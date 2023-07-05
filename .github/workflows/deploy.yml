@@ -48,7 +48,7 @@ jobs:
           skip_app_build: true
           skip_api_build: true
           action: upload
-          app_location: aquifer-web-build
+          app_location: build
           output_location: ''
 
   e2e_tests:
