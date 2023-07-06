@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import StreamCoordinator from '../utils/audio_storage/stream_coordinator';
 import AudioStore from '../utils/audio_storage/audio_store';
 import Player from '../utils/audio_storage/player';
@@ -11,7 +11,6 @@ declare global {
 }
 
 function AudioPlayer({ url }: { url: string }) {
-  const [loaded, setLoaded] = useState(false);
   const el = useRef<HTMLDivElement>(null);
   const ac = useRef<AudioContext>();
   const store = useRef<AudioStore>();
@@ -42,15 +41,13 @@ function AudioPlayer({ url }: { url: string }) {
     await streamer.current.load();
     // set up the player
     new Player(el.current!, streamer.current!);
-
-    setLoaded(true);
   }, [info, url]);
 
   useEffect(() => {
     run();
   }, [run]);
 
-  return loaded ? (
+  return (
     <>
       <div className="player" ref={el}>
         <p className="message"></p>
@@ -65,7 +62,7 @@ function AudioPlayer({ url }: { url: string }) {
 
       <div className="logs" ref={logs}></div>
     </>
-  ) : null;
+  );
 }
 
 export default AudioPlayer;
