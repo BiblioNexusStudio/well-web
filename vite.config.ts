@@ -1,7 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
-import legacy from '@vitejs/plugin-legacy';
 
 const kitConfig = {
     adapterFallback: '/index.html'
@@ -10,7 +9,6 @@ const kitConfig = {
 export default defineConfig({
     plugins: [
         sveltekit(),
-        legacy({ targets: ['>0.2%', 'not dead', 'not op_mini all'] }),
         SvelteKitPWA({
             registerType: 'autoUpdate',
             workbox: {
