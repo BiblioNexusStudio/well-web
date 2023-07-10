@@ -1,40 +1,38 @@
-## Description
+# create-svelte
 
-Aquifer Web is the official front-end web app to access content in the Aquifer.
+Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
-It's designed as a PWA (Progressive Web App) allowing a user to download
-content to their device and use it in an offline environment.
+## Creating a project
 
-## Installation
-
-```bash
-$ yarn install
-```
-
-## Running the app
+If you're seeing this, you've probably already done this step. Congrats!
 
 ```bash
-# development
-$ yarn run start
+# create a new project in the current directory
+npm create svelte@latest
 
-# production mode (required to test PWA functionality)
-$ yarn run build && serve -s build
+# create a new project in my-app
+npm create svelte@latest my-app
 ```
 
-## Lint
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
-# lint
-$ yarn run lint
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-## Test
+## Building
+
+To create a production version of your app:
 
 ```bash
-# unit tests
-$ yarn run test
+npm run build
 ```
 
-## License
+You can preview the production build with `npm run preview`.
 
-Aquifer Server is [MIT licensed](LICENSE).
+> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
