@@ -1,12 +1,17 @@
 <script lang="ts">
-    import type { PageData } from './$types';
+    // import type { PageData } from './$types';
 
-    export let data: PageData;
+    // export let data: PageData;
 
+    import { get } from 'svelte/store';
+    import { storeData } from '$lib/datastore';
+
+    let data = get(storeData);
     let languageSelected: boolean;
     let selectedBook: string;
     let selectedPassage: string;
     let passageNames: string[] = [];
+    let selectedId: string | undefined;
 
     function setPassageNames() {
         selectedPassage = 'Passage';
@@ -20,7 +25,7 @@
         <h1>AQUIFER</h1>
         <h1>AQUIFER</h1>
     </div>
-    <form action="/passage" class="form-control w-full max-w-xs space-y-6">
+    <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6">
         <select on:change={() => (languageSelected = true)} class="select select-info">
             <option disabled selected>Language</option>
             <option>English</option>
@@ -39,6 +44,9 @@
         </select>
         <select
             bind:value={selectedPassage}
+            on:change={() => {
+                selectedId = data.passages.find((x) => x.name === selectedPassage)?.id;
+            }}
             class="select select-info"
             disabled={!passageNames.length}
         >
@@ -47,7 +55,9 @@
                 <option>{passageName}</option>
             {/each}
         </select>
-        <button class="btn btn-info" disabled={selectedPassage === 'Passage'}>Go</button>
+        <button class="btn btn-info" disabled={!selectedPassage || selectedPassage === 'Passage'}
+            >Go</button
+        >
     </form>
 </section>
 
