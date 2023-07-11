@@ -1,4 +1,18 @@
-<script>
+<script lang="ts">
+    import type { PageData } from './$types';
+
+    export let data: PageData;
+
+    let languageSelected: boolean;
+    let selectedBook: string;
+    let selectedPassage: string;
+    let passageNames: string[] = [];
+
+    function setPassageNames() {
+        selectedPassage = 'Passage';
+        let bookPassages = data.passages.filter((x) => x.book === selectedBook);
+        passageNames = bookPassages.map((x) => x.name);
+    }
 </script>
 
 <section>
@@ -7,28 +21,33 @@
         <h1>AQUIFER</h1>
     </div>
     <form action="/passage" class="form-control w-full max-w-xs space-y-6">
-        <select class="select select-info">
+        <select on:change={() => (languageSelected = true)} class="select select-info">
             <option disabled selected>Language</option>
             <option>English</option>
             <option>Tok Pisin</option>
         </select>
-        <select class="select select-info">
+        <select
+            bind:value={selectedBook}
+            on:change={setPassageNames}
+            class="select select-info"
+            disabled={!languageSelected}
+        >
             <option disabled selected>Book</option>
-            <option>Matthew</option>
-            <option>Mark</option>
-            <option>Luke</option>
-            <option>John</option>
+            {#each data.books as book}
+                <option>{book}</option>
+            {/each}
         </select>
-        <select class="select select-info">
+        <select
+            bind:value={selectedPassage}
+            class="select select-info"
+            disabled={!passageNames.length}
+        >
             <option disabled selected>Passage</option>
-            <option>blah blah blah 1</option>
-            <option>blah blah blah 2</option>
-            <option>blah blah blah 3</option>
-            <option>blah blah blah 4</option>
-            <option>blah blah blah 5</option>
-            <option>blah blah blah 6</option>
+            {#each passageNames as passageName}
+                <option>{passageName}</option>
+            {/each}
         </select>
-        <button class="btn btn-info">Go</button>
+        <button class="btn btn-info" disabled={selectedPassage === 'Passage'}>Go</button>
     </form>
 </section>
 
