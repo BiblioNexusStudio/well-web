@@ -16,7 +16,7 @@
     ];
 </script>
 
-<div class="navbar px-4 bg-base-200 fixed bottom-0">
+<div class="navbar px-4 bg-base-200 fixed bottom-0 z-50">
     <div class="navbar-start">
         <a href="/" class="font-bold normal-case text-xl">aquifer</a>
     </div>
