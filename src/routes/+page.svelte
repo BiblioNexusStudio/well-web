@@ -1,12 +1,8 @@
 <script lang="ts">
-    // import type { PageData } from './$types';
+    import type { PageData } from './$types';
 
-    // export let data: PageData;
+    export let data: PageData;
 
-    import { get } from 'svelte/store';
-    import { storeData } from '$lib/datastore';
-
-    let data = get(storeData);
     let languageSelected: boolean;
     let selectedBook: string;
     let selectedPassage: string;

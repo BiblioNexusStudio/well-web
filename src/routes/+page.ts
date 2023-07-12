@@ -1,6 +1,10 @@
 import type { PageLoad } from './$types';
+import { get } from 'svelte/store';
+import { storeData } from '$lib/datastore';
 
 export const load = (({ params }) => {
+    return get(storeData);
+
     // return {
     //     books: ['Genesis', 'Job', 'Matthew', 'Mark', 'Luke', 'John', 'Acts'],
     //     passages: [
@@ -65,5 +69,4 @@ export const load = (({ params }) => {
     //         },
     //     ],
     // };
-    return {};
 }) satisfies PageLoad;
