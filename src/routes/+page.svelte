@@ -5,15 +5,8 @@
 
     let languageSelected: boolean;
     let selectedBook: string;
-    let selectedPassage: string;
-    let passageNames: string[] = [];
     let selectedId: string | undefined;
-
-    function setPassageNames() {
-        selectedPassage = 'Passage';
-        let bookPassages = data.passages.filter((x) => x.book === selectedBook);
-        passageNames = bookPassages.map((x) => x.name);
-    }
+    $: bookPassages = data.passages.filter((x) => x.book === selectedBook);
 </script>
 
 <section>
@@ -29,7 +22,7 @@
         </select>
         <select
             bind:value={selectedBook}
-            on:change={setPassageNames}
+            on:change={() => (selectedId = 'default')}
             class="select select-info"
             disabled={!languageSelected}
         >
@@ -38,22 +31,13 @@
                 <option>{book}</option>
             {/each}
         </select>
-        <select
-            bind:value={selectedPassage}
-            on:change={() => {
-                selectedId = data.passages.find((x) => x.name === selectedPassage)?.id;
-            }}
-            class="select select-info"
-            disabled={!passageNames.length}
-        >
-            <option disabled selected>Passage</option>
-            {#each passageNames as passageName}
-                <option>{passageName}</option>
+        <select bind:value={selectedId} class="select select-info" disabled={!bookPassages.length}>
+            <option disabled selected value="default">Passage</option>
+            {#each bookPassages as passage}
+                <option value={passage.id}>{passage.name}</option>
             {/each}
         </select>
-        <button class="btn btn-info" disabled={!selectedPassage || selectedPassage === 'Passage'}
-            >Go</button
-        >
+        <button class="btn btn-info" disabled={!selectedId || selectedId === 'default'}>Go</button>
     </form>
 </section>
 
