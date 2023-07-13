@@ -33,11 +33,11 @@
         </select>
         <select bind:value={selectedId} class="select select-info" disabled={!bookPassages.length}>
             <option disabled selected value="default">Passage</option>
-            {#each bookPassages as passage}
-                <option value={passage.id}>{passage.name}</option>
+            {#each bookPassages as { name, id }}
+                <option value={id}>{name}</option>
             {/each}
         </select>
-        <button class="btn btn-info" disabled={!selectedId || selectedId === 'default'}>Go</button>
+        <button class="btn btn-info" disabled={selectedId === 'default'}>Go</button>
     </form>
 </section>
 
