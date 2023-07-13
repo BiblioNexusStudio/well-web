@@ -85,7 +85,5 @@
     </div>
 </div>
 
-<!-- <div class="prose container mx-auto pt-8 pb-24"><p>{@html cbbter}</p></div> -->
-
 <style>
 </style>

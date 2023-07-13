@@ -58,23 +58,12 @@
 </section>
 
 <style>
-    @import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
-
-    /* form {
-        display: flex;
-        justify-content: space-evenly;
-        flex-direction: column;
-    } */
-
     section {
         display: flex;
         min-height: 100vh;
         align-items: center;
         justify-content: space-evenly;
         flex-direction: column;
-    }
-
-    .aquiferHeader {
     }
 
     .aquiferHeader h1 {
