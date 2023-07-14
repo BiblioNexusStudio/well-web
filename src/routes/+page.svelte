@@ -14,12 +14,14 @@
         <h1>AQUIFER</h1>
         <h1>AQUIFER</h1>
     </div>
+
     <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6">
         <select on:change={() => (languageSelected = true)} class="select select-info">
             <option disabled selected>Language</option>
             <option>English</option>
             <option>Tok Pisin</option>
         </select>
+
         <select
             bind:value={selectedBook}
             on:change={() => (selectedId = 'default')}
@@ -31,12 +33,14 @@
                 <option>{book}</option>
             {/each}
         </select>
+
         <select bind:value={selectedId} class="select select-info" disabled={!bookPassages.length}>
             <option disabled selected value="default">Passage</option>
             {#each bookPassages as { name, id }}
                 <option value={id}>{name}</option>
             {/each}
         </select>
+
         <button class="btn btn-info" disabled={selectedId === 'default'}>Go</button>
     </form>
 </section>
