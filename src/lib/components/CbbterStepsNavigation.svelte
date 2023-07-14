@@ -1,8 +1,8 @@
 <script lang="ts">
-    export let cbbterSelectedIndex: number = 0;
-    export let bibleViewSelected: boolean = false;
+    export let cbbterSelectedIndex = 0;
+    export let bibleViewSelected = false;
     export let responsive: string;
-    export let fullDisplay: boolean = false;
+    export let fullDisplay = false;
     export let buttonNames: any[] = [1, 2, 3, 4, 5, 6];
 
     function setCbbterStep(step: number) {

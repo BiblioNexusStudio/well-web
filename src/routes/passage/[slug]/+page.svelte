@@ -5,9 +5,9 @@
 
     export let data: PageData;
 
-    let cbbterSelectedIndex: number = 0;
+    let cbbterSelectedIndex = 0;
     $: cbbter = data.cbbter[cbbterSelectedIndex];
-    let bibleViewSelected: boolean = false;
+    let bibleViewSelected = false;
 
     const stepNames: string[] = [
         'Hear and Heart',
