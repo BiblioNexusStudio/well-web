@@ -15,7 +15,7 @@ $ yarn install
 
 ```bash
 # development
-$ yarn run start
+$ yarn run dev - --open
 
 # production mode (required to test PWA functionality)
 $ yarn run build && serve -s build

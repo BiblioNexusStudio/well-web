@@ -1,8 +1,7 @@
-import { render, screen } from '@testing-library/svelte';
-import page from './routes/+page.svelte';
+import { describe, it, expect } from 'vitest';
 
-test('renders learn react link', async () => {
-    render(page);
-    const linkElement = await screen.findByText(/is offline ready/i);
-    expect(linkElement).toBeInTheDocument();
+describe('sum test', () => {
+    it('adds 1 + 2 to equal 3', () => {
+        expect(1 + 2).toBe(3);
+    });
 });

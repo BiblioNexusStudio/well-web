@@ -3,7 +3,7 @@ import { defineConfig } from 'vitest/config';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
 const kitConfig = {
-    adapterFallback: '/index.html'
+    adapterFallback: '/index.html',
 };
 
 export default defineConfig({
@@ -15,7 +15,7 @@ export default defineConfig({
                 // include all client files and the index "fallback" file
                 globPatterns: [
                     'client/**/*.{html,js,css,ico,png,svg,webp,webmanifest}',
-                    '../../build/index.html'
+                    '../../build/index.html',
                 ],
                 // when `modifyURLPrefix` is set it allows our specified `globPatterns`
                 // to override the default behavior. otherwise our `globPatterns` our
@@ -33,11 +33,11 @@ export default defineConfig({
                         return {
                             manifest: manifest.map(({ url, ...rest }: { url: string }) => ({
                                 ...rest,
-                                url: url === '../../build' ? '/index.html' : url
-                            }))
+                                url: url === '../../build' ? '/index.html' : url,
+                            })),
                         };
-                    }
-                ]
+                    },
+                ],
             },
             kit: kitConfig,
             manifest: {
@@ -47,31 +47,31 @@ export default defineConfig({
                     {
                         src: 'favicon.png',
                         sizes: '64x64 32x32 24x24 16x16',
-                        type: 'image/png'
+                        type: 'image/png',
                     },
                     {
                         src: 'vite.svg',
                         type: 'image/svg',
-                        sizes: '192x192'
+                        sizes: '192x192',
                     },
                     {
                         src: 'vite.svg',
                         type: 'image/svg',
-                        sizes: '512x512'
-                    }
+                        sizes: '512x512',
+                    },
                 ],
                 display: 'standalone',
                 theme_color: '#000000',
-                background_color: '#ffffff'
-            }
-        })
+                background_color: '#ffffff',
+            },
+        }),
     ],
     test: {
         globals: true,
         environment: 'jsdom',
         setupFiles: ['src/setup-tests.ts'],
-        include: ['src/**/*.{test,spec}.{js,ts}']
-    }
+        include: ['src/**/*.{test,spec}.{js,ts}'],
+    },
 });
 
 // copy/paste from https://github.com/vite-pwa/sveltekit/blob/main/src/config.ts

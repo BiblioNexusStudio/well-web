@@ -1,7 +1,5 @@
 <script>
+    import '../app.css';
 </script>
 
-<main>
-    testing
-    <slot />
-</main>
+<slot />
