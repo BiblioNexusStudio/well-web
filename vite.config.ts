@@ -17,10 +17,39 @@ export default defineConfig({
                     'client/**/*.{html,js,css,ico,png,svg,webp,webmanifest}',
                     '../../build/index.html',
                 ],
+
+                runtimeCaching: [
+                    {
+                        // TODO: update this with the Aquifer API URL
+                        urlPattern: /.*/,
+                        handler: 'StaleWhileRevalidate',
+                        method: 'GET',
+                        options: {
+                            cacheName: 'aquifer-api',
+                            cacheableResponse: {
+                                statuses: [0, 200],
+                            },
+                        },
+                    },
+                    {
+                        // TODO: update this with the base Aquifer file storage URL
+                        urlPattern: /https:\/\/s3.*/,
+                        handler: 'StaleWhileRevalidate',
+                        method: 'GET',
+                        options: {
+                            cacheName: 'aquifer-media',
+                            cacheableResponse: {
+                                statuses: [0, 200],
+                            },
+                        },
+                    },
+                ],
+
                 // when `modifyURLPrefix` is set it allows our specified `globPatterns`
                 // to override the default behavior. otherwise our `globPatterns` our
                 // interpolated and overridden by SvelteKitPWA
                 modifyURLPrefix: {},
+
                 // here we specify the manifest transforms directly so that we can
                 // override the "../../build" with "index.html"
                 manifestTransforms: [
@@ -45,22 +74,23 @@ export default defineConfig({
                 name: 'Aquifer',
                 icons: [
                     {
-                        src: 'favicon.png',
-                        sizes: '64x64 32x32 24x24 16x16',
+                        src: 'aquifer-logo-512.png',
                         type: 'image/png',
+                        sizes: '512x512',
                     },
                     {
-                        src: 'vite.svg',
-                        type: 'image/svg',
+                        src: 'aquifer-logo-192.png',
+                        type: 'image/png',
                         sizes: '192x192',
                     },
                     {
-                        src: 'vite.svg',
-                        type: 'image/svg',
-                        sizes: '512x512',
+                        src: 'aquifer-logo-64.png',
+                        type: 'image/png',
+                        sizes: '64x64 32x32 24x24 16x16',
                     },
                 ],
                 display: 'standalone',
+                start_url: '/',
                 theme_color: '#000000',
                 background_color: '#ffffff',
             },
