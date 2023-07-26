@@ -3,7 +3,7 @@
     export let bibleViewSelected = false;
     export let responsive: string;
     export let fullDisplay = false;
-    export let buttonNames: any[] = [1, 2, 3, 4, 5, 6];
+    export let buttonNames: number[] | string[] = [1, 2, 3, 4, 5, 6];
 
     function setCbbterStep(step: number) {
         cbbterSelectedIndex = step;

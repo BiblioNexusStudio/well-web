@@ -45,7 +45,7 @@
 
 <div class="flex flex-row justify-evenly w-full pt-14 pb-20">
     <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} xl:block">
-        {#each data.verses as verse, i}
+        {#each data.verses as verse}
             <h3>{data.book} / Chapter {verse.chapter}</h3>
             {#each verse.values as value, i}
                 <div class="py-1">
