@@ -11,8 +11,8 @@
 
 <section>
     <div class="aquiferHeader">
-        <h1>AQUIFER</h1>
-        <h1>AQUIFER</h1>
+        <h1>AQUIFER 2</h1>
+        <h1>AQUIFER 2</h1>
     </div>
 
     <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6">
