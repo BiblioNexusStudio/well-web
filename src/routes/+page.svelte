@@ -1,12 +1,19 @@
 <script lang="ts">
     import type { PageData } from './$types';
+    import { _ as translate } from 'svelte-i18n';
+    import { locale } from 'svelte-i18n';
 
     export let data: PageData;
 
     let languageSelected: boolean;
     let selectedBook: string;
-    let selectedId: string | undefined;
+    let selectedId: string = 'default';
     $: bookPassages = data.passages.filter((x) => x.book === selectedBook);
+
+    let onLanguageSelected = (e) => {
+        languageSelected = true;
+        $locale = e.target.value;
+    };
 </script>
 
 <section>
@@ -14,12 +21,11 @@
         <h1>AQUIFER</h1>
         <h1>AQUIFER</h1>
     </div>
-
     <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6">
-        <select on:change={() => (languageSelected = true)} class="select select-info">
-            <option disabled selected>Language</option>
-            <option>English</option>
-            <option>Tok Pisin</option>
+        <select on:change={onLanguageSelected} class="select select-info">
+            <option disabled selected>{$translate('page.index.language.value')}</option>
+            <option value="en">English</option>
+            <option value="tpi">Tok Pisin</option>
         </select>
 
         <select
@@ -28,20 +34,24 @@
             class="select select-info"
             disabled={!languageSelected}
         >
-            <option disabled selected>Book</option>
+            <option disabled selected value="default">{$translate('page.index.book.value')}</option>
             {#each data.books as book}
                 <option>{book}</option>
             {/each}
         </select>
 
         <select bind:value={selectedId} class="select select-info" disabled={!bookPassages.length}>
-            <option disabled selected value="default">Passage</option>
+            <option disabled selected value="default"
+                >{$translate('page.index.passage.value')}</option
+            >
             {#each bookPassages as { name, id }}
                 <option value={id}>{name}</option>
             {/each}
         </select>
 
-        <button class="btn btn-info" disabled={selectedId === 'default'}>Go</button>
+        <button class="btn btn-info" disabled={selectedId === 'default'}
+            >{$translate('page.index.go.value')}</button
+        >
     </form>
 </section>
 
