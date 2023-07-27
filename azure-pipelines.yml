@@ -29,3 +29,20 @@ stages:
           - script: echo "Pre-deployment steps go here..."
           - script: echo "Deployment steps go here..."
           - script: echo "Post-deployment steps go here..."
+          - script: |
+              curl -X POST \
+              -H "Authorization: token $(GITHUB_TOKEN)" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/BiblioNexusStudio/aquifer-web/deployments \
+              -d '{
+                "ref": "$(Build.SourceVersion)",
+                "task": "deploy",
+                "environment": "dev",
+                "auto_merge": false,
+                "payload": {
+                  "url": "https://google.com"
+                },
+                "state": "success",
+                "description": "Deployed via Azure Pipelines"
+              }'
+            displayName: 'Create GitHub Deployment'
