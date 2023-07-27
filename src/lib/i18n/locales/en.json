@@ -1,0 +1,22 @@
+﻿{
+    "page": {
+        "index": {
+            "language": {
+                "value": "Language",
+                "context": "Indicates to the user that they should select a 'Language' for the application"
+            },
+            "book": {
+                "value": "Book",
+                "context": "Indicates to the user that they should select a 'Book' of the Bible"
+            },
+            "passage": {
+                "value": "Passage",
+                "context": "Indicates to the user that they should select a 'Passage' from their chosen 'Book'"
+            },
+            "go": {
+                "value": "Go",
+                "context": "Indicates to the user that they can click on this button to move to next page with their given selections"
+            }
+        }
+    }
+}

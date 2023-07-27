@@ -1,0 +1,18 @@
+﻿{
+    "page": {
+        "index": {
+            "language": {
+                "value": "Tok ples"
+            },
+            "book": {
+                "value": "Buk"
+            },
+            "passage": {
+                "value": "Hap Buk Baibel"
+            },
+            "go": {
+                "value": "Go"
+            }
+        }
+    }
+}
