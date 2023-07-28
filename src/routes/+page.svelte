@@ -7,7 +7,7 @@
 
     let languageSelected: boolean;
     let selectedBook: string;
-    let selectedId: string = 'default';
+    let selectedId = 'default';
     $: bookPassages = data.passages.filter((x) => x.book === selectedBook);
 
     let onLanguageSelected = (e) => {

@@ -1,17 +1,19 @@
-<script>
+<script lang="ts">
     import '../app.css';
     import { pwaInfo } from 'virtual:pwa-info';
     import { onMount } from 'svelte';
+    let loadedConfig = false;
 
-    // register the service worker to enable offline mode
-    onMount(async () => {
-        if (pwaInfo) {
-            const { registerSW } = await import('virtual:pwa-register');
-            registerSW({
-                immediate: true,
-            });
-        }
-    });
+    async function initializeConfig() {
+        const [globalConfig, envConfig] = await Promise.all([
+            fetch('/global-config.json').then((r) => r.json()),
+            fetch('/env-config.json').then((r) => r.json()),
+        ]);
+        window.__CONFIG = Object.assign({}, globalConfig, envConfig);
+        loadedConfig = true;
+    }
+
+    onMount(initializeConfig);
 
     // get the manifest info to include in the head
     $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
@@ -21,4 +23,6 @@
     {@html webManifestLink}
 </svelte:head>
 
-<slot />
+{#if loadedConfig}
+    <slot />
+{/if}

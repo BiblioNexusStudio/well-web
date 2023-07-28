@@ -1,0 +1,76 @@
+diff --git a/node_modules/@sveltejs/kit/src/core/config/options.js b/node_modules/@sveltejs/kit/src/core/config/options.js
+index 7d73510..c3c598e 100644
+--- a/node_modules/@sveltejs/kit/src/core/config/options.js
++++ b/node_modules/@sveltejs/kit/src/core/config/options.js
+@@ -145,7 +145,7 @@ const options = object(
+ 			outDir: string('.svelte-kit'),
+ 
+ 			output: object({
+-				preloadStrategy: list(['modulepreload', 'preload-js', 'preload-mjs'], 'modulepreload')
++				preloadStrategy: list(['modulepreload', 'preload-js', 'preload-mjs', 'disabled'], 'modulepreload')
+ 			}),
+ 
+ 			paths: object({
+diff --git a/node_modules/@sveltejs/kit/src/runtime/server/page/render.js b/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
+index 2a3dfc1..fa20ca5 100644
+--- a/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
++++ b/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
+@@ -282,9 +282,9 @@ export async function render_response({
+ 		for (const path of included_modulepreloads) {
+ 			// see the kit.output.preloadStrategy option for details on why we have multiple options here
+ 			link_header_preloads.add(`<${encodeURI(path)}>; rel="modulepreload"; nopush`);
+-			if (options.preload_strategy !== 'modulepreload') {
++			if (options.preload_strategy !== 'disabled' && options.preload_strategy !== 'modulepreload') {
+ 				head += `\n\t\t<link rel="preload" as="script" crossorigin="anonymous" href="${path}">`;
+-			} else if (state.prerendering) {
++			} else if (options.preload_strategy !== 'disabled' && state.prerendering) {
+ 				head += `\n\t\t<link rel="modulepreload" href="${path}">`;
+ 			}
+ 		}
+@@ -355,23 +355,34 @@ export async function render_response({
+ 			args.push(`{\n\t\t\t\t\t\t\t${hydrate.join(',\n\t\t\t\t\t\t\t')}\n\t\t\t\t\t\t}`);
+ 		}
+ 
+-		blocks.push(`Promise.all([
++		blocks.push(`function startSvelteKit() { Promise.all([
+ 						import(${s(prefixed(client.start))}),
+ 						import(${s(prefixed(client.app))})
+ 					]).then(([kit, app]) => {
+ 						kit.start(${args.join(', ')});
+-					});`);
+-
+-		if (options.service_worker) {
+-			const opts = __SVELTEKIT_DEV__ ? ", { type: 'module' }" : '';
+-
+-			// we use an anonymous function instead of an arrow function to support
+-			// older browsers (https://github.com/sveltejs/kit/pull/5417)
+-			blocks.push(`if ('serviceWorker' in navigator) {
+-						addEventListener('load', function () {
+-							navigator.serviceWorker.register('${prefixed('service-worker.js')}'${opts});
++					}); }`);
++		if (__SVELTEKIT_DEV__) {
++			blocks.push(`startSvelteKit();`)
++		} else {
++			blocks.push(`
++				if ('serviceWorker' in navigator) {
++					window.addEventListener('load', () => {
++						navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((registration) => {
++							if (registration.waiting || !registration.installing) {
++								startSvelteKit();
++							} else {
++								registration.installing.addEventListener('statechange', (event) => {
++									if (event.target.state === 'activated') {
++										startSvelteKit();
++									}
++								});
++							}
+ 						});
+-					}`);
++					});
++				} else {
++					startSvelteKit();
++				}
++			`)
+ 		}
+ 
+ 		const init_app = `

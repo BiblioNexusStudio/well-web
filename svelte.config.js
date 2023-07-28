@@ -4,7 +4,12 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     kit: {
-        adapter: adapter({ fallback: 'index.html' }),
+        adapter: adapter({
+            pages: 'build',
+            assets: 'build',
+            fallback: 'index.html',
+        }),
+        output: { preloadStrategy: 'disabled' },
     },
     preprocess: vitePreprocess(),
 };
