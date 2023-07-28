@@ -11,6 +11,18 @@ content to their device and use it in an offline environment.
 $ yarn install
 ```
 
+## Setup
+
+Use the appropriate config vars for your env (to specify the API URL among other things)
+
+```bash
+# local server
+$ yarn use-config local
+
+# dev server
+$ yarn use-config dev
+```
+
 ## Running the app
 
 ```bash
