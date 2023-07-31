@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<div class="flex flex-row justify-evenly w-full pt-14 pb-20">
+<div class="flex flex-row justify-evenly w-full pt-14 pb-20 px-5">
     <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} xl:block">
         {#each data.verses as verse}
             <h3>{data.book} / Chapter {verse.chapter}</h3>
