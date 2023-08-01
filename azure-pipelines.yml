@@ -50,8 +50,8 @@ steps:
 
 - task: AzureStaticWebApp@0
   inputs:
+    cwd: $(Pipeline.Workspace)
     skip_app_build: true
-    #cwd: '$(Pipeline.Workspace)'
     app_location: 'drop/aquifer-web-$(Build.BuildId)'
     api_location: ''  # Leave this empty if you don't have Azure Functions
     output_location: ''  # Leave this empty to use the default
