@@ -1,0 +1,20 @@
+steps:
+    - checkout: self
+      fetchDepth: 1
+      persistCredentials: true
+    - script: git fetch origin refs/pull/${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}/head && git checkout FETCH_HEAD
+      displayName: Checkout PR HEAD
+    - task: NodeTool@0
+      inputs:
+          versionSpec: 18.16.0
+      displayName: Install Node.js
+    - task: Cache@2
+      inputs:
+          key: 'yarn | "$(Agent.OS)" | yarn.lock'
+          restoreKeys: |
+              yarn | "$(Agent.OS)"
+          path: $(Build.SourcesDirectory)/node_modules
+      displayName: Cache yarn dependencies
+    - script: yarn install --frozen-lockfile
+      displayName: Install dependencies
+

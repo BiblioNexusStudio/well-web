@@ -3,27 +3,33 @@ pr:
       include:
       - '*'
 
+trigger: none
+
 pool:
     vmImage: ubuntu-latest
 
-steps:
-    - checkout: self
-      fetchDepth: 1
-    - task: NodeTool@0
-      inputs:
-          versionSpec: 18.16.0
-      displayName: Install Node.js
-    - task: Cache@2
-      inputs:
-          key: 'yarn | "$(Agent.OS)" | yarn.lock'
-          restoreKeys: |
-              yarn | "$(Agent.OS)"
-          path: $(Pipeline.Workspace)/.yarn
-      displayName: Cache yarn dependencies
-    - script: yarn install --frozen-lockfile
-      displayName: Install dependencies
-    - script: yarn lint:ci
-      displayName: ESLint
-    - script: yarn test
-      displayName: Test
+jobs:
+    - job: lint_and_test
+      displayName: Lint and test
+      steps:
+          - template: templates/checkout_and_install_deps.yml
+          - script: yarn lint:ci
+            displayName: ESLint
+          - script: yarn test
+            displayName: Test
+
+    - job: build
+      displayName: Build
+      dependsOn: lint_and_test
+      steps:
+          - template: templates/checkout_and_install_deps.yml
+          - script: yarn build
+            displayName: Build
+          - script: zip -r build.zip build
+            displayName: Zip artifact
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: build.zip
+              artifactName: aquifer-web
+            displayName: Publish artifact
 
