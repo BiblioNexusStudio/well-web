@@ -1,4 +1,6 @@
-# azure-pipelines.yml
+
+variables:
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
 
 trigger:
   branches:
@@ -16,8 +18,17 @@ steps:
     versionSpec: '18.x'  # Ensure Node.js 14 or later version is installed
   displayName: 'Install Node.js'
 
+- task: Cache@2
+  inputs:
+    key: '"yarn" | "$(Agent.OS)" | yarn.lock'
+    restoreKeys: |
+       "yarn" | "$(Agent.OS)"
+       "yarn"
+    path: $(YARN_CACHE_FOLDER)
+  displayName: Cache Yarn packages
+
 - script: |
-    yarn install
+    yarn install --frozen-lockfile
   displayName: 'Install Dependencies'
 
 - script: |
