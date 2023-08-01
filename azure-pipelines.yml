@@ -22,30 +22,26 @@ steps:
 
 - script: |
     yarn run build
-  displayName: 'Build SvelteKit Application'
+  displayName: 'Build Application'
 
-- task: ArchiveFiles@2
+- task: CopyFiles@2
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build'  # The location of the build output
-    includeRootFolder: false
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'  # Archive the build artifacts
-    replaceExistingArchive: true
-  displayName: 'Archive Build Artifacts'
+    sourceFolder: '$(System.DefaultWorkingDirectory)/build'
+    targetFolder: '$(Build.ArtifactStagingDirectory)/aquifer-web-$(Build.BuildId)'
+    contents: '**'
+  displayName: 'Copy build files'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    artifactName: 'aquifer-web'
-  displayName: 'Publish Build Artifacts'
+- publish: $(Build.ArtifactStagingDirectory)
+  artifact: aquiferweb
 
 # You can now add deployment steps below, depending on your deployment target.
 # The following is an example for deploying to Azure Static Web Apps:
 
 - task: AzureStaticWebApp@0
   inputs:
-    app_location: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    app_location: '$(Build.ArtifactStagingDirectory)/aquifer-web-$(Build.BuildId)'
     api_location: ''  # Leave this empty if you don't have Azure Functions
-    output_location: ''  # Leave this empty to use the default
+    output_location: '/'  # Leave this empty to use the default
     azure_static_web_apps_api_token: $(AzureStaticWebAppsApiToken)  # Create an Azure DevOps variable group containing the API token for authentication
 
   # Add additional steps for post-deployment tasks if needed
