@@ -8,28 +8,55 @@ trigger: none
 pool:
     vmImage: ubuntu-latest
 
-jobs:
-    - job: lint_and_test
-      displayName: Lint and test
-      steps:
-          - template: templates/checkout_and_install_deps.yml
-          - script: yarn lint:ci
-            displayName: ESLint
-          - script: yarn test
-            displayName: Test
+stages:
+    - stage: test_and_build
+      displayName: Test and build
+      jobs:
+          - job: lint_and_test
+            displayName: Lint and test
+            steps:
+                - template: templates/checkout_and_install_deps.yml
+                - script: yarn lint:ci
+                  displayName: ESLint
+                - script: yarn test
+                  displayName: Test
 
-    - job: build
-      displayName: Build
-      dependsOn: lint_and_test
-      steps:
-          - template: templates/checkout_and_install_deps.yml
-          - script: yarn build
+          - job: build
             displayName: Build
-          - script: zip -r build.zip build
-            displayName: Zip artifact
-          - task: PublishBuildArtifacts@1
-            inputs:
-              pathToPublish: build.zip
-              artifactName: aquifer-web
-            displayName: Publish artifact
+            dependsOn: lint_and_test
+            steps:
+                - template: templates/checkout_and_install_deps.yml
+                - script: yarn build
+                  displayName: Build
+                - publish: ./build
+                  artifact: build
+                  displayName: Publish artifact
+
+    - stage: deploy_to_dev
+      dependsOn: test_and_build
+      displayName: Deploy to dev
+      jobs:
+          - deployment: deploy_to_dev
+            displayName: Deploy
+            environment: dev
+            strategy:
+                runOnce:
+                    deploy:
+                        steps:
+                            - template: templates/checkout.yml
+                            - download: current
+                              artifact: build
+                              displayName: Download artifact
+                            - script: cp ./src/env/dev-config.json $(Pipeline.Workspace)/build/env-config.json
+                              displayName: Setup env
+                            - task: AzureStaticWebApp@0
+                              inputs:
+                                cwd: $(Pipeline.Workspace)
+                                skip_app_build: true
+                                app_location: ./build
+                                api_location: ''
+                                production_branch: master
+                                output_location: ''
+                                azure_static_web_apps_api_token: $(AzureStaticWebAppsApiToken)
+                              displayName: Deploy Azure Static Web App
 

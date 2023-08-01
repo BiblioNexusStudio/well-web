@@ -1,9 +1,5 @@
 steps:
-    - checkout: self
-      fetchDepth: 1
-      persistCredentials: true
-    - script: git fetch origin refs/pull/${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}/head && git checkout FETCH_HEAD
-      displayName: Checkout PR HEAD
+    - template: ./checkout.yml
     - task: NodeTool@0
       inputs:
           versionSpec: 18.16.0
@@ -17,4 +13,3 @@ steps:
       displayName: Cache yarn dependencies
     - script: yarn install --frozen-lockfile
       displayName: Install dependencies
-
