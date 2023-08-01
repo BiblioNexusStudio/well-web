@@ -48,9 +48,14 @@ steps:
 # You can now add deployment steps below, depending on your deployment target.
 # The following is an example for deploying to Azure Static Web Apps:
 
+- task: DownloadPipelineArtifact@2
+  inputs:
+    buildType: 'current'
+    targetPath: '$(Pipeline.Workspace)'
+
 - task: AzureStaticWebApp@0
   inputs:
-    cwd: '$(Pipeline.Workspace)/drop'
+    cwd: '$(Pipeline.Workspace)/drop/aquifer-web-$(Build.BuildId)'
     skip_app_build: true
     app_location: /
     api_location: ''  # Leave this empty if you don't have Azure Functions
