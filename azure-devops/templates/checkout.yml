@@ -1,0 +1,6 @@
+steps:
+    - checkout: self
+      fetchDepth: 1
+      persistCredentials: true
+    - script: git fetch origin refs/pull/${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}/head && git checkout FETCH_HEAD
+      displayName: Checkout PR HEAD
