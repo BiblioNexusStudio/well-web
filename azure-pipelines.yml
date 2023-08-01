@@ -52,7 +52,7 @@ steps:
   inputs:
     cwd: $(Pipeline.Workspace)
     skip_app_build: true
-    app_location: '/'
+    app_location: './drop/aquifer-web-$(Build.BuildId)'
     api_location: ''  # Leave this empty if you don't have Azure Functions
     output_location: ''  # Leave this empty to use the default
     azure_static_web_apps_api_token: $(AzureStaticWebAppsApiToken)  # Create an Azure DevOps variable group containing the API token for authentication
