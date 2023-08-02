@@ -3,4 +3,4 @@ steps:
       fetchDepth: 2
       persistCredentials: true
     - script: git checkout HEAD^2
-      displayName: Checkout the branch commit
+      displayName: Checkout the PR's HEAD commit
