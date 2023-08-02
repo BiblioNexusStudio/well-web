@@ -7,16 +7,18 @@ resources:
         - pipeline: pre-merge-build
           source: aquifer-web-pre-merge
           branch: master
-          trigger:
-              branches:
-                  include:
-                      - refs/pull/*
+          trigger: true
 
 pr: none
 trigger: none
 
 pool:
     vmImage: ubuntu-latest
+
+variables:
+    - group: dev-web
+    - group: qa-web
+    - group: github-app
 
 stages:
     - stage: deploy_to_dev
@@ -31,15 +33,13 @@ stages:
                     deploy:
                         steps:
                             - template: templates/checkout_pr.yml
-                            - download: pre-merge-build
-                              artifact: build
-                              displayName: Download artifact
                             - template: templates/deploy.yml
                               parameters:
                                 DeployEnv: dev
-                                ArtifactDir: $(Pipeline.Workspace)/pre-merge-build
+                                DownloadFromPipeline: pre-merge-build
                                 DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
-
+                                DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
+                                GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
 
     - stage: deploy_to_qa
       displayName: Deploy to qa (preview)
@@ -53,14 +53,13 @@ stages:
                     deploy:
                         steps:
                             - template: templates/checkout_pr.yml
-                            - download: pre-merge-build
-                              artifact: build
-                              displayName: Download artifact
                             - script: echo "##vso[task.setvariable variable=DeployPreviewName]pr$(echo $BUILD_SOURCEBRANCH | grep -oP "refs/pull/\K[0-9]+")"
                               displayName: Calculate deploy preview name
                             - template: templates/deploy.yml
                               parameters:
                                 DeployEnv: qa
-                                ArtifactDir: $(Pipeline.Workspace)/pre-merge-build
+                                DownloadFromPipeline: pre-merge-build
                                 DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
                                 DeployPreviewName: $(DeployPreviewName)
+                                DeployUrl: $(AzureStaticWebAppsDeployUrlQaPreview)
+                                GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)

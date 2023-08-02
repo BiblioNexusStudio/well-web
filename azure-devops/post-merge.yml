@@ -3,12 +3,15 @@ appendCommitMessageToRunName: true
 
 pr: none
 trigger:
-    branches:
-        include:
-            - master
+    - master
 
 pool:
     vmImage: ubuntu-latest
+
+variables:
+    - group: dev-web
+    - group: qa-web
+    - group: github-app
 
 stages:
     - stage: build
@@ -29,6 +32,8 @@ stages:
           - job: cleanup_qa_preview
             displayName: Cleanup qa preview environment
             steps:
+                - template: templates/checkout_master.yml
+                - template: templates/setup_node.yml
                 - task: AzureCLI@2
                   inputs:
                       azureSubscription: dacfa945-984c-4708-9f2d-7d8358f223d5
@@ -36,6 +41,8 @@ stages:
                       scriptLocation: inlineScript
                       inlineScript: |
                           az staticwebapp environment delete --yes --name aquifer-web-qa --environment-name "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')"
+                - script: ./azure-devops/github-deployer/script.sh "$GITHUBAPPPRIVATEKEYBASE64" "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" destroy
+                  displayName: Destroy GitHub preview environment
 
     - stage: deploy_to_dev
       displayName: Deploy to dev
@@ -49,14 +56,12 @@ stages:
                     deploy:
                         steps:
                             - template: templates/checkout_master.yml
-                            - download: current
-                              artifact: build
-                              displayName: Download artifact
                             - template: templates/deploy.yml
                               parameters:
                                 DeployEnv: dev
-                                ArtifactDir: $(Pipeline.Workspace)
                                 DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
+                                DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
+                                GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
 
     - stage: deploy_to_qa
       displayName: Deploy to qa
@@ -70,11 +75,9 @@ stages:
                     deploy:
                         steps:
                             - template: templates/checkout_master.yml
-                            - download: current
-                              artifact: build
-                              displayName: Download artifact
                             - template: templates/deploy.yml
                               parameters:
                                 DeployEnv: qa
-                                ArtifactDir: $(Pipeline.Workspace)
                                 DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
+                                DeployUrl: $(AzureStaticWebAppsDeployUrlQa)
+                                GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)

@@ -1,20 +1,28 @@
 parameters:
     - name: DeployEnv
       type: string
-    - name: ArtifactDir
+    - name: DownloadFromPipeline
       type: string
+      default: ''
     - name: DeployPreviewName
       type: string
       default: ''
     - name: DeployApiToken
       type: string
+    - name: DeployUrl
+      type: string
+    - name: GithubAppPrivateKeyBase64
+      type: string
 
 steps:
-    - script: cp ./src/env/${{ parameters.DeployEnv }}-config.json ${{ parameters.ArtifactDir }}/build/env-config.json
+    - download: ${{ coalesce(parameters.DownloadFromPipeline, 'current') }}
+      artifact: build
+      displayName: Download artifact
+    - script: cp ./src/env/${{ parameters.DeployEnv }}-config.json $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}/build/env-config.json
       displayName: Setup env
     - task: AzureStaticWebApp@0
       inputs:
-          cwd: ${{ parameters.ArtifactDir }}
+          cwd: $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}
           skip_app_build: true
           app_location: ./build
           api_location: ''
@@ -22,3 +30,10 @@ steps:
           output_location: ''
           azure_static_web_apps_api_token: ${{ parameters.DeployApiToken }}
       displayName: Deploy Azure Static Web App
+    - script: ./azure-devops/github-deployer/script.sh "$GITHUB_APP_PRIVATE_KEY_BASE64" "$ENVIRONMENT" "$(git rev-parse HEAD)" "$DEPLOY_URL" "$DEPLOY_PREVIEW_NAME"
+      displayName: Create deployment in GitHub
+      env:
+          ENVIRONMENT: ${{ coalesce(parameters.DeployPreviewName, parameters.DeployEnv) }}
+          DEPLOY_URL: ${{ parameters.DeployUrl }}
+          DEPLOY_PREVIEW_NAME: ${{ parameters.DeployPreviewName }}
+          GITHUB_APP_PRIVATE_KEY_BASE64: ${{ parameters.GithubAppPrivateKeyBase64 }}

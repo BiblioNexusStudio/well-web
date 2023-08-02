@@ -1,0 +1,22 @@
+pr: none
+
+trigger:
+    branches:
+        exclude:
+            - "*"
+    tags:
+        include:
+            - "v*"
+
+pool:
+    vmImage: ubuntu-latest
+
+stages:
+    - stage: testing
+      displayName: Testing
+      jobs:
+          - job: testing
+            displayName: Testing
+            steps:
+                - script: echo hey
+                  displayName: Hey

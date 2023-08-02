@@ -1,8 +1,5 @@
 steps:
-    - task: NodeTool@0
-      inputs:
-          versionSpec: 18.16.0
-      displayName: Install Node.js
+    - template: ./setup_node.yml
     - script: cat patches/*.patch | md5sum > patches/lock
       displayName: Generate patch lock file
     - task: Cache@2

@@ -1,11 +1,6 @@
 # make the name of the pipeline relevant and associated with the pull request
 name: $[ format('PR {0} (build {1})', variables['System.PullRequest.PullRequestNumber'], counter(format('build{0}', variables['System.PullRequest.PullRequestNumber']), 1)) ]
-appendCommitMessageToRunName: false
-
-pr:
-    branches:
-        include:
-            - '*'
+appendCommitMessageToRunName: true
 
 trigger: none
 
