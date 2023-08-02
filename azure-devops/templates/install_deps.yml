@@ -3,11 +3,11 @@ steps:
       inputs:
           versionSpec: 18.16.0
       displayName: Install Node.js
+    - script: cat patches/*.patch | md5sum > patches/lock
+      displayName: Generate patch lock file
     - task: Cache@2
       inputs:
-          key: 'yarn | "$(Agent.OS)" | yarn.lock'
-          restoreKeys: |
-              yarn | "$(Agent.OS)"
+          key: 'yarn | "$(Agent.OS)" | yarn.lock | patches/lock'
           path: $(Build.SourcesDirectory)/node_modules
       displayName: Cache yarn dependencies
     - script: yarn install --frozen-lockfile
