@@ -28,6 +28,8 @@ stages:
                 - template: templates/checkout_and_install_deps.yml
                 - script: yarn build
                   displayName: Build
+                - script: cp staticwebapp.config.json build
+                  displayName: Copy Azure Static Web App config
                 - publish: ./build
                   artifact: build
                   displayName: Publish artifact
