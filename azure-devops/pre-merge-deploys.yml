@@ -2,7 +2,6 @@ resources:
   pipelines:
   - pipeline: pre-merge-build
     source: aquifer-web-pre-merge
-    branch: master-test
     trigger: true
 
 pr: none
@@ -16,8 +15,8 @@ stages:
       displayName: Deploy to dev
       jobs:
           - deployment: deploy_to_dev
-            displayName: Deploy
-            environment: dev
+            displayName: Deploy to dev
+            environment: dev-web
             strategy:
                 runOnce:
                     deploy:
@@ -28,15 +27,21 @@ stages:
                               displayName: Download artifact
                             - script: cp ./src/env/dev-config.json $(Pipeline.Workspace)/pre-merge-build/build/env-config.json
                               displayName: Setup env
-                            - script: cp staticwebapp.config.json $(Pipeline.Workspace)/pre-merge-build/build
-                              displayName: Setup Azure config
+                            - script: echo "##vso[task.setvariable variable=PrNumber]$(echo $BUILD_SOURCEBRANCH | grep -oP "refs/pull/\K[0-9]+")"
+                              displayName: Set PR number var
                             - task: AzureStaticWebApp@0
                               inputs:
-                                  cwd: $(Pipeline.Workspace)
+                                  cwd: $(Pipeline.Workspace)/pre-merge-build
                                   skip_app_build: true
                                   app_location: ./build
                                   api_location: ''
-                                  production_branch: master
+                                  deployment_environment: pr$(PrNumber)
                                   output_location: ''
                                   azure_static_web_apps_api_token: $(AzureStaticWebAppsApiToken)
                               displayName: Deploy Azure Static Web App
+                            - task: GitHubComment@0
+                              inputs:
+                                  gitHubConnection: MrGrinst
+                                  id: $(PrNumber)
+                                  comment: Deployed to https://polite-pond-08e447610-pr$(PrNumber).centralus.3.azurestaticapps.net/
+                              displayName: Comment deployment URL
