@@ -2,7 +2,7 @@ resources:
   pipelines:
   - pipeline: pre-merge-build
     source: aquifer-web-pre-merge
-    branch: master
+    branch: master-test
     trigger: true
 
 pr: none
