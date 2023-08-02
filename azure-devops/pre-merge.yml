@@ -30,6 +30,8 @@ stages:
                   displayName: Build
                 - script: cp staticwebapp.config.json build
                   displayName: Copy Azure Static Web App config
+                - script: cp -r src/env build/__env
+                  displayName: Copy all env files for use in deploys
                 - publish: ./build
                   artifact: build
                   displayName: Publish artifact
