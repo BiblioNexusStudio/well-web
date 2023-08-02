@@ -1,6 +1,5 @@
 steps:
     - checkout: self
       fetchDepth: 2
-      persistCredentials: true
     - script: git checkout HEAD^2
       displayName: Checkout the PR's HEAD commit

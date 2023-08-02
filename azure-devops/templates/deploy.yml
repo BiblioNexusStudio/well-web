@@ -1,0 +1,24 @@
+parameters:
+    - name: DeployEnv
+      type: string
+    - name: ArtifactDir
+      type: string
+    - name: DeployPreviewName
+      type: string
+      default: ''
+    - name: DeployApiToken
+      type: string
+
+steps:
+    - script: cp ./src/env/${{ parameters.DeployEnv }}-config.json ${{ parameters.ArtifactDir }}/build/env-config.json
+      displayName: Setup env
+    - task: AzureStaticWebApp@0
+      inputs:
+          cwd: ${{ parameters.ArtifactDir }}
+          skip_app_build: true
+          app_location: ./build
+          api_location: ''
+          deployment_environment: ${{ parameters.DeployPreviewName }}
+          output_location: ''
+          azure_static_web_apps_api_token: ${{ parameters.DeployApiToken }}
+      displayName: Deploy Azure Static Web App

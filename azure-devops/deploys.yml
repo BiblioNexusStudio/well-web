@@ -1,0 +1,80 @@
+name: $(Build.SourceVersion)
+appendCommitMessageToRunName: true
+
+pr: none
+trigger:
+    branches:
+        include:
+            - master
+
+pool:
+    vmImage: ubuntu-latest
+
+stages:
+    - stage: build
+      displayName: Build
+      dependsOn: []
+      jobs:
+          - job: build
+            displayName: Build
+            steps:
+                - template: templates/checkout_master.yml
+                - template: templates/install_deps.yml
+                - template: templates/build_and_publish_artifact.yml
+
+    - stage: cleanup_qa_preview
+      displayName: Cleanup qa preview environment
+      dependsOn: []
+      jobs:
+          - job: cleanup_qa_preview
+            displayName: Cleanup qa preview environment
+            steps:
+                - task: AzureCLI@2
+                  inputs:
+                      azureSubscription: dacfa945-984c-4708-9f2d-7d8358f223d5
+                      scriptType: bash
+                      scriptLocation: inlineScript
+                      inlineScript: |
+                          az staticwebapp environment delete --yes --name aquifer-web-qa --environment-name "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')"
+
+    - stage: deploy_to_dev
+      displayName: Deploy to dev
+      dependsOn: build
+      jobs:
+          - deployment: deploy_to_dev
+            displayName: Deploy to dev
+            environment: dev-web
+            strategy:
+                runOnce:
+                    deploy:
+                        steps:
+                            - template: templates/checkout_master.yml
+                            - download: current
+                              artifact: build
+                              displayName: Download artifact
+                            - template: templates/deploy.yml
+                              parameters:
+                                DeployEnv: dev
+                                ArtifactDir: $(Pipeline.Workspace)
+                                DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
+
+    - stage: deploy_to_qa
+      displayName: Deploy to qa
+      dependsOn: build
+      jobs:
+          - deployment: deploy_to_qa
+            displayName: Deploy to qa
+            environment: qa-web
+            strategy:
+                runOnce:
+                    deploy:
+                        steps:
+                            - template: templates/checkout_master.yml
+                            - download: current
+                              artifact: build
+                              displayName: Download artifact
+                            - template: templates/deploy.yml
+                              parameters:
+                                DeployEnv: qa
+                                ArtifactDir: $(Pipeline.Workspace)
+                                DeployApiToken: $(AzureStaticWebAppsApiTokenQa)

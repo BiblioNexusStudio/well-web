@@ -1,7 +1,12 @@
+# make the name of the pipeline relevant and associated with the pull request
+# name: $[ format('PR {0} (build {1})', variables['System.PullRequest.PullRequestNumber'], counter(format('build{0}', variables['System.PullRequest.PullRequestNumber']), 1)) ]
+name: $[ split('1/2/3', '/')['1'] ]
+appendCommitMessageToRunName: false
+
 pr:
     branches:
-      include:
-      - '*'
+        include:
+            - '*'
 
 trigger: none
 
@@ -15,7 +20,8 @@ stages:
           - job: lint_and_test
             displayName: Lint and test
             steps:
-                - template: templates/checkout_and_install_deps.yml
+                - template: templates/checkout_pr.yml
+                - template: templates/install_deps.yml
                 - script: yarn lint:ci
                   displayName: ESLint
                 - script: yarn test
@@ -25,11 +31,6 @@ stages:
             displayName: Build
             dependsOn: lint_and_test
             steps:
-                - template: templates/checkout_and_install_deps.yml
-                - script: yarn build
-                  displayName: Build
-                - script: cp staticwebapp.config.json build
-                  displayName: Copy Azure Static Web App config
-                - publish: ./build
-                  artifact: build
-                  displayName: Publish artifact
+                - template: templates/checkout_pr.yml
+                - template: templates/install_deps.yml
+                - template: templates/build_and_publish_artifact.yml

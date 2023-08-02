@@ -1,8 +1,16 @@
+# make the name of the pipeline relevant and associated with the pull request
+name: $[ format('PR {0} (deploy {1})', replace(replace(variables['Build.SourceBranch'], 'refs/pull/', ''), '/merge', ''), counter(format('deploy{0}', replace(replace(variables['Build.SourceBranch'], 'refs/pull/', ''), '/merge', '')), 1)) ]
+appendCommitMessageToRunName: false
+
 resources:
-  pipelines:
-  - pipeline: pre-merge-build
-    source: aquifer-web-pre-merge
-    trigger: true
+    pipelines:
+        - pipeline: pre-merge-build
+          source: aquifer-web-pre-merge
+          branch: master-test
+          trigger:
+              branches:
+                  include:
+                      - refs/pull/*
 
 pr: none
 trigger: none
@@ -13,6 +21,7 @@ pool:
 stages:
     - stage: deploy_to_dev
       displayName: Deploy to dev
+      dependsOn: []
       jobs:
           - deployment: deploy_to_dev
             displayName: Deploy to dev
@@ -21,27 +30,37 @@ stages:
                 runOnce:
                     deploy:
                         steps:
-                            - template: templates/checkout.yml
+                            - template: templates/checkout_pr.yml
                             - download: pre-merge-build
                               artifact: build
                               displayName: Download artifact
-                            - script: cp ./src/env/dev-config.json $(Pipeline.Workspace)/pre-merge-build/build/env-config.json
-                              displayName: Setup env
-                            - script: echo "##vso[task.setvariable variable=PrNumber]$(echo $BUILD_SOURCEBRANCH | grep -oP "refs/pull/\K[0-9]+")"
-                              displayName: Set PR number var
-                            - task: AzureStaticWebApp@0
-                              inputs:
-                                  cwd: $(Pipeline.Workspace)/pre-merge-build
-                                  skip_app_build: true
-                                  app_location: ./build
-                                  api_location: ''
-                                  deployment_environment: pr$(PrNumber)
-                                  output_location: ''
-                                  azure_static_web_apps_api_token: $(AzureStaticWebAppsApiToken)
-                              displayName: Deploy Azure Static Web App
-                            - task: GitHubComment@0
-                              inputs:
-                                  gitHubConnection: MrGrinst
-                                  id: $(PrNumber)
-                                  comment: Deployed to https://polite-pond-08e447610-pr$(PrNumber).centralus.3.azurestaticapps.net/
-                              displayName: Comment deployment URL
+                            - template: templates/deploy.yml
+                              parameters:
+                                DeployEnv: dev
+                                ArtifactDir: $(Pipeline.Workspace)/pre-merge-build
+                                DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
+
+
+    - stage: deploy_to_qa
+      displayName: Deploy to qa (preview)
+      dependsOn: []
+      jobs:
+          - deployment: deploy_to_qa
+            displayName: Deploy to qa (preview)
+            environment: qa-web-preview
+            strategy:
+                runOnce:
+                    deploy:
+                        steps:
+                            - template: templates/checkout_pr.yml
+                            - download: pre-merge-build
+                              artifact: build
+                              displayName: Download artifact
+                            - script: echo "##vso[task.setvariable variable=DeployPreviewName]pr$(echo $BUILD_SOURCEBRANCH | grep -oP "refs/pull/\K[0-9]+")"
+                              displayName: Calculate deploy preview name
+                            - template: templates/deploy.yml
+                              parameters:
+                                DeployEnv: qa
+                                ArtifactDir: $(Pipeline.Workspace)/pre-merge-build
+                                DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
+                                DeployPreviewName: $(DeployPreviewName)
