@@ -1,8 +1,0 @@
-{
-    "name": "github-deployer",
-    "version": "1.0.0",
-    "description": "Small script to handle GitHub deployments",
-    "dependencies": {
-        "octokit": "^3.1.0"
-    }
-}

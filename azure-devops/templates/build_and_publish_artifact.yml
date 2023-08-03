@@ -1,8 +1,10 @@
 steps:
     - script: yarn build
       displayName: Build
+
     - script: cp staticwebapp.config.json build
       displayName: Copy Azure Static Web App config
+
     - publish: ./build
       artifact: build
       displayName: Publish artifact
