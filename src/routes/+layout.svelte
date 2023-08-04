@@ -3,20 +3,13 @@
     import { pwaInfo } from 'virtual:pwa-info';
     import { onMount } from 'svelte';
     import { registerSW } from 'virtual:pwa-register';
-    let loadedConfig = false;
+    import { page } from '$app/stores';
+    import { log } from '$lib/logger';
+
+    $: log.pageView($page.route.id ?? '');
 
     async function initialize() {
         registerSW({}); // force a reload if the user is online and the app updated
-        initializeConfig();
-    }
-
-    async function initializeConfig() {
-        const [globalConfig, envConfig] = await Promise.all([
-            fetch('/global-config.json').then((r) => r.json()),
-            fetch('/env-config.json').then((r) => r.json()),
-        ]);
-        window.__CONFIG = Object.assign({}, globalConfig, envConfig);
-        loadedConfig = true;
     }
 
     onMount(initialize);
@@ -26,9 +19,8 @@
 </script>
 
 <svelte:head>
+    <title>aquifer</title>
     {@html webManifestLink}
 </svelte:head>
 
-{#if loadedConfig}
-    <slot />
-{/if}
+<slot />
