@@ -47,9 +47,11 @@ stages:
                       displayName: Destroy preview environment in Azure
                     - script: |
                         ./azure-devops/github-cli/script.sh deployment \
-                            --privateKeyBase64 "$GITHUBAPPPRIVATEKEYBASE64" \
+                            --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
                             --environment "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" \
                             --destroy
+                      env:
+                          GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)
                       displayName: Destroy preview environment in GitHub
 
     - template: templates/deploy_stage.yml
