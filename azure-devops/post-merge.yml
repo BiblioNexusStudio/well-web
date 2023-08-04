@@ -12,6 +12,7 @@ variables:
     - group: dev-web
     - group: qa-web
     - group: github-app
+    - group: e2e-tests
 
 stages:
     - stage: build
@@ -74,3 +75,12 @@ stages:
           DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
           DeployUrl: $(AzureStaticWebAppsDeployUrlQa)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+
+    - stage: e2e_tests
+      displayName: E2E Tests
+      dependsOn: [deploy_to_dev]
+      jobs:
+          - template: templates/e2e_tests.yml
+            parameters:
+                Url: $(AzureStaticWebAppsDeployUrlDev)
+

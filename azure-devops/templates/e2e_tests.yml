@@ -1,0 +1,44 @@
+parameters:
+    - name: Url
+      type: string
+
+jobs:
+    - job: e2e_tests
+      displayName: E2E Tests
+      container:
+          image: mcr.microsoft.com/playwright:v1.36.2-jammy
+      steps:
+          - checkout: none
+
+          - template: setup_node.yml
+
+          - script: |
+                mkdir -p ~/.ssh
+                echo "$E2E_REPO_KEY_BASE64" | base64 --decode > ~/.ssh/id_ed25519
+                chmod 600 ~/.ssh/id_ed25519
+                ssh-keyscan github.com >> ~/.ssh/known_hosts
+            env:
+                E2E_REPO_KEY_BASE64: $(E2ERepoKeyBase64)
+            displayName: Setup SSH Key
+
+          - script: git clone git@github.com:BiblioNexusStudio/aquifer-e2e.git
+            displayName: Clone aquifer-e2e
+
+          - task: Cache@2
+            inputs:
+                key: 'yarn-e2e | "$(Agent.OS)" | yarn.lock'
+                path: node_modules
+            displayName: Cache yarn dependencies
+
+          - script: yarn install --frozen-lockfile
+            displayName: Install dependencies
+
+          - script: yarn test:ci $URL
+            env:
+                URL: ${{ parameters.Url }}
+            displayName: Run E2E tests
+
+          - publish: test-results
+            artifact: failure-traces
+            displayName: Upload failure-traces
+            condition: failed()

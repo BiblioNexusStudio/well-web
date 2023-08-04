@@ -1,5 +1,5 @@
 steps:
-    - template: ./setup_node.yml
+    - template: setup_node.yml
 
     - script: cat patches/*.patch | md5sum > patches/lock
       displayName: Generate patch lock file

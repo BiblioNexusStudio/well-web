@@ -52,14 +52,14 @@ stages:
                               artifact: build
                               displayName: Download artifact
 
-                            - script: cp ./src/env/${{ parameters.DeployEnv }}-config.json $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}/build/env-config.json
+                            - script: cp src/env/${{ parameters.DeployEnv }}-config.json $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}/build/env-config.json
                               displayName: Setup env
 
                             - task: AzureStaticWebApp@0
                               inputs:
                                   cwd: $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}
                                   skip_app_build: true
-                                  app_location: ./build
+                                  app_location: build
                                   api_location: ''
                                   deployment_environment: $(DeployPreviewName)
                                   output_location: ''
