@@ -44,7 +44,6 @@ const deployment = async (argv) => {
     const isTransient = !!previewEnvName;
 
     const octokit = await createOctokit(atob(privateKeyBase64));
-    octokit.repos;
 
     if (!destroy) {
         const {
