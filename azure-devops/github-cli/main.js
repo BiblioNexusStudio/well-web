@@ -7,8 +7,8 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 /* eslint-enable */
 
-const APP_ID = 370405;
-const INSTALLATION_ID = 40320420;
+const APP_ID = 370405; // comes from the GitHub App's about page
+const INSTALLATION_ID = 40320420; // comes from the URL after installing the GitHub App to the org
 const OWNER = 'BiblioNexusStudio';
 const REPO = 'aquifer-web';
 

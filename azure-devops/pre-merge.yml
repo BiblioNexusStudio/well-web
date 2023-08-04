@@ -7,24 +7,14 @@ trigger: none
 pool:
     vmImage: ubuntu-latest
 
-stages:
-    - stage: test_and_build
-      displayName: Test and build
-      jobs:
-          - job: lint_and_test
-            displayName: Lint and test
-            steps:
-                - template: templates/checkout_pr.yml
-                - template: templates/install_deps.yml
-                - script: yarn lint:ci
-                  displayName: ESLint
-                - script: yarn test
-                  displayName: Test
-
-          - job: build
-            displayName: Build
-            dependsOn: lint_and_test
-            steps:
-                - template: templates/checkout_pr.yml
-                - template: templates/install_deps.yml
-                - template: templates/build_and_publish_artifact.yml
+jobs:
+    - job: lint_and_test_and_build
+      displayName: Lint, test, and build
+      steps:
+          - template: templates/checkout_pr.yml
+          - template: templates/install_deps.yml
+          - script: yarn lint:ci
+            displayName: ESLint
+          - script: yarn test
+            displayName: Test
+          - template: templates/build_and_publish_artifact.yml
