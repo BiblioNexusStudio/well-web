@@ -21,45 +21,23 @@ variables:
     - group: github-app
 
 stages:
-    - stage: deploy_to_dev
-      displayName: Deploy to dev
-      dependsOn: []
-      jobs:
-          - deployment: deploy_to_dev
-            displayName: Deploy to dev
-            environment: dev-web
-            strategy:
-                runOnce:
-                    deploy:
-                        steps:
-                            - template: templates/checkout_pr.yml
-                            - template: templates/deploy.yml
-                              parameters:
-                                DeployEnv: dev
-                                DownloadFromPipeline: pre-merge-build
-                                DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
-                                DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
-                                GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: dev
+          AzureDevopsEnvName: dev-web
+          CheckoutTemplate: checkout_pr.yml
+          DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
+          DownloadFromPipeline: pre-merge-build
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
 
-    - stage: deploy_to_qa
-      displayName: Deploy to qa (preview)
-      dependsOn: []
-      jobs:
-          - deployment: deploy_to_qa
-            displayName: Deploy to qa (preview)
-            environment: qa-web-preview
-            strategy:
-                runOnce:
-                    deploy:
-                        steps:
-                            - template: templates/checkout_pr.yml
-                            - script: echo "##vso[task.setvariable variable=DeployPreviewName]pr$(echo $BUILD_SOURCEBRANCH | grep -oP "refs/pull/\K[0-9]+")"
-                              displayName: Calculate deploy preview name
-                            - template: templates/deploy.yml
-                              parameters:
-                                DeployEnv: qa
-                                DownloadFromPipeline: pre-merge-build
-                                DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
-                                DeployPreviewName: $(DeployPreviewName)
-                                DeployUrl: $(AzureStaticWebAppsDeployUrlQaPreview)
-                                GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: qa
+          AzureDevopsEnvName: qa-web-preview
+          CheckoutTemplate: checkout_pr.yml
+          DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlQaPreview)
+          DownloadFromPipeline: pre-merge-build
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+          SourceBranchForPreviewEnvironment: $(Build.SourceBranch)

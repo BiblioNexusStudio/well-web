@@ -20,15 +20,15 @@ const release = async (argv) => {
 
     const octokit = await createOctokit(atob(privateKeyBase64));
 
-    const { data: tags } = await octokit.request('GET /repos/{owner}/{repo}/tags', {
+    const { data: releases } = await octokit.request('GET /repos/{owner}/{repo}/releases', {
         owner: OWNER,
         repo: REPO,
     });
 
-    const versions = tags.map((tag) => tag.name).filter(semver.valid);
-    const latestTag = versions.sort(semver.rcompare)[0];
+    const versions = releases.map((release) => release.tag_name).filter(semver.valid);
+    const latestReleaseVersion = versions.sort(semver.rcompare)[0];
 
-    const newVersion = semver.inc(latestTag, 'patch');
+    const newVersion = semver.inc(latestReleaseVersion, 'patch');
 
     await octokit.request('POST /repos/{owner}/{repo}/releases', {
         owner: OWNER,
@@ -55,6 +55,7 @@ const deployment = async (argv) => {
             environment,
             transient_environment: isTransient,
             required_contexts: [],
+            auto_merge: false,
             ref,
         });
 
