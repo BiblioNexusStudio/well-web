@@ -1,0 +1,74 @@
+name: $(Build.SourceVersion)
+appendCommitMessageToRunName: true
+
+pr: none
+trigger:
+    - master
+
+pool:
+    vmImage: ubuntu-latest
+
+variables:
+    - group: dev-web
+    - group: qa-web
+    - group: github-app
+
+stages:
+    - stage: build
+      displayName: Build
+      dependsOn: []
+      jobs:
+          - job: build
+            displayName: Build
+            steps:
+                - template: templates/checkout_master.yml
+                - template: templates/install_deps.yml
+                - template: templates/build_and_publish_artifact.yml
+
+    - ${{ if contains(variables['Build.SourceVersionMessage'], '(#') }}:
+        - stage: cleanup_qa_preview
+          displayName: Cleanup qa preview environment
+          dependsOn: []
+          jobs:
+              - job: cleanup_qa_preview
+                displayName: Cleanup qa preview environment
+                steps:
+                    - template: templates/checkout_master.yml
+                    - template: templates/setup_node.yml
+                    - task: AzureCLI@2
+                      inputs:
+                          azureSubscription: dacfa945-984c-4708-9f2d-7d8358f223d5
+                          scriptType: bash
+                          scriptLocation: inlineScript
+                          inlineScript: |
+                              az staticwebapp environment delete \
+                                  --yes --name aquifer-web-qa \
+                                  --environment-name "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')"
+                      displayName: Destroy preview environment in Azure
+                    - script: |
+                        ./azure-devops/github-cli/script.sh deployment \
+                            --privateKeyBase64 "$GITHUBAPPPRIVATEKEYBASE64" \
+                            --environment "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" \
+                            --destroy
+                      displayName: Destroy preview environment in GitHub
+
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: dev
+          AzureDevopsEnvName: dev-web
+          CheckoutTemplate: checkout_master.yml
+          CreateGithubRelease: true
+          DependsOn: [build]
+          DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: qa
+          AzureDevopsEnvName: qa-web
+          CheckoutTemplate: checkout_master.yml
+          DependsOn: [build]
+          DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlQa)
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)

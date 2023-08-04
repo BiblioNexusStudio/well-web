@@ -1,0 +1,43 @@
+# make the name of the pipeline relevant and associated with the pull request
+name: $[ format('PR {0} (deploy {1})', replace(replace(variables['Build.SourceBranch'], 'refs/pull/', ''), '/merge', ''), counter(format('deploy{0}', replace(replace(variables['Build.SourceBranch'], 'refs/pull/', ''), '/merge', '')), 1)) ]
+appendCommitMessageToRunName: false
+
+resources:
+    pipelines:
+        - pipeline: pre-merge-build
+          source: aquifer-web-pre-merge
+          branch: master
+          trigger: true
+
+pr: none
+trigger: none
+
+pool:
+    vmImage: ubuntu-latest
+
+variables:
+    - group: dev-web
+    - group: qa-web
+    - group: github-app
+
+stages:
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: dev
+          AzureDevopsEnvName: dev-web
+          CheckoutTemplate: checkout_pr.yml
+          DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
+          DownloadFromPipeline: pre-merge-build
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: qa
+          AzureDevopsEnvName: qa-web-preview
+          CheckoutTemplate: checkout_pr.yml
+          DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlQaPreview)
+          DownloadFromPipeline: pre-merge-build
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+          SourceBranchForPreviewEnvironment: $(Build.SourceBranch)

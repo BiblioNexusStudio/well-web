@@ -1,0 +1,20 @@
+# make the name of the pipeline relevant and associated with the pull request
+name: $[ format('PR {0} (build {1})', variables['System.PullRequest.PullRequestNumber'], counter(format('build{0}', variables['System.PullRequest.PullRequestNumber']), 1)) ]
+appendCommitMessageToRunName: true
+
+trigger: none
+
+pool:
+    vmImage: ubuntu-latest
+
+jobs:
+    - job: lint_and_test_and_build
+      displayName: Lint, test, and build
+      steps:
+          - template: templates/checkout_pr.yml
+          - template: templates/install_deps.yml
+          - script: yarn lint:ci
+            displayName: ESLint
+          - script: yarn test
+            displayName: Test
+          - template: templates/build_and_publish_artifact.yml
