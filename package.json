@@ -10,7 +10,7 @@
         "lint": "prettier --plugin-search-dir . --check **/*.{json,js,ts,css,html,svelte,cjs} && eslint --fix .",
         "lint:ci": "prettier --plugin-search-dir . --check **/*.{json,js,ts,css,html,svelte,cjs} && eslint .",
         "format": "prettier --plugin-search-dir . --write **/*.{json,js,ts,css,html,svelte,cjs}",
-        "use-config": "fun() { cp \"src/env/${1}-config.json\" \"static/env-config.json\"; }; fun",
+        "use-config": "node scripts/use-config.js",
         "postinstall": "patch-package"
     },
     "devDependencies": {

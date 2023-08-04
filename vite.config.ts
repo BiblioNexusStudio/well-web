@@ -2,6 +2,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
+const buildTimestamp = new Date().toISOString();
+
 const kitConfig = {
     adapterFallback: '/index.html',
 };
@@ -14,8 +16,9 @@ export default defineConfig({
             injectRegister: null,
             workbox: {
                 globPatterns: ['client/**/*.{html,js,css,ico,png,svg,webp,webmanifest}'],
-                additionalManifestEntries: [{ url: '/', revision: null }],
+                additionalManifestEntries: [{ url: '/', revision: buildTimestamp }],
                 navigateFallback: '/',
+                cleanupOutdatedCaches: true,
                 runtimeCaching: [
                     {
                         urlPattern: /\/.*-config\.json$/,
