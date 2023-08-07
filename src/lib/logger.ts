@@ -2,27 +2,28 @@
 import { config } from '$lib/stores/config.store';
 import { get } from 'svelte/store';
 
-const logSource: string = 'aquifer-web';
+const configuration = get(config);
 const appInsights = new ApplicationInsights({
     config: {
-        connectionString: get(config).APPLICATION_INSIGHTS.CONNECTION_STRING,
+        connectionString: configuration.APPLICATION_INSIGHTS.CONNECTION_STRING,
     },
 });
 
 appInsights.loadAppInsights();
 
+const additionalProperties = {
+    source: 'aquifer-web',
+    environment: configuration.ENV,
+};
+
 export const log = {
     exception: (ex: any) => {
-        appInsights.trackException(ex, {
-            source: logSource,
-        });
+        appInsights.trackException(ex, additionalProperties);
     },
     pageView: (routeId: string) => {
         appInsights.trackPageView({
             name: routeId,
-            properties: {
-                source: logSource,
-            },
+            properties: additionalProperties,
         });
     },
 };
