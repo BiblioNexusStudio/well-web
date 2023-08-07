@@ -16,12 +16,13 @@ export default defineConfig({
             injectRegister: null,
             workbox: {
                 globPatterns: ['client/**/*.{html,js,css,ico,png,svg,webp,webmanifest}'],
+                globIgnores: ['**/env-config.js', '**/global-config.js'],
                 additionalManifestEntries: [{ url: '/', revision: buildTimestamp }],
                 navigateFallback: '/',
                 cleanupOutdatedCaches: true,
                 runtimeCaching: [
                     {
-                        urlPattern: /\/.*-config\.json$/,
+                        urlPattern: /\/.*-config\.js$/,
                         handler: 'StaleWhileRevalidate',
                     },
                     {

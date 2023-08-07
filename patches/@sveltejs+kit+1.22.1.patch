@@ -12,7 +12,7 @@ index 7d73510..c3c598e 100644
  
  			paths: object({
 diff --git a/node_modules/@sveltejs/kit/src/runtime/server/page/render.js b/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
-index 2a3dfc1..fe6bbe3 100644
+index 2a3dfc1..e6c3f04 100644
 --- a/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
 +++ b/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
 @@ -282,9 +282,9 @@ export async function render_response({
@@ -39,15 +39,20 @@ index 2a3dfc1..fe6bbe3 100644
  
  		if (page_config.ssr) {
  			const serialized = { form: 'null', error: 'null' };
-@@ -355,23 +355,34 @@ export async function render_response({
+@@ -355,23 +355,37 @@ export async function render_response({
  			args.push(`{\n\t\t\t\t\t\t\t${hydrate.join(',\n\t\t\t\t\t\t\t')}\n\t\t\t\t\t\t}`);
  		}
  
 -		blocks.push(`Promise.all([
 +		blocks.push(`function startSvelteKit() { Promise.all([
  						import(${s(prefixed(client.start))}),
- 						import(${s(prefixed(client.app))})
- 					]).then(([kit, app]) => {
+-						import(${s(prefixed(client.app))})
+-					]).then(([kit, app]) => {
++						import(${s(prefixed(client.app))}),
++						import('/env-config.js'),
++						import('/global-config.js')
++					]).then(([kit, app, envConfig, globalConfig]) => {
++						window.__CONFIG = Object.assign({}, globalConfig.default(), envConfig.default());
  						kit.start(${args.join(', ')});
 -					});`);
 -

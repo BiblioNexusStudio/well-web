@@ -7,6 +7,6 @@ const __dirname = dirname(__filename);
 
 const configName = process.argv[2];
 fs.copyFileSync(
-    join(__dirname, '../src/env', `${configName}-config.json`),
-    join(__dirname, '../static', 'env-config.json')
+    join(__dirname, '../src/env', `${configName}-config.js`),
+    join(__dirname, '../static', 'env-config.js')
 );

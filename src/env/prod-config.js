@@ -1,0 +1,4 @@
+export default () => ({
+    ENV: 'prod',
+    AQUIFER_API_URL: 'https://aquifer-server-prod.azurewebsites.net',
+});

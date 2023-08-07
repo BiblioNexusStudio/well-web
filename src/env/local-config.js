@@ -1,0 +1,4 @@
+export default () => ({
+    ENV: 'local',
+    AQUIFER_API_URL: 'http://localhost:5066',
+});

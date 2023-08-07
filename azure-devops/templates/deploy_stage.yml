@@ -52,7 +52,7 @@ stages:
                               artifact: build
                               displayName: Download artifact
 
-                            - script: cp ./src/env/${{ parameters.DeployEnv }}-config.json $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}/build/env-config.json
+                            - script: cp ./src/env/${{ parameters.DeployEnv }}-config.js $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}/build/env-config.js
                               displayName: Setup env
 
                             - task: AzureStaticWebApp@0

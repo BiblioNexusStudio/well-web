@@ -1,0 +1,4 @@
+export default () => ({
+    ENV: 'qa',
+    AQUIFER_API_URL: 'https://aquifer-server-qa.azurewebsites.net',
+});
