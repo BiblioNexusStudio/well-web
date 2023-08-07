@@ -2,6 +2,13 @@
 name: $[ format('PR {0} (build {1})', variables['System.PullRequest.PullRequestNumber'], counter(format('build{0}', variables['System.PullRequest.PullRequestNumber']), 1)) ]
 appendCommitMessageToRunName: true
 
+resources:
+    repositories:
+        - repository: devops
+          type: github
+          name: BiblioNexusStudio/devops
+          endpoint: BiblioNexusStudio
+
 trigger: none
 
 pool:
@@ -11,7 +18,7 @@ jobs:
     - job: lint_and_test_and_build
       displayName: Lint, test, and build
       steps:
-          - template: templates/checkout_pr.yml
+          - template: templates/checkout_pr.yml@devops
           - template: templates/install_deps.yml
           - script: yarn lint:ci
             displayName: ESLint

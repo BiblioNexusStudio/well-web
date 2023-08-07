@@ -8,6 +8,11 @@ resources:
           source: aquifer-web-pre-merge
           branch: master
           trigger: true
+    repositories:
+        - repository: devops
+          type: github
+          name: BiblioNexusStudio/devops
+          endpoint: BiblioNexusStudio
 
 pr: none
 trigger: none
@@ -25,19 +30,21 @@ stages:
       parameters:
           DeployEnv: dev
           AzureDevopsEnvName: dev-web
-          CheckoutTemplate: checkout_pr.yml
+          CheckoutTemplate: templates/checkout_pr.yml@devops
           DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
           DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
           DownloadFromPipeline: pre-merge-build
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+          SourceDirectory: aquifer-web
 
     - template: templates/deploy_stage.yml
       parameters:
           DeployEnv: qa
           AzureDevopsEnvName: qa-web-preview
-          CheckoutTemplate: checkout_pr.yml
+          CheckoutTemplate: templates/checkout_pr.yml@devops
           DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
           DeployUrl: $(AzureStaticWebAppsDeployUrlQaPreview)
           DownloadFromPipeline: pre-merge-build
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
           SourceBranchForPreviewEnvironment: $(Build.SourceBranch)
+          SourceDirectory: aquifer-web

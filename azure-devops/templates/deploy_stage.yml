@@ -23,6 +23,9 @@ parameters:
     - name: CreateGithubRelease
       type: boolean
       default: false
+    - name: SourceDirectory
+      type: string
+      default: '.'
 
 stages:
     - stage: deploy_to_${{ parameters.DeployEnv }}
@@ -37,6 +40,8 @@ stages:
                     deploy:
                         steps:
                             - template: ${{ parameters.CheckoutTemplate }}
+                              parameters:
+                                  WorkingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
 
                             - ${{ if ne(parameters.SourceBranchForPreviewEnvironment, '') }}:
                                 - script: echo "##vso[task.setvariable variable=DeployPreviewName]pr$(echo $SOURCE_BRANCH | grep -oP "refs/pull/\K[0-9]+")"
@@ -53,6 +58,7 @@ stages:
                               displayName: Download artifact
 
                             - script: cp src/env/${{ parameters.DeployEnv }}-config.json $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}/build/env-config.json
+                              workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
                               displayName: Setup env
 
                             - task: AzureStaticWebApp@0
@@ -66,14 +72,18 @@ stages:
                                   azure_static_web_apps_api_token: ${{ parameters.DeployApiToken }}
                               displayName: Deploy Azure Static Web App
 
+                            - checkout: devops
+                              path: devops
+
                             - script: |
-                                  ./azure-devops/github-cli/script.sh deployment \
+                                  $(Pipeline.Workspace)/devops/github-cli/script.sh deployment \
                                       --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
                                       --environment "${DEPLOY_PREVIEW_NAME:-$ENVIRONMENT}" \
                                       --ref "$(git rev-parse HEAD)" \
                                       --deployedUrl "$DEPLOY_URL" \
                                       --previewEnvName "$DEPLOY_PREVIEW_NAME"
                               displayName: Create deployment in GitHub
+                              workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
                               env:
                                   ENVIRONMENT: ${{ parameters.DeployEnv }}
                                   DEPLOY_URL: ${{ parameters.DeployUrl }}
@@ -82,9 +92,10 @@ stages:
 
                             - ${{ if eq(parameters.CreateGithubRelease, true) }}:
                                 - script: |
-                                    ./azure-devops/github-cli/script.sh release \
+                                    $(Pipeline.Workspace)/devops/github-cli/script.sh release \
                                         --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
                                         --ref "$(git rev-parse HEAD)"
                                   env:
                                       GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)
+                                  workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
                                   displayName: Create GitHub release

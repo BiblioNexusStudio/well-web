@@ -1,5 +1,16 @@
-name: $(Build.SourceVersion)
+name: ' '
 appendCommitMessageToRunName: true
+
+resources:
+    repositories:
+        - repository: devops
+          type: github
+          name: BiblioNexusStudio/devops
+          endpoint: BiblioNexusStudio
+        - repository: aquifer_e2e
+          type: github
+          name: BiblioNexusStudio/aquifer-e2e
+          endpoint: BiblioNexusStudio
 
 pr: none
 trigger:
@@ -12,7 +23,6 @@ variables:
     - group: dev-web
     - group: qa-web
     - group: github-app
-    - group: e2e-tests
 
 stages:
     - stage: build
@@ -22,7 +32,7 @@ stages:
           - job: build
             displayName: Build
             steps:
-                - template: templates/checkout_master.yml
+                - template: templates/checkout_master.yml@devops
                 - template: templates/install_deps.yml
                 - template: templates/build_and_publish_artifact.yml
 
@@ -34,8 +44,8 @@ stages:
               - job: cleanup_qa_preview
                 displayName: Cleanup qa preview environment
                 steps:
-                    - template: templates/checkout_master.yml
-                    - template: templates/setup_node.yml
+                    - template: templates/checkout_master.yml@devops
+                    - template: templates/setup_node.yml@devops
                     - task: AzureCLI@2
                       inputs:
                           azureSubscription: dacfa945-984c-4708-9f2d-7d8358f223d5
@@ -47,10 +57,10 @@ stages:
                                   --environment-name "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')"
                       displayName: Destroy preview environment in Azure
                     - script: |
-                        ./azure-devops/github-cli/script.sh deployment \
-                            --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
-                            --environment "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" \
-                            --destroy
+                          $(Pipeline.Workspace)/devops/github-cli/script.sh deployment \
+                              --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
+                              --environment "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" \
+                              --destroy
                       env:
                           GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)
                       displayName: Destroy preview environment in GitHub
@@ -59,28 +69,29 @@ stages:
       parameters:
           DeployEnv: dev
           AzureDevopsEnvName: dev-web
-          CheckoutTemplate: checkout_master.yml
+          CheckoutTemplate: templates/checkout_master.yml@devops
           CreateGithubRelease: true
           DependsOn: [build]
           DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
           DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+          SourceDirectory: aquifer-web
 
     - template: templates/deploy_stage.yml
       parameters:
           DeployEnv: qa
           AzureDevopsEnvName: qa-web
-          CheckoutTemplate: checkout_master.yml
+          CheckoutTemplate: templates/checkout_master.yml@devops
           DependsOn: [build]
           DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
           DeployUrl: $(AzureStaticWebAppsDeployUrlQa)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+          SourceDirectory: aquifer-web
 
     - stage: e2e_tests
-      displayName: E2E Tests
+      displayName: E2E tests
       dependsOn: [deploy_to_dev]
       jobs:
-          - template: templates/e2e_tests.yml
+          - template: azure-devops/templates/e2e_tests.yml@aquifer_e2e
             parameters:
                 Url: $(AzureStaticWebAppsDeployUrlDev)
-
