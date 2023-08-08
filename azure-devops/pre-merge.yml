@@ -14,14 +14,44 @@ trigger: none
 pool:
     vmImage: ubuntu-latest
 
-jobs:
-    - job: lint_and_test_and_build
-      displayName: Lint, test, and build
-      steps:
-          - template: templates/checkout_pr.yml@devops
-          - template: templates/install_deps.yml
-          - script: yarn lint:ci
-            displayName: ESLint
-          - script: yarn test
-            displayName: Test
-          - template: templates/build_and_publish_artifact.yml
+variables:
+    - group: dev-web
+    - group: qa-web
+    - group: github-app
+
+stages:
+    - stage: build
+      jobs:
+          - job: lint_test
+            steps:
+                - template: templates/checkout_pr.yml@devops
+                - template: templates/install_deps.yml
+                - script: yarn lint:ci
+                  displayName: ESLint
+                - script: yarn test
+                  displayName: Test
+                - script: yarn build
+                  displayName: Build
+
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: dev
+          DependsOn: [build]
+          AzureDevopsEnvName: dev-web
+          CheckoutTemplate: templates/checkout_pr.yml@devops
+          DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+          SourceDirectory: aquifer-web
+
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: qa
+          DependsOn: [build]
+          AzureDevopsEnvName: qa-web-preview
+          CheckoutTemplate: templates/checkout_pr.yml@devops
+          DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlQaPreview)
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+          SourceBranchForPreviewEnvironment: $(Build.SourceBranch)
+          SourceDirectory: aquifer-web

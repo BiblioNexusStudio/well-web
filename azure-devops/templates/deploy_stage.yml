@@ -3,9 +3,6 @@ parameters:
       type: string
     - name: AzureDevopsEnvName
       type: string
-    - name: DownloadFromPipeline
-      type: string
-      default: ''
     - name: DeployApiToken
       type: string
     - name: DeployUrl
@@ -17,7 +14,6 @@ parameters:
       default: ''
     - name: DependsOn
       type: object
-      default: []
     - name: CheckoutTemplate
       type: string
     - name: CreateGithubRelease
@@ -29,11 +25,10 @@ parameters:
 
 stages:
     - stage: deploy_to_${{ parameters.DeployEnv }}
-      displayName: Deploy to ${{ parameters.AzureDevopsEnvName }}
+      displayName: ${{ parameters.AzureDevopsEnvName }}
       dependsOn: ${{ parameters.DependsOn }}
       jobs:
-          - deployment: deploy_to_${{ parameters.DeployEnv }}
-            displayName: Deploy to ${{ parameters.AzureDevopsEnvName }}
+          - deployment: deploy
             environment: ${{ parameters.AzureDevopsEnvName }}
             strategy:
                 runOnce:
@@ -53,17 +48,29 @@ stages:
                                 - script: echo "##vso[task.setvariable variable=DeployPreviewName]"
                                   displayName: Skip setting deploy preview name
 
-                            - download: ${{ coalesce(parameters.DownloadFromPipeline, 'current') }}
-                              artifact: build
-                              displayName: Download artifact
+                            - template: install_deps.yml
+                              parameters:
+                                  WorkingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
 
-                            - script: cp src/env/${{ parameters.DeployEnv }}-config.json $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}/build/env-config.json
+                            - script: yarn use-config ${{ parameters.DeployEnv }}
                               workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
                               displayName: Setup env
 
+                            - script: yarn build
+                              workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
+                              displayName: Build
+
+                            - script: cp staticwebapp.config.json build
+                              workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
+                              displayName: Copy Azure Static Web App config
+
+                            - publish: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}/build
+                              artifact: build-${{ parameters.DeployEnv }}
+                              displayName: Publish artifact (for introspection)
+
                             - task: AzureStaticWebApp@0
                               inputs:
-                                  cwd: $(Pipeline.Workspace)/${{ coalesce(parameters.DownloadFromPipeline, '.') }}
+                                  cwd: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
                                   skip_app_build: true
                                   app_location: build
                                   api_location: ''

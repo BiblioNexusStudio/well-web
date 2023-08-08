@@ -1,11 +1,10 @@
-﻿import { writable, readable } from 'svelte/store';
+﻿import { readable } from 'svelte/store';
+import { env } from '$env/dynamic/public';
 
-export const config = writable<Configuration>();
+export const config = readable<Configuration>(env as Configuration);
 
 export interface Configuration {
-    APPLICATION_INSIGHTS: {
-        CONNECTION_STRING: string;
-    };
-    ENV: string;
-    AQUIFER_API_URL: string;
+    PUBLIC_APPLICATION_INSIGHTS_CONNECTION_STRING: string;
+    PUBLIC_ENV: string;
+    PUBLIC_AQUIFER_API_URL: string;
 }

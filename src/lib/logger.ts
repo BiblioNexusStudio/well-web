@@ -1,4 +1,4 @@
-﻿import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+﻿import { ApplicationInsights, type IExceptionTelemetry } from '@microsoft/applicationinsights-web';
 import { config } from '$lib/stores/config.store';
 import type { Configuration } from '$lib/stores/config.store';
 
@@ -13,7 +13,7 @@ config.subscribe((value) => {
 
     appInsights = new ApplicationInsights({
         config: {
-            connectionString: configuration.APPLICATION_INSIGHTS.CONNECTION_STRING,
+            connectionString: configuration.PUBLIC_APPLICATION_INSIGHTS_CONNECTION_STRING,
         },
     });
 
@@ -21,12 +21,12 @@ config.subscribe((value) => {
 
     additionalProperties = {
         source: 'aquifer-web',
-        environment: configuration.ENV,
+        environment: configuration.PUBLIC_ENV,
     };
 });
 
 export const log = {
-    exception: (ex: any) => {
+    exception: (ex: IExceptionTelemetry) => {
         appInsights.trackException(ex, additionalProperties);
     },
     pageView: (routeId: string) => {

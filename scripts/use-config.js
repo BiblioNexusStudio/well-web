@@ -6,7 +6,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const configName = process.argv[2];
-fs.copyFileSync(
-    join(__dirname, '../src/env', `${configName}-config.json`),
-    join(__dirname, '../static', 'env-config.json')
+fs.copyFileSync(join(__dirname, '../config', `.env.${configName}`), join(__dirname, '..', '.env'));
+fs.appendFile(
+    join(__dirname, '..', '.env'),
+    fs.readFileSync(join(__dirname, '../config', `.env.global`)),
+    {},
+    () => {
+        // no-op
+    }
 );

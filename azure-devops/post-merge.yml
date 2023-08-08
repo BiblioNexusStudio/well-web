@@ -25,24 +25,11 @@ variables:
     - group: github-app
 
 stages:
-    - stage: build
-      displayName: Build
-      dependsOn: []
-      jobs:
-          - job: build
-            displayName: Build
-            steps:
-                - template: templates/checkout_master.yml@devops
-                - template: templates/install_deps.yml
-                - template: templates/build_and_publish_artifact.yml
-
     - ${{ if contains(variables['Build.SourceVersionMessage'], '(#') }}:
-        - stage: cleanup_qa_preview
-          displayName: Cleanup qa preview environment
+        - stage: cleanup_qa_preview_env
           dependsOn: []
           jobs:
-              - job: cleanup_qa_preview
-                displayName: Cleanup qa preview environment
+              - job: cleanup
                 steps:
                     - template: templates/checkout_master.yml@devops
                     - template: templates/setup_node.yml@devops
@@ -65,13 +52,15 @@ stages:
                           GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)
                       displayName: Destroy preview environment in GitHub
 
+    - template: templates/setup_cache.yml
+
     - template: templates/deploy_stage.yml
       parameters:
           DeployEnv: dev
+          DependsOn: [setup_cache]
           AzureDevopsEnvName: dev-web
           CheckoutTemplate: templates/checkout_master.yml@devops
           CreateGithubRelease: true
-          DependsOn: [build]
           DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
           DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
@@ -80,16 +69,15 @@ stages:
     - template: templates/deploy_stage.yml
       parameters:
           DeployEnv: qa
+          DependsOn: [setup_cache]
           AzureDevopsEnvName: qa-web
           CheckoutTemplate: templates/checkout_master.yml@devops
-          DependsOn: [build]
           DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
           DeployUrl: $(AzureStaticWebAppsDeployUrlQa)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
           SourceDirectory: aquifer-web
 
     - stage: e2e_tests
-      displayName: E2E tests
       dependsOn: [deploy_to_dev]
       jobs:
           - template: azure-devops/templates/e2e_tests.yml@aquifer_e2e
