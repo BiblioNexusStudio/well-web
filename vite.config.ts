@@ -21,10 +21,6 @@ export default defineConfig({
                 cleanupOutdatedCaches: true,
                 runtimeCaching: [
                     {
-                        urlPattern: /\/.*-config\.json$/,
-                        handler: 'StaleWhileRevalidate',
-                    },
-                    {
                         // TODO: update this with the Aquifer API URL
                         urlPattern: /.*/,
                         handler: 'StaleWhileRevalidate',
