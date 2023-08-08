@@ -1,14 +1,8 @@
-﻿import { readable } from 'svelte/store';
+﻿import { writable, readable } from 'svelte/store';
 
-const [globalConfig, envConfig] = await Promise.all([
-    fetch('/global-config.json').then((r) => r.json()),
-    fetch('/env-config.json').then((r) => r.json()),
-]);
-const configValues: Configuration = Object.assign({}, globalConfig, envConfig);
+export const config = writable<Configuration>();
 
-export const config = readable(configValues);
-
-interface Configuration {
+export interface Configuration {
     APPLICATION_INSIGHTS: {
         CONNECTION_STRING: string;
     };
