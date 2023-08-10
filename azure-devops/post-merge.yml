@@ -35,7 +35,7 @@ stages:
                     - template: templates/setup_node.yml@devops
                     - task: AzureCLI@2
                       inputs:
-                          azureSubscription: dacfa945-984c-4708-9f2d-7d8358f223d5
+                          azureSubscription: BiblioNexusAzureSubscription
                           scriptType: bash
                           scriptLocation: inlineScript
                           inlineScript: |
@@ -49,6 +49,7 @@ stages:
                           $(Pipeline.Workspace)/devops/github-cli/script.sh deployment \
                               --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
                               --environment "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" \
+                              --repo aquifer-web \
                               --destroy
                       env:
                           GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)

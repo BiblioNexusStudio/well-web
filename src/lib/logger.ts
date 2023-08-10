@@ -1,4 +1,4 @@
-﻿import { ApplicationInsights, type IExceptionTelemetry } from '@microsoft/applicationinsights-web';
+import { ApplicationInsights, type IExceptionTelemetry } from '@microsoft/applicationinsights-web';
 import { config } from '$lib/stores/config.store';
 import type { Configuration } from '$lib/stores/config.store';
 
