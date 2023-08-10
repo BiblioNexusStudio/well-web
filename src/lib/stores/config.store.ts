@@ -1,4 +1,4 @@
-﻿import { readable } from 'svelte/store';
+import { readable } from 'svelte/store';
 import { env } from '$env/dynamic/public';
 
 export const config = readable<Configuration>(env as Configuration);
