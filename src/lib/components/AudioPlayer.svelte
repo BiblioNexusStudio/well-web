@@ -10,23 +10,49 @@
         return `${minutes}:${seconds}`;
     };
 
-    const sound = new Howl({
-        src: audioFile,
-        onplay: () => (isAudioPlaying = true),
-        onpause: () => (isAudioPlaying = false),
-        onend: () => (isAudioPlaying = false),
-    });
-
     let isAudioPlaying: boolean = false;
     let currentTime: number = 0;
-    let totalTime: number = sound.duration();
+    let totalTime: number = 0;
+    let timer: NodeJS.Timer;
 
-    let timer = setInterval(() => {
-        currentTime = sound.seek();
+    const sound = new Howl({
+        src: audioFile,
+        onplay: () => {
+            isAudioPlaying = true;
+            timer = setInterval(() => {
+                console.log('timer is going');
+                currentTime = sound.seek();
 
-        let slider = document.getElementById('song-percentage-played');
-        slider.style.backgroundSize = currentTime / totalTime + '% 100%';
-    }, 500);
+                let slider = document.getElementById('song-percentage-played');
+                if (slider) {
+                    slider.value = 100 * (currentTime / totalTime);
+                    slider.style.backgroundSize = 100 * (currentTime / totalTime) + '% 100%';
+                }
+            }, 500);
+        },
+        onpause: () => {
+            isAudioPlaying = false;
+            clearInterval(timer);
+        },
+        onend: () => {
+            isAudioPlaying = false;
+            clearInterval(timer);
+        },
+        onload: () => {
+            totalTime = sound.duration();
+        },
+        onseek: () => {
+            let slider = document.getElementById('song-percentage-played');
+            if (slider) {
+                slider.style.backgroundSize = 100 * (currentTime / totalTime) + '% 100%';
+            }
+        },
+    });
+
+    const onSeek = (e: any) => {
+        console.log(e.target.value);
+        sound.seek((e.target.value / 100) * totalTime);
+    };
 </script>
 
 <div
@@ -73,7 +99,16 @@
     </div>
 
     <div class="w-full flex flex-col grow z-50 mx-6">
-        <input type="range" id="song-percentage-played" class="" step=".1" />
+        <input
+            type="range"
+            id="song-percentage-played"
+            class=""
+            step=".1"
+            value="0"
+            min="0"
+            max="100"
+            on:change={onSeek}
+        />
     </div>
 
     <span class="w-24 items-start text-xs font-sans tracking-wide font-medium text-gray-500"
@@ -115,11 +150,14 @@
     }
 
     input[type='range'] {
-        background: #0f172a;
+        -webkit-appearance: none;
+        height: 8px;
+        background-color: #131212;
         background-image: linear-gradient(#38bdf8, #38bdf8);
         background-size: 0% 100%;
         box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.06);
         background-repeat: no-repeat;
+        border-radius: 5px;
     }
 
     input[type='range']::-webkit-slider-thumb {
@@ -164,46 +202,8 @@
         border-color: rgba(255, 255, 255, 0.16);
     }
 
-    .border-cover-dark-border {
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .border-gray-900 {
-        --tw-border-opacity: 1;
-        border-color: rgb(17 24 39 / var(--tw-border-opacity));
-    }
-
-    .border-play-pause-dark-border {
-        border-color: rgba(255, 255, 255, 0.06);
-    }
-
-    .bg-\[\#0A1122\] {
-        --tw-bg-opacity: 1;
-        background-color: rgb(10 17 34 / var(--tw-bg-opacity));
-    }
-
-    .bg-player-dark-background {
-        background-color: rgba(30, 41, 59, 0.7);
-    }
-
-    .bg-control-panel-dark-background {
-        background-color: rgba(23, 31, 50, 0.5);
-    }
-
-    .bg-play-pause-dark-background {
-        --tw-bg-opacity: 1;
-        background-color: rgb(47 59 79 / var(--tw-bg-opacity));
-    }
-
     .fill-slate-400 {
         fill: #94a3b8;
-    }
-
-    .shadow-player-dark {
-        --tw-shadow: inset 0px 2px 4px rgba(255, 255, 255, 0.06);
-        --tw-shadow-colored: inset 0px 2px 4px var(--tw-shadow-color);
-        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-            var(--tw-shadow);
     }
 
     .backdrop-blur-xl {

@@ -11,7 +11,7 @@
     let selectedId = 'default';
     $: bookPassages = data.passages.filter((x) => x.book === selectedBook);
 
-    let onLanguageSelected = (e) => {
+    let onLanguageSelected = (e: any) => {
         languageSelected = true;
         $locale = e.target.value;
     };
