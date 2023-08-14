@@ -2,6 +2,7 @@
     import type { PageData } from './$types';
     import { _ as translate } from 'svelte-i18n';
     import { locale } from 'svelte-i18n';
+    import AudioPlayer from '$lib/components/AudioPlayer.svelte';
 
     export let data: PageData;
 
@@ -17,6 +18,7 @@
 </script>
 
 <section>
+    <AudioPlayer />
     <div class="aquiferHeader">
         <h1>AQUIFER</h1>
         <h1>AQUIFER</h1>

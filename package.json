@@ -20,6 +20,7 @@
         "@tailwindcss/typography": "^0.5.9",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/svelte": "^4.0.3",
+        "@types/howler": "^2.2.7",
         "@typescript-eslint/eslint-plugin": "^5.45.0",
         "@typescript-eslint/parser": "^5.45.0",
         "@vite-pwa/sveltekit": "^0.2.5",
@@ -48,6 +49,7 @@
     "type": "module",
     "dependencies": {
         "@microsoft/applicationinsights-web": "^3.0.2",
+        "howler": "^2.2.3",
         "svelte-i18n": "^3.7.0"
     }
 }
