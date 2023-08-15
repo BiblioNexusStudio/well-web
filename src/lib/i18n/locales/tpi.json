@@ -12,6 +12,33 @@
             },
             "go": {
                 "value": "Go"
+            },
+            "searchByBook": {
+                "value": "Sospen Long Buk"
+            },
+            "download": {
+                "value": "Dounload"
+            },
+            "size": {
+                "value": "Sais"
+            },
+            "expand": {
+                "value": "Ekspandim"
+            },
+            "fileManager": {
+                "value": "Fael Manija"
+            },
+            "type": {
+                "value": "Taip"
+            },
+            "update": {
+                "value": "Apdetim"
+            },
+            "cancel": {
+                "value": "Kanselim"
+            },
+            "back": {
+                "value": "Bak"
             }
         }
     }
