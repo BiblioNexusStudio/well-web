@@ -11,6 +11,7 @@
     import infoCircle from 'svelte-awesome/icons/infoCircle';
     import refresh from 'svelte-awesome/icons/refresh';
     import type { BibleBook as BibleBookInterface } from '$lib/types/fileManager';
+    import { convertToReadableSize } from '$lib/utils/fileManager';
 
     export let data: PageData;
     let bibleData: BibleBookInterface[] = [];
@@ -143,7 +144,9 @@
                                     </div>
                                 </div>
                             </td>
-                            <td> {book.audioSizeKb + book.textSizeKb} </td>
+                            <td>
+                                {convertToReadableSize(book.audioSizeKb + book.textSizeKb)}
+                            </td>
                             {#if book.textSizeKb > 1 || book.audioSizeKb > 1}
                                 <td>
                                     <button
@@ -178,7 +181,7 @@
                                         </label>
                                     </td>
                                     <td> Text </td>
-                                    <td> {book.textSizeKb} </td>
+                                    <td> {convertToReadableSize(book.textSizeKb)} </td>
                                     <td />
                                 </tr>
                             {/if}
@@ -194,7 +197,7 @@
                                             </label>
                                         </td>
                                         <td> Audio Chapter {audioChapter.number} </td>
-                                        <td> {audioChapter.webmSizeKb} </td>
+                                        <td> {convertToReadableSize(audioChapter.webmSizeKb)} </td>
                                         <td />
                                     </tr>
                                 {/each}
