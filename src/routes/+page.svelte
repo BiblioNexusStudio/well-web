@@ -34,7 +34,7 @@
     <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6">
         <select on:change={onLanguageSelected} bind:value={$language} class="select select-info">
             <option value="" disabled selected>{$translate('page.index.language.value')}</option>
-            <option value="en">English</option>
+            <option value="eng">English</option>
             <option value="tpi">Tok Pisin</option>
         </select>
 
