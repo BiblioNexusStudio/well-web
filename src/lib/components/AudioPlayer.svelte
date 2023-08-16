@@ -1,17 +1,11 @@
 ﻿<script lang="ts">
     export const audioFile: string =
         'https://cdn.aquifer.bible/testcontainer1/BSB_01_Gen_001_H.mp3';
-    export const startTime: number = 8;
-    export const endTime: number = 60;
+    export const startTime: number = 10;
+    export const endTime: number = 65;
 
     import { Howl } from 'howler';
-
-    const formatTime = (totalSeconds: number) => {
-        totalSeconds = Math.floor(totalSeconds);
-        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-        const seconds = String(totalSeconds % 60).padStart(2, '0');
-        return `${minutes}:${seconds}`;
-    };
+    import type { HowlOptions } from 'howler';
 
     const hasCustomTime: boolean = startTime !== 0 && endTime !== 0;
     let playId: number | undefined = undefined;
@@ -23,16 +17,12 @@
     $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
     $: timeDisplayValue = `${formatTime(currentTimeOffset)} / ${formatTime(totalTime)}`;
 
-    const sound = new Howl({
+    const howlOptions: HowlOptions = {
         src: audioFile,
-        sprite: {
-            audioSection: [1000 * startTime, 1000 * (endTime - startTime)],
-        },
         onplay: () => {
             isAudioPlaying = true;
             timer = setInterval(() => {
                 currentTime = sound.seek(playId);
-                console.log(`Current time: ${currentTime}`);
                 if (!sound.playing(playId)) clearInterval(timer);
             }, 500);
         },
@@ -45,12 +35,28 @@
         onload: () => {
             totalTime = hasCustomTime ? endTime - startTime : sound.duration(playId);
         },
-    });
+    };
+
+    // If you specify a section, you must play a section.
+    if (hasCustomTime) {
+        howlOptions.sprite = {
+            audioSection: [1000 * startTime, 1000 * (endTime - startTime)],
+        };
+    }
+
+    const sound = new Howl(howlOptions);
 
     const onManualSeek = (e: any) => {
         const newTime = startTime + (e.target.value / 100) * totalTime;
         sound.seek(newTime, playId);
         currentTime = newTime;
+    };
+
+    const formatTime = (totalSeconds: number) => {
+        totalSeconds = Math.floor(totalSeconds);
+        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+        const seconds = String(totalSeconds % 60).padStart(2, '0');
+        return `${minutes}:${seconds}`;
     };
 </script>
 
@@ -60,8 +66,8 @@
             class={isAudioPlaying ? 'hidden' : ''}
             on:click={() =>
                 (playId = hasCustomTime
-                    ? sound.play(playId ? playId : 'audioSection')
-                    : sound.play())}
+                    ? sound.play(playId !== undefined ? playId : 'audioSection')
+                    : sound.play(playId))}
         >
             <svg
                 id="play-icon"
