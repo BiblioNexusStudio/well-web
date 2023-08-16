@@ -1,7 +1,10 @@
 ﻿<script lang="ts">
-    export let audioFile: string = 'https://cdn.aquifer.bible/testcontainer1/BSB_01_Gen_001_H.mp3';
+    export const audioFile: string =
+        'https://cdn.aquifer.bible/testcontainer1/BSB_01_Gen_001_H.mp3';
+    export const startTime: number = 8;
+    export const endTime: number = 60;
 
-    import { Howl, Howler } from 'howler';
+    import { Howl } from 'howler';
 
     const formatTime = (totalSeconds: number) => {
         totalSeconds = Math.floor(totalSeconds);
@@ -10,90 +13,83 @@
         return `${minutes}:${seconds}`;
     };
 
+    const hasCustomTime: boolean = startTime !== 0 && endTime !== 0;
+    let playId: number | undefined = undefined;
     let isAudioPlaying: boolean = false;
-    let currentTime: number = 0;
+    let currentTime: number = startTime;
     let totalTime: number = 0;
     let timer: NodeJS.Timer;
+    $: currentTimeOffset = currentTime - startTime;
+    $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
+    $: timeDisplayValue = `${formatTime(currentTimeOffset)} / ${formatTime(totalTime)}`;
 
     const sound = new Howl({
         src: audioFile,
+        sprite: {
+            audioSection: [1000 * startTime, 1000 * (endTime - startTime)],
+        },
         onplay: () => {
             isAudioPlaying = true;
             timer = setInterval(() => {
-                console.log('timer is going');
-                currentTime = sound.seek();
-
-                let slider = document.getElementById('song-percentage-played');
-                if (slider) {
-                    slider.value = 100 * (currentTime / totalTime);
-                    slider.style.backgroundSize = 100 * (currentTime / totalTime) + '% 100%';
-                }
+                currentTime = sound.seek(playId);
+                console.log(`Current time: ${currentTime}`);
+                if (!sound.playing(playId)) clearInterval(timer);
             }, 500);
         },
         onpause: () => {
             isAudioPlaying = false;
-            clearInterval(timer);
         },
         onend: () => {
             isAudioPlaying = false;
-            clearInterval(timer);
         },
         onload: () => {
-            totalTime = sound.duration();
-        },
-        onseek: () => {
-            let slider = document.getElementById('song-percentage-played');
-            if (slider) {
-                slider.style.backgroundSize = 100 * (currentTime / totalTime) + '% 100%';
-            }
+            totalTime = hasCustomTime ? endTime - startTime : sound.duration(playId);
         },
     });
 
-    const onSeek = (e: any) => {
-        console.log(e.target.value);
-        sound.seek((e.target.value / 100) * totalTime);
+    const onManualSeek = (e: any) => {
+        const newTime = startTime + (e.target.value / 100) * totalTime;
+        sound.seek(newTime, playId);
+        currentTime = newTime;
     };
 </script>
 
-<div
-    class="relative w-player flex flex-row justify-center items-center rounded-xl border-player-dark-border backdrop-blur-xl"
->
+<div class="relative w-3/4 flex flex-row justify-center items-center rounded-xl">
     <div class="grow-0 cursor-pointer amplitude-play-pause w-[16px] items-end">
         <button
             class={isAudioPlaying ? 'hidden' : ''}
-            on:click={() => {
-                sound.play();
-            }}
+            on:click={() =>
+                (playId = hasCustomTime
+                    ? sound.play(playId ? playId : 'audioSection')
+                    : sound.play())}
         >
             <svg
                 id="play-icon"
                 width="16"
                 height="19"
                 viewBox="0 0 31 37"
-                fill="none"
+                fill="#94a3b8"
                 xmlns="http://www.w3.org/2000/svg"
-                class=""
             >
                 <path
                     fill-rule="evenodd"
                     clip-rule="evenodd"
                     d="M29.6901 16.6608L4.00209 0.747111C2.12875 -0.476923 0.599998 0.421814 0.599998 2.75545V33.643C0.599998 35.9728 2.12747 36.8805 4.00209 35.6514L29.6901 19.7402C29.6901 19.7402 30.6043 19.0973 30.6043 18.2012C30.6043 17.3024 29.6901 16.6608 29.6901 16.6608Z"
-                    class="fill-slate-400"
                 />
             </svg>
         </button>
 
-        <button class={isAudioPlaying ? '' : 'hidden'} on:click={() => sound.pause()}>
+        <button class={isAudioPlaying ? '' : 'hidden'} on:click={() => sound.pause(playId)}>
             <svg
                 id="pause-icon"
                 width="12"
                 height="18"
                 viewBox="0 0 24 36"
-                fill="none"
+                fill="#94a3b8"
                 xmlns="http://www.w3.org/2000/svg"
             >
-                <rect width="6" height="36" rx="3" class="fill-slate-400" />
-                <rect x="18" width="6" height="36" rx="3" class="fill-slate-400" />
+                <rect width="6" height="36" rx="3" />
+                <rect x="18" width="6" height="36" rx="3" />
             </svg>
         </button>
     </div>
@@ -102,119 +98,16 @@
         <input
             type="range"
             id="song-percentage-played"
-            class=""
+            class="range range-xs range-info"
             step=".1"
-            value="0"
             min="0"
             max="100"
-            on:change={onSeek}
+            on:change={onManualSeek}
+            bind:value={rangeValue}
         />
     </div>
 
-    <span class="w-24 items-start text-xs font-sans tracking-wide font-medium text-gray-500"
-        >{formatTime(currentTime)} / {formatTime(totalTime)}</span
+    <span class="w-24 items-start text-xs font-sans font-medium text-gray-500"
+        >{timeDisplayValue}</span
     >
 </div>
-
-<style>
-    .w-player {
-        width: 640px;
-    }
-
-    .rounded-xl {
-        border-radius: 0.75rem;
-    }
-
-    .font-sans {
-        font-family: Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-            'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    }
-
-    .text-xs {
-        font-size: 0.75rem;
-        line-height: 1rem;
-    }
-
-    .font-medium {
-        font-weight: 500;
-    }
-
-    .tracking-wide {
-        letter-spacing: 0.025em;
-    }
-
-    .text-gray-500 {
-        --tw-text-opacity: 1;
-        color: rgb(107 114 128 / var(--tw-text-opacity));
-    }
-
-    input[type='range'] {
-        -webkit-appearance: none;
-        height: 8px;
-        background-color: #131212;
-        background-image: linear-gradient(#38bdf8, #38bdf8);
-        background-size: 0% 100%;
-        box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.06);
-        background-repeat: no-repeat;
-        border-radius: 5px;
-    }
-
-    input[type='range']::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        -moz-appearance: none;
-        height: 24px;
-        width: 24px;
-        border-radius: 50%;
-        background: #e2e8f0;
-        cursor: ew-resize;
-        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
-        -webkit-transition: background 0.3s ease-in-out;
-        transition: background 0.3s ease-in-out;
-    }
-
-    input[type='range']::-webkit-slider-runnable-track,
-    input[type='range']::-moz-range-track,
-    input[type='range']::-ms-track {
-        -webkit-appearance: none;
-        appearance: none;
-        -moz-appearance: none;
-        box-shadow: none;
-        border: none;
-        background: transparent;
-    }
-
-    div#song-saved.saved svg path {
-        fill: #38bdf8;
-        stroke: #38bdf8;
-    }
-
-    div.amplitude-shuffle.amplitude-shuffle-on svg path {
-        fill: #38bdf8;
-    }
-
-    div.amplitude-repeat-song.amplitude-repeat-song-on svg path {
-        fill: #38bdf8;
-    }
-
-    .border-player-dark-border {
-        border-color: rgba(255, 255, 255, 0.16);
-    }
-
-    .fill-slate-400 {
-        fill: #94a3b8;
-    }
-
-    .backdrop-blur-xl {
-        --tw-backdrop-blur: blur(24px);
-        -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
-            var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
-            var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
-            var(--tw-backdrop-sepia);
-        backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
-            var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate)
-            var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
-            var(--tw-backdrop-sepia);
-    }
-</style>
