@@ -1,8 +1,8 @@
 ﻿<script lang="ts">
     export const audioFile: string =
         'https://cdn.aquifer.bible/testcontainer1/BSB_01_Gen_001_H.mp3';
-    export const startTime: number = 10;
-    export const endTime: number = 65;
+    export const startTime: number = 0;
+    export const endTime: number = 0;
 
     import { Howl } from 'howler';
     import type { HowlOptions } from 'howler';
@@ -24,7 +24,7 @@
             timer = setInterval(() => {
                 currentTime = sound.seek(playId);
                 if (!sound.playing(playId)) clearInterval(timer);
-            }, 500);
+            }, 50);
         },
         onpause: () => {
             isAudioPlaying = false;
@@ -46,10 +46,33 @@
 
     const sound = new Howl(howlOptions);
 
-    const onManualSeek = (e: any) => {
-        const newTime = startTime + (e.target.value / 100) * totalTime;
-        sound.seek(newTime, playId);
-        currentTime = newTime;
+    const onRangeChange = (e: any) => {
+        currentTime = startTime + (e.target.value / 100) * totalTime;
+
+        if (playId !== undefined) {
+            sound.pause(playId);
+            sound.seek(currentTime, playId);
+            sound.play(playId);
+        }
+    };
+
+    const onRangeInput = () => {
+        clearInterval(timer);
+    };
+
+    const onPlayClick = () => {
+        if (playId !== undefined) {
+            sound.play(playId);
+            return;
+        }
+
+        if (hasCustomTime) {
+            playId = sound.play('audioSection');
+        } else {
+            playId = sound.play();
+        }
+
+        sound.seek(currentTime, playId);
     };
 
     const formatTime = (totalSeconds: number) => {
@@ -61,14 +84,8 @@
 </script>
 
 <div class="relative w-3/4 flex flex-row justify-center items-center rounded-xl">
-    <div class="grow-0 cursor-pointer amplitude-play-pause w-[16px] items-end">
-        <button
-            class={isAudioPlaying ? 'hidden' : ''}
-            on:click={() =>
-                (playId = hasCustomTime
-                    ? sound.play(playId !== undefined ? playId : 'audioSection')
-                    : sound.play(playId))}
-        >
+    <div class="grow-0 cursor-pointer amplitude-play-pause w-[16px]">
+        <button class={isAudioPlaying ? 'hidden' : ''} on:click={onPlayClick}>
             <svg
                 id="play-icon"
                 width="16"
@@ -88,7 +105,7 @@
         <button class={isAudioPlaying ? '' : 'hidden'} on:click={() => sound.pause(playId)}>
             <svg
                 id="pause-icon"
-                width="12"
+                width="16"
                 height="18"
                 viewBox="0 0 24 36"
                 fill="#94a3b8"
@@ -100,20 +117,21 @@
         </button>
     </div>
 
-    <div class="w-full flex flex-col grow z-50 mx-6">
+    <div class="w-full flex flex-col grow z-50 mx-4 h-[19px]">
         <input
             type="range"
             id="song-percentage-played"
             class="range range-xs range-info"
-            step=".1"
+            step="any"
             min="0"
             max="100"
-            on:change={onManualSeek}
+            on:change={onRangeChange}
+            on:input={onRangeInput}
             bind:value={rangeValue}
         />
     </div>
 
-    <span class="w-24 items-start text-xs font-sans font-medium text-gray-500"
+    <span class="w-24 items-start text-xs font-sans font-medium text-gray-500 h-[19px]"
         >{timeDisplayValue}</span
     >
 </div>
