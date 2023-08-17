@@ -79,7 +79,7 @@
                     <td />
                 </tr>
                 {#if book.textUrl}
-                    <tr class="bg-primary text-neutral">
+                    <tr class="bg-primary">
                         <td>
                             <label>
                                 <input
@@ -96,7 +96,7 @@
                 {/if}
                 {#if book.audioUrls.chapters.length > 0}
                     {#each book.audioUrls.chapters as audioChapter}
-                        <tr class="bg-primary text-neutral">
+                        <tr class="bg-primary">
                             <td>
                                 <label>
                                     <input
