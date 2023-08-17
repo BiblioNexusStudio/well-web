@@ -7,11 +7,6 @@ const __dirname = dirname(__filename);
 
 const configName = process.argv[2];
 fs.copyFileSync(join(__dirname, '../config', `.env.${configName}`), join(__dirname, '..', '.env'));
-fs.appendFile(
-    join(__dirname, '..', '.env'),
-    fs.readFileSync(join(__dirname, '../config', `.env.global`)),
-    {},
-    () => {
-        // no-op
-    }
-);
+fs.appendFile(join(__dirname, '..', '.env'), fs.readFileSync(join(__dirname, '../config', `.env.global`)), {}, () => {
+    // no-op
+});
