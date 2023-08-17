@@ -1,8 +1,7 @@
 ﻿<script lang="ts">
-    export const audioFile: string =
-        'https://cdn.aquifer.bible/testcontainer1/BSB_01_Gen_001_H.mp3';
-    export const startTime: number = 0;
-    export const endTime: number = 0;
+    export let audioFile: string;
+    export let startTime: number = 0;
+    export let endTime: number = 0;
 
     import { Howl } from 'howler';
     import type { HowlOptions } from 'howler';
@@ -46,7 +45,7 @@
 
     const sound = new Howl(howlOptions);
 
-    const onRangeChange = (e: any) => {
+    const onRangeChange = (e: Event) => {
         currentTime = startTime + (e.target.value / 100) * totalTime;
 
         if (playId !== undefined) {
@@ -117,7 +116,7 @@
         </button>
     </div>
 
-    <div class="w-full flex flex-col grow z-50 mx-4 h-[19px]">
+    <div class="w-full flex flex-col grow mx-4 h-[19px]">
         <input
             type="range"
             id="song-percentage-played"

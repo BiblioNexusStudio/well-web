@@ -18,7 +18,6 @@
 </script>
 
 <section>
-    <AudioPlayer />
     <div class="aquiferHeader">
         <h1>AQUIFER</h1>
         <h1>AQUIFER</h1>
