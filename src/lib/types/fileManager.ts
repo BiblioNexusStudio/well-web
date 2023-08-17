@@ -11,18 +11,24 @@ export interface BibleBookContent {
     audioUrls: {
         chapters: audioChapters[];
     };
-    textSizeKb: number;
-    audioSizeKb: number;
+    textSize: number;
+    audioSize: number;
     expanded?: boolean;
+    selected?: boolean;
+    textSelected?: boolean;
 }
 
 export interface audioChapters {
     number: string;
-    webmUrl: string;
-    mp3Url: string;
-    webmSizeKb: number;
-    mp3SizeKb: number;
+    webm: audioResource;
+    mp3: audioResource;
     audioTimestamps: audioTimestamps[];
+    selected?: boolean;
+}
+
+export interface audioResource {
+    url: string;
+    size: number;
 }
 
 export interface audioTimestamps {

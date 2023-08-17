@@ -1,19 +1,34 @@
+import type { BibleBook } from '$lib/types/fileManager';
+
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
     const mb = kb * 1024;
     const gb = mb * 1024;
 
-    const bytes = size * 1024;
-
-    if (isNaN(bytes)) {
+    if (isNaN(size)) {
         return 'Invalid input';
     }
 
-    if (bytes < mb) {
-        return `${bytes / kb} KB`;
-    } else if (bytes < gb) {
-        return `${(bytes / mb).toFixed(2)} MB`;
+    if (size < kb) {
+        return `${size.toFixed(2)} B`;
+    } else if (size < mb) {
+        return `${(size / kb).toFixed(2)} KB`;
+    } else if (size < gb) {
+        return `${(size / mb).toFixed(2)} MB`;
     } else {
-        return `${(bytes / gb).toFixed(2)} GB`;
+        return `${(size / gb).toFixed(2)} GB`;
     }
+};
+
+export const addFrontEndDataToBibleData = (bibleData: BibleBook[]) => {
+    bibleData.forEach((book) => {
+        book.contents.forEach((content) => {
+            content.expanded = false;
+            content.selected = false;
+            content.textSelected = false;
+            content.audioUrls.chapters.forEach((chapter) => {
+                chapter.selected = false;
+            });
+        });
+    });
 };
