@@ -2,7 +2,6 @@
     import type { PageData } from './$types';
     import { _ as translate } from 'svelte-i18n';
     import { locale } from 'svelte-i18n';
-    import AudioPlayer from '$lib/components/AudioPlayer.svelte';
 
     export let data: PageData;
 
@@ -11,7 +10,7 @@
     let selectedId = 'default';
     $: bookPassages = data.passages.filter((x) => x.book === selectedBook);
 
-    let onLanguageSelected = (e: any) => {
+    let onLanguageSelected = (e: Event) => {
         languageSelected = true;
         $locale = e.target.value;
     };

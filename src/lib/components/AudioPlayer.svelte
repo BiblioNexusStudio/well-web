@@ -1,17 +1,18 @@
 ﻿<script lang="ts">
     export let audioFile: string;
-    export let startTime: number = 0;
-    export let endTime: number = 0;
+    export let startTime = 0;
+    export let endTime = 0;
 
     import { Howl } from 'howler';
     import type { HowlOptions } from 'howler';
+    type Timer = ReturnType<typeof setInterval>;
 
-    const hasCustomTime: boolean = startTime !== 0 && endTime !== 0;
+    const hasCustomTime = startTime !== 0 && endTime !== 0;
     let playId: number | undefined = undefined;
-    let isAudioPlaying: boolean = false;
-    let currentTime: number = startTime;
-    let totalTime: number = 0;
-    let timer: NodeJS.Timer;
+    let isAudioPlaying = false;
+    let currentTime = startTime;
+    let totalTime = 0;
+    let timer: Timer;
     $: currentTimeOffset = currentTime - startTime;
     $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
     $: timeDisplayValue = `${formatTime(currentTimeOffset)} / ${formatTime(totalTime)}`;
