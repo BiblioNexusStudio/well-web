@@ -2,6 +2,15 @@
     export let audioFile: string;
     export let startTime = 0;
     export let endTime = 0;
+    export let activePlayId: number | undefined = undefined;
+
+    const pauseAudioIfOtherSourcePlaying = (activePlayId: number | undefined) => {
+        if (playId !== undefined && activePlayId !== playId && sound.playing(playId)) {
+            sound.pause(playId);
+        }
+    };
+
+    $: pauseAudioIfOtherSourcePlaying(activePlayId);
 
     import { Howl } from 'howler';
     import type { HowlOptions } from 'howler';
@@ -25,6 +34,9 @@
                 currentTime = sound.seek(playId);
                 if (!sound.playing(playId)) clearInterval(timer);
             }, 50);
+
+            console.log(`next playid ${playId}`);
+            activePlayId = playId;
         },
         onpause: () => {
             isAudioPlaying = false;

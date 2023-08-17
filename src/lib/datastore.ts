@@ -54,7 +54,7 @@ const testData = {
                     audioUrl:
                         'https://cdn.aquifer.bible/aquifer-content/scripture/ENG/BSB/audio/webm/ENG_BSB_01_002.webm',
                     audioStart: 3.2,
-                    audioEnd: 33.6,
+                    audioEnd: 29.84,
                     chapter: 2,
                     verseStart: 1,
                     endVerse: 3,

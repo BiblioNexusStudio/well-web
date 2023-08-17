@@ -8,6 +8,7 @@
 
     let cbbterSelectedIndex = 0;
     let bibleViewSelected = false;
+    let activePlayId: number | undefined = undefined;
 
     const stepNames: string[] = [
         'Hear and Heart',
@@ -50,6 +51,7 @@
             {#if verse.audioUrl}
                 <div class="py-4">
                     <AudioPlayer
+                        bind:activePlayId
                         audioFile={verse.audioUrl}
                         startTime={verse.audioStart}
                         endTime={verse.audioEnd}
@@ -70,7 +72,7 @@
                 <h3 class="mt-0">{stepNames[i]}</h3>
                 {#if value.audioUrl}
                     <div class="py-4">
-                        <AudioPlayer audioFile={value.audioUrl} />
+                        <AudioPlayer audioFile={value.audioUrl} bind:activePlayId />
                     </div>
                 {/if}
                 {@html value.text}
