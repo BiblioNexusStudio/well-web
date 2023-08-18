@@ -1,4 +1,5 @@
 ﻿<script lang="ts">
+    import { navigating, page } from '$app/stores';
     import { Howl } from 'howler';
     import type { HowlOptions } from 'howler';
     type Timer = ReturnType<typeof setInterval>;
@@ -19,6 +20,12 @@
     };
     $: pauseAudioIfOtherSourcePlaying(activePlayId);
 
+    $: if ($navigating) {
+        if ($navigating.to?.url.pathname !== $page.url.pathname) {
+            sound.unload();
+        }
+    }
+
     const hasCustomTime = startTime !== 0 && endTime !== 0;
     let playId: number | undefined = undefined;
     let isAudioPlaying = false;
@@ -38,7 +45,6 @@
                 if (!sound.playing(playId)) clearInterval(timer);
             }, 50);
 
-            console.log(`next playid ${playId}`);
             activePlayId = playId;
         },
         onpause: () => {
