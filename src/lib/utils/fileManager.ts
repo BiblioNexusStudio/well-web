@@ -1,4 +1,3 @@
-import { currentBibleBook } from '$lib/stores/file-manager.store';
 import type { BibleBook } from '$lib/types/fileManager';
 
 export const convertToReadableSize = (size: number) => {
@@ -36,10 +35,4 @@ export const addFrontEndDataToBibleData = (bibleData: BibleBook[]) => {
 
 export const removeSpecialCharactersAndSpaces = (inputString: string) => {
     return inputString.replace(/[^a-zA-Z0-9]/g, '');
-};
-
-export const getCachedString = (currentBibleBook: BibleBook) => {
-    return `${removeSpecialCharactersAndSpaces(currentBibleBook.name)}-${
-        currentBibleBook.languageId
-    }`;
 };

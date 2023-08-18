@@ -1,20 +1,16 @@
 import type { PageLoad } from './$types';
 import type { language as languageInterface } from '$lib/types/fileManager';
-import { PUBLIC_AQUIFER_API_URL } from '$env/static/public';
 import { language } from '$lib/stores/language.store';
 import { get } from 'svelte/store';
+import { fetchFromCacheOrApi } from '$lib/data-cache';
 
-export const load = (async ({ fetch }) => {
+export const load = (async () => {
     try {
-        const response = await fetch(`${PUBLIC_AQUIFER_API_URL}/languages/`);
-        const languages = await response.json();
+        const languages = await fetchFromCacheOrApi(`languages/`);
 
         if (get(language).length > 0) {
-            const { id } = languages.find(
-                (lang: languageInterface) => lang.iso6393Code === get(language)
-            );
-            const biblesResponse = await fetch(`${PUBLIC_AQUIFER_API_URL}/bibles/language/${id}`);
-            const bibles = await biblesResponse.json();
+            const { id } = languages.find((lang: languageInterface) => lang.iso6393Code === get(language));
+            const bibles = await fetchFromCacheOrApi(`bibles/language/${id}`);
 
             return {
                 languages,

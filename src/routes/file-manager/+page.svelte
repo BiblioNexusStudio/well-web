@@ -10,12 +10,7 @@
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
     import Modal from '$lib/components/file-manager/modal.svelte';
-    import {
-        fileManagerLoading,
-        bibleData,
-        currentBibleBook,
-        languages,
-    } from '$lib/stores/file-manager.store';
+    import { fileManagerLoading, bibleData, currentBibleBook, languages } from '$lib/stores/file-manager.store';
 
     export let data: PageData;
 
