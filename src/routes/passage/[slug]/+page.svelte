@@ -2,12 +2,13 @@
     import CbbterStepsNavigation from '$lib/components/CbbterStepsNavigation.svelte';
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import type { PageData } from './$types';
+    import AudioPlayer from '$lib/components/AudioPlayer.svelte';
 
     export let data: PageData;
 
     let cbbterSelectedIndex = 0;
-    $: cbbter = data.cbbter[cbbterSelectedIndex];
     let bibleViewSelected = false;
+    let activePlayId: number | undefined = undefined;
 
     const stepNames: string[] = [
         'Hear and Heart',
@@ -19,7 +20,7 @@
     ];
 </script>
 
-<div class="navbar px-4 bg-base-200 fixed bottom-0 z-50">
+<div class="navbar px-4 bg-base-200 fixed bottom-0 z-50 bg-transparent/90">
     <div class="navbar-start">
         <a href="/" class="font-bold normal-case text-xl">aquifer</a>
     </div>
@@ -47,6 +48,16 @@
     <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} xl:block">
         {#each data.verses as verse}
             <h3>{data.book} / Chapter {verse.chapter}</h3>
+            {#if verse.audioUrl}
+                <div class="py-4">
+                    <AudioPlayer
+                        bind:activePlayId
+                        audioFile={verse.audioUrl}
+                        startTime={verse.audioStart}
+                        endTime={verse.audioEnd}
+                    />
+                </div>
+            {/if}
             {#each verse.values as value, i}
                 <div class="py-1">
                     <span class="sup pr-1">{i + verse.verseStart}</span><span>{@html value}</span>
@@ -56,8 +67,17 @@
     </div>
     <div class="divider divider-horizontal hidden xl:flex" />
     <div class="prose flex-grow {bibleViewSelected ? 'hidden' : 'block'} xl:block">
-        <h3>{stepNames[cbbterSelectedIndex]}</h3>
-        {@html cbbter}
+        {#each data.cbbter as value, i}
+            <div class={cbbterSelectedIndex === i ? '' : 'hidden'}>
+                <h3 class="mt-0">{stepNames[i]}</h3>
+                {#if value.audioUrl}
+                    <div class="py-4">
+                        <AudioPlayer audioFile={value.audioUrl} bind:activePlayId />
+                    </div>
+                {/if}
+                {@html value.text}
+            </div>
+        {/each}
     </div>
 </div>
 
