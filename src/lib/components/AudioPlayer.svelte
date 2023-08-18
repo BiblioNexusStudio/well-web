@@ -152,7 +152,5 @@
         />
     </div>
 
-    <span class="w-24 items-start text-xs font-sans font-medium text-gray-500 h-[19px]"
-        >{timeDisplayValue}</span
-    >
+    <span class="w-24 items-start text-xs font-sans font-medium text-gray-500 h-[19px]">{timeDisplayValue}</span>
 </div>
