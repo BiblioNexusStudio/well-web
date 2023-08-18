@@ -1,4 +1,4 @@
-import { config } from './stores/config.store';
+import config from './config';
 
 type Url = string;
 type CheckCacheChangeItem = { url: string; expectedSize: number };
@@ -10,14 +10,6 @@ type AllItemsProgress = Record<Url, SingleItemProgress>;
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const _partiallyDownloadedCdnUrls: string[] = [];
 const _partiallyDownloadedApiPaths: string[] = [];
-
-let baseUrl: string | null = null;
-
-config.subscribe((c) => {
-    if (c) {
-        baseUrl = c.PUBLIC_AQUIFER_API_URL;
-    }
-});
 
 const fetchFromCacheOrApi = async (path: string) => {
     if (!(await isCachedFromApi(path))) {
@@ -141,7 +133,7 @@ const isCachedFromApi = async (path: string) => {
     return response != null;
 };
 
-const _apiUrl = (path: string) => (baseUrl ?? '' + path.startsWith('/') ? path.slice(1) : path);
+const _apiUrl = (path: string) => config.PUBLIC_AQUIFER_API_URL + (path.startsWith('/') ? path.slice(1) : path);
 
 const _removeFromArray = <T>(array: T[], value: T) => {
     const index = array.indexOf(value);

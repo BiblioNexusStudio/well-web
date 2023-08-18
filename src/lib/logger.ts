@@ -1,29 +1,18 @@
 import { ApplicationInsights, type IExceptionTelemetry } from '@microsoft/applicationinsights-web';
-import { config } from '$lib/stores/config.store';
-import type { Configuration } from '$lib/stores/config.store';
+import config from '$lib/config';
 
-let configuration: Configuration;
-let appInsights: ApplicationInsights;
-let additionalProperties = {};
-
-config.subscribe((value) => {
-    if (!value) return;
-
-    configuration = value;
-
-    appInsights = new ApplicationInsights({
-        config: {
-            connectionString: configuration.PUBLIC_APPLICATION_INSIGHTS_CONNECTION_STRING,
-        },
-    });
-
-    appInsights.loadAppInsights();
-
-    additionalProperties = {
-        source: 'aquifer-web',
-        environment: configuration.PUBLIC_ENV,
-    };
+const appInsights = new ApplicationInsights({
+    config: {
+        connectionString: config.PUBLIC_APPLICATION_INSIGHTS_CONNECTION_STRING,
+    },
 });
+
+appInsights.loadAppInsights();
+
+const additionalProperties = {
+    source: 'aquifer-web',
+    environment: config.PUBLIC_ENV,
+};
 
 export const log = {
     exception: (ex: IExceptionTelemetry) => {
