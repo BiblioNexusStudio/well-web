@@ -1,20 +1,23 @@
 ﻿<script lang="ts">
+    import { Howl } from 'howler';
+    import type { HowlOptions } from 'howler';
+    type Timer = ReturnType<typeof setInterval>;
+
     export let audioFile: string;
     export let startTime = 0;
     export let endTime = 0;
-    export let activePlayId: number | undefined = undefined;
 
+    /** Bind to this when you have multiple players on a single page. It will
+     * call pauseAudioIfOtherSourcePlaying when any bound activePlayId changes,
+     * preventing multiple audio sources from playing simultaneously.
+     */
+    export let activePlayId: number | undefined = undefined;
     const pauseAudioIfOtherSourcePlaying = (activePlayId: number | undefined) => {
         if (playId !== undefined && activePlayId !== playId && sound.playing(playId)) {
             sound.pause(playId);
         }
     };
-
     $: pauseAudioIfOtherSourcePlaying(activePlayId);
-
-    import { Howl } from 'howler';
-    import type { HowlOptions } from 'howler';
-    type Timer = ReturnType<typeof setInterval>;
 
     const hasCustomTime = startTime !== 0 && endTime !== 0;
     let playId: number | undefined = undefined;
