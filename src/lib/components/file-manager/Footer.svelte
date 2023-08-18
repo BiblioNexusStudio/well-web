@@ -3,9 +3,11 @@
     import { currentBibleBook } from '$lib/stores/file-manager.store';
 
     $: console.log('currentBibleBook', $currentBibleBook);
-
     const updateFiles = () => {
-        console.log('updateFiles');
+        const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
+        if (modal) {
+            modal.showModal();
+        }
     };
 
     const cancelUpdateFiles = () => {
@@ -21,10 +23,10 @@
             >
         </div>
         <div class="flex">
-            <button class="btn btn-neutral" on:click={updateFiles}
+            <button class="btn btn-neutral" on:click={cancelUpdateFiles}
                 >{$translate('page.index.cancel.value')}</button
             >
-            <button class="btn btn-primary ml-4" on:click={cancelUpdateFiles}
+            <button class="btn btn-primary ml-4" on:click={updateFiles}
                 >{$translate('page.index.update.value')}</button
             >
         </div>

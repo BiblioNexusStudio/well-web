@@ -9,6 +9,7 @@
     import LanguageSelect from '$lib/components/file-manager/LanguageSelect.svelte';
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
+    import Modal from '$lib/components/file-manager/modal.svelte';
     import {
         fileManagerLoading,
         bibleData,
@@ -38,6 +39,7 @@
 </script>
 
 <div class="container mx-auto">
+    <Modal />
     <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
         <h1 class="text-2xl mb-4 sm:mb-0">
             {$translate('page.index.fileManager.value')}
