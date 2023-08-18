@@ -51,17 +51,13 @@
         </select>
 
         <select bind:value={selectedId} class="select select-info" disabled={!bookPassages.length}>
-            <option disabled selected value="default"
-                >{$translate('page.index.passage.value')}</option
-            >
+            <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
             {#each bookPassages as { name, id }}
                 <option value={id}>{name}</option>
             {/each}
         </select>
 
-        <button class="btn btn-info" disabled={selectedId === 'default'}
-            >{$translate('page.index.go.value')}</button
-        >
+        <button class="btn btn-info" disabled={selectedId === 'default'}>{$translate('page.index.go.value')}</button>
     </form>
     <div class="flex flex-row space-x-2 fixed bottom-4 right-4">
         <a href="/file-manager" class="btn btn-info">
@@ -99,31 +95,11 @@
     @keyframes animate {
         0%,
         100% {
-            clip-path: polygon(
-                0% 45%,
-                16% 44%,
-                33% 50%,
-                54% 60%,
-                70% 61%,
-                84% 59%,
-                100% 52%,
-                100% 100%,
-                0% 100%
-            );
+            clip-path: polygon(0% 45%, 16% 44%, 33% 50%, 54% 60%, 70% 61%, 84% 59%, 100% 52%, 100% 100%, 0% 100%);
         }
 
         50% {
-            clip-path: polygon(
-                0% 60%,
-                15% 65%,
-                34% 66%,
-                51% 62%,
-                67% 50%,
-                84% 45%,
-                100% 46%,
-                100% 100%,
-                0% 100%
-            );
+            clip-path: polygon(0% 60%, 15% 65%, 34% 66%, 51% 62%, 67% 50%, 84% 45%, 100% 46%, 100% 100%, 0% 100%);
         }
     }
 </style>
