@@ -22,6 +22,7 @@ pool:
 variables:
     - group: dev-web
     - group: qa-web
+    - group: prod-web
     - group: github-app
 
 stages:
@@ -63,7 +64,6 @@ stages:
           DependsOn: [setup_cache]
           AzureDevopsEnvName: dev-web
           CheckoutTemplate: templates/checkout_master.yml@devops
-          CreateGithubRelease: true
           DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
           DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
@@ -77,6 +77,18 @@ stages:
           CheckoutTemplate: templates/checkout_master.yml@devops
           DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
           DeployUrl: $(AzureStaticWebAppsDeployUrlQa)
+          GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
+          SourceDirectory: aquifer-web
+
+    - template: templates/deploy_stage.yml
+      parameters:
+          DeployEnv: prod
+          DependsOn: [setup_cache]
+          AzureDevopsEnvName: prod-web
+          CheckoutTemplate: templates/checkout_master.yml@devops
+          CreateGithubRelease: true
+          DeployApiToken: $(AzureStaticWebAppsApiTokenProd)
+          DeployUrl: $(AzureStaticWebAppsDeployUrlProd)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
           SourceDirectory: aquifer-web
 
