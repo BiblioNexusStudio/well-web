@@ -9,7 +9,7 @@
     import LanguageSelect from '$lib/components/file-manager/LanguageSelect.svelte';
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
-    import Modal from '$lib/components/file-manager/Modal.svelte';
+    import FmModal from '$lib/components/file-manager/FmModal.svelte';
     import { fileManagerLoading, bibleData, currentBibleBook, languages } from '$lib/stores/file-manager.store';
 
     export let data: PageData;
@@ -34,7 +34,7 @@
 </script>
 
 <div class="container mx-auto">
-    <Modal />
+    <FmModal />
     <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
         <h1 class="text-2xl mb-4 sm:mb-0">
             {$translate('page.index.fileManager.value')}
