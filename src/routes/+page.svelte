@@ -2,6 +2,10 @@
     import type { PageData } from './$types';
     import { _ as translate } from 'svelte-i18n';
     import { locale } from 'svelte-i18n';
+    import { language } from '$lib/stores/language.store';
+    import Icon from 'svelte-awesome';
+    import gear from 'svelte-awesome/icons/gear';
+    import { onMount } from 'svelte';
 
     export let data: PageData;
 
@@ -13,7 +17,13 @@
     let onLanguageSelected = (e: Event) => {
         languageSelected = true;
         $locale = e.target.value;
+        $language = e.target.value;
     };
+    onMount(() => {
+        if ($language) {
+            languageSelected = true;
+        }
+    });
 </script>
 
 <section>
@@ -22,9 +32,9 @@
         <h1>AQUIFER</h1>
     </div>
     <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6">
-        <select on:change={onLanguageSelected} class="select select-info">
-            <option disabled selected>{$translate('page.index.language.value')}</option>
-            <option value="en">English</option>
+        <select on:change={onLanguageSelected} bind:value={$language} class="select select-info">
+            <option value="" disabled selected>{$translate('page.index.language.value')}</option>
+            <option value="eng">English</option>
             <option value="tpi">Tok Pisin</option>
         </select>
 
@@ -49,6 +59,11 @@
 
         <button class="btn btn-info" disabled={selectedId === 'default'}>{$translate('page.index.go.value')}</button>
     </form>
+    <div class="flex flex-row space-x-2 fixed bottom-4 right-4">
+        <a href="/file-manager" class="btn btn-info">
+            <Icon class="w-6 h-6" data={gear} />
+        </a>
+    </div>
 </section>
 
 <style>

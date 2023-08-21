@@ -16,6 +16,33 @@
             "go": {
                 "value": "Go",
                 "context": "Indicates to the user that they can click on this button to move to next page with their given selections"
+            },
+            "searchByBook": {
+                "value": "Search By Book"
+            },
+            "download": {
+                "value": "Download"
+            },
+            "size": {
+                "value": "Size"
+            },
+            "expand": {
+                "value": "Expand"
+            },
+            "fileManager": {
+                "value": "File Manager"
+            },
+            "type": {
+                "value": "Type"
+            },
+            "update": {
+                "value": "Update"
+            },
+            "cancel": {
+                "value": "Cancel"
+            },
+            "back": {
+                "value": "Back"
             }
         }
     }
