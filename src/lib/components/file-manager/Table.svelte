@@ -1,22 +1,62 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { currentBibleBook } from '$lib/stores/file-manager.store';
+    import { currentBibleBook, downloadData } from '$lib/stores/file-manager.store';
     import { convertToReadableSize } from '$lib/utils/fileManager';
-    import type { BibleBook as BibleBookType } from '$lib/types/bible';
+    import type { BibleBookContent } from '$lib/types/fileManager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
 
-    const selectedAllContentsOfBook = (book: BibleBookType) => {
-        if (book.select) {
-            book.select = false;
+    const selectedAllContentsOfBook = (book: BibleBookContent) => {
+        if (book.selected) {
+            book.selected = false;
             book.textSelected = false;
-            book.audioUrls.chapters.forEach((chapter) => (chapter.selected = false));
+            addUrlToDelete(book.textUrl, book.textSize);
+            book.audioUrls.chapters.forEach((chapter) => {
+                chapter.selected = false;
+                addUrlToDelete(chapter.webm.url, chapter.webm.size);
+            });
             return;
         } else {
-            book.select = true;
+            book.selected = true;
             book.textSelected = true;
-            book.audioUrls.chapters.forEach((chapter) => (chapter.selected = true));
+            addUrlToDownloads(book.textUrl, book.textSize);
+            book.audioUrls.chapters.forEach((chapter) => {
+                chapter.selected = true;
+                addUrlToDownloads(chapter.webm.url, chapter.webm.size);
+            });
+        }
+    };
+
+    const addUrlToDownloads = (url: string, size: number) => {
+        //first check if url is in delete list
+        const index = $downloadData.urlsToDelete.indexOf(url);
+        if (index > -1) {
+            $downloadData.urlsToDelete.splice(index, 1);
+            $downloadData.totalSizeToDelete = $downloadData.totalSizeToDelete - size;
+        }
+
+        //then check if url is in download list
+        const index2 = $downloadData.urlsToDownload.indexOf(url);
+        if (index2 === -1) {
+            $downloadData.urlsToDownload.push(url);
+            $downloadData.totalSizeToDownload = $downloadData.totalSizeToDownload + size;
+        }
+    };
+
+    const addUrlToDelete = (url: string, size: number) => {
+        //first check if url is in download list
+        const index = $downloadData.urlsToDownload.indexOf(url);
+        if (index > -1) {
+            $downloadData.urlsToDownload.splice(index, 1);
+            $downloadData.totalSizeToDownload = $downloadData.totalSizeToDownload - size;
+        }
+
+        //then check if url is in delete list
+        const index2 = $downloadData.urlsToDelete.indexOf(url);
+        if (index2 === -1) {
+            $downloadData.urlsToDelete.push(url);
+            $downloadData.totalSizeToDelete = $downloadData.totalSizeToDelete + size;
         }
     };
 </script>
@@ -39,7 +79,7 @@
                     <label>
                         <input
                             type="checkbox"
-                            on:click={selectedAllContentsOfBook(book)}
+                            on:click={() => selectedAllContentsOfBook(book)}
                             bind:checked={book.selected}
                             class="checkbox checkbox-primary"
                         />
@@ -57,14 +97,8 @@
                 </td>
                 {#if book.textSize > 1 || book.audioSize > 1}
                     <td>
-                        <button
-                            class="btn btn-primary btn-sm"
-                            on:click={() => (book.expanded = !book.expanded)}
-                        >
-                            <Icon
-                                class="cursor-pointer text-white"
-                                data={book.expanded ? chevronUp : chevronDown}
-                            />
+                        <button class="btn btn-primary btn-sm" on:click={() => (book.expanded = !book.expanded)}>
+                            <Icon class="cursor-pointer text-white" data={book.expanded ? chevronUp : chevronDown} />
                         </button>
                     </td>
                 {:else}
@@ -84,6 +118,10 @@
                             <label>
                                 <input
                                     type="checkbox"
+                                    on:click={() =>
+                                        book.textSelected
+                                            ? addUrlToDelete(book.textUrl, book.textSize)
+                                            : addUrlToDownloads(book.textUrl, book.textSize)}
                                     bind:checked={book.textSelected}
                                     class="checkbox checkbox-secondary"
                                 />
@@ -101,6 +139,10 @@
                                 <label>
                                     <input
                                         type="checkbox"
+                                        on:click={() =>
+                                            audioChapter.selected
+                                                ? addUrlToDelete(audioChapter.webm.url, audioChapter.webm.size)
+                                                : addUrlToDownloads(audioChapter.webm.url, audioChapter.webm.size)}
                                         bind:checked={audioChapter.selected}
                                         class="checkbox checkbox-secondary"
                                     />

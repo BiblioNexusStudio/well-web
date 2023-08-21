@@ -18,7 +18,7 @@
         if ($bibleData.length > 0) {
             $currentBibleBook = $bibleData[0];
         }
-        addFrontEndDataToBibleData($bibleData);
+        addFrontEndDataToBibleData();
         $fileManagerLoading = false;
     };
 </script>

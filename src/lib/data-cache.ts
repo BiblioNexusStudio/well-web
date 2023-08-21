@@ -120,7 +120,9 @@ const isCachedFromCdn = async (url: Url) => {
     if (_partiallyDownloadedCdnUrls.includes(url)) {
         return false;
     }
-    return _cachedCdnContentSize != null;
+    const cache = await caches.open('aquifer-cdn');
+    const response = await cache.match(url);
+    return response != null;
 };
 
 // Checks if a fully downloaded cache entry exists for the API path.

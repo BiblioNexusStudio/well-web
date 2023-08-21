@@ -1,4 +1,5 @@
-import type { BibleBook } from '$lib/types/fileManager';
+import { bibleData, bibleDataClone } from '$lib/stores/file-manager.store';
+import { isCachedFromCdn } from '$lib/data-cache';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -20,19 +21,30 @@ export const convertToReadableSize = (size: number) => {
     }
 };
 
-export const addFrontEndDataToBibleData = (bibleData: BibleBook[]) => {
-    bibleData.forEach((book) => {
-        book.contents.forEach((content) => {
-            content.expanded = false;
-            content.selected = false;
-            content.textSelected = false;
-            content.audioUrls.chapters.forEach((chapter) => {
-                chapter.selected = false;
+export const addFrontEndDataToBibleData = () => {
+    bibleData.update((bibleData) => {
+        bibleData.forEach((book) => {
+            book.contents.forEach(async (content) => {
+                content.expanded = false;
+                content.textSelected = await isCachedFromCdn(content.textUrl);
+
+                content.audioUrls.chapters.forEach(async (chapter) => {
+                    chapter.selected = await isCachedFromCdn(chapter.webm.url);
+                });
+
+                content.selected =
+                    content.textSelected && content.audioUrls.chapters.every((chapter) => chapter.selected);
             });
         });
-    });
-};
 
-export const removeSpecialCharactersAndSpaces = (inputString: string) => {
-    return inputString.replace(/[^a-zA-Z0-9]/g, '');
+        return bibleData;
+    });
+
+    bibleDataClone.update((bibleDataClone) => {
+        bibleData.subscribe((bibleData) => {
+            bibleDataClone = structuredClone(bibleData);
+        });
+
+        return bibleDataClone;
+    });
 };

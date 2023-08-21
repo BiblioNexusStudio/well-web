@@ -42,3 +42,10 @@ export interface language {
     iso6393Code: string;
     englishDisplay: string;
 }
+
+export interface DownloadData {
+    totalSizeToDownload: number;
+    totalSizeToDelete: number;
+    urlsToDownload: string[];
+    urlsToDelete: string[];
+}

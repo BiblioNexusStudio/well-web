@@ -9,7 +9,7 @@
     import LanguageSelect from '$lib/components/file-manager/LanguageSelect.svelte';
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
-    import Modal from '$lib/components/file-manager/modal.svelte';
+    import Modal from '$lib/components/file-manager/Modal.svelte';
     import { fileManagerLoading, bibleData, currentBibleBook, languages } from '$lib/stores/file-manager.store';
 
     export let data: PageData;
@@ -25,7 +25,7 @@
             if ($bibleData.length > 0) {
                 $currentBibleBook = $bibleData[0];
             }
-            addFrontEndDataToBibleData($bibleData);
+            addFrontEndDataToBibleData();
         }
         if (data.languages) {
             $languages = data.languages;
