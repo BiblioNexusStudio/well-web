@@ -135,7 +135,7 @@ const isCachedFromApi = async (path: string) => {
     return response != null;
 };
 
-const _apiUrl = (path: string) => config.PUBLIC_AQUIFER_API_URL + '/' + (path.startsWith('/') ? path.slice(1) : path);
+const _apiUrl = (path: string) => config.PUBLIC_AQUIFER_API_URL + (path.startsWith('/') ? path.slice(1) : path);
 
 const _removeFromArray = <T>(array: T[], value: T) => {
     const index = array.indexOf(value);
