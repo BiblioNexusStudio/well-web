@@ -2,11 +2,8 @@
     import { _ as translate } from 'svelte-i18n';
     import { bibleData, bibleDataClone, downloadData, currentBibleBook } from '$lib/stores/file-manager.store';
 
-    const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
-
     const updateFiles = () => {
-        console.log('$downloadData', $downloadData);
-        console.log(modal);
+        const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
         if (modal) {
             modal.showModal();
         }
