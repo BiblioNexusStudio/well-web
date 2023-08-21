@@ -1,4 +1,4 @@
-import { bibleData, bibleDataClone } from '$lib/stores/file-manager.store';
+import { bibleData, bibleDataClone, downloadData } from '$lib/stores/file-manager.store';
 import { isCachedFromCdn } from '$lib/data-cache';
 
 export const convertToReadableSize = (size: number) => {
@@ -46,5 +46,16 @@ export const addFrontEndDataToBibleData = () => {
         });
 
         return bibleDataClone;
+    });
+};
+
+export const resetDownloadData = () => {
+    downloadData.update((downloadData) => {
+        downloadData.urlsToDelete = [];
+        downloadData.urlsToDownload = [];
+        downloadData.totalSizeToDelete = 0;
+        downloadData.totalSizeToDownload = 0;
+
+        return downloadData;
     });
 };

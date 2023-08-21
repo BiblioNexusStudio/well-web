@@ -1,5 +1,6 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
+    import { resetDownloadData } from '$lib/utils/fileManager';
     import { bibleData, bibleDataClone, downloadData, currentBibleBook } from '$lib/stores/file-manager.store';
 
     const updateFiles = () => {
@@ -15,6 +16,7 @@
         if (matchingBook) {
             $currentBibleBook = matchingBook;
         }
+        resetDownloadData();
     };
 </script>
 
