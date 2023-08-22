@@ -1,15 +1,15 @@
-export interface BibleBook {
+export interface BibleVersion {
     languageId: number | string;
     name: string;
-    contents: BibleBookContent[];
+    contents: BibleVersionBookContent[];
 }
 
-export interface BibleBookContent {
+export interface BibleVersionBookContent {
     bookId: number;
     displayName: string;
     textUrl: string;
     audioUrls: {
-        chapters: audioChapters[];
+        chapters: AudioChapter[];
     };
     textSize: number;
     audioSize: number;
@@ -18,26 +18,26 @@ export interface BibleBookContent {
     textSelected?: boolean;
 }
 
-export interface audioChapters {
+export interface AudioChapter {
     number: string;
-    webm: audioResource;
-    mp3: audioResource;
-    audioTimestamps: audioTimestamps[];
+    webm: AudioResource;
+    mp3: AudioResource;
+    audioTimestamps: AudioTimestamp[];
     selected?: boolean;
 }
 
-export interface audioResource {
+export interface AudioResource {
     url: string;
     size: number;
 }
 
-export interface audioTimestamps {
+export interface AudioTimestamp {
     verseNumber: string;
     start: number;
     end: number;
 }
 
-export interface language {
+export interface Language {
     id: number;
     iso6393Code: string;
     englishDisplay: string;
@@ -79,8 +79,8 @@ export interface ResourceContentSteps {
 
 export interface ResourceStep {
     step: number;
-    webm: audioResource;
-    mp3: audioResource;
+    webm: AudioResource;
+    mp3: AudioResource;
 }
 
 export interface ResourceContentUrl {

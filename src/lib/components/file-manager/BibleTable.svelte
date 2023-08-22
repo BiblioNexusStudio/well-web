@@ -1,13 +1,13 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { currentBibleBook } from '$lib/stores/file-manager.store';
+    import { currentBibleVersion } from '$lib/stores/file-manager.store';
     import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/fileManager';
-    import type { BibleBookContent } from '$lib/types/fileManager';
+    import type { BibleVersionBookContent } from '$lib/types/fileManager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
 
-    const selectedAllContentsOfBook = (book: BibleBookContent) => {
+    const selectedAllContentsOfBook = (book: BibleVersionBookContent) => {
         if (book.selected) {
             book.selected = false;
             book.textSelected = false;
@@ -41,7 +41,7 @@
     </thead>
 
     <tbody>
-        {#each $currentBibleBook.contents as book}
+        {#each $currentBibleVersion.contents as book}
             <tr>
                 <td>
                     <label>

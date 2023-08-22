@@ -5,7 +5,7 @@ const buildTimestamp = new Date().toISOString();
 export const serviceWorkerPwaConfig = {
     registerType: 'autoUpdate',
     injectRegister: null,
-    devOptions: { enabled: true },
+    devOptions: { enabled: true, suppressWarnings: true },
     workbox: {
         globPatterns: ['client/**/*.{html,js,css,ico,png,svg,webp,webmanifest}'],
         additionalManifestEntries: [{ url: '/', revision: buildTimestamp }],

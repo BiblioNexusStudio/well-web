@@ -3,12 +3,16 @@
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import type { PageData } from './$types';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
+    import { isIOSSafari } from '$lib/utils/browser';
 
     export let data: PageData;
 
-    let cbbterSelectedIndex = 0;
+    let cbbterSelectedStepNumber = 1;
     let bibleViewSelected = false;
     let activePlayId: number | undefined = undefined;
+
+    let cbbterText = data.textResourceContent[0];
+    let cbbterAudio = data.audioResourceContent[0];
 
     const stepNames: string[] = [
         'Hear and Heart',
@@ -25,9 +29,9 @@
         <a href="/" class="font-bold normal-case text-xl">aquifer</a>
     </div>
 
-    <CbbterStepsNavigation bind:cbbterSelectedIndex bind:bibleViewSelected responsive="xl:hidden" />
+    <CbbterStepsNavigation bind:cbbterSelectedStepNumber bind:bibleViewSelected responsive="xl:hidden" />
     <CbbterStepsNavigation
-        bind:cbbterSelectedIndex
+        bind:cbbterSelectedStepNumber
         bind:bibleViewSelected
         responsive="hidden xl:flex"
         fullDisplay={true}
@@ -46,38 +50,42 @@
 
 <div class="flex flex-row justify-evenly w-full pt-14 pb-20 px-5">
     <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} xl:block">
-        {#each data.verses as verse}
-            <h3>{data.book} / Chapter {verse.chapter}</h3>
-            {#if verse.audioUrl}
+        {#each data.chapters as chapter}
+            <h3>{data.bookName} {chapter.number}</h3>
+            {#if chapter.audioData}
                 <div class="py-4">
                     <AudioPlayer
                         bind:activePlayId
-                        audioFile={verse.audioUrl}
-                        startTime={verse.audioStart}
-                        endTime={verse.audioEnd}
+                        audioFile={chapter.audioData.url}
+                        startTime={chapter.audioData.startTimestamp}
+                        endTime={chapter.audioData.endTimestamp}
                     />
                 </div>
             {/if}
-            {#each verse.values as value, i}
+            {#each chapter.versesText as { number, text }}
                 <div class="py-1">
-                    <span class="sup pr-1">{i + verse.verseStart}</span><span>{@html value}</span>
+                    <span class="sup pr-1">{number}</span><span>{@html text}</span>
                 </div>
             {/each}
         {/each}
     </div>
     <div class="divider divider-horizontal hidden xl:flex" />
     <div class="prose flex-grow {bibleViewSelected ? 'hidden' : 'block'} xl:block">
-        {#each data.cbbter as value, i}
-            <div class={cbbterSelectedIndex === i ? '' : 'hidden'}>
-                <h3 class="mt-0">{stepNames[i]}</h3>
-                {#if value.audioUrl}
-                    <div class="py-4">
-                        <AudioPlayer audioFile={value.audioUrl} bind:activePlayId />
-                    </div>
-                {/if}
-                {@html value.text}
-            </div>
-        {/each}
+        {#if cbbterText}
+            {#each cbbterText.steps as { stepNumber, contentHTML }}
+                {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
+                <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
+                    {#if audioStep}
+                        <div class="py-4">
+                            <AudioPlayer audioFile={audioStep[isIOSSafari() ? 'mp3' : 'webm'].url} bind:activePlayId />
+                        </div>
+                    {/if}
+                    {@html contentHTML}
+                </div>
+            {/each}
+        {:else}
+            No CBBT-ER content available
+        {/if}
     </div>
 </div>
 

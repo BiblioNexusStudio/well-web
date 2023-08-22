@@ -1,15 +1,15 @@
 <script lang="ts">
-    import { bibleData, currentBibleBook, tableType } from '$lib/stores/file-manager.store';
+    import { bibleData, currentBibleVersion, tableType } from '$lib/stores/file-manager.store';
 
-    const onBibleBookSelected = (e: any) => {
-        const { value } = e.target;
+    const onAvailableResourceSelected = (event: any) => {
+        const { value } = event.target as HTMLSelectElement;
 
         if (value === 'resources') {
             $tableType = 'resources';
         } else {
             const book = $bibleData.find((b) => b.languageId == value);
             if (book) {
-                $currentBibleBook = book;
+                $currentBibleVersion = book;
             }
             $tableType = 'bible';
         }
@@ -17,14 +17,14 @@
 </script>
 
 <div class="form-control w-full max-w-xs">
-    <label class="label" for="bibleBookSelect">
+    <label class="label" for="availableResourceSelect">
         <span class="label-text">Choose a Resource</span>
     </label>
     <select
         class="select select-primary w-full max-w-xs"
-        on:change={onBibleBookSelected}
-        bind:value={$currentBibleBook.languageId}
-        id="bibleBookSelect"
+        on:change={onAvailableResourceSelected}
+        bind:value={$currentBibleVersion.languageId}
+        id="availableResourceSelect"
     >
         <option value="" disabled selected>Please select a resource</option>
         <option value="resources">CBBT-ER</option>

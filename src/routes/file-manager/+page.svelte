@@ -1,47 +1,36 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { language } from '$lib/stores/language.store';
+    import { currentLanguage, currentLanguageId } from '$lib/stores/current-language.store';
     import { _ as translate } from 'svelte-i18n';
-    import type { PageData } from './$types';
     import { addFrontEndDataToBibleData, addFrontEndDataToPassageData } from '$lib/utils/fileManager';
     import InfoBox from '$lib/components/file-manager/InfoBox.svelte';
-    import BibleBookSelect from '$lib/components/file-manager/BibleBookSelect.svelte';
+    import AvailableResourceSelect from '$lib/components/file-manager/AvailableResourceSelect.svelte';
     import LanguageSelect from '$lib/components/file-manager/LanguageSelect.svelte';
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
-    import {
-        fileManagerLoading,
-        bibleData,
-        currentBibleBook,
-        languages,
-        passageData,
-    } from '$lib/stores/file-manager.store';
-
-    export let data: PageData;
+    import { fileManagerLoading, bibleData, currentBibleVersion, passageData } from '$lib/stores/file-manager.store';
+    import { fetchFromCacheOrApi } from '$lib/data-cache';
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
-        ($bibleData.length === 0 && $language.length > 0 && !$fileManagerLoading) ||
-        ($bibleData.length === 0 && $language.length === 0 && !$fileManagerLoading);
+        ($bibleData.length === 0 && $currentLanguage.length > 0 && !$fileManagerLoading) ||
+        ($bibleData.length === 0 && $currentLanguage.length === 0 && !$fileManagerLoading);
 
-    onMount(() => {
-        if (data.bibles) {
-            $bibleData = data.bibles;
-            if ($bibleData.length > 0) {
-                $currentBibleBook = $bibleData[0];
+    async function fetchAvailableResources(currentLanguageId: number | undefined) {
+        if (currentLanguageId) {
+            $fileManagerLoading = true;
+            $bibleData = await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`);
+            if ($bibleData[0]) {
+                $currentBibleVersion = $bibleData[0];
             }
+            $passageData = await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`);
             addFrontEndDataToBibleData();
-        }
-
-        if (data.resources) {
-            $passageData = data.resources;
             addFrontEndDataToPassageData();
+            $fileManagerLoading = false;
         }
-        if (data.languages) {
-            $languages = data.languages;
-        }
-    });
+    }
+
+    $: fetchAvailableResources($currentLanguageId);
 </script>
 
 <div class="container mx-auto">
@@ -57,7 +46,7 @@
 
     {#if $bibleData?.length > 0}
         <div class="flex flex-col sm:flex-row mx-2 mx-4 sm:mx-0 justify-end items-center">
-            <BibleBookSelect />
+            <AvailableResourceSelect />
         </div>
 
         <div class="divider" />
@@ -65,7 +54,7 @@
     <div class="overflow-x-auto mb-20">
         {#if infoBoxConditionsMet}
             <InfoBox />
-        {:else if $bibleData.length > 0 && $currentBibleBook.contents.length > 0 && !$fileManagerLoading}
+        {:else if $bibleData.length > 0 && $currentBibleVersion.contents.length > 0 && !$fileManagerLoading}
             <Table />
         {/if}
     </div>

@@ -23,8 +23,8 @@ export const convertToReadableSize = (size: number) => {
 
 export const addFrontEndDataToBibleData = () => {
     bibleData.update((bibleData) => {
-        bibleData.forEach((book) => {
-            book.contents.forEach(async (content) => {
+        bibleData.forEach((bibleVersion) => {
+            bibleVersion.contents.forEach(async (content) => {
                 content.expanded = false;
                 content.textSelected = await isCachedFromCdn(content.textUrl);
 

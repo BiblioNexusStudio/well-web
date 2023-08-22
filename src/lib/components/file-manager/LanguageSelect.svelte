@@ -1,37 +1,17 @@
 <script lang="ts">
     import { locale } from 'svelte-i18n';
     import { _ as translate } from 'svelte-i18n';
-    import { language } from '$lib/stores/language.store';
-    import type { language as languageType } from '$lib/types/fileManager';
-    import { addFrontEndDataToBibleData, addFrontEndDataToPassageData } from '$lib/utils/fileManager';
-    import { fetchFromCacheOrApi } from '$lib/data-cache';
-    import {
-        fileManagerLoading,
-        bibleData,
-        currentBibleBook,
-        languages,
-        passageData,
-    } from '$lib/stores/file-manager.store';
+    import { currentLanguage } from '$lib/stores/current-language.store';
+    import { languages } from '$lib/stores/file-manager.store';
 
-    const onLanguageSelected = async (e: any) => {
-        $locale = e.target.value;
-        $language = e.target.value;
-        $fileManagerLoading = true;
-
-        const { id } = $languages.find((l: languageType) => l.iso6393Code === $language);
-
-        $bibleData = await fetchFromCacheOrApi(`bibles/language/${id}`);
-        if ($bibleData.length > 0) {
-            $currentBibleBook = $bibleData[0];
-        }
-        $passageData = await fetchFromCacheOrApi(`passages/resources/language/${id}`);
-        addFrontEndDataToBibleData();
-        addFrontEndDataToPassageData();
-        $fileManagerLoading = false;
+    const onLanguageSelected = async (event: Event) => {
+        const target = event.target as HTMLSelectElement;
+        $locale = target.value;
+        $currentLanguage = target.value;
     };
 </script>
 
-<select class="select select-primary w-full max-w-xs" on:change={onLanguageSelected} bind:value={$language}>
+<select class="select select-primary w-full max-w-xs" on:change={onLanguageSelected} bind:value={$currentLanguage}>
     <option value="" disabled selected>{$translate('page.index.language.value')}</option>
     {#each $languages as language}
         <option value={language.iso6393Code}>{language.englishDisplay}</option>

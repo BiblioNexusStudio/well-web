@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { downloadData, bibleData, bibleDataClone, currentBibleBook } from '$lib/stores/file-manager.store';
+    import { downloadData, bibleData, bibleDataClone, currentBibleVersion } from '$lib/stores/file-manager.store';
     import { convertToReadableSize, resetDownloadData } from '$lib/utils/fileManager';
-    import { removeFromCdnCache, cacheManyFromCdnWithProgress } from '$lib/data-cache';
+    import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';
 
     let downloadInProgress = false;
     let totalSizeToDownload = 1;
@@ -26,7 +26,7 @@
         }
     };
 
-    const progressCallback = (progress: any) => {
+    const progressCallback = (progress: AllItemsProgress) => {
         Object.keys(progress).forEach((key: string) => {
             const p = progress[key];
             totalSizeToDownload = totalSizeToDownload + p.totalSize;
@@ -54,9 +54,9 @@
         const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
 
         $bibleData = $bibleDataClone;
-        const matchingBook = $bibleData.find((b) => b.languageId == $currentBibleBook.languageId);
+        const matchingBook = $bibleData.find((b) => b.languageId == $currentBibleVersion.languageId);
         if (matchingBook) {
-            $currentBibleBook = matchingBook;
+            $currentBibleVersion = matchingBook;
         }
         resetDownloadData();
         if (modal) {
