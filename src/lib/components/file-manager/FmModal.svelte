@@ -20,11 +20,10 @@
         } else {
             const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
             if (modal) {
+                resetDownloadData();
                 modal.close();
             }
         }
-
-        resetDownloadData();
     };
 
     const progressCallback = (progress: any) => {
@@ -45,6 +44,7 @@
         if (!downloadInProgress) {
             const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
             if (modal) {
+                resetDownloadData();
                 modal.close();
             }
         }
@@ -70,7 +70,7 @@
         <form class="modal-box">
             <h3 class="font-bold text-lg">Download Progress</h3>
             <div class="divider" />
-            <progress class="progress progress-primary w-56" value={totalSizeDownloaded} max={totalSizeToDownload} />
+            <progress class="progress progress-primary w-100" value={totalSizeDownloaded} max={totalSizeToDownload} />
         </form>
     {:else}
         <form class="modal-box">

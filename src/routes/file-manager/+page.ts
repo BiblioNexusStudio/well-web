@@ -11,10 +11,12 @@ export const load = (async () => {
         if (get(language).length > 0) {
             const { id } = languages.find((lang: languageInterface) => lang.iso6393Code === get(language));
             const bibles = await fetchFromCacheOrApi(`bibles/language/${id}`);
+            const resources = await fetchFromCacheOrApi(`passages/resources/language/${id}`);
 
             return {
                 languages,
                 bibles,
+                resources,
             };
         }
 
