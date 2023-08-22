@@ -20,32 +20,28 @@
         } else {
             const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
             if (modal) {
-                resetDownloadData();
                 modal.close();
+                resetDownloadData();
             }
         }
     };
 
     const progressCallback = (progress: AllItemsProgress) => {
-        Object.keys(progress).forEach((key: string) => {
-            const p = progress[key];
-            totalSizeToDownload = totalSizeToDownload + p.totalSize;
-            totalSizeDownloaded = totalSizeDownloaded + p.downloadedSize;
-        });
+        [totalSizeToDownload, totalSizeDownloaded] = Object.values(progress).reduce(
+            ([runningTotal, runningDownloaded], { downloadedSize, totalSize }) => [
+                runningTotal + totalSize,
+                runningDownloaded + downloadedSize,
+            ],
+            [0, 0]
+        );
+        const downloadFinished = Object.keys(progress).every((key: string) => progress[key].done);
 
-        downloadInProgress = Object.keys(progress).some((key: string) => {
-            const p = progress[key];
-            if (p.done === false) {
-                return true;
-            }
-            return false;
-        });
-
-        if (!downloadInProgress) {
+        if (downloadFinished) {
             const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
             if (modal) {
-                resetDownloadData();
                 modal.close();
+                downloadInProgress = false;
+                resetDownloadData();
             }
         }
     };

@@ -10,6 +10,7 @@
     import type { Passages, PassagesContent } from '$lib/types/fileManager';
     import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
     import { get } from 'svelte/store';
+    import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
     let languageSelected: boolean;
     let selectedBookIndex: number;
@@ -46,8 +47,7 @@
                     } else if (mediaType === 2 && content) {
                         return asyncEvery(
                             (content as PassagesContent).content.steps,
-                            async (step) =>
-                                (await isCachedFromCdn(step.webm.url)) || (await isCachedFromCdn(step.mp3.url))
+                            async (step) => await isCachedFromCdn(step[audioFileTypeForBrowser()].url)
                         );
                     } else {
                         return false;

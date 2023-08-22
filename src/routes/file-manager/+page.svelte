@@ -18,15 +18,17 @@
     async function fetchAvailableResources(currentLanguageId: number | undefined) {
         if (currentLanguageId) {
             $fileManagerLoading = true;
-            $bibleData = await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`);
+            $bibleData = await addFrontEndDataToBibleData(
+                await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`)
+            );
             if ($bibleData[0]) {
                 $currentBibleVersion = $bibleData[0];
             }
-            $passageData = (await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)).filter(
-                ({ resources }) => resources.some(({ content }) => !!content)
+            $passageData = await addFrontEndDataToPassageData(
+                (
+                    await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)
+                ).filter(({ resources }) => resources.some(({ content }) => !!content))
             );
-            addFrontEndDataToBibleData();
-            addFrontEndDataToPassageData();
             $fileManagerLoading = false;
         }
     }

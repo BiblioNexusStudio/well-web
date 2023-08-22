@@ -1,3 +1,5 @@
+import type { UrlWithSize } from '$lib/data-cache';
+
 export interface BibleVersion {
     languageId: number | string;
     name: string;
@@ -46,7 +48,7 @@ export interface Language {
 export interface DownloadData {
     totalSizeToDownload: number;
     totalSizeToDelete: number;
-    urlsToDownload: string[];
+    urlsToDownload: UrlWithSize[];
     urlsToDelete: string[];
 }
 
