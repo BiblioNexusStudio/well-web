@@ -49,3 +49,71 @@ export interface DownloadData {
     urlsToDownload: string[];
     urlsToDelete: string[];
 }
+
+export interface Resource {
+    languageId: number;
+    displayName: string;
+    summary: string | null;
+    content: ResourceContentSteps | ResourceContentUrl | null;
+    contentSize: number;
+    type: number;
+    mediaType: number;
+    englishLabel: string;
+    tags: string | null;
+    passages: Passage[];
+    expanded?: boolean;
+    selected?: boolean;
+}
+
+export interface Passage {
+    bookId: number;
+    startChapter: number;
+    endChapter: number;
+    startVerse: number;
+    endVerse: number;
+}
+
+export interface ResourceContentSteps {
+    steps: ResourceStep[];
+}
+
+export interface ResourceStep {
+    step: number;
+    webm: audioResource;
+    mp3: audioResource;
+}
+
+export interface ResourceContentUrl {
+    url: string;
+}
+
+export interface Passages {
+    bookId: number;
+    bookName: string;
+    startChapter: number;
+    endChapter: number;
+    startVerse: number;
+    endVerse: number;
+    resources: PassagesResource[];
+    expanded?: boolean;
+    selected?: boolean;
+}
+
+export interface PassagesResource {
+    content: PassagesContent | null;
+    type: number;
+    mediaType: number;
+    englishLabel: string;
+    tag: string | null;
+    expanded?: boolean;
+    selected?: boolean;
+}
+
+export interface PassagesContent {
+    languageId: number;
+    displayName: string;
+    summary: string | null;
+    content: ResourceContentSteps | ResourceContentUrl;
+    contentSize: number;
+    selected?: boolean;
+}

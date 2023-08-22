@@ -3,14 +3,20 @@
     import { language } from '$lib/stores/language.store';
     import { _ as translate } from 'svelte-i18n';
     import type { PageData } from './$types';
-    import { addFrontEndDataToBibleData } from '$lib/utils/fileManager';
+    import { addFrontEndDataToBibleData, addFrontEndDataToPassageData } from '$lib/utils/fileManager';
     import InfoBox from '$lib/components/file-manager/InfoBox.svelte';
     import BibleBookSelect from '$lib/components/file-manager/BibleBookSelect.svelte';
     import LanguageSelect from '$lib/components/file-manager/LanguageSelect.svelte';
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
-    import { fileManagerLoading, bibleData, currentBibleBook, languages } from '$lib/stores/file-manager.store';
+    import {
+        fileManagerLoading,
+        bibleData,
+        currentBibleBook,
+        languages,
+        passageData,
+    } from '$lib/stores/file-manager.store';
 
     export let data: PageData;
 
@@ -26,6 +32,11 @@
                 $currentBibleBook = $bibleData[0];
             }
             addFrontEndDataToBibleData();
+        }
+
+        if (data.resources) {
+            $passageData = data.resources;
+            addFrontEndDataToPassageData();
         }
         if (data.languages) {
             $languages = data.languages;

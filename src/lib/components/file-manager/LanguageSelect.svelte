@@ -3,9 +3,15 @@
     import { _ as translate } from 'svelte-i18n';
     import { language } from '$lib/stores/language.store';
     import type { language as languageType } from '$lib/types/fileManager';
-    import { addFrontEndDataToBibleData } from '$lib/utils/fileManager';
+    import { addFrontEndDataToBibleData, addFrontEndDataToPassageData } from '$lib/utils/fileManager';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
-    import { fileManagerLoading, bibleData, currentBibleBook, languages } from '$lib/stores/file-manager.store';
+    import {
+        fileManagerLoading,
+        bibleData,
+        currentBibleBook,
+        languages,
+        passageData,
+    } from '$lib/stores/file-manager.store';
 
     const onLanguageSelected = async (e: any) => {
         $locale = e.target.value;
@@ -18,7 +24,9 @@
         if ($bibleData.length > 0) {
             $currentBibleBook = $bibleData[0];
         }
+        $passageData = await fetchFromCacheOrApi(`passages/resources/language/${id}`);
         addFrontEndDataToBibleData();
+        addFrontEndDataToPassageData();
         $fileManagerLoading = false;
     };
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { downloadData, bibleData, bibleDataClone, currentBibleBook } from '$lib/stores/file-manager.store';
-    import { convertToReadableSize } from '$lib/utils/fileManager';
+    import { convertToReadableSize, resetDownloadData } from '$lib/utils/fileManager';
     import { removeFromCdnCache, cacheManyFromCdnWithProgress } from '$lib/data-cache';
 
     let downloadInProgress = false;
@@ -8,15 +8,22 @@
     let totalSizeDownloaded = 0;
 
     const continueUpdateFiles = () => {
-        $downloadData.urlsToDelete.forEach((url) => {
-            removeFromCdnCache(url);
-        });
-        $downloadData.urlsToDelete = [];
-        $downloadData.totalSizeToDelete = 0;
-        cacheManyFromCdnWithProgress($downloadData.urlsToDownload, progressCallback);
-        $downloadData.urlsToDownload = [];
-        $downloadData.totalSizeToDownload = 0;
-        downloadInProgress = true;
+        if ($downloadData.urlsToDelete.length > 0) {
+            $downloadData.urlsToDelete.forEach((url) => {
+                removeFromCdnCache(url);
+            });
+        }
+
+        if ($downloadData.urlsToDownload.length > 0) {
+            cacheManyFromCdnWithProgress($downloadData.urlsToDownload, progressCallback);
+            downloadInProgress = true;
+        } else {
+            const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
+            if (modal) {
+                resetDownloadData();
+                modal.close();
+            }
+        }
     };
 
     const progressCallback = (progress: any) => {
@@ -37,6 +44,7 @@
         if (!downloadInProgress) {
             const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
             if (modal) {
+                resetDownloadData();
                 modal.close();
             }
         }
@@ -50,6 +58,7 @@
         if (matchingBook) {
             $currentBibleBook = matchingBook;
         }
+        resetDownloadData();
         if (modal) {
             modal.close();
         }
@@ -61,7 +70,7 @@
         <form class="modal-box">
             <h3 class="font-bold text-lg">Download Progress</h3>
             <div class="divider" />
-            <progress class="progress progress-primary w-56" value={totalSizeDownloaded} max={totalSizeToDownload} />
+            <progress class="progress progress-primary w-100" value={totalSizeDownloaded} max={totalSizeToDownload} />
         </form>
     {:else}
         <form class="modal-box">
