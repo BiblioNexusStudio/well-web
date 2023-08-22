@@ -51,6 +51,7 @@
     "dependencies": {
         "@microsoft/applicationinsights-web": "^3.0.2",
         "howler": "^2.2.3",
+        "lodash.clonedeep": "^4.5.0",
         "svelte-i18n": "^3.7.0"
     }
 }

@@ -21,18 +21,32 @@ async function fetchBibleContent(passage: Passage) {
             const chapterNumber = parseInt(chapter.number);
             if (passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber) {
                 const audioUrlData = filteredAudio.find((audioChapter: AudioChapter) => {
-                    const chapterNumber = parseInt(audioChapter.number);
-                    return passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber;
+                    const audioChapterNumber = parseInt(audioChapter.number);
+                    return audioChapterNumber === chapterNumber;
                 });
+
+                const startTimestamp =
+                    chapterNumber === passage.startChapter
+                        ? audioUrlData.audioTimestamps.find(
+                              ({ verseNumber }: AudioTimestamp) =>
+                                  passage.startVerse === parseInt(verseNumber.split('-')[0])
+                          ).start
+                        : audioUrlData.audioTimestamps[0].start;
+
+                const endTimestamp =
+                    chapterNumber === passage.endChapter
+                        ? audioUrlData.audioTimestamps.find(
+                              ({ verseNumber }: AudioTimestamp) =>
+                                  passage.endVerse === parseInt(verseNumber.split('-')[0])
+                          ).end
+                        : audioUrlData.audioTimestamps[audioUrlData.audioTimestamps.length - 1].end;
+
                 const audioData = {
                     url: audioUrlData[audioFileTypeForBrowser()].url,
-                    startTimestamp: audioUrlData.audioTimestamps.find(({ verseNumber }: AudioTimestamp) => {
-                        return passage.startVerse === parseInt(verseNumber.split('-')[0]);
-                    }).start,
-                    endTimestamp: audioUrlData.audioTimestamps.find(({ verseNumber }: AudioTimestamp) => {
-                        return passage.endVerse === parseInt(verseNumber.split('-')[0]);
-                    }).end,
+                    startTimestamp,
+                    endTimestamp,
                 };
+
                 return [
                     ...output,
                     {
@@ -40,7 +54,12 @@ async function fetchBibleContent(passage: Passage) {
                         audioData,
                         versesText: chapter.verses.filter((verse) => {
                             const verseNumber = parseInt(verse.number.split('-')[0]);
-                            return passage.startVerse <= verseNumber && passage.endVerse >= verseNumber;
+                            return (
+                                (chapterNumber > passage.startChapter ||
+                                    (chapterNumber === passage.startChapter && verseNumber >= passage.startVerse)) &&
+                                (chapterNumber < passage.endChapter ||
+                                    (chapterNumber === passage.endChapter && verseNumber <= passage.endVerse))
+                            );
                         }),
                     },
                 ];

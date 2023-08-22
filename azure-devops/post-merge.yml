@@ -45,9 +45,9 @@ stages:
                                   --environment-name "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')"
                       displayName: Destroy preview environment in Azure
                     - checkout: devops
-                      path: $(Pipeline.Workspace)/devops
+                      path: devops
                     - script: |
-                          $(Pipeline.Workspace)/devops/github-cli/script.sh deployment \
+                          devops/github-cli/script.sh deployment \
                               --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
                               --environment "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" \
                               --repo aquifer-web \
