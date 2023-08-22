@@ -6,7 +6,7 @@ import { stringToPassageType } from '$lib/utils/passage-helpers';
 import type { AudioChapter, AudioTimestamp, BibleVersionBookContent, Passage, Passages } from '$lib/types/fileManager';
 import type { BibleBookTextContent } from '$lib/types/bible-text-content';
 import { passagesEqual } from '$lib/utils/passage-helpers';
-import { isIOSSafari } from '$lib/utils/browser';
+import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
 async function fetchBibleContent(passage: Passage) {
     const bibleData = await fetchFromCacheOrApi(`bibles/language/${get(currentLanguageId)}`);
@@ -25,7 +25,7 @@ async function fetchBibleContent(passage: Passage) {
                     return passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber;
                 });
                 const audioData = {
-                    url: isIOSSafari() ? audioUrlData.mp3.url : audioUrlData.webm.url,
+                    url: audioUrlData[audioFileTypeForBrowser()].url,
                     startTimestamp: audioUrlData.audioTimestamps.find(({ verseNumber }: AudioTimestamp) => {
                         return passage.startVerse === parseInt(verseNumber.split('-')[0]);
                     }).start,
@@ -60,10 +60,11 @@ async function fetchResourceContent(passage: Passage) {
     )) as Passages[];
     const passageWithResources = allPassagesWithResources.find((thisPassage) => passagesEqual(thisPassage, passage));
     if (passageWithResources) {
-        const audioResourceContent =
+        const audioResourceContent = (
             passageWithResources.resources
                 ?.filter(({ mediaType }) => mediaType === 2)
-                ?.map(({ content }) => content?.content) || [];
+                ?.map(({ content }) => content?.content) || []
+        )?.filter(Boolean);
         const textResources = passageWithResources.resources?.filter(({ mediaType }) => mediaType === 1) || [];
         const textResourceContent = await Promise.all(
             textResources.map(async ({ content }) => await fetchFromCacheOrCdn(content?.content.url))

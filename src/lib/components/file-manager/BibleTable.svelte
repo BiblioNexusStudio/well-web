@@ -6,6 +6,7 @@
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
+    import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
     const selectedAllContentsOfBook = (book: BibleVersionBookContent) => {
         if (book.selected) {
@@ -14,7 +15,7 @@
             addUrlToDelete(book.textUrl, book.textSize);
             book.audioUrls.chapters.forEach((chapter) => {
                 chapter.selected = false;
-                addUrlToDelete(chapter.webm.url, chapter.webm.size);
+                addUrlToDelete(chapter[audioFileTypeForBrowser()].url, chapter[audioFileTypeForBrowser()].size);
             });
             return;
         } else {
@@ -23,7 +24,7 @@
             addUrlToDownloads(book.textUrl, book.textSize);
             book.audioUrls.chapters.forEach((chapter) => {
                 chapter.selected = true;
-                addUrlToDownloads(chapter.webm.url, chapter.webm.size);
+                addUrlToDownloads(chapter[audioFileTypeForBrowser()].url, chapter[audioFileTypeForBrowser()].size);
             });
         }
     };
@@ -109,15 +110,21 @@
                                         type="checkbox"
                                         on:click={() =>
                                             audioChapter.selected
-                                                ? addUrlToDelete(audioChapter.webm.url, audioChapter.webm.size)
-                                                : addUrlToDownloads(audioChapter.webm.url, audioChapter.webm.size)}
+                                                ? addUrlToDelete(
+                                                      audioChapter[audioFileTypeForBrowser()].url,
+                                                      audioChapter[audioFileTypeForBrowser()].size
+                                                  )
+                                                : addUrlToDownloads(
+                                                      audioChapter[audioFileTypeForBrowser()].url,
+                                                      audioChapter[audioFileTypeForBrowser()].size
+                                                  )}
                                         bind:checked={audioChapter.selected}
                                         class="checkbox checkbox-secondary"
                                     />
                                 </label>
                             </td>
                             <td> Audio Chapter {audioChapter.number} </td>
-                            <td> {convertToReadableSize(audioChapter.webm.size)} </td>
+                            <td> {convertToReadableSize(audioChapter[audioFileTypeForBrowser()].size)} </td>
                             <td />
                         </tr>
                     {/each}

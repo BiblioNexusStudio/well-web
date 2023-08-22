@@ -1,7 +1,8 @@
-import { bibleData, bibleDataClone, downloadData, passageData } from '$lib/stores/file-manager.store';
+import { downloadData } from '$lib/stores/file-manager.store';
 import { isCachedFromCdn } from '$lib/data-cache';
-import { asyncEvery } from './async-array';
-import { isIOSSafari } from './browser';
+import { asyncEvery, asyncForEach } from './async-array';
+import { audioFileTypeForBrowser } from './browser';
+import type { BibleVersion, Passages } from '$lib/types/fileManager';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -23,62 +24,43 @@ export const convertToReadableSize = (size: number) => {
     }
 };
 
-function fileTypeBasedOnBrowser() {
-    return isIOSSafari() ? 'mp3' : 'webm';
-}
+export const addFrontEndDataToBibleData = async (inputBibleData: BibleVersion[]) => {
+    await asyncForEach(inputBibleData, async (bibleVersion) => {
+        await asyncForEach(bibleVersion.contents, async (content) => {
+            content.expanded = false;
+            content.textSelected = await isCachedFromCdn(content.textUrl);
 
-export const addFrontEndDataToBibleData = () => {
-    bibleData.update((bibleData) => {
-        bibleData.forEach((bibleVersion) => {
-            bibleVersion.contents.forEach(async (content) => {
-                content.expanded = false;
-                content.textSelected = await isCachedFromCdn(content.textUrl);
-
-                content.audioUrls.chapters.forEach(async (chapter) => {
-                    chapter.selected = await isCachedFromCdn(chapter[fileTypeBasedOnBrowser()].url);
-                });
-
-                content.selected =
-                    content.textSelected && content.audioUrls.chapters.every((chapter) => chapter.selected);
+            await asyncForEach(content.audioUrls.chapters, async (chapter) => {
+                chapter.selected = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);
             });
+
+            content.selected = content.textSelected && content.audioUrls.chapters.every((chapter) => chapter.selected);
         });
-
-        return bibleData;
     });
-
-    bibleDataClone.update((bibleDataClone) => {
-        bibleData.subscribe((bibleData) => {
-            bibleDataClone = structuredClone(bibleData);
-        });
-
-        return bibleDataClone;
-    });
+    return inputBibleData;
 };
 
-export const addFrontEndDataToPassageData = () => {
-    passageData.update((passageData) => {
-        passageData.forEach((passage) => {
-            passage.expanded = false;
+export const addFrontEndDataToPassageData = async (inputPassageData: Passages[]) => {
+    await asyncForEach(inputPassageData, async (passage) => {
+        passage.expanded = false;
 
-            passage.resources.forEach(async (resource: any) => {
-                resource.expanded = false;
+        await asyncForEach(passage.resources, async (resource: any) => {
+            resource.expanded = false;
 
-                if (resource.mediaType === 1) {
-                    resource.selected = await isCachedFromCdn(resource.content?.content?.url);
-                }
-                if (resource.mediaType === 2) {
-                    resource.selected = asyncEvery(
-                        resource.content?.content?.steps ?? [],
-                        async (step) => await isCachedFromCdn(step[fileTypeBasedOnBrowser()].url)
-                    );
-                }
-            });
-
-            passage.selected = passage.resources.every(({ selected }) => selected);
+            if (resource.mediaType === 1) {
+                resource.selected = await isCachedFromCdn(resource.content?.content?.url);
+            }
+            if (resource.mediaType === 2) {
+                resource.selected = await asyncEvery(
+                    resource.content?.content?.steps ?? [],
+                    async (step) => await isCachedFromCdn(step[audioFileTypeForBrowser()].url)
+                );
+            }
         });
 
-        return passageData;
+        passage.selected = passage.resources.every(({ selected }) => selected);
     });
+    return inputPassageData;
 };
 
 export const resetDownloadData = () => {
@@ -100,9 +82,9 @@ export const addUrlToDownloads = (url: string, size: number) => {
             downloadData.totalSizeToDelete = downloadData.totalSizeToDelete - size;
         }
 
-        const index2 = downloadData.urlsToDownload.indexOf(url);
+        const index2 = downloadData.urlsToDownload.findIndex((urlWithSize) => urlWithSize.url === url);
         if (index2 === -1) {
-            downloadData.urlsToDownload.push(url);
+            downloadData.urlsToDownload.push({ url, size });
             downloadData.totalSizeToDownload = downloadData.totalSizeToDownload + size;
         }
 
@@ -112,7 +94,7 @@ export const addUrlToDownloads = (url: string, size: number) => {
 
 export const addUrlToDelete = (url: string, size: number) => {
     downloadData.update((downloadData) => {
-        const index = downloadData.urlsToDownload.indexOf(url);
+        const index = downloadData.urlsToDownload.findIndex((urlWithSize) => urlWithSize.url === url);
         if (index > -1) {
             downloadData.urlsToDownload.splice(index, 1);
             downloadData.totalSizeToDownload = downloadData.totalSizeToDownload - size;

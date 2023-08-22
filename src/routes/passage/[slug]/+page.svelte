@@ -3,7 +3,7 @@
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import type { PageData } from './$types';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
-    import { isIOSSafari } from '$lib/utils/browser';
+    import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
     export let data: PageData;
 
@@ -11,10 +11,10 @@
     let bibleViewSelected = false;
     let activePlayId: number | undefined = undefined;
 
-    let cbbterText = data.textResourceContent[0];
-    let cbbterAudio = data.audioResourceContent[0];
+    let cbbterText = data.textResourceContent?.[0];
+    let cbbterAudio = data.audioResourceContent?.[0];
 
-    let stepsAvailable = cbbterText.steps.map(({ stepNumber }) => stepNumber);
+    let stepsAvailable = cbbterText?.steps.map(({ stepNumber }) => stepNumber);
 </script>
 
 <div class="navbar px-4 bg-base-200 fixed bottom-0 z-50 bg-transparent/90">
@@ -77,7 +77,7 @@
                 <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
                     {#if audioStep}
                         <div class="py-4">
-                            <AudioPlayer audioFile={audioStep[isIOSSafari() ? 'mp3' : 'webm'].url} bind:activePlayId />
+                            <AudioPlayer audioFile={audioStep[audioFileTypeForBrowser()].url} bind:activePlayId />
                         </div>
                     {/if}
                     {@html contentHTML}

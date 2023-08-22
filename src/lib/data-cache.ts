@@ -1,6 +1,7 @@
 import config from './config';
 
 type Url = string;
+export type UrlWithSize = { url: Url; size: number };
 type CheckCacheChangeItem = { url: string; expectedSize: number };
 type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean };
 export type AllItemsProgress = Record<Url, SingleItemProgress>;
@@ -47,12 +48,23 @@ const removeFromCdnCache = async (url: Url) => {
 
 // Fetch multiple URLs when online and store them in the cache, tracking progress as the downloads happen.
 const cacheManyFromCdnWithProgress = async (
-    urls: Url[],
+    urls: UrlWithSize[],
     progressCallback: (progress: AllItemsProgress) => void,
     concurrentRequests = 6
 ) => {
-    const progress: AllItemsProgress = {};
-    const queue: string[] = [...urls];
+    const progress: AllItemsProgress = urls.reduce(
+        (output, { url, size }) => ({
+            ...output,
+            [url]: {
+                downloadedSize: 0,
+                totalSize: size,
+                done: false,
+            },
+        }),
+        {}
+    );
+    const queue: string[] = Object.keys(progress);
+    progressCallback(progress);
 
     const updateProgress = (url: Url, downloadedSize: number, totalSize: number, done: boolean) => {
         progress[url] = { downloadedSize, totalSize, done };
@@ -80,7 +92,7 @@ const cacheManyFromCdnWithProgress = async (
                     if (done) break;
                     receivedLength += value?.length || 0;
                     const now = Date.now();
-                    if (now - lastProgressTime >= 1000) {
+                    if (now - lastProgressTime >= 100) {
                         updateProgress(url, receivedLength, contentLength ? +contentLength : 0, false);
                         lastProgressTime = now;
                     }

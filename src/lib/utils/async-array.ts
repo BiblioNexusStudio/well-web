@@ -12,3 +12,10 @@ export async function asyncSome<T>(array: T[], asyncPredicate: (element: T) => P
     const results = await Promise.all(array.map(asyncPredicate));
     return results.some(Boolean);
 }
+
+export async function asyncForEach<T>(
+    array: T[],
+    asyncCallback: (element: T, index: number, array: T[]) => Promise<void>
+): Promise<void> {
+    await Promise.all(array.map(asyncCallback));
+}

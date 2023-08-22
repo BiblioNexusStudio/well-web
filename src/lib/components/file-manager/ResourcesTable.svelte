@@ -5,6 +5,7 @@
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
+    import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
     const mediaTypeSwitch = (type: number) => {
         switch (type) {
@@ -35,7 +36,7 @@
         }
         if (passageResource.mediaType === 2) {
             passageResource.content?.content?.steps.forEach((step: any) => {
-                addUrlToDelete(step.webm.url, step.webm.size);
+                addUrlToDelete(step[audioFileTypeForBrowser()].url, step[audioFileTypeForBrowser()].size);
             });
         }
     };
@@ -46,7 +47,7 @@
         }
         if (passageResource.mediaType === 2) {
             passageResource.content?.content?.steps.forEach((step: any) => {
-                addUrlToDownloads(step.webm.url, step.webm.size);
+                addUrlToDownloads(step[audioFileTypeForBrowser()].url, step[audioFileTypeForBrowser()].size);
             });
         }
     };
