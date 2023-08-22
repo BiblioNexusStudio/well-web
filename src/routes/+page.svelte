@@ -1,64 +1,129 @@
 <script lang="ts">
-    import type { PageData } from './$types';
     import { _ as translate } from 'svelte-i18n';
     import { locale } from 'svelte-i18n';
-    import { language } from '$lib/stores/language.store';
+    import { currentLanguage, currentLanguageId } from '$lib/stores/current-language.store';
     import Icon from 'svelte-awesome';
     import gear from 'svelte-awesome/icons/gear';
     import { onMount } from 'svelte';
-
-    export let data: PageData;
+    import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
+    import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
+    import type { Passages, PassagesContent } from '$lib/types/fileManager';
+    import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
+    import { get } from 'svelte/store';
 
     let languageSelected: boolean;
-    let selectedBook: string;
+    let selectedBookIndex: number;
     let selectedId = 'default';
-    $: bookPassages = data.passages.filter((x) => x.book === selectedBook);
+    let data = {};
 
-    let onLanguageSelected = (e: Event) => {
+    $: selectedBookInfo = data.passagesByBook?.[selectedBookIndex];
+
+    $: $currentLanguage && fetchData();
+
+    async function getBibleBookIdsToNameAndIndex(languageId: number | null = null) {
+        const bibleData = await fetchFromCacheOrApi(`bibles/language/${languageId || get(currentLanguageId)}`);
+        if (bibleData[0]) {
+            return bibleData[0].contents.reduce(
+                (output, { displayName, bookId }, index) => ({ ...output, [bookId]: { displayName, index } }),
+                {} as Record<number, { displayName: string; index: number }>
+            );
+        } else {
+            return getBibleBookIdsToNameAndIndex(1);
+        }
+    }
+
+    export async function fetchData() {
+        const bibleBookIdsToNameAndIndex = await getBibleBookIdsToNameAndIndex();
+        const passagesWithResources = (await fetchFromCacheOrApi(
+            `passages/resources/language/${get(currentLanguageId)}`
+        )) as Passages[];
+        const availableOfflinePassagesWithResources = await asyncFilter(
+            passagesWithResources,
+            async ({ resources }) => {
+                return asyncSome(resources, async ({ mediaType, content }) => {
+                    if (mediaType === 1 && content) {
+                        return await isCachedFromCdn((content as PassagesContent).content.url);
+                    } else if (mediaType === 2 && content) {
+                        return asyncEvery(
+                            (content as PassagesContent).content.steps,
+                            async (step) =>
+                                (await isCachedFromCdn(step.webm.url)) || (await isCachedFromCdn(step.mp3.url))
+                        );
+                    } else {
+                        return false;
+                    }
+                });
+            }
+        );
+        const passagesByBook = availableOfflinePassagesWithResources
+            .reduce((output, passageWithResource) => {
+                const bibleBookNameAndIndex = bibleBookIdsToNameAndIndex[passageWithResource.bookId];
+                output[bibleBookNameAndIndex.index] ||= {
+                    displayName: bibleBookNameAndIndex.displayName,
+                    passages: [],
+                };
+                const bookInfo = output[bibleBookNameAndIndex.index];
+                bookInfo.passages.push(passageWithResource);
+                return output;
+            }, [])
+            .filter(Boolean);
+        data = { passagesByBook };
+    }
+
+    let onLanguageSelected = (event: Event) => {
+        const { value } = event.target as HTMLSelectElement;
         languageSelected = true;
-        $locale = e.target.value;
-        $language = e.target.value;
+        $locale = value;
+        $currentLanguage = value;
     };
     onMount(() => {
-        if ($language) {
+        if ($currentLanguage) {
             languageSelected = true;
         }
     });
 </script>
 
-<section>
-    <div class="aquiferHeader">
-        <h1>AQUIFER</h1>
-        <h1>AQUIFER</h1>
+<section class="container mx-auto flex h-screen">
+    <div class="flex-grow self-center">
+        <h1 class="text-center font-semibold text-info text-7xl pb-6">AQUIFER</h1>
+        <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6 mx-auto">
+            <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-info">
+                <option value="" disabled selected>{$translate('page.index.language.value')}</option>
+                <option value="eng">English</option>
+                <option value="tpi">Tok Pisin</option>
+            </select>
+
+            <select
+                bind:value={selectedBookIndex}
+                on:change={() => (selectedId = 'default')}
+                class="select select-info"
+                disabled={!languageSelected}
+            >
+                <option disabled selected value="default">{$translate('page.index.book.value')}</option>
+                {#if data.passagesByBook}
+                    {#each data.passagesByBook as book, index}
+                        <option value={index}>{book.displayName}</option>
+                    {/each}
+                {/if}
+            </select>
+
+            <select bind:value={selectedId} class="select select-info" disabled={!selectedBookInfo}>
+                <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
+                {#if selectedBookInfo}
+                    {#each selectedBookInfo.passages as passage}
+                        <option value={passageTypeToString(passage)}
+                            >{selectedBookInfo.displayName}
+                            {passageToReference(passage)}</option
+                        >
+                    {/each}
+                {/if}
+            </select>
+
+            <button class="btn btn-info" disabled={selectedId === 'default'}>{$translate('page.index.go.value')}</button
+            >
+        </form>
     </div>
-    <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6">
-        <select on:change={onLanguageSelected} bind:value={$language} class="select select-info">
-            <option value="" disabled selected>{$translate('page.index.language.value')}</option>
-            <option value="eng">English</option>
-            <option value="tpi">Tok Pisin</option>
-        </select>
 
-        <select
-            bind:value={selectedBook}
-            on:change={() => (selectedId = 'default')}
-            class="select select-info"
-            disabled={!languageSelected}
-        >
-            <option disabled selected value="default">{$translate('page.index.book.value')}</option>
-            {#each data.books as book}
-                <option>{book}</option>
-            {/each}
-        </select>
-
-        <select bind:value={selectedId} class="select select-info" disabled={!bookPassages.length}>
-            <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
-            {#each bookPassages as { name, id }}
-                <option value={id}>{name}</option>
-            {/each}
-        </select>
-
-        <button class="btn btn-info" disabled={selectedId === 'default'}>{$translate('page.index.go.value')}</button>
-    </form>
     <div class="flex flex-row space-x-2 fixed bottom-4 right-4">
         <a href="/file-manager" class="btn btn-info">
             <Icon class="w-6 h-6" data={gear} />
@@ -67,31 +132,6 @@
 </section>
 
 <style>
-    section {
-        display: flex;
-        min-height: 100vh;
-        align-items: center;
-        justify-content: space-evenly;
-        flex-direction: column;
-    }
-
-    .aquiferHeader h1 {
-        color: #fff;
-        font-size: 8em;
-        position: absolute;
-        transform: translate(-50%, -50%);
-    }
-
-    .aquiferHeader h1:nth-child(1) {
-        color: transparent;
-        -webkit-text-stroke: 2px hsl(var(--in));
-    }
-
-    .aquiferHeader h1:nth-child(2) {
-        color: hsl(var(--in));
-        animation: animate 8s ease-in-out infinite;
-    }
-
     @keyframes animate {
         0%,
         100% {

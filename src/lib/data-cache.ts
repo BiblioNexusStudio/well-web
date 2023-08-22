@@ -3,7 +3,7 @@ import config from './config';
 type Url = string;
 type CheckCacheChangeItem = { url: string; expectedSize: number };
 type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean };
-type AllItemsProgress = Record<Url, SingleItemProgress>;
+export type AllItemsProgress = Record<Url, SingleItemProgress>;
 
 // The workbox `fetch` caching API will create a cache entry as soon as response headers have been returned, rather than
 // after the full response has been downloaded. Without these arrays and their usages, isCachedFromApi and
@@ -23,13 +23,13 @@ const fetchFromCacheOrApi = async (path: string) => {
     }
 };
 
-const fetchFromCacheOrCdn = async (url: Url) => {
+const fetchFromCacheOrCdn = async (url: Url, type: 'blob' | 'json' = 'json') => {
     if (!(await isCachedFromCdn(url))) {
         _partiallyDownloadedCdnUrls.push(url);
     }
     try {
         const response = await fetch(url);
-        return await response.blob();
+        return await (type === 'blob' ? response.blob() : response.json());
     } finally {
         _removeFromArray(_partiallyDownloadedCdnUrls, url);
     }
@@ -69,22 +69,23 @@ const cacheManyFromCdnWithProgress = async (
             }
 
             const response = await fetch(url);
-
-            // Simulate progress updates every second
             const reader = response.body?.getReader();
             const contentLength = response.headers.get('Content-Length');
             let receivedLength = 0;
             if (reader) {
+                let lastProgressTime = Date.now();
                 // eslint-disable-next-line
                 while (true) {
                     const { done, value } = await reader.read();
                     if (done) break;
                     receivedLength += value?.length || 0;
-                    updateProgress(url, receivedLength, contentLength ? +contentLength : 0, false);
-                    await new Promise((r) => setTimeout(r, 1000)); // Update every second
+                    const now = Date.now();
+                    if (now - lastProgressTime >= 1000) {
+                        updateProgress(url, receivedLength, contentLength ? +contentLength : 0, false);
+                        lastProgressTime = now;
+                    }
                 }
             }
-
             updateProgress(url, receivedLength, contentLength ? +contentLength : 0, true);
         } finally {
             _removeFromArray(_partiallyDownloadedCdnUrls, url);

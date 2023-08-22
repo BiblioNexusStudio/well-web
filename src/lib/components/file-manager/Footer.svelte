@@ -1,7 +1,7 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import { resetDownloadData } from '$lib/utils/fileManager';
-    import { bibleData, bibleDataClone, downloadData, currentBibleBook } from '$lib/stores/file-manager.store';
+    import { bibleData, bibleDataClone, downloadData, currentBibleVersion } from '$lib/stores/file-manager.store';
 
     const updateFiles = () => {
         const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
@@ -12,9 +12,9 @@
 
     const cancelUpdateFiles = () => {
         $bibleData = $bibleDataClone;
-        const matchingBook = $bibleData.find((b) => b.languageId == $currentBibleBook.languageId);
+        const matchingBook = $bibleData.find((b) => b.languageId == $currentBibleVersion.languageId);
         if (matchingBook) {
-            $currentBibleBook = matchingBook;
+            $currentBibleVersion = matchingBook;
         }
         resetDownloadData();
     };

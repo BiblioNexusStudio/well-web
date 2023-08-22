@@ -4,7 +4,5 @@ import { log } from '$lib/logger';
 export const handleError = (async ({ error }) => {
     log.exception(error);
 
-    return {
-        message: 'error',
-    };
+    throw error;
 }) satisfies HandleClientError;
