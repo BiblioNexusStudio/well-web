@@ -33,6 +33,7 @@
             }
             addFrontEndDataToBibleData();
         }
+
         if (data.resources) {
             $passageData = data.resources;
             addFrontEndDataToPassageData();
