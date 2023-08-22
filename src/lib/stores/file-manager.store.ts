@@ -1,9 +1,10 @@
 import { derived, writable } from 'svelte/store';
 import type { BibleVersion, Language, DownloadData, Passages } from '$lib/types/fileManager';
+import cloneDeep from 'lodash.clonedeep';
 
 export const bibleData = writable<BibleVersion[]>([]);
 export const bibleDataClone = derived(bibleData, (currentBibleData) => {
-    return structuredClone(currentBibleData);
+    return cloneDeep(currentBibleData);
 });
 export const currentBibleVersion = writable<BibleVersion>({
     languageId: '',
