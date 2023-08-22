@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { currentLanguage, currentLanguageId } from '$lib/stores/current-language.store';
+    import { currentLanguageId } from '$lib/stores/current-language.store';
     import { _ as translate } from 'svelte-i18n';
     import { addFrontEndDataToBibleData, addFrontEndDataToPassageData } from '$lib/utils/fileManager';
     import InfoBox from '$lib/components/file-manager/InfoBox.svelte';
@@ -13,8 +13,7 @@
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
-        ($bibleData.length === 0 && $currentLanguage.length > 0 && !$fileManagerLoading) ||
-        ($bibleData.length === 0 && $currentLanguage.length === 0 && !$fileManagerLoading);
+        (!$fileManagerLoading && !$bibleData.length && !$passageData.length && $currentLanguageId);
 
     async function fetchAvailableResources(currentLanguageId: number | undefined) {
         if (currentLanguageId) {
@@ -23,7 +22,9 @@
             if ($bibleData[0]) {
                 $currentBibleVersion = $bibleData[0];
             }
-            $passageData = await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`);
+            $passageData = (await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)).filter(
+                ({ resources }) => resources.some(({ content }) => !!content)
+            );
             addFrontEndDataToBibleData();
             addFrontEndDataToPassageData();
             $fileManagerLoading = false;
@@ -44,7 +45,7 @@
 
     <div class="divider" />
 
-    {#if $bibleData?.length > 0}
+    {#if !$fileManagerLoading && ($bibleData.length || $passageData.length)}
         <div class="flex flex-col sm:flex-row mx-2 mx-4 sm:mx-0 justify-end items-center">
             <AvailableResourceSelect />
         </div>
@@ -54,7 +55,7 @@
     <div class="overflow-x-auto mb-20">
         {#if infoBoxConditionsMet}
             <InfoBox />
-        {:else if $bibleData.length > 0 && $currentBibleVersion.contents.length > 0 && !$fileManagerLoading}
+        {:else if (($bibleData.length && $currentBibleVersion.contents.length) || $passageData.length) && !$fileManagerLoading}
             <Table />
         {/if}
     </div>

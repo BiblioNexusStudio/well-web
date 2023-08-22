@@ -14,14 +14,7 @@
     let cbbterText = data.textResourceContent[0];
     let cbbterAudio = data.audioResourceContent[0];
 
-    const stepNames: string[] = [
-        'Hear and Heart',
-        'Setting the Stage',
-        'Defining the Scenes',
-        'Embodying the Text',
-        'Filling the Gaps',
-        'Speaking the Word',
-    ];
+    let stepsAvailable = cbbterText.steps.map(({ stepNumber }) => stepNumber);
 </script>
 
 <div class="navbar px-4 bg-base-200 fixed bottom-0 z-50 bg-transparent/90">
@@ -29,13 +22,18 @@
         <a href="/" class="font-bold normal-case text-xl">aquifer</a>
     </div>
 
-    <CbbterStepsNavigation bind:cbbterSelectedStepNumber bind:bibleViewSelected responsive="xl:hidden" />
+    <CbbterStepsNavigation
+        bind:cbbterSelectedStepNumber
+        bind:bibleViewSelected
+        responsive="xl:hidden"
+        {stepsAvailable}
+    />
     <CbbterStepsNavigation
         bind:cbbterSelectedStepNumber
         bind:bibleViewSelected
         responsive="hidden xl:flex"
         fullDisplay={true}
-        buttonNames={stepNames}
+        {stepsAvailable}
     />
 
     <div class="navbar-end">
@@ -50,24 +48,26 @@
 
 <div class="flex flex-row justify-evenly w-full pt-14 pb-20 px-5">
     <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} xl:block">
-        {#each data.chapters as chapter}
-            <h3>{data.bookName} {chapter.number}</h3>
-            {#if chapter.audioData}
-                <div class="py-4">
-                    <AudioPlayer
-                        bind:activePlayId
-                        audioFile={chapter.audioData.url}
-                        startTime={chapter.audioData.startTimestamp}
-                        endTime={chapter.audioData.endTimestamp}
-                    />
-                </div>
-            {/if}
-            {#each chapter.versesText as { number, text }}
-                <div class="py-1">
-                    <span class="sup pr-1">{number}</span><span>{@html text}</span>
-                </div>
+        {#if data.chapters?.length}
+            {#each data.chapters as chapter}
+                <h3>{data.bookName} {chapter.number}</h3>
+                {#if chapter.audioData}
+                    <div class="py-4">
+                        <AudioPlayer
+                            bind:activePlayId
+                            audioFile={chapter.audioData.url}
+                            startTime={chapter.audioData.startTimestamp}
+                            endTime={chapter.audioData.endTimestamp}
+                        />
+                    </div>
+                {/if}
+                {#each chapter.versesText as { number, text }}
+                    <div class="py-1">
+                        <span class="sup pr-1">{number}</span><span>{@html text}</span>
+                    </div>
+                {/each}
             {/each}
-        {/each}
+        {/if}
     </div>
     <div class="divider divider-horizontal hidden xl:flex" />
     <div class="prose flex-grow {bibleViewSelected ? 'hidden' : 'block'} xl:block">

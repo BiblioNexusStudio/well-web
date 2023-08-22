@@ -1,5 +1,7 @@
 import { bibleData, bibleDataClone, downloadData, passageData } from '$lib/stores/file-manager.store';
 import { isCachedFromCdn } from '$lib/data-cache';
+import { asyncEvery } from './async-array';
+import { isIOSSafari } from './browser';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -21,6 +23,10 @@ export const convertToReadableSize = (size: number) => {
     }
 };
 
+function fileTypeBasedOnBrowser() {
+    return isIOSSafari() ? 'mp3' : 'webm';
+}
+
 export const addFrontEndDataToBibleData = () => {
     bibleData.update((bibleData) => {
         bibleData.forEach((bibleVersion) => {
@@ -29,7 +35,7 @@ export const addFrontEndDataToBibleData = () => {
                 content.textSelected = await isCachedFromCdn(content.textUrl);
 
                 content.audioUrls.chapters.forEach(async (chapter) => {
-                    chapter.selected = await isCachedFromCdn(chapter.webm.url);
+                    chapter.selected = await isCachedFromCdn(chapter[fileTypeBasedOnBrowser()].url);
                 });
 
                 content.selected =
@@ -53,7 +59,6 @@ export const addFrontEndDataToPassageData = () => {
     passageData.update((passageData) => {
         passageData.forEach((passage) => {
             passage.expanded = false;
-            passage.selected = false;
 
             passage.resources.forEach(async (resource: any) => {
                 resource.expanded = false;
@@ -62,9 +67,14 @@ export const addFrontEndDataToPassageData = () => {
                     resource.selected = await isCachedFromCdn(resource.content?.content?.url);
                 }
                 if (resource.mediaType === 2) {
-                    resource.selected = false;
+                    resource.selected = asyncEvery(
+                        resource.content?.content?.steps ?? [],
+                        async (step) => await isCachedFromCdn(step[fileTypeBasedOnBrowser()].url)
+                    );
                 }
             });
+
+            passage.selected = passage.resources.every(({ selected }) => selected);
         });
 
         return passageData;

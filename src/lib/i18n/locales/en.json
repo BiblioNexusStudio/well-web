@@ -45,5 +45,15 @@
                 "value": "Back"
             }
         }
+    },
+    "resources": {
+        "cbbt-er": {
+            "step1": "Hear and Heart",
+            "step2": "Setting the Stage",
+            "step3": "Defining the Scenes",
+            "step4": "Embodying the Text",
+            "step5": "Filling the Gaps",
+            "step6": "Speaking the Word"
+        }
     }
 }

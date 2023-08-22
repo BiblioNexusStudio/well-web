@@ -1,9 +1,20 @@
 <script lang="ts">
+    import { _ as translate } from 'svelte-i18n';
+
     export let cbbterSelectedStepNumber = 1;
     export let bibleViewSelected = false;
     export let responsive: string;
     export let fullDisplay = false;
-    export let buttonNames: number[] | string[] = [1, 2, 3, 4, 5, 6];
+    export let stepsAvailable: number[];
+
+    const steps = [
+        $translate('resources.cbbt-er.step1'),
+        $translate('resources.cbbt-er.step2'),
+        $translate('resources.cbbt-er.step3'),
+        $translate('resources.cbbt-er.step4'),
+        $translate('resources.cbbt-er.step5'),
+        $translate('resources.cbbt-er.step6'),
+    ];
 
     function setCbbterStep(step: number) {
         cbbterSelectedStepNumber = step;
@@ -12,11 +23,11 @@
 </script>
 
 <div class="navbar-center join {responsive}">
-    {#each buttonNames as buttonName, i}
+    {#each stepsAvailable as stepNumber}
         <button
             class="join-item btn"
-            class:btn-primary={i === cbbterSelectedStepNumber - 1 && (!bibleViewSelected || fullDisplay)}
-            on:click={() => setCbbterStep(i + 1)}>{buttonName}</button
+            class:btn-primary={stepNumber === cbbterSelectedStepNumber && (!bibleViewSelected || fullDisplay)}
+            on:click={() => setCbbterStep(stepNumber)}>{fullDisplay ? steps[stepNumber - 1] : stepNumber}</button
         >
     {/each}
 </div>
