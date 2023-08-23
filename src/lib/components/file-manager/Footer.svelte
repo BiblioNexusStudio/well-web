@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
     import { _ as translate } from 'svelte-i18n';
     import { resetDownloadData } from '$lib/utils/file-manager';
     import { bibleData, bibleDataClone, downloadData, currentBibleVersion } from '$lib/stores/file-manager.store';
@@ -17,13 +18,16 @@
             $currentBibleVersion = matchingBook;
         }
         resetDownloadData();
+        goto('/');
     };
 </script>
 
 <footer class="footer footer-center p-4 bg-base-300 text-base-content fixed bottom-0 left-0">
     <div class="container mx-auto flex justify-between">
         <div>
-            <a href="/"><button class="btn btn-neutral">{$translate('page.fileManager.back.value')}</button></a>
+            <button on:click={cancelUpdateFiles} class="btn btn-neutral"
+                >{$translate('page.fileManager.back.value')}</button
+            >
         </div>
         <div class="flex">
             <button class="btn btn-neutral" on:click={cancelUpdateFiles}

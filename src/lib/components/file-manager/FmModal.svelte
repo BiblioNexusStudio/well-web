@@ -67,9 +67,12 @@
             <h3 class="font-bold text-lg">{$translate('page.fileManager.modal.downloadProgress.value')}</h3>
             <div class="divider" />
             <p class="mb-2">
-                Downloading {convertToReadableSize(totalSizeDownloaded)} of {convertToReadableSize(
-                    totalSizeToDownload
-                )}.
+                {$translate('page.fileManager.modal.downloadingDescription.value', {
+                    values: {
+                        totalSizeDownloaded: convertToReadableSize(totalSizeDownloaded),
+                        totalSizeToDownload: convertToReadableSize(totalSizeToDownload),
+                    },
+                })}
             </p>
             <progress
                 class="progress progress-primary w-100 mb-4"
@@ -77,15 +80,19 @@
                 max={totalSizeToDownload}
             />
             <div class="flex justify-end">
-                <button class="btn btn-primary" on:click={cancelUpdateFiles}>Cancel</button>
+                <button class="btn btn-primary" on:click={cancelUpdateFiles}
+                    >{$translate('page.fileManager.cancel.value')}</button
+                >
             </div>
         </form>
     {:else if downloadedSuccessfully && !downloadInProgress}
         <form class="modal-box">
-            <h3 class="font-bold text-lg">Downloaded Successfully</h3>
+            <h3 class="font-bold text-lg">{$translate('page.fileManager.modal.success.value')}</h3>
             <div class="divider" />
             <div class="flex justify-end">
-                <button class="btn btn-primary" on:click={closeModal}>Close</button>
+                <button class="btn btn-primary" on:click={closeModal}
+                    >{$translate('page.fileManager.modal.close.value')}</button
+                >
             </div>
         </form>
     {:else}

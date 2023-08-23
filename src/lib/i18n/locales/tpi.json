@@ -52,26 +52,35 @@
                 "value": "Bak"
             },
             "selectLanguage": {
-                "value": "Please select a language."
+                "value": "Plis sekim wanpela tokples."
             },
             "selectResource": {
-                "value": "Please select a resource."
+                "value": "Plis sekim wanpela resos."
             },
             "chooseResource": {
-                "value": "Choose a Resource"
+                "value": "Chuusim wanpela resos."
             },
             "modal": {
                 "title": {
-                    "value": "Confirmation"
+                    "value": "Kanfemesen"
                 },
                 "description": {
-                    "value": "You are about to download {downloadSize} and delete {deleteSize} of content from your device."
+                    "value": "Yu i stap long daunlotim {downloadSize} na bagarapim {deleteSize} bilong samting long yu divais."
                 },
                 "question": {
-                    "value": "How would you like to proceed?"
+                    "value": "Yu laik pas long we?"
                 },
                 "downloadProgress": {
-                    "value": "Download progress"
+                    "value": "Daunlot Pragos"
+                },
+                "success": {
+                    "value": "Dounloadim Sukes"
+                },
+                "close": {
+                    "value": "Klosim"
+                },
+                "downloadingDescription": {
+                    "value": "I dai nau daunlot {totalSizeDownloaded} bilong {totalSizeToDownload}."
                 }
             }
         }
@@ -94,7 +103,7 @@
                 "value": "Pulapim dispela speis"
             },
             "step6": {
-                "value": "Speaking the Word"
+                "value": "Tokim Olgeta"
             }
         }
     }

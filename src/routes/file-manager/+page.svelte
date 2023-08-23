@@ -8,7 +8,13 @@
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
-    import { fileManagerLoading, bibleData, currentBibleVersion, passageData } from '$lib/stores/file-manager.store';
+    import {
+        fileManagerLoading,
+        bibleData,
+        currentBibleVersion,
+        passageData,
+        tableType,
+    } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
 
     $: infoBoxConditionsMet =
@@ -21,7 +27,7 @@
             $bibleData = await addFrontEndDataToBibleData(
                 await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`)
             );
-            if ($bibleData[0]) {
+            if ($bibleData.length > 0) {
                 $currentBibleVersion = $bibleData[0];
             }
             $passageData = await addFrontEndDataToPassageData(
@@ -29,6 +35,9 @@
                     await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)
                 ).filter(({ resources }) => resources.some(({ content }) => !!content))
             );
+            if ($bibleData.length === 0 && $passageData.length > 0) {
+                $tableType = 'resources';
+            }
             $fileManagerLoading = false;
         }
     }

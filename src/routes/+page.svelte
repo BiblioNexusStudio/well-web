@@ -131,7 +131,9 @@
         </button>
         <ul role="menu" class="dropdown-content z-[1] menu p-2 shadow bg-info rounded-box w-52">
             <li>
-                <a href="/file-manager" role="menuitem"><Icon class="mr-1" data={cloudDownload} />File Manager</a>
+                <a href="/file-manager" role="menuitem"
+                    ><Icon class="mr-1" data={cloudDownload} />{$translate('page.fileManager.title.value')}</a
+                >
             </li>
         </ul>
     </div>

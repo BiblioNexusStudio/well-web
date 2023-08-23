@@ -95,6 +95,18 @@
                 "downloadProgress": {
                     "value": "Download progress",
                     "context": "Title of the modal showing the user how the download is progressing"
+                },
+                "success": {
+                    "value": "Downloaded Successfully",
+                    "context": "Title of the modal showing the download was successful"
+                },
+                "close": {
+                    "value": "Close",
+                    "context": "Button to close the modal"
+                },
+                "downloadingDescription": {
+                    "value": "Downloading {totalSizeDownloaded} of {totalSizeToDownload}.",
+                    "context": "Shows on the modal showing the user how the download is progressing"
                 }
             }
         }
