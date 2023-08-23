@@ -11,6 +11,7 @@
     import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
     import { get } from 'svelte/store';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
+    import cloudDownload from 'svelte-awesome/icons/cloudDownload';
 
     let languageSelected: boolean;
     let selectedBookIndex: number;
@@ -124,10 +125,15 @@
         </form>
     </div>
 
-    <div class="flex flex-row space-x-2 fixed bottom-4 right-4">
-        <a href="/file-manager" class="btn btn-info">
+    <div class="dropdown dropdown-top dropdown-end flex flex-row space-x-2 fixed bottom-4 right-4">
+        <button aria-label="Settings" class="btn btn-info m-1">
             <Icon class="w-6 h-6" data={gear} />
-        </a>
+        </button>
+        <ul role="menu" class="dropdown-content z-[1] menu p-2 shadow bg-info rounded-box w-52">
+            <li>
+                <a href="/file-manager" role="menuitem"><Icon class="mr-1" data={cloudDownload} />File Manager</a>
+            </li>
+        </ul>
     </div>
 </section>
 
