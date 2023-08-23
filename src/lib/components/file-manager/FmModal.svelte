@@ -1,6 +1,6 @@
 <script lang="ts">
     import { downloadData, bibleData, bibleDataClone, currentBibleVersion } from '$lib/stores/file-manager.store';
-    import { convertToReadableSize, resetDownloadData } from '$lib/utils/fileManager';
+    import { convertToReadableSize, resetDownloadData } from '$lib/utils/file-manager';
     import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';
 
     let downloadInProgress = false;

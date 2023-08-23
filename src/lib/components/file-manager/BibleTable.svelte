@@ -1,7 +1,7 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import { currentBibleVersion } from '$lib/stores/file-manager.store';
-    import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/fileManager';
+    import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/file-manager';
     import type { BibleVersionBookContent } from '$lib/types/fileManager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
