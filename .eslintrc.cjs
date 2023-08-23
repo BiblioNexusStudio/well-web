@@ -2,7 +2,7 @@ module.exports = {
     root: true,
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:svelte/recommended', 'prettier'],
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint'],
+    plugins: ['@typescript-eslint', 'svelte-translate-check'],
     parserOptions: {
         sourceType: 'module',
         ecmaVersion: 2020,
@@ -24,5 +24,6 @@ module.exports = {
     ],
     rules: {
         'svelte/no-at-html-tags': 0,
+        'svelte-translate-check/missing-translations': 'error',
     },
 };
