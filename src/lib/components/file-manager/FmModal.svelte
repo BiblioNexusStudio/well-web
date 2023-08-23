@@ -66,7 +66,19 @@
         <form class="modal-box">
             <h3 class="font-bold text-lg">Download Progress</h3>
             <div class="divider" />
-            <progress class="progress progress-primary w-100" value={totalSizeDownloaded} max={totalSizeToDownload} />
+            <p class="mb-2">
+                Downloading {convertToReadableSize(totalSizeDownloaded)} of {convertToReadableSize(
+                    totalSizeToDownload
+                )}.
+            </p>
+            <progress
+                class="progress progress-primary w-100 mb-4"
+                value={totalSizeDownloaded}
+                max={totalSizeToDownload}
+            />
+            <div class="flex justify-end">
+                <button class="btn btn-primary" on:click={cancelUpdateFiles}>Cancel</button>
+            </div>
         </form>
     {:else}
         <form class="modal-box">
