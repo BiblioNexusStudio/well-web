@@ -35,9 +35,6 @@
                     await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)
                 ).filter(({ resources }) => resources.some(({ content }) => !!content))
             );
-            if ($bibleData.length === 0 && $passageData.length > 0) {
-                $tableType = 'resources';
-            }
             $fileManagerLoading = false;
         }
     }
