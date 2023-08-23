@@ -6,6 +6,7 @@
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
+    import { _ as translate } from 'svelte-i18n';
 
     const mediaTypeSwitch = (type: number) => {
         switch (type) {
@@ -73,10 +74,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Download</th>
-            <th>Passage</th>
-            <th>Total Size</th>
-            <th>Expand</th>
+            <th>{$translate('page.fileManager.download.value')}</th>
+            <th>{$translate('page.fileManager.passage.value')}</th>
+            <th>{$translate('page.fileManager.size.value')}</th>
+            <th>{$translate('page.fileManager.expand.value')}</th>
         </tr>
     </thead>
     <tbody>
@@ -109,10 +110,10 @@
             </tr>
             {#if passage.expanded && passage.resources.length > 0}
                 <tr class="bg-secondary text-neutral">
-                    <td class="font-bold">Download</td>
-                    <td class="font-bold">Passage</td>
-                    <td class="font-bold">Media Type</td>
-                    <td class="font-bold">Size</td>
+                    <td class="font-bold">{$translate('page.fileManager.download.value')}</td>
+                    <td class="font-bold">{$translate('page.fileManager.passage.value')}</td>
+                    <td class="font-bold">{$translate('page.fileManager.type.value')}</td>
+                    <td class="font-bold">{$translate('page.fileManager.size.value')}</td>
                 </tr>
                 {#each passage.resources as passageResource}
                     <tr class="bg-primary">

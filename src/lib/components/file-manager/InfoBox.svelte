@@ -4,6 +4,7 @@
     import Icon from 'svelte-awesome';
     import { fileManagerLoading, bibleData, passageData } from '$lib/stores/file-manager.store';
     import { currentLanguage } from '$lib/stores/current-language.store';
+    import { _ as translate } from 'svelte-i18n';
 </script>
 
 {#if $fileManagerLoading}
@@ -17,7 +18,7 @@
         {#if !$bibleData.length && !$passageData.length && $currentLanguage}
             <span>Sorry, we don't have data for this language.</span>
         {:else if !$currentLanguage.length}
-            <span>Please select a language.</span>
+            <span>{$translate('page.fileManager.selectLanguage.value')}</span>
         {/if}
     </div>
 {/if}
