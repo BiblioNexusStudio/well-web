@@ -2620,6 +2620,10 @@ eslint-config-prettier@^8.5.0:
   resolved "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-8.8.0.tgz"
   integrity sha512-wLbQiFre3tdGgpDv67NQKnJuTlcUVYHas3k+DZCc2U2BadthoEY4B7hLPvAxaqdyOGCzuLfii2fqGph10va7oA==
 
+"eslint-plugin-svelte-translate-check@https://github.com/BiblioNexusStudio/eslint-plugin-svelte-translate-check":
+  version "1.0.0"
+  resolved "https://github.com/BiblioNexusStudio/eslint-plugin-svelte-translate-check#02ae88c9ac79604d502e2e54319b0dc5344dead3"
+
 eslint-plugin-svelte@^2.30.0:
   version "2.32.2"
   resolved "https://registry.npmjs.org/eslint-plugin-svelte/-/eslint-plugin-svelte-2.32.2.tgz"
