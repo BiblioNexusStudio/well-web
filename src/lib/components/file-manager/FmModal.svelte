@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { downloadData, bibleData, bibleDataClone, currentBibleVersion } from '$lib/stores/file-manager.store';
+    import { downloadData } from '$lib/stores/file-manager.store';
     import { convertToReadableSize, resetDownloadData } from '$lib/utils/file-manager';
     import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';
 
     let downloadInProgress = false;
+    let downloadedSuccessfully = false;
     let totalSizeToDownload = 1;
     let totalSizeDownloaded = 0;
 
@@ -37,27 +38,25 @@
         const downloadFinished = Object.keys(progress).every((key: string) => progress[key].done);
 
         if (downloadFinished) {
-            const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
-            if (modal) {
-                modal.close();
-                downloadInProgress = false;
-                resetDownloadData();
-            }
+            downloadInProgress = false;
+            resetDownloadData();
+            downloadedSuccessfully = true;
         }
     };
 
     const cancelUpdateFiles = () => {
         const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
-
-        $bibleData = $bibleDataClone;
-        const matchingBook = $bibleData.find((b) => b.languageId == $currentBibleVersion.languageId);
-        if (matchingBook) {
-            $currentBibleVersion = matchingBook;
-        }
-        resetDownloadData();
         if (modal) {
             modal.close();
         }
+    };
+
+    const closeModal = () => {
+        const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
+        if (modal) {
+            modal.close();
+        }
+        downloadedSuccessfully = false;
     };
 </script>
 
@@ -78,6 +77,14 @@
             />
             <div class="flex justify-end">
                 <button class="btn btn-primary" on:click={cancelUpdateFiles}>Cancel</button>
+            </div>
+        </form>
+    {:else if downloadedSuccessfully && !downloadInProgress}
+        <form class="modal-box">
+            <h3 class="font-bold text-lg">Downloaded Successfully</h3>
+            <div class="divider" />
+            <div class="flex justify-end">
+                <button class="btn btn-primary" on:click={closeModal}>Close</button>
             </div>
         </form>
     {:else}
