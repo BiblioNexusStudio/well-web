@@ -2,7 +2,14 @@
     import { goto } from '$app/navigation';
     import { _ as translate } from 'svelte-i18n';
     import { resetDownloadData } from '$lib/utils/file-manager';
-    import { bibleData, bibleDataClone, downloadData, currentBibleVersion } from '$lib/stores/file-manager.store';
+    import {
+        bibleData,
+        bibleDataClone,
+        downloadData,
+        currentBibleVersion,
+        passageData,
+        passageDataClone,
+    } from '$lib/stores/file-manager.store';
 
     const updateFiles = () => {
         const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
@@ -17,6 +24,7 @@
         if (matchingBook) {
             $currentBibleVersion = matchingBook;
         }
+        $passageData = $passageDataClone;
         resetDownloadData();
         goto('/');
     };

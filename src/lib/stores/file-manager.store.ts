@@ -20,4 +20,7 @@ export const downloadData = writable<DownloadData>({
     urlsToDelete: [],
 });
 export const passageData = writable<Passages[]>([]);
+export const passageDataClone = derived(passageData, (currentPassageData) => {
+    return cloneDeep(currentPassageData);
+});
 export const tableType = writable<string>('bible');
