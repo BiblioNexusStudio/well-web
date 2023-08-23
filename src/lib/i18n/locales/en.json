@@ -18,42 +18,113 @@
                 "context": "Indicates to the user that they can click on this button to move to next page with their given selections"
             },
             "searchByBook": {
-                "value": "Search By Book"
+                "value": "Search By Book",
+                "context": "Allows the user to search specifically by a 'Book' of the Bible"
+            }
+        },
+        "fileManager": {
+            "title": {
+                "value": "File Manager",
+                "context": "Title displayed on the file manager page"
             },
             "download": {
-                "value": "Download"
+                "value": "Download",
+                "context": "Table column heading for the column with checkboxes allowing the user to select content to download"
+            },
+            "language": {
+                "value": "Language",
+                "context": "Label for a dropdown allowing the user to select their language"
+            },
+            "passage": {
+                "value": "Passage",
+                "context": "Table column heading for the column displaying passage names"
+            },
+            "book": {
+                "value": "Book",
+                "context": "Table column heading for the column for displaying book names"
             },
             "size": {
-                "value": "Size"
+                "value": "Size",
+                "context": "Table column heading for the column displaying file size"
             },
             "expand": {
-                "value": "Expand"
-            },
-            "fileManager": {
-                "value": "File Manager"
+                "value": "Expand",
+                "context": "Table column heading for the column with buttons allowing accordions to be expanded"
             },
             "type": {
-                "value": "Type"
+                "value": "Type",
+                "context": "Table column heading for the column displaying media type"
             },
             "update": {
-                "value": "Update"
+                "value": "Update",
+                "context": "Button to download/delete content based on what the user selected"
             },
             "cancel": {
-                "value": "Cancel"
+                "value": "Cancel",
+                "context": "Button to cancel current action"
             },
             "back": {
-                "value": "Back"
+                "value": "Back",
+                "context": "Button to go back to the main page"
+            },
+            "selectLanguage": {
+                "value": "Please select a language.",
+                "context": "Placeholder for the language dropdown"
+            },
+            "selectResource": {
+                "value": "Please select a resource.",
+                "context": "Placeholder for the resource dropdown"
+            },
+            "chooseResource": {
+                "value": "Choose a Resource",
+                "context": "Label for a dropdown allowing the user to select a resource to view"
+            },
+            "modal": {
+                "title": {
+                    "value": "Confirmation",
+                    "context": "Title of the modal asking the user to confirm changes before syncing"
+                },
+                "description": {
+                    "value": "You are about to download {downloadSize} and delete {deleteSize} of content from your device.",
+                    "context": "Shows on the modal asking the user to confirm changes before syncing"
+                },
+                "question": {
+                    "value": "How would you like to proceed?",
+                    "context": "Question to ask the user before confirming"
+                },
+                "downloadProgress": {
+                    "value": "Download progress",
+                    "context": "Title of the modal showing the user how the download is progressing"
+                }
             }
         }
     },
     "resources": {
         "cbbt-er": {
-            "step1": "Hear and Heart",
-            "step2": "Setting the Stage",
-            "step3": "Defining the Scenes",
-            "step4": "Embodying the Text",
-            "step5": "Filling the Gaps",
-            "step6": "Speaking the Word"
+            "step1": {
+                "value": "Hear and Heart",
+                "context": "See CBBT-ER for translations of each step name"
+            },
+            "step2": {
+                "value": "Setting the Stage",
+                "context": "See CBBT-ER for translations of each step name"
+            },
+            "step3": {
+                "value": "Defining the Scenes",
+                "context": "See CBBT-ER for translations of each step name"
+            },
+            "step4": {
+                "value": "Embodying the Text",
+                "context": "See CBBT-ER for translations of each step name"
+            },
+            "step5": {
+                "value": "Filling the Gaps",
+                "context": "See CBBT-ER for translations of each step name"
+            },
+            "step6": {
+                "value": "Speaking the Word",
+                "context": "See CBBT-ER for translations of each step name"
+            }
         }
     }
 }

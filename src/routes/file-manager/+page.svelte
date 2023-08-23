@@ -40,7 +40,7 @@
     <FmModal />
     <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
         <h1 class="text-2xl mb-4 sm:mb-0">
-            {$translate('page.index.fileManager.value')}
+            {$translate('page.fileManager.title.value')}
         </h1>
         <LanguageSelect />
     </div>

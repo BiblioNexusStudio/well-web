@@ -8,12 +8,12 @@
     export let stepsAvailable: number[];
 
     const steps = [
-        $translate('resources.cbbt-er.step1'),
-        $translate('resources.cbbt-er.step2'),
-        $translate('resources.cbbt-er.step3'),
-        $translate('resources.cbbt-er.step4'),
-        $translate('resources.cbbt-er.step5'),
-        $translate('resources.cbbt-er.step6'),
+        $translate('resources.cbbt-er.step1.value'),
+        $translate('resources.cbbt-er.step2.value'),
+        $translate('resources.cbbt-er.step3.value'),
+        $translate('resources.cbbt-er.step4.value'),
+        $translate('resources.cbbt-er.step5.value'),
+        $translate('resources.cbbt-er.step6.value'),
     ];
 
     function setCbbterStep(step: number) {
