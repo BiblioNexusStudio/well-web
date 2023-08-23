@@ -16,6 +16,16 @@
             "go": {
                 "value": "Go",
                 "_context": "Indicates to the user that they can click on this button to move to next page with their given selections"
+            },
+            "searchByBook": {
+                "value": "Search By Book",
+                "_context": "Allows the user to search specifically by a 'Book' of the Bible"
+            },
+            "a11y": {
+                "settings": {
+                    "value": "Settings",
+                    "_context": "Accessibility settings"
+                }
             }
         },
         "fileManager": {
@@ -91,6 +101,18 @@
                 "downloadProgress": {
                     "value": "Download progress",
                     "_context": "Title of the modal showing the user how the download is progressing"
+                },
+                "success": {
+                    "value": "Downloaded Successfully",
+                    "_context": "Title of the modal showing the download was successful"
+                },
+                "close": {
+                    "value": "Close",
+                    "_context": "Button to close the modal"
+                },
+                "downloadingDescription": {
+                    "value": "Downloading {totalSizeDownloaded} of {totalSizeToDownload}.",
+                    "_context": "Shows on the modal showing the user how the download is progressing"
                 }
             }
         }

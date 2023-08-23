@@ -1,7 +1,7 @@
 <script lang="ts">
     import { passageData } from '$lib/stores/file-manager.store';
     import type { Passages } from '$lib/types/fileManager';
-    import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/fileManager';
+    import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/file-manager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';

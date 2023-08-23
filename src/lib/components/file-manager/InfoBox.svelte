@@ -9,9 +9,7 @@
 
 {#if $fileManagerLoading}
     <div class="alert alert-info flex mt-4 px-4">
-        <div class="spin">
-            <Icon data={refresh} />
-        </div>
+        <Icon data={refresh} spin />
         <span>Loading...</span>
     </div>
 {:else}
@@ -24,21 +22,3 @@
         {/if}
     </div>
 {/if}
-
-<style>
-    .spin {
-        animation-name: ckw;
-        animation-duration: 0.9s;
-        animation-iteration-count: infinite;
-        transform-origin: 50% 50%;
-        display: inline-block;
-    }
-    @keyframes ckw {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-</style>
