@@ -20,6 +20,12 @@
             "searchByBook": {
                 "value": "Search By Book",
                 "context": "Allows the user to search specifically by a 'Book' of the Bible"
+            },
+            "a11y": {
+                "settings": {
+                    "value": "Settings",
+                    "context": "Accessibility settings"
+                }
             }
         },
         "fileManager": {

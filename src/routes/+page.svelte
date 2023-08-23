@@ -126,7 +126,7 @@
     </div>
 
     <div class="dropdown dropdown-top dropdown-end flex flex-row space-x-2 fixed bottom-4 right-4">
-        <button aria-label="Settings" class="btn btn-info m-1">
+        <button aria-label={$translate('page.index.a11y.settings.value')} class="btn btn-info m-1">
             <Icon class="w-6 h-6" data={gear} />
         </button>
         <ul role="menu" class="dropdown-content z-[1] menu p-2 shadow bg-info rounded-box w-52">

@@ -15,6 +15,11 @@
             },
             "searchByBook": {
                 "value": "Sospen Long Buk"
+            },
+            "a11y": {
+                "settings": {
+                    "value": "Saiting"
+                }
             }
         },
         "fileManager": {
