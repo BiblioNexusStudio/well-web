@@ -12,7 +12,7 @@
 </script>
 
 <select class="select select-primary w-full max-w-xs" on:change={onLanguageSelected} bind:value={$currentLanguage}>
-    <option value="" disabled selected>{$translate('page.index.language.value')}</option>
+    <option value="" disabled selected>{$translate('page.fileManager.language.value')}</option>
     {#each $languages as language}
         <option value={language.iso6393Code}>{language.englishDisplay}</option>
     {/each}

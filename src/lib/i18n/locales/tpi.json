@@ -15,18 +15,29 @@
             },
             "searchByBook": {
                 "value": "Sospen Long Buk"
+            }
+        },
+        "fileManager": {
+            "title": {
+                "value": "Fael Manija"
             },
             "download": {
                 "value": "Dounload"
+            },
+            "language": {
+                "value": "Tok ples"
+            },
+            "passage": {
+                "value": "Hap Buk Baibel"
+            },
+            "book": {
+                "value": "Buk"
             },
             "size": {
                 "value": "Sais"
             },
             "expand": {
                 "value": "Ekspandim"
-            },
-            "fileManager": {
-                "value": "Fael Manija"
             },
             "type": {
                 "value": "Taip"
@@ -39,6 +50,51 @@
             },
             "back": {
                 "value": "Bak"
+            },
+            "selectLanguage": {
+                "value": "Please select a language."
+            },
+            "selectResource": {
+                "value": "Please select a resource."
+            },
+            "chooseResource": {
+                "value": "Choose a Resource"
+            },
+            "modal": {
+                "title": {
+                    "value": "Confirmation"
+                },
+                "description": {
+                    "value": "You are about to download {downloadSize} and delete {deleteSize} of content from your device."
+                },
+                "question": {
+                    "value": "How would you like to proceed?"
+                },
+                "downloadProgress": {
+                    "value": "Download progress"
+                }
+            }
+        }
+    },
+    "resources": {
+        "cbbt-er": {
+            "step1": {
+                "value": "Harim na Bel/Tingting"
+            },
+            "step2": {
+                "value": "Stretim dispela Hap"
+            },
+            "step3": {
+                "value": "Painim aut dispela hap"
+            },
+            "step4": {
+                "value": "Ektim aut dispela tok"
+            },
+            "step5": {
+                "value": "Pulapim dispela speis"
+            },
+            "step6": {
+                "value": "Speaking the Word"
             }
         }
     }

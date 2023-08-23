@@ -34,10 +34,10 @@
     <!-- head -->
     <thead>
         <tr>
-            <th>{$translate('page.index.download.value')}</th>
-            <th>{$translate('page.index.book.value')}</th>
-            <th>{$translate('page.index.size.value')}</th>
-            <th>{$translate('page.index.expand.value')}</th>
+            <th>{$translate('page.fileManager.download.value')}</th>
+            <th>{$translate('page.fileManager.book.value')}</th>
+            <th>{$translate('page.fileManager.size.value')}</th>
+            <th>{$translate('page.fileManager.expand.value')}</th>
         </tr>
     </thead>
 
@@ -76,9 +76,9 @@
             </tr>
             {#if book.expanded}
                 <tr class="bg-secondary text-neutral">
-                    <td class="font-bold">{$translate('page.index.download.value')}</td>
-                    <td class="font-bold">{$translate('page.index.type.value')}</td>
-                    <td class="font-bold">{$translate('page.index.size.value')}</td>
+                    <td class="font-bold">{$translate('page.fileManager.download.value')}</td>
+                    <td class="font-bold">{$translate('page.fileManager.type.value')}</td>
+                    <td class="font-bold">{$translate('page.fileManager.size.value')}</td>
                     <td />
                 </tr>
                 {#if book.textUrl}
