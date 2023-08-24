@@ -13,6 +13,20 @@ export const serviceWorkerPwaConfig = {
         cleanupOutdatedCaches: true,
         runtimeCaching: [
             {
+                urlPattern: /https:\/\/.*\.applicationinsights\.azure\.com.*/,
+                handler: 'NetworkOnly',
+                method: 'POST',
+                options: {
+                    cacheName: 'application-insights',
+                    backgroundSync: {
+                        name: 'application-insights-syncer',
+                        options: {
+                            maxRetentionTime: 14 * 24 * 60, // two weeks
+                        },
+                    },
+                },
+            },
+            {
                 urlPattern: /https:\/\/aquifer-server-(qa|dev|prod)\.azurewebsites\.net.*/,
                 handler: 'CacheFirst',
                 method: 'GET',
@@ -79,6 +93,7 @@ export const serviceWorkerPwaConfig = {
         launch_handler: { client_mode: 'auto' },
         orientation: 'portrait',
         prefer_related_applications: false,
+        dir: 'auto' as unknown,
         screenshots: [],
     },
 } as SvelteKitPWAOptions;
