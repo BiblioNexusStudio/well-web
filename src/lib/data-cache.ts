@@ -1,4 +1,6 @@
 import config from './config';
+import { get } from 'svelte/store';
+import { downloadData } from './stores/file-manager.store';
 
 type Url = string;
 export type UrlWithSize = { url: Url; size: number };
@@ -63,7 +65,12 @@ const cacheManyFromCdnWithProgress = async (
         }),
         {}
     );
-    const queue: string[] = Object.keys(progress);
+    // using downloadData.queue to track the queue of urls to download
+    downloadData.update((downloadData) => {
+        downloadData.queue = Object.keys(progress);
+        return downloadData;
+    });
+
     progressCallback(progress);
 
     const updateProgress = (url: Url, downloadedSize: number, totalSize: number, done: boolean) => {
@@ -79,8 +86,8 @@ const cacheManyFromCdnWithProgress = async (
                 updateProgress(url, cachedSize, cachedSize, true);
                 return;
             }
-
-            const response = await fetch(url);
+            const { signal } = get(downloadData).abortController;
+            const response = await fetch(url, { signal });
             const reader = response.body?.getReader();
             const contentLength = response.headers.get('Content-Length');
             let receivedLength = 0;
@@ -108,9 +115,18 @@ const cacheManyFromCdnWithProgress = async (
         const workers = Array(concurrentRequests)
             .fill(null)
             .map(async () => {
-                while (queue.length > 0) {
-                    const url = queue.shift();
-                    if (url) await processUrl(url);
+                while (get(downloadData).queue.length > 0) {
+                    const url = get(downloadData).queue[0];
+                    if (url) {
+                        downloadData.update((downloadData) => {
+                            const url = downloadData.queue.shift();
+                            const index = downloadData.urlsToDownload.findIndex((item) => item.url === url);
+                            downloadData.urlsToDownload.splice(index, 1);
+
+                            return downloadData;
+                        });
+                        await processUrl(url);
+                    }
                 }
             });
         await Promise.all(workers);

@@ -59,6 +59,16 @@
         }
         downloadedSuccessfully = false;
     };
+
+    const cancelCurrentDownload = () => {
+        const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
+        if (modal) {
+            modal.close();
+            downloadInProgress = false;
+            $downloadData.queue = [];
+            $downloadData.abortController.abort();
+        }
+    };
 </script>
 
 <dialog id="file-manager-modal" class="modal">
@@ -80,7 +90,7 @@
                 max={totalSizeToDownload}
             />
             <div class="flex justify-end">
-                <button class="btn btn-primary" on:click={cancelUpdateFiles}
+                <button class="btn btn-primary" on:click={cancelCurrentDownload}
                     >{$translate('page.fileManager.cancel.value')}</button
                 >
             </div>
