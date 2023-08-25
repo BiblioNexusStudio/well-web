@@ -92,6 +92,14 @@
                 "description": {
                     "value": "Dispela em i wari yu ken dounload na deletim Aquifer samting long yu divais."
                 }
+            },
+            "a11y": {
+                "expandResources": {
+                    "value": "Ekspandim Resos {bookName}"
+                },
+                "collapseResources": {
+                    "value": "Kolapsim Resos {bookName}"
+                }
             }
         }
     },

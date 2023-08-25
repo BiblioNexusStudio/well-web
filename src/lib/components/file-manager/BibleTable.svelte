@@ -66,7 +66,21 @@
                 </td>
                 {#if book.textSize > 1 || book.audioSize > 1}
                     <td>
-                        <button class="btn btn-primary btn-sm" on:click={() => (book.expanded = !book.expanded)}>
+                        <button
+                            class="btn btn-primary btn-sm"
+                            aria-label={book.expanded
+                                ? $translate('page.fileManager.a11y.collapseResources.value', {
+                                      values: {
+                                          bookName: book.displayName,
+                                      },
+                                  })
+                                : $translate('page.fileManager.a11y.expandedResources.value', {
+                                      values: {
+                                          bookName: book.displayName,
+                                      },
+                                  })}
+                            on:click={() => (book.expanded = !book.expanded)}
+                        >
                             <Icon class="cursor-pointer text-white" data={book.expanded ? chevronUp : chevronDown} />
                         </button>
                     </td>

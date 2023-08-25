@@ -120,6 +120,16 @@
                     "value": "This is where you can download and delete Aquifer content from your device.",
                     "_context": "Meta tag description"
                 }
+            },
+            "a11y": {
+                "expandResources": {
+                    "value": "Expand {bookName} Resources",
+                    "_context": "Accessibility label for the button to expand the resources"
+                },
+                "collapseResources": {
+                    "value": "Collapse {bookName} Resources",
+                    "_context": "Accessibility label for the button to collapse the resources"
+                }
             }
         }
     },

@@ -103,7 +103,21 @@
                 </td>
                 <td>{totalSize(passage)}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm" on:click={() => (passage.expanded = !passage.expanded)}>
+                    <button
+                        class="btn btn-primary btn-sm"
+                        aria-label={passage.expanded
+                            ? $translate('page.fileManager.a11y.collapseResources.value', {
+                                  values: {
+                                      bookName: firstDisplayName(passage),
+                                  },
+                              })
+                            : $translate('page.fileManager.a11y.expandedResources.value', {
+                                  values: {
+                                      bookName: firstDisplayName(passage),
+                                  },
+                              })}
+                        on:click={() => (passage.expanded = !passage.expanded)}
+                    >
                         <Icon class="cursor-pointer text-white" data={passage.expanded ? chevronUp : chevronDown} />
                     </button>
                 </td>
