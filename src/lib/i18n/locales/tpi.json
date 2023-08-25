@@ -87,6 +87,11 @@
                 "downloadingDescription": {
                     "value": "I dai nau daunlot {totalSizeDownloaded} bilong {totalSizeToDownload}."
                 }
+            },
+            "metaData": {
+                "description": {
+                    "value": "Dispela em i wari yu ken dounload na deletim Aquifer samting long yu divais."
+                }
             }
         }
     },

@@ -16,6 +16,7 @@
         tableType,
     } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { MetaTags } from 'svelte-meta-tags';
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
@@ -69,3 +70,5 @@
     </div>
     <Footer />
 </div>
+
+<MetaTags description={$translate('page.fileManager.metaData.description.value')} />

@@ -114,6 +114,12 @@
                     "value": "Downloading {totalSizeDownloaded} of {totalSizeToDownload}.",
                     "_context": "Shows on the modal showing the user how the download is progressing"
                 }
+            },
+            "metaData": {
+                "description": {
+                    "value": "This is where you can download and delete Aquifer content from your device.",
+                    "_context": "Meta tag description"
+                }
             }
         }
     },

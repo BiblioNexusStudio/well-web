@@ -4481,6 +4481,11 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
+schema-dts@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/schema-dts/-/schema-dts-1.1.2.tgz#82ccf71b5dcb80065a1cc5941888507a4ce1e44b"
+  integrity sha512-MpNwH0dZJHinVxk9bT8XUdjKTxMYrA5bLtrrGmFA6PTLwlOKnhi67XoRd6/ty+Djt6ZC0slR57qFhZDNMI6DhQ==
+
 semver@^7.3.7, semver@^7.5.3:
   version "7.5.3"
   resolved "https://registry.npmjs.org/semver/-/semver-7.5.3.tgz"
@@ -4773,6 +4778,13 @@ svelte-i18n@^3.7.0:
     intl-messageformat "^9.13.0"
     sade "^1.8.1"
     tiny-glob "^0.2.9"
+
+svelte-meta-tags@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/svelte-meta-tags/-/svelte-meta-tags-3.0.3.tgz#15467fd5ceb7ef56ffe1a4cd532d7294e16f6fac"
+  integrity sha512-av5B6MQb1ujpM11GOYj9PDridXYJmWWJdfQvtJivFDeEc7t4Xh0hBQqcL5oEONd4Tt8UjSi0cIQG0mshTM4s+A==
+  dependencies:
+    schema-dts "^1.1.2"
 
 svelte-preprocess@^5.0.3:
   version "5.0.4"
