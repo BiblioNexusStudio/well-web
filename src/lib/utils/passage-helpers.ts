@@ -1,4 +1,4 @@
-import type { Passage } from '$lib/types/fileManager';
+import type { Passage } from '$lib/types/file-manager';
 
 export function passageTypeToString(passage: Passage) {
     return `1${String(passage.bookId).padStart(3, '0')}${String(passage.startChapter).padStart(3, '0')}${String(

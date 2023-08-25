@@ -10,6 +10,7 @@
 
     async function initialize() {
         registerSW({}); // force a reload if the user is online and the app updated
+        window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
     }
 
     onMount(initialize);

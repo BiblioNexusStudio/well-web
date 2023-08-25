@@ -8,13 +8,7 @@
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
-    import {
-        fileManagerLoading,
-        bibleData,
-        currentBibleVersion,
-        passageData,
-        tableType,
-    } from '$lib/stores/file-manager.store';
+    import { fileManagerLoading, bibleData, currentBibleVersion, passageData } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
 

@@ -1,6 +1,4 @@
 import config from './config';
-import { get } from 'svelte/store';
-import { downloadData } from './stores/file-manager.store';
 
 type Url = string;
 export type UrlWithSize = { url: Url; size: number };

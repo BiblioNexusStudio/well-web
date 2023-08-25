@@ -13,9 +13,6 @@
             "go": {
                 "value": "Go"
             },
-            "searchByBook": {
-                "value": "Sospen Long Buk"
-            },
             "a11y": {
                 "settings": {
                     "value": "Saiting"
@@ -46,6 +43,15 @@
             },
             "type": {
                 "value": "Taip"
+            },
+            "textType": {
+                "value": "Teks"
+            },
+            "audioType": {
+                "value": "Odio"
+            },
+            "imagesType": {
+                "value": "Piksa"
             },
             "update": {
                 "value": "Apdetim"

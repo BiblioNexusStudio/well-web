@@ -17,10 +17,6 @@
                 "value": "Go",
                 "_context": "Indicates to the user that they can click on this button to move to next page with their given selections"
             },
-            "searchByBook": {
-                "value": "Search By Book",
-                "_context": "Allows the user to search specifically by a 'Book' of the Bible"
-            },
             "a11y": {
                 "settings": {
                     "value": "Settings",
@@ -60,6 +56,18 @@
             "type": {
                 "value": "Type",
                 "_context": "Table column heading for the column displaying media type"
+            },
+            "textType": {
+                "value": "Text",
+                "_context": "The media type for text, available to be downloaded"
+            },
+            "audioType": {
+                "value": "Audio",
+                "_context": "The media type for audio, available to be downloaded"
+            },
+            "imagesType": {
+                "value": "Images",
+                "_context": "The media type for images, available to be downloaded"
             },
             "update": {
                 "value": "Update",

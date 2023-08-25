@@ -109,6 +109,7 @@ export interface PassagesResource {
     tag: string | null;
     expanded?: boolean;
     selected?: boolean;
+    supportingResources: PassagesResource[];
 }
 
 export interface PassagesContent {

@@ -7,9 +7,9 @@
         "build": "vite build",
         "preview": "vite preview",
         "test": "vitest",
-        "lint:unused-translations": "eslint --rule \"svelte-translate-check/unused-translations:error\" \"src/lib/i18n/locales/*.json\"; rm -f tmp/all-translate-calls.txt",
-        "lint": "yarn format && eslint --fix . && yarn lint:unused-translations",
-        "lint:ci": "prettier --plugin-search-dir . --check \"**/*.{json,js,ts,css,html,svelte,cjs}\" && eslint . && yarn lint:unused-translations",
+        "lint:unused-translations": "( eslint --max-warnings 0 --rule \"svelte-translate-check/unused-translations:error\" \"src/lib/i18n/locales/*.json\" || rm -f tmp/all-translate-calls.txt ) || exit 1",
+        "lint": "yarn format && eslint --max-warnings 0 --fix . && yarn lint:unused-translations",
+        "lint:ci": "prettier --plugin-search-dir . --check \"**/*.{json,js,ts,css,html,svelte,cjs}\" && eslint --max-warnings 0 . && yarn lint:unused-translations",
         "format": "prettier --plugin-search-dir . --write \"**/*.{json,js,ts,css,html,svelte,cjs}\"",
         "use-config": "node scripts/use-config.js",
         "postinstall": "patch-package"
