@@ -14,8 +14,6 @@ export const downloadData = writable<DownloadData>({
     totalSizeToDelete: 0,
     urlsToDownload: [],
     urlsToDelete: [],
-    queue: [],
-    abortController: new AbortController(),
 });
 export const passageData = writable<Passages[]>([]);
 export const tableType = writable<string>('bible');

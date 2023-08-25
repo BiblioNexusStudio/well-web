@@ -65,11 +65,7 @@ const cacheManyFromCdnWithProgress = async (
         }),
         {}
     );
-    // using downloadData.queue to track the queue of urls to download
-    downloadData.update((downloadData) => {
-        downloadData.queue = Object.keys(progress);
-        return downloadData;
-    });
+    const queue: string[] = Object.keys(progress);
 
     progressCallback(progress);
 
@@ -86,8 +82,7 @@ const cacheManyFromCdnWithProgress = async (
                 updateProgress(url, cachedSize, cachedSize, true);
                 return;
             }
-            const { signal } = get(downloadData).abortController;
-            const response = await fetch(url, { signal });
+            const response = await fetch(url);
             const reader = response.body?.getReader();
             const contentLength = response.headers.get('Content-Length');
             let receivedLength = 0;
@@ -115,18 +110,9 @@ const cacheManyFromCdnWithProgress = async (
         const workers = Array(concurrentRequests)
             .fill(null)
             .map(async () => {
-                while (get(downloadData).queue.length > 0) {
-                    const url = get(downloadData).queue[0];
-                    if (url) {
-                        downloadData.update((downloadData) => {
-                            const url = downloadData.queue.shift();
-                            const index = downloadData.urlsToDownload.findIndex((item) => item.url === url);
-                            downloadData.urlsToDownload.splice(index, 1);
-
-                            return downloadData;
-                        });
-                        await processUrl(url);
-                    }
+                while (queue.length > 0) {
+                    const url = queue.shift();
+                    if (url) await processUrl(url);
                 }
             });
         await Promise.all(workers);

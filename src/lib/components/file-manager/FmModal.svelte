@@ -62,14 +62,7 @@
     };
 
     const cancelCurrentDownload = () => {
-        const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
-        if (modal) {
-            modal.close();
-            downloadInProgress = false;
-            $downloadData.queue = [];
-            $downloadData.abortController.abort();
-            window.location.reload();
-        }
+        window.location.reload();
     };
 </script>
 

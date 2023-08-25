@@ -50,8 +50,6 @@ export interface DownloadData {
     totalSizeToDelete: number;
     urlsToDownload: UrlWithSize[];
     urlsToDelete: string[];
-    queue: string[];
-    abortController: AbortController;
 }
 
 export interface Resource {
