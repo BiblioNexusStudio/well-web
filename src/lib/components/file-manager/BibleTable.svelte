@@ -34,7 +34,7 @@
     <!-- head -->
     <thead>
         <tr>
-            <th>{$translate('page.fileManager.download.value')}</th>
+            <th id="select-all-book-contents">{$translate('page.fileManager.download.value')}</th>
             <th>{$translate('page.fileManager.book.value')}</th>
             <th>{$translate('page.fileManager.size.value')}</th>
             <th>{$translate('page.fileManager.expand.value')}</th>
@@ -48,6 +48,7 @@
                     <label>
                         <input
                             type="checkbox"
+                            aria-labelledby="select-all-book-contents"
                             on:click={() => selectedAllContentsOfBook(book)}
                             bind:checked={book.selected}
                             class="checkbox checkbox-primary"
@@ -66,7 +67,21 @@
                 </td>
                 {#if book.textSize > 1 || book.audioSize > 1}
                     <td>
-                        <button class="btn btn-primary btn-sm" on:click={() => (book.expanded = !book.expanded)}>
+                        <button
+                            class="btn btn-primary btn-sm"
+                            aria-label={book.expanded
+                                ? $translate('page.fileManager.a11y.collapseResources.value', {
+                                      values: {
+                                          bookName: book.displayName,
+                                      },
+                                  })
+                                : $translate('page.fileManager.a11y.expandResources.value', {
+                                      values: {
+                                          bookName: book.displayName,
+                                      },
+                                  })}
+                            on:click={() => (book.expanded = !book.expanded)}
+                        >
                             <Icon class="cursor-pointer text-white" data={book.expanded ? chevronUp : chevronDown} />
                         </button>
                     </td>
@@ -76,7 +91,9 @@
             </tr>
             {#if book.expanded}
                 <tr class="bg-secondary text-neutral">
-                    <td class="font-bold">{$translate('page.fileManager.download.value')}</td>
+                    <td id="select-one-book-resource" class="font-bold"
+                        >{$translate('page.fileManager.download.value')}</td
+                    >
                     <td class="font-bold">{$translate('page.fileManager.type.value')}</td>
                     <td class="font-bold">{$translate('page.fileManager.size.value')}</td>
                     <td />
@@ -87,6 +104,7 @@
                             <label>
                                 <input
                                     type="checkbox"
+                                    aria-labelledby="select-one-book-resource"
                                     on:click={() =>
                                         book.textSelected
                                             ? addUrlToDelete(book.textUrl, book.textSize)
@@ -108,6 +126,7 @@
                                 <label>
                                     <input
                                         type="checkbox"
+                                        aria-labelledby="select-one-book-resource"
                                         on:click={() =>
                                             audioChapter.selected
                                                 ? addUrlToDelete(

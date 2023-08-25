@@ -74,7 +74,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>{$translate('page.fileManager.download.value')}</th>
+            <th id="select-all-book-contents">{$translate('page.fileManager.download.value')}</th>
             <th>{$translate('page.fileManager.passage.value')}</th>
             <th>{$translate('page.fileManager.size.value')}</th>
             <th>{$translate('page.fileManager.expand.value')}</th>
@@ -87,6 +87,7 @@
                     <label>
                         <input
                             type="checkbox"
+                            aria-labelledby="select-all-book-contents"
                             class="checkbox checkbox-primary"
                             bind:checked={passage.selected}
                             on:click={() => addAllPassageResources(passage)}
@@ -103,14 +104,30 @@
                 </td>
                 <td>{totalSize(passage)}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm" on:click={() => (passage.expanded = !passage.expanded)}>
+                    <button
+                        class="btn btn-primary btn-sm"
+                        aria-label={passage.expanded
+                            ? $translate('page.fileManager.a11y.collapseResources.value', {
+                                  values: {
+                                      bookName: firstDisplayName(passage),
+                                  },
+                              })
+                            : $translate('page.fileManager.a11y.expandResources.value', {
+                                  values: {
+                                      bookName: firstDisplayName(passage),
+                                  },
+                              })}
+                        on:click={() => (passage.expanded = !passage.expanded)}
+                    >
                         <Icon class="cursor-pointer text-white" data={passage.expanded ? chevronUp : chevronDown} />
                     </button>
                 </td>
             </tr>
             {#if passage.expanded && passage.resources.length > 0}
                 <tr class="bg-secondary text-neutral">
-                    <td class="font-bold">{$translate('page.fileManager.download.value')}</td>
+                    <td id="select-one-resource-to-download" class="font-bold"
+                        >{$translate('page.fileManager.download.value')}</td
+                    >
                     <td class="font-bold">{$translate('page.fileManager.passage.value')}</td>
                     <td class="font-bold">{$translate('page.fileManager.type.value')}</td>
                     <td class="font-bold">{$translate('page.fileManager.size.value')}</td>
@@ -121,6 +138,7 @@
                             <label>
                                 <input
                                     type="checkbox"
+                                    aria-labelledby="select-one-resource-to-download"
                                     bind:checked={passageResource.selected}
                                     on:click={() =>
                                         passageResource.selected

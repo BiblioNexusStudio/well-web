@@ -1,4 +1,6 @@
 import config from './config';
+import { get } from 'svelte/store';
+import { downloadData } from './stores/file-manager.store';
 
 type Url = string;
 export type UrlWithSize = { url: Url; size: number };
@@ -64,6 +66,7 @@ const cacheManyFromCdnWithProgress = async (
         {}
     );
     const queue: string[] = Object.keys(progress);
+
     progressCallback(progress);
 
     const updateProgress = (url: Url, downloadedSize: number, totalSize: number, done: boolean) => {
@@ -79,7 +82,6 @@ const cacheManyFromCdnWithProgress = async (
                 updateProgress(url, cachedSize, cachedSize, true);
                 return;
             }
-
             const response = await fetch(url);
             const reader = response.body?.getReader();
             const contentLength = response.headers.get('Content-Length');

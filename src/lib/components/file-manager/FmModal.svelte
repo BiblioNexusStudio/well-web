@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
     import { downloadData } from '$lib/stores/file-manager.store';
     import { convertToReadableSize, resetDownloadData } from '$lib/utils/file-manager';
     import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';
@@ -59,6 +60,10 @@
         }
         downloadedSuccessfully = false;
     };
+
+    const cancelCurrentDownload = () => {
+        window.location.reload();
+    };
 </script>
 
 <dialog id="file-manager-modal" class="modal">
@@ -80,7 +85,7 @@
                 max={totalSizeToDownload}
             />
             <div class="flex justify-end">
-                <button class="btn btn-primary" on:click={cancelUpdateFiles}
+                <button class="btn btn-primary" on:click={cancelCurrentDownload}
                     >{$translate('page.fileManager.cancel.value')}</button
                 >
             </div>
