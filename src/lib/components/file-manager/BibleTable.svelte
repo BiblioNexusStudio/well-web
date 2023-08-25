@@ -74,7 +74,7 @@
                                           bookName: book.displayName,
                                       },
                                   })
-                                : $translate('page.fileManager.a11y.expandedResources.value', {
+                                : $translate('page.fileManager.a11y.expandResources.value', {
                                       values: {
                                           bookName: book.displayName,
                                       },

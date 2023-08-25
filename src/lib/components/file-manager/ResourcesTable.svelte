@@ -111,7 +111,7 @@
                                       bookName: firstDisplayName(passage),
                                   },
                               })
-                            : $translate('page.fileManager.a11y.expandedResources.value', {
+                            : $translate('page.fileManager.a11y.expandResources.value', {
                                   values: {
                                       bookName: firstDisplayName(passage),
                                   },
