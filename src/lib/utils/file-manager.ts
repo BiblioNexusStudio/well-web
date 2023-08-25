@@ -1,8 +1,8 @@
 import { downloadData } from '$lib/stores/file-manager.store';
 import { isCachedFromCdn } from '$lib/data-cache';
-import { asyncEvery, asyncForEach } from './async-array';
+import { asyncEvery, asyncForEach, reduceAsync } from './async-array';
 import { audioFileTypeForBrowser } from './browser';
-import type { BibleVersion, Passages } from '$lib/types/fileManager';
+import type { BibleVersion, Passages } from '$lib/types/file-manager';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -44,21 +44,48 @@ export const addFrontEndDataToPassageData = async (inputPassageData: Passages[])
     await asyncForEach(inputPassageData, async (passage) => {
         passage.expanded = false;
 
-        await asyncForEach(passage.resources, async (resource: any) => {
-            resource.expanded = false;
+        passage.resources = [
+            ...passage.resources,
+            ...passage.resources.flatMap(({ supportingResources }) => supportingResources ?? []),
+        ].reduce(
+            (output, resource) => {
+                if (!!resource.content && resource.type === 1) {
+                    if (resource.mediaType === 1) {
+                        output.text.urlsAndSizes.push({
+                            url: resource.content.content.url,
+                            size: resource.content.contentSize,
+                        });
+                    } else if (resource.mediaType === 2) {
+                        output.audio.urlsAndSizes.push(
+                            ...resource.content.content.steps.map((step) => ({
+                                url: step[audioFileTypeForBrowser()].url,
+                                size: step[audioFileTypeForBrowser()].size,
+                            }))
+                        );
+                    }
+                } else if (!!resource.content && resource.mediaType === 3) {
+                    output.images.urlsAndSizes.push({
+                        url: resource.content.content.url,
+                        size: resource.content.content.size,
+                    });
+                }
+                return output;
+            },
+            {
+                text: { urlsAndSizes: [], selected: false },
+                audio: { urlsAndSizes: [], selected: false },
+                images: { urlsAndSizes: [], selected: false },
+            }
+        );
 
-            if (resource.mediaType === 1) {
-                resource.selected = await isCachedFromCdn(resource.content?.content?.url);
-            }
-            if (resource.mediaType === 2) {
-                resource.selected = await asyncEvery(
-                    resource.content?.content?.steps ?? [],
-                    async (step) => await isCachedFromCdn(step[audioFileTypeForBrowser()].url)
-                );
-            }
+        await asyncForEach(Object.entries(passage.resources), async ([_, resourceInfo]) => {
+            resourceInfo.selected = await asyncEvery(
+                resourceInfo.urlsAndSizes,
+                async ({ url }) => await isCachedFromCdn(url)
+            );
         });
 
-        passage.selected = passage.resources.every(({ selected }) => selected);
+        passage.selected = Object.values(passage.resources).every(({ selected }) => selected);
     });
     return inputPassageData;
 };

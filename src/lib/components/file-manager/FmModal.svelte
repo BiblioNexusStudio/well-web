@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
     import { downloadData } from '$lib/stores/file-manager.store';
     import { convertToReadableSize, resetDownloadData } from '$lib/utils/file-manager';
     import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';

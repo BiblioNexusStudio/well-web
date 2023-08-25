@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { BibleVersion, Language, DownloadData, Passages } from '$lib/types/fileManager';
+import type { BibleVersion, Language, DownloadData, Passages } from '$lib/types/file-manager';
 
 export const bibleData = writable<BibleVersion[]>([]);
 export const currentBibleVersion = writable<BibleVersion>({
