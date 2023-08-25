@@ -71,4 +71,4 @@
     <Footer />
 </div>
 
-<MetaTags description={$translate('page.fileManager.metaData.description.value')} />
+<MetaTags description={$translate('page.fileManager.metaData.description.value')} robots="noindex" />
