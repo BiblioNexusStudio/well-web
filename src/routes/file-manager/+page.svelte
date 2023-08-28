@@ -1,7 +1,11 @@
 <script lang="ts">
     import { currentLanguageId } from '$lib/stores/current-language.store';
     import { _ as translate } from 'svelte-i18n';
-    import { addFrontEndDataToBibleData, addFrontEndDataToPassageData } from '$lib/utils/file-manager';
+    import {
+        addFrontEndDataToBibleData,
+        addFrontEndDataToPassageData,
+        resetOriginalData,
+    } from '$lib/utils/file-manager';
     import InfoBox from '$lib/components/file-manager/InfoBox.svelte';
     import AvailableResourceSelect from '$lib/components/file-manager/AvailableResourceSelect.svelte';
     import LanguageSelect from '$lib/components/file-manager/LanguageSelect.svelte';
@@ -31,6 +35,7 @@
                     (await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)) as ApiPassage[]
                 ).filter(({ resources }) => resources.some(({ content }) => !!content))
             );
+            resetOriginalData();
             $fileManagerLoading = false;
         }
     }

@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { downloadData } from '$lib/stores/file-manager.store';
-    import { convertToReadableSize, resetDownloadData } from '$lib/utils/file-manager';
+    import { convertToReadableSize, resetOriginalData } from '$lib/utils/file-manager';
     import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';
     import { _ as translate } from 'svelte-i18n';
     import { objectKeys, objectValues } from '$lib/utils/typesafe-standard-lib';
+    import { downloadData } from '$lib/stores/file-manager.store';
 
     let downloadInProgress = false;
     let downloadedSuccessfully = false;
@@ -11,11 +11,7 @@
     let totalSizeDownloaded = 0;
 
     const continueUpdateFiles = () => {
-        if ($downloadData.urlsToDelete.length > 0) {
-            $downloadData.urlsToDelete.forEach((url) => {
-                removeFromCdnCache(url);
-            });
-        }
+        $downloadData.urlsToDelete.forEach(removeFromCdnCache);
 
         if ($downloadData.urlsToDownload.length > 0) {
             cacheManyFromCdnWithProgress($downloadData.urlsToDownload, progressCallback);
@@ -24,7 +20,7 @@
             const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
             if (modal) {
                 modal.close();
-                resetDownloadData();
+                resetOriginalData();
             }
         }
     };
@@ -41,7 +37,7 @@
 
         if (downloadFinished) {
             downloadInProgress = false;
-            resetDownloadData();
+            resetOriginalData();
             downloadedSuccessfully = true;
         }
     };
@@ -119,7 +115,7 @@
                 >
                 <button
                     class="btn btn-primary"
-                    disabled={$downloadData.totalSizeToDownload === 0 && $downloadData.totalSizeToDelete === 0}
+                    disabled={$downloadData.urlsToDelete.length === 0 && $downloadData.urlsToDownload.length === 0}
                     on:click={continueUpdateFiles}>{$translate('page.fileManager.update.value')}</button
                 >
             </div>
