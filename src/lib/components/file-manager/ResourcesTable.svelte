@@ -1,7 +1,7 @@
 <script lang="ts">
     import { passageData } from '$lib/stores/file-manager.store';
     import { MediaType, type FrontendPassage, type MediaTypeEnum } from '$lib/types/file-manager';
-    import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/file-manager';
+    import { convertToReadableSize } from '$lib/utils/file-manager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
@@ -28,28 +28,29 @@
     };
 
     const addPassageResourceToDelete = (passage: FrontendPassage, mediaType: MediaTypeEnum) => {
-        passage.resources[mediaType].urlsAndSizes.forEach(({ url, size }) => addUrlToDelete(url, size));
+        passage.resources[mediaType].selected = false;
+        $passageData = $passageData;
     };
 
     const addPassageResourceToDownloads = (passage: FrontendPassage, mediaType: MediaTypeEnum) => {
-        passage.resources[mediaType].urlsAndSizes.forEach(({ url, size }) => addUrlToDownloads(url, size));
+        passage.resources[mediaType].selected = true;
+        $passageData = $passageData;
     };
 
     const addAllPassageResources = (passage: FrontendPassage) => {
         if (passage.selected) {
             passage.selected = false;
-            objectEntries(passage.resources).forEach(([mediaType, resourceInfo]) => {
+            objectValues(passage.resources).forEach((resourceInfo) => {
                 resourceInfo.selected = false;
-                addPassageResourceToDelete(passage, mediaType);
             });
             return;
         } else {
             passage.selected = true;
-            objectEntries(passage.resources).forEach(([mediaType, resourceInfo]) => {
+            objectValues(passage.resources).forEach((resourceInfo) => {
                 resourceInfo.selected = true;
-                addPassageResourceToDownloads(passage, mediaType);
             });
         }
+        $passageData = $passageData;
     };
 </script>
 

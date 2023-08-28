@@ -16,7 +16,7 @@
     let stepsAvailable: number[] = [];
     let cbbterText: CbbtErTextContent | undefined;
     let cbbterAudio: ResourceContentSteps | undefined;
-    let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] };
+    let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
     let topOfStep: HTMLElement | null = null;
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
@@ -58,12 +58,14 @@
     />
 
     <div class="navbar-end">
-        <button
-            class="btn btn-square {bibleViewSelected ? 'btn-primary' : 'btn-ghost'} xl:hidden"
-            on:click={() => (bibleViewSelected = !bibleViewSelected)}
-        >
-            <BookIcon />
-        </button>
+        {#if bibleContent?.chapters?.length}
+            <button
+                class="btn btn-square {bibleViewSelected ? 'btn-primary' : 'btn-ghost'} xl:hidden"
+                on:click={() => (bibleViewSelected = !bibleViewSelected)}
+            >
+                <BookIcon />
+            </button>
+        {/if}
     </div>
 </div>
 
@@ -72,7 +74,7 @@
         <FullPageSpinner />
     {:then}
         <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} py-10 xl:block overflow-y-scroll">
-            {#if bibleContent.chapters?.length}
+            {#if bibleContent?.chapters?.length}
                 {#each bibleContent.chapters as chapter}
                     {#if chapter.audioData}
                         <div class="py-4">

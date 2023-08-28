@@ -29,7 +29,7 @@ async function fetchBibleContent(passage: BasePassage) {
     try {
         bibleData = await fetchFromCacheOrApi(`bibles/language/${get(currentLanguageId)}`);
     } catch (error) {
-        console.log(error);
+        // this means the user hasn't cached the Bible data, so just return empty
         return {};
     }
     if (bibleData[0]) {
@@ -40,7 +40,7 @@ async function fetchBibleContent(passage: BasePassage) {
         try {
             fullBookText = (await fetchFromCacheOrCdn(book.textUrl)) as BibleBookTextContent;
         } catch (_) {
-            // no-op
+            // this means the user hasn't downloaded the Bible text, which is fine
         }
         const filteredAudio = book.audioUrls.chapters.filter((chapter: FrontendAudioChapter) => {
             const chapterNumber = parseInt(chapter.number);

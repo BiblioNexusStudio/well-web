@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { _ as translate } from 'svelte-i18n';
-    import { resetDownloadData } from '$lib/utils/file-manager';
+    import { resetOriginalData } from '$lib/utils/file-manager';
     import { downloadData } from '$lib/stores/file-manager.store';
 
     const updateFiles = () => {
@@ -12,7 +12,7 @@
     };
 
     const cancelUpdateFiles = () => {
-        resetDownloadData();
+        resetOriginalData();
         goto('/');
     };
 </script>

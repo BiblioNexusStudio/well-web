@@ -13,19 +13,11 @@
             "go": {
                 "value": "Go"
             },
-            "searchByBook": {
-                "value": "Sospen Long Buk"
-            },
             "downloadResourcesForOfflineUse": {
                 "value": "Downloadim resos bilong yu long yusim long oflain yusim."
             },
             "youAreCurrentlyOffline": {
                 "value": "Yu stap oflain taim nau. Plis konnekim long intanet long downloadim moa resos."
-            },
-            "a11y": {
-                "settings": {
-                    "value": "Saiting"
-                }
             }
         },
         "fileManager": {
