@@ -3,6 +3,7 @@
     import { convertToReadableSize, resetDownloadData } from '$lib/utils/file-manager';
     import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';
     import { _ as translate } from 'svelte-i18n';
+    import { objectKeys, objectValues } from '$lib/utils/typesafe-standard-lib';
 
     let downloadInProgress = false;
     let downloadedSuccessfully = false;
@@ -29,14 +30,14 @@
     };
 
     const progressCallback = (progress: AllItemsProgress) => {
-        [totalSizeToDownload, totalSizeDownloaded] = Object.values(progress).reduce(
+        [totalSizeToDownload, totalSizeDownloaded] = objectValues(progress).reduce(
             ([runningTotal, runningDownloaded], { downloadedSize, totalSize }) => [
                 runningTotal + totalSize,
                 runningDownloaded + downloadedSize,
             ],
             [0, 0]
         );
-        const downloadFinished = Object.keys(progress).every((key: string) => progress[key].done);
+        const downloadFinished = objectKeys(progress).every((key: string) => progress[key].done);
 
         if (downloadFinished) {
             downloadInProgress = false;

@@ -5,7 +5,12 @@
     import { onMount } from 'svelte';
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
     import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
-    import type { Passages, PassagesContent } from '$lib/types/file-manager';
+    import type {
+        ApiPassage,
+        ApiBibleVersion,
+        ResourceContentSteps,
+        ResourceContentUrl,
+    } from '$lib/types/file-manager';
     import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
     import { get } from 'svelte/store';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
@@ -15,7 +20,7 @@
     let languageSelected: boolean;
     let selectedBookIndex: number;
     let selectedId = 'default';
-    let data = {};
+    let data = {} as { passagesByBook?: PassagesForBook[] };
 
     $: selectedBookInfo = data.passagesByBook?.[selectedBookIndex];
 
@@ -25,8 +30,15 @@
         goto('/file-manager');
     };
 
+    interface PassagesForBook {
+        displayName: string;
+        passages: ApiPassage[];
+    }
+
     async function getBibleBookIdsToNameAndIndex(languageId: number | null = null) {
-        const bibleData = await fetchFromCacheOrApi(`bibles/language/${languageId || get(currentLanguageId)}`);
+        const bibleData = (await fetchFromCacheOrApi(
+            `bibles/language/${languageId || get(currentLanguageId)}`
+        )) as ApiBibleVersion[];
         if (bibleData[0]) {
             return bibleData[0].contents.reduce(
                 (output, { displayName, bookId }, index) => ({ ...output, [bookId]: { displayName, index } }),
@@ -41,16 +53,18 @@
         const bibleBookIdsToNameAndIndex = await getBibleBookIdsToNameAndIndex();
         const passagesWithResources = (await fetchFromCacheOrApi(
             `passages/resources/language/${get(currentLanguageId)}`
-        )) as Passages[];
+        )) as ApiPassage[];
         const availableOfflinePassagesWithResources = await asyncFilter(
             passagesWithResources,
             async ({ resources }) => {
                 return asyncSome(resources, async ({ mediaType, content }) => {
                     if (mediaType === 1 && content) {
-                        return await isCachedFromCdn((content as PassagesContent).content.url);
+                        const textContent = content.content as ResourceContentUrl;
+                        return await isCachedFromCdn(textContent.url);
                     } else if (mediaType === 2 && content) {
+                        const audioContent = content.content as ResourceContentSteps;
                         return asyncEvery(
-                            (content as PassagesContent).content.steps,
+                            audioContent.steps,
                             async (step) => await isCachedFromCdn(step[audioFileTypeForBrowser()].url)
                         );
                     } else {
@@ -69,7 +83,7 @@
                 const bookInfo = output[bibleBookNameAndIndex.index];
                 bookInfo.passages.push(passageWithResource);
                 return output;
-            }, [])
+            }, [] as PassagesForBook[])
             .filter(Boolean);
         data = { passagesByBook };
     }

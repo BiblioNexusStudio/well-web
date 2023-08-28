@@ -1,57 +1,51 @@
 <script lang="ts">
     import { passageData } from '$lib/stores/file-manager.store';
-    import type { Passages } from '$lib/types/file-manager';
+    import { MediaType, type FrontendPassage, type MediaTypeEnum } from '$lib/types/file-manager';
     import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/file-manager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
-    import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { _ as translate } from 'svelte-i18n';
+    import { objectEntries, objectValues } from '$lib/utils/typesafe-standard-lib';
 
-    const mediaTypeSwitch = (mediaType: string) => {
+    const mediaTypeSwitch = (mediaType: MediaTypeEnum) => {
         switch (mediaType) {
-            case 'text':
-                return $translate('page.fileManager.textType');
-            case 'audio':
-                return $translate('page.fileManager.audioType');
-            case 'images':
-                return $translate('page.fileManager.imagesType');
-            default:
-                return 'Unknown';
+            case MediaType.text:
+                return $translate('page.fileManager.textType.value');
+            case MediaType.audio:
+                return $translate('page.fileManager.audioType.value');
+            case MediaType.images:
+                return $translate('page.fileManager.imagesType.value');
         }
     };
 
-    const totalSize = (passage: Passages) => {
+    const totalSize = (passage: FrontendPassage) => {
         let total = 0;
-        Object.values(passage.resources).forEach(({ urlsAndSizes }) => {
+        objectValues(passage.resources).forEach(({ urlsAndSizes }) => {
             total += urlsAndSizes.reduce((acc, { size }) => acc + size, 0);
         });
         return convertToReadableSize(total);
     };
 
-    const firstDisplayName = (passage: Passages) => {
-        return passage.resources.find((p) => p.englishLabel)?.englishLabel;
+    const addPassageResourceToDelete = (passage: FrontendPassage, mediaType: MediaTypeEnum) => {
+        passage.resources[mediaType].urlsAndSizes.forEach(({ url, size }) => addUrlToDelete(url, size));
     };
 
-    const addPassageResourceToDelete = (passage, mediaType) => {
-        passage[mediaType].urlsAndSizes.forEach(({ url, size }) => addUrlToDelete(url, size));
+    const addPassageResourceToDownloads = (passage: FrontendPassage, mediaType: MediaTypeEnum) => {
+        passage.resources[mediaType].urlsAndSizes.forEach(({ url, size }) => addUrlToDownloads(url, size));
     };
 
-    const addPassageResourceToDownloads = (passage, mediaType) => {
-        passage[mediaType].urlsAndSizes.forEach(({ url, size }) => addUrlToDownloads(url, size));
-    };
-
-    const addAllPassageResources = (passage: Passages) => {
+    const addAllPassageResources = (passage: FrontendPassage) => {
         if (passage.selected) {
             passage.selected = false;
-            Object.entries(passage.resources).forEach(([mediaType, resourceInfo]) => {
+            objectEntries(passage.resources).forEach(([mediaType, resourceInfo]) => {
                 resourceInfo.selected = false;
                 addPassageResourceToDelete(passage, mediaType);
             });
             return;
         } else {
             passage.selected = true;
-            Object.entries(passage.resources).forEach(([mediaType, resourceInfo]) => {
+            objectEntries(passage.resources).forEach(([mediaType, resourceInfo]) => {
                 resourceInfo.selected = true;
                 addPassageResourceToDownloads(passage, mediaType);
             });
@@ -86,7 +80,7 @@
                 <td>
                     <div class="flex items-center space-x-3">
                         <div>
-                            <div class="font-bold">{firstDisplayName(passage)}</div>
+                            <div class="font-bold">{passage.primaryResourceName}</div>
                         </div>
                     </div>
                 </td>
@@ -97,12 +91,12 @@
                         aria-label={passage.expanded
                             ? $translate('page.fileManager.a11y.collapseResources.value', {
                                   values: {
-                                      bookName: firstDisplayName(passage),
+                                      bookName: passage.primaryResourceName,
                                   },
                               })
                             : $translate('page.fileManager.a11y.expandResources.value', {
                                   values: {
-                                      bookName: firstDisplayName(passage),
+                                      bookName: passage.primaryResourceName,
                                   },
                               })}
                         on:click={() => (passage.expanded = !passage.expanded)}
@@ -111,7 +105,7 @@
                     </button>
                 </td>
             </tr>
-            {#if passage.expanded && Object.entries(passage.resources).length > 0}
+            {#if passage.expanded && objectEntries(passage.resources).length > 0}
                 <tr class="bg-secondary text-neutral">
                     <td id="select-one-resource-to-download" class="font-bold"
                         >{$translate('page.fileManager.download.value')}</td
@@ -120,30 +114,32 @@
                     <td class="font-bold">{$translate('page.fileManager.type.value')}</td>
                     <td class="font-bold">{$translate('page.fileManager.size.value')}</td>
                 </tr>
-                {#each Object.entries(passage.resources) as [mediaType, resourceInfo]}
-                    <tr class="bg-primary">
-                        <td>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    aria-labelledby="select-one-resource-to-download"
-                                    bind:checked={resourceInfo.selected}
-                                    on:click={() =>
-                                        resourceInfo.selected
-                                            ? addPassageResourceToDelete(passage, mediaType)
-                                            : addPassageResourceToDownloads(passage, mediaType)}
-                                    class="checkbox checkbox-secondary"
-                                />
-                            </label>
-                        </td>
-                        <td>{firstDisplayName(passage)}</td>
-                        <td>{mediaTypeSwitch(mediaType)}</td>
-                        <td
-                            >{convertToReadableSize(
-                                resourceInfo.urlsAndSizes.reduce((acc, { size }) => acc + size, 0)
-                            )}</td
-                        >
-                    </tr>
+                {#each objectEntries(passage.resources) as [mediaType, resourceInfo]}
+                    {#if resourceInfo.urlsAndSizes.length}
+                        <tr class="bg-primary">
+                            <td>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        aria-labelledby="select-one-resource-to-download"
+                                        bind:checked={resourceInfo.selected}
+                                        on:click={() =>
+                                            resourceInfo.selected
+                                                ? addPassageResourceToDelete(passage, mediaType)
+                                                : addPassageResourceToDownloads(passage, mediaType)}
+                                        class="checkbox checkbox-secondary"
+                                    />
+                                </label>
+                            </td>
+                            <td>{passage.primaryResourceName}</td>
+                            <td>{mediaTypeSwitch(mediaType)}</td>
+                            <td
+                                >{convertToReadableSize(
+                                    resourceInfo.urlsAndSizes.reduce((acc, { size }) => acc + size, 0)
+                                )}</td
+                            >
+                        </tr>
+                    {/if}
                 {/each}
             {/if}
         {/each}

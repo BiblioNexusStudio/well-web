@@ -1,12 +1,12 @@
-import type { Passage } from '$lib/types/file-manager';
+import type { BasePassage } from '$lib/types/file-manager';
 
-export function passageTypeToString(passage: Passage) {
+export function passageTypeToString(passage: BasePassage) {
     return `1${String(passage.bookId).padStart(3, '0')}${String(passage.startChapter).padStart(3, '0')}${String(
         passage.startVerse
     ).padStart(3, '0')}${String(passage.endChapter).padStart(3, '0')}${String(passage.endVerse).padStart(3, '0')}`;
 }
 
-export function stringToPassageType(passageString: string): Passage {
+export function stringToPassageType(passageString: string): BasePassage {
     return {
         bookId: parseInt(passageString.substring(1, 4), 10),
         startChapter: parseInt(passageString.substring(4, 7), 10),
@@ -16,7 +16,7 @@ export function stringToPassageType(passageString: string): Passage {
     };
 }
 
-export function passagesEqual(passage1: Passage, passage2: Passage): boolean {
+export function passagesEqual(passage1: BasePassage, passage2: BasePassage): boolean {
     return (
         passage1.bookId === passage2.bookId &&
         passage1.startChapter === passage2.startChapter &&
@@ -26,7 +26,7 @@ export function passagesEqual(passage1: Passage, passage2: Passage): boolean {
     );
 }
 
-export function passageToReference(passage: Passage): string {
+export function passageToReference(passage: BasePassage): string {
     if (passage.startChapter === passage.endChapter) {
         return `${passage.startChapter}:${passage.startVerse}-${passage.endVerse}`;
     }

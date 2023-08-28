@@ -1,30 +1,50 @@
 import type { UrlWithSize } from '$lib/data-cache';
 
-export interface BibleVersion {
+export interface BaseBibleVersion {
     languageId: number | string;
     name: string;
-    contents: BibleVersionBookContent[];
 }
 
-export interface BibleVersionBookContent {
+export interface ApiBibleVersion extends BaseBibleVersion {
+    contents: ApiBibleVersionBookContent[];
+}
+
+export interface FrontendBibleVersion extends BaseBibleVersion {
+    contents: FrontendBibleVersionBookContent[];
+}
+
+export interface BaseBibleVersionBookContent {
     bookId: number;
     displayName: string;
     textUrl: string;
-    audioUrls: {
-        chapters: AudioChapter[];
-    };
     textSize: number;
     audioSize: number;
+}
+
+export interface ApiBibleVersionBookContent extends BaseBibleVersionBookContent {
+    audioUrls: {
+        chapters: ApiAudioChapter[];
+    };
+}
+
+export interface FrontendBibleVersionBookContent extends BaseBibleVersionBookContent {
+    audioUrls: {
+        chapters: FrontendAudioChapter[];
+    };
     expanded?: boolean;
     selected?: boolean;
     textSelected?: boolean;
 }
 
-export interface AudioChapter {
+export interface ApiAudioChapter {
     number: string;
     webm: AudioResource;
     mp3: AudioResource;
     audioTimestamps: AudioTimestamp[];
+    selected?: boolean;
+}
+
+export interface FrontendAudioChapter extends ApiAudioChapter {
     selected?: boolean;
 }
 
@@ -52,29 +72,6 @@ export interface DownloadData {
     urlsToDelete: string[];
 }
 
-export interface Resource {
-    languageId: number;
-    displayName: string;
-    summary: string | null;
-    content: ResourceContentSteps | ResourceContentUrl | null;
-    contentSize: number;
-    type: number;
-    mediaType: number;
-    englishLabel: string;
-    tags: string | null;
-    passages: Passage[];
-    expanded?: boolean;
-    selected?: boolean;
-}
-
-export interface Passage {
-    bookId: number;
-    startChapter: number;
-    endChapter: number;
-    startVerse: number;
-    endVerse: number;
-}
-
 export interface ResourceContentSteps {
     steps: ResourceStep[];
 }
@@ -89,30 +86,42 @@ export interface ResourceContentUrl {
     url: string;
 }
 
-export interface Passages {
+export interface CbbtErTextContent {
+    steps: { stepNumber: number; contentHTML: string }[];
+}
+
+export interface BasePassage {
     bookId: number;
-    bookName: string;
+    bookName?: string;
     startChapter: number;
     endChapter: number;
     startVerse: number;
     endVerse: number;
-    resources: PassagesResource[];
-    expanded?: boolean;
-    selected?: boolean;
 }
 
-export interface PassagesResource {
-    content: PassagesContent | null;
+export interface ApiPassage extends BasePassage {
+    resources: ApiPassageResource[];
+}
+
+export interface FrontendPassage extends BasePassage {
+    resources: ResourcesByMediaType;
+    expanded?: boolean;
+    selected?: boolean;
+    primaryResourceName?: string;
+}
+
+export interface ApiPassageResource {
+    content: ApiPassageContent | null;
     type: number;
     mediaType: number;
     englishLabel: string;
     tag: string | null;
     expanded?: boolean;
     selected?: boolean;
-    supportingResources: PassagesResource[];
+    supportingResources: ApiPassageResource[];
 }
 
-export interface PassagesContent {
+export interface ApiPassageContent {
     languageId: number;
     displayName: string;
     summary: string | null;
@@ -120,3 +129,22 @@ export interface PassagesContent {
     contentSize: number;
     selected?: boolean;
 }
+
+export interface ResourcesByMediaType {
+    [MediaType.text]: ResourcesForMediaType;
+    [MediaType.audio]: ResourcesForMediaType;
+    [MediaType.images]: ResourcesForMediaType;
+}
+
+export interface ResourcesForMediaType {
+    urlsAndSizes: { url: string; size: number }[];
+    selected: boolean;
+}
+
+export const MediaType = {
+    text: 'text',
+    audio: 'audio',
+    images: 'images',
+} as const;
+
+export type MediaTypeEnum = (typeof MediaType)[keyof typeof MediaType];

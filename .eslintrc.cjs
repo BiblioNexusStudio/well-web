@@ -24,6 +24,7 @@ module.exports = {
     ],
     rules: {
         'svelte/no-at-html-tags': 0,
+        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         'svelte-translate-check/missing-translations': 'error',
     },
 };

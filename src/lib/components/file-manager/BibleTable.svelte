@@ -2,13 +2,13 @@
     import { _ as translate } from 'svelte-i18n';
     import { currentBibleVersion } from '$lib/stores/file-manager.store';
     import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/file-manager';
-    import type { BibleVersionBookContent } from '$lib/types/file-manager';
+    import type { FrontendBibleVersionBookContent } from '$lib/types/file-manager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
-    const selectedAllContentsOfBook = (book: BibleVersionBookContent) => {
+    const selectedAllContentsOfBook = (book: FrontendBibleVersionBookContent) => {
         if (book.selected) {
             book.selected = false;
             book.textSelected = false;

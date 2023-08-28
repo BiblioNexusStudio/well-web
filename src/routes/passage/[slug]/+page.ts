@@ -3,13 +3,28 @@ import { get } from 'svelte/store';
 import { fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
 import { currentLanguageId } from '$lib/stores/current-language.store';
 import { stringToPassageType } from '$lib/utils/passage-helpers';
-import type { AudioChapter, AudioTimestamp, BibleVersionBookContent, Passage, Passages } from '$lib/types/file-manager';
+import type {
+    ApiPassage,
+    FrontendAudioChapter,
+    AudioTimestamp,
+    BasePassage,
+    FrontendBibleVersionBookContent,
+    ResourceContentUrl,
+    ResourceContentSteps,
+    CbbtErTextContent,
+} from '$lib/types/file-manager';
 import type { BibleBookTextContent } from '$lib/types/bible-text-content';
 import { passagesEqual } from '$lib/utils/passage-helpers';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import { reduceAsync } from '$lib/utils/async-array';
 
-async function fetchBibleContent(passage: Passage) {
+export interface FrontendChapterContent {
+    number: string;
+    audioData: { url: string; startTimestamp: number; endTimestamp: number } | null;
+    versesText: { number: string; text: string }[];
+}
+
+async function fetchBibleContent(passage: BasePassage) {
     let bibleData;
     try {
         bibleData = await fetchFromCacheOrApi(`bibles/language/${get(currentLanguageId)}`);
@@ -18,18 +33,25 @@ async function fetchBibleContent(passage: Passage) {
         return {};
     }
     if (bibleData[0]) {
-        const book = bibleData[0].contents.find((book: BibleVersionBookContent) => book.bookId === passage.bookId);
-        const fullBookText = (await fetchFromCacheOrCdn(book.textUrl)) as BibleBookTextContent;
-        const filteredAudio = book.audioUrls.chapters.filter((chapter: AudioChapter) => {
+        const book = bibleData[0].contents.find(
+            (book: FrontendBibleVersionBookContent) => book.bookId === passage.bookId
+        );
+        let fullBookText = null;
+        try {
+            fullBookText = (await fetchFromCacheOrCdn(book.textUrl)) as BibleBookTextContent;
+        } catch (_) {
+            // no-op
+        }
+        const filteredAudio = book.audioUrls.chapters.filter((chapter: FrontendAudioChapter) => {
             const chapterNumber = parseInt(chapter.number);
             return passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber;
         });
         const chapters = await reduceAsync(
-            fullBookText.chapters,
+            fullBookText?.chapters ?? [],
             async (output, chapter) => {
                 const chapterNumber = parseInt(chapter.number);
                 if (passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber) {
-                    const audioUrlData = filteredAudio.find((audioChapter: AudioChapter) => {
+                    const audioUrlData = filteredAudio.find((audioChapter: FrontendAudioChapter) => {
                         const audioChapterNumber = parseInt(audioChapter.number);
                         return audioChapterNumber === chapterNumber;
                     });
@@ -80,7 +102,7 @@ async function fetchBibleContent(passage: Passage) {
                     return output;
                 }
             },
-            []
+            [] as FrontendChapterContent[]
         );
         return { bookName: book.displayName, chapters };
     } else {
@@ -88,15 +110,15 @@ async function fetchBibleContent(passage: Passage) {
     }
 }
 
-async function fetchResourceContent(passage: Passage) {
+async function fetchResourceContent(passage: BasePassage) {
     let allPassagesWithResources;
     try {
         allPassagesWithResources = (await fetchFromCacheOrApi(
             `passages/resources/language/${get(currentLanguageId)}`
-        )) as Passages[];
+        )) as ApiPassage[];
     } catch (error) {
         console.log(error);
-        return {};
+        return { text: [], audio: [] };
     }
     const passageWithResources = allPassagesWithResources.find((thisPassage) => passagesEqual(thisPassage, passage));
     if (passageWithResources) {
@@ -104,17 +126,20 @@ async function fetchResourceContent(passage: Passage) {
             passageWithResources.resources
                 ?.filter(({ mediaType }) => mediaType === 2)
                 ?.map(({ content }) => content?.content) || []
-        )?.filter(Boolean);
+        )?.filter(Boolean) as ResourceContentSteps[];
         const textResources = passageWithResources.resources?.filter(({ mediaType }) => mediaType === 1) || [];
         const textResourceContent = await Promise.all(
-            textResources.map(async ({ content }) => await fetchFromCacheOrCdn(content?.content.url))
+            textResources.map(async ({ content }) => {
+                const textContent = content?.content as ResourceContentUrl | null;
+                return textContent?.url && (await fetchFromCacheOrCdn(textContent?.url));
+            })
         );
         return {
-            text: textResourceContent.map((content) => ({ steps: content })),
+            text: textResourceContent.map((content) => ({ steps: content } as CbbtErTextContent)),
             audio: audioResourceContent,
         };
     } else {
-        return {};
+        return { text: [], audio: [] };
     }
 }
 
