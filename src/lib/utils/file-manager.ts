@@ -1,8 +1,17 @@
 import { downloadData } from '$lib/stores/file-manager.store';
 import { isCachedFromCdn } from '$lib/data-cache';
-import { asyncEvery, asyncForEach, reduceAsync } from './async-array';
+import { asyncEvery, asyncForEach } from './async-array';
 import { audioFileTypeForBrowser } from './browser';
-import type { BibleVersion, Passages } from '$lib/types/file-manager';
+import type {
+    ApiPassage,
+    FrontendBibleVersionBookContent,
+    ResourceContentUrl,
+    ResourceContentSteps,
+    ResourcesByMediaType,
+    ApiBibleVersion,
+} from '$lib/types/file-manager';
+import type { FrontendPassage } from '$lib/types/file-manager';
+import { objectEntries, objectValues } from './typesafe-standard-lib';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -24,49 +33,59 @@ export const convertToReadableSize = (size: number) => {
     }
 };
 
-export const addFrontEndDataToBibleData = async (inputBibleData: BibleVersion[]) => {
+export const addFrontEndDataToBibleData = async (inputBibleData: ApiBibleVersion[]) => {
     await asyncForEach(inputBibleData, async (bibleVersion) => {
         await asyncForEach(bibleVersion.contents, async (content) => {
-            content.expanded = false;
-            content.textSelected = await isCachedFromCdn(content.textUrl);
+            const outputContent = content as unknown as FrontendBibleVersionBookContent;
+            outputContent.expanded = false;
+            outputContent.textSelected = await isCachedFromCdn(content.textUrl);
 
-            await asyncForEach(content.audioUrls.chapters, async (chapter) => {
+            await asyncForEach(outputContent.audioUrls.chapters, async (chapter) => {
                 chapter.selected = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);
             });
 
-            content.selected = content.textSelected && content.audioUrls.chapters.every((chapter) => chapter.selected);
+            outputContent.selected =
+                outputContent.textSelected && outputContent.audioUrls.chapters.every((chapter) => chapter.selected);
         });
     });
     return inputBibleData;
 };
 
-export const addFrontEndDataToPassageData = async (inputPassageData: Passages[]) => {
-    await asyncForEach(inputPassageData, async (passage) => {
+export const addFrontEndDataToPassageData = async (inputPassageData: ApiPassage[]) => {
+    const outputPassageData = inputPassageData as unknown as FrontendPassage[];
+    await asyncForEach(outputPassageData, async (passage) => {
+        const inputPassage = passage as unknown as ApiPassage;
         passage.expanded = false;
 
+        passage.primaryResourceName = inputPassage.resources.find(
+            ({ content }) => content?.displayName
+        )?.content?.displayName;
         passage.resources = [
-            ...passage.resources,
-            ...passage.resources.flatMap(({ supportingResources }) => supportingResources ?? []),
+            ...inputPassage.resources,
+            ...inputPassage.resources.flatMap(({ supportingResources }) => supportingResources ?? []),
         ].reduce(
             (output, resource) => {
                 if (!!resource.content && resource.type === 1) {
                     if (resource.mediaType === 1) {
+                        const textContent = resource.content.content as ResourceContentUrl;
                         output.text.urlsAndSizes.push({
-                            url: resource.content.content.url,
+                            url: textContent.url,
                             size: resource.content.contentSize,
                         });
                     } else if (resource.mediaType === 2) {
+                        const audioContent = resource.content.content as ResourceContentSteps;
                         output.audio.urlsAndSizes.push(
-                            ...resource.content.content.steps.map((step) => ({
+                            ...audioContent.steps.map((step) => ({
                                 url: step[audioFileTypeForBrowser()].url,
                                 size: step[audioFileTypeForBrowser()].size,
                             }))
                         );
                     }
                 } else if (!!resource.content && resource.mediaType === 3) {
+                    const imagesContent = resource.content.content as ResourceContentUrl;
                     output.images.urlsAndSizes.push({
-                        url: resource.content.content.url,
-                        size: resource.content.content.size,
+                        url: imagesContent.url,
+                        size: resource.content.contentSize,
                     });
                 }
                 return output;
@@ -75,19 +94,19 @@ export const addFrontEndDataToPassageData = async (inputPassageData: Passages[])
                 text: { urlsAndSizes: [], selected: false },
                 audio: { urlsAndSizes: [], selected: false },
                 images: { urlsAndSizes: [], selected: false },
-            }
+            } as ResourcesByMediaType
         );
 
-        await asyncForEach(Object.entries(passage.resources), async ([_, resourceInfo]) => {
+        await asyncForEach(objectEntries(passage.resources), async ([_, resourceInfo]) => {
             resourceInfo.selected = await asyncEvery(
                 resourceInfo.urlsAndSizes,
                 async ({ url }) => await isCachedFromCdn(url)
             );
         });
 
-        passage.selected = Object.values(passage.resources).every(({ selected }) => selected);
+        passage.selected = objectValues(passage.resources).every(({ selected }) => selected);
     });
-    return inputPassageData;
+    return outputPassageData;
 };
 
 export const resetDownloadData = () => {

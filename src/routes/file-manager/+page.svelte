@@ -11,6 +11,7 @@
     import { fileManagerLoading, bibleData, currentBibleVersion, passageData } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
+    import type { ApiPassage } from '$lib/types/file-manager';
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
@@ -27,7 +28,7 @@
             }
             $passageData = await addFrontEndDataToPassageData(
                 (
-                    await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)
+                    (await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)) as ApiPassage[]
                 ).filter(({ resources }) => resources.some(({ content }) => !!content))
             );
             $fileManagerLoading = false;

@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store';
-import type { BibleVersion, Language, DownloadData, Passages } from '$lib/types/file-manager';
+import type { Language, DownloadData, FrontendPassage, FrontendBibleVersion } from '$lib/types/file-manager';
 
-export const bibleData = writable<BibleVersion[]>([]);
-export const currentBibleVersion = writable<BibleVersion>({
+export const bibleData = writable<FrontendBibleVersion[]>([]);
+export const currentBibleVersion = writable<FrontendBibleVersion>({
     languageId: '',
     name: '',
     contents: [],
@@ -15,5 +15,5 @@ export const downloadData = writable<DownloadData>({
     urlsToDownload: [],
     urlsToDelete: [],
 });
-export const passageData = writable<Passages[]>([]);
+export const passageData = writable<FrontendPassage[]>([]);
 export const tableType = writable<string>('bible');

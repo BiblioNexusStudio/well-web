@@ -1,7 +1,11 @@
 <script lang="ts">
     import '../app.css';
+    // eslint-disable-next-line
+    // @ts-ignore
     import { pwaInfo } from 'virtual:pwa-info';
     import { onMount } from 'svelte';
+    // eslint-disable-next-line
+    // @ts-ignore
     import { registerSW } from 'virtual:pwa-register';
     import { page } from '$app/stores';
     import { log } from '$lib/logger';

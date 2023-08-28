@@ -1,4 +1,5 @@
 import config from './config';
+import { objectKeys } from './utils/typesafe-standard-lib';
 
 type Url = string;
 export type UrlWithSize = { url: Url; size: number };
@@ -63,7 +64,7 @@ const cacheManyFromCdnWithProgress = async (
         }),
         {}
     );
-    const queue: string[] = Object.keys(progress);
+    const queue = objectKeys(progress);
 
     progressCallback(progress);
 

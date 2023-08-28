@@ -5,6 +5,8 @@
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
+    import type { CbbtErTextContent, ResourceContentSteps } from '$lib/types/file-manager';
+    import type { FrontendChapterContent } from './+page';
 
     export let data: PageData;
 
@@ -12,9 +14,9 @@
     let bibleViewSelected = false;
     let activePlayId: number | undefined = undefined;
     let stepsAvailable: number[] = [];
-    let cbbterText: { steps: object[] } | null = null;
-    let cbbterAudio: { steps: object[] } | null = null;
-    let bibleContent: object | null = null;
+    let cbbterText: CbbtErTextContent | undefined;
+    let cbbterAudio: ResourceContentSteps | undefined;
+    let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] };
     let topOfStep: HTMLElement | null = null;
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
@@ -24,12 +26,12 @@
             data.fetched.bibleContent,
             data.fetched.resourceContent,
         ]);
-        cbbterText = fetchedResourceContent.text[0];
-        cbbterAudio = fetchedResourceContent.audio[0];
+        cbbterText = fetchedResourceContent.text?.[0];
+        cbbterAudio = fetchedResourceContent.audio?.[0];
         bibleContent = fetchedBibleContent;
         stepsAvailable = Array.from(
             new Set([
-                ...(cbbterText?.steps.map(({ stepNumber }) => stepNumber) ?? []),
+                ...(cbbterText?.steps.map((step) => step?.stepNumber) ?? []),
                 ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
             ])
         );

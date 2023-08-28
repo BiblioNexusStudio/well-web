@@ -26,12 +26,12 @@ stages:
             steps:
                 - template: templates/checkout_pr.yml@devops
                 - template: templates/install_deps.yml
+                - script: yarn build
+                  displayName: Build
                 - script: yarn lint:ci
                   displayName: ESLint
                 - script: yarn test
                   displayName: Test
-                - script: yarn build
-                  displayName: Build
 
     - template: templates/deploy_stage.yml
       parameters:
