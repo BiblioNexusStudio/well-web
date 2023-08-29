@@ -21,11 +21,13 @@
                 "value": "Search By Book",
                 "_context": "Allows the user to search specifically by a 'Book' of the Bible"
             },
-            "a11y": {
-                "settings": {
-                    "value": "Settings",
-                    "_context": "Accessibility settings"
-                }
+            "downloadResourcesForOfflineUse": {
+                "value": "Download resources for offline use",
+                "_context": "Button text telling the user to download resources for offline use"
+            },
+            "youAreCurrentlyOffline": {
+                "value": "You are currently offline. Please connect to the internet to download additional resources.",
+                "_context": "Tooltip text telling the user that they are currently offline"
             }
         },
         "fileManager": {
