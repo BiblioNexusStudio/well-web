@@ -1,6 +1,6 @@
 <script lang="ts">
     import { passageData } from '$lib/stores/file-manager.store';
-    import type { Passages } from '$lib/types/fileManager';
+    import type { Passages } from '$lib/types/file-manager';
     import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/file-manager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
@@ -8,12 +8,14 @@
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { _ as translate } from 'svelte-i18n';
 
-    const mediaTypeSwitch = (type: number) => {
-        switch (type) {
-            case 1:
-                return 'Text';
-            case 2:
-                return 'Audio';
+    const mediaTypeSwitch = (mediaType: string) => {
+        switch (mediaType) {
+            case 'text':
+                return $translate('page.fileManager.textType');
+            case 'audio':
+                return $translate('page.fileManager.audioType');
+            case 'images':
+                return $translate('page.fileManager.imagesType');
             default:
                 return 'Unknown';
         }
@@ -21,8 +23,8 @@
 
     const totalSize = (passage: Passages) => {
         let total = 0;
-        passage.resources.forEach((resource) => {
-            total += resource?.content?.contentSize || 0;
+        Object.values(passage.resources).forEach(({ urlsAndSizes }) => {
+            total += urlsAndSizes.reduce((acc, { size }) => acc + size, 0);
         });
         return convertToReadableSize(total);
     };
@@ -31,41 +33,27 @@
         return passage.resources.find((p) => p.englishLabel)?.englishLabel;
     };
 
-    const addPassageResourceToDelete = (passageResource: any) => {
-        if (passageResource.mediaType === 1) {
-            addUrlToDelete(passageResource.content?.content?.url || '', passageResource?.content?.contentSize);
-        }
-        if (passageResource.mediaType === 2) {
-            passageResource.content?.content?.steps.forEach((step: any) => {
-                addUrlToDelete(step[audioFileTypeForBrowser()].url, step[audioFileTypeForBrowser()].size);
-            });
-        }
+    const addPassageResourceToDelete = (passage, mediaType) => {
+        passage[mediaType].urlsAndSizes.forEach(({ url, size }) => addUrlToDelete(url, size));
     };
 
-    const addPassageResourceToDownloads = (passageResource: any) => {
-        if (passageResource.mediaType === 1) {
-            addUrlToDownloads(passageResource.content?.content?.url || '', passageResource?.content?.contentSize);
-        }
-        if (passageResource.mediaType === 2) {
-            passageResource.content?.content?.steps.forEach((step: any) => {
-                addUrlToDownloads(step[audioFileTypeForBrowser()].url, step[audioFileTypeForBrowser()].size);
-            });
-        }
+    const addPassageResourceToDownloads = (passage, mediaType) => {
+        passage[mediaType].urlsAndSizes.forEach(({ url, size }) => addUrlToDownloads(url, size));
     };
 
     const addAllPassageResources = (passage: Passages) => {
         if (passage.selected) {
             passage.selected = false;
-            passage.resources.forEach((resource) => {
-                resource.selected = false;
-                addPassageResourceToDelete(resource);
+            Object.entries(passage.resources).forEach(([mediaType, resourceInfo]) => {
+                resourceInfo.selected = false;
+                addPassageResourceToDelete(passage, mediaType);
             });
             return;
         } else {
             passage.selected = true;
-            passage.resources.forEach((resource) => {
-                resource.selected = true;
-                addPassageResourceToDownloads(resource);
+            Object.entries(passage.resources).forEach(([mediaType, resourceInfo]) => {
+                resourceInfo.selected = true;
+                addPassageResourceToDownloads(passage, mediaType);
             });
         }
     };
@@ -123,7 +111,7 @@
                     </button>
                 </td>
             </tr>
-            {#if passage.expanded && passage.resources.length > 0}
+            {#if passage.expanded && Object.entries(passage.resources).length > 0}
                 <tr class="bg-secondary text-neutral">
                     <td id="select-one-resource-to-download" class="font-bold"
                         >{$translate('page.fileManager.download.value')}</td
@@ -132,25 +120,29 @@
                     <td class="font-bold">{$translate('page.fileManager.type.value')}</td>
                     <td class="font-bold">{$translate('page.fileManager.size.value')}</td>
                 </tr>
-                {#each passage.resources as passageResource}
+                {#each Object.entries(passage.resources) as [mediaType, resourceInfo]}
                     <tr class="bg-primary">
                         <td>
                             <label>
                                 <input
                                     type="checkbox"
                                     aria-labelledby="select-one-resource-to-download"
-                                    bind:checked={passageResource.selected}
+                                    bind:checked={resourceInfo.selected}
                                     on:click={() =>
-                                        passageResource.selected
-                                            ? addPassageResourceToDelete(passageResource)
-                                            : addPassageResourceToDownloads(passageResource)}
+                                        resourceInfo.selected
+                                            ? addPassageResourceToDelete(passage, mediaType)
+                                            : addPassageResourceToDownloads(passage, mediaType)}
                                     class="checkbox checkbox-secondary"
                                 />
                             </label>
                         </td>
-                        <td>{passageResource.englishLabel}</td>
-                        <td>{mediaTypeSwitch(passageResource.mediaType)}</td>
-                        <td>{convertToReadableSize(passageResource.content?.contentSize || 0)}</td>
+                        <td>{firstDisplayName(passage)}</td>
+                        <td>{mediaTypeSwitch(mediaType)}</td>
+                        <td
+                            >{convertToReadableSize(
+                                resourceInfo.urlsAndSizes.reduce((acc, { size }) => acc + size, 0)
+                            )}</td
+                        >
                     </tr>
                 {/each}
             {/if}

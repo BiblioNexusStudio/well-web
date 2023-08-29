@@ -4,17 +4,36 @@
     import type { PageData } from './$types';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
+    import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
 
     export let data: PageData;
 
     let cbbterSelectedStepNumber = 1;
     let bibleViewSelected = false;
     let activePlayId: number | undefined = undefined;
+    let stepsAvailable: number[] = [];
+    let cbbterText: { steps: object[] } | null = null;
+    let cbbterAudio: { steps: object[] } | null = null;
+    let bibleContent: object | null = null;
+    let topOfStep: HTMLElement | null = null;
 
-    let cbbterText = data.textResourceContent?.[0];
-    let cbbterAudio = data.audioResourceContent?.[0];
+    $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
 
-    let stepsAvailable = cbbterText?.steps.map(({ stepNumber }) => stepNumber);
+    async function getContent() {
+        let [fetchedBibleContent, fetchedResourceContent] = await Promise.all([
+            data.fetched.bibleContent,
+            data.fetched.resourceContent,
+        ]);
+        cbbterText = fetchedResourceContent.text[0];
+        cbbterAudio = fetchedResourceContent.audio[0];
+        bibleContent = fetchedBibleContent;
+        stepsAvailable = Array.from(
+            new Set([
+                ...(cbbterText?.steps.map(({ stepNumber }) => stepNumber) ?? []),
+                ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
+            ])
+        );
+    }
 </script>
 
 <div class="navbar px-4 bg-base-200 fixed bottom-0 z-50 bg-transparent/90">
@@ -46,48 +65,55 @@
     </div>
 </div>
 
-<div class="flex flex-row justify-evenly w-full pt-14 pb-20 px-5">
-    <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} xl:block">
-        {#if data.chapters?.length}
-            {#each data.chapters as chapter}
-                <h3>{data.bookName} {chapter.number}</h3>
-                {#if chapter.audioData}
-                    <div class="py-4">
-                        <AudioPlayer
-                            bind:activePlayId
-                            audioFile={chapter.audioData.url}
-                            startTime={chapter.audioData.startTimestamp}
-                            endTime={chapter.audioData.endTimestamp}
-                        />
-                    </div>
-                {/if}
-                {#each chapter.versesText as { number, text }}
-                    <div class="py-1">
-                        <span class="sup pr-1">{number}</span><span>{@html text}</span>
-                    </div>
-                {/each}
-            {/each}
-        {/if}
-    </div>
-    <div class="divider divider-horizontal hidden xl:flex" />
-    <div class="prose flex-grow {bibleViewSelected ? 'hidden' : 'block'} xl:block">
-        {#if cbbterText}
-            {#each cbbterText.steps as { stepNumber, contentHTML }}
-                {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
-                <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
-                    {#if audioStep}
+<div class="flex flex-row justify-evenly h-full w-full pb-16 px-5">
+    {#await getContent()}
+        <FullPageSpinner />
+    {:then}
+        <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} py-10 xl:block overflow-y-scroll">
+            {#if bibleContent.chapters?.length}
+                {#each bibleContent.chapters as chapter}
+                    {#if chapter.audioData}
                         <div class="py-4">
-                            <AudioPlayer audioFile={audioStep[audioFileTypeForBrowser()].url} bind:activePlayId />
+                            <AudioPlayer
+                                bind:activePlayId
+                                audioFile={chapter.audioData.url}
+                                startTime={chapter.audioData.startTimestamp}
+                                endTime={chapter.audioData.endTimestamp}
+                            />
                         </div>
                     {/if}
-                    {@html contentHTML}
-                </div>
-            {/each}
-        {:else}
-            No CBBT-ER content available
-        {/if}
-    </div>
+                    <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
+                    {#each chapter.versesText as { number, text }}
+                        <div class="py-1">
+                            <span class="sup pr-1">{number}</span><span>{@html text}</span>
+                        </div>
+                    {/each}
+                {/each}
+            {/if}
+        </div>
+        <div class="divider divider-horizontal hidden xl:flex" />
+        <div class="prose flex-grow {bibleViewSelected ? 'hidden' : 'block'} xl:block overflow-y-scroll">
+            <span bind:this={topOfStep} />
+            <div class="py-10">
+                {#if cbbterText}
+                    {#each cbbterText.steps as { stepNumber, contentHTML }}
+                        {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
+                        <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
+                            {#if audioStep}
+                                <div class="py-4">
+                                    <AudioPlayer
+                                        audioFile={audioStep[audioFileTypeForBrowser()].url}
+                                        bind:activePlayId
+                                    />
+                                </div>
+                            {/if}
+                            {@html contentHTML}
+                        </div>
+                    {/each}
+                {:else}
+                    No CBBT-ER content available
+                {/if}
+            </div>
+        </div>
+    {/await}
 </div>
-
-<style>
-</style>

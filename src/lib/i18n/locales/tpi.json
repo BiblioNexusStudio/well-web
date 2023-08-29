@@ -21,6 +21,11 @@
             },
             "youAreCurrentlyOffline": {
                 "value": "Yu stap oflain taim nau. Plis konnekim long intanet long downloadim moa resos."
+            },
+            "a11y": {
+                "settings": {
+                    "value": "Saiting"
+                }
             }
         },
         "fileManager": {
@@ -47,6 +52,15 @@
             },
             "type": {
                 "value": "Taip"
+            },
+            "textType": {
+                "value": "Teks"
+            },
+            "audioType": {
+                "value": "Odio"
+            },
+            "imagesType": {
+                "value": "Piksa"
             },
             "update": {
                 "value": "Apdetim"

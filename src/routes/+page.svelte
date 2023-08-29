@@ -5,7 +5,7 @@
     import { onMount } from 'svelte';
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
     import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
-    import type { Passages, PassagesContent } from '$lib/types/fileManager';
+    import type { Passages, PassagesContent } from '$lib/types/file-manager';
     import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
     import { get } from 'svelte/store';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
