@@ -1,22 +1,21 @@
 <script lang="ts">
     import { currentLanguageId } from '$lib/stores/current-language.store';
     import { _ as translate } from 'svelte-i18n';
-    import { addFrontEndDataToBibleData, addFrontEndDataToPassageData } from '$lib/utils/file-manager';
+    import {
+        addFrontEndDataToBibleData,
+        addFrontEndDataToPassageData,
+        resetOriginalData,
+    } from '$lib/utils/file-manager';
     import InfoBox from '$lib/components/file-manager/InfoBox.svelte';
     import AvailableResourceSelect from '$lib/components/file-manager/AvailableResourceSelect.svelte';
     import LanguageSelect from '$lib/components/file-manager/LanguageSelect.svelte';
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
-    import {
-        fileManagerLoading,
-        bibleData,
-        currentBibleVersion,
-        passageData,
-        tableType,
-    } from '$lib/stores/file-manager.store';
+    import { fileManagerLoading, bibleData, currentBibleVersion, passageData } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
+    import type { ApiPassage } from '$lib/types/file-manager';
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
@@ -33,9 +32,10 @@
             }
             $passageData = await addFrontEndDataToPassageData(
                 (
-                    await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)
+                    (await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)) as ApiPassage[]
                 ).filter(({ resources }) => resources.some(({ content }) => !!content))
             );
+            resetOriginalData();
             $fileManagerLoading = false;
         }
     }

@@ -13,9 +13,6 @@
             "go": {
                 "value": "Go"
             },
-            "searchByBook": {
-                "value": "Sospen Long Buk"
-            },
             "downloadResourcesForOfflineUse": {
                 "value": "Downloadim resos bilong yu long yusim long oflain yusim."
             },
@@ -47,6 +44,15 @@
             },
             "type": {
                 "value": "Taip"
+            },
+            "textType": {
+                "value": "Teks"
+            },
+            "audioType": {
+                "value": "Odio"
+            },
+            "imagesType": {
+                "value": "Piksa"
             },
             "update": {
                 "value": "Apdetim"

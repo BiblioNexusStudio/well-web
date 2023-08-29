@@ -1,32 +1,28 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { currentBibleVersion } from '$lib/stores/file-manager.store';
-    import { convertToReadableSize, addUrlToDownloads, addUrlToDelete } from '$lib/utils/file-manager';
-    import type { BibleVersionBookContent } from '$lib/types/fileManager';
+    import { bibleData, currentBibleVersion } from '$lib/stores/file-manager.store';
+    import { convertToReadableSize } from '$lib/utils/file-manager';
+    import type { FrontendBibleVersionBookContent } from '$lib/types/file-manager';
     import Icon from 'svelte-awesome';
     import chevronUp from 'svelte-awesome/icons/chevronUp';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
-    const selectedAllContentsOfBook = (book: BibleVersionBookContent) => {
+    const selectedAllContentsOfBook = (book: FrontendBibleVersionBookContent) => {
         if (book.selected) {
             book.selected = false;
             book.textSelected = false;
-            addUrlToDelete(book.textUrl, book.textSize);
             book.audioUrls.chapters.forEach((chapter) => {
                 chapter.selected = false;
-                addUrlToDelete(chapter[audioFileTypeForBrowser()].url, chapter[audioFileTypeForBrowser()].size);
             });
-            return;
         } else {
             book.selected = true;
             book.textSelected = true;
-            addUrlToDownloads(book.textUrl, book.textSize);
             book.audioUrls.chapters.forEach((chapter) => {
                 chapter.selected = true;
-                addUrlToDownloads(chapter[audioFileTypeForBrowser()].url, chapter[audioFileTypeForBrowser()].size);
             });
         }
+        $bibleData = $bibleData;
     };
 </script>
 
@@ -105,10 +101,10 @@
                                 <input
                                     type="checkbox"
                                     aria-labelledby="select-one-book-resource"
-                                    on:click={() =>
-                                        book.textSelected
-                                            ? addUrlToDelete(book.textUrl, book.textSize)
-                                            : addUrlToDownloads(book.textUrl, book.textSize)}
+                                    on:click={() => {
+                                        book.textSelected = !book.textSelected;
+                                        $bibleData = $bibleData;
+                                    }}
                                     bind:checked={book.textSelected}
                                     class="checkbox checkbox-secondary"
                                 />
@@ -127,16 +123,10 @@
                                     <input
                                         type="checkbox"
                                         aria-labelledby="select-one-book-resource"
-                                        on:click={() =>
-                                            audioChapter.selected
-                                                ? addUrlToDelete(
-                                                      audioChapter[audioFileTypeForBrowser()].url,
-                                                      audioChapter[audioFileTypeForBrowser()].size
-                                                  )
-                                                : addUrlToDownloads(
-                                                      audioChapter[audioFileTypeForBrowser()].url,
-                                                      audioChapter[audioFileTypeForBrowser()].size
-                                                  )}
+                                        on:click={() => {
+                                            audioChapter.selected = !audioChapter.selected;
+                                            $bibleData = $bibleData;
+                                        }}
                                         bind:checked={audioChapter.selected}
                                         class="checkbox checkbox-secondary"
                                     />

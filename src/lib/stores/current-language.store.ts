@@ -1,6 +1,6 @@
 import { derived, writable } from 'svelte/store';
 import { languages } from './file-manager.store';
-import type { Language } from '$lib/types/fileManager';
+import type { Language } from '$lib/types/file-manager';
 import { browser } from '$app/environment';
 
 const storedLanguage = browser ? localStorage.getItem('currentLanguage') : null;

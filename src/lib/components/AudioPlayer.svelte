@@ -67,8 +67,9 @@
 
     const sound = new Howl(howlOptions);
 
-    const onRangeChange = (e: Event) => {
-        currentTime = startTime + (e.target.value / 100) * totalTime;
+    const onRangeChange = (event: Event) => {
+        const { value } = event.target as HTMLInputElement;
+        currentTime = startTime + (parseInt(value) / 100) * totalTime;
 
         if (playId !== undefined) {
             sound.pause(playId);

@@ -1,8 +1,20 @@
-import { downloadData } from '$lib/stores/file-manager.store';
+import { bibleData, originalBibleData, originalPassageData, passageData } from '$lib/stores/file-manager.store';
 import { isCachedFromCdn } from '$lib/data-cache';
 import { asyncEvery, asyncForEach } from './async-array';
 import { audioFileTypeForBrowser } from './browser';
-import type { BibleVersion, Passages } from '$lib/types/fileManager';
+import type {
+    ApiPassage,
+    FrontendBibleVersionBookContent,
+    ResourceContentUrl,
+    ResourceContentSteps,
+    ResourcesByMediaType,
+    ApiBibleVersion,
+    FrontendBibleVersion,
+    ApiPassageResource,
+} from '$lib/types/file-manager';
+import { get } from 'svelte/store';
+import type { FrontendPassage } from '$lib/types/file-manager';
+import { objectEntries, objectValues } from './typesafe-standard-lib';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -24,88 +36,157 @@ export const convertToReadableSize = (size: number) => {
     }
 };
 
-export const addFrontEndDataToBibleData = async (inputBibleData: BibleVersion[]) => {
+export const resetOriginalData = () => {
+    originalPassageData.set(JSON.parse(JSON.stringify(get(passageData))));
+    originalBibleData.set(JSON.parse(JSON.stringify(get(bibleData))));
+};
+
+const selectedUrlsAndSizesForPassages = (passages: FrontendPassage[]) =>
+    passages.reduce(
+        (output, passage) =>
+            output.concat(
+                objectValues(passage.resources).reduce(
+                    (acc, { urlsAndSizes, selected }) => (selected ? acc.concat(urlsAndSizes) : acc),
+                    [] as { url: string; size: number }[]
+                )
+            ),
+        [] as { url: string; size: number }[]
+    );
+
+const selectedUrlsAndSizesForBibles = (bibles: FrontendBibleVersion[]) =>
+    bibles.reduce(
+        (output, bible) =>
+            output.concat(
+                bible.contents.reduce((acc, bookContent) => {
+                    const urlsAndSizes = [] as { url: string; size: number }[];
+                    if (bookContent.textSelected) {
+                        urlsAndSizes.push({ url: bookContent.textUrl, size: bookContent.textSize });
+                    }
+                    bookContent.audioUrls.chapters.forEach((chapter) => {
+                        if (chapter.selected) {
+                            urlsAndSizes.push(chapter[audioFileTypeForBrowser()]);
+                        }
+                    });
+                    return acc.concat(urlsAndSizes);
+                }, [] as { url: string; size: number }[])
+            ),
+        [] as { url: string; size: number }[]
+    );
+
+export const calculateUrlsAndSizesToChange = (
+    currentBibles: FrontendBibleVersion[],
+    originalBibles: FrontendBibleVersion[],
+    currentPassages: FrontendPassage[],
+    originalPassages: FrontendPassage[]
+) => {
+    const originalSelectedUrlsAndSizes = selectedUrlsAndSizesForPassages(originalPassages).concat(
+        selectedUrlsAndSizesForBibles(originalBibles)
+    );
+    const currentSelectedUrlsAndSizes = selectedUrlsAndSizesForPassages(currentPassages).concat(
+        selectedUrlsAndSizesForBibles(currentBibles)
+    );
+
+    const urlsAndSizesToDelete = originalSelectedUrlsAndSizes
+        .filter(({ url: originalUrl }) => !currentSelectedUrlsAndSizes.some(({ url }) => url === originalUrl))
+        .filter((v, i, a) => a.findIndex((t) => t.url === v.url) === i);
+
+    const urlsAndSizesToDownload = currentSelectedUrlsAndSizes
+        .filter(({ url: currentUrl }) => !originalSelectedUrlsAndSizes.some(({ url }) => url === currentUrl))
+        .filter((v, i, a) => a.findIndex((t) => t.url === v.url) === i);
+
+    return {
+        urlsToDelete: urlsAndSizesToDelete.map(({ url }) => url),
+        urlsToDownload: urlsAndSizesToDownload,
+        totalSizeToDelete: urlsAndSizesToDelete.reduce((acc, { size }) => size + acc, 0),
+        totalSizeToDownload: urlsAndSizesToDownload.reduce((acc, { size }) => size + acc, 0),
+    };
+};
+
+export const addFrontEndDataToBibleData = async (inputBibleData: ApiBibleVersion[]) => {
     await asyncForEach(inputBibleData, async (bibleVersion) => {
         await asyncForEach(bibleVersion.contents, async (content) => {
-            content.expanded = false;
-            content.textSelected = await isCachedFromCdn(content.textUrl);
+            const outputContent = content as unknown as FrontendBibleVersionBookContent;
+            outputContent.expanded = false;
+            outputContent.textSelected = await isCachedFromCdn(content.textUrl);
 
-            await asyncForEach(content.audioUrls.chapters, async (chapter) => {
+            await asyncForEach(outputContent.audioUrls.chapters, async (chapter) => {
                 chapter.selected = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);
             });
 
-            content.selected = content.textSelected && content.audioUrls.chapters.every((chapter) => chapter.selected);
+            outputContent.selected =
+                outputContent.textSelected && outputContent.audioUrls.chapters.every((chapter) => chapter.selected);
         });
     });
     return inputBibleData;
 };
 
-export const addFrontEndDataToPassageData = async (inputPassageData: Passages[]) => {
-    await asyncForEach(inputPassageData, async (passage) => {
+const extractUrlAndSizeFromCbbterText = (output: ResourcesByMediaType, resource: ApiPassageResource) => {
+    if (resource.content && resource.type === 1 && resource.mediaType === 1) {
+        const textContent = resource.content.content as ResourceContentUrl;
+        output.text.urlsAndSizes.push({
+            url: textContent.url,
+            size: resource.content.contentSize,
+        });
+    }
+};
+
+const extractUrlsAndSizesFromCbbterAudio = (output: ResourcesByMediaType, resource: ApiPassageResource) => {
+    if (resource.content && resource.type === 1 && resource.mediaType === 2) {
+        const audioContent = resource.content.content as ResourceContentSteps;
+        output.audio.urlsAndSizes.push(
+            ...audioContent.steps.map((step) => ({
+                url: step[audioFileTypeForBrowser()].url,
+                size: step[audioFileTypeForBrowser()].size,
+            }))
+        );
+    }
+};
+
+const extractUrlAndSizeFromImages = (output: ResourcesByMediaType, resource: ApiPassageResource) => {
+    if (resource.content && resource.mediaType === 4) {
+        const imagesContent = resource.content.content as ResourceContentUrl;
+        output.images.urlsAndSizes.push({
+            url: imagesContent.url,
+            size: resource.content.contentSize,
+        });
+    }
+};
+
+export const addFrontEndDataToPassageData = async (inputPassageData: ApiPassage[]) => {
+    const outputPassageData = inputPassageData as unknown as FrontendPassage[];
+    await asyncForEach(outputPassageData, async (passage) => {
+        const inputPassage = passage as unknown as ApiPassage;
         passage.expanded = false;
 
-        await asyncForEach(passage.resources, async (resource: any) => {
-            resource.expanded = false;
+        passage.primaryResourceName = inputPassage.resources.find(
+            ({ content }) => content?.displayName
+        )?.content?.displayName;
 
-            if (resource.mediaType === 1) {
-                resource.selected = await isCachedFromCdn(resource.content?.content?.url);
-            }
-            if (resource.mediaType === 2) {
-                resource.selected = await asyncEvery(
-                    resource.content?.content?.steps ?? [],
-                    async (step) => await isCachedFromCdn(step[audioFileTypeForBrowser()].url)
-                );
-            }
+        passage.resources = [
+            ...inputPassage.resources,
+            ...inputPassage.resources.flatMap(({ supportingResources }) => supportingResources ?? []),
+        ].reduce(
+            (output, resource) => {
+                extractUrlAndSizeFromCbbterText(output, resource);
+                extractUrlsAndSizesFromCbbterAudio(output, resource);
+                extractUrlAndSizeFromImages(output, resource);
+                return output;
+            },
+            {
+                text: { urlsAndSizes: [], selected: false },
+                audio: { urlsAndSizes: [], selected: false },
+                images: { urlsAndSizes: [], selected: false },
+            } as ResourcesByMediaType
+        );
+
+        await asyncForEach(objectEntries(passage.resources), async ([_, resourceInfo]) => {
+            resourceInfo.selected = await asyncEvery(
+                resourceInfo.urlsAndSizes,
+                async ({ url }) => await isCachedFromCdn(url)
+            );
         });
 
-        passage.selected = passage.resources.every(({ selected }) => selected);
+        passage.selected = objectValues(passage.resources).every(({ selected }) => selected);
     });
-    return inputPassageData;
-};
-
-export const resetDownloadData = () => {
-    downloadData.update((downloadData) => {
-        downloadData.urlsToDelete = [];
-        downloadData.urlsToDownload = [];
-        downloadData.totalSizeToDelete = 0;
-        downloadData.totalSizeToDownload = 0;
-
-        return downloadData;
-    });
-};
-
-export const addUrlToDownloads = (url: string, size: number) => {
-    downloadData.update((downloadData) => {
-        const index = downloadData.urlsToDelete.indexOf(url);
-        if (index > -1) {
-            downloadData.urlsToDelete.splice(index, 1);
-            downloadData.totalSizeToDelete = downloadData.totalSizeToDelete - size;
-        }
-
-        const index2 = downloadData.urlsToDownload.findIndex((urlWithSize) => urlWithSize.url === url);
-        if (index2 === -1) {
-            downloadData.urlsToDownload.push({ url, size });
-            downloadData.totalSizeToDownload = downloadData.totalSizeToDownload + size;
-        }
-
-        return downloadData;
-    });
-};
-
-export const addUrlToDelete = (url: string, size: number) => {
-    downloadData.update((downloadData) => {
-        const index = downloadData.urlsToDownload.findIndex((urlWithSize) => urlWithSize.url === url);
-        if (index > -1) {
-            downloadData.urlsToDownload.splice(index, 1);
-            downloadData.totalSizeToDownload = downloadData.totalSizeToDownload - size;
-        }
-
-        const index2 = downloadData.urlsToDelete.indexOf(url);
-        if (index2 === -1) {
-            downloadData.urlsToDelete.push(url);
-            downloadData.totalSizeToDelete = downloadData.totalSizeToDelete + size;
-        }
-
-        return downloadData;
-    });
+    return outputPassageData;
 };

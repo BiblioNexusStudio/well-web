@@ -2,7 +2,7 @@
     import { bibleData, currentBibleVersion, tableType } from '$lib/stores/file-manager.store';
     import { _ as translate } from 'svelte-i18n';
 
-    const onAvailableResourceSelected = (event: any) => {
+    const onAvailableResourceSelected = (event: Event) => {
         const { value } = event.target as HTMLSelectElement;
 
         if (value === 'resources') {

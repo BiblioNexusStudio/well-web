@@ -4737,10 +4737,10 @@ svelte-awesome@^3.2.1:
   resolved "https://registry.yarnpkg.com/svelte-awesome/-/svelte-awesome-3.2.1.tgz#a2c89ee287b6efadb224b5d26f2cdb7e2f4ec22f"
   integrity sha512-4jckcBktldqgmHUWg1xvl3vCrZllt5YSSsPun4NW7dOp9VZx1mOqJ9ddkYCH7O3PJN4ntucJr5P9/6q2xvw/0A==
 
-svelte-check@^3.4.3:
-  version "3.4.5"
-  resolved "https://registry.npmjs.org/svelte-check/-/svelte-check-3.4.5.tgz"
-  integrity sha512-FsD/CUVdEI0F9sfylh1Fe15kDjvvbyBxzDpACPsdq0EASgaZukBXaMXofpxlgmWsgVET3OynMQlbtUQoWCz9Rw==
+svelte-check@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-3.5.0.tgz#ebf2d29799bdd35d35d7c6298115726708e7e6e3"
+  integrity sha512-KHujbn4k17xKYLmtCwv0sKKM7uiHTYcQvXnvrCcNU6a7hcszh99zFTIoiu/Sp/ewAw5aJmillJ1Cs8gKLmcX4A==
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.17"
     chokidar "^3.4.1"
@@ -4748,7 +4748,7 @@ svelte-check@^3.4.3:
     import-fresh "^3.2.1"
     picocolors "^1.0.0"
     sade "^1.7.4"
-    svelte-preprocess "^5.0.3"
+    svelte-preprocess "^5.0.4"
     typescript "^5.0.3"
 
 svelte-eslint-parser@^0.32.0:
@@ -4786,9 +4786,9 @@ svelte-meta-tags@^3.0.3:
   dependencies:
     schema-dts "^1.1.2"
 
-svelte-preprocess@^5.0.3:
+svelte-preprocess@^5.0.4:
   version "5.0.4"
-  resolved "https://registry.npmjs.org/svelte-preprocess/-/svelte-preprocess-5.0.4.tgz"
+  resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-5.0.4.tgz#2123898e079a074f7f4ef1799e10e037f5bcc55b"
   integrity sha512-ABia2QegosxOGsVlsSBJvoWeXy1wUKSfF7SWJdTjLAbx/Y3SrVevvvbFNQqrSJw89+lNSsM58SipmZJ5SRi5iw==
   dependencies:
     "@types/pug" "^2.0.6"
