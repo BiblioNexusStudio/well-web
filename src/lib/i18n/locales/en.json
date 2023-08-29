@@ -26,6 +26,16 @@
                 "_context": "Tooltip text telling the user that they are currently offline"
             }
         },
+        "passage": {
+            "text": {
+                "value": "Text",
+                "_context": "The label next to the chevron that lets you expand/collapse text"
+            },
+            "media": {
+                "value": "Media",
+                "_context": "The label next to the chevron that lets you expand/collapse media"
+            }
+        },
         "fileManager": {
             "title": {
                 "value": "File Manager",

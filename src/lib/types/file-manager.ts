@@ -90,6 +90,11 @@ export interface CbbtErTextContent {
     steps: { stepNumber: number; contentHTML: string }[];
 }
 
+export interface CbbtErImageContent {
+    displayName: string;
+    url: string;
+}
+
 export interface BasePassage {
     bookId: number;
     bookName?: string;

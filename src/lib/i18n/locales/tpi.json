@@ -20,6 +20,14 @@
                 "value": "Yu stap oflain taim nau. Plis konnekim long intanet long downloadim moa resos."
             }
         },
+        "passage": {
+            "text": {
+                "value": "Teks"
+            },
+            "media": {
+                "value": "Media"
+            }
+        },
         "fileManager": {
             "title": {
                 "value": "Fael Manija"

@@ -5,8 +5,11 @@
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import type { CbbtErTextContent, ResourceContentSteps } from '$lib/types/file-manager';
+    import type { CbbtErImageContent, CbbtErTextContent, ResourceContentSteps } from '$lib/types/file-manager';
     import type { FrontendChapterContent } from './+page';
+    import Icon from 'svelte-awesome';
+    import chevronDown from 'svelte-awesome/icons/chevronDown';
+    import { _ as translate } from 'svelte-i18n';
 
     export let data: PageData;
 
@@ -16,8 +19,12 @@
     let stepsAvailable: number[] = [];
     let cbbterText: CbbtErTextContent | undefined;
     let cbbterAudio: ResourceContentSteps | undefined;
+    let cbbterImages: CbbtErImageContent[] | undefined;
     let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
     let topOfStep: HTMLElement | null = null;
+    let isBibleTextExpanded = true;
+    let isMediaExpanded = true;
+    let fullscreenCbbterImage: CbbtErImageContent | null = null;
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
 
@@ -28,6 +35,7 @@
         ]);
         cbbterText = fetchedResourceContent.text?.[0];
         cbbterAudio = fetchedResourceContent.audio?.[0];
+        cbbterImages = fetchedResourceContent.images;
         bibleContent = fetchedBibleContent;
         stepsAvailable = Array.from(
             new Set([
@@ -38,7 +46,31 @@
     }
 </script>
 
-<div class="navbar px-4 bg-base-200 fixed bottom-0 z-50 bg-transparent/90">
+<svelte:window
+    on:keydown={(key) => {
+        if (key.key === 'Escape' && fullscreenCbbterImage !== null) {
+            fullscreenCbbterImage = null;
+        }
+    }}
+/>
+
+<button
+    on:click={() => (fullscreenCbbterImage = null)}
+    class={`fixed inset-0 z-50 bg-black bg-opacity-50 ${fullscreenCbbterImage ? 'block' : 'hidden'}`}
+>
+    <div class="w-screen h-screen flex flex-col">
+        <div
+            aria-label={fullscreenCbbterImage?.displayName}
+            style={`background-image: url('${fullscreenCbbterImage?.url}')`}
+            class="flex-1 bg-center bg-no-repeat bg-contain"
+        />
+        <div class="flex-shrink-0 text-center text-xl py-4 bg-black">
+            {fullscreenCbbterImage?.displayName}
+        </div>
+    </div>
+</button>
+
+<div class="navbar px-4 bg-base-200 fixed bottom-0 z-40 bg-transparent/90">
     <div class="navbar-start">
         <a href="/" class="font-bold normal-case text-xl">aquifer</a>
     </div>
@@ -76,6 +108,7 @@
         <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} py-10 xl:block overflow-y-scroll">
             {#if bibleContent?.chapters?.length}
                 {#each bibleContent.chapters as chapter}
+                    <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
                     {#if chapter.audioData}
                         <div class="py-4">
                             <AudioPlayer
@@ -86,13 +119,48 @@
                             />
                         </div>
                     {/if}
-                    <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
-                    {#each chapter.versesText as { number, text }}
-                        <div class="py-1">
-                            <span class="sup pr-1">{number}</span><span>{@html text}</span>
+                    <div class="py-2">
+                        <button on:click={() => (isBibleTextExpanded = !isBibleTextExpanded)}>
+                            <Icon
+                                data={chevronDown}
+                                class={`mb-1 transform transition-transform duration-300 ${
+                                    isBibleTextExpanded ? '' : 'rotate-[-90deg]'
+                                }`}
+                            />
+                        </button>
+                        <span class="pl-1 text-lg text-base-content">{$translate('page.passage.text.value')}</span>
+                    </div>
+                    <div class={`${isBibleTextExpanded ? 'block' : 'hidden'}`}>
+                        {#each chapter.versesText as { number, text }}
+                            <div class="py-1">
+                                <span class="sup pr-1">{number}</span><span>{@html text}</span>
+                            </div>
+                        {/each}
+                    </div>
+                {/each}
+            {/if}
+            {#if cbbterImages?.length}
+                <div class="py-2">
+                    <button on:click={() => (isMediaExpanded = !isMediaExpanded)}>
+                        <Icon
+                            data={chevronDown}
+                            class={`mb-1 transform transition-transform duration-300 ${
+                                isMediaExpanded ? '' : 'rotate-[-90deg]'
+                            }`}
+                        />
+                    </button>
+                    <span class="pl-1 text-lg text-base-content">{$translate('page.passage.media.value')}</span>
+                </div>
+                <div class={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${isMediaExpanded ? 'block' : 'hidden'}`}>
+                    {#each cbbterImages as image}
+                        <div class="p-4 flex flex-col items-center">
+                            <button on:click={() => (fullscreenCbbterImage = image)}>
+                                <img class="my-1" src={image.url} alt={image.displayName} />
+                            </button>
+                            <span class="text-center">{image.displayName}</span>
                         </div>
                     {/each}
-                {/each}
+                </div>
             {/if}
         </div>
         <div class="divider divider-horizontal hidden xl:flex" />
