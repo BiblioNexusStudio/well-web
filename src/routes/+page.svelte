@@ -2,8 +2,6 @@
     import { _ as translate } from 'svelte-i18n';
     import { locale } from 'svelte-i18n';
     import { currentLanguage, currentLanguageId } from '$lib/stores/current-language.store';
-    import Icon from 'svelte-awesome';
-    import gear from 'svelte-awesome/icons/gear';
     import { onMount } from 'svelte';
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
     import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
@@ -11,7 +9,8 @@
     import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
     import { get } from 'svelte/store';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
-    import cloudDownload from 'svelte-awesome/icons/cloudDownload';
+    import { goto } from '$app/navigation';
+    import { isOnline } from '$lib/stores/is-online.store';
 
     let languageSelected: boolean;
     let selectedBookIndex: number;
@@ -21,6 +20,10 @@
     $: selectedBookInfo = data.passagesByBook?.[selectedBookIndex];
 
     $: $currentLanguage && fetchData();
+
+    const goToFileManager = () => {
+        goto('/file-manager');
+    };
 
     async function getBibleBookIdsToNameAndIndex(languageId: number | null = null) {
         const bibleData = await fetchFromCacheOrApi(`bibles/language/${languageId || get(currentLanguageId)}`);
@@ -84,6 +87,8 @@
     });
 </script>
 
+<svelte:window bind:online={$isOnline} />
+
 <section class="container mx-auto flex h-screen">
     <div class="flex-grow self-center">
         <h1 class="text-center font-semibold text-info text-7xl pb-6">AQUIFER</h1>
@@ -122,20 +127,21 @@
 
             <button class="btn btn-info" disabled={selectedId === 'default'}>{$translate('page.index.go.value')}</button
             >
-        </form>
-    </div>
-
-    <div class="dropdown dropdown-top dropdown-end flex flex-row space-x-2 fixed bottom-4 right-4">
-        <button aria-label={$translate('page.index.a11y.settings.value')} class="btn btn-info m-1">
-            <Icon class="w-6 h-6" data={gear} />
-        </button>
-        <ul role="menu" class="dropdown-content z-[1] menu p-2 shadow bg-info rounded-box w-52">
-            <li>
-                <a href="/file-manager" role="menuitem"
-                    ><Icon class="mr-1" data={cloudDownload} />{$translate('page.fileManager.title.value')}</a
+            {#if $isOnline}
+                <button class="btn btn-info mx-auto" on:click|preventDefault={goToFileManager}
+                    >{$translate('page.index.downloadResourcesForOfflineUse.value')}</button
                 >
-            </li>
-        </ul>
+            {:else}
+                <div
+                    class="tooltip tooltip-bottom tooltip-info"
+                    data-tip={$translate('page.index.youAreCurrentlyOffline.value')}
+                >
+                    <button class="btn btn-info mx-auto" disabled={!$isOnline}
+                        >{$translate('page.index.downloadResourcesForOfflineUse.value')}</button
+                    >
+                </div>
+            {/if}
+        </form>
     </div>
 </section>
 
