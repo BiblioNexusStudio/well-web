@@ -1,3 +1,10 @@
+// This script preloads files from the aquifer server to the static folder of the sveletekit project.
+// This script is meant to be run from the command line. using the following command:
+// node scripts/preload-files-to-static.js language=eng bible=BSB book=mark audio=true resouces=true
+// The above command will preload the english bible, BSB, book of mark, with audio and resources.
+// Since this is a POC, the script only accepts one language, one bible, and one book and gives you the option to preload audio and resources.
+// The script should be run and then yarn build will build the static folder with the preloaded files.
+
 import fs from 'fs';
 import { join } from 'path';
 
