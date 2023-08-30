@@ -171,8 +171,14 @@ urls.push({
 });
 
 // finally adding the urls to the staticPath
+const staticUrlsMap = {};
+
+urls.forEach((url) => {
+    staticUrlsMap[url.apiUrl] = url.staticPath;
+});
+
 // make directory for passagesData
-fs.mkdirSync(`${staticPath}staticUrlsMap`, { recursive: true });
+fs.mkdirSync(`${staticPath}static-urls-map`, { recursive: true });
 
 // write passagesData as index.json in passages directory
-fs.writeFileSync(`${staticPath}staticUrlsMap/index.json`, JSON.stringify(urls));
+fs.writeFileSync(`${staticPath}static-urls-map/index.json`, JSON.stringify(staticUrlsMap));
