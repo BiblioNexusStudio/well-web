@@ -10,6 +10,8 @@
     import Icon from 'svelte-awesome';
     import chevronDown from 'svelte-awesome/icons/chevronDown';
     import { _ as translate } from 'svelte-i18n';
+    import { asyncFilter } from '$lib/utils/async-array';
+    import { isCachedFromCdn } from '$lib/data-cache';
 
     export let data: PageData;
 
@@ -35,7 +37,10 @@
         ]);
         cbbterText = fetchedResourceContent.text?.[0];
         cbbterAudio = fetchedResourceContent.audio?.[0];
-        cbbterImages = fetchedResourceContent.images;
+        cbbterImages = await asyncFilter(
+            fetchedResourceContent.images ?? [],
+            async (image) => navigator.onLine || (await isCachedFromCdn(image.url))
+        );
         bibleContent = fetchedBibleContent;
         stepsAvailable = Array.from(
             new Set([
