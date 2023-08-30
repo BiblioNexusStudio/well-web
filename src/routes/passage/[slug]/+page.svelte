@@ -119,47 +119,51 @@
                             />
                         </div>
                     {/if}
-                    <div class="py-2">
-                        <button on:click={() => (isBibleTextExpanded = !isBibleTextExpanded)}>
+                    <div class="collapse">
+                        <input class="min-h-0" type="checkbox" bind:checked={isBibleTextExpanded} />
+                        <div class="collapse-title pb-2 min-h-0 p-0 text-lg font-medium">
                             <Icon
                                 data={chevronDown}
                                 class={`mb-1 transform transition-transform duration-300 ${
                                     isBibleTextExpanded ? '' : 'rotate-[-90deg]'
                                 }`}
                             />
-                        </button>
-                        <span class="pl-1 text-lg text-base-content">{$translate('page.passage.text.value')}</span>
-                    </div>
-                    <div class={`${isBibleTextExpanded ? 'block' : 'hidden'}`}>
-                        {#each chapter.versesText as { number, text }}
-                            <div class="py-1">
-                                <span class="sup pr-1">{number}</span><span>{@html text}</span>
-                            </div>
-                        {/each}
+                            <span class="pl-1 text-lg text-base-content">{$translate('page.passage.text.value')}</span>
+                        </div>
+                        <div class="collapse-content p-0">
+                            {#each chapter.versesText as { number, text }}
+                                <div class="py-1">
+                                    <span class="sup pr-1">{number}</span><span>{@html text}</span>
+                                </div>
+                            {/each}
+                        </div>
                     </div>
                 {/each}
             {/if}
             {#if cbbterImages?.length}
-                <div class="py-2">
-                    <button on:click={() => (isMediaExpanded = !isMediaExpanded)}>
+                <div class="collapse">
+                    <input class="min-h-0" type="checkbox" bind:checked={isMediaExpanded} />
+                    <div class="collapse-title pb-2 min-h-0 p-0 text-lg font-medium">
                         <Icon
                             data={chevronDown}
                             class={`mb-1 transform transition-transform duration-300 ${
                                 isMediaExpanded ? '' : 'rotate-[-90deg]'
                             }`}
                         />
-                    </button>
-                    <span class="pl-1 text-lg text-base-content">{$translate('page.passage.media.value')}</span>
-                </div>
-                <div class={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${isMediaExpanded ? 'block' : 'hidden'}`}>
-                    {#each cbbterImages as image}
-                        <div class="p-4 flex flex-col items-center">
-                            <button on:click={() => (fullscreenCbbterImage = image)}>
-                                <img class="my-1" src={image.url} alt={image.displayName} />
-                            </button>
-                            <span class="text-center">{image.displayName}</span>
+                        <span class="pl-1 text-lg text-base-content">{$translate('page.passage.media.value')}</span>
+                    </div>
+                    <div class="collapse-content p-0">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                            {#each cbbterImages as image}
+                                <div class="p-4 flex flex-col items-center">
+                                    <button on:click={() => (fullscreenCbbterImage = image)}>
+                                        <img class="my-1" src={image.url} alt={image.displayName} />
+                                    </button>
+                                    <span class="text-center">{image.displayName}</span>
+                                </div>
+                            {/each}
                         </div>
-                    {/each}
+                    </div>
                 </div>
             {/if}
         </div>
