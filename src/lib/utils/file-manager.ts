@@ -2,19 +2,19 @@ import { bibleData, originalBibleData, originalPassageData, passageData } from '
 import { isCachedFromCdn } from '$lib/data-cache';
 import { asyncEvery, asyncForEach } from './async-array';
 import { audioFileTypeForBrowser } from './browser';
-import type {
-    ApiPassage,
-    FrontendBibleVersionBookContent,
-    ResourceContentUrl,
-    ResourceContentSteps,
-    ResourcesByMediaType,
-    ApiBibleVersion,
-    FrontendBibleVersion,
-    ApiPassageResource,
+import {
+    type ApiPassage,
+    type FrontendBibleVersionBookContent,
+    type ApiBibleVersion,
+    type FrontendBibleVersion,
+    type UrlWithMetadata,
+    MediaType,
 } from '$lib/types/file-manager';
 import { get } from 'svelte/store';
 import type { FrontendPassage } from '$lib/types/file-manager';
 import { objectEntries, objectValues } from './typesafe-standard-lib';
+import { cbbterUrlsWithMetadataForPassage } from './data-handlers/resources/cbbt-er';
+import { groupBy } from './array';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -41,57 +41,64 @@ export const resetOriginalData = () => {
     originalBibleData.set(JSON.parse(JSON.stringify(get(bibleData))));
 };
 
-const selectedUrlsAndSizesForPassages = (passages: FrontendPassage[]) =>
+const selectedUrlsWithMetadataForPassages = (passages: FrontendPassage[]) =>
     passages.reduce(
         (output, passage) =>
             output.concat(
                 objectValues(passage.resources).reduce(
-                    (acc, { urlsAndSizes, selected }) => (selected ? acc.concat(urlsAndSizes) : acc),
-                    [] as { url: string; size: number }[]
+                    (acc, { urlsWithMetadata, selected }) => (selected ? acc.concat(urlsWithMetadata) : acc),
+                    [] as UrlWithMetadata[]
                 )
             ),
-        [] as { url: string; size: number }[]
+        [] as UrlWithMetadata[]
     );
 
-const selectedUrlsAndSizesForBibles = (bibles: FrontendBibleVersion[]) =>
+const selectedUrlsWithMetadataForBibles = (bibles: FrontendBibleVersion[]) =>
     bibles.reduce(
         (output, bible) =>
             output.concat(
                 bible.contents.reduce((acc, bookContent) => {
-                    const urlsAndSizes = [] as { url: string; size: number }[];
+                    const urlsWithMetadata = [] as UrlWithMetadata[];
                     if (bookContent.textSelected) {
-                        urlsAndSizes.push({ url: bookContent.textUrl, size: bookContent.textSize });
+                        urlsWithMetadata.push({
+                            url: bookContent.textUrl,
+                            size: bookContent.textSize,
+                            mediaType: MediaType.text,
+                        });
                     }
                     bookContent.audioUrls.chapters.forEach((chapter) => {
                         if (chapter.selected) {
-                            urlsAndSizes.push(chapter[audioFileTypeForBrowser()]);
+                            urlsWithMetadata.push({
+                                ...chapter[audioFileTypeForBrowser()],
+                                mediaType: MediaType.audio,
+                            });
                         }
                     });
-                    return acc.concat(urlsAndSizes);
-                }, [] as { url: string; size: number }[])
+                    return acc.concat(urlsWithMetadata);
+                }, [] as UrlWithMetadata[])
             ),
-        [] as { url: string; size: number }[]
+        [] as UrlWithMetadata[]
     );
 
-export const calculateUrlsAndSizesToChange = (
+export const calculateUrlsWithMetadataToChange = (
     currentBibles: FrontendBibleVersion[],
     originalBibles: FrontendBibleVersion[],
     currentPassages: FrontendPassage[],
     originalPassages: FrontendPassage[]
 ) => {
-    const originalSelectedUrlsAndSizes = selectedUrlsAndSizesForPassages(originalPassages).concat(
-        selectedUrlsAndSizesForBibles(originalBibles)
+    const originalSelectedUrlsWithMetadata = selectedUrlsWithMetadataForPassages(originalPassages).concat(
+        selectedUrlsWithMetadataForBibles(originalBibles)
     );
-    const currentSelectedUrlsAndSizes = selectedUrlsAndSizesForPassages(currentPassages).concat(
-        selectedUrlsAndSizesForBibles(currentBibles)
+    const currentSelectedUrlsWithMetadata = selectedUrlsWithMetadataForPassages(currentPassages).concat(
+        selectedUrlsWithMetadataForBibles(currentBibles)
     );
 
-    const urlsAndSizesToDelete = originalSelectedUrlsAndSizes
-        .filter(({ url: originalUrl }) => !currentSelectedUrlsAndSizes.some(({ url }) => url === originalUrl))
+    const urlsAndSizesToDelete = originalSelectedUrlsWithMetadata
+        .filter(({ url: originalUrl }) => !currentSelectedUrlsWithMetadata.some(({ url }) => url === originalUrl))
         .filter((v, i, a) => a.findIndex((t) => t.url === v.url) === i);
 
-    const urlsAndSizesToDownload = currentSelectedUrlsAndSizes
-        .filter(({ url: currentUrl }) => !originalSelectedUrlsAndSizes.some(({ url }) => url === currentUrl))
+    const urlsAndSizesToDownload = currentSelectedUrlsWithMetadata
+        .filter(({ url: currentUrl }) => !originalSelectedUrlsWithMetadata.some(({ url }) => url === currentUrl))
         .filter((v, i, a) => a.findIndex((t) => t.url === v.url) === i);
 
     return {
@@ -120,38 +127,6 @@ export const addFrontEndDataToBibleData = async (inputBibleData: ApiBibleVersion
     return inputBibleData;
 };
 
-const extractUrlAndSizeFromCbbterText = (output: ResourcesByMediaType, resource: ApiPassageResource) => {
-    if (resource.content && resource.type === 1 && resource.mediaType === 1) {
-        const textContent = resource.content.content as ResourceContentUrl;
-        output.text.urlsAndSizes.push({
-            url: textContent.url,
-            size: resource.content.contentSize,
-        });
-    }
-};
-
-const extractUrlsAndSizesFromCbbterAudio = (output: ResourcesByMediaType, resource: ApiPassageResource) => {
-    if (resource.content && resource.type === 1 && resource.mediaType === 2) {
-        const audioContent = resource.content.content as ResourceContentSteps;
-        output.audio.urlsAndSizes.push(
-            ...audioContent.steps.map((step) => ({
-                url: step[audioFileTypeForBrowser()].url,
-                size: step[audioFileTypeForBrowser()].size,
-            }))
-        );
-    }
-};
-
-const extractUrlAndSizeFromImages = (output: ResourcesByMediaType, resource: ApiPassageResource) => {
-    if (resource.content && resource.mediaType === 4) {
-        const imagesContent = resource.content.content as ResourceContentUrl;
-        output.images.urlsAndSizes.push({
-            url: imagesContent.url,
-            size: resource.content.contentSize,
-        });
-    }
-};
-
 export const addFrontEndDataToPassageData = async (inputPassageData: ApiPassage[]) => {
     const outputPassageData = inputPassageData as unknown as FrontendPassage[];
     await asyncForEach(outputPassageData, async (passage) => {
@@ -162,26 +137,15 @@ export const addFrontEndDataToPassageData = async (inputPassageData: ApiPassage[
             ({ content }) => content?.displayName
         )?.content?.displayName;
 
-        passage.resources = [
-            ...inputPassage.resources,
-            ...inputPassage.resources.flatMap(({ supportingResources }) => supportingResources ?? []),
-        ].reduce(
-            (output, resource) => {
-                extractUrlAndSizeFromCbbterText(output, resource);
-                extractUrlsAndSizesFromCbbterAudio(output, resource);
-                extractUrlAndSizeFromImages(output, resource);
-                return output;
-            },
-            {
-                text: { urlsAndSizes: [], selected: false },
-                audio: { urlsAndSizes: [], selected: false },
-                images: { urlsAndSizes: [], selected: false },
-            } as ResourcesByMediaType
+        passage.resources = groupBy(
+            cbbterUrlsWithMetadataForPassage(inputPassage),
+            (urlWithMediaTypeAndSize) => urlWithMediaTypeAndSize.mediaType,
+            (urlsWithMetadata) => ({ urlsWithMetadata, selected: false })
         );
 
         await asyncForEach(objectEntries(passage.resources), async ([_, resourceInfo]) => {
             resourceInfo.selected = await asyncEvery(
-                resourceInfo.urlsAndSizes,
+                resourceInfo.urlsWithMetadata,
                 async ({ url }) => await isCachedFromCdn(url)
             );
         });

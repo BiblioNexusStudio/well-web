@@ -1,9 +1,8 @@
 import config from './config';
+import type { Url, UrlWithMetadata } from './types/file-manager';
 import { objectKeys } from './utils/typesafe-standard-lib';
 
-type Url = string;
-export type UrlWithSize = { url: Url; size: number };
-type CheckCacheChangeItem = { url: string; expectedSize: number };
+type CheckCacheChangeItem = { url: Url; expectedSize: number };
 type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean };
 export type AllItemsProgress = Record<Url, SingleItemProgress>;
 
@@ -49,7 +48,7 @@ const removeFromCdnCache = async (url: Url) => {
 
 // Fetch multiple URLs when online and store them in the cache, tracking progress as the downloads happen.
 const cacheManyFromCdnWithProgress = async (
-    urls: UrlWithSize[],
+    urls: UrlWithMetadata[],
     progressCallback: (progress: AllItemsProgress) => void,
     concurrentRequests = 6
 ) => {

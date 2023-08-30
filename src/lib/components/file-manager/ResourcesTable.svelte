@@ -21,8 +21,8 @@
 
     const totalSize = (passage: FrontendPassage) => {
         let total = 0;
-        objectValues(passage.resources).forEach(({ urlsAndSizes }) => {
-            total += urlsAndSizes.reduce((acc, { size }) => acc + size, 0);
+        objectValues(passage.resources).forEach(({ urlsWithMetadata }) => {
+            total += urlsWithMetadata.reduce((acc, { size }) => acc + size, 0);
         });
         return convertToReadableSize(total);
     };
@@ -116,7 +116,7 @@
                     <td class="font-bold">{$translate('page.fileManager.size.value')}</td>
                 </tr>
                 {#each objectEntries(passage.resources) as [mediaType, resourceInfo]}
-                    {#if resourceInfo.urlsAndSizes.length}
+                    {#if resourceInfo.urlsWithMetadata.length}
                         <tr class="bg-primary">
                             <td>
                                 <label>
@@ -136,7 +136,7 @@
                             <td>{mediaTypeSwitch(mediaType)}</td>
                             <td
                                 >{convertToReadableSize(
-                                    resourceInfo.urlsAndSizes.reduce((acc, { size }) => acc + size, 0)
+                                    resourceInfo.urlsWithMetadata.reduce((acc, { size }) => acc + size, 0)
                                 )}</td
                             >
                         </tr>

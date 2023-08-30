@@ -1,4 +1,5 @@
-import type { UrlWithSize } from '$lib/data-cache';
+export type Url = string;
+export type UrlWithMetadata = { mediaType: MediaTypeEnum; url: Url; size: number };
 
 export interface BaseBibleVersion {
     languageId: number | string;
@@ -68,7 +69,7 @@ export interface Language {
 export interface DownloadData {
     totalSizeToDownload: number;
     totalSizeToDelete: number;
-    urlsToDownload: UrlWithSize[];
+    urlsToDownload: UrlWithMetadata[];
     urlsToDelete: string[];
 }
 
@@ -142,7 +143,7 @@ export interface ResourcesByMediaType {
 }
 
 export interface ResourcesForMediaType {
-    urlsAndSizes: { url: string; size: number }[];
+    urlsWithMetadata: UrlWithMetadata[];
     selected: boolean;
 }
 
