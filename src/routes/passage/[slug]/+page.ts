@@ -12,6 +12,7 @@ import type {
     ResourceContentUrl,
     ResourceContentSteps,
     CbbtErTextContent,
+    CbbtErImageContent,
 } from '$lib/types/file-manager';
 import type { BibleBookTextContent } from '$lib/types/bible-text-content';
 import { passagesEqual } from '$lib/utils/passage-helpers';
@@ -134,9 +135,22 @@ async function fetchResourceContent(passage: BasePassage) {
                 return textContent?.url && (await fetchFromCacheOrCdn(textContent?.url));
             })
         );
+        const imageResources =
+            passageWithResources.resources
+                .flatMap(({ supportingResources }) => supportingResources ?? [])
+                .filter(({ mediaType }) => mediaType === 4) || [];
+        const imageResourceContent = imageResources
+            .map(({ content }) => {
+                if (content) {
+                    const imageContent = content.content as ResourceContentUrl;
+                    return { displayName: content.displayName, url: imageContent?.url };
+                }
+            })
+            .filter(Boolean) as CbbtErImageContent[];
         return {
             text: textResourceContent.map((content) => ({ steps: content } as CbbtErTextContent)),
             audio: audioResourceContent,
+            images: imageResourceContent,
         };
     } else {
         return { text: [], audio: [] };
