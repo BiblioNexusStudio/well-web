@@ -1,6 +1,7 @@
 import config from './config';
 import type { Url, UrlWithMetadata } from './types/file-manager';
 import { objectKeys } from './utils/typesafe-standard-lib';
+import staticUrlsMap from '$lib/static-urls-map.json' assert { type: 'json' };
 
 type CheckCacheChangeItem = { url: Url; expectedSize: number };
 type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean };
@@ -17,7 +18,7 @@ const fetchFromCacheOrApi = async (path: string) => {
         _partiallyDownloadedApiPaths.push(path);
     }
     try {
-        const response = await fetch(_apiUrl(path));
+        const response = await fetch(_apiUrl(path) in staticUrlsMap ? staticUrlsMap[_apiUrl(path)] : _apiUrl(path));
         return await response.json();
     } finally {
         _removeFromArray(_partiallyDownloadedApiPaths, path);
@@ -29,7 +30,7 @@ const fetchFromCacheOrCdn = async (url: Url, type: 'blob' | 'json' = 'json') => 
         _partiallyDownloadedCdnUrls.push(url);
     }
     try {
-        const response = await fetch(url);
+        const response = await fetch(url in staticUrlsMap ? staticUrlsMap[url] : url);
         return await (type === 'blob' ? response.blob() : response.json());
     } finally {
         _removeFromArray(_partiallyDownloadedCdnUrls, url);
@@ -135,6 +136,9 @@ const isCachedFromCdn = async (url: Url) => {
     if (_partiallyDownloadedCdnUrls.includes(url)) {
         return false;
     }
+    if (url in staticUrlsMap) {
+        return true;
+    }
     const cache = await caches.open('aquifer-cdn');
     const response = await cache.match(url);
     return response != null;
@@ -144,6 +148,9 @@ const isCachedFromCdn = async (url: Url) => {
 const isCachedFromApi = async (path: string) => {
     if (_partiallyDownloadedApiPaths.includes(path)) {
         return false;
+    }
+    if (_apiUrl(path) in staticUrlsMap) {
+        return true;
     }
     const cache = await caches.open('aquifer-api');
     const response = await cache.match(_apiUrl(path));
