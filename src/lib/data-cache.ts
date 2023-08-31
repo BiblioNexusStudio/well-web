@@ -49,7 +49,9 @@ const removeFromCdnCache = async (url: Url) => {
 // Fetch multiple URLs when online and store them in the cache, tracking progress as the downloads happen.
 const cacheManyFromCdnWithProgress = async (
     urls: UrlWithMetadata[],
-    progressCallback: (progress: AllItemsProgress) => void,
+    progressCallback: (progress: AllItemsProgress) => void = () => {
+        // no-op by default
+    },
     concurrentRequests = 6
 ) => {
     const progress: AllItemsProgress = urls.reduce(

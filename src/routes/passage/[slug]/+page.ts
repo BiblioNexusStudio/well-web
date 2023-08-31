@@ -41,10 +41,7 @@ async function cacheBibleContentForPassageIfOnline(bibleVersion: ApiBibleVersion
             (_, i) => i + passage.startChapter
         );
         await cacheManyFromCdnWithProgress(
-            bibleUrlsWithMetadataForBookAndChapters(bibleVersion, passage.bookId, chapterNumbers),
-            () => {
-                // ignore progress
-            }
+            bibleUrlsWithMetadataForBookAndChapters(bibleVersion, passage.bookId, chapterNumbers)
         );
     }
 }
@@ -138,9 +135,7 @@ async function fetchBibleContent(passage: BasePassage) {
 
 async function cacheCbbterContentForPassageIfOnline(passageWithResources: ApiPassage) {
     if (get(isOnline)) {
-        await cacheManyFromCdnWithProgress(cbbterUrlsWithMetadataForPassage(passageWithResources), () => {
-            // ignore progress
-        });
+        await cacheManyFromCdnWithProgress(cbbterUrlsWithMetadataForPassage(passageWithResources));
     }
 }
 
