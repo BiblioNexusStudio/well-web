@@ -47,7 +47,7 @@ stages:
                     - checkout: devops
                       path: devops
                     - script: |
-                          devops/github-cli/script.sh deployment \
+                          $(Pipeline.Workspace)/devops/github-cli/script.sh deployment \
                               --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
                               --environment "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" \
                               --repo aquifer-web \
