@@ -1,6 +1,11 @@
 import type { PageLoad } from './$types';
 import { get } from 'svelte/store';
-import { fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
+import {
+    cacheManyFromCdnWithProgress,
+    fetchFromCacheOrApi,
+    fetchFromCacheOrCdn,
+    isCachedFromCdn,
+} from '$lib/data-cache';
 import { currentLanguageId } from '$lib/stores/current-language.store';
 import { stringToPassageType } from '$lib/utils/passage-helpers';
 import type {
@@ -13,16 +18,32 @@ import type {
     ResourceContentSteps,
     CbbtErTextContent,
     CbbtErImageContent,
+    ApiBibleVersion,
 } from '$lib/types/file-manager';
 import type { BibleBookTextContent } from '$lib/types/bible-text-content';
 import { passagesEqual } from '$lib/utils/passage-helpers';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import { reduceAsync } from '$lib/utils/async-array';
+import { isOnline } from '$lib/stores/is-online.store';
+import { bibleUrlsWithMetadataForBookAndChapters } from '$lib/utils/data-handlers/bible';
+import { cbbterUrlsWithMetadataForPassage } from '$lib/utils/data-handlers/resources/cbbt-er';
 
 export interface FrontendChapterContent {
     number: string;
     audioData: { url: string; startTimestamp: number; endTimestamp: number } | null;
     versesText: { number: string; text: string }[];
+}
+
+async function cacheBibleContentForPassageIfOnline(bibleVersion: ApiBibleVersion, passage: BasePassage) {
+    if (get(isOnline)) {
+        const chapterNumbers = Array.from(
+            { length: passage.endChapter - passage.startChapter },
+            (_, i) => i + passage.startChapter
+        );
+        await cacheManyFromCdnWithProgress(
+            bibleUrlsWithMetadataForBookAndChapters(bibleVersion, passage.bookId, chapterNumbers)
+        );
+    }
 }
 
 async function fetchBibleContent(passage: BasePassage) {
@@ -34,6 +55,7 @@ async function fetchBibleContent(passage: BasePassage) {
         return {};
     }
     if (bibleData[0]) {
+        await cacheBibleContentForPassageIfOnline(bibleData[0], passage);
         const book = bibleData[0].contents.find(
             (book: FrontendBibleVersionBookContent) => book.bookId === passage.bookId
         );
@@ -111,6 +133,12 @@ async function fetchBibleContent(passage: BasePassage) {
     }
 }
 
+async function cacheCbbterContentForPassageIfOnline(passageWithResources: ApiPassage) {
+    if (get(isOnline)) {
+        await cacheManyFromCdnWithProgress(cbbterUrlsWithMetadataForPassage(passageWithResources));
+    }
+}
+
 async function fetchResourceContent(passage: BasePassage) {
     let allPassagesWithResources;
     try {
@@ -118,11 +146,11 @@ async function fetchResourceContent(passage: BasePassage) {
             `passages/resources/language/${get(currentLanguageId)}`
         )) as ApiPassage[];
     } catch (error) {
-        console.log(error);
         return { text: [], audio: [] };
     }
     const passageWithResources = allPassagesWithResources.find((thisPassage) => passagesEqual(thisPassage, passage));
     if (passageWithResources) {
+        await cacheCbbterContentForPassageIfOnline(passageWithResources);
         const audioResourceContent = (
             passageWithResources.resources
                 ?.filter(({ mediaType }) => mediaType === 2)

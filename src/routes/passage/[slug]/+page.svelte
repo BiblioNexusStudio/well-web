@@ -39,7 +39,7 @@
         cbbterAudio = fetchedResourceContent.audio?.[0];
         cbbterImages = await asyncFilter(
             fetchedResourceContent.images ?? [],
-            async (image) => navigator.onLine || (await isCachedFromCdn(image.url))
+            async (image) => await isCachedFromCdn(image.url)
         );
         bibleContent = fetchedBibleContent;
         stepsAvailable = Array.from(

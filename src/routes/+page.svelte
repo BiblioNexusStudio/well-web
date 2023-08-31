@@ -24,7 +24,7 @@
 
     $: selectedBookInfo = data.passagesByBook?.[selectedBookIndex];
 
-    $: $currentLanguage && fetchData();
+    $: $currentLanguage && fetchData($isOnline);
 
     const goToFileManager = () => {
         goto('/file-manager');
@@ -49,7 +49,7 @@
         }
     }
 
-    export async function fetchData() {
+    export async function fetchData(isOnline: boolean) {
         const bibleBookIdsToNameAndIndex = await getBibleBookIdsToNameAndIndex();
         const passagesWithResources = (await fetchFromCacheOrApi(
             `passages/resources/language/${get(currentLanguageId)}`
@@ -58,6 +58,9 @@
             passagesWithResources,
             async ({ resources }) => {
                 return asyncSome(resources, async ({ mediaType, content }) => {
+                    if (isOnline && content) {
+                        return true;
+                    }
                     if (mediaType === 1 && content) {
                         const textContent = content.content as ResourceContentUrl;
                         return await isCachedFromCdn(textContent.url);
@@ -101,8 +104,6 @@
     });
 </script>
 
-<svelte:window bind:online={$isOnline} />
-
 <section class="container mx-auto flex h-screen">
     <div class="flex-grow self-center">
         <h1 class="text-center font-semibold text-info text-7xl pb-6">AQUIFER</h1>
@@ -117,7 +118,7 @@
                 bind:value={selectedBookIndex}
                 on:change={() => (selectedId = 'default')}
                 class="select select-info"
-                disabled={!languageSelected}
+                disabled={!languageSelected || !data.passagesByBook?.length}
             >
                 <option disabled selected value="default">{$translate('page.index.book.value')}</option>
                 {#if data.passagesByBook}

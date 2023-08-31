@@ -9,6 +9,7 @@
     import { registerSW } from 'virtual:pwa-register';
     import { page } from '$app/stores';
     import { log } from '$lib/logger';
+    import { updateOnlineStatus } from '$lib/stores/is-online.store';
 
     $: log.pageView($page.route.id ?? '');
 
@@ -17,7 +18,10 @@
         window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
     }
 
-    onMount(initialize);
+    onMount(() => {
+        updateOnlineStatus();
+        initialize();
+    });
 
     // get the manifest info to include in the head
     $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
@@ -27,5 +31,7 @@
     <title>aquifer</title>
     {@html webManifestLink}
 </svelte:head>
+
+<svelte:window on:online={updateOnlineStatus} on:offline={updateOnlineStatus} />
 
 <slot />
