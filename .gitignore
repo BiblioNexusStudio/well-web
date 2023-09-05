@@ -10,3 +10,5 @@ vite.config.ts.timestamp-*
 /dev-dist/
 /tmp/
 yarn-error.log
+/static/cached-data/
+/src/lib/static-urls-map.json

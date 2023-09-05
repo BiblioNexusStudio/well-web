@@ -9,7 +9,7 @@
 // If you want mutiple books or bibles, rerun the script with the new book and or bible.
 
 import fs from 'fs';
-import { join } from 'path';
+import { join, basename, dirname } from 'path';
 import 'dotenv/config';
 
 // setup for url matching
@@ -24,7 +24,7 @@ args.forEach(function (val) {
 });
 
 const apiUrl = process.env.PUBLIC_AQUIFER_API_URL;
-const cndUrl = 'https://cdn.aquifer.bible/';
+const cdnUrl = 'https://cdn.aquifer.bible/';
 
 async function downloadResource(filename, directory, url) {
     try {
@@ -40,10 +40,8 @@ async function downloadResource(filename, directory, url) {
 }
 
 function getFileNameAndPath(str) {
-    const split = str.split('/');
-    const fileName = split.pop();
-    const pathName = split.join('/');
-    return { fileName, pathName };
+    const pathName = dirname(str);
+    return { fileName: basename(str), pathName: pathName.startsWith('/') ? pathName.slice(1) : pathName };
 }
 
 async function getData(url) {
@@ -59,44 +57,45 @@ async function getData(url) {
 }
 
 function formatStaticPath(str, pattern) {
-    return '/' + str.replace(pattern, '');
+    return '/' + staticCdnPath + str.replace(pattern, '');
 }
 
-const staticPath = './static/';
+const staticCdnPath = 'static/cached-data/cdn/';
+const staticApiPath = 'static/cached-data/api/';
 const languagesPath = 'languages/';
 const languagesUrl = `${apiUrl}languages/`;
 
 const languages = await getData(languagesUrl);
 
 //make directory for language
-fs.mkdirSync(`${staticPath}${languagesPath}`, { recursive: true });
+fs.mkdirSync(`${staticApiPath}${languagesPath}`, { recursive: true });
 
 //write language file as index.json in language directory
-fs.writeFileSync(`${staticPath}${languagesPath}index.json`, JSON.stringify(languages));
+fs.writeFileSync(`${staticApiPath}${languagesPath}index.json`, JSON.stringify(languages));
 
 // find language id
 const language = languages.find((lang) => lang.iso6393Code.toLowerCase() === userArgs.language.toLowerCase());
 
 // get bible data with language id
-const biblesPath = `bibles/language/${language.id}`;
-const biblesUrl = `${apiUrl}bibles/language/${language.id}`;
+const biblesPath = `bibles/language/${language.id}/`;
+const biblesUrl = `${apiUrl}bibles/language/${language.id}/`;
 const bibleData = await getData(biblesUrl);
 
 // make directory for bibleData
-fs.mkdirSync(`${staticPath}${biblesPath}`, { recursive: true });
+fs.mkdirSync(`${staticApiPath}${biblesPath}`, { recursive: true });
 
 // write bibleData as index.json in bible directory
-fs.writeFileSync(`${staticPath}${biblesPath}/index.json`, JSON.stringify(bibleData));
+fs.writeFileSync(`${staticApiPath}${biblesPath}index.json`, JSON.stringify(bibleData));
 
-const passagesPath = `passages/resources/language/${language.id}`;
-const passagesUrl = `${apiUrl}/passages/resources/language/${language.id}`;
+const passagesPath = `passages/resources/language/${language.id}/`;
+const passagesUrl = `${apiUrl}passages/resources/language/${language.id}/`;
 const passagesData = await getData(passagesUrl);
 
 // make directory for passagesData
-fs.mkdirSync(`${staticPath}${passagesPath}`, { recursive: true });
+fs.mkdirSync(`${staticApiPath}${passagesPath}`, { recursive: true });
 
 // write passagesData as index.json in passages directory
-fs.writeFileSync(`${staticPath}${passagesPath}/index.json`, JSON.stringify(passagesData));
+fs.writeFileSync(`${staticApiPath}${passagesPath}index.json`, JSON.stringify(passagesData));
 
 // using bibleData, passagesData and user input, create a list of urls to fetch
 // user input: language=eng bible=BSB book=mark audio=true resouces=true
@@ -110,14 +109,14 @@ const book = bible.contents.find((book) => book.displayName.toLowerCase().includ
 // start loading up urls
 urls.push({
     apiUrl: book.textUrl,
-    staticPath: formatStaticPath(book.textUrl, cndUrl),
+    staticPath: formatStaticPath(book.textUrl, cdnUrl),
 });
 
 if (userArgs.audio === 'true') {
     book.audioUrls.chapters.forEach((chapter) => {
         urls.push({
             apiUrl: chapter.webm.url,
-            staticPath: formatStaticPath(chapter.webm.url, cndUrl),
+            staticPath: formatStaticPath(chapter.webm.url, cdnUrl),
         });
     });
 }
@@ -129,13 +128,13 @@ if (userArgs.resources === 'true') {
                 if (resource.mediaType === 1) {
                     urls.push({
                         apiUrl: resource.content.content.url,
-                        staticPath: formatStaticPath(resource.content.content.url, cndUrl),
+                        staticPath: formatStaticPath(resource.content.content.url, cdnUrl),
                     });
                 } else if (resource.mediaType === 2 && userArgs.audio === 'true') {
                     resource.content.content.steps.forEach((step) => {
                         urls.push({
                             apiUrl: step.webm.url,
-                            staticPath: formatStaticPath(step.webm.url, cndUrl),
+                            staticPath: formatStaticPath(step.webm.url, cdnUrl),
                         });
                     });
                 }
@@ -147,7 +146,7 @@ if (userArgs.resources === 'true') {
 // download urls
 urls.forEach(async (url) => {
     const { fileName, pathName } = getFileNameAndPath(url.staticPath);
-    await downloadResource(fileName, `${staticPath}${pathName}`, url.apiUrl);
+    await downloadResource(fileName, `${pathName}`, url.apiUrl);
 });
 
 // Manually adding more urls after downloading the first set.
@@ -156,19 +155,19 @@ urls.forEach(async (url) => {
 // adding language index.json
 urls.push({
     apiUrl: languagesUrl,
-    staticPath: `/${languagesPath}index.json`,
+    staticPath: `/${staticApiPath}${languagesPath}index.json`,
 });
 
 // adding bible index.json
 urls.push({
     apiUrl: biblesUrl,
-    staticPath: `/${biblesPath}/index.json`,
+    staticPath: `/${staticApiPath}${biblesPath}index.json`,
 });
 
 // adding passages index.json
 urls.push({
     apiUrl: passagesUrl,
-    staticPath: `/${passagesPath}/index.json`,
+    staticPath: `/${staticApiPath}${passagesPath}index.json`,
 });
 
 // finally adding the urls to the src folder as static-urls-map.json
@@ -184,7 +183,7 @@ Object.keys(existingUrlsMap).forEach((key) => {
 
 // add the new urls to the staticUrlsMap
 urls.forEach((url) => {
-    staticUrlsMap[url.apiUrl] = url.staticPath;
+    staticUrlsMap[url.apiUrl] = url.staticPath.replace(/^\/static/, '');
 });
 
 // write the staticUrlsMap to the static-urls-map.json file

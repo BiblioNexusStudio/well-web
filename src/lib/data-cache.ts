@@ -40,11 +40,17 @@ const fetchFromCacheOrCdn = async (url: Url, type: 'blob' | 'json' = 'json') => 
 };
 
 const removeFromApiCache = async (path: string) => {
+    if (!('serviceWorker' in navigator)) {
+        return;
+    }
     const cache = await caches.open('aquifer-api');
     await cache.delete(_apiUrl(path));
 };
 
 const removeFromCdnCache = async (url: Url) => {
+    if (!('serviceWorker' in navigator)) {
+        return;
+    }
     const cache = await caches.open('aquifer-cdn');
     await cache.delete(url);
 };
@@ -141,6 +147,9 @@ const isCachedFromCdn = async (url: Url) => {
     if (url in staticUrlsMap) {
         return true;
     }
+    if (!('serviceWorker' in navigator)) {
+        return false;
+    }
     const cache = await caches.open('aquifer-cdn');
     const response = await cache.match(url);
     return response != null;
@@ -153,6 +162,9 @@ const isCachedFromApi = async (path: string) => {
     }
     if (_apiUrl(path) in staticUrlsMap) {
         return true;
+    }
+    if (!('serviceWorker' in navigator)) {
+        return false;
     }
     const cache = await caches.open('aquifer-api');
     const response = await cache.match(_apiUrl(path));
@@ -167,6 +179,9 @@ const _removeFromArray = <T>(array: T[], value: T) => {
 };
 
 const _cachedCdnContentSize = async (url: Url, cache: Cache | null = null) => {
+    if (!('serviceWorker' in navigator)) {
+        return null;
+    }
     const openedCache = cache || (await caches.open('aquifer-cdn'));
     const response = await openedCache.match(url);
     if (response) {
