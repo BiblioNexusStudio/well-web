@@ -1,6 +1,8 @@
 // This script preloads files from the aquifer server to the static folder of the sveletekit project.
 // This script is meant to be run from the command line. using the following command:
-// node scripts/preload-files-to-static.js language=eng bible=BSB book=mark audio=true resouces=true
+
+// node scripts/preload-files-to-static.js language=eng bible=BSB book=mark audio=true resources=true
+
 // The above command will preload the english bible, BSB, book of mark, with audio and resources.
 // Since this is a POC, the script only accepts one language, one bible, and one book and gives you the option to preload audio and resources.
 // The script should be run and then yarn build will build the static folder with the preloaded files.
@@ -8,6 +10,7 @@
 
 import fs from 'fs';
 import { join } from 'path';
+import 'dotenv/config';
 
 // setup for url matching
 const urls = [];
@@ -20,7 +23,7 @@ args.forEach(function (val) {
     userArgs[split[0]] = split[1];
 });
 
-const apiUrl = 'https://aquifer-server-dev.azurewebsites.net/';
+const apiUrl = process.env.PUBLIC_AQUIFER_API_URL;
 const cndUrl = 'https://cdn.aquifer.bible/';
 
 async function downloadResource(filename, directory, url) {
@@ -171,8 +174,18 @@ urls.push({
 // finally adding the urls to the src folder as static-urls-map.json
 const staticUrlsMap = {};
 
+// read ./src/lib/static-urls-map.json and get the existing urls
+const existingUrlsMap = JSON.parse(fs.readFileSync('./src/lib/static-urls-map.json', 'utf8'));
+
+// add the existing urls to the staticUrlsMap
+Object.keys(existingUrlsMap).forEach((key) => {
+    staticUrlsMap[key] = existingUrlsMap[key];
+});
+
+// add the new urls to the staticUrlsMap
 urls.forEach((url) => {
     staticUrlsMap[url.apiUrl] = url.staticPath;
 });
 
+// write the staticUrlsMap to the static-urls-map.json file
 fs.writeFileSync(`./src/lib/static-urls-map.json`, JSON.stringify(staticUrlsMap));

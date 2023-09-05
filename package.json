@@ -31,6 +31,7 @@
         "async-es": "^3.2.4",
         "autoprefixer": "^10.4.14",
         "daisyui": "^3.2.1",
+        "dotenv": "^16.3.1",
         "eslint": "^8.28.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-svelte": "^2.30.0",

@@ -1,7 +1,8 @@
 import config from './config';
 import type { Url, UrlWithMetadata } from './types/file-manager';
 import { objectKeys } from './utils/typesafe-standard-lib';
-import staticUrlsMap from '$lib/static-urls-map.json' assert { type: 'json' };
+import type { StaticUrlsMap } from './types/static-mapping';
+import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 
 type CheckCacheChangeItem = { url: Url; expectedSize: number };
 type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean };
@@ -12,6 +13,7 @@ export type AllItemsProgress = Record<Url, SingleItemProgress>;
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const _partiallyDownloadedCdnUrls: string[] = [];
 const _partiallyDownloadedApiPaths: string[] = [];
+const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 const fetchFromCacheOrApi = async (path: string) => {
     if (!(await isCachedFromApi(path))) {
