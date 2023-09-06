@@ -106,9 +106,9 @@
 
 <section class="container mx-auto flex h-screen">
     <div class="flex-grow self-center">
-        <h1 class="text-center font-semibold text-info text-7xl pb-6">AQUIFER</h1>
+        <h1 class="text-center font-semibold text-primary text-7xl pb-6">AQUIFER</h1>
         <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6 mx-auto">
-            <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-info">
+            <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-primary">
                 <option value="" disabled selected>{$translate('page.index.language.value')}</option>
                 <option value="eng">English</option>
                 <option value="tpi">Tok Pisin</option>
@@ -117,7 +117,7 @@
             <select
                 bind:value={selectedBookIndex}
                 on:change={() => (selectedId = 'default')}
-                class="select select-info"
+                class="select select-primary"
                 disabled={!languageSelected || !data.passagesByBook?.length}
             >
                 <option disabled selected value="default">{$translate('page.index.book.value')}</option>
@@ -128,7 +128,7 @@
                 {/if}
             </select>
 
-            <select bind:value={selectedId} class="select select-info" disabled={!selectedBookInfo}>
+            <select bind:value={selectedId} class="select select-primary" disabled={!selectedBookInfo}>
                 <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
                 {#if selectedBookInfo}
                     {#each selectedBookInfo.passages as passage}
@@ -140,7 +140,8 @@
                 {/if}
             </select>
 
-            <button class="btn btn-info" disabled={selectedId === 'default'}>{$translate('page.index.go.value')}</button
+            <button class="btn btn-primary" disabled={selectedId === 'default'}
+                >{$translate('page.index.go.value')}</button
             >
             {#if $isOnline}
                 <button class="btn btn-info mx-auto" on:click|preventDefault={goToFileManager}
