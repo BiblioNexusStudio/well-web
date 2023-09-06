@@ -4,7 +4,7 @@
     import { currentLanguage, currentLanguageId } from '$lib/stores/current-language.store';
     import { onMount } from 'svelte';
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
-    import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
+    import { fetchFromCacheOrApi, isCachedFromCdn, staticUrlsMap } from '$lib/data-cache';
     import type {
         ApiPassage,
         ApiBibleVersion,

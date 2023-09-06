@@ -12,7 +12,7 @@ export type AllItemsProgress = Record<Url, SingleItemProgress>;
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const _partiallyDownloadedCdnUrls: string[] = [];
 const _partiallyDownloadedApiPaths: string[] = [];
-const staticUrlsMap: StaticUrlsMap = staticUrls;
+export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 const fetchFromCacheOrApi = async (path: string) => {
     if (!(await isCachedFromApi(path))) {
