@@ -20,7 +20,7 @@ const fetchFromCacheOrApi = async (path: string) => {
     }
     try {
         const url = _apiUrl(path).replace(/\/$/, '');
-        const response = await fetch(url in staticUrlsMap ? staticUrlsMap[url] : url);
+        const response = await fetch(cachedOrRealUrl(url));
         return await response.json();
     } finally {
         _removeFromArray(_partiallyDownloadedApiPaths, path);
@@ -32,7 +32,7 @@ const fetchFromCacheOrCdn = async (url: Url, type: 'blob' | 'json' = 'json') => 
         _partiallyDownloadedCdnUrls.push(url);
     }
     try {
-        const response = await fetch(url in staticUrlsMap ? staticUrlsMap[url] : url);
+        const response = await fetch(cachedOrRealUrl(url));
         return await (type === 'blob' ? response.blob() : response.json());
     } finally {
         _removeFromArray(_partiallyDownloadedCdnUrls, url);
@@ -55,7 +55,7 @@ const removeFromCdnCache = async (url: Url) => {
     await cache.delete(url);
 };
 
-const cachedOrRealUrl = (url: Url | undefined) => (url && url in staticUrlsMap ? staticUrlsMap[url] : url);
+const cachedOrRealUrl = (url: Url) => (url in staticUrlsMap ? (staticUrlsMap[url] as string) : url);
 
 // Fetch multiple URLs when online and store them in the cache, tracking progress as the downloads happen.
 const cacheManyFromCdnWithProgress = async (

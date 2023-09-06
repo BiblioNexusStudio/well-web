@@ -1,13 +1,16 @@
 import { browser } from '$app/environment';
-import { writable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
+import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 
-export const isOnline = writable<boolean>(browser && navigator.onLine);
+export const isApkMode = readable<boolean>(!!Object.keys(staticUrls).length);
+
+export const isOnline = writable<boolean>(browser && navigator.onLine && !isApkMode);
 
 export function updateOnlineStatus() {
-    isOnline.set(navigator.onLine);
+    isOnline.set(navigator.onLine && !isApkMode);
     // wait a second for network update to settle and fire a request to check the true online status
     setTimeout(async () => {
-        if (navigator.onLine) {
+        if (navigator.onLine && !isApkMode) {
             await checkTrueOnlineStatus();
         }
     }, 1000);

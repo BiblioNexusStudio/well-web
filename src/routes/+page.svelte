@@ -15,7 +15,7 @@
     import { get } from 'svelte/store';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { goto } from '$app/navigation';
-    import { isOnline } from '$lib/stores/is-online.store';
+    import { isOnline, isApkMode } from '$lib/stores/is-online.store';
 
     let languageSelected: boolean;
     let selectedBookIndex: number;
@@ -156,7 +156,7 @@
                 <button class="btn btn-info mx-auto" on:click|preventDefault={goToFileManager}
                     >{$translate('page.index.downloadResourcesForOfflineUse.value')}</button
                 >
-            {:else}
+            {:else if !$isApkMode}
                 <div
                     class="tooltip tooltip-bottom tooltip-info"
                     data-tip={$translate('page.index.youAreCurrentlyOffline.value')}

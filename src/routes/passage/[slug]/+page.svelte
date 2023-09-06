@@ -66,7 +66,9 @@
     <div class="w-screen h-screen flex flex-col">
         <div
             aria-label={fullscreenCbbterImage?.displayName}
-            style={`background-image: url('${cachedOrRealUrl(fullscreenCbbterImage?.url)}')`}
+            style={`background-image: url('${
+                fullscreenCbbterImage?.url ? cachedOrRealUrl(fullscreenCbbterImage.url) : ''
+            }')`}
             class="flex-1 bg-center bg-no-repeat bg-contain"
         />
         <div class="flex-shrink-0 text-center text-xl py-4 bg-black">
@@ -176,8 +178,11 @@
         <div class="prose flex-grow {bibleViewSelected ? 'hidden' : 'block'} xl:block overflow-y-scroll">
             <span bind:this={topOfStep} />
             <div class="py-10">
-                {#if cbbterText}
-                    {#each cbbterText.steps as { stepNumber, contentHTML }}
+                {#if stepsAvailable.length > 0}
+                    {#each stepsAvailable as stepNumber}
+                        {@const contentHTML = cbbterText?.steps?.find(
+                            (step) => step.stepNumber === stepNumber
+                        )?.contentHTML}
                         {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
                         <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
                             {#if audioStep}
@@ -188,7 +193,9 @@
                                     />
                                 </div>
                             {/if}
-                            {@html contentHTML}
+                            {#if contentHTML}
+                                {@html contentHTML}
+                            {/if}
                         </div>
                     {/each}
                 {:else}
