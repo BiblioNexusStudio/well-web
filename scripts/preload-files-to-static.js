@@ -138,6 +138,12 @@ if (userArgs.resources === 'true') {
                         });
                     });
                 }
+                resource.supportingResources.forEach((supportingResource) => {
+                    urls.push({
+                        apiUrl: supportingResource.content.content.url,
+                        staticPath: formatStaticPath(supportingResource.content.content.url, cdnUrl),
+                    });
+                });
             });
         }
     });
