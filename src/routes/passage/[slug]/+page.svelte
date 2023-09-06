@@ -164,7 +164,7 @@
                             {#each cbbterImages as image}
                                 <div class="p-4 flex flex-col items-center">
                                     <button on:click={() => (fullscreenCbbterImage = image)}>
-                                        <img class="my-1" src={image.url} alt={image.displayName} />
+                                        <img class="my-1" src={cachedOrRealUrl(image.url)} alt={image.displayName} />
                                     </button>
                                     <span class="text-center">{image.displayName}</span>
                                 </div>

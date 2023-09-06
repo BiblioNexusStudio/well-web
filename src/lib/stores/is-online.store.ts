@@ -17,8 +17,8 @@ export function updateOnlineStatus() {
 // This will catch cases where the user is on Wi-fi or LTE but no actual connection to the internet is there.
 async function checkTrueOnlineStatus() {
     try {
-        const res = await fetch(config.PUBLIC_IS_ONLINE_CHECK_URL, { cache: 'no-store' });
-        isOnline.set(res.status === 200);
+        await fetch(config.PUBLIC_IS_ONLINE_CHECK_URL, { mode: 'no-cors', cache: 'no-store' });
+        isOnline.set(true);
     } catch (_) {
         isOnline.set(false);
     }
