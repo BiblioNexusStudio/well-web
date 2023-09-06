@@ -1,6 +1,5 @@
 import config from './config';
 import type { Url, UrlWithMetadata } from './types/file-manager';
-import { objectKeys } from './utils/typesafe-standard-lib';
 import type { StaticUrlsMap } from './types/static-mapping';
 import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 
@@ -20,7 +19,8 @@ const fetchFromCacheOrApi = async (path: string) => {
         _partiallyDownloadedApiPaths.push(path);
     }
     try {
-        const response = await fetch(_apiUrl(path) in staticUrlsMap ? staticUrlsMap[_apiUrl(path)] : _apiUrl(path));
+        const url = _apiUrl(path).replace(/\/$/, '');
+        const response = await fetch(url in staticUrlsMap ? staticUrlsMap[url] : url);
         return await response.json();
     } finally {
         _removeFromArray(_partiallyDownloadedApiPaths, path);
@@ -55,6 +55,8 @@ const removeFromCdnCache = async (url: Url) => {
     await cache.delete(url);
 };
 
+const cachedOrRealUrl = (url: Url | undefined) => (url && url in staticUrlsMap ? staticUrlsMap[url] : url);
+
 // Fetch multiple URLs when online and store them in the cache, tracking progress as the downloads happen.
 const cacheManyFromCdnWithProgress = async (
     urls: UrlWithMetadata[],
@@ -74,7 +76,7 @@ const cacheManyFromCdnWithProgress = async (
         }),
         {}
     );
-    const queue = objectKeys(progress);
+    const queue = [...urls];
 
     progressCallback(progress);
 
@@ -83,14 +85,20 @@ const cacheManyFromCdnWithProgress = async (
         progressCallback(progress);
     };
 
-    const processUrl = async (url: Url) => {
+    const processUrl = async (url: Url, expectedSize: number) => {
         _partiallyDownloadedCdnUrls.push(url);
         try {
+            if (url in staticUrlsMap) {
+                updateProgress(url, expectedSize, expectedSize, true);
+                return;
+            }
+
             const cachedSize = await _cachedCdnContentSize(url);
             if (cachedSize) {
                 updateProgress(url, cachedSize, cachedSize, true);
                 return;
             }
+
             const response = await fetch(url);
             const reader = response.body?.getReader();
             const contentLength = response.headers.get('Content-Length');
@@ -120,8 +128,8 @@ const cacheManyFromCdnWithProgress = async (
             .fill(null)
             .map(async () => {
                 while (queue.length > 0) {
-                    const url = queue.shift();
-                    if (url) await processUrl(url);
+                    const { url, size } = queue.shift() as UrlWithMetadata;
+                    if (url) await processUrl(url, size);
                 }
             });
         await Promise.all(workers);
@@ -200,4 +208,5 @@ export {
     isCachedFromApi,
     isCachedFromCdn,
     cacheManyFromCdnWithProgress,
+    cachedOrRealUrl,
 };

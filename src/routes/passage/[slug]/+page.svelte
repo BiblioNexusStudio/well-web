@@ -11,7 +11,7 @@
     import chevronDown from 'svelte-awesome/icons/chevronDown';
     import { _ as translate } from 'svelte-i18n';
     import { asyncFilter } from '$lib/utils/async-array';
-    import { isCachedFromCdn } from '$lib/data-cache';
+    import { cachedOrRealUrl, isCachedFromCdn } from '$lib/data-cache';
 
     export let data: PageData;
 
@@ -66,7 +66,7 @@
     <div class="w-screen h-screen flex flex-col">
         <div
             aria-label={fullscreenCbbterImage?.displayName}
-            style={`background-image: url('${fullscreenCbbterImage?.url}')`}
+            style={`background-image: url('${cachedOrRealUrl(fullscreenCbbterImage?.url)}')`}
             class="flex-1 bg-center bg-no-repeat bg-contain"
         />
         <div class="flex-shrink-0 text-center text-xl py-4 bg-black">

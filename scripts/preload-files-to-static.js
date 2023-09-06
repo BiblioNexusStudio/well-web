@@ -63,7 +63,7 @@ function formatStaticPath(str, pattern) {
 const staticCdnPath = 'static/cached-data/cdn/';
 const staticApiPath = 'static/cached-data/api/';
 const languagesPath = 'languages/';
-const languagesUrl = `${apiUrl}languages/`;
+const languagesUrl = `${apiUrl}languages`;
 
 const languages = await getData(languagesUrl);
 
@@ -78,7 +78,7 @@ const language = languages.find((lang) => lang.iso6393Code.toLowerCase() === use
 
 // get bible data with language id
 const biblesPath = `bibles/language/${language.id}/`;
-const biblesUrl = `${apiUrl}bibles/language/${language.id}/`;
+const biblesUrl = `${apiUrl}bibles/language/${language.id}`;
 const bibleData = await getData(biblesUrl);
 
 // make directory for bibleData
@@ -88,7 +88,7 @@ fs.mkdirSync(`${staticApiPath}${biblesPath}`, { recursive: true });
 fs.writeFileSync(`${staticApiPath}${biblesPath}index.json`, JSON.stringify(bibleData));
 
 const passagesPath = `passages/resources/language/${language.id}/`;
-const passagesUrl = `${apiUrl}passages/resources/language/${language.id}/`;
+const passagesUrl = `${apiUrl}passages/resources/language/${language.id}`;
 const passagesData = await getData(passagesUrl);
 
 // make directory for passagesData

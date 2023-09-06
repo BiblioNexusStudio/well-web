@@ -1,5 +1,6 @@
 ﻿<script lang="ts">
     import { navigating, page } from '$app/stores';
+    import { cachedOrRealUrl } from '$lib/data-cache';
     import { Howl } from 'howler';
     import type { HowlOptions } from 'howler';
     type Timer = ReturnType<typeof setInterval>;
@@ -38,7 +39,7 @@
     $: timeDisplayValue = `${formatTime(currentTimeOffset)} / ${formatTime(totalTime)}`;
 
     const howlOptions: HowlOptions = {
-        src: audioFile,
+        src: cachedOrRealUrl(audioFile),
         onplay: () => {
             isAudioPlaying = true;
             timer = setInterval(() => {
