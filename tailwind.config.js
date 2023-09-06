@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 export default {
     content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
@@ -6,7 +6,26 @@ export default {
     },
     plugins: [require('@tailwindcss/typography'), require('daisyui')],
     daisyui: {
-        themes: ['light', 'dark', 'night', 'business'], // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]
+        themes: [
+            'light',
+            'dark',
+            'night',
+            'business',
+            {
+                biblioNexusLight: {
+                    'color-scheme': 'light',
+                    primary: '#817556',
+                    'primary-content': '#FFFFFF',
+                    secondary: '#F0EDE4',
+                    'secondary-content': '#585133',
+                    accent: '#DC8850',
+                    neutral: '#475467',
+                    'base-100': '#ffffff',
+                    'base-200': '#F9FAFB',
+                    'base-content': '#101828',
+                },
+            },
+        ], // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]
         darkTheme: 'dark', // name of one of the included themes for dark mode
         base: true, // applies background color and foreground color for root element by default
         styled: true, // include daisyUI colors and design decisions for all components
