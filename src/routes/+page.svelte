@@ -4,7 +4,7 @@
     import { currentLanguage, currentLanguageId } from '$lib/stores/current-language.store';
     import { onMount } from 'svelte';
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
-    import { fetchFromCacheOrApi, isCachedFromCdn, staticUrlsMap } from '$lib/data-cache';
+    import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
     import type {
         ApiPassage,
         ApiBibleVersion,
@@ -15,7 +15,7 @@
     import { get } from 'svelte/store';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { goto } from '$app/navigation';
-    import { isOnline, isApkMode } from '$lib/stores/is-online.store';
+    import { isOnline } from '$lib/stores/is-online.store';
 
     let languageSelected: boolean;
     let selectedBookIndex: number;
@@ -156,7 +156,7 @@
                 <button class="btn btn-info mx-auto" on:click|preventDefault={goToFileManager}
                     >{$translate('page.index.downloadResourcesForOfflineUse.value')}</button
                 >
-            {:else if !$isApkMode}
+            {:else}
                 <div
                     class="tooltip tooltip-bottom tooltip-info"
                     data-tip={$translate('page.index.youAreCurrentlyOffline.value')}

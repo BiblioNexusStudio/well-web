@@ -1,16 +1,14 @@
 import { browser } from '$app/environment';
-import { get, readable, writable } from 'svelte/store';
-import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
+import { writable } from 'svelte/store';
+import config from '$lib/config';
 
-export const isApkMode = readable<boolean>(!!Object.keys(staticUrls).length);
-
-export const isOnline = writable<boolean>(browser && navigator.onLine && !get(isApkMode));
+export const isOnline = writable<boolean>(browser && navigator.onLine);
 
 export function updateOnlineStatus() {
-    isOnline.set(navigator.onLine && !get(isApkMode));
+    isOnline.set(navigator.onLine);
     // wait a second for network update to settle and fire a request to check the true online status
     setTimeout(async () => {
-        if (navigator.onLine && !get(isApkMode)) {
+        if (navigator.onLine) {
             await checkTrueOnlineStatus();
         }
     }, 1000);
@@ -18,6 +16,10 @@ export function updateOnlineStatus() {
 
 // This will catch cases where the user is on Wi-fi or LTE but no actual connection to the internet is there.
 async function checkTrueOnlineStatus() {
-    const res = await fetch('/empty-file.txt', { cache: 'no-store' });
-    isOnline.set(res.status === 200);
+    try {
+        const res = await fetch(config.PUBLIC_IS_ONLINE_CHECK_URL, { cache: 'no-store' });
+        isOnline.set(res.status === 200);
+    } catch (_) {
+        isOnline.set(false);
+    }
 }

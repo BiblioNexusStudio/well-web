@@ -5,8 +5,7 @@ const config: CapacitorConfig = {
     appName: 'Aquifer',
     webDir: 'build',
     server: {
-        androidScheme: 'http',
-        hostname: 'aquifer',
+        androidScheme: 'https',
     },
 };
 

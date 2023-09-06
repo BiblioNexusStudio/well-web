@@ -10,23 +10,7 @@ const targetDirectory = join(__dirname, '../static/cached-data');
 
 // Check if the directory exists before attempting to delete it
 if (fs.existsSync(targetDirectory)) {
-    // Get a list of files and subdirectories within the directory
-    const directoryContents = fs.readdirSync(targetDirectory);
-
-    // Iterate through the contents and delete each one
-    for (const content of directoryContents) {
-        const contentPath = join(targetDirectory, content);
-        if (fs.statSync(contentPath).isDirectory()) {
-            // If it's a subdirectory, delete it recursively
-            fs.rmdirSync(contentPath, { recursive: true });
-        } else {
-            // If it's a file, delete it
-            fs.unlinkSync(contentPath);
-        }
-    }
-
-    // Finally, remove the directory itself
-    fs.rmdirSync(targetDirectory);
+    fs.rmdirSync(targetDirectory, { recursive: true });
 } else {
     console.log(`Directory "${targetDirectory}" does not exist.`);
 }

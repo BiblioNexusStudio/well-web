@@ -69,13 +69,19 @@ $ node scripts/preload-files-to-static.js language=eng bible=BSB book=mark audio
 $ yarn run build
 ```
 
-3. Sync the app into the capacitor android project
+3. Generate assets from `resources/*.png` files
+
+```bash
+$ npx capacitor-assets generate --android
+```
+
+4. Sync the app into the capacitor android project
 
 ```bash
 $ npx cap sync android
 ```
 
-4. Using Android Studio, build the APK
+5. Using Android Studio, build the APK
 
 ```bash
 $ npx cap open android
