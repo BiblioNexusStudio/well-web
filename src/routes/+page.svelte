@@ -20,6 +20,7 @@
     let languageSelected: boolean;
     let selectedBookIndex: number;
     let selectedId = 'default';
+    let isLoading = false;
     let data = {} as { passagesByBook?: PassagesForBook[] };
 
     $: selectedBookInfo = data.passagesByBook?.[selectedBookIndex];
@@ -50,6 +51,7 @@
     }
 
     export async function fetchData(isOnline: boolean) {
+        isLoading = true;
         const bibleBookIdsToNameAndIndex = await getBibleBookIdsToNameAndIndex();
         const passagesWithResources = (await fetchFromCacheOrApi(
             `passages/resources/language/${get(currentLanguageId)}`
@@ -89,6 +91,7 @@
             }, [] as PassagesForBook[])
             .filter(Boolean);
         data = { passagesByBook };
+        isLoading = false;
     }
 
     let onLanguageSelected = (event: Event) => {
@@ -111,6 +114,7 @@
             <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-primary">
                 <option value="" disabled selected>{$translate('page.index.language.value')}</option>
                 <option value="eng">English</option>
+                <option value="hin">Hindi</option>
                 <option value="tpi">Tok Pisin</option>
             </select>
 
@@ -120,7 +124,12 @@
                 class="select select-primary"
                 disabled={!languageSelected || !data.passagesByBook?.length}
             >
-                <option disabled selected value="default">{$translate('page.index.book.value')}</option>
+                <option disabled selected value="default">
+                    {$translate('page.index.book.value')}
+                    {#if isLoading}
+                        (loading...)
+                    {/if}
+                </option>
                 {#if data.passagesByBook}
                     {#each data.passagesByBook as book, index}
                         <option value={index}>{book.displayName}</option>

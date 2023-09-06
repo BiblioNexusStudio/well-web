@@ -5,8 +5,8 @@
     type Timer = ReturnType<typeof setInterval>;
 
     export let audioFile: string;
-    export let startTime = 0;
-    export let endTime = 0;
+    export let startTime: number | null = null;
+    export let endTime: number | null = null;
 
     /** Bind to this when you have multiple players on a single page. It will
      * call pauseAudioIfOtherSourcePlaying when any bound activePlayId changes,
@@ -26,13 +26,13 @@
         }
     }
 
-    const hasCustomTime = startTime !== 0 && endTime !== 0;
+    const hasCustomTime = startTime !== null && endTime !== null;
     let playId: number | undefined = undefined;
     let isAudioPlaying = false;
-    let currentTime = startTime;
+    let currentTime = startTime || 0;
     let totalTime = 0;
     let timer: Timer;
-    $: currentTimeOffset = currentTime - startTime;
+    $: currentTimeOffset = currentTime - (startTime || 0);
     $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
     $: timeDisplayValue = `${formatTime(currentTimeOffset)} / ${formatTime(totalTime)}`;
 
@@ -54,14 +54,14 @@
             isAudioPlaying = false;
         },
         onload: () => {
-            totalTime = hasCustomTime ? endTime - startTime : sound.duration(playId);
+            totalTime = hasCustomTime ? (endTime || 0) - (startTime || 0) : sound.duration(playId);
         },
     };
 
     // If you specify a section, you must play a section.
     if (hasCustomTime) {
         howlOptions.sprite = {
-            audioSection: [1000 * startTime, 1000 * (endTime - startTime)],
+            audioSection: [1000 * (startTime || 0), 1000 * ((endTime || 0) - (startTime || 0))],
         };
     }
 
@@ -69,7 +69,7 @@
 
     const onRangeChange = (event: Event) => {
         const { value } = event.target as HTMLInputElement;
-        currentTime = startTime + (parseInt(value) / 100) * totalTime;
+        currentTime = (startTime || 0) + (parseInt(value) / 100) * totalTime;
 
         if (playId !== undefined) {
             sound.pause(playId);
