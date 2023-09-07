@@ -114,7 +114,7 @@
             <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-primary">
                 <option value="" disabled selected>{$translate('page.index.language.value')}</option>
                 <option value="eng">English</option>
-                <option value="hin">Hindi</option>
+                <option value="hin">हिंदी</option>
                 <option value="tpi">Tok Pisin</option>
             </select>
 

@@ -1,0 +1,143 @@
+{
+    "page": {
+        "index": {
+            "language": {
+                "value": "भाषा"
+            },
+            "book": {
+                "value": "पुस्तक"
+            },
+            "passage": {
+                "value": "पाठ"
+            },
+            "go": {
+                "value": "जाओ"
+            },
+            "downloadResourcesForOfflineUse": {
+                "value": "ऑफ़लाइन उपयोग के लिए संसाधन डाउनलोड करें"
+            },
+            "youAreCurrentlyOffline": {
+                "value": "आप वर्तमान में ऑफलाइन हैं। कृपया अतिरिक्त संसाधनों को डाउनलोड करने के लिए इंटरनेट से जुड़ें।"
+            }
+        },
+        "passage": {
+            "text": {
+                "value": "पाठ"
+            },
+            "media": {
+                "value": "मीडिया"
+            }
+        },
+        "fileManager": {
+            "title": {
+                "value": "फ़ाइल प्रबंधक"
+            },
+            "download": {
+                "value": "डाउनलोड"
+            },
+            "language": {
+                "value": "भाषा"
+            },
+            "passage": {
+                "value": "पाठ"
+            },
+            "book": {
+                "value": "पुस्तक"
+            },
+            "size": {
+                "value": "आकार"
+            },
+            "expand": {
+                "value": "विस्तार"
+            },
+            "type": {
+                "value": "प्रकार"
+            },
+            "textType": {
+                "value": "पाठ"
+            },
+            "audioType": {
+                "value": "ऑडियो"
+            },
+            "imagesType": {
+                "value": "छवियां"
+            },
+            "update": {
+                "value": "अपडेट"
+            },
+            "cancel": {
+                "value": "रद्द करें"
+            },
+            "back": {
+                "value": "पीछे"
+            },
+            "selectLanguage": {
+                "value": "कृपया एक भाषा चुनें।"
+            },
+            "selectResource": {
+                "value": "कृपया एक संसाधन चुनें।"
+            },
+            "chooseResource": {
+                "value": "एक संसाधन चुनें"
+            },
+            "modal": {
+                "title": {
+                    "value": "पुष्टि"
+                },
+                "description": {
+                    "value": "आप अपने डिवाइस से {downloadSize} डाउनलोड और {deleteSize} को हटाने वाले हैं।"
+                },
+                "question": {
+                    "value": "आप कैसे आगे बढ़ना चाहेंगे?"
+                },
+                "downloadProgress": {
+                    "value": "डाउनलोड प्रगति"
+                },
+                "success": {
+                    "value": "सफलतापूर्वक डाउनलोड किया गया"
+                },
+                "close": {
+                    "value": "बंद करें"
+                },
+                "downloadingDescription": {
+                    "value": "{totalSizeDownloaded} का {totalSizeToDownload} डाउनलोड किया जा रहा है।"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "यहां आप अपने डिवाइस से एक्विफर सामग्री डाउनलोड और हटा सकते हैं।"
+                }
+            },
+            "a11y": {
+                "expandResources": {
+                    "value": "{bookName} संसाधनों को विस्तारित करें"
+                },
+                "collapseResources": {
+                    "value": "{bookName} संसाधनों को संकुचित करें"
+                }
+            }
+        }
+    },
+    "resources": {
+        "cbbt-er": {
+            "step1": {
+                "value": "सुनें और दिल"
+            },
+            "step2": {
+                "value": "स्थापना करना"
+            },
+            "step3": {
+                "value": "दृश्यों को परिभाषित करना"
+            },
+            "step4": {
+                "value": "पाठ को व्यक्तिगत करना"
+            },
+            "step5": {
+                "value": "अंतर भरना"
+            },
+            "step6": {
+                "value": "शब्द बोलना"
+            }
+        }
+    }
+}

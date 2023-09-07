@@ -4,6 +4,7 @@ import { init, register } from 'svelte-i18n';
 const defaultLocale = 'en';
 
 register('en', () => import('./locales/en.json'));
+register('hin', () => import('./locales/hin.json'));
 register('tpi', () => import('./locales/tpi.json'));
 
 init({
