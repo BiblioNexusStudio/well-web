@@ -5,8 +5,9 @@
     type Timer = ReturnType<typeof setInterval>;
 
     export let audioFile: string;
-    export let startTime: number | null = null;
+    export let startTime: number = 0;
     export let endTime: number | null = null;
+    let nonNullEndTime = endTime || 0;
 
     /** Bind to this when you have multiple players on a single page. It will
      * call pauseAudioIfOtherSourcePlaying when any bound activePlayId changes,
@@ -26,13 +27,13 @@
         }
     }
 
-    const hasCustomTime = startTime !== null && endTime !== null;
+    const hasCustomTime = endTime !== null;
     let playId: number | undefined = undefined;
     let isAudioPlaying = false;
-    let currentTime = startTime || 0;
+    let currentTime = startTime;
     let totalTime = 0;
     let timer: Timer;
-    $: currentTimeOffset = currentTime - (startTime || 0);
+    $: currentTimeOffset = currentTime - startTime;
     $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
     $: timeDisplayValue = `${formatTime(currentTimeOffset)} / ${formatTime(totalTime)}`;
 
@@ -54,14 +55,14 @@
             isAudioPlaying = false;
         },
         onload: () => {
-            totalTime = hasCustomTime ? (endTime || 0) - (startTime || 0) : sound.duration(playId);
+            totalTime = hasCustomTime ? nonNullEndTime - startTime : sound.duration(playId);
         },
     };
 
     // If you specify a section, you must play a section.
     if (hasCustomTime) {
         howlOptions.sprite = {
-            audioSection: [1000 * (startTime || 0), 1000 * ((endTime || 0) - (startTime || 0))],
+            audioSection: [1000 * startTime, 1000 * (nonNullEndTime - startTime)],
         };
     }
 
@@ -69,7 +70,7 @@
 
     const onRangeChange = (event: Event) => {
         const { value } = event.target as HTMLInputElement;
-        currentTime = (startTime || 0) + (parseInt(value) / 100) * totalTime;
+        currentTime = startTime + (parseInt(value) / 100) * totalTime;
 
         if (playId !== undefined) {
             sound.pause(playId);
