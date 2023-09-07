@@ -119,7 +119,7 @@
                             <AudioPlayer
                                 bind:activePlayId
                                 audioFile={chapter.audioData.url}
-                                startTime={chapter.audioData.startTimestamp}
+                                startTime={chapter.audioData.startTimestamp || 0}
                                 endTime={chapter.audioData.endTimestamp}
                             />
                         </div>

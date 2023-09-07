@@ -6,7 +6,8 @@
 
     export let audioFile: string;
     export let startTime = 0;
-    export let endTime = 0;
+    export let endTime: number | null = null;
+    let nonNullEndTime = endTime || 0;
 
     /** Bind to this when you have multiple players on a single page. It will
      * call pauseAudioIfOtherSourcePlaying when any bound activePlayId changes,
@@ -26,7 +27,7 @@
         }
     }
 
-    const hasCustomTime = startTime !== 0 && endTime !== 0;
+    const hasCustomTime = endTime !== null;
     let playId: number | undefined = undefined;
     let isAudioPlaying = false;
     let currentTime = startTime;
@@ -54,14 +55,14 @@
             isAudioPlaying = false;
         },
         onload: () => {
-            totalTime = hasCustomTime ? endTime - startTime : sound.duration(playId);
+            totalTime = hasCustomTime ? nonNullEndTime - startTime : sound.duration(playId);
         },
     };
 
     // If you specify a section, you must play a section.
     if (hasCustomTime) {
         howlOptions.sprite = {
-            audioSection: [1000 * startTime, 1000 * (endTime - startTime)],
+            audioSection: [1000 * startTime, 1000 * (nonNullEndTime - startTime)],
         };
     }
 
