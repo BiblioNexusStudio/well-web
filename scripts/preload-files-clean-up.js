@@ -16,4 +16,4 @@ if (fs.existsSync(targetDirectory)) {
 }
 
 // Replace the contents of ../src/lib/static-urls-map.json with {} src/lib/static-urls-map.json
-fs.writeFileSync(join(__dirname, '../src/lib/static-urls-map.json'), '{}');
+fs.writeFileSync(join(__dirname, '../src/lib/static-urls-map.json'), '{}\n');
