@@ -1,5 +1,4 @@
 <script lang="ts">
-    import CbbterStepsNavigation from '$lib/components/CbbterStepsNavigation.svelte';
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import type { PageData } from './$types';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
@@ -12,11 +11,15 @@
     import { _ as translate } from 'svelte-i18n';
     import { asyncFilter } from '$lib/utils/async-array';
     import { cachedOrRealUrl, isCachedFromCdn } from '$lib/data-cache';
+    import CompassIcon from '$lib/icons/CompassIcon.svelte';
+    import DoubleChevronUpIcon from '$lib/icons/DoubleChevronUpIcon.svelte';
+    import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
+
+    type Tab = 'bible' | 'guide';
 
     export let data: PageData;
 
     let cbbterSelectedStepNumber = 1;
-    let bibleViewSelected = false;
     let activePlayId: number | undefined = undefined;
     let stepsAvailable: number[] = [];
     let cbbterText: CbbtErTextContent | undefined;
@@ -27,6 +30,8 @@
     let isBibleTextExpanded = true;
     let isMediaExpanded = true;
     let fullscreenCbbterImage: CbbtErImageContent | null = null;
+    let selectedTab: Tab = 'bible';
+    let isShowingResourceDrawer = false;
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
 
@@ -77,34 +82,32 @@
     </div>
 </button>
 
-<div class="navbar px-4 bg-base-200 fixed bottom-0 z-40 bg-transparent/90">
-    <div class="navbar-start">
-        <a href="/" class="font-bold normal-case text-xl">aquifer</a>
-    </div>
-
-    <CbbterStepsNavigation
-        bind:cbbterSelectedStepNumber
-        bind:bibleViewSelected
-        responsive="xl:hidden"
-        {stepsAvailable}
-    />
-    <CbbterStepsNavigation
-        bind:cbbterSelectedStepNumber
-        bind:bibleViewSelected
-        responsive="hidden xl:flex"
-        fullDisplay={true}
-        {stepsAvailable}
-    />
-
-    <div class="navbar-end">
-        {#if bibleContent?.chapters?.length}
-            <button
-                class="btn btn-square {bibleViewSelected ? 'btn-primary' : 'btn-ghost'} xl:hidden"
-                on:click={() => (bibleViewSelected = !bibleViewSelected)}
+<div class="navbar p-0 bg-base-100 fixed bottom-0 z-40 border-t border-t-primary-300">
+    <div class="navbar-center grow">
+        <ul class="flex justify-evenly flex-row px-1 max-w-2xl grow mx-auto">
+            <NavMenuTabItem
+                hideOnXl={true}
+                bind:selectedTab
+                tabName="bible"
+                label={$translate('page.passage.nav.bible.value')}
             >
                 <BookIcon />
-            </button>
-        {/if}
+            </NavMenuTabItem>
+            <NavMenuTabItem
+                hideOnXl={true}
+                bind:selectedTab
+                tabName="guide"
+                label={$translate('page.passage.nav.guide.value')}
+            >
+                <CompassIcon />
+            </NavMenuTabItem>
+            <NavMenuTabItem
+                bind:isSelected={isShowingResourceDrawer}
+                label={$translate('page.passage.nav.resources.value')}
+            >
+                <DoubleChevronUpIcon />
+            </NavMenuTabItem>
+        </ul>
     </div>
 </div>
 
@@ -112,7 +115,7 @@
     {#await getContent()}
         <FullPageSpinner />
     {:then}
-        <div class="prose flex-grow {bibleViewSelected ? 'block' : 'hidden'} py-10 xl:block overflow-y-scroll">
+        <div class="prose flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-10 xl:block overflow-y-scroll">
             {#if bibleContent?.chapters?.length}
                 {#each bibleContent.chapters as chapter}
                     <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
@@ -175,7 +178,7 @@
             {/if}
         </div>
         <div class="divider divider-horizontal hidden xl:flex" />
-        <div class="prose flex-grow {bibleViewSelected ? 'hidden' : 'block'} xl:block overflow-y-scroll">
+        <div class="prose flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} xl:block overflow-y-scroll">
             <span bind:this={topOfStep} />
             <div class="py-10">
                 {#if stepsAvailable.length > 0}
