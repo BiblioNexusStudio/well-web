@@ -2,7 +2,12 @@
 export default {
     content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                'primary-50': 'var(--primary-50)',
+                'primary-300': 'var(--primary-300)',
+            },
+        },
     },
     plugins: [require('@tailwindcss/typography'), require('daisyui')],
     daisyui: {
@@ -23,6 +28,8 @@ export default {
                     'base-100': '#ffffff',
                     'base-200': '#F9FAFB',
                     'base-content': '#101828',
+                    '--primary-50': '#F0EDE4',
+                    '--primary-300': '#B5AC8B',
                 },
             },
         ], // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]
