@@ -81,7 +81,7 @@ async function fetchBibleContent(passage: BasePassage) {
                     let audioData: { url: string; startTimestamp: number | null; endTimestamp: number | null } | null =
                         null;
                     const url = audioUrlData[audioFileTypeForBrowser()].url;
-                    if (navigator.onLine || (await isCachedFromCdn(url))) {
+                    if (get(isOnline) || (await isCachedFromCdn(url))) {
                         if (audioUrlData.audioTimestamps) {
                             const startTimestamp =
                                 chapterNumber === passage.startChapter

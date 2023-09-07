@@ -11,7 +11,7 @@
     import chevronDown from 'svelte-awesome/icons/chevronDown';
     import { _ as translate } from 'svelte-i18n';
     import { asyncFilter } from '$lib/utils/async-array';
-    import { isCachedFromCdn } from '$lib/data-cache';
+    import { cachedOrRealUrl, isCachedFromCdn } from '$lib/data-cache';
 
     export let data: PageData;
 
@@ -66,7 +66,9 @@
     <div class="w-screen h-screen flex flex-col">
         <div
             aria-label={fullscreenCbbterImage?.displayName}
-            style={`background-image: url('${fullscreenCbbterImage?.url}')`}
+            style={`background-image: url('${
+                fullscreenCbbterImage?.url ? cachedOrRealUrl(fullscreenCbbterImage.url) : ''
+            }')`}
             class="flex-1 bg-center bg-no-repeat bg-contain"
         />
         <div class="flex-shrink-0 text-center text-xl py-4 bg-black">
@@ -162,7 +164,7 @@
                             {#each cbbterImages as image}
                                 <div class="p-4 flex flex-col items-center">
                                     <button on:click={() => (fullscreenCbbterImage = image)}>
-                                        <img class="my-1" src={image.url} alt={image.displayName} />
+                                        <img class="my-1" src={cachedOrRealUrl(image.url)} alt={image.displayName} />
                                     </button>
                                     <span class="text-center">{image.displayName}</span>
                                 </div>
@@ -176,8 +178,11 @@
         <div class="prose flex-grow {bibleViewSelected ? 'hidden' : 'block'} xl:block overflow-y-scroll">
             <span bind:this={topOfStep} />
             <div class="py-10">
-                {#if cbbterText}
-                    {#each cbbterText.steps as { stepNumber, contentHTML }}
+                {#if stepsAvailable.length > 0}
+                    {#each stepsAvailable as stepNumber}
+                        {@const contentHTML = cbbterText?.steps?.find(
+                            (step) => step.stepNumber === stepNumber
+                        )?.contentHTML}
                         {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
                         <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
                             {#if audioStep}
@@ -188,7 +193,9 @@
                                     />
                                 </div>
                             {/if}
-                            {@html contentHTML}
+                            {#if contentHTML}
+                                {@html contentHTML}
+                            {/if}
                         </div>
                     {/each}
                 {:else}
