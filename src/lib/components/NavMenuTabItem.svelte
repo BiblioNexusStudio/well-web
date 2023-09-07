@@ -1,4 +1,9 @@
 <script lang="ts">
+    // This component has two options:
+    // 1) selectedTab and tabName
+    //    These are meant to be used for "tab-like" content where only one tab displays at a time
+    // 2) isSelected
+    //    This is for toggle-able things like drawers that are separate from tab content
     export let selectedTab: string | null = null;
     export let tabName: string | null = null;
     export let label: string;
@@ -16,18 +21,13 @@
     $: isSelected = selectedTab !== null && tabName !== null ? selectedTab === tabName : false;
 </script>
 
-<li
-    class={`flex flex-col group text-primary text-xs text-center pt-3 pb-4 px-3 ${hideOnXl ? 'xl:hidden' : ''} ${
-        isSelected && 'font-bold'
-    }`}
->
-    <button on:click={handleClick}>
-        <div
-            class={`rounded-2xl py-1 px-5 mb-1 focus:bg-primary-50 group-hover:bg-primary-50
-group-hover:stroke-primary ${isSelected ? 'bg-primary-50 stroke-primary' : 'stroke-primary-300'}`}
-        >
-            <slot />
-        </div>
-        <div>{label}</div>
-    </button>
-</li>
+<button on:click={handleClick} class={`group stroke-black active border-none ${hideOnXl ? 'xl:hidden' : ''}`}>
+    <div
+        class={`rounded-2xl py-1 px-5 focus:bg-primary-50 group-hover:bg-primary-50 group-hover:stroke-primary ${
+            isSelected ? 'bg-primary-50 stroke-primary' : 'stroke-primary-300'
+        }`}
+    >
+        <slot />
+    </div>
+    <span class={`btm-nav-label text-primary text-xs ${isSelected && 'font-bold'}`}>{label}</span>
+</button>

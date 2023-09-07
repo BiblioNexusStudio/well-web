@@ -82,33 +82,16 @@
     </div>
 </button>
 
-<div class="navbar p-0 bg-base-100 fixed bottom-0 z-40 border-t border-t-primary-300">
-    <div class="navbar-center grow">
-        <ul class="flex justify-evenly flex-row px-1 max-w-2xl grow mx-auto">
-            <NavMenuTabItem
-                hideOnXl={true}
-                bind:selectedTab
-                tabName="bible"
-                label={$translate('page.passage.nav.bible.value')}
-            >
-                <BookIcon />
-            </NavMenuTabItem>
-            <NavMenuTabItem
-                hideOnXl={true}
-                bind:selectedTab
-                tabName="guide"
-                label={$translate('page.passage.nav.guide.value')}
-            >
-                <CompassIcon />
-            </NavMenuTabItem>
-            <NavMenuTabItem
-                bind:isSelected={isShowingResourceDrawer}
-                label={$translate('page.passage.nav.resources.value')}
-            >
-                <DoubleChevronUpIcon />
-            </NavMenuTabItem>
-        </ul>
-    </div>
+<div class="btm-nav border-t border-t-primary-300">
+    <NavMenuTabItem hideOnXl={true} bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
+        <BookIcon />
+    </NavMenuTabItem>
+    <NavMenuTabItem hideOnXl={true} bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
+        <CompassIcon />
+    </NavMenuTabItem>
+    <NavMenuTabItem bind:isSelected={isShowingResourceDrawer} label={$translate('page.passage.nav.resources.value')}>
+        <DoubleChevronUpIcon />
+    </NavMenuTabItem>
 </div>
 
 <div class="flex flex-row justify-evenly h-full w-full pb-16 px-5">
