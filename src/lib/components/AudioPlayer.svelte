@@ -5,7 +5,7 @@
     type Timer = ReturnType<typeof setInterval>;
 
     export let audioFile: string;
-    export let startTime: number = 0;
+    export let startTime = 0;
     export let endTime: number | null = null;
     let nonNullEndTime = endTime || 0;
 
