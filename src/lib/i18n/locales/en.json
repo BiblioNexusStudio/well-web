@@ -27,14 +27,6 @@
             }
         },
         "passage": {
-            "text": {
-                "value": "Text",
-                "_context": "The label next to the chevron that lets you expand/collapse text"
-            },
-            "media": {
-                "value": "Media",
-                "_context": "The label next to the chevron that lets you expand/collapse media"
-            },
             "nav": {
                 "bible": {
                     "value": "Bible",

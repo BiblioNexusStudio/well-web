@@ -8,6 +8,7 @@
     export let tabName: string | null = null;
     export let label: string;
     export let isSelected: boolean | null = null;
+    export let flipWhenSelected = false;
     export let hideOnXl = false;
 
     function handleClick() {
@@ -27,7 +28,16 @@
             isSelected ? 'bg-primary-50 stroke-primary' : 'stroke-primary-300'
         }`}
     >
-        <slot />
+        {#if flipWhenSelected}
+            <div
+                style={`transform: rotateX(${isSelected ? '180deg' : '0deg'});`}
+                class="transition-transform duration-300 transform origin-center"
+            >
+                <slot />
+            </div>
+        {:else}
+            <slot />
+        {/if}
     </div>
     <span class={`btm-nav-label text-primary text-xs ${isSelected && 'font-bold'}`}>{label}</span>
 </button>
