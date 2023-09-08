@@ -108,8 +108,8 @@
     };
 </script>
 
-<div class="relative w-3/4 flex flex-row justify-center items-center rounded-xl">
-    <div class="grow-0 cursor-pointer amplitude-play-pause w-[16px]">
+<div class="relative w-full flex flex-row justify-center items-center rounded-xl">
+    <div class="grow-0 cursor-pointer w-[20px] h-[20px]">
         <button class={isAudioPlaying ? 'hidden' : ''} on:click={onPlayClick}>
             <PlayMediaIcon />
         </button>
@@ -119,11 +119,11 @@
         </button>
     </div>
 
-    <div class="w-full flex flex-col grow mx-4 h-[19px]">
+    <div class="w-full mx-4 h-[20px]">
         <input
             type="range"
             id="song-percentage-played"
-            class="range range-xxs range-primary"
+            class="range range-audio range-primary my-[4px]"
             step="any"
             min="0"
             max="100"
@@ -133,27 +133,27 @@
         />
     </div>
 
-    <span class="w-24 items-start text-xs font-sans font-medium text-primary h-[19px]">{timeDisplayValue}</span>
+    <span class="w-36 items-start text-sm font-sans font-medium text-neutral h-[20px]">{timeDisplayValue}</span>
 </div>
 
 <style>
-    .range-xxs {
-        height: 0.75rem /* 16px */;
+    .range-audio {
+        height: 0.75rem;
     }
-    .range-xxs::-webkit-slider-runnable-track {
-        height: 0.75rem /* 4px */;
+    .range-audio::-webkit-slider-runnable-track {
+        height: 0.75rem;
     }
-    .range-xxs::-moz-range-track {
-        height: 0.75rem /* 4px */;
+    .range-audio::-moz-range-track {
+        height: 0.75rem;
     }
-    .range-xxs::-webkit-slider-thumb {
-        height: 0.75rem /* 16px */;
-        width: 0.75rem /* 16px */;
-        --filler-offset: 0.4rem /* 6.4px */;
+    .range-audio::-webkit-slider-thumb {
+        height: 0.75rem;
+        width: 0.75rem;
+        --filler-offset: 0.4rem;
     }
-    .range-xxs::-moz-range-thumb {
-        height: 0.75rem /* 16px */;
-        width: 0.75rem /* 16px */;
-        --filler-offset: 0.4rem /* 6.4px */;
+    .range-audio::-moz-range-thumb {
+        height: 0.75rem;
+        width: 0.75rem;
+        --filler-offset: 0.4rem;
     }
 </style>
