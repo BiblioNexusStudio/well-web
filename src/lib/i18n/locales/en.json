@@ -38,7 +38,7 @@
         },
         "fileManager": {
             "title": {
-                "value": "File Manager",
+                "value": "Local File Manager",
                 "_context": "Title displayed on the file manager page"
             },
             "download": {

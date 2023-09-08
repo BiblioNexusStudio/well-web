@@ -16,7 +16,7 @@
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
     import type { ApiPassage } from '$lib/types/file-manager';
-    import NavBar from '$lib/components/NavBar.svelte';
+    import TopNavBar from '$lib/components/TopNavBar.svelte';
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
@@ -46,7 +46,7 @@
 
 <div class="container mx-auto">
     <FmModal />
-    <NavBar title={$translate('page.fileManager.title.value')} />
+    <TopNavBar title={$translate('page.fileManager.title.value')} />
     <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
         <h1 class="text-2xl mb-4 sm:mb-0">
             {$translate('page.fileManager.title.value')}

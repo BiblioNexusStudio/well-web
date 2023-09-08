@@ -16,13 +16,15 @@
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { goto } from '$app/navigation';
     import { isOnline } from '$lib/stores/is-online.store';
+    import {
+        languageSelected,
+        data,
+        selectedId,
+        selectedBookIndex,
+        passagesByBook,
+    } from '$lib/stores/passage-form.store';
 
-    let languageSelected: boolean;
-    let selectedBookIndex: number;
-    let selectedId = 'default';
-    let data = {} as { passagesByBook?: PassagesForBook[] };
-
-    $: selectedBookInfo = data.passagesByBook?.[selectedBookIndex];
+    $: selectedBookInfo = $data.passagesByBook?.[$selectedBookIndex];
 
     $: $currentLanguage && fetchData($isOnline);
 
@@ -76,7 +78,7 @@
                 });
             }
         );
-        const passagesByBook = availableOfflinePassagesWithResources
+        $passagesByBook = availableOfflinePassagesWithResources
             .reduce((output, passageWithResource) => {
                 const bibleBookNameAndIndex = bibleBookIdsToNameAndIndex[passageWithResource.bookId];
                 output[bibleBookNameAndIndex.index] ||= {
@@ -88,18 +90,18 @@
                 return output;
             }, [] as PassagesForBook[])
             .filter(Boolean);
-        data = { passagesByBook };
+        $data = { passagesByBook: $passagesByBook };
     }
 
     let onLanguageSelected = (event: Event) => {
         const { value } = event.target as HTMLSelectElement;
-        languageSelected = true;
+        $languageSelected = true;
         $locale = value;
         $currentLanguage = value;
     };
     onMount(() => {
         if ($currentLanguage) {
-            languageSelected = true;
+            $languageSelected = true;
         }
     });
 </script>
@@ -107,7 +109,7 @@
 <section class="container mx-auto flex h-screen">
     <div class="flex-grow self-center">
         <h1 class="text-center font-semibold text-primary text-7xl pb-6">AQUIFER</h1>
-        <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6 mx-auto">
+        <form action="/passage/{$selectedId}" class="form-control w-full max-w-xs space-y-6 mx-auto">
             <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-primary">
                 <option value="" disabled selected>{$translate('page.index.language.value')}</option>
                 <option value="eng">English</option>
@@ -115,20 +117,20 @@
             </select>
 
             <select
-                bind:value={selectedBookIndex}
-                on:change={() => (selectedId = 'default')}
+                bind:value={$selectedBookIndex}
+                on:change={() => ($selectedId = 'default')}
                 class="select select-primary"
-                disabled={!languageSelected || !data.passagesByBook?.length}
+                disabled={!$languageSelected || !$data.passagesByBook?.length}
             >
                 <option disabled selected value="default">{$translate('page.index.book.value')}</option>
-                {#if data.passagesByBook}
-                    {#each data.passagesByBook as book, index}
+                {#if $data.passagesByBook}
+                    {#each $data.passagesByBook as book, index}
                         <option value={index}>{book.displayName}</option>
                     {/each}
                 {/if}
             </select>
 
-            <select bind:value={selectedId} class="select select-primary" disabled={!selectedBookInfo}>
+            <select bind:value={$selectedId} class="select select-primary" disabled={!selectedBookInfo}>
                 <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
                 {#if selectedBookInfo}
                     {#each selectedBookInfo.passages as passage}
@@ -140,7 +142,7 @@
                 {/if}
             </select>
 
-            <button class="btn btn-primary" disabled={selectedId === 'default'}
+            <button class="btn btn-primary" disabled={$selectedId === 'default'}
                 >{$translate('page.index.go.value')}</button
             >
             {#if $isOnline}
