@@ -62,17 +62,15 @@
     }
 
     $: showOrDismissResourcePane(isShowingResourcePane);
-
-    $: navbarHiddenOnXl = !cbbterImages?.length;
 </script>
 
 <ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} images={cbbterImages} />
 
-<div class={`btm-nav border-t border-t-primary-300 z-40 ${navbarHiddenOnXl && 'xl:hidden'}`}>
-    <NavMenuTabItem hideOnXl={true} bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
+<div class={`btm-nav border-t border-t-primary-300 z-40`}>
+    <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
         <BookIcon />
     </NavMenuTabItem>
-    <NavMenuTabItem hideOnXl={true} bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
+    <NavMenuTabItem bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
         <CompassIcon />
     </NavMenuTabItem>
     {#if cbbterImages?.length}
@@ -86,11 +84,11 @@
     {/if}
 </div>
 
-<div id="passage-page-content" class={`flex flex-row absolute inset-0 bottom-16 ${navbarHiddenOnXl && 'xl:bottom-0'}`}>
+<div id="passage-page-content" class={`flex flex-row absolute inset-0 bottom-16`}>
     {#await getContent()}
         <FullPageSpinner />
     {:then}
-        <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-5 xl:block overflow-y-scroll">
+        <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-5 overflow-y-scroll">
             <div class="prose mx-auto">
                 {#if bibleContent?.chapters?.length}
                     {#each bibleContent.chapters as chapter}
@@ -116,8 +114,7 @@
                 {/if}
             </div>
         </div>
-        <div class="divider divider-horizontal w-auto mx-0 hidden xl:flex" />
-        <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-5 xl:block overflow-y-scroll">
+        <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-5 overflow-y-scroll">
             <div class="prose mx-auto">
                 <span bind:this={topOfStep} />
                 <div class="py-5">

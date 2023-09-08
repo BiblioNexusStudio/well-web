@@ -9,7 +9,6 @@
     export let label: string;
     export let isSelected: boolean | null = null;
     export let flipWhenSelected = false;
-    export let hideOnXl = false;
 
     function handleClick() {
         if (tabName !== null) {
@@ -22,7 +21,7 @@
     $: isSelected = selectedTab !== null && tabName !== null ? selectedTab === tabName : false;
 </script>
 
-<button on:click={handleClick} class={`group stroke-black active border-none ${hideOnXl ? 'xl:hidden' : ''}`}>
+<button on:click={handleClick} class={`group stroke-black active border-none`}>
     <div
         class={`rounded-2xl py-1 px-5 focus:bg-primary-50 group-hover:bg-primary-50 group-hover:stroke-primary ${
             isSelected ? 'bg-primary-50 stroke-primary' : 'stroke-primary-300'
