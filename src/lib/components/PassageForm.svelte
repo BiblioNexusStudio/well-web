@@ -15,10 +15,7 @@
     $: selectedBookInfo = $data.passagesByBook?.[$selectedBookIndex];
 </script>
 
-<form action="/passage/{$selectedId}" class="form-control w-full mx-auto">
-    <label class="label">
-        <span class="label-text">{$translate('page.index.language.value')}</span>
-    </label>
+<form action="/passage/{$selectedId}" class="form-control w-full space-y-4 max-w-xs mx-auto">
     <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-primary">
         <option value="" disabled selected>{$translate('page.index.language.value')}</option>
         <option value="eng">English</option>
