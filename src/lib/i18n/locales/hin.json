@@ -26,6 +26,17 @@
             },
             "media": {
                 "value": "मीडिया"
+            },
+            "nav": {
+                "bible": {
+                    "value": "बाइबिल"
+                },
+                "guide": {
+                    "value": "मार्गदर्शक"
+                },
+                "resources": {
+                    "value": "संसाधन"
+                }
             }
         },
         "fileManager": {

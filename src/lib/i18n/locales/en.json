@@ -34,6 +34,20 @@
             "media": {
                 "value": "Media",
                 "_context": "The label next to the chevron that lets you expand/collapse media"
+            },
+            "nav": {
+                "bible": {
+                    "value": "Bible",
+                    "_context": "Label for Bible button on navbar"
+                },
+                "guide": {
+                    "value": "Guide",
+                    "_context": "Label for Guide button on navbar"
+                },
+                "resources": {
+                    "value": "Resources",
+                    "_context": "Label for Resources button on navbar"
+                }
             }
         },
         "fileManager": {
