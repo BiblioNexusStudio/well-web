@@ -4,6 +4,7 @@
     import { onMount } from 'svelte';
     import { cachedOrRealUrl } from '$lib/data-cache';
     import { _ as translate } from 'svelte-i18n';
+    import { trapFocus } from '$lib/utils/trap-focus';
 
     export let resourcePane: CupertinoPane;
     export let isShowing: boolean;
@@ -20,6 +21,7 @@
             lowerThanBottom: true,
             upperThanTop: false,
             backdrop: true,
+            backdropOpacity: 0.4,
             fitHeight: true,
             simulateTouch: false,
             maxFitHeight: window.screen.height / 2 + 100,
@@ -38,15 +40,19 @@
 
 <svelte:window
     on:keydown={(key) => {
-        if (key.key === 'Escape' && fullscreenImage !== null) {
-            fullscreenImage = null;
+        if (key.key === 'Escape') {
+            if (fullscreenImage !== null) {
+                fullscreenImage = null;
+            } else if (isShowing) {
+                isShowing = false;
+            }
         }
     }}
 />
 
 <button
     on:click={() => (fullscreenImage = null)}
-    class={`fixed inset-0 z-50 bg-black bg-opacity-50 ${fullscreenImage ? 'block' : 'hidden'}`}
+    class={`fixed inset-0 z-50 bg-black bg-opacity-40 ${fullscreenImage ? 'block' : 'hidden'}`}
 >
     <div class="absolute inset-0 flex flex-col">
         <div
@@ -62,7 +68,7 @@
     </div>
 </button>
 
-<div id="resource-pane" class="px-4 pb-4 mb-16">
+<div id="resource-pane" use:trapFocus={isShowing} class="px-4 pb-4 mb-16">
     <div class="text-lg font-semibold text-base-content pb-4">{$translate('page.passage.nav.resources.value')}</div>
     <div class="flex flex-col space-y-3">
         {#each images || [] as image}
