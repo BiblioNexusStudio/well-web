@@ -37,7 +37,7 @@ function trapFocus(wrap: HTMLElement, active = true) {
     /** deactivates trap (removes from stack) and restores focus to lastActiveElement */
     function removeFromStack() {
         stack = stack.filter((el) => el != wrap);
-        lastActiveElement.focus();
+        lastActiveElement && lastActiveElement.focus();
     }
 
     // add to stack if active

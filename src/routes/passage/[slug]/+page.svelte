@@ -14,10 +14,20 @@
     import DoubleChevronUpIcon from '$lib/icons/DoubleChevronUpIcon.svelte';
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
     import ResourcePane from './ResourcePane.svelte';
+    import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
 
     type Tab = 'bible' | 'guide';
 
     export let data: PageData;
+
+    const steps = [
+        $translate('resources.cbbt-er.step1.value'),
+        $translate('resources.cbbt-er.step2.value'),
+        $translate('resources.cbbt-er.step3.value'),
+        $translate('resources.cbbt-er.step4.value'),
+        $translate('resources.cbbt-er.step5.value'),
+        $translate('resources.cbbt-er.step6.value'),
+    ];
 
     let cbbterSelectedStepNumber = 1;
     let activePlayId: number | undefined = undefined;
@@ -84,11 +94,11 @@
     {/if}
 </div>
 
-<div id="passage-page-content" class={`flex flex-row absolute inset-0 bottom-16`}>
+<div id="passage-page-content" class={`flex flex-col absolute inset-0 bottom-16 z-10`}>
     {#await getContent()}
         <FullPageSpinner />
     {:then}
-        <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-5 overflow-y-scroll">
+        <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-4 overflow-y-scroll">
             <div class="prose mx-auto">
                 {#if bibleContent?.chapters?.length}
                     {#each bibleContent.chapters as chapter}
@@ -114,7 +124,20 @@
                 {/if}
             </div>
         </div>
-        <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-5 overflow-y-scroll">
+        {#if selectedTab === 'guide'}
+            <div class="px-4 py-6">
+                <div class="max-w-[65ch] m-auto">
+                    <ButtonCarousel
+                        bind:selectedValue={cbbterSelectedStepNumber}
+                        buttons={stepsAvailable.map((stepNumber) => ({
+                            value: stepNumber,
+                            label: steps[stepNumber - 1],
+                        }))}
+                    />
+                </div>
+            </div>
+        {/if}
+        <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-4 overflow-y-scroll">
             <div class="prose mx-auto">
                 <span bind:this={topOfStep} />
                 <div class="py-5">
