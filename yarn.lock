@@ -3027,6 +3027,11 @@ cssstyle@^3.0.0:
   dependencies:
     rrweb-cssom "^0.6.0"
 
+cupertino-pane@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/cupertino-pane/-/cupertino-pane-1.4.2.tgz#4fee62865b59a928279fd9c7b16b4850355dfa48"
+  integrity sha512-veeC2DsWvan2JYDkf4sa81KWY4LljJHbPyrSMV67B+z1JC+kba9oQ41nZyENSxLn4/DEDeUnr9gwEVK/SE2DkQ==
+
 d@1, d@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/d/-/d-1.0.1.tgz#8698095372d58dbee346ffd0c7093f99f8f9eb5a"

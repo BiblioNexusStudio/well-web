@@ -21,12 +21,6 @@
             }
         },
         "passage": {
-            "text": {
-                "value": "पाठ"
-            },
-            "media": {
-                "value": "मीडिया"
-            },
             "nav": {
                 "bible": {
                     "value": "बाइबिल"

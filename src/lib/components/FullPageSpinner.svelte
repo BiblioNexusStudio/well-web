@@ -3,4 +3,4 @@
     import { Icon } from 'svelte-awesome';
 </script>
 
-<Icon class="self-center" data={refresh} scale={2} spin />
+<Icon class="self-center mx-auto" data={refresh} scale={2} spin />

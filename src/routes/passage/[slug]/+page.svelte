@@ -6,14 +6,14 @@
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import type { CbbtErImageContent, CbbtErTextContent, ResourceContentSteps } from '$lib/types/file-manager';
     import type { FrontendChapterContent } from './+page';
-    import Icon from 'svelte-awesome';
-    import chevronDown from 'svelte-awesome/icons/chevronDown';
+    import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
     import { asyncFilter } from '$lib/utils/async-array';
-    import { cachedOrRealUrl, isCachedFromCdn } from '$lib/data-cache';
+    import { isCachedFromCdn } from '$lib/data-cache';
     import CompassIcon from '$lib/icons/CompassIcon.svelte';
     import DoubleChevronUpIcon from '$lib/icons/DoubleChevronUpIcon.svelte';
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
+    import ResourcePane from './ResourcePane.svelte';
 
     type Tab = 'bible' | 'guide';
 
@@ -27,11 +27,9 @@
     let cbbterImages: CbbtErImageContent[] | undefined;
     let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
     let topOfStep: HTMLElement | null = null;
-    let isBibleTextExpanded = true;
-    let isMediaExpanded = true;
-    let fullscreenCbbterImage: CbbtErImageContent | null = null;
     let selectedTab: Tab = 'bible';
-    let isShowingResourceDrawer = false;
+    let isShowingResourcePane = false;
+    let resourcePane: CupertinoPane;
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
 
@@ -54,139 +52,96 @@
             ])
         );
     }
+
+    function showOrDismissResourcePane(show: boolean) {
+        if (show) {
+            resourcePane?.present({ animate: true });
+        } else {
+            resourcePane?.destroy({ animate: true });
+        }
+    }
+
+    $: showOrDismissResourcePane(isShowingResourcePane);
 </script>
 
-<svelte:window
-    on:keydown={(key) => {
-        if (key.key === 'Escape' && fullscreenCbbterImage !== null) {
-            fullscreenCbbterImage = null;
-        }
-    }}
-/>
+<ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} images={cbbterImages} />
 
-<button
-    on:click={() => (fullscreenCbbterImage = null)}
-    class={`fixed inset-0 z-50 bg-black bg-opacity-50 ${fullscreenCbbterImage ? 'block' : 'hidden'}`}
->
-    <div class="w-screen h-screen flex flex-col">
-        <div
-            aria-label={fullscreenCbbterImage?.displayName}
-            style={`background-image: url('${
-                fullscreenCbbterImage?.url ? cachedOrRealUrl(fullscreenCbbterImage.url) : ''
-            }')`}
-            class="flex-1 bg-center bg-no-repeat bg-contain"
-        />
-        <div class="flex-shrink-0 text-center text-xl py-4 bg-black">
-            {fullscreenCbbterImage?.displayName}
-        </div>
-    </div>
-</button>
-
-<div class="btm-nav border-t border-t-primary-300">
-    <NavMenuTabItem hideOnXl={true} bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
+<div class={`btm-nav border-t border-t-primary-300 z-40`}>
+    <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
         <BookIcon />
     </NavMenuTabItem>
-    <NavMenuTabItem hideOnXl={true} bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
+    <NavMenuTabItem bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
         <CompassIcon />
     </NavMenuTabItem>
-    <NavMenuTabItem bind:isSelected={isShowingResourceDrawer} label={$translate('page.passage.nav.resources.value')}>
-        <DoubleChevronUpIcon />
-    </NavMenuTabItem>
+    {#if cbbterImages?.length}
+        <NavMenuTabItem
+            bind:isSelected={isShowingResourcePane}
+            flipWhenSelected={true}
+            label={$translate('page.passage.nav.resources.value')}
+        >
+            <DoubleChevronUpIcon />
+        </NavMenuTabItem>
+    {/if}
 </div>
 
-<div class="flex flex-row justify-evenly h-full w-full pb-16 px-5">
+<div id="passage-page-content" class={`flex flex-row absolute inset-0 bottom-16`}>
     {#await getContent()}
         <FullPageSpinner />
     {:then}
-        <div class="prose flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-10 xl:block overflow-y-scroll">
-            {#if bibleContent?.chapters?.length}
-                {#each bibleContent.chapters as chapter}
-                    <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
-                    {#if chapter.audioData}
-                        <div class="py-4">
-                            <AudioPlayer
-                                bind:activePlayId
-                                audioFile={chapter.audioData.url}
-                                startTime={chapter.audioData.startTimestamp || 0}
-                                endTime={chapter.audioData.endTimestamp}
-                            />
-                        </div>
-                    {/if}
-                    <div class="collapse">
-                        <input class="min-h-0" type="checkbox" bind:checked={isBibleTextExpanded} />
-                        <div class="collapse-title pb-2 min-h-0 p-0 text-lg font-medium">
-                            <Icon
-                                data={chevronDown}
-                                class={`mb-1 transform transition-transform duration-300 ${
-                                    isBibleTextExpanded ? '' : 'rotate-[-90deg]'
-                                }`}
-                            />
-                            <span class="pl-1 text-lg text-base-content">{$translate('page.passage.text.value')}</span>
-                        </div>
-                        <div class="collapse-content p-0">
+        <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-5 overflow-y-scroll">
+            <div class="prose mx-auto">
+                {#if bibleContent?.chapters?.length}
+                    {#each bibleContent.chapters as chapter}
+                        <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
+                        {#if chapter.audioData}
+                            <div class="py-4">
+                                <AudioPlayer
+                                    bind:activePlayId
+                                    audioFile={chapter.audioData.url}
+                                    startTime={chapter.audioData.startTimestamp || 0}
+                                    endTime={chapter.audioData.endTimestamp}
+                                />
+                            </div>
+                        {/if}
+                        <div>
                             {#each chapter.versesText as { number, text }}
                                 <div class="py-1">
                                     <span class="sup pr-1">{number}</span><span>{@html text}</span>
                                 </div>
                             {/each}
                         </div>
-                    </div>
-                {/each}
-            {/if}
-            {#if cbbterImages?.length}
-                <div class="collapse">
-                    <input class="min-h-0" type="checkbox" bind:checked={isMediaExpanded} />
-                    <div class="collapse-title pb-2 min-h-0 p-0 text-lg font-medium">
-                        <Icon
-                            data={chevronDown}
-                            class={`mb-1 transform transition-transform duration-300 ${
-                                isMediaExpanded ? '' : 'rotate-[-90deg]'
-                            }`}
-                        />
-                        <span class="pl-1 text-lg text-base-content">{$translate('page.passage.media.value')}</span>
-                    </div>
-                    <div class="collapse-content p-0">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                            {#each cbbterImages as image}
-                                <div class="p-4 flex flex-col items-center">
-                                    <button on:click={() => (fullscreenCbbterImage = image)}>
-                                        <img class="my-1" src={cachedOrRealUrl(image.url)} alt={image.displayName} />
-                                    </button>
-                                    <span class="text-center">{image.displayName}</span>
-                                </div>
-                            {/each}
-                        </div>
-                    </div>
-                </div>
-            {/if}
-        </div>
-        <div class="divider divider-horizontal hidden xl:flex" />
-        <div class="prose flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} xl:block overflow-y-scroll">
-            <span bind:this={topOfStep} />
-            <div class="py-10">
-                {#if stepsAvailable.length > 0}
-                    {#each stepsAvailable as stepNumber}
-                        {@const contentHTML = cbbterText?.steps?.find(
-                            (step) => step.stepNumber === stepNumber
-                        )?.contentHTML}
-                        {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
-                        <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
-                            {#if audioStep}
-                                <div class="py-4">
-                                    <AudioPlayer
-                                        audioFile={audioStep[audioFileTypeForBrowser()].url}
-                                        bind:activePlayId
-                                    />
-                                </div>
-                            {/if}
-                            {#if contentHTML}
-                                {@html contentHTML}
-                            {/if}
-                        </div>
                     {/each}
-                {:else}
-                    No CBBT-ER content available
                 {/if}
+            </div>
+        </div>
+        <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-5 overflow-y-scroll">
+            <div class="prose mx-auto">
+                <span bind:this={topOfStep} />
+                <div class="py-5">
+                    {#if stepsAvailable.length > 0}
+                        {#each stepsAvailable as stepNumber}
+                            {@const contentHTML = cbbterText?.steps?.find(
+                                (step) => step.stepNumber === stepNumber
+                            )?.contentHTML}
+                            {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
+                            <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
+                                {#if audioStep}
+                                    <div class="py-4">
+                                        <AudioPlayer
+                                            audioFile={audioStep[audioFileTypeForBrowser()].url}
+                                            bind:activePlayId
+                                        />
+                                    </div>
+                                {/if}
+                                {#if contentHTML}
+                                    {@html contentHTML}
+                                {/if}
+                            </div>
+                        {/each}
+                    {:else}
+                        No CBBT-ER content available
+                    {/if}
+                </div>
             </div>
         </div>
     {/await}
