@@ -52,7 +52,7 @@
 
 <button
     on:click={() => (fullscreenImage = null)}
-    class={`fixed inset-0 z-50 bg-black bg-opacity-40 ${fullscreenImage ? 'block' : 'hidden'}`}
+    class={`fixed inset-0 z-50 bg-black bg-opacity-40 w-full ${fullscreenImage ? 'block' : 'hidden'}`}
 >
     <div class="absolute inset-0 flex flex-col">
         <div
