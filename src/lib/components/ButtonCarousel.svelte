@@ -3,7 +3,7 @@
     export let selectedValue: string | number;
 </script>
 
-<div class="carousel space-x-2 text-base-500 bg-base-100">
+<div class="carousel space-x-2 text-base-500 bg-base-100 w-full">
     {#each buttons as { value, label }}
         <div class="carousel-item">
             <button

@@ -94,76 +94,78 @@
     {/if}
 </div>
 
-<div id="passage-page-content" class={`flex flex-col absolute inset-0 bottom-16 z-10`}>
+<div id="passage-page" class="w-full h-full">
     {#await getContent()}
         <FullPageSpinner />
     {:then}
-        <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-4 overflow-y-scroll">
-            <div class="prose mx-auto">
-                {#if bibleContent?.chapters?.length}
-                    {#each bibleContent.chapters as chapter}
-                        <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
-                        {#if chapter.audioData}
-                            <div class="py-4">
-                                <AudioPlayer
-                                    bind:activePlayId
-                                    audioFile={chapter.audioData.url}
-                                    startTime={chapter.audioData.startTimestamp || 0}
-                                    endTime={chapter.audioData.endTimestamp}
-                                />
-                            </div>
-                        {/if}
-                        <div>
-                            {#each chapter.versesText as { number, text }}
-                                <div class="py-1">
-                                    <span class="sup pr-1">{number}</span><span>{@html text}</span>
+        <div class={`flex flex-col absolute inset-0 bottom-16 z-10`}>
+            <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-4 overflow-y-scroll">
+                <div class="prose mx-auto">
+                    {#if bibleContent?.chapters?.length}
+                        {#each bibleContent.chapters as chapter}
+                            <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
+                            {#if chapter.audioData}
+                                <div class="py-4">
+                                    <AudioPlayer
+                                        bind:activePlayId
+                                        audioFile={chapter.audioData.url}
+                                        startTime={chapter.audioData.startTimestamp || 0}
+                                        endTime={chapter.audioData.endTimestamp}
+                                    />
                                 </div>
-                            {/each}
-                        </div>
-                    {/each}
-                {/if}
-            </div>
-        </div>
-        {#if selectedTab === 'guide'}
-            <div class="px-4 py-6">
-                <div class="max-w-[65ch] m-auto">
-                    <ButtonCarousel
-                        bind:selectedValue={cbbterSelectedStepNumber}
-                        buttons={stepsAvailable.map((stepNumber) => ({
-                            value: stepNumber,
-                            label: steps[stepNumber - 1],
-                        }))}
-                    />
-                </div>
-            </div>
-        {/if}
-        <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-4 overflow-y-scroll">
-            <div class="prose mx-auto">
-                <span bind:this={topOfStep} />
-                <div class="py-5">
-                    {#if stepsAvailable.length > 0}
-                        {#each stepsAvailable as stepNumber}
-                            {@const contentHTML = cbbterText?.steps?.find(
-                                (step) => step.stepNumber === stepNumber
-                            )?.contentHTML}
-                            {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
-                            <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
-                                {#if audioStep}
-                                    <div class="py-4">
-                                        <AudioPlayer
-                                            audioFile={audioStep[audioFileTypeForBrowser()].url}
-                                            bind:activePlayId
-                                        />
+                            {/if}
+                            <div>
+                                {#each chapter.versesText as { number, text }}
+                                    <div class="py-1">
+                                        <span class="sup pr-1">{number}</span><span>{@html text}</span>
                                     </div>
-                                {/if}
-                                {#if contentHTML}
-                                    {@html contentHTML}
-                                {/if}
+                                {/each}
                             </div>
                         {/each}
-                    {:else}
-                        No CBBT-ER content available
                     {/if}
+                </div>
+            </div>
+            {#if selectedTab === 'guide'}
+                <div class="px-4 py-6">
+                    <div class="max-w-[65ch] m-auto">
+                        <ButtonCarousel
+                            bind:selectedValue={cbbterSelectedStepNumber}
+                            buttons={stepsAvailable.map((stepNumber) => ({
+                                value: stepNumber,
+                                label: steps[stepNumber - 1],
+                            }))}
+                        />
+                    </div>
+                </div>
+            {/if}
+            <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-4 overflow-y-scroll">
+                <div class="prose mx-auto">
+                    <span bind:this={topOfStep} />
+                    <div class="py-5">
+                        {#if stepsAvailable.length > 0}
+                            {#each stepsAvailable as stepNumber}
+                                {@const contentHTML = cbbterText?.steps?.find(
+                                    (step) => step.stepNumber === stepNumber
+                                )?.contentHTML}
+                                {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
+                                <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
+                                    {#if audioStep}
+                                        <div class="py-4">
+                                            <AudioPlayer
+                                                audioFile={audioStep[audioFileTypeForBrowser()].url}
+                                                bind:activePlayId
+                                            />
+                                        </div>
+                                    {/if}
+                                    {#if contentHTML}
+                                        {@html contentHTML}
+                                    {/if}
+                                </div>
+                            {/each}
+                        {:else}
+                            No CBBT-ER content available
+                        {/if}
+                    </div>
                 </div>
             </div>
         </div>
