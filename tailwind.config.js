@@ -9,6 +9,7 @@ export default {
             colors: {
                 'primary-50': 'var(--primary-50)',
                 'primary-300': 'var(--primary-300)',
+                'base-500': 'var(--base-500)',
                 'base-700': 'var(--base-700)',
             },
         },
@@ -32,6 +33,7 @@ export default {
                     'base-100': '#ffffff',
                     'base-200': '#F9FAFB',
                     'base-content': '#101828',
+                    '--base-500': '#667085',
                     '--base-700': '#344054',
                     '--primary-50': '#F0EDE4',
                     '--primary-300': '#B5AC8B',

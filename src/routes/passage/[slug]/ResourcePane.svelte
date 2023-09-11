@@ -14,7 +14,7 @@
 
     onMount(() => {
         resourcePane = new CupertinoPane('#resource-pane', {
-            parentElement: '#passage-page-content',
+            parentElement: '#passage-page',
             buttonDestroy: false,
             bottomClose: true,
             fastSwipeClose: true,
@@ -74,7 +74,7 @@
         {#each images || [] as image}
             <button class="flex flex-row items-center" on:click={() => handleImageSelected(image)}>
                 <img
-                    class="my-1 h-10 w-10 object-cover rounded-lg border border-gray-300"
+                    class="ml-1 my-1 h-10 w-10 object-cover rounded-lg border border-gray-300"
                     src={cachedOrRealUrl(image.url)}
                     alt={image.displayName}
                 />
