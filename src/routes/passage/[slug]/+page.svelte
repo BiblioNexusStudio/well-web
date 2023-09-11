@@ -40,6 +40,7 @@
     let selectedTab: Tab = 'bible';
     let isShowingResourcePane = false;
     let resourcePane: CupertinoPane;
+    let cbbterSelectedStepScroll: number | undefined;
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
 
@@ -130,6 +131,7 @@
                     <div class="max-w-[65ch] m-auto">
                         <ButtonCarousel
                             bind:selectedValue={cbbterSelectedStepNumber}
+                            bind:scroll={cbbterSelectedStepScroll}
                             buttons={stepsAvailable.map((stepNumber) => ({
                                 value: stepNumber,
                                 label: steps[stepNumber - 1],

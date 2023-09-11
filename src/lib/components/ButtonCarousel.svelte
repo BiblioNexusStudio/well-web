@@ -1,9 +1,24 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+
     export let buttons: { value: string | number; label: string }[];
     export let selectedValue: string | number;
+    export let scroll: number | undefined;
+
+    let carousel: HTMLElement | undefined;
+
+    onMount(() => {
+        if (scroll && carousel) {
+            carousel.scrollTo({ left: scroll, behavior: 'instant' });
+        }
+    });
 </script>
 
-<div class="carousel space-x-2 text-base-500 bg-base-100 w-full">
+<div
+    class="carousel space-x-2 text-base-500 bg-base-100 w-full"
+    bind:this={carousel}
+    on:scroll={() => (scroll = carousel?.scrollLeft)}
+>
     {#each buttons as { value, label }}
         <div class="carousel-item">
             <button
