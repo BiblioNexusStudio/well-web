@@ -17,9 +17,6 @@
     import { MetaTags } from 'svelte-meta-tags';
     import type { ApiPassage } from '$lib/types/file-manager';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
-    import { topNavBarTitle } from '$lib/stores/top-menu.store';
-
-    $topNavBarTitle = $translate('page.fileManager.title.value');
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
@@ -49,7 +46,7 @@
 
 <div class="container mx-auto pt-12">
     <FmModal />
-    <TopNavBar />
+    <TopNavBar title={$translate('page.fileManager.title.value')} />
     <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
         <LanguageSelect />
     </div>

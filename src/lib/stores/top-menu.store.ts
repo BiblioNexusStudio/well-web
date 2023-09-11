@@ -1,3 +1,3 @@
 import { writable } from 'svelte/store';
 
-export const topNavBarTitle = writable<string>('');
+export const isSideMenuOpen = writable<boolean>(false);

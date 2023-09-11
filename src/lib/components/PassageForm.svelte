@@ -1,41 +1,38 @@
 <script lang="ts">
-    import { locale } from 'svelte-i18n';
+    import { onMount } from 'svelte';
     import { Icon } from 'svelte-awesome';
     import { _ as translate } from 'svelte-i18n';
+    import { closeSideMenu } from '$lib/utils/side-menu';
     import { isOnline } from '$lib/stores/is-online.store';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import { currentLanguage } from '$lib/stores/current-language.store';
     import { fetchData } from '$lib/utils/data-handlers/resources/passages';
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
-    import { selectedId, languageSelected, selectedBookIndex, data } from '$lib/stores/passage-form.store';
-    import { onMount } from 'svelte';
+    import { selectedId, selectedBookIndex, data } from '$lib/stores/passage-form.store';
+    import { supportedLanguages } from '$lib/utils/language-utils';
 
     export let isSideMenu = false;
 
+    let isLoading = false;
+
     let onLanguageSelected = (event: Event) => {
         const { value } = event.target as HTMLSelectElement;
-        $languageSelected = true;
-        $locale = value;
         $currentLanguage = value;
     };
 
-    const closeSideMenu = () => {
-        if (isSideMenu) {
-            const sideMenu = document.getElementById('top-navbar-drawer') as HTMLDivElement;
-            if (sideMenu) {
-                sideMenu.click();
-            }
-        }
-    };
-
-    $: $currentLanguage && fetchData($isOnline);
+    $: $currentLanguage && callFetchData($isOnline);
     $: selectedBookInfo = $data.passagesByBook?.[$selectedBookIndex];
 
-    onMount(() => {
-        if ($currentLanguage) {
-            $languageSelected = true;
-        }
-        fetchData($isOnline);
+    async function callFetchData(isOnline: boolean = true) {
+        isLoading = true;
+        await fetchData(isOnline);
+        isLoading = false;
+    }
+
+    onMount(async () => {
+        isLoading = true;
+        await fetchData($isOnline);
+        isLoading = false;
     });
 </script>
 
@@ -43,8 +40,9 @@
     {#if !isSideMenu}
         <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-info">
             <option value="" disabled selected>{$translate('page.index.language.value')}</option>
-            <option value="eng">English</option>
-            <option value="tpi">Tok Pisin</option>
+            {#each supportedLanguages as { id, label }}
+                <option value={id}>{label}</option>
+            {/each}
         </select>
     {/if}
 
@@ -58,9 +56,14 @@
         bind:value={$selectedBookIndex}
         on:change={() => ($selectedId = 'default')}
         class="select select-info"
-        disabled={!$languageSelected || !$data.passagesByBook?.length}
+        disabled={!$data.passagesByBook?.length}
     >
-        <option disabled selected value="default">{$translate('page.index.book.value')}</option>
+        <option disabled selected value="default">
+            {$translate('page.index.book.value')}
+            {#if isLoading}
+                (loading...)
+            {/if}
+        </option>
         {#if $data.passagesByBook}
             {#each $data.passagesByBook as book, index}
                 <option value={index}>{book.displayName}</option>

@@ -4,24 +4,20 @@
     import close from 'svelte-awesome/icons/close';
     import HomeIcon from '$lib/icons/HomeIcon.svelte';
     import navicon from 'svelte-awesome/icons/navicon';
+    import { closeSideMenu } from '$lib/utils/side-menu';
     import DownloadIcon from '$lib/icons/DownloadIcon.svelte';
-    import { topNavBarTitle } from '$lib/stores/top-menu.store';
+    import { isSideMenuOpen } from '$lib/stores/top-menu.store';
     import PassageForm from '$lib/components/PassageForm.svelte';
 
-    const closeSideMenu = () => {
-        const sideMenu = document.getElementById('top-navbar-drawer') as HTMLDivElement;
-        if (sideMenu) {
-            sideMenu.click();
-        }
-    };
+    export let title: string = '';
 </script>
 
 <div class="drawer drawer-end fixed top-0 left-0 bg-base-100 z-50">
-    <input id="top-navbar-drawer" type="checkbox" class="drawer-toggle" />
+    <input id="top-navbar-drawer" type="checkbox" class="drawer-toggle" bind:checked={$isSideMenuOpen} />
     <div class="drawer-content flex flex-col">
         <!-- Navbar -->
         <div class="w-full navbar">
-            <div class="flex-1 px-2 text-lg semi-bold">{$topNavBarTitle}</div>
+            <div class="flex-1 px-2 text-lg semi-bold">{title}</div>
             <div class="flex-none">
                 <label for="top-navbar-drawer" class="btn btn-square btn-ghost text-primary">
                     <Icon data={navicon} scale={2} />
