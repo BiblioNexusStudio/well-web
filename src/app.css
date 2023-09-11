@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --cupertino-pane-border-radius: 0.5rem;
+}
+
 .sub,
 .sup {
     font-size: 75%;

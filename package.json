@@ -15,6 +15,10 @@
         "postinstall": "patch-package"
     },
     "devDependencies": {
+        "@capacitor/android": "^5.3.0",
+        "@capacitor/assets": "^2.0.4",
+        "@capacitor/cli": "^5.3.0",
+        "@capacitor/core": "^5.3.0",
         "@sveltejs/adapter-auto": "^2.0.0",
         "@sveltejs/adapter-static": "^2.0.2",
         "@sveltejs/kit": "^1.20.4",
@@ -27,7 +31,9 @@
         "@vite-pwa/sveltekit": "^0.2.5",
         "async-es": "^3.2.4",
         "autoprefixer": "^10.4.14",
+        "cupertino-pane": "^1.4.2",
         "daisyui": "^3.2.1",
+        "dotenv": "^16.3.1",
         "eslint": "^8.28.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-svelte": "^2.30.0",

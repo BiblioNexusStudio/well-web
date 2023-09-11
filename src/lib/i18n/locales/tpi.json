@@ -18,11 +18,16 @@
             }
         },
         "passage": {
-            "text": {
-                "value": "Teks"
-            },
-            "media": {
-                "value": "Media"
+            "nav": {
+                "bible": {
+                    "value": "Baibel"
+                },
+                "guide": {
+                    "value": "Gaid"
+                },
+                "resources": {
+                    "value": "Risoses"
+                }
             }
         },
         "fileManager": {

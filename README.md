@@ -47,6 +47,46 @@ $ yarn run lint
 $ yarn run test
 ```
 
+## Generate APK
+
+Using the preload-files-to-static script, we can generate an APK with preloaded Aquifer content. This is useful for distributing the app to users who may not have internet access.
+
+1. You have to preload the files into the static diretory.
+
+-   language: the language code of the content you want to preload
+-   bible: the bible code of the content you want to preload
+-   book: bible chapter to preload
+-   audio: true/false to preload audio files
+-   resources: true/false to preload resource files
+
+```bash
+$ node scripts/preload-files-to-static.js language=eng bible=BSB book=mark audio=true resources=true
+```
+
+2. Build the app
+
+```bash
+$ yarn run build
+```
+
+3. Generate assets from `resources/*.png` files
+
+```bash
+$ npx capacitor-assets generate --android
+```
+
+4. Sync the app into the capacitor android project
+
+```bash
+$ npx cap sync android
+```
+
+5. Using Android Studio, build the APK
+
+```bash
+$ npx cap open android
+```
+
 ## License
 
 Aquifer Server is [MIT licensed](LICENSE).

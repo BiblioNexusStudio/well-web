@@ -1,6 +1,7 @@
 import config from './config';
 import type { Url, UrlWithMetadata } from './types/file-manager';
-import { objectKeys } from './utils/typesafe-standard-lib';
+import type { StaticUrlsMap } from './types/static-mapping';
+import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 
 type CheckCacheChangeItem = { url: Url; expectedSize: number };
 type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean };
@@ -11,13 +12,15 @@ export type AllItemsProgress = Record<Url, SingleItemProgress>;
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const _partiallyDownloadedCdnUrls: string[] = [];
 const _partiallyDownloadedApiPaths: string[] = [];
+export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 const fetchFromCacheOrApi = async (path: string) => {
     if (!(await isCachedFromApi(path))) {
         _partiallyDownloadedApiPaths.push(path);
     }
     try {
-        const response = await fetch(_apiUrl(path));
+        const url = _apiUrl(path).replace(/\/$/, '');
+        const response = await fetch(cachedOrRealUrl(url));
         return await response.json();
     } finally {
         _removeFromArray(_partiallyDownloadedApiPaths, path);
@@ -29,7 +32,7 @@ const fetchFromCacheOrCdn = async (url: Url, type: 'blob' | 'json' = 'json') => 
         _partiallyDownloadedCdnUrls.push(url);
     }
     try {
-        const response = await fetch(url);
+        const response = await fetch(cachedOrRealUrl(url));
         return await (type === 'blob' ? response.blob() : response.json());
     } finally {
         _removeFromArray(_partiallyDownloadedCdnUrls, url);
@@ -37,14 +40,22 @@ const fetchFromCacheOrCdn = async (url: Url, type: 'blob' | 'json' = 'json') => 
 };
 
 const removeFromApiCache = async (path: string) => {
+    if (!('serviceWorker' in navigator)) {
+        return;
+    }
     const cache = await caches.open('aquifer-api');
     await cache.delete(_apiUrl(path));
 };
 
 const removeFromCdnCache = async (url: Url) => {
+    if (!('serviceWorker' in navigator)) {
+        return;
+    }
     const cache = await caches.open('aquifer-cdn');
     await cache.delete(url);
 };
+
+const cachedOrRealUrl = (url: Url) => (url in staticUrlsMap ? (staticUrlsMap[url] as string) : url);
 
 // Fetch multiple URLs when online and store them in the cache, tracking progress as the downloads happen.
 const cacheManyFromCdnWithProgress = async (
@@ -65,7 +76,7 @@ const cacheManyFromCdnWithProgress = async (
         }),
         {}
     );
-    const queue = objectKeys(progress);
+    const queue = [...urls];
 
     progressCallback(progress);
 
@@ -74,14 +85,20 @@ const cacheManyFromCdnWithProgress = async (
         progressCallback(progress);
     };
 
-    const processUrl = async (url: Url) => {
+    const processUrl = async (url: Url, expectedSize: number) => {
         _partiallyDownloadedCdnUrls.push(url);
         try {
+            if (url in staticUrlsMap) {
+                updateProgress(url, expectedSize, expectedSize, true);
+                return;
+            }
+
             const cachedSize = await _cachedCdnContentSize(url);
             if (cachedSize) {
                 updateProgress(url, cachedSize, cachedSize, true);
                 return;
             }
+
             const response = await fetch(url);
             const reader = response.body?.getReader();
             const contentLength = response.headers.get('Content-Length');
@@ -111,8 +128,8 @@ const cacheManyFromCdnWithProgress = async (
             .fill(null)
             .map(async () => {
                 while (queue.length > 0) {
-                    const url = queue.shift();
-                    if (url) await processUrl(url);
+                    const { url, size } = queue.shift() as UrlWithMetadata;
+                    if (url) await processUrl(url, size);
                 }
             });
         await Promise.all(workers);
@@ -135,6 +152,12 @@ const isCachedFromCdn = async (url: Url) => {
     if (_partiallyDownloadedCdnUrls.includes(url)) {
         return false;
     }
+    if (url in staticUrlsMap) {
+        return true;
+    }
+    if (!('serviceWorker' in navigator)) {
+        return false;
+    }
     const cache = await caches.open('aquifer-cdn');
     const response = await cache.match(url);
     return response != null;
@@ -143,6 +166,12 @@ const isCachedFromCdn = async (url: Url) => {
 // Checks if a fully downloaded cache entry exists for the API path.
 const isCachedFromApi = async (path: string) => {
     if (_partiallyDownloadedApiPaths.includes(path)) {
+        return false;
+    }
+    if (_apiUrl(path) in staticUrlsMap) {
+        return true;
+    }
+    if (!('serviceWorker' in navigator)) {
         return false;
     }
     const cache = await caches.open('aquifer-api');
@@ -158,6 +187,9 @@ const _removeFromArray = <T>(array: T[], value: T) => {
 };
 
 const _cachedCdnContentSize = async (url: Url, cache: Cache | null = null) => {
+    if (!('serviceWorker' in navigator)) {
+        return null;
+    }
     const openedCache = cache || (await caches.open('aquifer-cdn'));
     const response = await openedCache.match(url);
     if (response) {
@@ -176,4 +208,5 @@ export {
     isCachedFromApi,
     isCachedFromCdn,
     cacheManyFromCdnWithProgress,
+    cachedOrRealUrl,
 };

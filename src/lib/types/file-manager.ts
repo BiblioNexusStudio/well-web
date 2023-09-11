@@ -41,7 +41,7 @@ export interface ApiAudioChapter {
     number: string;
     webm: AudioResource;
     mp3: AudioResource;
-    audioTimestamps: AudioTimestamp[];
+    audioTimestamps: AudioTimestamp[] | null;
     selected?: boolean;
 }
 

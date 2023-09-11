@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
+import config from '$lib/config';
 
 export const isOnline = writable<boolean>(browser && navigator.onLine);
 
@@ -15,6 +16,10 @@ export function updateOnlineStatus() {
 
 // This will catch cases where the user is on Wi-fi or LTE but no actual connection to the internet is there.
 async function checkTrueOnlineStatus() {
-    const res = await fetch('/empty-file.txt', { cache: 'no-store' });
-    isOnline.set(res.status === 200);
+    try {
+        await fetch(config.PUBLIC_IS_ONLINE_CHECK_URL, { mode: 'no-cors', cache: 'no-store' });
+        isOnline.set(true);
+    } catch (_) {
+        isOnline.set(false);
+    }
 }

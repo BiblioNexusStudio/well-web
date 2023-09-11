@@ -30,7 +30,7 @@ import { cbbterUrlsWithMetadataForPassage } from '$lib/utils/data-handlers/resou
 
 export interface FrontendChapterContent {
     number: string;
-    audioData: { url: string; startTimestamp: number; endTimestamp: number } | null;
+    audioData: { url: string; startTimestamp: number | null; endTimestamp: number | null } | null;
     versesText: { number: string; text: string }[];
 }
 
@@ -78,30 +78,39 @@ async function fetchBibleContent(passage: BasePassage) {
                         const audioChapterNumber = parseInt(audioChapter.number);
                         return audioChapterNumber === chapterNumber;
                     });
-                    let audioData: { url: string; startTimestamp: number; endTimestamp: number } | null = null;
+                    let audioData: { url: string; startTimestamp: number | null; endTimestamp: number | null } | null =
+                        null;
                     const url = audioUrlData[audioFileTypeForBrowser()].url;
-                    if (navigator.onLine || (await isCachedFromCdn(url))) {
-                        const startTimestamp =
-                            chapterNumber === passage.startChapter
-                                ? audioUrlData.audioTimestamps.find(
-                                      ({ verseNumber }: AudioTimestamp) =>
-                                          passage.startVerse === parseInt(verseNumber.split('-')[0])
-                                  ).start
-                                : audioUrlData.audioTimestamps[0].start;
+                    if (get(isOnline) || (await isCachedFromCdn(url))) {
+                        if (audioUrlData.audioTimestamps) {
+                            const startTimestamp =
+                                chapterNumber === passage.startChapter
+                                    ? audioUrlData.audioTimestamps.find(
+                                          ({ verseNumber }: AudioTimestamp) =>
+                                              passage.startVerse === parseInt(verseNumber.split('-')[0])
+                                      ).start
+                                    : audioUrlData.audioTimestamps[0].start;
 
-                        const endTimestamp =
-                            chapterNumber === passage.endChapter
-                                ? audioUrlData.audioTimestamps.find(
-                                      ({ verseNumber }: AudioTimestamp) =>
-                                          passage.endVerse === parseInt(verseNumber.split('-')[0])
-                                  ).end
-                                : audioUrlData.audioTimestamps[audioUrlData.audioTimestamps.length - 1].end;
+                            const endTimestamp =
+                                chapterNumber === passage.endChapter
+                                    ? audioUrlData.audioTimestamps.find(
+                                          ({ verseNumber }: AudioTimestamp) =>
+                                              passage.endVerse === parseInt(verseNumber.split('-')[0])
+                                      ).end
+                                    : audioUrlData.audioTimestamps[audioUrlData.audioTimestamps.length - 1].end;
 
-                        audioData = {
-                            url,
-                            startTimestamp,
-                            endTimestamp,
-                        };
+                            audioData = {
+                                url,
+                                startTimestamp,
+                                endTimestamp,
+                            };
+                        } else {
+                            audioData = {
+                                url,
+                                startTimestamp: null,
+                                endTimestamp: null,
+                            };
+                        }
                     }
 
                     return [
