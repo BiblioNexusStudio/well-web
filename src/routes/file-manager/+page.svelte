@@ -22,9 +22,9 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import { currentLanguage } from '$lib/stores/current-language.store';
     import { languageSelected } from '$lib/stores/passage-form.store';
-    import { topMenuTitle } from '$lib/stores/top-menu.store';
+    import { topNavBarTitle } from '$lib/stores/top-menu.store';
 
-    $topMenuTitle = $translate('page.fileManager.title.value');
+    $topNavBarTitle = $translate('page.fileManager.title.value');
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||

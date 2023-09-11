@@ -5,16 +5,16 @@
     import HomeIcon from '$lib/icons/HomeIcon.svelte';
     import navicon from 'svelte-awesome/icons/navicon';
     import DownloadIcon from '$lib/icons/DownloadIcon.svelte';
-    import { topMenuTitle } from '$lib/stores/top-menu.store';
+    import { topNavBarTitle } from '$lib/stores/top-menu.store';
     import PassageForm from '$lib/components/PassageForm.svelte';
 </script>
 
-<div class="drawer drawer-end fixed top-0 left-0 bg-base-100 z-10">
+<div class="drawer drawer-end fixed top-0 left-0 bg-base-100 z-50">
     <input id="top-navbar-drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content flex flex-col">
         <!-- Navbar -->
         <div class="w-full navbar">
-            <div class="flex-1 px-2 mx-2 text-lg semi-bold">{$topMenuTitle}</div>
+            <div class="flex-1 px-2 mx-2 text-lg semi-bold">{$topNavBarTitle}</div>
             <div class="flex-none">
                 <label for="top-navbar-drawer" class="btn btn-square btn-ghost text-primary">
                     <Icon data={navicon} scale={2} />
