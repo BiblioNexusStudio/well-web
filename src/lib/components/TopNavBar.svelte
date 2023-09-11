@@ -2,7 +2,9 @@
     import { Icon } from 'svelte-awesome';
     import { _ as translate } from 'svelte-i18n';
     import close from 'svelte-awesome/icons/close';
+    import HomeIcon from '$lib/icons/HomeIcon.svelte';
     import navicon from 'svelte-awesome/icons/navicon';
+    import DownloadIcon from '$lib/icons/DownloadIcon.svelte';
     import { topMenuTitle } from '$lib/stores/top-menu.store';
     import PassageForm from '$lib/components/PassageForm.svelte';
 </script>
@@ -23,7 +25,7 @@
     <div class="drawer-side">
         <label for="top-navbar-drawer" class="drawer-overlay" />
         <div class="menu p-4 w-80 min-h-full bg-base-200">
-            <div class="flex flex-col w-100">
+            <div class="flex flex-col w-100 grow">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg semi-bold">{$translate('sideMenu.menu.value')}</h3>
                     <label for="top-navbar-drawer" class="btn btn-square btn-ghost flex px-0 justify-end">
@@ -31,6 +33,16 @@
                     </label>
                 </div>
                 <PassageForm isSideMenu={true} />
+                <div class="flex flex-col mt-auto">
+                    <a href="/" class="text-lg semi-bold text-primary mb-6 flex"
+                        ><span class="mr-2 flex items-center"><HomeIcon /></span>{$translate('sideMenu.home.value')}</a
+                    >
+                    <a href="/file-manager" class="text-lg semi-bold text-primary mb-6 flex"
+                        ><span class="mr-2 flex items-center"><DownloadIcon /></span>{$translate(
+                            'sideMenu.fileManager.value'
+                        )}</a
+                    >
+                </div>
             </div>
         </div>
     </div>

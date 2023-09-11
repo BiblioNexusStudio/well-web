@@ -193,6 +193,10 @@
         "changeLanguage": {
             "value": "Change Language...",
             "_context": "The label for the change language button"
+        },
+        "fileManager": {
+            "value": "File Manager",
+            "_context": "The label for the file manager button"
         }
     }
 }

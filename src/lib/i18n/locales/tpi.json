@@ -149,6 +149,9 @@
         },
         "changeLanguage": {
             "value": "Liklikim Tokples..."
+        },
+        "fileManager": {
+            "value": "Fael Manija"
         }
     }
 }
