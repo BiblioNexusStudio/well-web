@@ -22,6 +22,9 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import { currentLanguage } from '$lib/stores/current-language.store';
     import { languageSelected } from '$lib/stores/passage-form.store';
+    import { topMenuTitle } from '$lib/stores/top-menu.store';
+
+    $topMenuTitle = $translate('page.fileManager.title.value');
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
@@ -56,13 +59,10 @@
     $: fetchAvailableResources($currentLanguageId);
 </script>
 
-<div class="container mx-auto">
+<div class="container mx-auto pt-12">
     <FmModal />
-    <TopNavBar title={$translate('page.fileManager.title.value')} />
+    <TopNavBar />
     <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
-        <h1 class="text-2xl mb-4 sm:mb-0">
-            {$translate('page.fileManager.title.value')}
-        </h1>
         <LanguageSelect />
     </div>
 

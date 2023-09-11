@@ -180,5 +180,19 @@
                 "_context": "See CBBT-ER for translations of each step name"
             }
         }
+    },
+    "sideMenu": {
+        "home": {
+            "value": "Home",
+            "_context": "The label for the home page"
+        },
+        "menu": {
+            "value": "Menu",
+            "_context": "The label for the menu"
+        },
+        "changeLanguage": {
+            "value": "Change Language...",
+            "_context": "The label for the change language button"
+        }
     }
 }

@@ -139,5 +139,16 @@
                 "value": "Tokim Olgeta"
             }
         }
+    },
+    "sideMenu": {
+        "home": {
+            "value": "Haus"
+        },
+        "menu": {
+            "value": "Menu"
+        },
+        "changeLanguage": {
+            "value": "Liklikim Tokples..."
+        }
     }
 }
