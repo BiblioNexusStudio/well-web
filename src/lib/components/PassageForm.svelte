@@ -7,7 +7,7 @@
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
     import { selectedId, languageSelected, selectedBookIndex, data } from '$lib/stores/passage-form.store';
 
-    export let isSideMenu: boolean = false;
+    export let isSideMenu = false;
 
     let onLanguageSelected = (event: Event) => {
         const { value } = event.target as HTMLSelectElement;
@@ -29,11 +29,12 @@
     {/if}
 
     {#if isSideMenu}
-        <label class="label p-0">
+        <label class="label p-0" for="passage-form-book">
             <span class="label-text text-primary bold">{$translate('page.index.book.value')}</span>
         </label>
     {/if}
     <select
+        id="passage-form-book"
         bind:value={$selectedBookIndex}
         on:change={() => ($selectedId = 'default')}
         class="select select-info"
@@ -48,11 +49,11 @@
     </select>
 
     {#if isSideMenu}
-        <label class="label p-0">
+        <label class="label p-0" for="passage-form-passage">
             <span class="label-text text-primary bold">{$translate('page.index.passage.value')}</span>
         </label>
     {/if}
-    <select bind:value={$selectedId} class="select select-info" disabled={!selectedBookInfo}>
+    <select id="passage-form-passage" bind:value={$selectedId} class="select select-info" disabled={!selectedBookInfo}>
         <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
         {#if selectedBookInfo}
             {#each selectedBookInfo.passages as passage}
