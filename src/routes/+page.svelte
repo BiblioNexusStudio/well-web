@@ -1,8 +1,6 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { locale } from 'svelte-i18n';
     import { currentLanguage, currentLanguageId } from '$lib/stores/current-language.store';
-    import { onMount } from 'svelte';
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
     import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
     import type {
@@ -16,8 +14,8 @@
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { goto } from '$app/navigation';
     import { isOnline } from '$lib/stores/is-online.store';
+    import { supportedLanguages } from '$lib/utils/language-utils';
 
-    let languageSelected: boolean;
     let selectedBookIndex: number;
     let selectedId = 'default';
     let isLoading = false;
@@ -96,15 +94,8 @@
 
     let onLanguageSelected = (event: Event) => {
         const { value } = event.target as HTMLSelectElement;
-        languageSelected = true;
-        $locale = value;
         $currentLanguage = value;
     };
-    onMount(() => {
-        if ($currentLanguage) {
-            languageSelected = true;
-        }
-    });
 </script>
 
 <section class="container mx-auto flex h-screen">
@@ -113,16 +104,16 @@
         <form action="/passage/{selectedId}" class="form-control w-full max-w-xs space-y-6 mx-auto">
             <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-primary">
                 <option value="" disabled selected>{$translate('page.index.language.value')}</option>
-                <option value="eng">English</option>
-                <option value="hin">हिंदी</option>
-                <option value="tpi">Tok Pisin</option>
+                {#each supportedLanguages as { id, label }}
+                    <option value={id}>{label}</option>
+                {/each}
             </select>
 
             <select
                 bind:value={selectedBookIndex}
                 on:change={() => (selectedId = 'default')}
                 class="select select-primary"
-                disabled={!languageSelected || !data.passagesByBook?.length}
+                disabled={!data.passagesByBook?.length}
             >
                 <option disabled selected value="default">
                     {$translate('page.index.book.value')}
