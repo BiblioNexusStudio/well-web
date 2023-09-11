@@ -15,6 +15,8 @@
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
     import ResourcePane from './ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
+    import TopNavBar from '$lib/components/TopNavBar.svelte';
+    import { topNavBarTitle } from '$lib/stores/top-menu.store';
 
     type Tab = 'bible' | 'guide';
 
@@ -43,6 +45,12 @@
     let cbbterSelectedStepScroll: number | undefined;
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
+    $: data && getContent();
+    $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
+    $: cbbterSelectedStepNumber && topNavBarTitle.set(`${steps[cbbterSelectedStepNumber - 1]}`);
+    $: selectedTab !== 'bible' && topNavBarTitle.set(`${steps[cbbterSelectedStepNumber - 1]}`);
+    $: selectedTab === 'bible' &&
+        topNavBarTitle.set(`${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`);
 
     async function getContent() {
         let [fetchedBibleContent, fetchedResourceContent] = await Promise.all([
@@ -99,12 +107,12 @@
     {#await getContent()}
         <FullPageSpinner />
     {:then}
-        <div class={`flex flex-col absolute inset-0 bottom-16 z-10`}>
+        <TopNavBar />
+        <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
             <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-4 overflow-y-scroll">
                 <div class="prose mx-auto">
                     {#if bibleContent?.chapters?.length}
                         {#each bibleContent.chapters as chapter}
-                            <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
                             {#if chapter.audioData}
                                 <div class="py-4">
                                     <AudioPlayer

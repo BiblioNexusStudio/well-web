@@ -2,10 +2,13 @@
     import { locale } from 'svelte-i18n';
     import { Icon } from 'svelte-awesome';
     import { _ as translate } from 'svelte-i18n';
+    import { isOnline } from '$lib/stores/is-online.store';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import { currentLanguage } from '$lib/stores/current-language.store';
+    import { fetchData } from '$lib/utils/data-handlers/resources/passages';
     import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
     import { selectedId, languageSelected, selectedBookIndex, data } from '$lib/stores/passage-form.store';
+    import { onMount } from 'svelte';
 
     export let isSideMenu = false;
 
@@ -16,7 +19,24 @@
         $currentLanguage = value;
     };
 
+    const closeSideMenu = () => {
+        if (isSideMenu) {
+            const sideMenu = document.getElementById('top-navbar-drawer') as HTMLDivElement;
+            if (sideMenu) {
+                sideMenu.click();
+            }
+        }
+    };
+
+    $: $currentLanguage && fetchData($isOnline);
     $: selectedBookInfo = $data.passagesByBook?.[$selectedBookIndex];
+
+    onMount(() => {
+        if ($currentLanguage) {
+            $languageSelected = true;
+        }
+        fetchData($isOnline);
+    });
 </script>
 
 <form action="/passage/{$selectedId}" class="form-control w-full space-y-4 max-w-xs mx-auto">
@@ -69,7 +89,10 @@
         <a href="/" class="text-primary">{$translate('sideMenu.changeLanguage.value')}</a>
     {/if}
 
-    <button class={isSideMenu ? 'btn btn-primary w-1/3' : 'btn btn-primary'} disabled={$selectedId === 'default'}
+    <button
+        class="btn btn-primary {isSideMenu ? 'w-1/3' : ''}"
+        disabled={$selectedId === 'default'}
+        on:click={closeSideMenu}
         >{$translate('page.index.go.value')}
         {#if isSideMenu}<Icon data={arrowRight} />{/if}</button
     >

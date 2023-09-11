@@ -17,11 +17,6 @@
     import { MetaTags } from 'svelte-meta-tags';
     import type { ApiPassage } from '$lib/types/file-manager';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
-    import { fetchData } from '$lib/utils/data-handlers/resources/passages';
-    import { onMount } from 'svelte';
-    import { isOnline } from '$lib/stores/is-online.store';
-    import { currentLanguage } from '$lib/stores/current-language.store';
-    import { languageSelected } from '$lib/stores/passage-form.store';
     import { topNavBarTitle } from '$lib/stores/top-menu.store';
 
     $topNavBarTitle = $translate('page.fileManager.title.value');
@@ -48,13 +43,6 @@
             $fileManagerLoading = false;
         }
     }
-
-    onMount(() => {
-        if ($currentLanguage) {
-            $languageSelected = true;
-        }
-        fetchData($isOnline);
-    });
 
     $: fetchAvailableResources($currentLanguageId);
 </script>

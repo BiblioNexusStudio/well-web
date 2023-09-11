@@ -7,6 +7,13 @@
     import DownloadIcon from '$lib/icons/DownloadIcon.svelte';
     import { topNavBarTitle } from '$lib/stores/top-menu.store';
     import PassageForm from '$lib/components/PassageForm.svelte';
+
+    const closeSideMenu = () => {
+        const sideMenu = document.getElementById('top-navbar-drawer') as HTMLDivElement;
+        if (sideMenu) {
+            sideMenu.click();
+        }
+    };
 </script>
 
 <div class="drawer drawer-end fixed top-0 left-0 bg-base-100 z-50">
@@ -14,7 +21,7 @@
     <div class="drawer-content flex flex-col">
         <!-- Navbar -->
         <div class="w-full navbar">
-            <div class="flex-1 px-2 mx-2 text-lg semi-bold">{$topNavBarTitle}</div>
+            <div class="flex-1 px-2 text-lg semi-bold">{$topNavBarTitle}</div>
             <div class="flex-none">
                 <label for="top-navbar-drawer" class="btn btn-square btn-ghost text-primary">
                     <Icon data={navicon} scale={2} />
@@ -34,10 +41,10 @@
                 </div>
                 <PassageForm isSideMenu={true} />
                 <div class="flex flex-col mt-auto">
-                    <a href="/" class="text-lg semi-bold text-primary mb-6 flex"
+                    <a href="/" class="text-lg semi-bold text-primary mb-6 flex" on:click={closeSideMenu}
                         ><span class="mr-2 flex items-center"><HomeIcon /></span>{$translate('sideMenu.home.value')}</a
                     >
-                    <a href="/file-manager" class="text-lg semi-bold text-primary mb-6 flex"
+                    <a href="/file-manager" class="text-lg semi-bold text-primary mb-6 flex" on:click={closeSideMenu}
                         ><span class="mr-2 flex items-center"><DownloadIcon /></span>{$translate(
                             'sideMenu.fileManager.value'
                         )}</a
