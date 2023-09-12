@@ -32,7 +32,7 @@
 
     let cbbterSelectedStepNumber = 1;
     let activePlayId: number | undefined = undefined;
-    let stepsAvailable: number[] = [];
+    let stepsAvailable: { stepNumber: number; stepContentRef: HTMLElement | null }[] = [];
     let cbbterText: CbbtErTextContent | undefined;
     let cbbterAudio: ResourceContentSteps | undefined;
     let cbbterImages: CbbtErImageContent[] | undefined;
@@ -43,10 +43,27 @@
     let resourcePane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let currentTopNavBarTitle: string;
+    let carouselElement: HTMLDivElement;
+
+    function calculateCbbterSelectedStepNumber() {
+        if (!carouselElement) return;
+        const itemWidth = carouselElement.offsetWidth;
+        cbbterSelectedStepNumber = stepsAvailable[Math.round(carouselElement.scrollLeft / itemWidth)].stepNumber;
+    }
+
+    function scrollToStepNumber(stepNumber: number) {
+        if (!carouselElement) return;
+        const index = stepsAvailable.findIndex((step) => step.stepNumber === stepNumber);
+        const itemWidth = carouselElement.offsetWidth;
+        carouselElement.scrollTo({
+            left: itemWidth * index,
+            behavior: 'smooth',
+        });
+    }
 
     $: data && getContent();
     $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
-    $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
+    $: scrollOtherStepsToTop(cbbterSelectedStepNumber);
 
     async function getContent() {
         let [fetchedBibleContent, fetchedResourceContent] = await Promise.all([
@@ -65,8 +82,18 @@
                 ...(cbbterText?.steps.map((step) => step?.stepNumber) ?? []),
                 ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
             ])
-        );
+        ).map((stepNumber) => ({ stepNumber, stepContentRef: null }));
         currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`;
+    }
+
+    function scrollOtherStepsToTop(selectedStepNumber: number) {
+        setTimeout(() => {
+            stepsAvailable.forEach(({ stepContentRef, stepNumber }) => {
+                if (stepNumber !== selectedStepNumber) {
+                    stepContentRef?.scrollTo({ top: 0, behavior: 'instant' });
+                }
+            });
+        }, 250);
     }
 
     function showOrDismissResourcePane(show: boolean) {
@@ -145,9 +172,10 @@
                 <div class="px-4 py-6">
                     <div class="max-w-[65ch] m-auto">
                         <ButtonCarousel
-                            bind:selectedValue={cbbterSelectedStepNumber}
+                            selectedValue={cbbterSelectedStepNumber}
                             bind:scroll={cbbterSelectedStepScroll}
-                            buttons={stepsAvailable.map((stepNumber) => ({
+                            onChange={scrollToStepNumber}
+                            buttons={stepsAvailable.map(({ stepNumber }) => ({
                                 value: stepNumber,
                                 label: steps[stepNumber - 1],
                             }))}
@@ -155,17 +183,24 @@
                     </div>
                 </div>
             {/if}
-            <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-4 overflow-y-scroll">
-                <div class="prose mx-auto">
-                    <span bind:this={topOfStep} />
-                    <div class="py-5">
-                        {#if stepsAvailable.length > 0}
-                            {#each stepsAvailable as stepNumber}
-                                {@const contentHTML = cbbterText?.steps?.find(
-                                    (step) => step.stepNumber === stepNumber
-                                )?.contentHTML}
-                                {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
-                                <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
+            {#if stepsAvailable.length > 0}
+                <div
+                    class="carousel {selectedTab === 'bible' ? 'hidden' : ''} max-w-[65ch] w-full mx-auto"
+                    on:scroll={calculateCbbterSelectedStepNumber}
+                    bind:this={carouselElement}
+                >
+                    {#each stepsAvailable as stepAvailable}
+                        {@const contentHTML = cbbterText?.steps?.find(
+                            (step) => step.stepNumber === stepAvailable.stepNumber
+                        )?.contentHTML}
+                        {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepAvailable.stepNumber)}
+                        <div
+                            class="carousel-item w-full flex-grow overflow-y-scroll"
+                            bind:this={stepAvailable.stepContentRef}
+                        >
+                            <div class="prose px-4">
+                                <span bind:this={topOfStep} />
+                                <div class="py-5">
                                     {#if audioStep}
                                         <div class="py-4">
                                             <AudioPlayer
@@ -178,13 +213,13 @@
                                         {@html contentHTML}
                                     {/if}
                                 </div>
-                            {/each}
-                        {:else}
-                            No CBBT-ER content available
-                        {/if}
-                    </div>
+                            </div>
+                        </div>
+                    {/each}
                 </div>
-            </div>
+            {:else}
+                No CBBT-ER content available
+            {/if}
         </div>
     {/await}
 </div>
