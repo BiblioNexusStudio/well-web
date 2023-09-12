@@ -15,9 +15,6 @@
             },
             "downloadResourcesForOfflineUse": {
                 "value": "ऑफ़लाइन उपयोग के लिए संसाधन डाउनलोड करें"
-            },
-            "youAreCurrentlyOffline": {
-                "value": "आप वर्तमान में ऑफलाइन हैं। कृपया अतिरिक्त संसाधनों को डाउनलोड करने के लिए इंटरनेट से जुड़ें।"
             }
         },
         "passage": {
@@ -143,6 +140,20 @@
             "step6": {
                 "value": "शब्द बोलना"
             }
+        }
+    },
+    "sideMenu": {
+        "home": {
+            "value": "घर"
+        },
+        "menu": {
+            "value": "मेनू"
+        },
+        "changeLanguage": {
+            "value": "भाषा बदलें"
+        },
+        "fileManager": {
+            "value": "फ़ाइल प्रबंधक"
         }
     }
 }

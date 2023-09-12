@@ -15,6 +15,7 @@
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
     import ResourcePane from './ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
+    import TopNavBar from '$lib/components/TopNavBar.svelte';
 
     type Tab = 'bible' | 'guide';
 
@@ -41,7 +42,10 @@
     let isShowingResourcePane = false;
     let resourcePane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
+    let currentTopNavBarTitle: string;
 
+    $: data && getContent();
+    $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
 
     async function getContent() {
@@ -62,6 +66,7 @@
                 ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
             ])
         );
+        currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`;
     }
 
     function showOrDismissResourcePane(show: boolean) {
@@ -69,6 +74,16 @@
             resourcePane?.present({ animate: true });
         } else {
             resourcePane?.destroy({ animate: true });
+        }
+    }
+
+    function handleNavBarTitleChange() {
+        if (selectedTab === 'bible') {
+            currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`;
+        } else if (cbbterSelectedStepNumber) {
+            currentTopNavBarTitle = `${steps[cbbterSelectedStepNumber - 1]}`;
+        } else {
+            currentTopNavBarTitle = '';
         }
     }
 
@@ -99,12 +114,12 @@
     {#await getContent()}
         <FullPageSpinner />
     {:then}
-        <div class={`flex flex-col absolute inset-0 bottom-16 z-10`}>
+        <TopNavBar title={currentTopNavBarTitle} />
+        <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
             <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-4 overflow-y-scroll">
                 <div class="prose mx-auto">
                     {#if bibleContent?.chapters?.length}
                         {#each bibleContent.chapters as chapter}
-                            <h3 class="my-2">{bibleContent.bookName} {chapter.number}</h3>
                             {#if chapter.audioData}
                                 <div class="py-4">
                                     <AudioPlayer

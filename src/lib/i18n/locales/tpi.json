@@ -15,9 +15,6 @@
             },
             "downloadResourcesForOfflineUse": {
                 "value": "Downloadim resos bilong yu long yusim long oflain yusim."
-            },
-            "youAreCurrentlyOffline": {
-                "value": "Yu stap oflain taim nau. Plis konnekim long intanet long downloadim moa resos."
             }
         },
         "passage": {
@@ -35,7 +32,7 @@
         },
         "fileManager": {
             "title": {
-                "value": "Fael Manija"
+                "value": "Laink Fael Manija"
             },
             "download": {
                 "value": "Dounload"
@@ -143,6 +140,20 @@
             "step6": {
                 "value": "Tokim Olgeta"
             }
+        }
+    },
+    "sideMenu": {
+        "home": {
+            "value": "Haus"
+        },
+        "menu": {
+            "value": "Menu"
+        },
+        "changeLanguage": {
+            "value": "Liklikim Tokples..."
+        },
+        "fileManager": {
+            "value": "Fael Manija"
         }
     }
 }
