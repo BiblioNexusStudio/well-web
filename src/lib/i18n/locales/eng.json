@@ -18,8 +18,12 @@
                 "_context": "Indicates to the user that they can click on this button to move to next page with their given selections"
             },
             "downloadResourcesForOfflineUse": {
-                "value": "Download resources for offline use",
+                "value": "Going Offline? Get more Content",
                 "_context": "Button text telling the user to download resources for offline use"
+            },
+            "subTitle": {
+                "value": "Bible Well: Fed by Aquifer",
+                "_context": "Subtitle for the main page"
             }
         },
         "passage": {
