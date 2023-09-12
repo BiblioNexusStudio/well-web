@@ -38,6 +38,11 @@
 
 <form action="/passage/{$selectedId}" class="form-control w-full space-y-4 max-w-xs mx-auto">
     {#if !isSideMenu}
+        <label class="label p-0" for="passage-form-book">
+            <span class="label-text {isSideMenu ? 'text-primary' : ''} bold"
+                >{$translate('page.index.language.value')}</span
+            >
+        </label>
         <select on:change={onLanguageSelected} bind:value={$currentLanguage} class="select select-info">
             <option value="" disabled selected>{$translate('page.index.language.value')}</option>
             {#each supportedLanguages as { id, label }}
@@ -46,11 +51,11 @@
         </select>
     {/if}
 
-    {#if isSideMenu}
-        <label class="label p-0" for="passage-form-book">
-            <span class="label-text text-primary bold">{$translate('page.index.book.value')}</span>
-        </label>
-    {/if}
+    <label class="label p-0" for="passage-form-book">
+        <span class="label-text {isSideMenu ? 'text-primary' : ''} bold"
+            >{isSideMenu ? $translate('page.index.book.value') : $translate('page.index.passage.value')}</span
+        >
+    </label>
     <select
         id="passage-form-book"
         bind:value={$selectedBookIndex}
@@ -89,14 +94,12 @@
     </select>
 
     {#if isSideMenu}
-        <a href="/" class="text-primary">{$translate('sideMenu.changeLanguage.value')}</a>
+        <a href="/" on:click={closeSideMenu} class="text-primary">{$translate('sideMenu.changeLanguage.value')}</a>
     {/if}
 
     <button
-        class="btn btn-primary {isSideMenu ? 'w-1/3' : ''}"
+        class="btn btn-primary w-1/3 {isSideMenu ? '' : 'mx-auto'}"
         disabled={$selectedId === 'default'}
-        on:click={closeSideMenu}
-        >{$translate('page.index.go.value')}
-        {#if isSideMenu}<Icon data={arrowRight} />{/if}</button
+        on:click={closeSideMenu}>{$translate('page.index.go.value')} <Icon data={arrowRight} /></button
     >
 </form>
