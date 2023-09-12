@@ -9,7 +9,7 @@
     import { isSideMenuOpen } from '$lib/stores/top-menu.store';
     import PassageForm from '$lib/components/PassageForm.svelte';
 
-    export let title: string = '';
+    export let title = '';
 </script>
 
 <div class="drawer drawer-end fixed top-0 left-0 bg-base-100 z-50">

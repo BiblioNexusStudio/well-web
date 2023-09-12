@@ -23,7 +23,7 @@
     $: $currentLanguage && callFetchData($isOnline);
     $: selectedBookInfo = $data.passagesByBook?.[$selectedBookIndex];
 
-    async function callFetchData(isOnline: boolean = true) {
+    async function callFetchData(isOnline = true) {
         isLoading = true;
         await fetchData(isOnline);
         isLoading = false;
