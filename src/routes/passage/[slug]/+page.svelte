@@ -33,7 +33,7 @@
 
     let cbbterSelectedStepNumber = 1;
     let activePlayId: number | undefined = undefined;
-    let stepsAvailable: { stepNumber: number; stepContentRef: HTMLElement | null }[] = [];
+    let stepsAvailable: number[] = [];
     let cbbterText: CbbtErTextContent | undefined;
     let cbbterAudio: ResourceContentSteps | undefined;
     let cbbterImages: CbbtErImageContent[] | undefined;
@@ -45,30 +45,13 @@
     let resourcePane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let currentTopNavBarTitle: string;
-    let carouselElement: HTMLDivElement;
     let contentLoadedPromise: Promise<void> | undefined;
 
     onMount(() => getContent());
 
-    function calculateCbbterSelectedStepNumber() {
-        if (!carouselElement) return;
-        const itemWidth = carouselElement.offsetWidth;
-        cbbterSelectedStepNumber = stepsAvailable[Math.round(carouselElement.scrollLeft / itemWidth)].stepNumber;
-    }
-
-    function scrollToStepNumber(stepNumber: number) {
-        if (!carouselElement) return;
-        const index = stepsAvailable.findIndex((step) => step.stepNumber === stepNumber);
-        const itemWidth = carouselElement.offsetWidth;
-        carouselElement.scrollTo({
-            left: itemWidth * index,
-            behavior: 'smooth',
-        });
-    }
-
     $: data && getContent(); // when the [slug] changes, the data will change and trigger this
     $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
-    $: scrollOtherStepsToTop(cbbterSelectedStepNumber);
+    $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
 
     async function getContent() {
         contentLoadedPromise = (async () => {
@@ -89,21 +72,9 @@
                     ...(cbbterText?.steps.map((step) => step?.stepNumber) ?? []),
                     ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
                 ])
-            ).map((stepNumber) => ({ stepNumber, stepContentRef: null }));
+            );
             handleNavBarTitleChange();
         })();
-    }
-
-    function scrollOtherStepsToTop(selectedStepNumber: number) {
-        // this timeout is here to prevent things from looking jumpy while animating
-        // it ensures the previous page is fully hidden before the scroll is reset on it
-        setTimeout(() => {
-            stepsAvailable.forEach(({ stepContentRef, stepNumber }) => {
-                if (stepNumber !== selectedStepNumber) {
-                    stepContentRef?.scrollTo({ top: 0, behavior: 'instant' });
-                }
-            });
-        }, 500);
     }
 
     function showOrDismissResourcePane(show: boolean) {
@@ -189,36 +160,26 @@
                 <div class="px-4 py-6">
                     <div class="max-w-[65ch] m-auto">
                         <ButtonCarousel
-                            selectedValue={cbbterSelectedStepNumber}
+                            bind:selectedValue={cbbterSelectedStepNumber}
                             bind:scroll={cbbterSelectedStepScroll}
-                            onChange={scrollToStepNumber}
-                            buttons={stepsAvailable.map(({ stepNumber }) => ({
+                            buttons={stepsAvailable.map((stepNumber) => ({
                                 value: stepNumber,
                                 label: steps[stepNumber - 1],
                             }))}
                         />
                     </div>
                 </div>
-                {#if stepsAvailable.length > 0}
-                    <div
-                        class="carousel max-w-[65ch] w-full mx-auto"
-                        on:scroll={calculateCbbterSelectedStepNumber}
-                        bind:this={carouselElement}
-                    >
-                        {#each stepsAvailable as stepAvailable}
-                            {@const contentHTML = cbbterText?.steps?.find(
-                                (step) => step.stepNumber === stepAvailable.stepNumber
-                            )?.contentHTML}
-                            {@const audioStep = cbbterAudio?.steps?.find(
-                                (step) => step.step === stepAvailable.stepNumber
-                            )}
-                            <div
-                                class="carousel-item w-full flex-grow overflow-y-scroll"
-                                bind:this={stepAvailable.stepContentRef}
-                            >
-                                <div class="prose px-4">
-                                    <span bind:this={topOfStep} />
-                                    <div class="py-5">
+                <div class="flex-grow px-4 overflow-y-scroll">
+                    <div class="prose mx-auto">
+                        <span bind:this={topOfStep} />
+                        <div class="py-5">
+                            {#if stepsAvailable.length > 0}
+                                {#each stepsAvailable as stepNumber}
+                                    {@const contentHTML = cbbterText?.steps?.find(
+                                        (step) => step.stepNumber === stepNumber
+                                    )?.contentHTML}
+                                    {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
+                                    <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
                                         {#if audioStep}
                                             <div class="py-4">
                                                 <AudioPlayer
@@ -231,17 +192,13 @@
                                             {@html contentHTML}
                                         {/if}
                                     </div>
-                                </div>
-                            </div>
-                        {/each}
-                    </div>
-                {:else}
-                    <div class="max-w-[65ch] w-full mx-auto">
-                        <div class="prose px-4">
-                            {$translate('page.passage.noCbbterContent.value')}
+                                {/each}
+                            {:else}
+                                {$translate('page.passage.noCbbterContent.value')}
+                            {/if}
                         </div>
                     </div>
-                {/if}
+                </div>
             {/if}
         </div>
     {/await}
