@@ -5,7 +5,6 @@
     export let buttonElements: (HTMLElement | null)[] = buttons.map(() => null);
     export let selectedValue: number;
     export let scroll: number | undefined;
-    export let onChange: (value: number) => void;
 
     let carousel: HTMLElement | undefined;
 
@@ -39,7 +38,7 @@
                 class={`text-sm font-semibold px-3 py-2 rounded-md ${
                     selectedValue === value && 'text-secondary-content bg-primary-50'
                 }`}
-                on:click={() => onChange(value)}
+                on:click={() => (selectedValue = value)}
                 bind:this={buttonElements[index]}
             >
                 {label}</button
