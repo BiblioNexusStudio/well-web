@@ -21,7 +21,7 @@
     };
 
     $: $currentLanguage && callFetchData($isOnline);
-    $: selectedBookInfo = $data.passagesByBook?.[$selectedBookIndex];
+    $: selectedBookInfo = $selectedBookIndex === 'default' ? null : $data.passagesByBook?.[$selectedBookIndex];
 
     async function callFetchData(isOnline = true) {
         isLoading = true;
@@ -29,11 +29,7 @@
         isLoading = false;
     }
 
-    onMount(async () => {
-        isLoading = true;
-        await fetchData($isOnline);
-        isLoading = false;
-    });
+    onMount(() => callFetchData());
 </script>
 
 <form action="/passage/{$selectedId}" class="form-control w-full space-y-4 max-w-xs mx-auto">
@@ -66,7 +62,7 @@
         <option disabled selected value="default">
             {$translate('page.index.book.value')}
             {#if isLoading}
-                (loading...)
+                ({$translate('page.index.loading.value')}...)
             {/if}
         </option>
         {#if $data.passagesByBook}

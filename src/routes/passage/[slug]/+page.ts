@@ -185,6 +185,7 @@ async function fetchResourceContent(passage: BasePassage) {
             })
             .filter(Boolean) as CbbtErImageContent[];
         return {
+            title: textResources?.[0]?.content?.displayName,
             text: textResourceContent.map((content) => ({ steps: content } as CbbtErTextContent)),
             audio: audioResourceContent,
             images: imageResourceContent,

@@ -5,6 +5,8 @@
     import PauseMediaIcon from '$lib/icons/PauseMediaIcon.svelte';
     import { Howl } from 'howler';
     import type { HowlOptions } from 'howler';
+    import refresh from 'svelte-awesome/icons/refresh';
+    import { Icon } from 'svelte-awesome';
     type Timer = ReturnType<typeof setInterval>;
 
     export let audioFile: string;
@@ -35,6 +37,7 @@
     let currentTime = startTime;
     let totalTime = 0;
     let timer: Timer;
+    let loading = true;
     $: currentTimeOffset = currentTime - startTime;
     $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
     $: timeDisplayValue = `${formatTime(currentTimeOffset)} / ${formatTime(totalTime)}`;
@@ -57,6 +60,7 @@
             isAudioPlaying = false;
         },
         onload: () => {
+            loading = false;
             totalTime = hasCustomTime ? endTime! - startTime : sound.duration(playId);
         },
     };
@@ -85,7 +89,12 @@
         clearInterval(timer);
     };
 
-    const onPlayClick = () => {
+    const onPlayPauseClick = () => {
+        if (isAudioPlaying) {
+            sound.pause(playId);
+            return;
+        }
+
         if (playId !== undefined) {
             sound.play(playId);
             return;
@@ -109,21 +118,24 @@
 </script>
 
 <div class="relative w-full flex flex-row justify-center items-center rounded-xl">
-    <div class="grow-0 cursor-pointer w-[20px] h-[20px]">
-        <button class={isAudioPlaying ? 'hidden' : ''} on:click={onPlayClick}>
-            <PlayMediaIcon />
+    {#if loading}
+        <div />
+        <Icon class="grow-0 w-[20px] h-[20px] text-primary" data={refresh} spin />
+    {:else}
+        <button class="grow-0 w-[20px] h-[20px] cursor-pointer" on:click={onPlayPauseClick}>
+            {#if isAudioPlaying}
+                <PauseMediaIcon />
+            {:else}
+                <PlayMediaIcon />
+            {/if}
         </button>
+    {/if}
 
-        <button class={isAudioPlaying ? '' : 'hidden'} on:click={() => sound.pause(playId)}>
-            <PauseMediaIcon />
-        </button>
-    </div>
-
-    <div class="w-full mx-4 h-[20px]">
+    <div class="w-full mx-4">
         <input
             type="range"
             id="song-percentage-played"
-            class="range range-audio range-primary my-[4px]"
+            class="range range-audio range-primary"
             step="any"
             min="0"
             max="100"

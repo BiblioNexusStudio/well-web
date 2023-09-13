@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import type { PassagesForBook } from '$lib/types/passage-form';
-import { data, passagesByBook } from '$lib/stores/passage-form.store';
+import { data, passagesByBook, selectedBookIndex } from '$lib/stores/passage-form.store';
 import { currentLanguageId } from '$lib/stores/current-language.store';
 import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
 import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
@@ -22,6 +22,10 @@ async function getBibleBookIdsToNameAndIndex(languageId: number | null = null) {
 }
 
 export async function fetchData(isOnline: boolean) {
+    passagesByBook.set([]);
+    data.set({ passagesByBook: [] });
+    selectedBookIndex.set('default');
+
     const bibleBookIdsToNameAndIndex = await getBibleBookIdsToNameAndIndex();
     const passagesWithResources = (await fetchFromCacheOrApi(
         `passages/resources/language/${get(currentLanguageId)}`
@@ -45,8 +49,8 @@ export async function fetchData(isOnline: boolean) {
             }
         });
     });
-    passagesByBook.update(() => {
-        return availableOfflinePassagesWithResources
+    passagesByBook.set(
+        availableOfflinePassagesWithResources
             .reduce((output, passageWithResource) => {
                 const bibleBookNameAndIndex = bibleBookIdsToNameAndIndex[passageWithResource.bookId];
                 output[bibleBookNameAndIndex.index] ||= {
@@ -57,9 +61,7 @@ export async function fetchData(isOnline: boolean) {
                 bookInfo.passages.push(passageWithResource);
                 return output;
             }, [] as PassagesForBook[])
-            .filter(Boolean);
-    });
-    data.update(() => {
-        return { passagesByBook: get(passagesByBook) };
-    });
+            .filter(Boolean)
+    );
+    data.set({ passagesByBook: get(passagesByBook) });
 }

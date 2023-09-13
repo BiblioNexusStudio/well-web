@@ -18,6 +18,9 @@
             },
             "subTitle": {
                 "value": "Bibel Pulum: Pusim liklik wara long giraun."
+            },
+            "loading": {
+                "value": "i laodim"
             }
         },
         "passage": {
@@ -31,6 +34,12 @@
                 "resources": {
                     "value": "Risoses"
                 }
+            },
+            "noBibleContent": {
+                "value": "Nogat Baibel stori long dispela hap."
+            },
+            "noCbbterContent": {
+                "value": "Nogat CBBT-ER stori long dispela hap."
             }
         },
         "fileManager": {
