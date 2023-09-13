@@ -18,6 +18,9 @@
             },
             "subTitle": {
                 "value": "बाइबिल कुआ: अक्वाइफ़र से भरा हुआ"
+            },
+            "loading": {
+                "value": "लोड हो रहा है"
             }
         },
         "passage": {
@@ -31,6 +34,12 @@
                 "resources": {
                     "value": "संसाधन"
                 }
+            },
+            "noBibleContent": {
+                "value": "इस पासेज के लिए कोई बाइबल सामग्री नहीं मिली।"
+            },
+            "noCbbterContent": {
+                "value": "इस पासेज के लिए कोई CBBT-ER सामग्री नहीं मिली।"
             }
         },
         "fileManager": {

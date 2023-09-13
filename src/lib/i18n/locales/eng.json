@@ -24,6 +24,10 @@
             "subTitle": {
                 "value": "Bible Well: Fed by Aquifer",
                 "_context": "Subtitle for the main page"
+            },
+            "loading": {
+                "value": "loading",
+                "_context": "Message to display in the options dropdown when things are loading"
             }
         },
         "passage": {
@@ -40,6 +44,14 @@
                     "value": "Resources",
                     "_context": "Label for Resources button on navbar"
                 }
+            },
+            "noBibleContent": {
+                "value": "No Bible content found for this passage.",
+                "_context": "Message to display when the Bible content is not downloaded or available"
+            },
+            "noCbbterContent": {
+                "value": "No CBBT-ER content found for this passage.",
+                "_context": "Message to display when the CBBT-ER content is not downloaded or available"
             }
         },
         "fileManager": {

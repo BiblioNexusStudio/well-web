@@ -16,6 +16,7 @@
     import ResourcePane from './ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
+    import { onMount } from 'svelte';
 
     type Tab = 'bible' | 'guide';
 
@@ -32,10 +33,11 @@
 
     let cbbterSelectedStepNumber = 1;
     let activePlayId: number | undefined = undefined;
-    let stepsAvailable: number[] = [];
+    let stepsAvailable: { stepNumber: number; stepContentRef: HTMLElement | null }[] = [];
     let cbbterText: CbbtErTextContent | undefined;
     let cbbterAudio: ResourceContentSteps | undefined;
     let cbbterImages: CbbtErImageContent[] | undefined;
+    let cbbterTitle: string | undefined;
     let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
     let topOfStep: HTMLElement | null = null;
     let selectedTab: Tab = 'bible';
@@ -43,30 +45,65 @@
     let resourcePane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let currentTopNavBarTitle: string;
+    let carouselElement: HTMLDivElement;
+    let contentLoadedPromise: Promise<void> | undefined;
 
-    $: data && getContent();
+    onMount(() => getContent());
+
+    function calculateCbbterSelectedStepNumber() {
+        if (!carouselElement) return;
+        const itemWidth = carouselElement.offsetWidth;
+        cbbterSelectedStepNumber = stepsAvailable[Math.round(carouselElement.scrollLeft / itemWidth)].stepNumber;
+    }
+
+    function scrollToStepNumber(stepNumber: number) {
+        if (!carouselElement) return;
+        const index = stepsAvailable.findIndex((step) => step.stepNumber === stepNumber);
+        const itemWidth = carouselElement.offsetWidth;
+        carouselElement.scrollTo({
+            left: itemWidth * index,
+            behavior: 'smooth',
+        });
+    }
+
+    $: data && getContent(); // when the [slug] changes, the data will change and trigger this
     $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
-    $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
+    $: scrollOtherStepsToTop(cbbterSelectedStepNumber);
 
     async function getContent() {
-        let [fetchedBibleContent, fetchedResourceContent] = await Promise.all([
-            data.fetched.bibleContent,
-            data.fetched.resourceContent,
-        ]);
-        cbbterText = fetchedResourceContent.text?.[0];
-        cbbterAudio = fetchedResourceContent.audio?.[0];
-        cbbterImages = await asyncFilter(
-            fetchedResourceContent.images ?? [],
-            async (image) => await isCachedFromCdn(image.url)
-        );
-        bibleContent = fetchedBibleContent;
-        stepsAvailable = Array.from(
-            new Set([
-                ...(cbbterText?.steps.map((step) => step?.stepNumber) ?? []),
-                ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
-            ])
-        );
-        currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`;
+        contentLoadedPromise = (async () => {
+            let [fetchedBibleContent, fetchedResourceContent] = await Promise.all([
+                data.fetched.bibleContent,
+                data.fetched.resourceContent,
+            ]);
+            cbbterTitle = fetchedResourceContent.title;
+            cbbterText = fetchedResourceContent.text?.[0];
+            cbbterAudio = fetchedResourceContent.audio?.[0];
+            cbbterImages = await asyncFilter(
+                fetchedResourceContent.images ?? [],
+                async (image) => await isCachedFromCdn(image.url)
+            );
+            bibleContent = fetchedBibleContent;
+            stepsAvailable = Array.from(
+                new Set([
+                    ...(cbbterText?.steps.map((step) => step?.stepNumber) ?? []),
+                    ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
+                ])
+            ).map((stepNumber) => ({ stepNumber, stepContentRef: null }));
+            handleNavBarTitleChange();
+        })();
+    }
+
+    function scrollOtherStepsToTop(selectedStepNumber: number) {
+        // this timeout is here to prevent things from looking jumpy while animating
+        // it ensures the previous page is fully hidden before the scroll is reset on it
+        setTimeout(() => {
+            stepsAvailable.forEach(({ stepContentRef, stepNumber }) => {
+                if (stepNumber !== selectedStepNumber) {
+                    stepContentRef?.scrollTo({ top: 0, behavior: 'instant' });
+                }
+            });
+        }, 500);
     }
 
     function showOrDismissResourcePane(show: boolean) {
@@ -79,9 +116,13 @@
 
     function handleNavBarTitleChange() {
         if (selectedTab === 'bible') {
-            currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`;
-        } else if (cbbterSelectedStepNumber) {
-            currentTopNavBarTitle = `${steps[cbbterSelectedStepNumber - 1]}`;
+            if (cbbterText?.steps?.length && cbbterTitle) {
+                currentTopNavBarTitle = cbbterTitle;
+            } else {
+                currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`;
+            }
+        } else if (cbbterTitle) {
+            currentTopNavBarTitle = `${cbbterTitle} - ${steps[cbbterSelectedStepNumber - 1]}`;
         } else {
             currentTopNavBarTitle = '';
         }
@@ -111,80 +152,97 @@
 </div>
 
 <div id="passage-page" class="w-full h-full">
-    {#await getContent()}
+    {#await contentLoadedPromise}
         <FullPageSpinner />
     {:then}
         <TopNavBar title={currentTopNavBarTitle} />
         <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
-            <div class="flex-grow {selectedTab === 'bible' ? 'block' : 'hidden'} py-5 px-4 overflow-y-scroll">
-                <div class="prose mx-auto">
-                    {#if bibleContent?.chapters?.length}
-                        {#each bibleContent.chapters as chapter}
-                            {#if chapter.audioData}
-                                <div class="py-4">
-                                    <AudioPlayer
-                                        bind:activePlayId
-                                        audioFile={chapter.audioData.url}
-                                        startTime={chapter.audioData.startTimestamp || 0}
-                                        endTime={chapter.audioData.endTimestamp}
-                                    />
-                                </div>
-                            {/if}
-                            <div>
-                                {#each chapter.versesText as { number, text }}
-                                    <div class="py-1">
-                                        <span class="sup pr-1">{number}</span><span>{@html text}</span>
+            {#if selectedTab === 'bible'}
+                <div class="flex-grow py-5 px-4 overflow-y-scroll">
+                    <div class="prose mx-auto">
+                        {#if bibleContent?.chapters?.length}
+                            {#each bibleContent.chapters as chapter}
+                                {#if chapter.audioData}
+                                    <div class="py-4">
+                                        <AudioPlayer
+                                            bind:activePlayId
+                                            audioFile={chapter.audioData.url}
+                                            startTime={chapter.audioData.startTimestamp || 0}
+                                            endTime={chapter.audioData.endTimestamp}
+                                        />
                                     </div>
-                                {/each}
-                            </div>
-                        {/each}
-                    {/if}
+                                {/if}
+                                <div>
+                                    {#each chapter.versesText as { number, text }}
+                                        <div class="py-1">
+                                            <span class="sup pr-1">{number}</span><span>{@html text}</span>
+                                        </div>
+                                    {/each}
+                                </div>
+                            {/each}
+                        {:else}
+                            {$translate('page.passage.noBibleContent.value')}
+                        {/if}
+                    </div>
                 </div>
-            </div>
-            {#if selectedTab === 'guide'}
+            {:else if selectedTab === 'guide'}
                 <div class="px-4 py-6">
                     <div class="max-w-[65ch] m-auto">
                         <ButtonCarousel
-                            bind:selectedValue={cbbterSelectedStepNumber}
+                            selectedValue={cbbterSelectedStepNumber}
                             bind:scroll={cbbterSelectedStepScroll}
-                            buttons={stepsAvailable.map((stepNumber) => ({
+                            onChange={scrollToStepNumber}
+                            buttons={stepsAvailable.map(({ stepNumber }) => ({
                                 value: stepNumber,
                                 label: steps[stepNumber - 1],
                             }))}
                         />
                     </div>
                 </div>
-            {/if}
-            <div class="flex-grow {selectedTab === 'bible' ? 'hidden' : 'block'} px-4 overflow-y-scroll">
-                <div class="prose mx-auto">
-                    <span bind:this={topOfStep} />
-                    <div class="py-5">
-                        {#if stepsAvailable.length > 0}
-                            {#each stepsAvailable as stepNumber}
-                                {@const contentHTML = cbbterText?.steps?.find(
-                                    (step) => step.stepNumber === stepNumber
-                                )?.contentHTML}
-                                {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
-                                <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
-                                    {#if audioStep}
-                                        <div class="py-4">
-                                            <AudioPlayer
-                                                audioFile={audioStep[audioFileTypeForBrowser()].url}
-                                                bind:activePlayId
-                                            />
-                                        </div>
-                                    {/if}
-                                    {#if contentHTML}
-                                        {@html contentHTML}
-                                    {/if}
+                {#if stepsAvailable.length > 0}
+                    <div
+                        class="carousel max-w-[65ch] w-full mx-auto"
+                        on:scroll={calculateCbbterSelectedStepNumber}
+                        bind:this={carouselElement}
+                    >
+                        {#each stepsAvailable as stepAvailable}
+                            {@const contentHTML = cbbterText?.steps?.find(
+                                (step) => step.stepNumber === stepAvailable.stepNumber
+                            )?.contentHTML}
+                            {@const audioStep = cbbterAudio?.steps?.find(
+                                (step) => step.step === stepAvailable.stepNumber
+                            )}
+                            <div
+                                class="carousel-item w-full flex-grow overflow-y-scroll"
+                                bind:this={stepAvailable.stepContentRef}
+                            >
+                                <div class="prose px-4">
+                                    <span bind:this={topOfStep} />
+                                    <div class="py-5">
+                                        {#if audioStep}
+                                            <div class="py-4">
+                                                <AudioPlayer
+                                                    audioFile={audioStep[audioFileTypeForBrowser()].url}
+                                                    bind:activePlayId
+                                                />
+                                            </div>
+                                        {/if}
+                                        {#if contentHTML}
+                                            {@html contentHTML}
+                                        {/if}
+                                    </div>
                                 </div>
-                            {/each}
-                        {:else}
-                            No CBBT-ER content available
-                        {/if}
+                            </div>
+                        {/each}
                     </div>
-                </div>
-            </div>
+                {:else}
+                    <div class="max-w-[65ch] w-full mx-auto">
+                        <div class="prose px-4">
+                            {$translate('page.passage.noCbbterContent.value')}
+                        </div>
+                    </div>
+                {/if}
+            {/if}
         </div>
     {/await}
 </div>
