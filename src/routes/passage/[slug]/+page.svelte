@@ -186,11 +186,11 @@
                                             ? 'flex flex-col flex-grow'
                                             : 'hidden'}
                                     >
-                                        {#if contentHTML}
-                                            <div class="flex-grow overflow-y-scroll">
+                                        <div class="flex-grow overflow-y-scroll">
+                                            {#if contentHTML}
                                                 {@html contentHTML}
-                                            </div>
-                                        {/if}
+                                            {/if}
+                                        </div>
                                         {#if audioStep}
                                             <div class="py-4">
                                                 <AudioPlayer
