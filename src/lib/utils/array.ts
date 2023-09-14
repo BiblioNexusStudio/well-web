@@ -15,3 +15,7 @@ export function groupBy<T, K extends PropertyKey, V>(
         return acc;
     }, {} as Record<K, V>);
 }
+
+export function range(start: number, end: number) {
+    return [...Array(end - start + 1).keys()].map((n) => n + start);
+}

@@ -5,10 +5,9 @@
     import { lookupLanguageInfoByCode, lookupLanguageInfoById } from '$lib/stores/current-language.store';
     import { supportedLanguages } from '$lib/utils/language-utils';
     import { asyncFilter, asyncReduce } from '$lib/utils/async-array';
-    import { fetchBibleDataForLanguageCode } from '$lib/utils/data-handlers/bible';
+    import { fetchBibleDataForLanguageCode, isContentCachedForPassageInBible } from '$lib/utils/data-handlers/bible';
     import type { ApiBibleVersion, BasePassage, Language } from '$lib/types/file-manager';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { isCachedFromCdn } from '$lib/data-cache';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
 
     interface BibleVersionWithLanguage extends ApiBibleVersion {
@@ -40,10 +39,10 @@
                     bibleVersions = [];
                 }
                 if (!isOnline) {
-                    bibleVersions = await asyncFilter(bibleVersions, async (bibleVersion) => {
-                        const book = bibleVersion.contents.find((book) => book.bookId === passage.bookId);
-                        return !!book?.textUrl && (await isCachedFromCdn(book?.textUrl));
-                    });
+                    bibleVersions = await asyncFilter(
+                        bibleVersions,
+                        async (version) => await isContentCachedForPassageInBible(passage, version)
+                    );
                 }
                 return acc.concat(
                     bibleVersions
@@ -66,17 +65,18 @@
 {:else}
     <div class="flex flex-col items-center py-4 prose mx-auto h-full">
         <div class="flex-1" />
-        <div class="flex flex-col flex-grow items-center max-h-56">
+        <div class="flex flex-col space-y-2 items-center">
             <div class="font-bold">{$translate('page.passage.noBibleContent.header.value')}</div>
-            <div class="flex-1" />
             {#if availableBibles.length}
                 <div class="text-center">
                     {@html $translate('page.passage.noBibleContent.description.value', {
                         values: { language: currentBibleLanguageLabel },
                     })}
                 </div>
-                <div class="flex-1" />
-                <select bind:value={selectedBible} class="select select-info text-primary text-ellipsis">
+                <select
+                    bind:value={selectedBible}
+                    class="select select-info {selectedBible ? 'text-primary' : 'text-base-500'} text-ellipsis"
+                >
                     <option disabled value="">
                         {$translate('page.passage.noBibleContent.bible.value')}
                     </option>
@@ -86,7 +86,6 @@
                         >
                     {/each}
                 </select>
-                <div class="flex-1" />
                 <button class="btn btn-primary w-1/4" disabled={!selectedBible} on:click={goToBibleLanguage}
                     >{$translate('page.passage.noBibleContent.show.value')}</button
                 >

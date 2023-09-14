@@ -1,7 +1,9 @@
 import { lookupLanguageInfoByCode } from '$lib/stores/current-language.store';
-import { MediaType, type ApiBibleVersion, type UrlWithMetadata } from '$lib/types/file-manager';
+import { MediaType, type ApiBibleVersion, type UrlWithMetadata, type BasePassage } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '../browser';
-import { fetchFromCacheOrApi } from '$lib/data-cache';
+import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
+import { asyncEvery } from '../async-array';
+import { range } from '../array';
 
 export function bibleUrlsWithMetadataForBookAndChapters(
     bibleVersion: ApiBibleVersion,
@@ -36,4 +38,18 @@ export async function fetchBibleDataForLanguageCode(languageCode: string | null)
         // this means the user hasn't cached the Bible data or language is invalid
         return [];
     }
+}
+
+// check if the text content is cached for the Bible or the audio URLs are cached for the given chapters
+export async function isContentCachedForPassageInBible(passage: BasePassage, bibleVersion: ApiBibleVersion) {
+    const book = bibleVersion.contents.find((book) => book.bookId === passage.bookId);
+    return (
+        (!!book?.textUrl && (await isCachedFromCdn(book?.textUrl))) ||
+        (await asyncEvery(range(passage.startChapter, passage.endChapter), async (chapterNumber) => {
+            const chapterAudioUrl = book?.audioUrls?.chapters?.find(
+                (chapter) => chapter.number === String(chapterNumber)
+            )?.[audioFileTypeForBrowser()]?.url;
+            return !!chapterAudioUrl && (await isCachedFromCdn(chapterAudioUrl));
+        }))
+    );
 }

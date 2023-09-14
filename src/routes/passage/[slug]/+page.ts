@@ -27,6 +27,7 @@ import { asyncFilter, asyncMap, asyncReduce } from '$lib/utils/async-array';
 import { isOnline } from '$lib/stores/is-online.store';
 import { bibleUrlsWithMetadataForBookAndChapters, fetchBibleDataForLanguageCode } from '$lib/utils/data-handlers/bible';
 import { cbbterUrlsWithMetadataForPassage } from '$lib/utils/data-handlers/resources/cbbt-er';
+import { range } from '$lib/utils/array';
 
 export interface FrontendChapterContent {
     number: string;
@@ -54,9 +55,9 @@ async function fetchBibleContent(passage: BasePassage, bibleLanguage: string | n
     const book = bibleData[0].contents.find((book: FrontendBibleVersionBookContent) => book.bookId === passage.bookId);
     if (!book) return {};
 
-    let fullBookText = null;
+    let fullBookText: BibleBookTextContent | null = null;
     try {
-        fullBookText = (await fetchFromCacheOrCdn(book.textUrl)) as BibleBookTextContent;
+        fullBookText = await fetchFromCacheOrCdn(book.textUrl);
     } catch (_) {
         // this means the user hasn't downloaded the Bible text, which is fine
     }
@@ -65,17 +66,14 @@ async function fetchBibleContent(passage: BasePassage, bibleLanguage: string | n
         return passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber;
     });
     const chapters = await asyncReduce(
-        fullBookText?.chapters ?? [],
-        async (output, chapter) => {
-            const chapterNumber = parseInt(chapter.number);
-            if (passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber) {
-                const audioUrlData = filteredAudio.find((audioChapter: FrontendAudioChapter) => {
-                    const audioChapterNumber = parseInt(audioChapter.number);
-                    return audioChapterNumber === chapterNumber;
-                });
-                if (!audioUrlData) return output;
-                let audioData: { url: string; startTimestamp: number | null; endTimestamp: number | null } | null =
-                    null;
+        range(passage.startChapter, passage.endChapter),
+        async (output, chapterNumber) => {
+            const audioUrlData = filteredAudio.find((audioChapter: FrontendAudioChapter) => {
+                const audioChapterNumber = parseInt(audioChapter.number);
+                return audioChapterNumber === chapterNumber;
+            });
+            let audioData: { url: string; startTimestamp: number | null; endTimestamp: number | null } | null = null;
+            if (audioUrlData) {
                 const url = audioUrlData[audioFileTypeForBrowser()].url;
                 if (get(isOnline) || (await isCachedFromCdn(url))) {
                     if (audioUrlData.audioTimestamps) {
@@ -108,26 +106,29 @@ async function fetchBibleContent(passage: BasePassage, bibleLanguage: string | n
                         };
                     }
                 }
-
+            }
+            const chapterText = fullBookText?.chapters?.find((chapter) => String(chapterNumber) === chapter.number);
+            if (chapterText || audioData) {
                 return [
                     ...output,
                     {
-                        number: chapter.number,
+                        number: String(chapterNumber),
                         audioData,
-                        versesText: chapter.verses.filter((verse) => {
-                            const verseNumber = parseInt(verse.number.split('-')[0]);
-                            return (
-                                (chapterNumber > passage.startChapter ||
-                                    (chapterNumber === passage.startChapter && verseNumber >= passage.startVerse)) &&
-                                (chapterNumber < passage.endChapter ||
-                                    (chapterNumber === passage.endChapter && verseNumber <= passage.endVerse))
-                            );
-                        }),
+                        versesText:
+                            chapterText?.verses.filter((verse) => {
+                                const verseNumber = parseInt(verse.number.split('-')[0]);
+                                return (
+                                    (chapterNumber > passage.startChapter ||
+                                        (chapterNumber === passage.startChapter &&
+                                            verseNumber >= passage.startVerse)) &&
+                                    (chapterNumber < passage.endChapter ||
+                                        (chapterNumber === passage.endChapter && verseNumber <= passage.endVerse))
+                                );
+                            }) ?? [],
                     },
                 ];
-            } else {
-                return output;
             }
+            return output;
         },
         [] as FrontendChapterContent[]
     );

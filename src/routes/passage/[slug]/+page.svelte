@@ -47,7 +47,6 @@
     let cbbterSelectedStepScroll: number | undefined;
     let currentTopNavBarTitle: string;
     let contentLoadedPromise: Promise<void> | undefined;
-    let numberOfChapters: number | undefined;
 
     onMount(() => getContent());
 
@@ -75,7 +74,6 @@
                     ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
                 ])
             );
-            numberOfChapters = bibleContent.chapters?.length;
             handleNavBarTitleChange();
         })();
     }
@@ -93,7 +91,7 @@
             if (cbbterText?.steps?.length && cbbterTitle) {
                 currentTopNavBarTitle = cbbterTitle;
             } else {
-                currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`;
+                currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0]?.number ?? ''}`;
             }
         } else if (cbbterTitle) {
             currentTopNavBarTitle = `${cbbterTitle} - ${steps[cbbterSelectedStepNumber - 1]}`;
@@ -131,15 +129,11 @@
     {:then}
         <TopNavBar title={currentTopNavBarTitle} />
         <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
-            <div
-                class="pt-5 px-4 {selectedTab !== 'bible' && 'hidden'} {numberOfChapters ?? 0 <= 1
-                    ? 'h-full'
-                    : 'overflow-y-hidden'}"
-            >
+            <div class="pt-5 px-4 {selectedTab !== 'bible' && 'hidden'} h-full">
                 {#if bibleContent?.chapters?.length}
-                    <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : ''}">
-                        {#each bibleContent.chapters as chapter}
-                            {#if chapter.audioData}
+                    <div class="prose mx-auto flex flex-col-reverse h-full">
+                        {#each bibleContent.chapters as chapter, index}
+                            {#if chapter.audioData && index === 0}
                                 <div class="py-4">
                                     <AudioPlayer
                                         bind:activePlayId
@@ -149,14 +143,16 @@
                                     />
                                 </div>
                             {/if}
-                            <div class={numberOfChapters === 1 ? 'overflow-y-scroll grow' : ''}>
+                        {/each}
+                        <div class="overflow-y-scroll grow">
+                            {#each bibleContent.chapters as chapter}
                                 {#each chapter.versesText as { number, text }}
                                     <div class="py-1">
                                         <span class="sup pr-1">{number}</span><span>{@html text}</span>
                                     </div>
                                 {/each}
-                            </div>
-                        {/each}
+                            {/each}
+                        </div>
                     </div>
                 {:else}
                     <BibleUnavailable bibleLanguageCode={data.bibleLanguageCode} passage={data.passage} />
