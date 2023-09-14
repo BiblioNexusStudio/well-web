@@ -40,7 +40,7 @@
     let cbbterTitle: string | undefined;
     let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
     let topOfStep: HTMLElement | null = null;
-    let selectedTab: Tab = 'bible';
+    let selectedTab: Tab = 'guide';
     let isShowingResourcePane = false;
     let resourcePane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
@@ -171,7 +171,7 @@
                         />
                     </div>
                 </div>
-                <div class="flex flex-grow px-4 overflow-y-scroll">
+                <div class="flex flex-grow px-4 overflow-y-hidden">
                     <div class="prose mx-auto flex flex-grow">
                         <span bind:this={topOfStep} />
                         <div class="flex flex-grow">
