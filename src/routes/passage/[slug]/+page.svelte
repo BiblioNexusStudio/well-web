@@ -171,17 +171,26 @@
                         />
                     </div>
                 </div>
-                <div class="flex-grow px-4 overflow-y-scroll">
-                    <div class="prose mx-auto">
+                <div class="flex flex-grow px-4 overflow-y-scroll">
+                    <div class="prose mx-auto flex flex-grow">
                         <span bind:this={topOfStep} />
-                        <div class="py-5">
+                        <div class="flex flex-grow">
                             {#if stepsAvailable.length > 0}
                                 {#each stepsAvailable as stepNumber}
                                     {@const contentHTML = cbbterText?.steps?.find(
                                         (step) => step.stepNumber === stepNumber
                                     )?.contentHTML}
                                     {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
-                                    <div class={cbbterSelectedStepNumber === stepNumber ? '' : 'hidden'}>
+                                    <div
+                                        class={cbbterSelectedStepNumber === stepNumber
+                                            ? 'flex flex-col flex-grow'
+                                            : 'hidden'}
+                                    >
+                                        {#if contentHTML}
+                                            <div class="flex-grow overflow-y-scroll">
+                                                {@html contentHTML}
+                                            </div>
+                                        {/if}
                                         {#if audioStep}
                                             <div class="py-4">
                                                 <AudioPlayer
@@ -189,9 +198,6 @@
                                                     bind:activePlayId
                                                 />
                                             </div>
-                                        {/if}
-                                        {#if contentHTML}
-                                            {@html contentHTML}
                                         {/if}
                                     </div>
                                 {/each}
