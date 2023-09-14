@@ -40,7 +40,7 @@
     let loading = true;
     $: currentTimeOffset = currentTime - startTime;
     $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
-    $: timeDisplayValue = `${formatTime(currentTimeOffset)} / ${formatTime(totalTime)}`;
+    $: timeDisplayValue = `${formatTime(currentTimeOffset)}`;
 
     const howlOptions: HowlOptions = {
         src: cachedOrRealUrl(audioFile),
@@ -145,7 +145,7 @@
         />
     </div>
 
-    <span class="w-36 items-start text-sm font-sans font-medium text-neutral h-[20px]">{timeDisplayValue}</span>
+    <span class="items-start text-sm font-sans font-medium text-neutral h-[20px]">{timeDisplayValue}</span>
 </div>
 
 <style>

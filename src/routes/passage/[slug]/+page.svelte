@@ -46,6 +46,7 @@
     let cbbterSelectedStepScroll: number | undefined;
     let currentTopNavBarTitle: string;
     let contentLoadedPromise: Promise<void> | undefined;
+    let numberOfChapters: number | undefined;
 
     onMount(() => getContent());
 
@@ -73,6 +74,7 @@
                     ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
                 ])
             );
+            numberOfChapters = bibleContent.chapters?.length;
             handleNavBarTitleChange();
         })();
     }
@@ -129,8 +131,8 @@
         <TopNavBar title={currentTopNavBarTitle} />
         <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
             {#if selectedTab === 'bible'}
-                <div class="flex-grow py-5 px-4 overflow-y-scroll">
-                    <div class="prose mx-auto">
+                <div class="pt-5 px-4 {numberOfChapters === 1 ? 'h-full' : 'overflow-y-scroll'}">
+                    <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : ''}">
                         {#if bibleContent?.chapters?.length}
                             {#each bibleContent.chapters as chapter}
                                 {#if chapter.audioData}
@@ -143,7 +145,7 @@
                                         />
                                     </div>
                                 {/if}
-                                <div>
+                                <div class={numberOfChapters === 1 ? 'overflow-y-scroll grow' : ''}>
                                     {#each chapter.versesText as { number, text }}
                                         <div class="py-1">
                                             <span class="sup pr-1">{number}</span><span>{@html text}</span>
