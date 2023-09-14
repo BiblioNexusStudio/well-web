@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
     import { _ as translate } from 'svelte-i18n';
     import { resetOriginalData } from '$lib/utils/file-manager';
     import { downloadData } from '$lib/stores/file-manager.store';
@@ -13,7 +12,7 @@
 
     const cancelUpdateFiles = () => {
         resetOriginalData();
-        goto('/');
+        history.back();
     };
 </script>
 

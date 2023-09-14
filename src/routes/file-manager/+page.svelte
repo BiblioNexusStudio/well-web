@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { currentLanguageId } from '$lib/stores/current-language.store';
+    import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import { _ as translate } from 'svelte-i18n';
     import {
         addFrontEndDataToBibleData,
@@ -20,7 +20,7 @@
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
-        (!$fileManagerLoading && !$bibleData.length && !$passageData.length && $currentLanguageId);
+        (!$fileManagerLoading && !$bibleData.length && !$passageData.length && $currentLanguageInfo);
 
     async function fetchAvailableResources(currentLanguageId: number | undefined) {
         if (currentLanguageId) {
@@ -41,7 +41,7 @@
         }
     }
 
-    $: fetchAvailableResources($currentLanguageId);
+    $: fetchAvailableResources($currentLanguageInfo?.id);
 </script>
 
 <div class="container mx-auto pt-12">

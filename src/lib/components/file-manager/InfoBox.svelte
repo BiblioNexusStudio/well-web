@@ -3,7 +3,7 @@
     import refresh from 'svelte-awesome/icons/refresh';
     import Icon from 'svelte-awesome';
     import { fileManagerLoading, bibleData, passageData } from '$lib/stores/file-manager.store';
-    import { currentLanguage } from '$lib/stores/current-language.store';
+    import { currentLanguageCode } from '$lib/stores/current-language.store';
     import { _ as translate } from 'svelte-i18n';
 </script>
 
@@ -15,9 +15,9 @@
 {:else}
     <div class="alert alert-info flex mt-4 px-4">
         <Icon data={infoCircle} />
-        {#if !$bibleData.length && !$passageData.length && $currentLanguage}
+        {#if !$bibleData.length && !$passageData.length && $currentLanguageCode}
             <span>Sorry, we don't have data for this language.</span>
-        {:else if !$currentLanguage.length}
+        {:else if !$currentLanguageCode.length}
             <span>{$translate('page.fileManager.selectLanguage.value')}</span>
         {/if}
     </div>

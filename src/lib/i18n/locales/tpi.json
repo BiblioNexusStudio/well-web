@@ -36,7 +36,24 @@
                 }
             },
             "noBibleContent": {
-                "value": "Nogat Baibel stori long dispela hap."
+                "header": {
+                    "value": "Risosis Nogat"
+                },
+                "description": {
+                    "value": "Baibel i no stap long dispela divais bilong {language}.<br />Yu likim yusim narapela tokples?"
+                },
+                "bible": {
+                    "value": "Baibel"
+                },
+                "noneAvailableDescription": {
+                    "value": "Baibel i no stap long dispela divais bilong {language} o narapela tokples.<br />Plis daunlodim konten taim yu stap onlain."
+                },
+                "show": {
+                    "value": "Soim"
+                },
+                "checkForMoreResources": {
+                    "value": "Lukim moa risosis..."
+                }
             },
             "noCbbterContent": {
                 "value": "Nogat CBBT-ER stori long dispela hap."

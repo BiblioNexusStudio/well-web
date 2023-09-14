@@ -1,5 +1,4 @@
 ﻿<script lang="ts">
-    import { navigating, page } from '$app/stores';
     import { cachedOrRealUrl } from '$lib/data-cache';
     import PlayMediaIcon from '$lib/icons/PlayMediaIcon.svelte';
     import PauseMediaIcon from '$lib/icons/PauseMediaIcon.svelte';
@@ -7,6 +6,7 @@
     import type { HowlOptions } from 'howler';
     import refresh from 'svelte-awesome/icons/refresh';
     import { Icon } from 'svelte-awesome';
+    import { onDestroy } from 'svelte';
     type Timer = ReturnType<typeof setInterval>;
 
     export let audioFile: string;
@@ -24,12 +24,6 @@
         }
     };
     $: pauseAudioIfOtherSourcePlaying(activePlayId);
-
-    $: if ($navigating) {
-        if ($navigating.to?.url.pathname !== $page.url.pathname) {
-            sound.unload();
-        }
-    }
 
     const hasCustomTime = endTime !== null;
     let playId: number | undefined = undefined;
@@ -115,6 +109,8 @@
         const seconds = String(totalSeconds % 60).padStart(2, '0');
         return `${minutes}:${seconds}`;
     };
+
+    onDestroy(() => sound.unload());
 </script>
 
 <div class="relative w-full flex flex-row justify-center items-center rounded-xl">

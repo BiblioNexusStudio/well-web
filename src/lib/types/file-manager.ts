@@ -2,7 +2,7 @@ export type Url = string;
 export type UrlWithMetadata = { mediaType: MediaTypeEnum; url: Url; size: number };
 
 export interface BaseBibleVersion {
-    languageId: number | string;
+    languageId: number;
     name: string;
 }
 
