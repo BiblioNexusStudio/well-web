@@ -193,6 +193,12 @@
             }
         }
     },
+    "navTop": {
+        "recording": {
+            "value": "Make a recording...",
+            "_context": "Button to create a recording for the passage"
+        }
+    },
     "resources": {
         "cbbt-er": {
             "step1": {
