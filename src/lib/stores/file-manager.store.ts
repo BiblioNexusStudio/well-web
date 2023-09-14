@@ -5,7 +5,7 @@ import { calculateUrlsWithMetadataToChange } from '$lib/utils/file-manager';
 export const originalBibleData = writable<FrontendBibleVersion[]>([]);
 export const bibleData = writable<FrontendBibleVersion[]>([]);
 export const currentBibleVersion = writable<FrontendBibleVersion>({
-    languageId: '',
+    languageId: 0,
     name: '',
     contents: [],
 });

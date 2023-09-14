@@ -17,6 +17,7 @@
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
     import { onMount } from 'svelte';
+    import BibleUnavailable from './BibleUnavailable.svelte';
 
     type Tab = 'bible' | 'guide';
 
@@ -70,7 +71,7 @@
             bibleContent = fetchedBibleContent;
             stepsAvailable = Array.from(
                 new Set([
-                    ...(cbbterText?.steps.map((step) => step?.stepNumber) ?? []),
+                    ...(cbbterText?.steps?.map((step) => step?.stepNumber) ?? []),
                     ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
                 ])
             );
@@ -131,9 +132,9 @@
         <TopNavBar title={currentTopNavBarTitle} />
         <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
             {#if selectedTab === 'bible'}
-                <div class="pt-5 px-4 {numberOfChapters === 1 ? 'h-full' : 'overflow-y-scroll'}">
-                    <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : ''}">
-                        {#if bibleContent?.chapters?.length}
+                <div class="pt-5 px-4 {numberOfChapters ?? 0 <= 1 ? 'h-full' : 'overflow-y-hidden'}">
+                    {#if bibleContent?.chapters?.length}
+                        <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : ''}">
                             {#each bibleContent.chapters as chapter}
                                 {#if chapter.audioData}
                                     <div class="py-4">
@@ -153,10 +154,10 @@
                                     {/each}
                                 </div>
                             {/each}
-                        {:else}
-                            {$translate('page.passage.noBibleContent.value')}
-                        {/if}
-                    </div>
+                        </div>
+                    {:else}
+                        <BibleUnavailable bibleLanguageCode={data.bibleLanguageCode} passage={data.passage} />
+                    {/if}
                 </div>
             {:else if selectedTab === 'guide'}
                 <div class="px-4 py-6">

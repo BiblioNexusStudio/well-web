@@ -4,10 +4,10 @@ register('eng', () => import('./locales/eng.json'));
 register('hin', () => import('./locales/hin.json'));
 register('tpi', () => import('./locales/tpi.json'));
 
-export async function init(currentLanguage: string | undefined) {
-    locale.set(currentLanguage);
+export async function init(currentLanguageCode: string | undefined) {
+    locale.set(currentLanguageCode);
     await svelteI18nInit({
         fallbackLocale: 'eng',
-        initialLocale: currentLanguage,
+        initialLocale: currentLanguageCode,
     });
 }

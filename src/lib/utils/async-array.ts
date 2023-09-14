@@ -20,7 +20,14 @@ export async function asyncForEach<T>(
     await Promise.all(array.map(asyncCallback));
 }
 
-export async function reduceAsync<T, R>(
+export async function asyncMap<T, R>(
+    array: T[],
+    asyncMapper: (element: T, index: number, array: T[]) => Promise<R>
+): Promise<R[]> {
+    return await Promise.all(array.map(asyncMapper));
+}
+
+export async function asyncReduce<T, R>(
     array: T[],
     reducer: (accumulator: R, element: T, index: number, array: T[]) => Promise<R>,
     initialValue: R

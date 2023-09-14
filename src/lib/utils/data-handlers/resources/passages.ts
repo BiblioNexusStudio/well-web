@@ -2,14 +2,14 @@ import { get } from 'svelte/store';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import type { PassagesForBook } from '$lib/types/passage-form';
 import { data, passagesByBook, selectedBookIndex } from '$lib/stores/passage-form.store';
-import { currentLanguageId } from '$lib/stores/current-language.store';
+import { currentLanguageInfo } from '$lib/stores/current-language.store';
 import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
 import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
 import type { ApiPassage, ApiBibleVersion, ResourceContentSteps, ResourceContentUrl } from '$lib/types/file-manager';
 
 async function getBibleBookIdsToNameAndIndex(languageId: number | null = null) {
     const bibleData = (await fetchFromCacheOrApi(
-        `bibles/language/${languageId || get(currentLanguageId)}`
+        `bibles/language/${languageId || get(currentLanguageInfo)?.id}`
     )) as ApiBibleVersion[];
     if (bibleData[0]) {
         return bibleData[0].contents.reduce(
@@ -28,7 +28,7 @@ export async function fetchData(isOnline: boolean) {
 
     const bibleBookIdsToNameAndIndex = await getBibleBookIdsToNameAndIndex();
     const passagesWithResources = (await fetchFromCacheOrApi(
-        `passages/resources/language/${get(currentLanguageId)}`
+        `passages/resources/language/${get(currentLanguageInfo)?.id}`
     )) as ApiPassage[];
     const availableOfflinePassagesWithResources = await asyncFilter(passagesWithResources, async ({ resources }) => {
         return asyncSome(resources, async ({ mediaType, content }) => {

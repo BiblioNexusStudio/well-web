@@ -8,7 +8,7 @@
         if (value === 'resources') {
             $tableType = 'resources';
         } else {
-            const book = $bibleData.find((b) => b.languageId == value);
+            const book = $bibleData.find((b) => String(b.languageId) === value);
             if (book) {
                 $currentBibleVersion = book;
             }

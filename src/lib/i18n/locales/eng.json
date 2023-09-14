@@ -46,8 +46,30 @@
                 }
             },
             "noBibleContent": {
-                "value": "No Bible content found for this passage.",
-                "_context": "Message to display when the Bible content is not downloaded or available"
+                "header": {
+                    "value": "Resource Unavailable",
+                    "_context": "Header for when a Bible is not available in the current language"
+                },
+                "description": {
+                    "value": "No Bible is available on this device for {language}.<br />Do you want to use another language?",
+                    "_context": "Description for when a Bible is not available in the current language"
+                },
+                "bible": {
+                    "value": "Bible",
+                    "_context": "Placeholder for selecting a Bible to show"
+                },
+                "noneAvailableDescription": {
+                    "value": "No Bible is available on this device for {language} or any other language.<br />Please download the content when you are online.",
+                    "_context": "Description for when a Bible is not available in the current language or any other language"
+                },
+                "show": {
+                    "value": "Show",
+                    "_context": "Show button to load in another language's Bible"
+                },
+                "checkForMoreResources": {
+                    "value": "Check for more resources...",
+                    "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
+                }
             },
             "noCbbterContent": {
                 "value": "No CBBT-ER content found for this passage.",
