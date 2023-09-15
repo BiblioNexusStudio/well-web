@@ -93,7 +93,7 @@
             if (cbbterText?.steps?.length && cbbterTitle) {
                 currentTopNavBarTitle = cbbterTitle;
             } else {
-                currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0].number ?? ''}`;
+                currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0]?.number ?? ''}`;
             }
         } else if (cbbterTitle) {
             currentTopNavBarTitle = `${cbbterTitle} - ${steps[cbbterSelectedStepNumber - 1]}`;
@@ -131,13 +131,9 @@
     {:then}
         <TopNavBar title={currentTopNavBarTitle} />
         <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
-            <div
-                class="pt-5 px-4 {selectedTab !== 'bible' && 'hidden'} {numberOfChapters ?? 0 <= 1
-                    ? 'h-full'
-                    : 'overflow-y-hidden'}"
-            >
+            <div class="pt-5 px-4 {selectedTab !== 'bible' && 'hidden'} h-full">
                 {#if bibleContent?.chapters?.length}
-                    <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : ''}">
+                    <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : 'pb-16'}">
                         {#each bibleContent.chapters as chapter}
                             {#if chapter.audioData}
                                 <div class="py-4">
