@@ -2,6 +2,7 @@
     import AudioRecorder from '$lib/components/AudioRecorder.svelte';
     import type { BasePassage } from '$lib/types/file-manager';
     import { saveBibleRecording } from '$lib/utils/data-handlers/bible';
+    import { _ as translate } from 'svelte-i18n';
 
     export let open = false;
     export let passage: BasePassage | undefined;
@@ -37,22 +38,23 @@
 <dialog bind:this={dialog} class="modal" on:close={() => (open = false)}>
     <div role="none" class="modal-backdrop" on:click={() => (open = false)} />
     <div class="modal-box space-y-2">
-        <h3 class="font-bold text-lg">Make a recording</h3>
+        <h3 class="font-bold text-lg">{$translate('navTop.recording.value')}</h3>
         <div class="form-control w-full">
             <label for="language" class="label">
-                <span class="label-text">What language are you recording?</span>
+                <span class="label-text">{$translate('navTop.audioRecordingModal.languageLabel.value')}</span>
             </label>
             <input name="language" type="text" class="input input-bordered w-full" bind:value={language} />
         </div>
         <div class="form-control w-full">
             <label for="translation" class="label">
-                <span class="label-text">What is the name of the translation?</span>
+                <span class="label-text">{$translate('navTop.audioRecordingModal.versionLabel.value')}</span>
             </label>
             <input name="translation" type="text" class="input input-bordered w-full" bind:value={translation} />
         </div>
         <div class="form-control w-full">
             <label for="abbreviation" class="label">
-                <span class="label-text">What is a 3-letter abbreviation for this translation?</span>
+                <span class="label-text">{$translate('navTop.audioRecordingModal.versionAbbreviationLabel.value')}</span
+                >
             </label>
             <input name="abbreviation" type="text" class="input input-bordered w-full" bind:value={abbreviation} />
         </div>
@@ -60,11 +62,14 @@
         <AudioRecorder bind:this={audioRecorder} bind:canSave={recordingAvailableToSave} />
 
         <div class="modal-action justify-center pt-4">
-            <button class="btn btn-secondary" on:click={discard}>Discard</button>
+            <button class="btn btn-secondary" on:click={discard}
+                >{$translate('navTop.audioRecordingModal.discard.value')}</button
+            >
             <button
                 class="btn btn-primary"
                 on:click={save}
-                disabled={!recordingAvailableToSave || !language || !translation || !abbreviation}>Save</button
+                disabled={!recordingAvailableToSave || !language || !translation || !abbreviation}
+                >{$translate('navTop.audioRecordingModal.save.value')}</button
             >
         </div>
     </div>

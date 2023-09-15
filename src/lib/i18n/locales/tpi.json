@@ -151,7 +151,27 @@
     },
     "navTop": {
         "recording": {
-            "value": "Mekim wanpela rekoding..."
+            "value": "Mekim wanpela rekoding"
+        },
+        "audioRecordingModal": {
+            "noPermission": {
+                "value": "Plis senisim seting bilong yu na givim olrait long mikrofon"
+            },
+            "languageLabel": {
+                "value": "Yu toktok long wanem tokples?"
+            },
+            "versionLabel": {
+                "value": "Nem bilong dispela translesen em wanem?"
+            },
+            "versionAbbreviationLabel": {
+                "value": "Wanem em 3-pela leta bilong dispela translesen?"
+            },
+            "discard": {
+                "value": "Rausim"
+            },
+            "save": {
+                "value": "Sevim"
+            }
         }
     },
     "resources": {

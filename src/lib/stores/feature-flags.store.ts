@@ -17,5 +17,10 @@ featureFlags.subscribe((value) => {
         if (defaultConfig[key] !== value[key]) acc[key] = value[key];
         return acc;
     }, {} as FeatureFlagConfig);
-    localStorage.setItem('featureFlags', JSON.stringify(diffs));
+
+    if (Object.keys(diffs).length === 0) {
+        localStorage.removeItem('featureFlags');
+    } else {
+        localStorage.setItem('featureFlags', JSON.stringify(diffs));
+    }
 });

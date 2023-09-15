@@ -10,7 +10,7 @@
     import DownloadIcon from '$lib/icons/DownloadIcon.svelte';
     import { isSideMenuOpen } from '$lib/stores/top-menu.store';
     import PassageForm from '$lib/components/PassageForm.svelte';
-    import AddRecordingModal from './AddRecordingModal.svelte';
+    import AddAudioRecordingModal from './AddAudioRecordingModal.svelte';
     import type { BasePassage } from '$lib/types/file-manager';
     import { featureFlags } from '$lib/stores/feature-flags.store';
 
@@ -30,7 +30,7 @@
 <svelte:window on:click={handleWindowClick} />
 
 {#if passage}
-    <AddRecordingModal bind:open={recordingModalOpen} {passage} />
+    <AddAudioRecordingModal bind:open={recordingModalOpen} {passage} />
 {/if}
 
 <div class="drawer drawer-end fixed top-0 left-0 bg-base-100 z-50">
@@ -52,7 +52,7 @@
                             <li>
                                 <button on:click={() => (recordingModalOpen = true)}>
                                     <Icon data={microphone} />
-                                    {$translate('navTop.recording.value')}
+                                    {$translate('navTop.recording.value')}...
                                 </button>
                             </li>
                         </ul>

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { saveRecordingToCache } from '$lib/utils/data-storage';
     import { onDestroy } from 'svelte';
+    import { _ as translate } from 'svelte-i18n';
     import { Icon } from 'svelte-awesome';
     import microphone from 'svelte-awesome/icons/microphone';
     import pause from 'svelte-awesome/icons/pause';
@@ -12,11 +13,13 @@
     let recording: Blob | null = null;
     let duration: number | null = null;
     let state: 'recording' | 'stopped' = 'stopped';
+    let noPermission = false;
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
     function startDurationCounter() {
+        noPermission = false;
         duration = 0;
         intervalId = setInterval(() => {
             if (duration !== null) {
@@ -119,7 +122,7 @@
             }
         } catch (e: unknown) {
             if ((e as Error).name === 'NotAllowedError') {
-                throw new Error(`Access to the device's microphone is not allowed`);
+                noPermission = true;
             }
         }
     }
@@ -141,6 +144,8 @@
         recorder = null;
         recording = null;
         stream = null;
+        noPermission = false;
+        audioContext.close();
         stopDurationCounter();
         duration = null;
         return savedRecording;
@@ -155,7 +160,13 @@
 </script>
 
 <div class="flex flex-col items-center">
-    <div class="align-middle">{totalTime}</div>
+    {#if noPermission}
+        <div class="align-middle py-2 text-center text-red-500">
+            {$translate('navTop.audioRecordingModal.noPermission.value')}
+        </div>
+    {:else}
+        <div class="align-middle">{totalTime}</div>
+    {/if}
     <div>
         {#if state === 'recording'}
             <button class="btn btn-primary btn-circle" on:click={pauseRecording}>
