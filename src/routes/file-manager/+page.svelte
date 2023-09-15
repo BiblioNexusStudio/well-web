@@ -17,56 +17,68 @@
     import { MetaTags } from 'svelte-meta-tags';
     import type { ApiPassage } from '$lib/types/file-manager';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
+    import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
+    import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+
+    let fetchAvailableResourcesPromise: Promise<void> | undefined;
 
     $: infoBoxConditionsMet =
         $fileManagerLoading ||
         (!$fileManagerLoading && !$bibleData.length && !$passageData.length && $currentLanguageInfo);
 
     async function fetchAvailableResources(currentLanguageId: number | undefined) {
-        if (currentLanguageId) {
-            $fileManagerLoading = true;
-            $bibleData = await addFrontEndDataToBibleData(
-                await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`)
-            );
-            if ($bibleData.length > 0) {
-                $currentBibleVersion = $bibleData[0];
+        fetchAvailableResourcesPromise = (async () => {
+            if (currentLanguageId) {
+                $fileManagerLoading = true;
+                $bibleData = await addFrontEndDataToBibleData(
+                    await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`)
+                );
+                if ($bibleData.length > 0) {
+                    $currentBibleVersion = $bibleData[0];
+                }
+                $passageData = await addFrontEndDataToPassageData(
+                    (
+                        (await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)) as ApiPassage[]
+                    ).filter(({ resources }) => resources.some(({ content }) => !!content))
+                );
+                resetOriginalData();
+                $fileManagerLoading = false;
             }
-            $passageData = await addFrontEndDataToPassageData(
-                (
-                    (await fetchFromCacheOrApi(`passages/resources/language/${currentLanguageId}`)) as ApiPassage[]
-                ).filter(({ resources }) => resources.some(({ content }) => !!content))
-            );
-            resetOriginalData();
-            $fileManagerLoading = false;
-        }
+        })();
     }
 
     $: fetchAvailableResources($currentLanguageInfo?.id);
 </script>
 
-<div class="container mx-auto pt-12">
+<div class="container mx-auto pt-12 w-full h-full">
     <FmModal />
     <TopNavBar title={$translate('page.fileManager.title.value')} />
-    <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
-        <LanguageSelect />
-    </div>
-
-    <div class="divider" />
-
-    {#if !$fileManagerLoading && ($bibleData.length || $passageData.length)}
-        <div class="flex flex-col sm:flex-row mx-2 mx-4 sm:mx-0 justify-end items-center">
-            <AvailableResourceSelect />
+    {#await fetchAvailableResourcesPromise}
+        <FullPageSpinner />
+    {:then}
+        <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
+            <LanguageSelect />
         </div>
 
         <div class="divider" />
-    {/if}
-    <div class="overflow-x-auto mb-20">
-        {#if infoBoxConditionsMet}
-            <InfoBox />
-        {:else if (($bibleData.length && $currentBibleVersion.contents.length) || $passageData.length) && !$fileManagerLoading}
-            <Table />
+
+        {#if !$fileManagerLoading && ($bibleData.length || $passageData.length)}
+            <div class="flex flex-col sm:flex-row mx-2 mx-4 sm:mx-0 justify-end items-center">
+                <AvailableResourceSelect />
+            </div>
+
+            <div class="divider" />
         {/if}
-    </div>
+        <div class="overflow-x-auto mb-20">
+            {#if infoBoxConditionsMet}
+                <InfoBox />
+            {:else if (($bibleData.length && $currentBibleVersion.contents.length) || $passageData.length) && !$fileManagerLoading}
+                <Table />
+            {/if}
+        </div>
+    {:catch error}
+        <ErrorMessage message={error.message} />
+    {/await}
     <Footer />
 </div>
 
