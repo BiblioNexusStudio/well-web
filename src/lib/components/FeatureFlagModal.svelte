@@ -13,10 +13,49 @@
         show = window.location.hash === '#ff';
     }
 
+    const correctSequence = ['tl', 'tr', 'tr', 'bl'];
+    let currentTapSequence: string[] = [];
+    const boxSize = 0.2; // 20% of screen width/height
+
+    function handleTap(e: TouchEvent) {
+        const x = e.changedTouches[0].clientX;
+        const y = e.changedTouches[0].clientY;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        const position =
+            x < width * boxSize
+                ? y < height * boxSize
+                    ? 'tl'
+                    : y > height * (1 - boxSize)
+                    ? 'bl'
+                    : ''
+                : x > width * (1 - boxSize)
+                ? y < height * boxSize
+                    ? 'tr'
+                    : y > height * (1 - boxSize)
+                    ? 'br'
+                    : ''
+                : '';
+
+        if (position) {
+            currentTapSequence.push(position);
+        }
+
+        if (currentTapSequence.length > correctSequence.length) {
+            currentTapSequence.shift();
+        }
+
+        if (currentTapSequence.join(',') === correctSequence.join(',')) {
+            show = true;
+            currentTapSequence = [];
+        }
+    }
+
     onMount(handleHashChange);
 </script>
 
-<svelte:window on:hashchange={handleHashChange} />
+<svelte:window on:touchend={handleTap} on:hashchange={handleHashChange} />
 
 <dialog class="modal" open={show}>
     <div class="modal-box">

@@ -42,7 +42,7 @@
             {#if passage && $featureFlags.audioRecording}
                 <div class="flex-none">
                     <details class="dropdown dropdown-end">
-                        <summary class="btn btn-square btn-ghost text-primary">
+                        <summary class="btn btn-active btn-link text-primary">
                             <Icon class="h-6 w-6" data={gear} scale={2} />
                         </summary>
                         <ul
