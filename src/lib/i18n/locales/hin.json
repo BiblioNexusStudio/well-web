@@ -184,5 +184,28 @@
         "fileManager": {
             "value": "फ़ाइल प्रबंधक"
         }
+    },
+    "errorMessage": {
+        "networkStatus": {
+            "value": "नेटवर्क स्थिति:"
+        },
+        "online": {
+            "value": "ऑनलाइन"
+        },
+        "offline": {
+            "value": "ऑफ़लाइन"
+        },
+        "error": {
+            "value": "त्रुटि"
+        },
+        "title": {
+            "value": "कुछ गलत हो गया:"
+        },
+        "home": {
+            "value": "घर"
+        },
+        "refresh": {
+            "value": "ताज़ा करें"
+        }
     }
 }

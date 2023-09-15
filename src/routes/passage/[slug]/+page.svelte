@@ -18,6 +18,7 @@
     import TopNavBar from '$lib/components/TopNavBar.svelte';
     import { onMount } from 'svelte';
     import BibleUnavailable from './BibleUnavailable.svelte';
+    import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
     type Tab = 'bible' | 'guide';
 
@@ -126,10 +127,10 @@
 </div>
 
 <div id="passage-page" class="w-full h-full">
+    <TopNavBar title={currentTopNavBarTitle} />
     {#await contentLoadedPromise}
         <FullPageSpinner />
     {:then}
-        <TopNavBar title={currentTopNavBarTitle} />
         <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
             <div class="pt-5 px-4 {selectedTab !== 'bible' && 'hidden'} h-full">
                 {#if bibleContent?.chapters?.length}
@@ -207,5 +208,7 @@
                 </div>
             </div>
         </div>
+    {:catch error}
+        <ErrorMessage message={error.message} />
     {/await}
 </div>

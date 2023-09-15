@@ -19,7 +19,7 @@
         <div class="w-full navbar">
             <div class="flex-1 px-2 text-lg semi-bold">{title}</div>
             <div class="flex-none">
-                <label for="top-navbar-drawer" class="btn btn-square btn-ghost text-primary">
+                <label for="top-navbar-drawer" class="btn btn-active btn-link text-primary">
                     <Icon data={navicon} scale={2} />
                 </label>
             </div>
@@ -31,7 +31,7 @@
             <div class="flex flex-col w-100 grow">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg semi-bold">{$translate('sideMenu.menu.value')}</h3>
-                    <label for="top-navbar-drawer" class="btn btn-square btn-ghost flex px-0 justify-end">
+                    <label for="top-navbar-drawer" class="btn btn-active btn-link flex px-0 justify-end">
                         <Icon data={close} class="text-info" />
                     </label>
                 </div>

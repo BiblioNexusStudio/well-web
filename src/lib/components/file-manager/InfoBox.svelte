@@ -8,12 +8,12 @@
 </script>
 
 {#if $fileManagerLoading}
-    <div class="alert alert-info flex mt-4 px-4">
+    <div class="alert alert-info flex mt-4 w-10/12 mx-auto">
         <Icon data={refresh} spin />
         <span>Loading...</span>
     </div>
 {:else}
-    <div class="alert alert-info flex mt-4 px-4">
+    <div class="alert alert-info flex mt-4 w-10/12 mx-auto">
         <Icon data={infoCircle} />
         {#if !$bibleData.length && !$passageData.length && $currentLanguageCode}
             <span>Sorry, we don't have data for this language.</span>

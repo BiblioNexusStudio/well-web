@@ -184,5 +184,28 @@
         "fileManager": {
             "value": "Fael Manija"
         }
+    },
+    "errorMessage": {
+        "networkStatus": {
+            "value": "Netwok Statas:"
+        },
+        "online": {
+            "value": "Long lain"
+        },
+        "offline": {
+            "value": "No Stap Long Lain"
+        },
+        "error": {
+            "value": "Erro"
+        },
+        "title": {
+            "value": "Sampela samting i no gut:"
+        },
+        "home": {
+            "value": "Haus"
+        },
+        "refresh": {
+            "value": "Rifresim"
+        }
     }
 }
