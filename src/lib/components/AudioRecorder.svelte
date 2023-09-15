@@ -14,7 +14,7 @@
     let state: 'recording' | 'stopped' = 'stopped';
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    let intervalId: NodeJS.Timeout | null = null;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
     function startDurationCounter() {
         duration = 0;

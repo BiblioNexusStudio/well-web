@@ -149,6 +149,11 @@
             }
         }
     },
+    "navTop": {
+        "recording": {
+            "value": "एक रेकॉर्डिंग बनाएं..."
+        }
+    },
     "resources": {
         "cbbt-er": {
             "step1": {

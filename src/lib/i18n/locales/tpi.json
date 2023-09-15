@@ -149,6 +149,11 @@
             }
         }
     },
+    "navTop": {
+        "recording": {
+            "value": "Mekim wanpela rekoding..."
+        }
+    },
     "resources": {
         "cbbt-er": {
             "step1": {
