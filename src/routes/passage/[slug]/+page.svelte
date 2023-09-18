@@ -208,7 +208,7 @@
                 </div>
             </div>
         </div>
-    {:catch error}
-        <ErrorMessage message={error.message} />
+    {:catch}
+        <ErrorMessage />
     {/await}
 </div>

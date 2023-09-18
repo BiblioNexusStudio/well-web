@@ -76,8 +76,8 @@
                 <Table />
             {/if}
         </div>
-    {:catch error}
-        <ErrorMessage message={error.message} />
+    {:catch}
+        <ErrorMessage />
     {/await}
     <Footer />
 </div>

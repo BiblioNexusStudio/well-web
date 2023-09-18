@@ -272,33 +272,21 @@
         }
     },
     "errorMessage": {
-        "networkStatus": {
-            "value": "Network Status",
-            "_context": "The label for the network status message"
-        },
-        "online": {
-            "value": "Online",
-            "_context": "The label for the online message"
-        },
-        "offline": {
-            "value": "Offline",
-            "_context": "The label for the offline message"
-        },
         "error": {
             "value": "Error",
             "_context": "The label for the error message"
         },
         "title": {
-            "value": "Something went wrong:",
+            "value": "Unable To Load Content",
             "_context": "The title for the error message"
+        },
+        "message": {
+            "value": "If the issue persists, please check your internet connection.",
+            "_context": "The message for the error message"
         },
         "home": {
             "value": "Home",
             "_context": "The label for the home button"
-        },
-        "refresh": {
-            "value": "Refresh",
-            "_context": "The label for the refresh button"
         }
     }
 }

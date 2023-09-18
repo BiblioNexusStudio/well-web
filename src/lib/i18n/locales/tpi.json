@@ -211,26 +211,17 @@
         }
     },
     "errorMessage": {
-        "networkStatus": {
-            "value": "Netwok Statas:"
-        },
-        "online": {
-            "value": "Long lain"
-        },
-        "offline": {
-            "value": "No Stap Long Lain"
-        },
         "error": {
             "value": "Erro"
         },
         "title": {
-            "value": "Sampela samting i no gut:"
+            "value": "Mi no inap load konten"
+        },
+        "message": {
+            "value": "Sapos i samting i no stap, plis lukim internet konekson bilong yu."
         },
         "home": {
             "value": "Haus"
-        },
-        "refresh": {
-            "value": "Rifresim"
         }
     }
 }
