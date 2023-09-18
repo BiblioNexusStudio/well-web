@@ -8,7 +8,7 @@ if (browser) {
         name: 'well_dynamic_data',
         version: 1.0,
         storeName: 'well_dynamic_data',
-        description: 'Dynamic data storage for Aquifer',
+        description: 'Dynamic data storage for Well',
     });
 }
 

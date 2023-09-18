@@ -42,7 +42,7 @@ stages:
           DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
           DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
-          SourceDirectory: aquifer-web
+          SourceDirectory: well-web
 
     - template: templates/deploy_stage.yml
       parameters:
@@ -54,4 +54,4 @@ stages:
           DeployUrl: $(AzureStaticWebAppsDeployUrlQaPreview)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
           SourceBranchForPreviewEnvironment: $(Build.SourceBranch)
-          SourceDirectory: aquifer-web
+          SourceDirectory: well-web

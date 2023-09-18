@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">aquifer-web</string>
-    <string name="title_activity_main">aquifer-web</string>
-    <string name="package_name">bible.aquifer</string>
-    <string name="custom_url_scheme">bible.aquifer</string>
+    <string name="app_name">Bible Well</string>
+    <string name="title_activity_main">Bible Well</string>
+    <string name="package_name">bible.well</string>
 </resources>
