@@ -27,15 +27,17 @@ const apiUrl = process.env.PUBLIC_AQUIFER_API_URL;
 const cdnUrl = 'https://cdn.aquifer.bible/';
 
 async function downloadResource(filename, directory, url) {
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        const filepath = join(directory, filename);
-        await fs.promises.mkdir(directory, { recursive: true });
-        await fs.promises.writeFile(filepath, buffer);
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
+    if (url) {
+        try {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+            const filepath = join(directory, filename);
+            await fs.promises.mkdir(directory, { recursive: true });
+            await fs.promises.writeFile(filepath, buffer);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
     }
 }
 
@@ -45,19 +47,21 @@ function getFileNameAndPath(str) {
 }
 
 async function getData(url) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+    if (url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
         }
-        return await response.json();
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
     }
 }
 
 function formatStaticPath(str, pattern) {
-    return '/' + staticCdnPath + str.replace(pattern, '');
+    return '/' + staticCdnPath + str?.replace(pattern, '');
 }
 
 const staticCdnPath = 'static/cached-data/cdn/';
@@ -74,11 +78,11 @@ fs.mkdirSync(`${staticApiPath}${languagesPath}`, { recursive: true });
 fs.writeFileSync(`${staticApiPath}${languagesPath}index.json`, JSON.stringify(languages));
 
 // find language id
-const language = languages.find((lang) => lang.iso6393Code.toLowerCase() === userArgs.language.toLowerCase());
+const language = languages?.find((lang) => lang?.iso6393Code?.toLowerCase() === userArgs?.language?.toLowerCase());
 
 // get bible data with language id
-const biblesPath = `bibles/language/${language.id}/`;
-const biblesUrl = `${apiUrl}bibles/language/${language.id}`;
+const biblesPath = `bibles/language/${language?.id}/`;
+const biblesUrl = `${apiUrl}bibles/language/${language?.id}`;
 const bibleData = await getData(biblesUrl);
 
 // make directory for bibleData
@@ -87,8 +91,8 @@ fs.mkdirSync(`${staticApiPath}${biblesPath}`, { recursive: true });
 // write bibleData as index.json in bible directory
 fs.writeFileSync(`${staticApiPath}${biblesPath}index.json`, JSON.stringify(bibleData));
 
-const passagesPath = `passages/resources/language/${language.id}/`;
-const passagesUrl = `${apiUrl}passages/resources/language/${language.id}`;
+const passagesPath = `passages/resources/language/${language?.id}/`;
+const passagesUrl = `${apiUrl}passages/resources/language/${language?.id}`;
 const passagesData = await getData(passagesUrl);
 
 // make directory for passagesData
@@ -101,47 +105,48 @@ fs.writeFileSync(`${staticApiPath}${passagesPath}index.json`, JSON.stringify(pas
 // user input: language=eng bible=BSB book=mark audio=true resouces=true
 
 // get bible
-const bible = bibleData.find((bible) => bible.name.toLowerCase().includes(userArgs.bible.toLowerCase()));
+const bible = bibleData?.find((bible) => bible?.name?.toLowerCase()?.includes(userArgs?.bible?.toLowerCase()));
 
 // get book
-const book = bible.contents.find((book) => book.displayName.toLowerCase().includes(userArgs.book.toLowerCase()));
+const book = bible?.contents?.find((book) => book?.displayName?.toLowerCase()?.includes(userArgs?.book?.toLowerCase()));
 
 // start loading up urls
+
 urls.push({
-    apiUrl: book.textUrl,
-    staticPath: formatStaticPath(book.textUrl, cdnUrl),
+    apiUrl: book?.textUrl,
+    staticPath: formatStaticPath(book?.textUrl, cdnUrl),
 });
 
-if (userArgs.audio === 'true') {
-    book.audioUrls.chapters.forEach((chapter) => {
+if (userArgs?.audio === 'true') {
+    book?.audioUrls?.chapters?.forEach((chapter) => {
         urls.push({
-            apiUrl: chapter.webm.url,
-            staticPath: formatStaticPath(chapter.webm.url, cdnUrl),
+            apiUrl: chapter?.webm?.url,
+            staticPath: formatStaticPath(chapter?.webm?.url, cdnUrl),
         });
     });
 }
 
-if (userArgs.resources === 'true') {
-    passagesData.forEach((passage) => {
-        if (passage.bookName.toLowerCase().includes(userArgs.book.toLowerCase())) {
-            passage.resources.forEach((resource) => {
+if (userArgs?.resources === 'true') {
+    passagesData?.forEach((passage) => {
+        if (passage.bookName.toLowerCase().includes(userArgs?.book?.toLowerCase())) {
+            passage?.resources?.forEach((resource) => {
                 if (resource.mediaType === 1) {
                     urls.push({
-                        apiUrl: resource.content.content.url,
-                        staticPath: formatStaticPath(resource.content.content.url, cdnUrl),
+                        apiUrl: resource?.content?.content?.url,
+                        staticPath: formatStaticPath(resource?.content?.content?.url, cdnUrl),
                     });
                 } else if (resource.mediaType === 2 && userArgs.audio === 'true') {
-                    resource.content.content.steps.forEach((step) => {
-                        urls.push({
-                            apiUrl: step.webm.url,
-                            staticPath: formatStaticPath(step.webm.url, cdnUrl),
+                    resource?.content?.content?.steps?.forEach((step) => {
+                        urls?.push({
+                            apiUrl: step?.webm?.url,
+                            staticPath: formatStaticPath(step?.webm?.url, cdnUrl),
                         });
                     });
                 }
-                resource.supportingResources.forEach((supportingResource) => {
+                resource.supportingResources?.forEach((supportingResource) => {
                     urls.push({
-                        apiUrl: supportingResource.content.content.url,
-                        staticPath: formatStaticPath(supportingResource.content.content.url, cdnUrl),
+                        apiUrl: supportingResource?.content?.content?.url,
+                        staticPath: formatStaticPath(supportingResource?.content?.content?.url, cdnUrl),
                     });
                 });
             });
@@ -151,8 +156,8 @@ if (userArgs.resources === 'true') {
 
 // download urls
 urls.forEach(async (url) => {
-    const { fileName, pathName } = getFileNameAndPath(url.staticPath);
-    await downloadResource(fileName, `${pathName}`, url.apiUrl);
+    const { fileName, pathName } = getFileNameAndPath(url?.staticPath);
+    await downloadResource(fileName, `${pathName}`, url?.apiUrl);
 });
 
 // Manually adding more urls after downloading the first set.
