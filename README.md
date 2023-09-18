@@ -47,6 +47,15 @@ $ yarn run lint
 $ yarn run test
 ```
 
+## Feature Flags
+
+To add a new feature flag, go to `feature-flags.store.ts` and add your flag to the `defaultConfig`.
+
+To toggle feature flags, open the feature flag modal by:
+
+-   On desktop, add `#ff` to the end of the address bar
+-   On mobile, tap the following sequence on the screen: Top Left, Top Right, Top Right, Bottom Left
+
 ## Generate APK
 
 Using the preload-files-to-static script, we can generate an APK with preloaded Aquifer content. This is useful for distributing the app to users who may not have internet access.

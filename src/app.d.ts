@@ -12,6 +12,7 @@ declare global {
 
     interface Window {
         __CONFIG: Record<string, string | number | boolean>;
+        webkitAudioContext: AudioContext;
     }
 }
 

@@ -9,6 +9,6 @@ export function browserLanguageToISO6393(browserLanguage: string) {
     if (twoDigit === 'en') {
         return 'eng';
     } else if (twoDigit === 'hi') {
-        return 'hindi';
+        return 'hin';
     }
 }
