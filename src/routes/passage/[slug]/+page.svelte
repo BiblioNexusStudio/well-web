@@ -127,7 +127,7 @@
 </div>
 
 <div id="passage-page" class="w-full h-full">
-    <TopNavBar title={currentTopNavBarTitle} />
+    <TopNavBar title={currentTopNavBarTitle} passage={data.passage} />
     {#await contentLoadedPromise}
         <FullPageSpinner />
     {:then}

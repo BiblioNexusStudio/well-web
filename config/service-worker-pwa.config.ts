@@ -48,6 +48,14 @@ export const serviceWorkerPwaConfig = {
                     },
                 },
             },
+            {
+                urlPattern: /.*\/__local_recordings\/.*/,
+                handler: 'CacheOnly',
+                method: 'GET',
+                options: {
+                    cacheName: 'local-recordings',
+                },
+            },
         ],
 
         // this prevents a warning

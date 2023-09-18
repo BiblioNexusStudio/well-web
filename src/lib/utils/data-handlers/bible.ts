@@ -4,6 +4,19 @@ import { audioFileTypeForBrowser } from '../browser';
 import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
 import { asyncEvery } from '../async-array';
 import { range } from '../array';
+import { updateRow } from '../data-storage';
+import { passageTypeToString } from '../passage-helpers';
+
+type BibleRecordingPassage = { url: string };
+type BibleRecordingVersion = {
+    passages: Record<string, BibleRecordingPassage>;
+    language: string;
+    version: string;
+    versionAbbreviation: string;
+};
+type BibleRecordingVersions = { bibleRecordingVersions: BibleRecordingVersion[] };
+
+const bibleRecordingsKey = 'bibleRecordings';
 
 export function bibleUrlsWithMetadataForBookAndChapters(
     bibleVersion: ApiBibleVersion,
@@ -52,4 +65,26 @@ export async function isContentCachedForPassageInBible(passage: BasePassage, bib
             return !!chapterAudioUrl && (await isCachedFromCdn(chapterAudioUrl));
         }))
     );
+}
+
+export async function saveBibleRecording(
+    language: string,
+    version: string,
+    versionAbbreviation: string,
+    passage: BasePassage,
+    filePath: string
+) {
+    await updateRow(bibleRecordingsKey, (current: object) => {
+        const bibleRecordings = current as BibleRecordingVersions;
+        bibleRecordings.bibleRecordingVersions ||= [];
+        let recordingVersion = bibleRecordings.bibleRecordingVersions.find(
+            (b) => b.language === language && b.version === version && b.versionAbbreviation === versionAbbreviation
+        );
+        if (!recordingVersion) {
+            recordingVersion = { language, version, versionAbbreviation, passages: {} };
+            bibleRecordings.bibleRecordingVersions.push(recordingVersion!);
+        }
+        recordingVersion.passages[passageTypeToString(passage)] = { url: filePath };
+        return bibleRecordings;
+    });
 }
