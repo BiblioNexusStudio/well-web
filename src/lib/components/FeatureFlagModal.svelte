@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { featureFlags, type FeatureFlag } from '$lib/stores/feature-flags.store';
+    import { featureFlags } from '$lib/stores/feature-flags.store';
+    import { objectKeys } from '$lib/utils/typesafe-standard-lib';
     import { onMount } from 'svelte';
     let show = window.location.hash === '#ff';
-    let flagNames = Object.keys($featureFlags) as FeatureFlag[];
+    let flagNames = objectKeys($featureFlags);
 
     function close() {
         window.location.hash = '';

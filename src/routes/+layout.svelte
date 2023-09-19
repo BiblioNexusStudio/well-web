@@ -10,6 +10,7 @@
     import { page } from '$app/stores';
     import { log } from '$lib/logger';
     import { updateOnlineStatus } from '$lib/stores/is-online.store';
+    import { featureFlags } from '$lib/stores/feature-flags.store';
     import FeatureFlagModal from '$lib/components/FeatureFlagModal.svelte';
 
     $: log.pageView($page.route.id ?? '');
@@ -22,6 +23,18 @@
     onMount(() => {
         updateOnlineStatus();
         initialize();
+    });
+
+    onMount(() => {
+        let unsubscribe = featureFlags.subscribe((flags) => {
+            if (flags.darkMode) {
+                document.documentElement.setAttribute('data-theme', 'biblioNexusDark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        });
+
+        return unsubscribe;
     });
 
     // get the manifest info to include in the head
