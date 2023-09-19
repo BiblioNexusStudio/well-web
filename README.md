@@ -1,6 +1,6 @@
 ## Description
 
-Aquifer Web is the official front-end web app to access content in the Aquifer.
+Well Web is the official front-end web app to access content in the Aquifer.
 
 It's designed as a PWA (Progressive Web App) allowing a user to download
 content to their device and use it in an offline environment.
@@ -98,4 +98,4 @@ $ npx cap open android
 
 ## License
 
-Aquifer Server is [MIT licensed](LICENSE).
+Well Web is [MIT licensed](LICENSE).

@@ -29,7 +29,7 @@
 </script>
 
 <svelte:head>
-    <title>aquifer</title>
+    <title>Bible Well</title>
     {@html webManifestLink}
 </svelte:head>
 

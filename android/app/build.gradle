@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "bible.aquifer"
+    namespace "bible.well"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "bible.aquifer"
+        applicationId "bible.well"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -89,7 +89,7 @@ stages:
                                       --ref "$(git rev-parse HEAD)" \
                                       --deployedUrl "$DEPLOY_URL" \
                                       --previewEnvName "$DEPLOY_PREVIEW_NAME" \
-                                      --repo aquifer-web
+                                      --repo well-web
                               displayName: Create deployment in GitHub
                               workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
                               env:
@@ -103,7 +103,7 @@ stages:
                                     $(Pipeline.Workspace)/devops/github-cli/script.sh release \
                                         --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
                                         --ref "$(git rev-parse HEAD)" \
-                                        --repo aquifer-web
+                                        --repo well-web
                                   env:
                                       GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)
                                   workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}

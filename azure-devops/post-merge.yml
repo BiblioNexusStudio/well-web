@@ -7,9 +7,9 @@ resources:
           type: github
           name: BiblioNexusStudio/devops
           endpoint: BiblioNexusStudio
-        - repository: aquifer_e2e
+        - repository: well_e2e
           type: github
-          name: BiblioNexusStudio/aquifer-e2e
+          name: BiblioNexusStudio/well-e2e
           endpoint: BiblioNexusStudio
 
 pr: none
@@ -50,7 +50,7 @@ stages:
                           $(Pipeline.Workspace)/devops/github-cli/script.sh deployment \
                               --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
                               --environment "pr$(echo $BUILD_SOURCEVERSIONMESSAGE | grep -oP '\(#\K\d+')" \
-                              --repo aquifer-web \
+                              --repo well-web \
                               --destroy
                       env:
                           GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)
@@ -67,7 +67,7 @@ stages:
           DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
           DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
-          SourceDirectory: aquifer-web
+          SourceDirectory: well-web
 
     - template: templates/deploy_stage.yml
       parameters:
@@ -78,7 +78,7 @@ stages:
           DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
           DeployUrl: $(AzureStaticWebAppsDeployUrlQa)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
-          SourceDirectory: aquifer-web
+          SourceDirectory: well-web
 
     - template: templates/deploy_stage.yml
       parameters:
@@ -90,11 +90,11 @@ stages:
           DeployApiToken: $(AzureStaticWebAppsApiTokenProd)
           DeployUrl: $(AzureStaticWebAppsDeployUrlProd)
           GithubAppPrivateKeyBase64: $(GithubAppPrivateKeyBase64)
-          SourceDirectory: aquifer-web
+          SourceDirectory: well-web
 
     - stage: e2e_tests
       dependsOn: [deploy_to_dev]
       jobs:
-          - template: azure-devops/templates/e2e_tests.yml@aquifer_e2e
+          - template: azure-devops/templates/e2e_tests.yml@well_e2e
             parameters:
                 Url: $(AzureStaticWebAppsDeployUrlDev)

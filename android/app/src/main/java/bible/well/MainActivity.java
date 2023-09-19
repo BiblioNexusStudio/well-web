@@ -1,4 +1,4 @@
-package bible.aquifer;
+package bible.well;
 
 import android.os.Bundle;
 import android.webkit.ServiceWorkerClient;
