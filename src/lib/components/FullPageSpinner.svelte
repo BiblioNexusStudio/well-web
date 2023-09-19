@@ -4,5 +4,5 @@
 </script>
 
 <div class="flex flex-row h-full w-full">
-    <Icon class="self-center mx-auto" data={refresh} scale={2} spin />
+    <Icon class="self-center mx-auto stroke-base-content" data={refresh} scale={2} spin />
 </div>
