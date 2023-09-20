@@ -39,7 +39,7 @@ try {
 
     console.log('\nGetting signing key from Azure Key Vault...');
     execSync(
-        `az keyvault secret download --name bible-well-release-keystore --vault-name WellAndroidSigning --file ${keystorePaths.base64}`
+        `az keyvault secret download --name bible-well-android-release-keystore --vault-name biblionexus-kv-prod --file ${keystorePaths.base64}`
     );
     const base64Data = fs.readFileSync(keystorePaths.base64, 'utf8');
     fs.writeFileSync(keystorePaths.jks, Buffer.from(base64Data, 'base64'));
