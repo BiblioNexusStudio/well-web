@@ -1,110 +1,214 @@
 ﻿<script lang="ts">
-    import { cachedOrRealUrl } from '$lib/data-cache';
+    import { Howl, type HowlOptions } from 'howler';
+    import { onDestroy } from 'svelte';
     import PlayMediaIcon from '$lib/icons/PlayMediaIcon.svelte';
     import PauseMediaIcon from '$lib/icons/PauseMediaIcon.svelte';
-    import { Howl } from 'howler';
-    import type { HowlOptions } from 'howler';
-    import refresh from 'svelte-awesome/icons/refresh';
     import { Icon } from 'svelte-awesome';
-    import { onDestroy } from 'svelte';
+    import refresh from 'svelte-awesome/icons/refresh';
     import type { AudioFileInfo, AudioPlayState } from '$lib/types/audio-player';
-    type Timer = ReturnType<typeof setInterval>;
 
-    export let file: AudioFileInfo;
+    export let files: AudioFileInfo[];
+
+    let playStates = files.map((file) => {
+        const hasCustomTime = file.endTime !== null && file.endTime !== undefined;
+        const howlOptions: HowlOptions = {
+            src: file.url,
+            onplay: onplayFactory(file),
+            onpause: onpauseFactory(file),
+            onend: onendFactory(file),
+            onload: onloadFactory(file),
+        };
+        if (hasCustomTime) {
+            howlOptions.sprite = { audioSection: [1000 * file.startTime, 1000 * (file.endTime! - file.startTime)] };
+        }
+        return {
+            currentTimeInFile: file.startTime,
+            isPlaying: false,
+            playId: null,
+            totalTime: null,
+            loading: true,
+            hasCustomTime,
+            sound: new Howl(howlOptions),
+        } as AudioPlayState;
+    });
+
+    $: allFilesLoaded = playStates.every(({ loading }) => !loading);
+
+    let currentFileIndex = 0;
+    let currentTimer: ReturnType<typeof setInterval> | null;
+
+    /** Bind to this when you have multiple players on a single page. It will
+     * call pauseAudioIfOtherSourcePlaying when any bound activePlayId changes,
+     * preventing multiple audio sources from playing simultaneously.
+     */
     export let activePlayId: number | undefined = undefined;
-
-    const hasCustomTime = file.endTime !== null && file.endTime !== undefined;
-
-    const howlOptions: HowlOptions = {
-        src: cachedOrRealUrl(file.url),
-        onplay: (id) => {
-            playState.isPlaying = true;
-            playState.playId = id;
-            timer = setInterval(() => {
-                playState.currentTime = playState.sound.seek(id) as number;
-                if (!playState.sound.playing(id)) clearInterval(timer);
-            }, 50);
-            activePlayId = id;
-        },
-        onpause: () => (playState.isPlaying = false),
-        onend: () => (playState.isPlaying = false),
-        onload: () => {
-            playState.loading = false;
-            playState.totalTime = hasCustomTime
-                ? file.endTime! - file.startTime
-                : playState.sound.duration(playState.playId!);
-        },
-    };
-
-    if (hasCustomTime) {
-        howlOptions.sprite = { audioSection: [1000 * file.startTime, 1000 * (file.endTime! - file.startTime)] };
-    }
-
-    let playState: AudioPlayState = {
-        currentTime: file.startTime,
-        isPlaying: false,
-        playId: null,
-        totalTime: null,
-        loading: true,
-        sound: new Howl(howlOptions),
-    };
-
     const pauseAudioIfOtherSourcePlaying = (activePlayId: number | undefined) => {
         if (
-            playState.playId !== null &&
-            activePlayId !== playState.playId &&
-            playState.sound.playing(playState.playId)
+            playStates.some(({ playId, sound }) => playId !== null && activePlayId !== playId && sound.playing(playId))
         ) {
-            playState.sound.pause(playState.playId);
+            pauseAll();
         }
     };
     $: pauseAudioIfOtherSourcePlaying(activePlayId);
 
-    let timer: Timer;
-    $: currentTimeOffset = playState.currentTime - file.startTime;
-    $: rangeValue = playState.totalTime === null ? 0 : 100 * (currentTimeOffset / playState.totalTime);
-    $: timeDisplayValue = `${formatTime(currentTimeOffset)}`;
+    function indexFromFile(file: AudioFileInfo) {
+        return files.indexOf(file);
+    }
 
-    const onRangeChange = (e: Event) => {
-        const value = (e.target as HTMLInputElement).value;
-        playState.currentTime = file.startTime + (parseInt(value) / 100) * (playState.totalTime || 0);
+    function pauseAll() {
+        playStates.forEach((state, index) => {
+            playStates[index].isPlaying = false;
+            if (state.playId !== null && state.sound.playing(state.playId)) {
+                state.sound.pause(state.playId);
+            }
+        });
+    }
 
-        if (playState.playId !== null) {
-            playState.sound.pause(playState.playId);
-            playState.sound.seek(playState.currentTime, playState.playId);
-            playState.sound.play(playState.playId);
+    function startCurrentTimer() {
+        if (currentTimer) return;
+        currentTimer = setInterval(() => {
+            const currentPlayId = playStates[currentFileIndex].playId;
+            if (currentPlayId !== null) {
+                playStates[currentFileIndex].currentTimeInFile = playStates[currentFileIndex].sound.seek(
+                    currentPlayId
+                ) as number;
+            }
+        }, 50);
+    }
+
+    function stopCurrentTimer() {
+        if (!currentTimer) return;
+        clearInterval(currentTimer);
+        currentTimer = null;
+    }
+
+    function onplayFactory(file: AudioFileInfo) {
+        return (id: number) => {
+            playStates[indexFromFile(file)].isPlaying = true;
+            startCurrentTimer();
+            activePlayId = id;
+        };
+    }
+
+    function onpauseFactory(file: AudioFileInfo) {
+        return () => {
+            playStates[indexFromFile(file)].isPlaying = false;
+            stopCurrentTimer();
+        };
+    }
+
+    function onendFactory(file: AudioFileInfo) {
+        return () => {
+            playStates[indexFromFile(file)].isPlaying = false;
+            if (files[indexFromFile(file) + 1]) {
+                currentFileIndex = indexFromFile(file) + 1;
+                playStates[currentFileIndex].currentTimeInFile = files[currentFileIndex].startTime;
+                playCurrent();
+            } else {
+                stopCurrentTimer();
+            }
+        };
+    }
+
+    function onloadFactory(file: AudioFileInfo) {
+        return () => {
+            playStates[indexFromFile(file)].loading = false;
+            playStates[indexFromFile(file)].totalTime = playStates[indexFromFile(file)].hasCustomTime
+                ? file.endTime! - file.startTime
+                : playStates[indexFromFile(file)].sound.duration();
+        };
+    }
+
+    function playCurrent() {
+        if (playStates[currentFileIndex].isPlaying) return;
+        let playId = playStates[currentFileIndex].playId;
+        const currentTime = playStates[currentFileIndex].currentTimeInFile;
+
+        if (playId !== null) {
+            playStates[currentFileIndex].sound.play(playId);
+        } else if (playStates[currentFileIndex].hasCustomTime) {
+            playId = playStates[currentFileIndex].sound.play('audioSection');
+            playStates[currentFileIndex].playId = playId;
+        } else {
+            playId = playStates[currentFileIndex].sound.play();
+            playStates[currentFileIndex].playId = playId;
         }
-    };
+        playStates[currentFileIndex].sound.seek(currentTime, playId);
+    }
 
-    const onRangeInput = () => clearInterval(timer);
-
-    const onPlayPauseClick = () => {
-        if (playState.isPlaying) return playState.sound.pause(playState.playId!);
-        if (playState.playId !== null) return playState.sound.play(playState.playId);
-
-        const sprite = hasCustomTime ? 'audioSection' : undefined;
-        const id = playState.sound.play(sprite);
-        playState.sound.seek(playState.currentTime, id);
-        playState.playId = id;
-    };
-
-    const formatTime = (totalSeconds: number) => {
+    function formatTime(totalSeconds: number) {
         totalSeconds = Math.floor(totalSeconds);
         const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
         const seconds = String(totalSeconds % 60).padStart(2, '0');
         return `${minutes}:${seconds}`;
-    };
+    }
 
-    onDestroy(() => playState.sound.unload());
+    let totalDuration = 0;
+    let currentDuration = 0;
+    let rangeValue = 0;
+    let timeDisplayValue = '00:00';
+
+    function updateDurationAndRange(playStates: AudioPlayState[]) {
+        totalDuration = playStates.reduce((acc, state) => {
+            return acc + (state.totalTime || 0);
+        }, 0);
+        currentDuration =
+            playStates.slice(0, currentFileIndex).reduce((acc, state) => {
+                return acc + (state.totalTime || 0);
+            }, 0) +
+            (playStates[currentFileIndex].currentTimeInFile || 0) -
+            (playStates[currentFileIndex].hasCustomTime ? files[currentFileIndex].startTime : 0);
+        rangeValue = 100 * (currentDuration / totalDuration);
+        timeDisplayValue = formatTime(currentDuration);
+    }
+
+    $: updateDurationAndRange(playStates);
+
+    function onRangeChange(e: Event) {
+        stopCurrentTimer();
+        const value = (e.target as HTMLInputElement).value;
+        const newTime = (parseInt(value) / 100) * totalDuration;
+        let offset = 0;
+        let newFileIndex = 0;
+        const isPlaying = playStates[currentFileIndex].isPlaying;
+
+        for (; newFileIndex < playStates.length; newFileIndex++) {
+            const fileTotalTime = playStates[newFileIndex].totalTime || 0;
+            if (offset + fileTotalTime >= newTime) break;
+            offset += fileTotalTime;
+        }
+
+        if (newFileIndex !== currentFileIndex) {
+            currentFileIndex = newFileIndex;
+        }
+
+        const startTime = playStates[currentFileIndex].hasCustomTime ? files[currentFileIndex].startTime : 0;
+        playStates[currentFileIndex].currentTimeInFile = newTime - offset + startTime;
+
+        if (isPlaying) {
+            pauseAll();
+            playCurrent();
+        }
+    }
+
+    function onPlayPauseClick() {
+        playStates[currentFileIndex].isPlaying ? pauseAll() : playCurrent();
+    }
+
+    onDestroy(() => {
+        playStates.forEach((state) => {
+            state.sound.unload();
+        });
+    });
 </script>
 
 <div class="relative w-full flex flex-row justify-center items-center rounded-xl">
-    {#if playState.loading}
+    {#if !allFilesLoaded}
         <div />
         <Icon class="grow-0 w-[20px] h-[20px] text-primary" data={refresh} spin />
     {:else}
         <button class="grow-0 w-[20px] h-[20px] cursor-pointer" on:click={onPlayPauseClick}>
-            {#if playState.isPlaying}
+            {#if playStates[currentFileIndex].isPlaying}
                 <PauseMediaIcon />
             {:else}
                 <PlayMediaIcon />
@@ -121,12 +225,12 @@
             min="0"
             max="100"
             on:change={onRangeChange}
-            on:input={onRangeInput}
+            on:input={stopCurrentTimer}
             value={rangeValue}
         />
     </div>
 
-    <span class="items-start text-sm font-sans font-medium text-neutral h-[20px]">{timeDisplayValue}</span>
+    <span class="items-start text-sm font-medium text-neutral h-[20px] font-mono">{timeDisplayValue}</span>
 </div>
 
 <style>

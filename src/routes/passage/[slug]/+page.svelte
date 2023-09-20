@@ -5,7 +5,7 @@
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import type { CbbtErImageContent, CbbtErTextContent, ResourceContentSteps } from '$lib/types/file-manager';
-    import type { FrontendChapterContent } from './+page';
+    import type { FrontendChapterAudioData, FrontendChapterContent } from './+page';
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
     import { asyncFilter } from '$lib/utils/async-array';
@@ -55,6 +55,9 @@
     $: data && getContent(); // when the [slug] changes, the data will change and trigger this
     $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
+
+    $: audioData = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) ||
+        []) as FrontendChapterAudioData[];
 
     async function getContent() {
         contentLoadedPromise = (async () => {
@@ -135,19 +138,19 @@
             <div class="pt-5 px-4 {selectedTab !== 'bible' && 'hidden'} h-full">
                 {#if bibleContent?.chapters?.length}
                     <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : 'pb-16'}">
+                        {#if audioData.length > 0}
+                            <div class="py-4">
+                                <AudioPlayer
+                                    bind:activePlayId
+                                    files={audioData.map((data) => ({
+                                        url: data.url,
+                                        startTime: data.startTimestamp || 0,
+                                        endTime: data.endTimestamp,
+                                    }))}
+                                />
+                            </div>
+                        {/if}
                         {#each bibleContent.chapters as chapter}
-                            {#if chapter.audioData}
-                                <div class="py-4">
-                                    <AudioPlayer
-                                        bind:activePlayId
-                                        file={{
-                                            url: chapter.audioData.url,
-                                            startTime: chapter.audioData.startTimestamp || 0,
-                                            endTime: chapter.audioData.endTimestamp,
-                                        }}
-                                    />
-                                </div>
-                            {/if}
                             <div class={numberOfChapters === 1 ? 'overflow-y-scroll grow' : ''}>
                                 {#each chapter.versesText as { number, text }}
                                     <div class="py-1">
@@ -196,10 +199,12 @@
                                     {#if audioStep}
                                         <div class="py-4">
                                             <AudioPlayer
-                                                file={{
-                                                    url: audioStep[audioFileTypeForBrowser()].url,
-                                                    startTime: 0,
-                                                }}
+                                                files={[
+                                                    {
+                                                        url: audioStep[audioFileTypeForBrowser()].url,
+                                                        startTime: 0,
+                                                    },
+                                                ]}
                                                 bind:activePlayId
                                             />
                                         </div>

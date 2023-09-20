@@ -29,9 +29,15 @@ import { bibleUrlsWithMetadataForBookAndChapters, fetchBibleDataForLanguageCode 
 import { cbbterUrlsWithMetadataForPassage } from '$lib/utils/data-handlers/resources/cbbt-er';
 import { range } from '$lib/utils/array';
 
+export interface FrontendChapterAudioData {
+    url: string;
+    startTimestamp: number | null;
+    endTimestamp: number | null;
+}
+
 export interface FrontendChapterContent {
     number: string;
-    audioData: { url: string; startTimestamp: number | null; endTimestamp: number | null } | null;
+    audioData: FrontendChapterAudioData | null;
     versesText: { number: string; text: string }[];
 }
 
