@@ -140,9 +140,11 @@
                                 <div class="py-4">
                                     <AudioPlayer
                                         bind:activePlayId
-                                        audioFile={chapter.audioData.url}
-                                        startTime={chapter.audioData.startTimestamp || 0}
-                                        endTime={chapter.audioData.endTimestamp}
+                                        file={{
+                                            url: chapter.audioData.url,
+                                            startTime: chapter.audioData.startTimestamp || 0,
+                                            endTime: chapter.audioData.endTimestamp,
+                                        }}
                                     />
                                 </div>
                             {/if}
@@ -194,7 +196,10 @@
                                     {#if audioStep}
                                         <div class="py-4">
                                             <AudioPlayer
-                                                audioFile={audioStep[audioFileTypeForBrowser()].url}
+                                                file={{
+                                                    url: audioStep[audioFileTypeForBrowser()].url,
+                                                    startTime: 0,
+                                                }}
                                                 bind:activePlayId
                                             />
                                         </div>

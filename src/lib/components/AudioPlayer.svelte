@@ -7,100 +7,85 @@
     import refresh from 'svelte-awesome/icons/refresh';
     import { Icon } from 'svelte-awesome';
     import { onDestroy } from 'svelte';
+    import type { AudioFileInfo, AudioPlayState } from '$lib/types/audio-player';
     type Timer = ReturnType<typeof setInterval>;
 
-    export let audioFile: string;
-    export let startTime = 0;
-    export let endTime: number | null = null;
-
-    /** Bind to this when you have multiple players on a single page. It will
-     * call pauseAudioIfOtherSourcePlaying when any bound activePlayId changes,
-     * preventing multiple audio sources from playing simultaneously.
-     */
+    export let file: AudioFileInfo;
     export let activePlayId: number | undefined = undefined;
+
+    const hasCustomTime = file.endTime !== null && file.endTime !== undefined;
+
+    const howlOptions: HowlOptions = {
+        src: cachedOrRealUrl(file.url),
+        onplay: (id) => {
+            playState.isPlaying = true;
+            playState.playId = id;
+            timer = setInterval(() => {
+                playState.currentTime = playState.sound.seek(id) as number;
+                if (!playState.sound.playing(id)) clearInterval(timer);
+            }, 50);
+            activePlayId = id;
+        },
+        onpause: () => (playState.isPlaying = false),
+        onend: () => (playState.isPlaying = false),
+        onload: () => {
+            playState.loading = false;
+            playState.totalTime = hasCustomTime
+                ? file.endTime! - file.startTime
+                : playState.sound.duration(playState.playId!);
+        },
+    };
+
+    if (hasCustomTime) {
+        howlOptions.sprite = { audioSection: [1000 * file.startTime, 1000 * (file.endTime! - file.startTime)] };
+    }
+
+    let playState: AudioPlayState = {
+        currentTime: file.startTime,
+        isPlaying: false,
+        playId: null,
+        totalTime: null,
+        loading: true,
+        sound: new Howl(howlOptions),
+    };
+
     const pauseAudioIfOtherSourcePlaying = (activePlayId: number | undefined) => {
-        if (playId !== undefined && activePlayId !== playId && sound.playing(playId)) {
-            sound.pause(playId);
+        if (
+            playState.playId !== null &&
+            activePlayId !== playState.playId &&
+            playState.sound.playing(playState.playId)
+        ) {
+            playState.sound.pause(playState.playId);
         }
     };
     $: pauseAudioIfOtherSourcePlaying(activePlayId);
 
-    const hasCustomTime = endTime !== null;
-    let playId: number | undefined = undefined;
-    let isAudioPlaying = false;
-    let currentTime = startTime;
-    let totalTime = 0;
     let timer: Timer;
-    let loading = true;
-    $: currentTimeOffset = currentTime - startTime;
-    $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
+    $: currentTimeOffset = playState.currentTime - file.startTime;
+    $: rangeValue = playState.totalTime === null ? 0 : 100 * (currentTimeOffset / playState.totalTime);
     $: timeDisplayValue = `${formatTime(currentTimeOffset)}`;
 
-    const howlOptions: HowlOptions = {
-        src: cachedOrRealUrl(audioFile),
-        onplay: () => {
-            isAudioPlaying = true;
-            timer = setInterval(() => {
-                currentTime = sound.seek(playId);
-                if (!sound.playing(playId)) clearInterval(timer);
-            }, 50);
+    const onRangeChange = (e: Event) => {
+        const value = (e.target as HTMLInputElement).value;
+        playState.currentTime = file.startTime + (parseInt(value) / 100) * (playState.totalTime || 0);
 
-            activePlayId = playId;
-        },
-        onpause: () => {
-            isAudioPlaying = false;
-        },
-        onend: () => {
-            isAudioPlaying = false;
-        },
-        onload: () => {
-            loading = false;
-            totalTime = hasCustomTime ? endTime! - startTime : sound.duration(playId);
-        },
-    };
-
-    // If you specify a section, you must play a section.
-    if (hasCustomTime) {
-        howlOptions.sprite = {
-            audioSection: [1000 * startTime, 1000 * (endTime! - startTime)],
-        };
-    }
-
-    const sound = new Howl(howlOptions);
-
-    const onRangeChange = (event: Event) => {
-        const { value } = event.target as HTMLInputElement;
-        currentTime = startTime + (parseInt(value) / 100) * totalTime;
-
-        if (playId !== undefined) {
-            sound.pause(playId);
-            sound.seek(currentTime, playId);
-            sound.play(playId);
+        if (playState.playId !== null) {
+            playState.sound.pause(playState.playId);
+            playState.sound.seek(playState.currentTime, playState.playId);
+            playState.sound.play(playState.playId);
         }
     };
 
-    const onRangeInput = () => {
-        clearInterval(timer);
-    };
+    const onRangeInput = () => clearInterval(timer);
 
     const onPlayPauseClick = () => {
-        if (isAudioPlaying) {
-            sound.pause(playId);
-            return;
-        }
+        if (playState.isPlaying) return playState.sound.pause(playState.playId!);
+        if (playState.playId !== null) return playState.sound.play(playState.playId);
 
-        if (playId !== undefined) {
-            sound.play(playId);
-            return;
-        }
-
-        if (hasCustomTime) {
-            playId = sound.play('audioSection');
-        } else {
-            playId = sound.play();
-        }
-
-        sound.seek(currentTime, playId);
+        const sprite = hasCustomTime ? 'audioSection' : undefined;
+        const id = playState.sound.play(sprite);
+        playState.sound.seek(playState.currentTime, id);
+        playState.playId = id;
     };
 
     const formatTime = (totalSeconds: number) => {
@@ -110,16 +95,16 @@
         return `${minutes}:${seconds}`;
     };
 
-    onDestroy(() => sound.unload());
+    onDestroy(() => playState.sound.unload());
 </script>
 
 <div class="relative w-full flex flex-row justify-center items-center rounded-xl">
-    {#if loading}
+    {#if playState.loading}
         <div />
         <Icon class="grow-0 w-[20px] h-[20px] text-primary" data={refresh} spin />
     {:else}
         <button class="grow-0 w-[20px] h-[20px] cursor-pointer" on:click={onPlayPauseClick}>
-            {#if isAudioPlaying}
+            {#if playState.isPlaying}
                 <PauseMediaIcon />
             {:else}
                 <PlayMediaIcon />
@@ -137,7 +122,7 @@
             max="100"
             on:change={onRangeChange}
             on:input={onRangeInput}
-            bind:value={rangeValue}
+            value={rangeValue}
         />
     </div>
 
