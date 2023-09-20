@@ -11,20 +11,7 @@
 import fs from 'fs';
 import { join, basename, dirname } from 'path';
 import 'dotenv/config';
-
-// setup for url matching
-const urls = [];
-
-// get the user input
-const args = process.argv.slice(2);
-const userArgs = {};
-args.forEach(function (val) {
-    var split = val.split('=');
-    userArgs[split[0]] = split[1];
-});
-
-const apiUrl = process.env.PUBLIC_AQUIFER_API_URL;
-const cdnUrl = 'https://cdn.aquifer.bible/';
+import pLimit from 'p-limit';
 
 async function downloadResource(filename, directory, url) {
     if (url) {
@@ -60,142 +47,182 @@ async function getData(url) {
     }
 }
 
-function formatStaticPath(str, pattern) {
-    return '/' + staticCdnPath + str?.replace(pattern, '');
-}
+export async function preloadFiles(apiUrl, options) {
+    if (!options.language) {
+        throw new Error('Must be called with `language` arg');
+    }
 
-const staticCdnPath = 'static/cached-data/cdn/';
-const staticApiPath = 'static/cached-data/api/';
-const languagesPath = 'languages/';
-const languagesUrl = `${apiUrl}languages`;
+    if (options.cleanDir) {
+        fs.rmSync('static/cached-data', { recursive: true, force: true });
+    }
 
-const languages = await getData(languagesUrl);
+    function formatStaticPath(str, pattern) {
+        return '/' + staticCdnPath + str?.replace(pattern, '');
+    }
+    // setup for url matching
+    const urls = [];
 
-//make directory for language
-fs.mkdirSync(`${staticApiPath}${languagesPath}`, { recursive: true });
+    const cdnUrl = 'https://cdn.aquifer.bible/';
 
-//write language file as index.json in language directory
-fs.writeFileSync(`${staticApiPath}${languagesPath}index.json`, JSON.stringify(languages));
+    const staticCdnPath = 'static/cached-data/cdn/';
+    const staticApiPath = 'static/cached-data/api/';
+    const languagesPath = 'languages/';
+    const languagesUrl = `${apiUrl}languages`;
 
-// find language id
-const language = languages?.find((lang) => lang?.iso6393Code?.toLowerCase() === userArgs?.language?.toLowerCase());
+    const languages = await getData(languagesUrl);
 
-// get bible data with language id
-const biblesPath = `bibles/language/${language?.id}/`;
-const biblesUrl = `${apiUrl}bibles/language/${language?.id}`;
-const bibleData = await getData(biblesUrl);
+    //make directory for language
+    fs.mkdirSync(`${staticApiPath}${languagesPath}`, { recursive: true });
 
-// make directory for bibleData
-fs.mkdirSync(`${staticApiPath}${biblesPath}`, { recursive: true });
+    //write language file as index.json in language directory
+    fs.writeFileSync(`${staticApiPath}${languagesPath}index.json`, JSON.stringify(languages));
 
-// write bibleData as index.json in bible directory
-fs.writeFileSync(`${staticApiPath}${biblesPath}index.json`, JSON.stringify(bibleData));
+    // find language id
+    const language = languages?.find((lang) => lang?.iso6393Code?.toLowerCase() === options.language?.toLowerCase());
 
-const passagesPath = `passages/resources/language/${language?.id}/`;
-const passagesUrl = `${apiUrl}passages/resources/language/${language?.id}`;
-const passagesData = await getData(passagesUrl);
+    // get bible data with language id
+    const biblesPath = `bibles/language/${language?.id}/`;
+    const biblesUrl = `${apiUrl}bibles/language/${language?.id}`;
+    const bibleData = await getData(biblesUrl);
 
-// make directory for passagesData
-fs.mkdirSync(`${staticApiPath}${passagesPath}`, { recursive: true });
+    // make directory for bibleData
+    fs.mkdirSync(`${staticApiPath}${biblesPath}`, { recursive: true });
 
-// write passagesData as index.json in passages directory
-fs.writeFileSync(`${staticApiPath}${passagesPath}index.json`, JSON.stringify(passagesData));
+    // write bibleData as index.json in bible directory
+    fs.writeFileSync(`${staticApiPath}${biblesPath}index.json`, JSON.stringify(bibleData));
 
-// using bibleData, passagesData and user input, create a list of urls to fetch
-// user input: language=eng bible=BSB book=mark audio=true resouces=true
+    const passagesPath = `passages/resources/language/${language?.id}/`;
+    const passagesUrl = `${apiUrl}passages/resources/language/${language?.id}`;
+    const passagesData = await getData(passagesUrl);
 
-// get bible
-const bible = bibleData?.find((bible) => bible?.name?.toLowerCase()?.includes(userArgs?.bible?.toLowerCase()));
+    // make directory for passagesData
+    fs.mkdirSync(`${staticApiPath}${passagesPath}`, { recursive: true });
 
-// get book
-const book = bible?.contents?.find((book) => book?.displayName?.toLowerCase()?.includes(userArgs?.book?.toLowerCase()));
+    // write passagesData as index.json in passages directory
+    fs.writeFileSync(`${staticApiPath}${passagesPath}index.json`, JSON.stringify(passagesData));
 
-// start loading up urls
+    // using bibleData, passagesData and user input, create a list of urls to fetch
+    // user input: language=eng bible=BSB book=mark audio=true resouces=true
 
-urls.push({
-    apiUrl: book?.textUrl,
-    staticPath: formatStaticPath(book?.textUrl, cdnUrl),
-});
+    // get bible
+    const bible = bibleData?.find((bible) => bible?.name?.toLowerCase()?.includes(options.bible?.toLowerCase()));
 
-if (userArgs?.audio === 'true') {
-    book?.audioUrls?.chapters?.forEach((chapter) => {
-        urls.push({
-            apiUrl: chapter?.webm?.url,
-            staticPath: formatStaticPath(chapter?.webm?.url, cdnUrl),
-        });
+    // get book
+    const book = bible?.contents?.find((book) =>
+        book?.displayName?.toLowerCase()?.includes(options.book?.toLowerCase())
+    );
+
+    // start loading up urls
+
+    urls.push({
+        apiUrl: book?.textUrl,
+        staticPath: formatStaticPath(book?.textUrl, cdnUrl),
     });
-}
 
-if (userArgs?.resources === 'true') {
-    passagesData?.forEach((passage) => {
-        if (passage.bookName.toLowerCase().includes(userArgs?.book?.toLowerCase())) {
-            passage?.resources?.forEach((resource) => {
-                if (resource.mediaType === 1) {
-                    urls.push({
-                        apiUrl: resource?.content?.content?.url,
-                        staticPath: formatStaticPath(resource?.content?.content?.url, cdnUrl),
-                    });
-                } else if (resource.mediaType === 2 && userArgs.audio === 'true') {
-                    resource?.content?.content?.steps?.forEach((step) => {
-                        urls?.push({
-                            apiUrl: step?.webm?.url,
-                            staticPath: formatStaticPath(step?.webm?.url, cdnUrl),
+    if (options.audio === 'true') {
+        book?.audioUrls?.chapters?.forEach((chapter) => {
+            urls.push({
+                apiUrl: chapter?.webm?.url,
+                staticPath: formatStaticPath(chapter?.webm?.url, cdnUrl),
+            });
+        });
+    }
+
+    if (options.resources === 'true') {
+        passagesData?.forEach((passage) => {
+            if (passage.bookName.toLowerCase().includes(options.book?.toLowerCase())) {
+                passage?.resources?.forEach((resource) => {
+                    if (resource.mediaType === 1) {
+                        urls.push({
+                            apiUrl: resource?.content?.content?.url,
+                            staticPath: formatStaticPath(resource?.content?.content?.url, cdnUrl),
+                        });
+                    } else if (resource.mediaType === 2 && options.audio === 'true') {
+                        resource?.content?.content?.steps?.forEach((step) => {
+                            urls?.push({
+                                apiUrl: step?.webm?.url,
+                                staticPath: formatStaticPath(step?.webm?.url, cdnUrl),
+                            });
+                        });
+                    }
+                    resource.supportingResources?.forEach((supportingResource) => {
+                        urls.push({
+                            apiUrl: supportingResource?.content?.content?.url,
+                            staticPath: formatStaticPath(supportingResource?.content?.content?.url, cdnUrl),
                         });
                     });
-                }
-                resource.supportingResources?.forEach((supportingResource) => {
-                    urls.push({
-                        apiUrl: supportingResource?.content?.content?.url,
-                        staticPath: formatStaticPath(supportingResource?.content?.content?.url, cdnUrl),
-                    });
                 });
-            });
-        }
+            }
+        });
+    }
+
+    const limit = pLimit(5);
+
+    const tasks = urls.map((url) => {
+        return limit(async () => {
+            const { fileName, pathName } = getFileNameAndPath(url?.staticPath);
+            await downloadResource(fileName, `${pathName}`, url?.apiUrl);
+        });
     });
+
+    await Promise.all(tasks);
+
+    // Manually adding more urls after downloading the first set.
+    // This is because the first set of urls are needed to get the rest of the urls.
+
+    // adding language index.json
+    urls.push({
+        apiUrl: languagesUrl,
+        staticPath: `/${staticApiPath}${languagesPath}index.json`,
+    });
+
+    // adding bible index.json
+    urls.push({
+        apiUrl: biblesUrl,
+        staticPath: `/${staticApiPath}${biblesPath}index.json`,
+    });
+
+    // adding passages index.json
+    urls.push({
+        apiUrl: passagesUrl,
+        staticPath: `/${staticApiPath}${passagesPath}index.json`,
+    });
+
+    // finally adding the urls to the src folder as static-urls-map.json
+    const staticUrlsMap = {};
+
+    // read ./src/lib/static-urls-map.json and get the existing urls
+    const existingUrlsMap = JSON.parse(fs.readFileSync('./src/lib/static-urls-map.json', 'utf8'));
+
+    // add the existing urls to the staticUrlsMap
+    Object.keys(existingUrlsMap).forEach((key) => {
+        staticUrlsMap[key] = existingUrlsMap[key];
+    });
+
+    // add the new urls to the staticUrlsMap
+    urls.forEach((url) => {
+        staticUrlsMap[url.apiUrl] = url.staticPath.replace(/^\/static/, '');
+    });
+
+    // write the staticUrlsMap to the static-urls-map.json file
+    fs.writeFileSync(`./src/lib/static-urls-map.json`, JSON.stringify(staticUrlsMap));
 }
 
-// download urls
-urls.forEach(async (url) => {
-    const { fileName, pathName } = getFileNameAndPath(url?.staticPath);
-    await downloadResource(fileName, `${pathName}`, url?.apiUrl);
-});
+export function parseArgs(argv) {
+    const args = argv.slice(2);
+    const userArgs = {};
+    args.forEach(function (val) {
+        var split = val.split('=');
+        userArgs[split[0]] = split[1];
+    });
+    return userArgs;
+}
 
-// Manually adding more urls after downloading the first set.
-// This is because the first set of urls are needed to get the rest of the urls.
+const isScriptCalledDirectly = import.meta.url.endsWith(basename(import.meta.url));
+if (isScriptCalledDirectly) {
+    const apiUrl = process.env.PUBLIC_AQUIFER_API_URL;
 
-// adding language index.json
-urls.push({
-    apiUrl: languagesUrl,
-    staticPath: `/${staticApiPath}${languagesPath}index.json`,
-});
-
-// adding bible index.json
-urls.push({
-    apiUrl: biblesUrl,
-    staticPath: `/${staticApiPath}${biblesPath}index.json`,
-});
-
-// adding passages index.json
-urls.push({
-    apiUrl: passagesUrl,
-    staticPath: `/${staticApiPath}${passagesPath}index.json`,
-});
-
-// finally adding the urls to the src folder as static-urls-map.json
-const staticUrlsMap = {};
-
-// read ./src/lib/static-urls-map.json and get the existing urls
-const existingUrlsMap = JSON.parse(fs.readFileSync('./src/lib/static-urls-map.json', 'utf8'));
-
-// add the existing urls to the staticUrlsMap
-Object.keys(existingUrlsMap).forEach((key) => {
-    staticUrlsMap[key] = existingUrlsMap[key];
-});
-
-// add the new urls to the staticUrlsMap
-urls.forEach((url) => {
-    staticUrlsMap[url.apiUrl] = url.staticPath.replace(/^\/static/, '');
-});
-
-// write the staticUrlsMap to the static-urls-map.json file
-fs.writeFileSync(`./src/lib/static-urls-map.json`, JSON.stringify(staticUrlsMap));
+    preloadFiles(apiUrl, parseArgs(process.argv)).catch((err) => {
+        console.error(err);
+    });
+}

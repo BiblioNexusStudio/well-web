@@ -58,7 +58,18 @@ To toggle feature flags, open the feature flag modal by:
 
 ## Generate APK
 
-Using the preload-files-to-static script, we can generate an APK with preloaded Aquifer content. This is useful for distributing the app to users who may not have internet access.
+This is useful for distributing the app to users who may not have internet access.
+
+### Automated Build
+
+Use `yarn apk:build` to run the manual steps in order, as well as handle the signing key stored in Azure Key Vault. See
+below for the options available for preloading content.
+
+```bash
+$ yarn apk:build language=eng bible=BSB book=mark audio=true resources=true
+```
+
+### Manual Build
 
 1. You have to preload the files into the static diretory.
 
@@ -69,7 +80,7 @@ Using the preload-files-to-static script, we can generate an APK with preloaded 
 -   resources: true/false to preload resource files
 
 ```bash
-$ node scripts/preload-files-to-static.js language=eng bible=BSB book=mark audio=true resources=true
+$ yarn apk:preload-content language=eng bible=BSB book=mark audio=true resources=true
 ```
 
 2. Build the app
