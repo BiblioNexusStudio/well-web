@@ -38,3 +38,4 @@ export const footerInputs = writable<FooterInputs>({
     audio: false,
     media: false,
 });
+export const changeMenuGroupValue = writable<string>('book');

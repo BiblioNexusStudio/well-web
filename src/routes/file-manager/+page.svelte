@@ -58,10 +58,6 @@
     {#await fetchAvailableResourcesPromise}
         <FullPageSpinner />
     {:then}
-        <div class="flex mx-4 my-6 justify-between items-center">
-            <Search />
-            <ChangeView />
-        </div>
         <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
             <LanguageSelect />
         </div>
@@ -75,6 +71,12 @@
 
             <div class="divider" />
         {/if}
+
+        <div class="flex mx-4 my-6 justify-between items-center">
+            <Search />
+            <ChangeView />
+        </div>
+
         <div class="overflow-x-auto pb-32">
             {#if infoBoxConditionsMet}
                 <InfoBox />
