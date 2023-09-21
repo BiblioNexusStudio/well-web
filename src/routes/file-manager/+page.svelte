@@ -69,7 +69,7 @@
 
             <div class="divider" />
         {/if}
-        <div class="overflow-x-auto mb-20">
+        <div class="overflow-x-auto pb-32">
             {#if infoBoxConditionsMet}
                 <InfoBox />
             {:else if (($bibleData.length && $currentBibleVersion.contents.length) || $passageData.length) && !$fileManagerLoading}
