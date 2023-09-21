@@ -26,3 +26,4 @@ export const downloadData = derived(
     }
 );
 export const tableType = writable<string>('bible');
+export const hideDownloadedBundles = writable<boolean>(false);
