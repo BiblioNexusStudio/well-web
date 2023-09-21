@@ -20,8 +20,8 @@
     import BibleUnavailable from './BibleUnavailable.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
     import {
-        createAudioPlayerStateStore,
-        type AudioPlayerStateStore,
+        createMultiClipAudioState,
+        type MultiClipAudioState,
         type AudioFileInfo,
     } from '$lib/components/AudioPlayer/audio-player-state';
     import { objectKeys } from '$lib/utils/typesafe-standard-lib';
@@ -53,7 +53,7 @@
     let cbbterSelectedStepScroll: number | undefined;
     let currentTopNavBarTitle: string;
     let contentLoadedPromise: Promise<void> | undefined;
-    let audioPlayerStateStores: Record<string, AudioPlayerStateStore> = {};
+    let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
 
     onMount(() => getContent());
 
@@ -61,7 +61,7 @@
     $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
     $: audioPlayerKey = selectedTab === 'bible' ? 'bible' : cbbterStepKey(cbbterSelectedStepNumber);
-    $: audioPlayerShowing = !!audioPlayerStateStores[audioPlayerKey];
+    $: audioPlayerShowing = !!multiClipAudioStates[audioPlayerKey];
 
     async function getContent() {
         contentLoadedPromise = (async () => {
@@ -89,25 +89,25 @@
     }
 
     // Populate the audio state object with key/values like
-    //   bible => AudioPlayerStoreState
-    //   guideStep1 => AudioPlayerStoreState
-    //   guideStep2 => AudioPlayerStoreState
+    //   bible => MultiClipAudioState
+    //   guideStep1 => MultiClipAudioState
+    //   guideStep2 => MultiClipAudioState
     function populateAudioState() {
         const bibleAudioFiles = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) || []).map(
             (data) => ({ url: data?.url, startTime: data?.startTimestamp || 0, endTime: data?.endTimestamp })
         ) as AudioFileInfo[];
         if (bibleAudioFiles.length) {
-            audioPlayerStateStores = { ...audioPlayerStateStores, bible: createAudioPlayerStateStore(bibleAudioFiles) };
+            multiClipAudioStates = { ...multiClipAudioStates, bible: createMultiClipAudioState(bibleAudioFiles) };
         }
         const cbbterAudioFiles = cbbterAudio?.steps.map((step) => {
             // return key/value mapping
             return [
                 cbbterStepKey(step.step),
-                createAudioPlayerStateStore([{ url: step[audioFileTypeForBrowser()].url, startTime: 0 }]),
+                createMultiClipAudioState([{ url: step[audioFileTypeForBrowser()].url, startTime: 0 }]),
             ];
         });
         if (cbbterAudioFiles?.length) {
-            audioPlayerStateStores = { ...audioPlayerStateStores, ...Object.fromEntries(cbbterAudioFiles) };
+            multiClipAudioStates = { ...multiClipAudioStates, ...Object.fromEntries(cbbterAudioFiles) };
         }
     }
 
@@ -225,12 +225,12 @@
                 </div>
             </div>
         </div>
-        {#if objectKeys(audioPlayerStateStores).length}
+        {#if objectKeys(multiClipAudioStates).length}
             <div
-                class="flex justify-items-center z-10 bg-base-100 fixed bottom-16 max-w-[65ch] m-auto left-0 right-0 h-14 {!audioPlayerShowing &&
+                class="flex justify-items-center z-10 px-4 bg-base-100 fixed bottom-16 max-w-[65ch] m-auto left-0 right-0 h-14 {!audioPlayerShowing &&
                     'hidden'}"
             >
-                <AudioPlayer {audioPlayerStateStores} currentStateStoreKey={audioPlayerKey} />
+                <AudioPlayer {multiClipAudioStates} currentClipKey={audioPlayerKey} />
             </div>
         {/if}
     {:catch}

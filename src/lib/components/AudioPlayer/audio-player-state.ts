@@ -7,21 +7,27 @@ export interface AudioFileInfo {
     endTime?: number | null;
 }
 
-class AudioPlayerState {
-    currentFileIndex: number;
-    fileStates: AudioFileState[];
+// This class encapsulates a single "instance" of an audio player that can play one or more audio clip in sequence,
+// seamlessly. One or more of these states can be passed into the AudioPlayer. Instead of instantiating directly, use
+// the createMultiClipAudioState function below to return a Svelte-store-ized version that's easy to use in the UI.
+//
+// Under the hood this will keep track of each of the files to be included in the clip sequence, including their
+// Howler.js instances.
+class _MultiClipAudioState {
+    currentClipIndex: number;
+    clipSequence: _AudioClip[];
     syncSeekPositionTimer: ReturnType<typeof setInterval> | null;
     _rangeValue: number;
     _timeDisplay: string;
 
     constructor(files: AudioFileInfo[]) {
-        this.currentFileIndex = 0;
+        this.currentClipIndex = 0;
         this.syncSeekPositionTimer = null;
         this._rangeValue = 0;
-        this._timeDisplay = '';
-        this.fileStates = files.map(
+        this._timeDisplay = '00:00';
+        this.clipSequence = files.map(
             (file, index) =>
-                new AudioFileState(file, {
+                new _AudioClip(file, {
                     onload: this.onloadFactory(index),
                     onplay: this.onplayFactory(index),
                     onend: this.onendFactory(index),
@@ -31,12 +37,12 @@ class AudioPlayerState {
     }
 
     playOrPause() {
-        this.currentFile().isPlaying ? this.pauseAllFiles() : this.currentFile().play();
+        this.currentClip().isPlaying ? this.pauseAllClips() : this.currentClip().play();
         this.notifyStateChanged();
     }
 
-    pauseAllFilesAndNotify() {
-        this.pauseAllFiles();
+    pauseAllClipsAndNotify() {
+        this.pauseAllClips();
         this.notifyStateChanged();
     }
 
@@ -44,31 +50,31 @@ class AudioPlayerState {
         this.stopSyncingSeekPosition();
         const value = (e.target as HTMLInputElement).value;
         const newTime = (parseInt(value) / 100) * this.totalDuration();
-        let previousFileDurations = 0;
-        let newFileIndex = 0;
-        const isPlaying = this.currentFile().isPlaying;
+        let previousClipDurations = 0;
+        let newClipIndex = 0;
+        const isPlaying = this.currentClip().isPlaying;
 
-        for (; newFileIndex < this.fileStates.length; newFileIndex++) {
-            const fileTotalTime = this.fileStates[newFileIndex].totalTime || 0;
-            if (previousFileDurations + fileTotalTime >= newTime) break;
-            previousFileDurations += fileTotalTime;
+        for (; newClipIndex < this.clipSequence.length; newClipIndex++) {
+            const clipTotalTime = this.clipSequence[newClipIndex].totalTime || 0;
+            if (previousClipDurations + clipTotalTime >= newTime) break;
+            previousClipDurations += clipTotalTime;
         }
 
-        if (newFileIndex !== this.currentFileIndex) {
-            this.currentFileIndex = newFileIndex;
+        if (newClipIndex !== this.currentClipIndex) {
+            this.currentClipIndex = newClipIndex;
         }
 
-        this.currentFile().updateRealSeekedTimeToClipAdjustedTime(newTime - previousFileDurations);
+        this.currentClip().updateRealSeekedTimeToClipAdjustedTime(newTime - previousClipDurations);
 
         if (isPlaying) {
-            this.pauseAllFiles();
-            this.currentFile().play();
+            this.pauseAllClips();
+            this.currentClip().play();
         }
         this.notifyStateChanged();
     }
 
     isPlaying() {
-        return this.currentFile().isPlaying;
+        return this.currentClip().isPlaying;
     }
 
     rangeValue() {
@@ -80,35 +86,35 @@ class AudioPlayerState {
     }
 
     onDestroy() {
-        this.fileStates.forEach((state) => state.destroy());
+        this.clipSequence.forEach((state) => state.destroy());
         this.stopSyncingSeekPosition();
         this.notifyStateChanged();
     }
 
     // Private methods below
 
-    currentFile() {
-        return this.fileStates[this.currentFileIndex];
+    currentClip() {
+        return this.clipSequence[this.currentClipIndex];
     }
 
     totalDuration() {
-        return this.fileStates.reduce((acc, state) => {
+        return this.clipSequence.reduce((acc, state) => {
             return acc + (state.totalTime || 0);
         }, 0);
     }
 
     allFilesLoaded() {
-        return this.fileStates.every(({ loading }) => !loading);
+        return this.clipSequence.every(({ loading }) => !loading);
     }
 
-    pauseAllFiles() {
-        this.fileStates.forEach((state) => state.pause());
+    pauseAllClips() {
+        this.clipSequence.forEach((state) => state.pause());
     }
 
     startSyncingSeekPosition() {
         if (this.syncSeekPositionTimer) return;
         this.syncSeekPositionTimer = setInterval(() => {
-            this.currentFile().syncRealSeekedTime();
+            this.currentClip().syncRealSeekedTime();
             this.updateRangeAndTimeDisplay();
             this.notifyStateChanged();
         }, 50);
@@ -122,7 +128,7 @@ class AudioPlayerState {
 
     onplayFactory(index: number) {
         return () => {
-            this.fileStates[index].isPlaying = true;
+            this.clipSequence[index].isPlaying = true;
             this.startSyncingSeekPosition();
             this.notifyStateChanged();
         };
@@ -130,7 +136,7 @@ class AudioPlayerState {
 
     onpauseFactory(index: number) {
         return () => {
-            this.fileStates[index].isPlaying = false;
+            this.clipSequence[index].isPlaying = false;
             this.stopSyncingSeekPosition();
             this.notifyStateChanged();
         };
@@ -138,11 +144,11 @@ class AudioPlayerState {
 
     onendFactory(index: number) {
         return () => {
-            this.fileStates[index].isPlaying = false;
-            if (this.fileStates[index + 1]) {
-                this.currentFileIndex = index + 1;
-                this.fileStates[index + 1].resetRealSeekedTimeToStartTime();
-                this.currentFile().play();
+            this.clipSequence[index].isPlaying = false;
+            if (this.clipSequence[index + 1]) {
+                this.currentClipIndex = index + 1;
+                this.clipSequence[index + 1].resetRealSeekedTimeToStartTime();
+                this.currentClip().play();
             } else {
                 this.stopSyncingSeekPosition();
             }
@@ -152,16 +158,16 @@ class AudioPlayerState {
 
     onloadFactory(index: number) {
         return () => {
-            this.fileStates[index].fileLoaded();
+            this.clipSequence[index].fileLoaded();
             this.notifyStateChanged();
         };
     }
 
     updateRangeAndTimeDisplay() {
         const currentDuration =
-            this.fileStates.slice(0, this.currentFileIndex).reduce((acc, state) => {
+            this.clipSequence.slice(0, this.currentClipIndex).reduce((acc, state) => {
                 return acc + (state.totalTime || 0);
-            }, 0) + this.currentFile().clipAdjustedTime();
+            }, 0) + this.currentClip().clipAdjustedTime();
         this._rangeValue = 100 * (currentDuration / this.totalDuration());
         this._timeDisplay = this.formatTime(currentDuration);
     }
@@ -173,19 +179,22 @@ class AudioPlayerState {
         return `${minutes}:${seconds}`;
     }
 
-    // This function tells the store that an update happened without changing any state
+    // This function tells the store that an update happened. It does not change state itself.
     notifyStateChanged() {
         // Overridden below during store creation
     }
 }
 
-export type AudioPlayerStateStore = ReturnType<typeof createAudioPlayerStateStore>;
+export type MultiClipAudioState = ReturnType<typeof createMultiClipAudioState>;
 
-export function createAudioPlayerStateStore(files: AudioFileInfo[]) {
-    const state = new AudioPlayerState(files);
+// Create a new MultiClipAudioState given the list of files.
+// Gives access to a subscribe method for components to see updates.
+// Also injects a notifyStateChanged method that will cause the subscribers to be called.
+export function createMultiClipAudioState(files: AudioFileInfo[]) {
+    const state = new _MultiClipAudioState(files);
     const { subscribe, update } = writable(state);
 
-    // This function tells the store that an update happened without changing any state
+    // This function tells the store that an update happened. It does not change state itself.
     state.notifyStateChanged = () => {
         update((state) => state);
     };
@@ -201,11 +210,13 @@ export function createAudioPlayerStateStore(files: AudioFileInfo[]) {
         timeDisplay: state.timeDisplay.bind(state),
         isPlaying: state.isPlaying.bind(state),
         allFilesLoaded: state.allFilesLoaded.bind(state),
-        pauseAllFilesAndNotify: state.pauseAllFilesAndNotify.bind(state),
+        pauseAllClipsAndNotify: state.pauseAllClipsAndNotify.bind(state),
     };
 }
 
-class AudioFileState {
+// A single audio clip, backed by a file that optionally includes a start and end time.
+// This will keep track of the current state of the clip including its Howler.js instance.
+class _AudioClip {
     file: AudioFileInfo;
     realSeekedTime: number;
     isPlaying: boolean;
@@ -280,10 +291,6 @@ class AudioFileState {
         if (this.playId !== null) {
             this.sound.pause(this.playId);
         }
-    }
-
-    isPlayingAndNotMatchingId(id: number | undefined) {
-        return id !== undefined && this.playId !== null && id !== this.playId && this.sound.playing(this.playId);
     }
 
     destroy() {

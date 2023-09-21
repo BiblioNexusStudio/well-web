@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
     import { onDestroy, onMount } from 'svelte';
     import PlayMediaIcon from '$lib/icons/PlayMediaIcon.svelte';
     import PauseMediaIcon from '$lib/icons/PauseMediaIcon.svelte';
@@ -6,59 +6,73 @@
     import refresh from 'svelte-awesome/icons/refresh';
     import {
         type AudioFileInfo,
-        createAudioPlayerStateStore,
-        type AudioPlayerStateStore,
+        createMultiClipAudioState,
+        type MultiClipAudioState,
     } from './AudioPlayer/audio-player-state';
     import { objectEntries, objectValues } from '$lib/utils/typesafe-standard-lib';
 
+    type ClipKey = string;
+
+    const defaultClipKey = 'default' as const;
+
+    // OPTION 1: Pass in a list of files you want to play.
+    // Great for when you just need one AudioPlayer to play one or a sequence of clips
     export let files: AudioFileInfo[] | undefined = undefined;
 
-    export let audioPlayerStateStores: Record<string, AudioPlayerStateStore> = {};
-    export let currentStateStoreKey = 'default';
+    // OPTION 2: Pass a mapping of MultiClipAudioState, indexed by string keys.
+    // Great for when you want one AudioPlayer on a page that can quickly switch between
+    // playing different sequences of clips.
+    // Example:
+    //   bible => MultiClipAudioState{clips: [...]}
+    //   guideStep1 => MultiClipAudioState{clips: [...]}
+    export let multiClipAudioStates: Record<ClipKey, MultiClipAudioState> = {};
+
+    // Indexes into the multiClipAudioStates to determine the current state to use.
+    export let currentClipKey: ClipKey = defaultClipKey;
 
     let rangeValue = 0;
     let timeDisplay = '';
     let isPlaying = false;
     let allFilesLoaded = false;
 
-    $: updateBasedOnKey(currentStateStoreKey);
+    $: updateBasedOnKey(currentClipKey);
 
-    function updateBasedOnKey(key: string) {
-        const currentStateStore = audioPlayerStateStores?.[key];
-        if (currentStateStore) {
-            rangeValue = currentStateStore.rangeValue();
-            timeDisplay = currentStateStore.timeDisplay();
-            isPlaying = currentStateStore.isPlaying();
-            allFilesLoaded = currentStateStore.allFilesLoaded();
+    function updateBasedOnKey(key: ClipKey) {
+        const currentState = multiClipAudioStates?.[key];
+        if (currentState) {
+            rangeValue = currentState.rangeValue();
+            timeDisplay = currentState.timeDisplay();
+            isPlaying = currentState.isPlaying();
+            allFilesLoaded = currentState.allFilesLoaded();
         }
     }
 
     function playOrPause() {
-        objectEntries(audioPlayerStateStores).forEach(([key, store]) => {
-            if (key !== currentStateStoreKey) {
-                store.pauseAllFilesAndNotify();
+        objectEntries(multiClipAudioStates).forEach(([key, state]) => {
+            if (key !== currentClipKey) {
+                state.pauseAllClipsAndNotify();
             }
         });
-        audioPlayerStateStores?.[currentStateStoreKey]?.playOrPause();
+        multiClipAudioStates?.[currentClipKey]?.playOrPause();
     }
 
     function stopSyncingSeekPosition() {
-        audioPlayerStateStores?.[currentStateStoreKey]?.stopSyncingSeekPosition();
+        multiClipAudioStates?.[currentClipKey]?.stopSyncingSeekPosition();
     }
 
     function onRangeChange(e: Event) {
-        audioPlayerStateStores?.[currentStateStoreKey]?.onRangeChange(e);
+        multiClipAudioStates?.[currentClipKey]?.onRangeChange(e);
     }
 
     onMount(() => {
         if (files) {
-            audioPlayerStateStores = { default: createAudioPlayerStateStore(files) };
+            multiClipAudioStates = { [defaultClipKey]: createMultiClipAudioState(files) };
         }
 
-        objectEntries(audioPlayerStateStores).forEach(([key, audioPlayerStateStore]) => {
-            audioPlayerStateStore.subscribe((state) => {
+        objectEntries(multiClipAudioStates).forEach(([key, multiClipAudioState]) => {
+            multiClipAudioState.subscribe((state) => {
                 // Only update the component if it's for the current audio player
-                if (key === currentStateStoreKey) {
+                if (key === currentClipKey) {
                     rangeValue = state.rangeValue();
                     timeDisplay = state.timeDisplay();
                     isPlaying = state.isPlaying();
@@ -69,7 +83,7 @@
     });
 
     onDestroy(() => {
-        objectValues(audioPlayerStateStores).forEach((audioPlayerStateStore) => audioPlayerStateStore.onDestroy());
+        objectValues(multiClipAudioStates).forEach((multiClipAudioState) => multiClipAudioState.onDestroy());
     });
 </script>
 
