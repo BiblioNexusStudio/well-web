@@ -19,6 +19,8 @@
     import TopNavBar from '$lib/components/TopNavBar.svelte';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+    import Search from '$lib/components/file-manager/Search.svelte';
+    import ChangeView from '$lib/components/file-manager/ChangeView.svelte';
 
     let fetchAvailableResourcesPromise: Promise<void> | undefined;
 
@@ -69,6 +71,12 @@
 
             <div class="divider" />
         {/if}
+
+        <div class="flex mx-4 my-6 justify-between items-center">
+            <Search />
+            <ChangeView />
+        </div>
+
         <div class="overflow-x-auto pb-32">
             {#if infoBoxConditionsMet}
                 <InfoBox />

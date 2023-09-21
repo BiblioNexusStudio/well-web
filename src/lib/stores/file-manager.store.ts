@@ -32,8 +32,10 @@ export const downloadData = derived(
     }
 );
 export const tableType = writable<string>('bible');
+export const hideDownloadedBundles = writable<boolean>(false);
 export const footerInputs = writable<FooterInputs>({
     text: false,
     audio: false,
     media: false,
 });
+export const changeMenuGroupValue = writable<string>('book');

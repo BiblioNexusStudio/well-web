@@ -114,6 +114,9 @@
             "files": {
                 "value": "फ़ाइलें"
             },
+            "search": {
+                "value": "खोजें"
+            },
             "modal": {
                 "title": {
                     "value": "पुष्टि"
@@ -148,6 +151,32 @@
                 },
                 "collapseResources": {
                     "value": "{bookName} संसाधनों को संकुचित करें"
+                }
+            },
+            "changeViewMenu": {
+                "changeView": {
+                    "value": "दृश्य बदलें"
+                },
+                "book": {
+                    "value": "पुस्तक"
+                },
+                "chapter": {
+                    "value": "अध्याय"
+                },
+                "pericope": {
+                    "value": "परिकोप"
+                },
+                "resource": {
+                    "value": "संसाधन"
+                },
+                "downloadBundles": {
+                    "value": "बंडल डाउनलोड करें"
+                },
+                "hideDownloadedBundles": {
+                    "value": "डाउनलोड किए गए बंडल छिपाएं"
+                },
+                "bundleView": {
+                    "value": "बंडल दृश्य"
                 }
             }
         }
