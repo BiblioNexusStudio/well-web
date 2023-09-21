@@ -32,18 +32,23 @@
 
     let rangeValue = 0;
     let timeDisplay = '';
+    let totalTimeDisplay = '';
     let isPlaying = false;
     let allFilesLoaded = false;
 
     $: updateBasedOnKey(currentClipKey);
 
     function updateBasedOnKey(key: ClipKey) {
-        const currentState = multiClipAudioStates?.[key];
-        if (currentState) {
-            rangeValue = currentState.rangeValue();
-            timeDisplay = currentState.timeDisplay();
-            isPlaying = currentState.isPlaying();
-            allFilesLoaded = currentState.allFilesLoaded();
+        updateDisplayValues(multiClipAudioStates?.[key]);
+    }
+
+    function updateDisplayValues(state: MultiClipAudioState | undefined) {
+        if (state) {
+            rangeValue = state.rangeValue();
+            timeDisplay = state.timeDisplay();
+            totalTimeDisplay = state.totalTimeDisplay();
+            isPlaying = state.isPlaying();
+            allFilesLoaded = state.allFilesLoaded();
         }
     }
 
@@ -73,10 +78,7 @@
             multiClipAudioState.subscribe((state) => {
                 // Only update the component if it's for the current audio player
                 if (key === currentClipKey) {
-                    rangeValue = state.rangeValue();
-                    timeDisplay = state.timeDisplay();
-                    isPlaying = state.isPlaying();
-                    allFilesLoaded = state.allFilesLoaded();
+                    updateDisplayValues(state as unknown as MultiClipAudioState);
                 }
             });
         });
@@ -101,7 +103,7 @@
         </button>
     {/if}
 
-    <div class="w-full mx-4">
+    <div class="grow mx-4">
         <input
             type="range"
             id="song-percentage-played"
@@ -115,7 +117,9 @@
         />
     </div>
 
-    <span class="items-start text-sm font-medium text-neutral h-[20px] font-mono">{timeDisplay}</span>
+    <span class="items-start text-sm font-medium text-neutral h-[20px] font-mono"
+        >{timeDisplay} / {totalTimeDisplay}</span
+    >
 </div>
 
 <style>

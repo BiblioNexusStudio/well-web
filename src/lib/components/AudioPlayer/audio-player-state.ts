@@ -19,12 +19,14 @@ class _MultiClipAudioState {
     syncSeekPositionTimer: ReturnType<typeof setInterval> | null;
     _rangeValue: number;
     _timeDisplay: string;
+    _totalTimeDisplay: string;
 
     constructor(files: AudioFileInfo[]) {
         this.currentClipIndex = 0;
         this.syncSeekPositionTimer = null;
         this._rangeValue = 0;
         this._timeDisplay = '00:00';
+        this._totalTimeDisplay = '00:00';
         this.clipSequence = files.map(
             (file, index) =>
                 new _AudioClip(file, {
@@ -38,12 +40,12 @@ class _MultiClipAudioState {
 
     playOrPause() {
         this.currentClip().isPlaying ? this.pauseAllClips() : this.currentClip().play();
-        this.notifyStateChanged();
+        this.calculateDisplayAndNotifyStateChanged();
     }
 
     pauseAllClipsAndNotify() {
         this.pauseAllClips();
-        this.notifyStateChanged();
+        this.calculateDisplayAndNotifyStateChanged();
     }
 
     onRangeChange(e: Event) {
@@ -70,7 +72,7 @@ class _MultiClipAudioState {
             this.pauseAllClips();
             this.currentClip().play();
         }
-        this.notifyStateChanged();
+        this.calculateDisplayAndNotifyStateChanged();
     }
 
     isPlaying() {
@@ -85,10 +87,14 @@ class _MultiClipAudioState {
         return this._timeDisplay;
     }
 
+    totalTimeDisplay() {
+        return this._totalTimeDisplay;
+    }
+
     onDestroy() {
         this.clipSequence.forEach((state) => state.destroy());
         this.stopSyncingSeekPosition();
-        this.notifyStateChanged();
+        this.calculateDisplayAndNotifyStateChanged();
     }
 
     // Private methods below
@@ -115,8 +121,7 @@ class _MultiClipAudioState {
         if (this.syncSeekPositionTimer) return;
         this.syncSeekPositionTimer = setInterval(() => {
             this.currentClip().syncRealSeekedTime();
-            this.updateRangeAndTimeDisplay();
-            this.notifyStateChanged();
+            this.calculateDisplayAndNotifyStateChanged();
         }, 50);
     }
 
@@ -130,7 +135,7 @@ class _MultiClipAudioState {
         return () => {
             this.clipSequence[index].isPlaying = true;
             this.startSyncingSeekPosition();
-            this.notifyStateChanged();
+            this.calculateDisplayAndNotifyStateChanged();
         };
     }
 
@@ -138,7 +143,7 @@ class _MultiClipAudioState {
         return () => {
             this.clipSequence[index].isPlaying = false;
             this.stopSyncingSeekPosition();
-            this.notifyStateChanged();
+            this.calculateDisplayAndNotifyStateChanged();
         };
     }
 
@@ -150,26 +155,19 @@ class _MultiClipAudioState {
                 this.clipSequence[index + 1].resetRealSeekedTimeToStartTime();
                 this.currentClip().play();
             } else {
+                this.currentClipIndex = 0;
+                this.clipSequence[0].resetRealSeekedTimeToStartTime();
                 this.stopSyncingSeekPosition();
             }
-            this.notifyStateChanged();
+            this.calculateDisplayAndNotifyStateChanged();
         };
     }
 
     onloadFactory(index: number) {
         return () => {
             this.clipSequence[index].fileLoaded();
-            this.notifyStateChanged();
+            this.calculateDisplayAndNotifyStateChanged();
         };
-    }
-
-    updateRangeAndTimeDisplay() {
-        const currentDuration =
-            this.clipSequence.slice(0, this.currentClipIndex).reduce((acc, state) => {
-                return acc + (state.totalTime || 0);
-            }, 0) + this.currentClip().clipAdjustedTime();
-        this._rangeValue = 100 * (currentDuration / this.totalDuration());
-        this._timeDisplay = this.formatTime(currentDuration);
     }
 
     formatTime(totalSeconds: number) {
@@ -179,8 +177,20 @@ class _MultiClipAudioState {
         return `${minutes}:${seconds}`;
     }
 
+    calculateDisplayAndNotifyStateChanged() {
+        const currentDuration =
+            this.clipSequence.slice(0, this.currentClipIndex).reduce((acc, state) => {
+                return acc + (state.totalTime || 0);
+            }, 0) + this.currentClip().clipAdjustedTime();
+        const totalDuration = this.totalDuration();
+        this._totalTimeDisplay = this.formatTime(totalDuration);
+        this._rangeValue = 100 * (currentDuration / totalDuration);
+        this._timeDisplay = this.formatTime(currentDuration);
+        this._notifyStateChanged();
+    }
+
     // This function tells the store that an update happened. It does not change state itself.
-    notifyStateChanged() {
+    _notifyStateChanged() {
         // Overridden below during store creation
     }
 }
@@ -195,7 +205,7 @@ export function createMultiClipAudioState(files: AudioFileInfo[]) {
     const { subscribe, update } = writable(state);
 
     // This function tells the store that an update happened. It does not change state itself.
-    state.notifyStateChanged = () => {
+    state._notifyStateChanged = () => {
         update((state) => state);
     };
 
@@ -208,6 +218,7 @@ export function createMultiClipAudioState(files: AudioFileInfo[]) {
         stopSyncingSeekPosition: state.stopSyncingSeekPosition.bind(state),
         rangeValue: state.rangeValue.bind(state),
         timeDisplay: state.timeDisplay.bind(state),
+        totalTimeDisplay: state.totalTimeDisplay.bind(state),
         isPlaying: state.isPlaying.bind(state),
         allFilesLoaded: state.allFilesLoaded.bind(state),
         pauseAllClipsAndNotify: state.pauseAllClipsAndNotify.bind(state),
