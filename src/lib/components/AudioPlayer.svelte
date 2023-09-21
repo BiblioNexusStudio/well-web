@@ -1,44 +1,84 @@
 ﻿<script lang="ts">
-    import { onDestroy } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import PlayMediaIcon from '$lib/icons/PlayMediaIcon.svelte';
     import PauseMediaIcon from '$lib/icons/PauseMediaIcon.svelte';
     import { Icon } from 'svelte-awesome';
     import refresh from 'svelte-awesome/icons/refresh';
-    import { type AudioFileInfo, createAudioPlayerStateStore } from './AudioPlayer/audio-player-state';
+    import {
+        type AudioFileInfo,
+        createAudioPlayerStateStore,
+        type AudioPlayerStateStore,
+    } from './AudioPlayer/audio-player-state';
+    import { objectEntries, objectValues } from '$lib/utils/typesafe-standard-lib';
 
-    export let files: AudioFileInfo[];
-    export let activePlayId: number | undefined = undefined;
+    export let files: AudioFileInfo[] | undefined = undefined;
+
+    export let audioPlayerStateStores: Record<string, AudioPlayerStateStore> = {};
+    export let currentStateStoreKey = 'default';
+
     let rangeValue = 0;
     let timeDisplay = '';
     let isPlaying = false;
     let allFilesLoaded = false;
 
-    let audioPlayerState = createAudioPlayerStateStore(files, (id) => (activePlayId = id));
+    $: updateBasedOnKey(currentStateStoreKey);
 
-    audioPlayerState.subscribe((state) => {
-        rangeValue = state.rangeValue;
-        timeDisplay = state.timeDisplay;
-        isPlaying = state.isPlaying;
-        allFilesLoaded = state.allFilesLoaded;
+    function updateBasedOnKey(key: string) {
+        const currentStateStore = audioPlayerStateStores?.[key];
+        if (currentStateStore) {
+            rangeValue = currentStateStore.rangeValue();
+            timeDisplay = currentStateStore.timeDisplay();
+            isPlaying = currentStateStore.isPlaying();
+            allFilesLoaded = currentStateStore.allFilesLoaded();
+        }
+    }
+
+    function playOrPause() {
+        objectEntries(audioPlayerStateStores).forEach(([key, store]) => {
+            if (key !== currentStateStoreKey) {
+                store.pauseAllFilesAndNotify();
+            }
+        });
+        audioPlayerStateStores?.[currentStateStoreKey]?.playOrPause();
+    }
+
+    function stopSyncingSeekPosition() {
+        audioPlayerStateStores?.[currentStateStoreKey]?.stopSyncingSeekPosition();
+    }
+
+    function onRangeChange(e: Event) {
+        audioPlayerStateStores?.[currentStateStoreKey]?.onRangeChange(e);
+    }
+
+    onMount(() => {
+        if (files) {
+            audioPlayerStateStores = { default: createAudioPlayerStateStore(files) };
+        }
+
+        objectEntries(audioPlayerStateStores).forEach(([key, audioPlayerStateStore]) => {
+            audioPlayerStateStore.subscribe((state) => {
+                // Only update the component if it's for the current audio player
+                if (key === currentStateStoreKey) {
+                    rangeValue = state.rangeValue();
+                    timeDisplay = state.timeDisplay();
+                    isPlaying = state.isPlaying();
+                    allFilesLoaded = state.allFilesLoaded();
+                }
+            });
+        });
     });
 
-    /** This is for when you have multiple players on a single page. It will
-     * call pauseAudioIfOtherSourcePlaying when any bound activePlayId changes,
-     * preventing multiple audio sources from playing simultaneously.
-     */
-    $: audioPlayerState.pauseAudioIfOtherSourcePlaying(activePlayId);
-
     onDestroy(() => {
-        audioPlayerState.onDestroy();
+        objectValues(audioPlayerStateStores).forEach((audioPlayerStateStore) => audioPlayerStateStore.onDestroy());
     });
 </script>
 
-<div class="relative w-full flex flex-row justify-center items-center rounded-xl">
+<div class="w-full flex flex-row justify-center items-center rounded-xl">
     {#if !allFilesLoaded}
         <div />
         <Icon class="grow-0 w-[20px] h-[20px] text-primary" data={refresh} spin />
     {:else}
-        <button class="grow-0 w-[20px] h-[20px] cursor-pointer" on:click={audioPlayerState.playOrPause}>
+        <button class="grow-0 w-[20px] h-[20px] cursor-pointer" on:click={playOrPause}>
             {#if isPlaying}
                 <PauseMediaIcon />
             {:else}
@@ -55,8 +95,8 @@
             step="any"
             min="0"
             max="100"
-            on:change={audioPlayerState.onRangeChange}
-            on:input={audioPlayerState.stopSyncingSeekPosition}
+            on:change={onRangeChange}
+            on:input={stopSyncingSeekPosition}
             value={rangeValue}
         />
     </div>

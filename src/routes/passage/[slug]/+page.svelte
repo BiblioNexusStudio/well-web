@@ -5,7 +5,7 @@
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import type { CbbtErImageContent, CbbtErTextContent, ResourceContentSteps } from '$lib/types/file-manager';
-    import type { FrontendChapterAudioData, FrontendChapterContent } from './+page';
+    import type { FrontendChapterContent } from './+page';
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
     import { asyncFilter } from '$lib/utils/async-array';
@@ -19,6 +19,12 @@
     import { onMount } from 'svelte';
     import BibleUnavailable from './BibleUnavailable.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+    import {
+        createAudioPlayerStateStore,
+        type AudioPlayerStateStore,
+        type AudioFileInfo,
+    } from '$lib/components/AudioPlayer/audio-player-state';
+    import { objectKeys } from '$lib/utils/typesafe-standard-lib';
 
     type Tab = 'bible' | 'guide';
 
@@ -34,7 +40,6 @@
     ];
 
     let cbbterSelectedStepNumber = 1;
-    let activePlayId: number | undefined = undefined;
     let stepsAvailable: number[] = [];
     let cbbterText: CbbtErTextContent | undefined;
     let cbbterAudio: ResourceContentSteps | undefined;
@@ -48,17 +53,15 @@
     let cbbterSelectedStepScroll: number | undefined;
     let currentTopNavBarTitle: string;
     let contentLoadedPromise: Promise<void> | undefined;
-    let numberOfChapters: number | undefined;
-    let audioPlayerStates: AudioPlayerStateStore[];
+    let audioPlayerStateStores: Record<string, AudioPlayerStateStore> = {};
 
     onMount(() => getContent());
 
     $: data && getContent(); // when the [slug] changes, the data will change and trigger this
     $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
-
-    $: bibleAudioData = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) ||
-        []) as FrontendChapterAudioData[];
+    $: audioPlayerKey = selectedTab === 'bible' ? 'bible' : cbbterStepKey(cbbterSelectedStepNumber);
+    $: audioPlayerShowing = !!audioPlayerStateStores[audioPlayerKey];
 
     async function getContent() {
         contentLoadedPromise = (async () => {
@@ -80,9 +83,36 @@
                     ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
                 ])
             );
-            numberOfChapters = bibleContent.chapters?.length;
+            populateAudioState();
             handleNavBarTitleChange();
         })();
+    }
+
+    // Populate the audio state object with key/values like
+    //   bible => AudioPlayerStoreState
+    //   guideStep1 => AudioPlayerStoreState
+    //   guideStep2 => AudioPlayerStoreState
+    function populateAudioState() {
+        const bibleAudioFiles = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) || []).map(
+            (data) => ({ url: data?.url, startTime: data?.startTimestamp || 0, endTime: data?.endTimestamp })
+        ) as AudioFileInfo[];
+        if (bibleAudioFiles.length) {
+            audioPlayerStateStores = { ...audioPlayerStateStores, bible: createAudioPlayerStateStore(bibleAudioFiles) };
+        }
+        const cbbterAudioFiles = cbbterAudio?.steps.map((step) => {
+            // return key/value mapping
+            return [
+                cbbterStepKey(step.step),
+                createAudioPlayerStateStore([{ url: step[audioFileTypeForBrowser()].url, startTime: 0 }]),
+            ];
+        });
+        if (cbbterAudioFiles?.length) {
+            audioPlayerStateStores = { ...audioPlayerStateStores, ...Object.fromEntries(cbbterAudioFiles) };
+        }
+    }
+
+    function cbbterStepKey(step: number) {
+        return `guideStep${step}`;
     }
 
     function showOrDismissResourcePane(show: boolean) {
@@ -112,7 +142,7 @@
 
 <ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} images={cbbterImages} />
 
-<div class={`btm-nav border-t border-t-primary-300 z-40`}>
+<div class="btm-nav border-t border-t-primary-300 z-40">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
         <BookIcon />
     </NavMenuTabItem>
@@ -135,37 +165,27 @@
     {#await contentLoadedPromise}
         <FullPageSpinner />
     {:then}
-        <div class={`flex flex-col absolute inset-0 bottom-16 z-10 pt-12`}>
-            <div class="pt-5 px-4 {selectedTab !== 'bible' && 'hidden'} h-full">
+        <div
+            class="flex flex-col absolute left-0 right-0 top-0 {audioPlayerShowing
+                ? 'bottom-32'
+                : 'bottom-16'} z-10 pt-16"
+        >
+            <div class="flex flex-grow px-4 overflow-y-hidden {selectedTab !== 'bible' && 'hidden'}">
                 {#if bibleContent?.chapters?.length}
-                    <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : 'pb-16'}">
-                        {#if bibleAudioData.length > 0}
-                            <div class="py-4">
-                                <AudioPlayer
-                                    bind:activePlayId
-                                    files={bibleAudioData.concat(bibleAudioData).map((data) => ({
-                                        url: data.url,
-                                        startTime: data.startTimestamp || 0,
-                                        endTime: data.endTimestamp,
-                                    }))}
-                                />
-                            </div>
-                        {/if}
+                    <div class="prose mx-auto overflow-y-scroll">
                         {#each bibleContent.chapters as chapter}
-                            <div class={numberOfChapters === 1 ? 'overflow-y-scroll grow' : ''}>
-                                {#each chapter.versesText as { number, text }}
-                                    <div class="py-1">
-                                        <span class="sup pr-1">{number}</span><span>{@html text}</span>
-                                    </div>
-                                {/each}
-                            </div>
+                            {#each chapter.versesText as { number, text }}
+                                <div class="py-1">
+                                    <span class="sup pr-1">{number}</span><span>{@html text}</span>
+                                </div>
+                            {/each}
                         {/each}
                     </div>
                 {:else}
                     <BibleUnavailable bibleLanguageCode={data.bibleLanguageCode} passage={data.passage} />
                 {/if}
             </div>
-            <div class="px-4 py-6 {selectedTab !== 'guide' && 'hidden'}">
+            <div class="px-4 py-4 {selectedTab !== 'guide' && 'hidden'}">
                 <div class="max-w-[65ch] m-auto">
                     <ButtonCarousel
                         bind:selectedValue={cbbterSelectedStepNumber}
@@ -186,7 +206,6 @@
                                 {@const contentHTML = cbbterText?.steps?.find(
                                     (step) => step.stepNumber === stepNumber
                                 )?.contentHTML}
-                                {@const audioStep = cbbterAudio?.steps?.find((step) => step.step === stepNumber)}
                                 <div
                                     class={cbbterSelectedStepNumber === stepNumber
                                         ? 'flex flex-col flex-grow'
@@ -197,19 +216,6 @@
                                             {@html contentHTML}
                                         {/if}
                                     </div>
-                                    {#if audioStep}
-                                        <div class="py-4">
-                                            <AudioPlayer
-                                                files={[
-                                                    {
-                                                        url: audioStep[audioFileTypeForBrowser()].url,
-                                                        startTime: 0,
-                                                    },
-                                                ]}
-                                                bind:activePlayId
-                                            />
-                                        </div>
-                                    {/if}
                                 </div>
                             {/each}
                         {:else}
@@ -219,6 +225,14 @@
                 </div>
             </div>
         </div>
+        {#if objectKeys(audioPlayerStateStores).length}
+            <div
+                class="flex justify-items-center z-10 bg-base-100 fixed bottom-16 max-w-[65ch] m-auto left-0 right-0 h-14 {!audioPlayerShowing &&
+                    'hidden'}"
+            >
+                <AudioPlayer {audioPlayerStateStores} currentStateStoreKey={audioPlayerKey} />
+            </div>
+        {/if}
     {:catch}
         <ErrorMessage />
     {/await}

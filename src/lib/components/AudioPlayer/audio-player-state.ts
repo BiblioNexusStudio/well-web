@@ -31,24 +31,22 @@ class AudioPlayerState {
     }
 
     playOrPause() {
-        this.currentFile.isPlaying ? this.pauseAll() : this.currentFile.play();
+        this.currentFile().isPlaying ? this.pauseAllFiles() : this.currentFile().play();
         this.notifyStateChanged();
     }
 
-    pauseAudioIfOtherSourcePlaying(activePlayId: number | undefined) {
-        if (this.fileStates.some((state) => state.isPlayingAndNotMatchingId(activePlayId))) {
-            this.pauseAll();
-            this.notifyStateChanged();
-        }
+    pauseAllFilesAndNotify() {
+        this.pauseAllFiles();
+        this.notifyStateChanged();
     }
 
     onRangeChange(e: Event) {
         this.stopSyncingSeekPosition();
         const value = (e.target as HTMLInputElement).value;
-        const newTime = (parseInt(value) / 100) * this.totalDuration;
+        const newTime = (parseInt(value) / 100) * this.totalDuration();
         let previousFileDurations = 0;
         let newFileIndex = 0;
-        const isPlaying = this.currentFile.isPlaying;
+        const isPlaying = this.currentFile().isPlaying;
 
         for (; newFileIndex < this.fileStates.length; newFileIndex++) {
             const fileTotalTime = this.fileStates[newFileIndex].totalTime || 0;
@@ -60,24 +58,24 @@ class AudioPlayerState {
             this.currentFileIndex = newFileIndex;
         }
 
-        this.currentFile.updateRealSeekedTimeToClipAdjustedTime(newTime - previousFileDurations);
+        this.currentFile().updateRealSeekedTimeToClipAdjustedTime(newTime - previousFileDurations);
 
         if (isPlaying) {
-            this.pauseAll();
-            this.currentFile.play();
+            this.pauseAllFiles();
+            this.currentFile().play();
         }
         this.notifyStateChanged();
     }
 
-    get isPlaying() {
-        return this.currentFile.isPlaying;
+    isPlaying() {
+        return this.currentFile().isPlaying;
     }
 
-    get rangeValue() {
+    rangeValue() {
         return this._rangeValue;
     }
 
-    get timeDisplay() {
+    timeDisplay() {
         return this._timeDisplay;
     }
 
@@ -89,28 +87,28 @@ class AudioPlayerState {
 
     // Private methods below
 
-    get currentFile() {
+    currentFile() {
         return this.fileStates[this.currentFileIndex];
     }
 
-    get totalDuration() {
+    totalDuration() {
         return this.fileStates.reduce((acc, state) => {
             return acc + (state.totalTime || 0);
         }, 0);
     }
 
-    get allFilesLoaded() {
+    allFilesLoaded() {
         return this.fileStates.every(({ loading }) => !loading);
     }
 
-    pauseAll() {
+    pauseAllFiles() {
         this.fileStates.forEach((state) => state.pause());
     }
 
     startSyncingSeekPosition() {
         if (this.syncSeekPositionTimer) return;
         this.syncSeekPositionTimer = setInterval(() => {
-            this.currentFile.syncRealSeekedTime();
+            this.currentFile().syncRealSeekedTime();
             this.updateRangeAndTimeDisplay();
             this.notifyStateChanged();
         }, 50);
@@ -123,10 +121,9 @@ class AudioPlayerState {
     }
 
     onplayFactory(index: number) {
-        return (id: number) => {
+        return () => {
             this.fileStates[index].isPlaying = true;
             this.startSyncingSeekPosition();
-            this.setActivePlayId(id);
             this.notifyStateChanged();
         };
     }
@@ -145,7 +142,7 @@ class AudioPlayerState {
             if (this.fileStates[index + 1]) {
                 this.currentFileIndex = index + 1;
                 this.fileStates[index + 1].resetRealSeekedTimeToStartTime();
-                this.currentFile.play();
+                this.currentFile().play();
             } else {
                 this.stopSyncingSeekPosition();
             }
@@ -164,8 +161,8 @@ class AudioPlayerState {
         const currentDuration =
             this.fileStates.slice(0, this.currentFileIndex).reduce((acc, state) => {
                 return acc + (state.totalTime || 0);
-            }, 0) + this.currentFile.clipAdjustedTime();
-        this._rangeValue = 100 * (currentDuration / this.totalDuration);
+            }, 0) + this.currentFile().clipAdjustedTime();
+        this._rangeValue = 100 * (currentDuration / this.totalDuration());
         this._timeDisplay = this.formatTime(currentDuration);
     }
 
@@ -180,20 +177,15 @@ class AudioPlayerState {
     notifyStateChanged() {
         // Overridden below during store creation
     }
-
-    setActivePlayId(_activePlayId: number) {
-        // Overridden below during store creation
-    }
 }
 
 export type AudioPlayerStateStore = ReturnType<typeof createAudioPlayerStateStore>;
 
-export function createAudioPlayerStateStore(files: AudioFileInfo[], setActivePlayId: (activePlayId: number) => void) {
+export function createAudioPlayerStateStore(files: AudioFileInfo[]) {
     const state = new AudioPlayerState(files);
     const { subscribe, update } = writable(state);
 
     // This function tells the store that an update happened without changing any state
-    state.setActivePlayId = setActivePlayId;
     state.notifyStateChanged = () => {
         update((state) => state);
     };
@@ -202,14 +194,14 @@ export function createAudioPlayerStateStore(files: AudioFileInfo[], setActivePla
     return {
         subscribe,
         playOrPause: state.playOrPause.bind(state),
-        pauseAudioIfOtherSourcePlaying: state.pauseAudioIfOtherSourcePlaying.bind(state),
         onRangeChange: state.onRangeChange.bind(state),
         onDestroy: state.onDestroy.bind(state),
         stopSyncingSeekPosition: state.stopSyncingSeekPosition.bind(state),
-        rangeValue: () => state.rangeValue,
-        timeDisplay: () => state.timeDisplay,
-        isPlaying: () => state.isPlaying,
-        allFilesLoaded: () => state.allFilesLoaded,
+        rangeValue: state.rangeValue.bind(state),
+        timeDisplay: state.timeDisplay.bind(state),
+        isPlaying: state.isPlaying.bind(state),
+        allFilesLoaded: state.allFilesLoaded.bind(state),
+        pauseAllFilesAndNotify: state.pauseAllFilesAndNotify.bind(state),
     };
 }
 
