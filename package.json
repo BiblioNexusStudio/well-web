@@ -12,7 +12,9 @@
         "lint:ci": "prettier --plugin-search-dir . --check \"**/*.{json,js,ts,css,html,svelte,cjs}\" && eslint --max-warnings 0 . && yarn lint:unused-translations && yarn svelte-check",
         "format": "prettier --plugin-search-dir . --write \"**/*.{json,js,ts,css,html,svelte,cjs}\"",
         "use-config": "node scripts/use-config.js",
-        "postinstall": "patch-package"
+        "postinstall": "patch-package",
+        "apk:build": "node ./scripts/build-android-apk.js",
+        "apk:preload-content": "node ./scripts/preload-files-to-static.js"
     },
     "dependencies": {
         "@microsoft/applicationinsights-web": "^3.0.2",
