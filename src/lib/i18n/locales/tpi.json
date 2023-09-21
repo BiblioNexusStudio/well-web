@@ -90,6 +90,9 @@
             "audioType": {
                 "value": "Odio"
             },
+            "mediaType": {
+                "value": "Midiya"
+            },
             "imagesType": {
                 "value": "Piksa"
             },
@@ -99,9 +102,6 @@
             "cancel": {
                 "value": "Kanselim"
             },
-            "back": {
-                "value": "Bak"
-            },
             "selectLanguage": {
                 "value": "Plis sekim wanpela tokples."
             },
@@ -110,6 +110,9 @@
             },
             "chooseResource": {
                 "value": "Chuusim wanpela resos."
+            },
+            "files": {
+                "value": "Fael"
             },
             "modal": {
                 "title": {

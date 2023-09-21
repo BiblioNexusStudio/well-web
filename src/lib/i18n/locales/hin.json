@@ -90,6 +90,9 @@
             "audioType": {
                 "value": "ऑडियो"
             },
+            "mediaType": {
+                "value": "मीडिया"
+            },
             "imagesType": {
                 "value": "छवियां"
             },
@@ -99,9 +102,6 @@
             "cancel": {
                 "value": "रद्द करें"
             },
-            "back": {
-                "value": "पीछे"
-            },
             "selectLanguage": {
                 "value": "कृपया एक भाषा चुनें।"
             },
@@ -110,6 +110,9 @@
             },
             "chooseResource": {
                 "value": "एक संसाधन चुनें"
+            },
+            "files": {
+                "value": "फ़ाइलें"
             },
             "modal": {
                 "title": {

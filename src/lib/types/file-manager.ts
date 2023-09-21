@@ -154,3 +154,9 @@ export const MediaType = {
 } as const;
 
 export type MediaTypeEnum = (typeof MediaType)[keyof typeof MediaType];
+
+export interface FooterInputs {
+    text: boolean;
+    audio: boolean;
+    media: boolean;
+}

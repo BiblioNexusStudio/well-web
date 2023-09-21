@@ -117,6 +117,10 @@
                 "value": "Audio",
                 "_context": "The media type for audio, available to be downloaded"
             },
+            "mediaType": {
+                "value": "Media",
+                "_context": "The media type for media, available to be downloaded"
+            },
             "imagesType": {
                 "value": "Images",
                 "_context": "The media type for images, available to be downloaded"
@@ -129,10 +133,6 @@
                 "value": "Cancel",
                 "_context": "Button to cancel current action"
             },
-            "back": {
-                "value": "Back",
-                "_context": "Button to go back to the main page"
-            },
             "selectLanguage": {
                 "value": "Please select a language.",
                 "_context": "Placeholder for the language dropdown"
@@ -144,6 +144,10 @@
             "chooseResource": {
                 "value": "Choose a Resource",
                 "_context": "Label for a dropdown allowing the user to select a resource to view"
+            },
+            "files": {
+                "value": "files",
+                "_context": "Label for the files"
             },
             "modal": {
                 "title": {
