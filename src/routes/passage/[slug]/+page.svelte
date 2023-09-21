@@ -49,6 +49,7 @@
     let currentTopNavBarTitle: string;
     let contentLoadedPromise: Promise<void> | undefined;
     let numberOfChapters: number | undefined;
+    let audioPlayerStates: AudioPlayerStateStore[];
 
     onMount(() => getContent());
 
@@ -56,7 +57,7 @@
     $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
 
-    $: audioData = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) ||
+    $: bibleAudioData = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) ||
         []) as FrontendChapterAudioData[];
 
     async function getContent() {
@@ -138,11 +139,11 @@
             <div class="pt-5 px-4 {selectedTab !== 'bible' && 'hidden'} h-full">
                 {#if bibleContent?.chapters?.length}
                     <div class="prose mx-auto {numberOfChapters === 1 ? 'flex flex-col-reverse h-full' : 'pb-16'}">
-                        {#if audioData.length > 0}
+                        {#if bibleAudioData.length > 0}
                             <div class="py-4">
                                 <AudioPlayer
                                     bind:activePlayId
-                                    files={audioData.map((data) => ({
+                                    files={bibleAudioData.concat(bibleAudioData).map((data) => ({
                                         url: data.url,
                                         startTime: data.startTimestamp || 0,
                                         endTime: data.endTimestamp,
