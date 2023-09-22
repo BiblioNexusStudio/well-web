@@ -21,6 +21,9 @@
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
     import Search from '$lib/components/file-manager/Search.svelte';
     import ChangeView from '$lib/components/file-manager/ChangeView.svelte';
+    import ResouceMenu from '$lib/components/file-manager/ResourceMenu.svelte';
+    import LanguageMenu from '$lib/components/file-manager/LanguageMenu.svelte';
+    import { featureFlags } from '$lib/stores/feature-flags.store';
 
     let fetchAvailableResourcesPromise: Promise<void> | undefined;
 
@@ -58,24 +61,33 @@
     {#await fetchAvailableResourcesPromise}
         <FullPageSpinner />
     {:then}
-        <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
-            <LanguageSelect />
-        </div>
-
-        <div class="divider" />
-
-        {#if !$fileManagerLoading && ($bibleData.length || $passageData.length)}
-            <div class="flex flex-col sm:flex-row mx-2 mx-4 sm:mx-0 justify-end items-center">
-                <AvailableResourceSelect />
+        {#if !$featureFlags.newFileManager}
+            <div class="flex flex-col sm:flex-row mx-2 mx-4 my-6 sm:mx-0 justify-between items-center">
+                <LanguageSelect />
             </div>
 
             <div class="divider" />
+
+            {#if !$fileManagerLoading && ($bibleData.length || $passageData.length)}
+                <div class="flex flex-col sm:flex-row mx-2 mx-4 sm:mx-0 justify-end items-center">
+                    <AvailableResourceSelect />
+                </div>
+
+                <div class="divider" />
+            {/if}
         {/if}
 
-        <div class="flex mx-4 my-6 justify-between items-center">
-            <Search />
-            <ChangeView />
-        </div>
+        {#if $featureFlags.newFileManager}
+            <div class="flex mx-4 my-6 justify-between items-center">
+                <ResouceMenu />
+                <LanguageMenu />
+            </div>
+
+            <div class="flex mx-4 my-6 justify-between items-center">
+                <Search />
+                <ChangeView />
+            </div>
+        {/if}
 
         <div class="overflow-x-auto pb-32">
             {#if infoBoxConditionsMet}
