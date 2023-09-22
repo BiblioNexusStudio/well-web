@@ -4,6 +4,7 @@ import { writable } from 'svelte/store';
 const defaultConfig = {
     audioRecording: false,
     darkMode: false,
+    newFileManager: false,
 };
 
 export type FeatureFlag = keyof typeof defaultConfig;
