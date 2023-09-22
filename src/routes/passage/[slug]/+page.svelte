@@ -167,7 +167,7 @@
     {:then}
         <div
             class="flex flex-col absolute left-0 right-0 top-0 {audioPlayerShowing
-                ? 'bottom-32'
+                ? 'bottom-[7.5rem]'
                 : 'bottom-16'} z-10 pt-16"
         >
             <div class="flex flex-grow px-4 overflow-y-hidden {selectedTab !== 'bible' && 'hidden'}">
