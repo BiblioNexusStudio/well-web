@@ -1,125 +1,101 @@
-﻿<script lang="ts">
-    import { cachedOrRealUrl } from '$lib/data-cache';
+<script lang="ts">
+    import { onDestroy, onMount } from 'svelte';
     import PlayMediaIcon from '$lib/icons/PlayMediaIcon.svelte';
     import PauseMediaIcon from '$lib/icons/PauseMediaIcon.svelte';
-    import { Howl } from 'howler';
-    import type { HowlOptions } from 'howler';
-    import refresh from 'svelte-awesome/icons/refresh';
     import { Icon } from 'svelte-awesome';
-    import { onDestroy } from 'svelte';
-    type Timer = ReturnType<typeof setInterval>;
+    import refresh from 'svelte-awesome/icons/refresh';
+    import {
+        type AudioFileInfo,
+        createMultiClipAudioState,
+        type MultiClipAudioState,
+    } from './AudioPlayer/audio-player-state';
+    import { objectEntries, objectValues } from '$lib/utils/typesafe-standard-lib';
 
-    export let audioFile: string;
-    export let startTime = 0;
-    export let endTime: number | null = null;
+    type ClipKey = string;
 
-    /** Bind to this when you have multiple players on a single page. It will
-     * call pauseAudioIfOtherSourcePlaying when any bound activePlayId changes,
-     * preventing multiple audio sources from playing simultaneously.
-     */
-    export let activePlayId: number | undefined = undefined;
-    const pauseAudioIfOtherSourcePlaying = (activePlayId: number | undefined) => {
-        if (playId !== undefined && activePlayId !== playId && sound.playing(playId)) {
-            sound.pause(playId);
-        }
-    };
-    $: pauseAudioIfOtherSourcePlaying(activePlayId);
+    const defaultClipKey = 'default' as const;
 
-    const hasCustomTime = endTime !== null;
-    let playId: number | undefined = undefined;
-    let isAudioPlaying = false;
-    let currentTime = startTime;
-    let totalTime = 0;
-    let timer: Timer;
-    let loading = true;
-    $: currentTimeOffset = currentTime - startTime;
-    $: rangeValue = totalTime === 0 ? 0 : 100 * (currentTimeOffset / totalTime);
-    $: timeDisplayValue = `${formatTime(currentTimeOffset)}`;
+    // OPTION 1: Pass in a list of files you want to play.
+    // Great for when you just need one AudioPlayer to play one or a sequence of clips
+    export let files: AudioFileInfo[] | undefined = undefined;
 
-    const howlOptions: HowlOptions = {
-        src: cachedOrRealUrl(audioFile),
-        onplay: () => {
-            isAudioPlaying = true;
-            timer = setInterval(() => {
-                currentTime = sound.seek(playId);
-                if (!sound.playing(playId)) clearInterval(timer);
-            }, 50);
+    // OPTION 2: Pass a mapping of MultiClipAudioState, indexed by string keys.
+    // Great for when you want one AudioPlayer on a page that can quickly switch between
+    // playing different sequences of clips.
+    // Example:
+    //   bible => MultiClipAudioState{clips: [...]}
+    //   guideStep1 => MultiClipAudioState{clips: [...]}
+    export let multiClipAudioStates: Record<ClipKey, MultiClipAudioState> = {};
 
-            activePlayId = playId;
-        },
-        onpause: () => {
-            isAudioPlaying = false;
-        },
-        onend: () => {
-            isAudioPlaying = false;
-        },
-        onload: () => {
-            loading = false;
-            totalTime = hasCustomTime ? endTime! - startTime : sound.duration(playId);
-        },
-    };
+    // Indexes into the multiClipAudioStates to determine the current state to use.
+    export let currentClipKey: ClipKey = defaultClipKey;
 
-    // If you specify a section, you must play a section.
-    if (hasCustomTime) {
-        howlOptions.sprite = {
-            audioSection: [1000 * startTime, 1000 * (endTime! - startTime)],
-        };
+    let rangeValue = 0;
+    let timeDisplay = '';
+    let totalTimeDisplay = '';
+    let isPlaying = false;
+    let allFilesLoaded = false;
+
+    $: updateBasedOnKey(currentClipKey);
+
+    function updateBasedOnKey(key: ClipKey) {
+        updateDisplayValues(multiClipAudioStates?.[key]);
     }
 
-    const sound = new Howl(howlOptions);
-
-    const onRangeChange = (event: Event) => {
-        const { value } = event.target as HTMLInputElement;
-        currentTime = startTime + (parseInt(value) / 100) * totalTime;
-
-        if (playId !== undefined) {
-            sound.pause(playId);
-            sound.seek(currentTime, playId);
-            sound.play(playId);
+    function updateDisplayValues(state: MultiClipAudioState | undefined) {
+        if (state) {
+            rangeValue = state.rangeValue();
+            timeDisplay = state.timeDisplay();
+            totalTimeDisplay = state.totalTimeDisplay();
+            isPlaying = state.isPlaying();
+            allFilesLoaded = state.allFilesLoaded();
         }
-    };
+    }
 
-    const onRangeInput = () => {
-        clearInterval(timer);
-    };
+    function playOrPause() {
+        objectEntries(multiClipAudioStates).forEach(([key, state]) => {
+            if (key !== currentClipKey) {
+                state.pauseAllClipsAndNotify();
+            }
+        });
+        multiClipAudioStates?.[currentClipKey]?.playOrPause();
+    }
 
-    const onPlayPauseClick = () => {
-        if (isAudioPlaying) {
-            sound.pause(playId);
-            return;
-        }
+    function stopSyncingSeekPosition() {
+        multiClipAudioStates?.[currentClipKey]?.stopSyncingSeekPosition();
+    }
 
-        if (playId !== undefined) {
-            sound.play(playId);
-            return;
-        }
+    function onRangeChange(e: Event) {
+        multiClipAudioStates?.[currentClipKey]?.onRangeChange(e);
+    }
 
-        if (hasCustomTime) {
-            playId = sound.play('audioSection');
-        } else {
-            playId = sound.play();
+    onMount(() => {
+        if (files) {
+            multiClipAudioStates = { [defaultClipKey]: createMultiClipAudioState(files) };
         }
 
-        sound.seek(currentTime, playId);
-    };
+        objectEntries(multiClipAudioStates).forEach(([key, multiClipAudioState]) => {
+            multiClipAudioState.subscribe((state) => {
+                // Only update the component if it's for the current audio player
+                if (key === currentClipKey) {
+                    updateDisplayValues(state as unknown as MultiClipAudioState);
+                }
+            });
+        });
+    });
 
-    const formatTime = (totalSeconds: number) => {
-        totalSeconds = Math.floor(totalSeconds);
-        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-        const seconds = String(totalSeconds % 60).padStart(2, '0');
-        return `${minutes}:${seconds}`;
-    };
-
-    onDestroy(() => sound.unload());
+    onDestroy(() => {
+        objectValues(multiClipAudioStates).forEach((multiClipAudioState) => multiClipAudioState.onDestroy());
+    });
 </script>
 
-<div class="relative w-full flex flex-row justify-center items-center rounded-xl">
-    {#if loading}
+<div class="w-full flex flex-row justify-center items-center rounded-xl">
+    {#if !allFilesLoaded}
         <div />
         <Icon class="grow-0 w-[20px] h-[20px] text-primary" data={refresh} spin />
     {:else}
-        <button class="grow-0 w-[20px] h-[20px] cursor-pointer" on:click={onPlayPauseClick}>
-            {#if isAudioPlaying}
+        <button class="grow-0 w-[20px] h-[20px] cursor-pointer" on:click={playOrPause}>
+            {#if isPlaying}
                 <PauseMediaIcon />
             {:else}
                 <PlayMediaIcon />
@@ -127,7 +103,7 @@
         </button>
     {/if}
 
-    <div class="w-full mx-4">
+    <div class="grow mx-4">
         <input
             type="range"
             id="song-percentage-played"
@@ -136,12 +112,14 @@
             min="0"
             max="100"
             on:change={onRangeChange}
-            on:input={onRangeInput}
-            bind:value={rangeValue}
+            on:input={stopSyncingSeekPosition}
+            value={rangeValue}
         />
     </div>
 
-    <span class="items-start text-sm font-sans font-medium text-neutral h-[20px]">{timeDisplayValue}</span>
+    <span class="items-start text-sm font-medium text-neutral h-[20px] font-mono"
+        >{timeDisplay} / {totalTimeDisplay}</span
+    >
 </div>
 
 <style>
