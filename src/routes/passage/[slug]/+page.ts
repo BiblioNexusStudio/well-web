@@ -15,10 +15,11 @@ import type {
     BasePassage,
     FrontendBibleVersionBookContent,
     ResourceContentUrl,
-    ResourceContentSteps,
+    CbbtErAudioContent,
     CbbtErTextContent,
     CbbtErImageContent,
     ApiBibleVersion,
+    ResourceContentCbbtErText,
 } from '$lib/types/file-manager';
 import type { BibleBookTextContent } from '$lib/types/bible-text-content';
 import { passagesEqual } from '$lib/utils/passage-helpers';
@@ -28,6 +29,7 @@ import { isOnline } from '$lib/stores/is-online.store';
 import { bibleUrlsWithMetadataForBookAndChapters, fetchBibleDataForLanguageCode } from '$lib/utils/data-handlers/bible';
 import { cbbterUrlsWithMetadataForPassage } from '$lib/utils/data-handlers/resources/cbbt-er';
 import { range } from '$lib/utils/array';
+import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-to-html';
 
 export interface FrontendChapterAudioData {
     url: string;
@@ -150,7 +152,7 @@ async function cacheCbbterContentForPassageIfOnline(passageWithResources: ApiPas
 async function getCachedAudioContentForPassage(passage: ApiPassage) {
     const audioResourceContent = (
         passage.resources?.filter(({ mediaType }) => mediaType === 2)?.map(({ content }) => content?.content) || []
-    )?.filter(Boolean) as ResourceContentSteps[];
+    )?.filter(Boolean) as CbbtErAudioContent[];
     const contentWithCachedSteps = await asyncMap(audioResourceContent, async (content) => ({
         ...content,
         steps: await asyncFilter(
@@ -164,19 +166,28 @@ async function getCachedAudioContentForPassage(passage: ApiPassage) {
 
 async function getCachedTextContentForPassage(passage: ApiPassage) {
     const textResources = passage.resources?.filter(({ mediaType }) => mediaType === 1) || [];
-    return await Promise.all(
-        textResources.map(async ({ content }) => {
-            const textContent = content?.content as ResourceContentUrl | null;
-            if (textContent?.url) {
-                try {
-                    return await fetchFromCacheOrCdn(textContent?.url);
-                } catch (e) {
-                    return null;
+    return (
+        await Promise.all(
+            textResources.map(async ({ content }) => {
+                const textContent = content?.content as ResourceContentUrl | ResourceContentCbbtErText[] | null;
+                if ((textContent as ResourceContentUrl)?.url) {
+                    // this will go away soon, just need to still support the old data structure for a bit
+                    try {
+                        return { steps: await fetchFromCacheOrCdn((textContent as ResourceContentUrl)?.url) };
+                    } catch (e) {
+                        return null;
+                    }
+                } else if ((textContent as ResourceContentCbbtErText[])?.length > 0) {
+                    const steps = (textContent as ResourceContentCbbtErText[]).map(({ stepNumber, tiptap }) => ({
+                        stepNumber,
+                        contentHTML: parseTiptapJsonToHtml(tiptap),
+                    }));
+                    return { steps };
                 }
-            }
-            return null;
-        })
-    );
+                return null;
+            })
+        )
+    ).filter(Boolean) as CbbtErTextContent[];
 }
 
 async function getCachedImageContentForPassage(passage: ApiPassage) {
@@ -220,7 +231,7 @@ async function fetchResourceContent(passage: BasePassage) {
         const title = getTitleForPassage(passageWithResources);
         return {
             title,
-            text: textResourceContent?.map((content) => ({ steps: content } as CbbtErTextContent)),
+            text: textResourceContent,
             audio: audioResourceContent,
             images: imageResourceContent,
         };

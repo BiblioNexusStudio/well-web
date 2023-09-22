@@ -2,7 +2,7 @@ import {
     MediaType,
     type ApiPassage,
     type ApiPassageResource,
-    type ResourceContentSteps,
+    type CbbtErAudioContent,
     type ResourceContentUrl,
     type UrlWithMetadata,
 } from '$lib/types/file-manager';
@@ -36,7 +36,7 @@ function extractUrlWithMetadataFromCbbterText(resource: ApiPassageResource): Url
 
 function extractUrlsWithMetadataFromCbbterAudio(resource: ApiPassageResource): UrlWithMetadata[] {
     if (resource.content && resource.type === 1 && resource.mediaType === 2) {
-        const audioContent = resource.content.content as ResourceContentSteps;
+        const audioContent = resource.content.content as CbbtErAudioContent;
         return audioContent.steps.map((step) => ({
             mediaType: MediaType.audio,
             url: step[audioFileTypeForBrowser()].url,

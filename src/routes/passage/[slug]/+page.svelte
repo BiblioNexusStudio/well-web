@@ -4,7 +4,7 @@
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import type { CbbtErImageContent, CbbtErTextContent, ResourceContentSteps } from '$lib/types/file-manager';
+    import type { CbbtErImageContent, CbbtErTextContent, CbbtErAudioContent } from '$lib/types/file-manager';
     import type { FrontendChapterContent } from './+page';
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
@@ -42,7 +42,7 @@
     let cbbterSelectedStepNumber = 1;
     let stepsAvailable: number[] = [];
     let cbbterText: CbbtErTextContent | undefined;
-    let cbbterAudio: ResourceContentSteps | undefined;
+    let cbbterAudio: CbbtErAudioContent | undefined;
     let cbbterImages: CbbtErImageContent[] | undefined;
     let cbbterTitle: string | undefined;
     let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
