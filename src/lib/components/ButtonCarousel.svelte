@@ -35,9 +35,8 @@
     {#each buttons as { value, label }, index}
         <div class="carousel-item">
             <button
-                class={`text-sm font-semibold px-3 py-2 rounded-md ${
-                    selectedValue === value && 'text-secondary-content bg-primary-50'
-                }`}
+                class="text-sm font-semibold px-3 py-2 rounded-md {selectedValue === value &&
+                    'text-secondary-content bg-primary-50'}"
                 on:click={() => (selectedValue = value)}
                 bind:this={buttonElements[index]}
             >
