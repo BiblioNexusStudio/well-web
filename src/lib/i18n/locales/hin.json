@@ -178,6 +178,25 @@
                 "bundleView": {
                     "value": "बंडल दृश्य"
                 }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "नाम"
+                },
+                "text": {
+                    "value": "पाठ"
+                },
+                "audio": {
+                    "value": "ऑडियो"
+                },
+                "media": {
+                    "value": "मीडिया"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "संसाधन"
+                }
             }
         }
     },
