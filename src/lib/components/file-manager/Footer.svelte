@@ -8,7 +8,7 @@
     import { featureFlags } from '$lib/stores/feature-flags.store';
 
     $: downloadingIsDisabled =
-        ($downloadData.totalSizeToDownload === 0 && $downloadData.totalSizeToDelete === 0) || !isOnline;
+        ($downloadData.totalSizeToDownload === 0 && $downloadData.totalSizeToDelete === 0) || !$isOnline;
 
     const updateFiles = () => {
         const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
@@ -75,9 +75,13 @@
                     )}
                 </span>
             </div>
-            <button class="btn btn-primary ml-4" disabled={downloadingIsDisabled} on:click={updateFiles}
-                ><Icon data={download} /> {$translate('page.fileManager.download.value')}</button
-            >
+            <button class="btn btn-primary ml-4" disabled={downloadingIsDisabled} on:click={updateFiles}>
+                {#if $isOnline}
+                    <Icon data={download} /> {$translate('page.fileManager.download.value')}
+                {:else}
+                    {$translate('page.fileManager.noInternet.value')}
+                {/if}
+            </button>
         </div>
     </div>
 </footer>

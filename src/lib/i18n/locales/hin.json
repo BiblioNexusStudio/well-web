@@ -117,6 +117,9 @@
             "search": {
                 "value": "खोजें"
             },
+            "noInternet": {
+                "value": "कोई इंटरनेट"
+            },
             "modal": {
                 "title": {
                     "value": "पुष्टि"
