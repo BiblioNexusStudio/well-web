@@ -1,5 +1,6 @@
 export type Url = string;
 export type UrlWithMetadata = { mediaType: MediaTypeEnum; url: Url; size: number };
+export type TiptapContent = object;
 
 export interface BaseBibleVersion {
     languageId: number;
@@ -73,22 +74,35 @@ export interface DownloadData {
     urlsToDelete: string[];
 }
 
-export interface ResourceContentSteps {
-    steps: ResourceStep[];
+export interface ResourceContentUrl {
+    url: string;
 }
 
-export interface ResourceStep {
+export interface ResourceContentTiptap {
+    tiptap: TiptapContent;
+}
+
+export interface ResourceContentCbbtErText extends ResourceContentTiptap {
+    stepNumber: number;
+}
+
+export interface CbbtErAudioSingleStepContent {
     step: number;
     webm: AudioResource;
     mp3: AudioResource;
 }
 
-export interface ResourceContentUrl {
-    url: string;
+export interface CbbtErTextSingleStepContent {
+    stepNumber: number;
+    contentHTML: string;
 }
 
 export interface CbbtErTextContent {
-    steps: { stepNumber: number; contentHTML: string }[];
+    steps: CbbtErTextSingleStepContent[];
+}
+
+export interface CbbtErAudioContent {
+    steps: CbbtErAudioSingleStepContent[];
 }
 
 export interface CbbtErImageContent {
@@ -131,7 +145,7 @@ export interface ApiPassageContent {
     languageId: number;
     displayName: string;
     summary: string | null;
-    content: ResourceContentSteps | ResourceContentUrl;
+    content: CbbtErAudioContent | ResourceContentUrl;
     contentSize: number;
     selected?: boolean;
 }

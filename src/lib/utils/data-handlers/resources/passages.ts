@@ -5,7 +5,7 @@ import { data, passagesByBook, selectedBookIndex } from '$lib/stores/passage-for
 import { currentLanguageInfo } from '$lib/stores/current-language.store';
 import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
 import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
-import type { ApiPassage, ApiBibleVersion, ResourceContentSteps, ResourceContentUrl } from '$lib/types/file-manager';
+import type { ApiPassage, ApiBibleVersion, CbbtErAudioContent, ResourceContentUrl } from '$lib/types/file-manager';
 
 async function getBibleBookIdsToNameAndIndex(languageId: number | null = null) {
     const bibleData = (await fetchFromCacheOrApi(
@@ -39,7 +39,7 @@ export async function fetchData(isOnline: boolean) {
                 const textContent = content.content as ResourceContentUrl;
                 return await isCachedFromCdn(textContent.url);
             } else if (mediaType === 2 && content) {
-                const audioContent = content.content as ResourceContentSteps;
+                const audioContent = content.content as CbbtErAudioContent;
                 return asyncEvery(
                     audioContent.steps,
                     async (step) => await isCachedFromCdn(step[audioFileTypeForBrowser()].url)
