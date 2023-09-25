@@ -232,6 +232,30 @@
                     "value": "Bundle View",
                     "_context": "Title for bundle view"
                 }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "Name",
+                    "_context": "Label for the name column"
+                },
+                "text": {
+                    "value": "Text",
+                    "_context": "Label for the text column"
+                },
+                "audio": {
+                    "value": "Audio",
+                    "_context": "Label for the audio column"
+                },
+                "media": {
+                    "value": "Media",
+                    "_context": "Label for the media column"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "Resources",
+                    "_context": "Label for the resources row"
+                }
             }
         }
     },

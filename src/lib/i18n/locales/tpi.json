@@ -178,6 +178,25 @@
                 "bundleView": {
                     "value": "Bundel Vyu"
                 }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "Nem"
+                },
+                "text": {
+                    "value": "Teks"
+                },
+                "audio": {
+                    "value": "Odio"
+                },
+                "media": {
+                    "value": "Mideiya"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "Resos"
+                }
             }
         }
     },
