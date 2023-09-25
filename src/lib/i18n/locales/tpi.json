@@ -117,6 +117,9 @@
             "search": {
                 "value": "Sachim"
             },
+            "noInternet": {
+                "value": "Nogat internet"
+            },
             "modal": {
                 "title": {
                     "value": "Kanfemesen"
