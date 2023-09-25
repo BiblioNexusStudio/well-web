@@ -1,0 +1,162 @@
+[
+    {
+        "book": "Lamentations",
+        "resources": 2,
+        "size": "16.31 MB",
+        "text": false,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Job",
+        "resources": 9,
+        "size": "22.97 MB",
+        "text": false,
+        "audio": false,
+        "media": true
+    },
+    {
+        "book": "Nahum",
+        "resources": 9,
+        "size": "66.92 MB",
+        "text": true,
+        "audio": true,
+        "media": false
+    },
+    {
+        "book": "Obadiah",
+        "resources": 10,
+        "size": "51.50 MB",
+        "text": true,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Lamentations",
+        "resources": 4,
+        "size": "78.21 MB",
+        "text": true,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Isaiah",
+        "resources": 10,
+        "size": "52.37 MB",
+        "text": true,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Joel",
+        "resources": 6,
+        "size": "65.10 MB",
+        "text": false,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Habakkuk",
+        "resources": 3,
+        "size": "47.38 MB",
+        "text": true,
+        "audio": true,
+        "media": false
+    },
+    {
+        "book": "2 Kings",
+        "resources": 4,
+        "size": "18.71 MB",
+        "text": true,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "2 Samuel",
+        "resources": 10,
+        "size": "50.27 MB",
+        "text": false,
+        "audio": false,
+        "media": true
+    },
+    {
+        "book": "Zephaniah",
+        "resources": 2,
+        "size": "90.00 MB",
+        "text": true,
+        "audio": false,
+        "media": true
+    },
+    {
+        "book": "Haggai",
+        "resources": 6,
+        "size": "98.80 MB",
+        "text": false,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Obadiah",
+        "resources": 2,
+        "size": "5.71 MB",
+        "text": false,
+        "audio": false,
+        "media": true
+    },
+    {
+        "book": "Nehemiah",
+        "resources": 8,
+        "size": "41.16 MB",
+        "text": true,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Jeremiah",
+        "resources": 9,
+        "size": "73.67 MB",
+        "text": false,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Daniel",
+        "resources": 6,
+        "size": "94.35 MB",
+        "text": false,
+        "audio": true,
+        "media": false
+    },
+    {
+        "book": "Esther",
+        "resources": 2,
+        "size": "99.02 MB",
+        "text": false,
+        "audio": true,
+        "media": true
+    },
+    {
+        "book": "Hosea",
+        "resources": 10,
+        "size": "34.38 MB",
+        "text": true,
+        "audio": false,
+        "media": true
+    },
+    {
+        "book": "2 Kings",
+        "resources": 10,
+        "size": "71.96 MB",
+        "text": false,
+        "audio": false,
+        "media": false
+    },
+    {
+        "book": "Amos",
+        "resources": 1,
+        "size": "99.38 MB",
+        "text": true,
+        "audio": false,
+        "media": true
+    }
+]
