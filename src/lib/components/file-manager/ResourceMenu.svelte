@@ -2,54 +2,28 @@
     import { Icon } from 'svelte-awesome';
     import caretUp from 'svelte-awesome/icons/caretUp';
     import caretDown from 'svelte-awesome/icons/caretDown';
-    import { bibleData } from '$lib/stores/file-manager.store';
+    import { resourcesMenu } from '$lib/stores/file-manager.store';
 
     let menuOpen = false;
+
+    $: selectedResources = $resourcesMenu.filter((resources) => resources.selected);
 
     const toggleMenu = () => {
         menuOpen = !menuOpen;
     };
-
-    const resouces = [
-        ...$bibleData.map((bible) => ({
-            name: bible.name,
-            value: String(bible.languageId),
-            selected: false,
-        })),
-        {
-            name: 'CBBT-ER',
-            value: 'resources',
-            selected: false,
-        },
-        {
-            name: 'Tyndale Bible Dictionary',
-            value: 'tyndaleBibleDictionary',
-            selected: false,
-        },
-        {
-            name: 'Tyndale Study Notes',
-            value: 'tyndaleStudyNotes',
-            selected: false,
-        },
-        {
-            name: 'Video Bible Dictionary',
-            value: 'videoBibleDictionary',
-            selected: false,
-        },
-    ];
 </script>
 
 <div class="flex h-full items-center relative w-1/2">
     <button class="btn btn-primary btn-outline flex justify-between w-full mr-2" on:click={toggleMenu}>
-        Resources ({resouces.length + 1}) <Icon data={menuOpen ? caretUp : caretDown} />
+        Resources ({selectedResources.length}) <Icon data={menuOpen ? caretUp : caretDown} />
     </button>
     {#if menuOpen}
         <div class="absolute top-16 left-0 border-2-primary bg-white shadow-lg rounded-md menu z-30">
             <!--svelte each-->
-            {#each resouces as resouce}
+            {#each $resourcesMenu as resource}
                 <label class="label cursor-pointer mb-4 justify-start">
-                    <input type="checkbox" bind:checked={resouce.selected} class="checkbox checkbox-primary" />
-                    <span class="label-text ml-4">{resouce.name}</span>
+                    <input type="checkbox" bind:checked={resource.selected} class="checkbox checkbox-primary" />
+                    <span class="label-text ml-4">{resource.name}</span>
                 </label>
             {/each}
         </div>

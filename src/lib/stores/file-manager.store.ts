@@ -39,3 +39,36 @@ export const footerInputs = writable<FooterInputs>({
     media: false,
 });
 export const changeMenuGroupValue = writable<string>('book');
+export const resourcesMenu = writable([
+    {
+        name: 'CBBT-ER',
+        value: 'cbbtErResources',
+        selected: false,
+    },
+    {
+        name: 'Tyndale Bible Dictionary',
+        value: 'tyndaleBibleDictionary',
+        selected: false,
+    },
+    {
+        name: 'Tyndale Study Notes',
+        value: 'tyndaleStudyNotes',
+        selected: false,
+    },
+    {
+        name: 'Video Bible Dictionary',
+        value: 'videoBibleDictionary',
+        selected: false,
+    },
+]);
+bibleData.subscribe((bibleData) => {
+    const biblesForResourcesMenu = bibleData.map((bible) => ({
+        name: bible.name,
+        value: bible.name,
+        selected: true,
+    }));
+
+    resourcesMenu.update((resourcesMenu) => {
+        return [...biblesForResourcesMenu, ...resourcesMenu];
+    });
+});
