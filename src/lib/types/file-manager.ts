@@ -174,3 +174,9 @@ export interface FooterInputs {
     audio: boolean;
     media: boolean;
 }
+
+export interface ResourcesMenuItem {
+    name: string;
+    value: string;
+    selected: boolean;
+}

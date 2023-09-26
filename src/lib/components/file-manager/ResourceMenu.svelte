@@ -3,7 +3,9 @@
     import caretUp from 'svelte-awesome/icons/caretUp';
     import caretDown from 'svelte-awesome/icons/caretDown';
     import { resourcesMenu } from '$lib/stores/file-manager.store';
+    import { onMount } from 'svelte';
 
+    let resourcesMenuDiv: HTMLElement;
     let menuOpen = false;
 
     $: selectedResources = $resourcesMenu.filter((resources) => resources.selected);
@@ -11,9 +13,23 @@
     const toggleMenu = () => {
         menuOpen = !menuOpen;
     };
+
+    onMount(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (resourcesMenuDiv && !resourcesMenuDiv.contains(event.target as Node) && menuOpen) {
+                toggleMenu();
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    });
 </script>
 
-<div class="flex h-full items-center relative w-1/2">
+<div class="flex h-full items-center relative w-1/2" bind:this={resourcesMenuDiv}>
     <button class="btn btn-primary btn-outline flex justify-between w-full mr-2" on:click={toggleMenu}>
         Resources ({selectedResources.length}) <Icon data={menuOpen ? caretUp : caretDown} />
     </button>

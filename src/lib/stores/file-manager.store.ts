@@ -5,6 +5,7 @@ import type {
     FrontendBibleVersion,
     UrlWithMetadata,
     FooterInputs,
+    ResourcesMenuItem,
 } from '$lib/types/file-manager';
 import { calculateUrlsWithMetadataToChange } from '$lib/utils/file-manager';
 
@@ -39,7 +40,7 @@ export const footerInputs = writable<FooterInputs>({
     media: false,
 });
 export const changeMenuGroupValue = writable<string>('book');
-export const resourcesMenu = writable([
+export const resourcesMenu = writable<ResourcesMenuItem[]>([
     {
         name: 'CBBT-ER',
         value: 'cbbtErResources',
