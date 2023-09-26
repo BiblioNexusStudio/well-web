@@ -182,6 +182,20 @@
                     "value": "Bundel Vyu"
                 }
             },
+            "resourcesMenu": {
+                "cbbtEr": {
+                    "value": "CBBT-ER"
+                },
+                "tyndaleBibleDictionary": {
+                    "value": "Tyndale Baibel Disiksenari"
+                },
+                "tyndaleStudyNotes": {
+                    "value": "Tyndale Stadi Not"
+                },
+                "videoBibleDictionary": {
+                    "value": "Vidio Baibel Disiksenari"
+                }
+            },
             "viewHeader": {
                 "name": {
                     "value": "Nem"

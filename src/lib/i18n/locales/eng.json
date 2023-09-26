@@ -255,6 +255,24 @@
                     "_context": "Label for the media column"
                 }
             },
+            "resourcesMenu": {
+                "cbbtEr": {
+                    "value": "CBBT-ER",
+                    "_context": "Label for the CBBT-ER resource"
+                },
+                "tyndaleBibleDictionary": {
+                    "value": "Tyndale Bible Dictionary",
+                    "_context": "Label for the Tyndale Bible Dictionary resource"
+                },
+                "tyndaleStudyNotes": {
+                    "value": "Tyndale Study Notes",
+                    "_context": "Label for the Tyndale Study Notes resource"
+                },
+                "videoBibleDictionary": {
+                    "value": "Video Bible Dictionary",
+                    "_context": "Label for the Video Bible Dictionary resource"
+                }
+            },
             "viewRow": {
                 "resources": {
                     "value": "Resources",
