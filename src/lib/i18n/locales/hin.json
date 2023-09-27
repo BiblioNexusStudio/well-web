@@ -196,6 +196,20 @@
                     "value": "मीडिया"
                 }
             },
+            "resourcesMenu": {
+                "cbbtEr": {
+                    "value": "CBBT-ER"
+                },
+                "tyndaleBibleDictionary": {
+                    "value": "Tyndale बाइबिल शब्दकोश"
+                },
+                "tyndaleStudyNotes": {
+                    "value": "Tyndale अध्ययन नोट्स"
+                },
+                "videoBibleDictionary": {
+                    "value": "वीडियो बाइबिल शब्दकोश"
+                }
+            },
             "viewRow": {
                 "resources": {
                     "value": "संसाधन"

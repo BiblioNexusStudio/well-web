@@ -1,8 +1,11 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import { hideDownloadedBundles, changeMenuGroupValue } from '$lib/stores/file-manager.store';
+    import { onMount } from 'svelte';
 
+    let changeMenu: HTMLElement;
     let menuOpen = false;
+
     const changeMenuItems = [
         {
             value: 'book',
@@ -21,12 +24,27 @@
             translate: $translate('page.fileManager.changeViewMenu.resource.value'),
         },
     ];
+
     function toggleMenu() {
         menuOpen = !menuOpen;
     }
+
+    onMount(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (changeMenu && !changeMenu.contains(event.target as Node) && menuOpen) {
+                toggleMenu();
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    });
 </script>
 
-<div class="flex h-full items-center relative">
+<div class="flex h-full items-center relative" bind:this={changeMenu}>
     <button
         on:click={toggleMenu}
         class="btn {menuOpen
@@ -63,6 +81,7 @@
                                     class="radio checked:bg-primary"
                                     value={changeMenuItem.value}
                                     bind:group={$changeMenuGroupValue}
+                                    on:change={toggleMenu}
                                 />
                                 <span class="label-text ml-4 capitalize"> {changeMenuItem.translate}</span>
                             </label>

@@ -7,7 +7,7 @@
 <thead>
     <tr class="w-full h-16 border-y-2">
         <th>
-            <input type="checkbox" class="checkbox mx-2" id="select-all-resources" />
+            <input type="checkbox" class="checkbox checkbox-primary mx-2" id="select-all-resources" />
         </th>
         <th class="text-start text-xs">
             {$translate('page.fileManager.viewHeader.name.value')}

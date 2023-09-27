@@ -5,6 +5,7 @@ import type {
     FrontendBibleVersion,
     UrlWithMetadata,
     FooterInputs,
+    ResourcesMenuItem,
 } from '$lib/types/file-manager';
 import { calculateUrlsWithMetadataToChange } from '$lib/utils/file-manager';
 
@@ -39,3 +40,11 @@ export const footerInputs = writable<FooterInputs>({
     media: false,
 });
 export const changeMenuGroupValue = writable<string>('book');
+export const resourcesMenu = writable<ResourcesMenuItem[]>([]);
+export const bibleDataForResourcesMenu = derived(bibleData, (bibleData) => {
+    return bibleData.map((bible, index) => ({
+        name: bible.name,
+        value: bible.name,
+        selected: index === 0 ? true : false,
+    }));
+});

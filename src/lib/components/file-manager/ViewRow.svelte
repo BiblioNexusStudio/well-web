@@ -15,7 +15,7 @@
 
 <tr class="w-full h-16 border-b-2 odd:bg-gray-100">
     <td class="text-center">
-        <input type="checkbox" class="checkbox mx-2" />
+        <input type="checkbox" class="checkbox checkbox-primary mx-2" />
     </td>
 
     <td>

@@ -78,12 +78,12 @@
         {/if}
 
         {#if $featureFlags.newFileManager}
-            <div class="flex mx-4 my-6 justify-between items-center">
+            <div class="flex mx-4 mt-6 mb-4 justify-between items-center">
                 <ResouceMenu />
                 <LanguageMenu />
             </div>
 
-            <div class="flex mx-4 my-6 justify-between items-center">
+            <div class="flex mx-4 my-4 justify-between items-center">
                 <Search />
                 <ChangeView />
             </div>
