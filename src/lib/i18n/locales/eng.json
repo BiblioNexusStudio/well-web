@@ -203,40 +203,6 @@
                     "_context": "Accessibility label for the button to collapse the resources"
                 }
             },
-            "changeViewMenu": {
-                "changeView": {
-                    "value": "Change View...",
-                    "_context": "Label for the button to change the view of the file manager"
-                },
-                "book": {
-                    "value": "book",
-                    "_context": "Label for the button to change the view of the file manager to show books"
-                },
-                "chapter": {
-                    "value": "chapter",
-                    "_context": "Label for the button to change the view of the file manager to show chapters"
-                },
-                "pericope": {
-                    "value": "pericope",
-                    "_context": "Label for the button to change the view of the file manager to show pericopes"
-                },
-                "resource": {
-                    "value": "resource",
-                    "_context": "Label for the button to change the view of the file manager to show resources"
-                },
-                "downloadBundles": {
-                    "value": "Download Bundles",
-                    "_context": "Title for download bundles"
-                },
-                "hideDownloadedBundles": {
-                    "value": "Hide downloaded bundles",
-                    "_context": "Lable text for hide downloaded bundles"
-                },
-                "bundleView": {
-                    "value": "Bundle View",
-                    "_context": "Title for bundle view"
-                }
-            },
             "viewHeader": {
                 "name": {
                     "value": "Name",

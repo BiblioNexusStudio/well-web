@@ -2,16 +2,15 @@
     import ViewHeader from './ViewHeader.svelte';
     import ViewRow from './ViewRow.svelte';
     import mockBibleData from './mock-data.json';
-    import { changeMenuGroupValue, resourcesMenu } from '$lib/stores/file-manager.store';
+    import { resourcesMenu } from '$lib/stores/file-manager.store';
     import type { ResourcesMenuItem } from '$lib/types/file-manager';
 
-    $: getViewTableData($changeMenuGroupValue, $resourcesMenu);
+    $: getViewTableData($resourcesMenu);
 
-    function getViewTableData(view: string, resourcesMenu: ResourcesMenuItem[]) {
+    function getViewTableData(resourcesMenu: ResourcesMenuItem[]) {
         // Logic Placeholder for getting data from API
         // Currently, the data is mocked
         // But the wiring from the change view menu is working.
-        console.log(view);
         console.log(resourcesMenu);
     }
 </script>

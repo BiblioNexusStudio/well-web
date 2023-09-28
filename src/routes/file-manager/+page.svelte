@@ -20,7 +20,6 @@
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
     import Search from '$lib/components/file-manager/Search.svelte';
-    import ChangeView from '$lib/components/file-manager/ChangeView.svelte';
     import ResouceMenu from '$lib/components/file-manager/ResourceMenu.svelte';
     import LanguageMenu from '$lib/components/file-manager/LanguageMenu.svelte';
     import { featureFlags } from '$lib/stores/feature-flags.store';
@@ -85,7 +84,6 @@
 
             <div class="flex mx-4 my-4 justify-between items-center">
                 <Search />
-                <ChangeView />
             </div>
         {/if}
 
