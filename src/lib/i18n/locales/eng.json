@@ -149,10 +149,6 @@
                 "value": "files",
                 "_context": "Label for the files"
             },
-            "search": {
-                "value": "Search",
-                "_context": "Label for the search input"
-            },
             "noInternet": {
                 "value": "No Internet",
                 "_context": "Message to display when the user has no internet connection"
