@@ -117,6 +117,9 @@
             "noInternet": {
                 "value": "Nogat internet"
             },
+            "selectABook": {
+                "value": "Plis sekim wanpela buk."
+            },
             "modal": {
                 "title": {
                     "value": "Kanfemesen"

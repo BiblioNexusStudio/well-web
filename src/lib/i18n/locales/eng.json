@@ -153,6 +153,10 @@
                 "value": "No Internet",
                 "_context": "Message to display when the user has no internet connection"
             },
+            "selectABook": {
+                "value": "Select a Book",
+                "_context": "Label for a dropdown allowing the user to select a book to view"
+            },
             "modal": {
                 "title": {
                     "value": "Confirmation",

@@ -12,7 +12,13 @@
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
-    import { fileManagerLoading, bibleData, currentBibleVersion, passageData } from '$lib/stores/file-manager.store';
+    import {
+        fileManagerLoading,
+        bibleData,
+        currentBibleVersion,
+        passageData,
+        selectedBookId,
+    } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
     import type { ApiPassage } from '$lib/types/file-manager';
@@ -22,6 +28,7 @@
     import ResouceMenu from '$lib/components/file-manager/ResourceMenu.svelte';
     import LanguageMenu from '$lib/components/file-manager/LanguageMenu.svelte';
     import { featureFlags } from '$lib/stores/feature-flags.store';
+    import SelectBookMenu from '$lib/components/file-manager/SelectBookMenu.svelte';
 
     let fetchAvailableResourcesPromise: Promise<void> | undefined;
 
@@ -77,9 +84,14 @@
 
         {#if $featureFlags.newFileManager}
             <div class="flex mx-4 mt-6 mb-4 justify-between items-center">
-                <ResouceMenu />
-                <LanguageMenu />
+                <SelectBookMenu />
             </div>
+            {#if $selectedBookId}
+                <div class="flex mx-4 my-4 justify-between items-center">
+                    <ResouceMenu />
+                    <LanguageMenu />
+                </div>
+            {/if}
         {/if}
 
         <div class="overflow-x-auto pb-32">
@@ -92,7 +104,9 @@
     {:catch}
         <ErrorMessage />
     {/await}
-    <Footer />
+    {#if $selectedBookId}
+        <Footer />
+    {/if}
 </div>
 
 <MetaTags description={$translate('page.fileManager.metaData.description.value')} robots="noindex" />

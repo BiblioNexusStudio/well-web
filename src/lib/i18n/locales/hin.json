@@ -117,6 +117,9 @@
             "noInternet": {
                 "value": "कोई इंटरनेट"
             },
+            "selectABook": {
+                "value": "कृपया एक पुस्तक चुनें।"
+            },
             "modal": {
                 "title": {
                     "value": "पुष्टि"

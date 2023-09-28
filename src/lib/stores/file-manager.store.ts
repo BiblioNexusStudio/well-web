@@ -46,3 +46,4 @@ export const bibleDataForResourcesMenu = derived(bibleData, (bibleData) => {
         selected: index === 0 ? true : false,
     }));
 });
+export const selectedBookId = writable<number | null>(null);
