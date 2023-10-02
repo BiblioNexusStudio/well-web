@@ -11,8 +11,8 @@
     import { isSideMenuOpen } from '$lib/stores/top-menu.store';
     import PassageForm from '$lib/components/PassageForm.svelte';
     import AddAudioRecordingModal from './AddAudioRecordingModal.svelte';
-    import type { BasePassage } from '$lib/types/file-manager';
     import { featureFlags } from '$lib/stores/feature-flags.store';
+    import type { BasePassage } from '$lib/types/passage';
 
     export let title = '';
     export let passage: BasePassage | null = null;

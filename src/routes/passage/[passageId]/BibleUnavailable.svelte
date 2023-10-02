@@ -2,55 +2,56 @@
     import { _ as translate } from 'svelte-i18n';
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
-    import { lookupLanguageInfoByCode, lookupLanguageInfoById } from '$lib/stores/current-language.store';
+    import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import { supportedLanguages } from '$lib/utils/language-utils';
     import { asyncFilter, asyncReduce } from '$lib/utils/async-array';
-    import { fetchBibleDataForLanguageCode, isContentCachedForPassageInBible } from '$lib/utils/data-handlers/bible';
-    import type { ApiBibleVersion, BasePassage, Language } from '$lib/types/file-manager';
+    import {
+        fetchBibleDataForBookCodeAndBibleId,
+        fetchBiblesForLanguageCode,
+        isContentCachedForPassageInBible,
+    } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
+    import type { ApiBible, BibleBookContentDetails } from '$lib/types/bible-text-content';
+    import type { BasePassage } from '$lib/types/passage';
 
-    interface BibleVersionWithLanguage extends ApiBibleVersion {
-        languageInfo: (Language & { label: string | undefined }) | null;
+    interface BibleWithLanguage extends ApiBible {
+        languageLabel: string;
     }
 
     export let passage: BasePassage;
-    export let bibleLanguageCode: string;
 
-    let selectedBible = '';
-    let availableBibles: BibleVersionWithLanguage[] | null = null;
-
-    $: currentBibleLanguageLabel = lookupLanguageInfoByCode(bibleLanguageCode)?.label;
+    let selectedBible = 0;
+    let availableBibles: BibleWithLanguage[] | null = null;
 
     function goToBibleLanguage() {
         const newUrl = new URL($page.url);
-        newUrl?.searchParams?.set('bibleLanguage', selectedBible);
+        newUrl?.searchParams?.set('bibleId', selectedBible.toString());
         goto(newUrl);
     }
 
     async function determineAvailableBibles(passage: BasePassage, isOnline: boolean) {
         availableBibles = await asyncReduce(
             supportedLanguages,
-            async (acc: BibleVersionWithLanguage[], language) => {
-                let bibleVersions: ApiBibleVersion[];
-                try {
-                    bibleVersions = await fetchBibleDataForLanguageCode(language.code);
-                } catch (e) {
-                    bibleVersions = [];
-                }
-                if (!isOnline) {
-                    bibleVersions = await asyncFilter(
-                        bibleVersions,
-                        async (version) => await isContentCachedForPassageInBible(passage, version)
-                    );
-                }
+            async (acc: BibleWithLanguage[], language) => {
+                const bibles = await fetchBiblesForLanguageCode(language.code);
+                const filteredBibles = await asyncFilter(bibles, async (bible) => {
+                    let bookData: BibleBookContentDetails | null = null;
+                    try {
+                        bookData = await fetchBibleDataForBookCodeAndBibleId(passage.bookCode, bible.id);
+                        if (!bookData) {
+                            return false;
+                        }
+                        return isOnline || (await isContentCachedForPassageInBible(passage, bookData));
+                    } catch (e) {
+                        return false;
+                    }
+                });
                 return acc.concat(
-                    bibleVersions
-                        .map((bibleVersion) => ({
-                            ...bibleVersion,
-                            languageInfo: lookupLanguageInfoById(bibleVersion.languageId),
-                        }))
-                        .slice(0, 1)
+                    filteredBibles.map((bible) => ({
+                        ...bible,
+                        languageLabel: language.label,
+                    }))
                 );
             },
             []
@@ -70,20 +71,18 @@
             {#if availableBibles.length}
                 <div class="text-center">
                     {@html $translate('page.passage.noBibleContent.description.value', {
-                        values: { language: currentBibleLanguageLabel },
+                        values: { language: $currentLanguageInfo?.label },
                     })}
                 </div>
                 <select
                     bind:value={selectedBible}
                     class="select select-info {selectedBible ? 'text-primary' : 'text-base-500'} text-ellipsis"
                 >
-                    <option disabled value="">
+                    <option disabled value={0}>
                         {$translate('page.passage.noBibleContent.bible.value')}
                     </option>
                     {#each availableBibles as bible}
-                        <option value={bible.languageInfo?.iso6393Code}
-                            >{bible.languageInfo?.label} - {bible.name}</option
-                        >
+                        <option value={bible.id}>{bible.languageLabel} - {bible.abbreviation}</option>
                     {/each}
                 </select>
                 <button class="btn btn-primary w-1/4" disabled={!selectedBible} on:click={goToBibleLanguage}
@@ -92,7 +91,7 @@
             {:else}
                 <div class="text-center">
                     {@html $translate('page.passage.noBibleContent.noneAvailableDescription.value', {
-                        values: { language: currentBibleLanguageLabel },
+                        values: { language: $currentLanguageInfo?.label },
                     })}
                 </div>
             {/if}

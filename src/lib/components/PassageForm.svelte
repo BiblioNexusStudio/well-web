@@ -6,8 +6,8 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import { currentLanguageCode } from '$lib/stores/current-language.store';
-    import { fetchData } from '$lib/utils/data-handlers/resources/passages';
-    import { passageToReference, passageTypeToString } from '$lib/utils/passage-helpers';
+    import { fetchCbbterPassagesByBook } from '$lib/utils/data-handlers/resources/passages';
+    import { passageToReference } from '$lib/utils/passage-helpers';
     import { selectedId, selectedBookIndex, data } from '$lib/stores/passage-form.store';
     import { supportedLanguages } from '$lib/utils/language-utils';
 
@@ -25,7 +25,7 @@
 
     async function callFetchData(isOnline = true) {
         isLoading = true;
-        await fetchData(isOnline);
+        await fetchCbbterPassagesByBook(isOnline);
         isLoading = false;
     }
 
@@ -67,7 +67,7 @@
         </option>
         {#if $data.passagesByBook}
             {#each $data.passagesByBook as book, index}
-                <option value={index}>{book.displayName}</option>
+                <option value={index}>{book.bookName}</option>
             {/each}
         {/if}
     </select>
@@ -81,8 +81,8 @@
         <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
         {#if selectedBookInfo}
             {#each selectedBookInfo.passages as passage}
-                <option value={passageTypeToString(passage)}
-                    >{selectedBookInfo.displayName}
+                <option value={passage.id}
+                    >{selectedBookInfo.bookName}
                     {passageToReference(passage)}</option
                 >
             {/each}

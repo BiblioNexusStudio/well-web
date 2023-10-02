@@ -1,6 +1,6 @@
 <script lang="ts">
     import AudioRecorder from '$lib/components/AudioRecorder.svelte';
-    import type { BasePassage } from '$lib/types/file-manager';
+    import type { BasePassage } from '$lib/types/passage';
     import { saveBibleRecording } from '$lib/utils/data-handlers/bible';
     import { _ as translate } from 'svelte-i18n';
 
