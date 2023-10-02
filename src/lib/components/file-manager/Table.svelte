@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { tableType } from '$lib/stores/file-manager.store';
+    import { tableType, selectedBookId } from '$lib/stores/file-manager.store';
     import BibleTable from '$lib/components/file-manager/BibleTable.svelte';
     import ResourcesTable from '$lib/components/file-manager/ResourcesTable.svelte';
     import { featureFlags } from '$lib/stores/feature-flags.store';
@@ -12,6 +12,6 @@
     {:else}
         <ResourcesTable />
     {/if}
-{:else}
+{:else if $selectedBookId}
     <ViewTable />
 {/if}

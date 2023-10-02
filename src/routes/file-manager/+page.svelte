@@ -12,18 +12,23 @@
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import Table from '$lib/components/file-manager/Table.svelte';
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
-    import { fileManagerLoading, bibleData, currentBibleVersion, passageData } from '$lib/stores/file-manager.store';
+    import {
+        fileManagerLoading,
+        bibleData,
+        currentBibleVersion,
+        passageData,
+        selectedBookId,
+    } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
     import type { ApiPassage } from '$lib/types/file-manager';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
-    import Search from '$lib/components/file-manager/Search.svelte';
-    import ChangeView from '$lib/components/file-manager/ChangeView.svelte';
     import ResouceMenu from '$lib/components/file-manager/ResourceMenu.svelte';
     import LanguageMenu from '$lib/components/file-manager/LanguageMenu.svelte';
     import { featureFlags } from '$lib/stores/feature-flags.store';
+    import SelectBookMenu from '$lib/components/file-manager/SelectBookMenu.svelte';
 
     let fetchAvailableResourcesPromise: Promise<void> | undefined;
 
@@ -79,14 +84,14 @@
 
         {#if $featureFlags.newFileManager}
             <div class="flex mx-4 mt-6 mb-4 justify-between items-center">
-                <ResouceMenu />
-                <LanguageMenu />
+                <SelectBookMenu />
             </div>
-
-            <div class="flex mx-4 my-4 justify-between items-center">
-                <Search />
-                <ChangeView />
-            </div>
+            {#if $selectedBookId}
+                <div class="flex mx-4 my-4 justify-between items-center">
+                    <ResouceMenu />
+                    <LanguageMenu />
+                </div>
+            {/if}
         {/if}
 
         <div class="overflow-x-auto pb-32">
@@ -99,7 +104,9 @@
     {:catch}
         <ErrorMessage />
     {/await}
-    <Footer />
+    {#if $selectedBookId}
+        <Footer />
+    {/if}
 </div>
 
 <MetaTags description={$translate('page.fileManager.metaData.description.value')} robots="noindex" />

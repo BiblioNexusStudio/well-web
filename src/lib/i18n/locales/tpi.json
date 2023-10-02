@@ -114,11 +114,11 @@
             "files": {
                 "value": "Fael"
             },
-            "search": {
-                "value": "Sachim"
-            },
             "noInternet": {
                 "value": "Nogat internet"
+            },
+            "selectABook": {
+                "value": "Plis sekim wanpela buk."
             },
             "modal": {
                 "title": {
@@ -154,32 +154,6 @@
                 },
                 "collapseResources": {
                     "value": "Kolapsim Resos {bookName}"
-                }
-            },
-            "changeViewMenu": {
-                "changeView": {
-                    "value": "Chenjim Vyu"
-                },
-                "book": {
-                    "value": "Buk"
-                },
-                "chapter": {
-                    "value": "Chapta"
-                },
-                "pericope": {
-                    "value": "Perikop"
-                },
-                "resource": {
-                    "value": "Resos"
-                },
-                "downloadBundles": {
-                    "value": "Dounloadim Bundles"
-                },
-                "hideDownloadedBundles": {
-                    "value": "Haidim Dounloadim Bundles"
-                },
-                "bundleView": {
-                    "value": "Bundel Vyu"
                 }
             },
             "resourcesMenu": {

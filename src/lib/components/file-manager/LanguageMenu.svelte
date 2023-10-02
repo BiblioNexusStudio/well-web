@@ -39,15 +39,15 @@
         {currentLanguage?.label} ({$currentLanguageCode}) <Icon data={menuOpen ? caretUp : caretDown} />
     </button>
     {#if menuOpen}
-        <div class="absolute top-16 right-0 border-2-primary bg-white shadow-lg rounded-md menu z-30 p-4 space-y-6">
+        <div class="absolute top-16 right-0 border-2-primary bg-white shadow-lg rounded-md menu z-30 p-4 space-y-8">
             {#each supportedLanguages as lanaguage}
                 <button
                     type="button"
-                    class="flex justify-start"
+                    class="flex justify-start ml-8 text-primary"
                     on:click={() => onLanguageSelected(lanaguage.code)}
                     aria-label={lanaguage.label}
                 >
-                    {lanaguage.label} ({lanaguage.code})
+                    {lanaguage.label} <span class="uppercase ml-2"> ({lanaguage.code})</span>
                 </button>
             {/each}
         </div>
