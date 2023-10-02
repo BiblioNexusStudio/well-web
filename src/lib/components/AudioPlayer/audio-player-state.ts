@@ -1,8 +1,8 @@
-import { Howl, type HowlOptions } from 'howler';
 import { writable } from 'svelte/store';
 
 export interface AudioFileInfo {
     url: string;
+    type: 'webm' | 'mp3';
     startTime: number;
     endTime?: number | null;
 }
@@ -12,7 +12,7 @@ export interface AudioFileInfo {
 // the createMultiClipAudioState function below to return a Svelte-store-ized version that's easy to use in the UI.
 //
 // Under the hood this will keep track of each of the files to be included in the clip sequence, including their
-// Howler.js instances.
+// HTMLAudioElement instances.
 class _MultiClipAudioState {
     currentClipIndex: number;
     clipSequence: _AudioClip[];
@@ -32,7 +32,7 @@ class _MultiClipAudioState {
                 new _AudioClip(file, {
                     onload: this.onloadFactory(index),
                     onplay: this.onplayFactory(index),
-                    onend: this.onendFactory(index),
+                    onended: this.onendedFactory(index),
                     onpause: this.onpauseFactory(index),
                 })
         );
@@ -121,6 +121,7 @@ class _MultiClipAudioState {
         if (this.syncSeekPositionTimer) return;
         this.syncSeekPositionTimer = setInterval(() => {
             this.currentClip().syncRealSeekedTime();
+            this.currentClip().checkPlaybackLimits();
             this.calculateDisplayAndNotifyStateChanged();
         }, 50);
     }
@@ -147,7 +148,7 @@ class _MultiClipAudioState {
         };
     }
 
-    onendFactory(index: number) {
+    onendedFactory(index: number) {
         return () => {
             this.clipSequence[index].isPlaying = false;
             if (this.clipSequence[index + 1]) {
@@ -226,85 +227,104 @@ export function createMultiClipAudioState(files: AudioFileInfo[]) {
 }
 
 // A single audio clip, backed by a file that optionally includes a start and end time.
-// This will keep track of the current state of the clip including its Howler.js instance.
+// This will keep track of the current state of the clip including its HTMLAudioElement instance.
+type AudioClipCallbacks = { onload: () => void; onplay: () => void; onpause: () => void; onended: () => void };
 class _AudioClip {
     file: AudioFileInfo;
     realSeekedTime: number;
     isPlaying: boolean;
-    playId: number | null;
     totalTime: number | null;
     loading: boolean;
     hasCustomTime: boolean;
-    sound: Howl;
+    audioElement: HTMLAudioElement;
+    startTime: number;
+    endTime: number | null;
+    callbacks: AudioClipCallbacks;
 
-    constructor(file: AudioFileInfo, callbacks: object) {
+    constructor(file: AudioFileInfo, callbacks: AudioClipCallbacks) {
         this.file = file;
         this.realSeekedTime = file.startTime;
         this.isPlaying = false;
-        this.playId = null;
         this.totalTime = null;
         this.loading = true;
-        this.hasCustomTime = file.endTime !== null && file.endTime !== undefined;
+        this.startTime = file.startTime;
+        this.endTime = file.endTime !== null && file.endTime !== undefined ? file.endTime - 0.1 : null;
+        this.hasCustomTime = this.endTime !== null;
+        this.callbacks = callbacks;
 
-        const howlOptions: HowlOptions = {
-            ...callbacks,
-            src: file.url,
-        };
-        if (this.hasCustomTime) {
-            howlOptions.sprite = { audioSection: [1000 * file.startTime, 1000 * (file.endTime! - file.startTime)] };
+        this.audioElement = new Audio();
+        this.audioElement.oncanplaythrough = callbacks.onload;
+        this.audioElement.onplay = callbacks.onplay;
+        this.audioElement.onpause = callbacks.onpause;
+        this.audioElement.onended = callbacks.onended;
+        this.audioElement.src = file.url;
+        this.audioElement.load();
+    }
+
+    checkPlaybackLimits() {
+        if (this.hasCustomTime && this.audioElement.currentTime >= (this.endTime || this.audioElement.duration)) {
+            this.audioElement.pause();
+            this.audioElement.onended && this.audioElement.onended(new Event('onended'));
         }
-        this.sound = new Howl(howlOptions);
     }
 
     syncRealSeekedTime() {
-        if (this.playId) {
-            this.realSeekedTime = this.sound.seek(this.playId);
-        }
+        this.realSeekedTime = this.audioElement.currentTime;
     }
 
     updateRealSeekedTimeToClipAdjustedTime(clipAdjustedTime: number) {
-        this.realSeekedTime = clipAdjustedTime + this.file.startTime;
+        this.realSeekedTime = clipAdjustedTime + this.startTime;
     }
 
     resetRealSeekedTimeToStartTime() {
-        this.realSeekedTime = this.file.startTime;
+        this.realSeekedTime = this.startTime;
     }
 
     fileLoaded() {
         this.loading = false;
-        this.totalTime = this.hasCustomTime ? this.file.endTime! - this.file.startTime : this.sound.duration();
+        this.totalTime = this.hasCustomTime ? this.endTime! - this.startTime : this.audioElement.duration;
     }
 
     clipAdjustedTime() {
-        return this.realSeekedTime - this.file.startTime;
+        return this.realSeekedTime - this.startTime;
     }
 
     play() {
         if (this.isPlaying) return;
 
-        let playId = this.playId;
-        const currentTime = this.realSeekedTime;
-
-        if (playId !== null) {
-            this.sound.play(playId);
-        } else if (this.hasCustomTime) {
-            playId = this.sound.play('audioSection');
-            this.playId = playId;
-        } else {
-            playId = this.sound.play();
-            this.playId = playId;
+        if (
+            this.audioElement.currentTime < this.startTime ||
+            this.audioElement.currentTime > (this.endTime || this.audioElement.duration)
+        ) {
+            this.realSeekedTime = this.startTime;
         }
-        this.sound.seek(currentTime, playId);
+
+        this.audioElement.currentTime = this.realSeekedTime;
+        this.audioElement.play();
     }
 
     pause() {
         this.isPlaying = false;
-        if (this.playId !== null) {
-            this.sound.pause(this.playId);
-        }
+        this.audioElement.pause();
     }
 
     destroy() {
-        this.sound.unload();
+        this.audioElement.remove();
+        this.audioElement.pause();
+
+        this.audioElement.src = '';
+        this.audioElement.load();
+
+        this.audioElement.removeEventListener('canplaythrough', this.callbacks.onload);
+        this.audioElement.removeEventListener('play', this.callbacks.onplay);
+        this.audioElement.removeEventListener('pause', this.callbacks.onpause);
+        this.audioElement.removeEventListener('ended', this.callbacks.onended);
+
+        if (this.audioElement.parentNode) {
+            this.audioElement.parentNode.removeChild(this.audioElement);
+        }
+
+        URL.revokeObjectURL(this.file.url);
+        this.audioElement = null!;
     }
 }

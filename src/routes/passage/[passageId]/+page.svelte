@@ -4,7 +4,7 @@
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import type { ImageContent, CbbtErTextContent, CbbtErAudioContent } from '$lib/types/file-manager';
+    import type { ImageContent, CbbtErTextContent } from '$lib/types/file-manager';
     import type { FrontendChapterContent } from './+page';
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
@@ -24,6 +24,7 @@
     import { objectKeys } from '$lib/utils/typesafe-standard-lib';
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
+    import type { CbbtErAudioContent } from '$lib/types/resource';
 
     type Tab = 'bible' | 'guide';
 
@@ -73,8 +74,8 @@
             bibleContent = fetchedBibleContent;
             stepsAvailable = Array.from(
                 new Set([
-                    ...(cbbterText?.steps?.map((step) => step?.stepNumber) ?? []),
-                    ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
+                    ...(cbbterText?.steps?.map((step) => step.stepNumber) ?? []),
+                    ...(cbbterAudio?.steps?.map((step) => step.stepNumber) ?? []),
                 ])
             );
             clearBibleIdIfNotAvailable();
@@ -96,8 +97,14 @@
     //   guideStep1 => MultiClipAudioState
     //   guideStep2 => MultiClipAudioState
     function populateAudioState() {
+        multiClipAudioStates = {};
         const bibleAudioFiles = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) || []).map(
-            (data) => ({ url: data?.url, startTime: data?.startTimestamp || 0, endTime: data?.endTimestamp })
+            (data) => ({
+                url: data?.url,
+                startTime: data?.startTimestamp || 0,
+                endTime: data?.endTimestamp,
+                type: audioFileTypeForBrowser(),
+            })
         ) as AudioFileInfo[];
         if (bibleAudioFiles.length) {
             multiClipAudioStates = { ...multiClipAudioStates, bible: createMultiClipAudioState(bibleAudioFiles) };
@@ -105,8 +112,8 @@
         const cbbterAudioFiles = cbbterAudio?.steps.map((step) => {
             // return key/value mapping
             return [
-                cbbterStepKey(step.step),
-                createMultiClipAudioState([{ url: step[audioFileTypeForBrowser()].url, startTime: 0 }]),
+                cbbterStepKey(step.stepNumber),
+                createMultiClipAudioState([{ url: step.url, type: audioFileTypeForBrowser(), startTime: 0 }]),
             ];
         });
         if (cbbterAudioFiles?.length) {

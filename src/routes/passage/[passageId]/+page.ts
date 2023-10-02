@@ -5,7 +5,6 @@ import { currentLanguageCode, currentLanguageInfo } from '$lib/stores/current-la
 import type {
     FrontendAudioChapter,
     AudioTimestamp,
-    CbbtErAudioContent,
     CbbtErTextContent,
     ResourceContentCbbtErText,
     ImageContent,
@@ -21,12 +20,14 @@ import {
 import { range } from '$lib/utils/array';
 import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-to-html';
 import type { BasePassage, PassageWithResourceContentIds } from '$lib/types/passage';
-import { MediaType, ResourceType } from '$lib/types/resource';
+import { MediaType, ResourceType, type CbbtErAudioMetadata, type CbbtErAudioContent } from '$lib/types/resource';
 import {
     fetchDisplayNameForResourceContent,
+    fetchMetadataForResourceContent,
     resourceContentApiFullUrl,
     resourceContentApiPath,
 } from '$lib/utils/data-handlers/resources/resource';
+import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
 
 export interface FrontendChapterAudioData {
     url: string;
@@ -129,12 +130,27 @@ async function fetchBibleContent(passage: BasePassage, bibleId: number | null) {
     return { bookName: bookData.displayName, chapters };
 }
 
-async function getCbbterAudioForPassage(_passage: PassageWithResourceContentIds): Promise<CbbtErAudioContent[]> {
-    // const allAudioResourceContent = passage.contents.filter(
-    //     ({ mediaTypeName, typeName }) => typeName === ResourceType.CBBTER && mediaTypeName === MediaType.Audio
-    // );
-    // TODO: add unzip usage here to unzip audio files into blob URLs
-    return [];
+async function getCbbterAudioForPassage(passage: PassageWithResourceContentIds): Promise<CbbtErAudioContent[]> {
+    const allAudioResourceContent = passage.contents.filter(
+        ({ mediaTypeName, typeName }) => typeName === ResourceType.CBBTER && mediaTypeName === MediaType.Audio
+    );
+    return (
+        await asyncMap(allAudioResourceContent, async (resourceContent) => {
+            try {
+                const metadata = await fetchMetadataForResourceContent(resourceContent);
+                const audioTypeSteps = (metadata?.metadata as CbbtErAudioMetadata | null)?.[audioFileTypeForBrowser()]
+                    .steps;
+                if (!audioTypeSteps) return null;
+                const steps = (
+                    await readFilesIntoObjectUrlsMapping(resourceContentApiFullUrl(resourceContent), audioTypeSteps)
+                ).filter(({ url }) => !!url);
+                return { steps };
+            } catch (_) {
+                // nothing cached
+                return null;
+            }
+        })
+    ).filter(Boolean) as CbbtErAudioContent[];
 }
 
 async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): Promise<CbbtErTextContent[]> {
