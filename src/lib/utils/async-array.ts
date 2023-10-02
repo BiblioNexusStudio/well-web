@@ -27,6 +27,14 @@ export async function asyncMap<T, R>(
     return await Promise.all(array.map(asyncMapper));
 }
 
+export async function asyncReturnFirst<T, V>(array: T[], asyncApply: (element: T) => Promise<V>): Promise<V | null> {
+    for (const item of array) {
+        const result = await asyncApply(item);
+        if (result) return result;
+    }
+    return null;
+}
+
 export async function asyncReduce<T, R>(
     array: T[],
     reducer: (accumulator: R, element: T, index: number, array: T[]) => Promise<R>,

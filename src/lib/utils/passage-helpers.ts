@@ -1,24 +1,15 @@
-import type { BasePassage } from '$lib/types/file-manager';
+import type { BasePassage } from '$lib/types/passage';
 
-export function passageTypeToString(passage: BasePassage) {
-    return `1${String(passage.bookId).padStart(3, '0')}${String(passage.startChapter).padStart(3, '0')}${String(
-        passage.startVerse
-    ).padStart(3, '0')}${String(passage.endChapter).padStart(3, '0')}${String(passage.endVerse).padStart(3, '0')}`;
-}
-
-export function stringToPassageType(passageString: string): BasePassage {
-    return {
-        bookId: parseInt(passageString.substring(1, 4), 10),
-        startChapter: parseInt(passageString.substring(4, 7), 10),
-        startVerse: parseInt(passageString.substring(7, 10), 10),
-        endChapter: parseInt(passageString.substring(10, 13), 10),
-        endVerse: parseInt(passageString.substring(13, 16), 10),
-    };
+export function passageToString(passage: BasePassage) {
+    return `${passage.bookCode}${String(passage.startChapter).padStart(3, '0')}${String(passage.startVerse).padStart(
+        3,
+        '0'
+    )}-${String(passage.endChapter).padStart(3, '0')}${String(passage.endVerse).padStart(3, '0')}`;
 }
 
 export function passagesEqual(passage1: BasePassage, passage2: BasePassage): boolean {
     return (
-        passage1.bookId === passage2.bookId &&
+        passage1.bookCode === passage2.bookCode &&
         passage1.startChapter === passage2.startChapter &&
         passage1.endChapter === passage2.endChapter &&
         passage1.startVerse === passage2.startVerse &&
