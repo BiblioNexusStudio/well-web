@@ -6,6 +6,7 @@ import { asyncMap, asyncSome, asyncFilter } from '$lib/utils/async-array';
 import type { ApiBible } from '$lib/types/bible-text-content';
 import type { BasePassagesByBook, FrontendPassagesByBook, PassageWithResourceContentIds } from '$lib/types/passage';
 import { ResourceType } from '$lib/types/resource';
+import { resourceContentApiPath } from './resource';
 
 async function getBibleBookCodesToName(languageId: number | null = null) {
     const bibleData = (await fetchFromCacheOrApi(
@@ -30,8 +31,8 @@ async function passageIdHasCbbterAvailable(passageId: number, isOnline: boolean)
         const cbbterResources = passageWithContentIds.contents.filter(
             ({ typeName }) => typeName === ResourceType.CBBTER
         );
-        return await asyncSome(cbbterResources, async ({ contentId }) => {
-            return isCachedFromApi(`resources/${contentId}/content`);
+        return await asyncSome(cbbterResources, async (resourceContent) => {
+            return isCachedFromApi(resourceContentApiPath(resourceContent));
         });
     }
     return false;
