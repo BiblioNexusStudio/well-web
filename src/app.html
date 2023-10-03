@@ -4,7 +4,10 @@
         <meta charset="utf-8" />
         <link rel="icon" href="%sveltekit.assets%/logo.svg" />
         <meta name="viewport" content="width=device-width" />
-        <meta http-equiv="Content-Security-Policy" content="media-src * blob:" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src ws: http: https: 'unsafe-eval' 'unsafe-inline' blob:; media-src * blob:;"
+        />
         <script>
             try {
                 const featureFlags = JSON.parse(localStorage.getItem('featureFlags') || '{}');
