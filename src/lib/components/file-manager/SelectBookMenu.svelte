@@ -4,26 +4,28 @@
     import { _ as translate } from 'svelte-i18n';
     import caretUp from 'svelte-awesome/icons/caretUp';
     import caretDown from 'svelte-awesome/icons/caretDown';
-    import { bibleData, selectedBookId } from '$lib/stores/file-manager.store';
+    import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { selectedBookCode, biblesModuleData, biblesModuleBook } from '$lib/stores/file-manager.store';
 
     let lanaguageMenuDiv: HTMLElement;
     let menuOpen = false;
-    let firstBible = $bibleData[0] || { contents: [] };
+    let firstBible = $biblesModuleData[0] || { contents: [] };
 
-    $: bookName = setBookName($selectedBookId);
+    $: bookName = setBookName($selectedBookCode);
 
     const toggleMenu = () => {
         menuOpen = !menuOpen;
     };
 
-    const handleBookClick = (id: number | null) => {
+    const handleBookClick = async (bookCode: string | null) => {
         toggleMenu();
-        $selectedBookId = id;
+        $biblesModuleBook = await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${bookCode}`);
+        $selectedBookCode = bookCode;
     };
 
-    const setBookName = (bookId: number | null) => {
-        const book = firstBible.contents.find((book) => book.bookId === bookId);
-        return book ? book.displayName : $translate('page.fileManager.selectABook.value');
+    const setBookName = (bookCode: string | null) => {
+        const book = firstBible.books.find((book) => book.bookCode === bookCode);
+        return book ? `${book.displayName} (${book.bookCode})` : $translate('page.fileManager.selectABook.value');
     };
 
     onMount(() => {
@@ -54,14 +56,14 @@
         <div
             class="flex flex-col flex-nowrap overflow-y-scroll absolute top-16 left-0 border-2-primary bg-white shadow-lg rounded-md menu z-30 p-4 space-y-8"
         >
-            {#each firstBible.contents as book}
+            {#each firstBible.books as book}
                 <button
                     type="button"
                     class="flex justify-start ml-8 text-primary"
                     aria-label={book.displayName}
-                    on:click={() => handleBookClick(book.bookId)}
+                    on:click={() => handleBookClick(book.bookCode)}
                 >
-                    {book.displayName}
+                    {book.displayName} ({book.bookCode})
                 </button>
             {/each}
         </div>

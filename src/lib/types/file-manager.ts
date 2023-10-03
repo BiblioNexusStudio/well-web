@@ -180,3 +180,53 @@ export interface ResourcesMenuItem {
     value: string;
     selected: boolean;
 }
+
+export interface BiblesModule {
+    id: 0;
+    name: 'string';
+    abbreviation: 'string';
+    books: [
+        {
+            bookCode: 'string';
+            displayName: 'string';
+            textSize: 0;
+            audioSize: 0;
+            chapterCount: 0;
+        }
+    ];
+}
+
+export interface BiblesModuleBook {
+    bookCode: string;
+    displayName: string;
+    textSize: 0;
+    audioSize: 0;
+    chapterCount: 0;
+    textUrl: string;
+    audioUrls: {
+        chapters: ApiAudioChapter;
+    };
+}
+
+export interface PassagesModule {
+    bookCode: string;
+    passages: [
+        {
+            id: 0;
+            bookCode: string;
+            startChapter: 0;
+            endChapter: 0;
+            startVerse: 0;
+            endVerse: 0;
+        }
+    ];
+}
+
+export interface BookRow {
+    book: string;
+    resources: number | null;
+    size: number | null;
+    hasText: boolean | null;
+    hasAudio: boolean | null;
+    hasMedia: boolean | null;
+}

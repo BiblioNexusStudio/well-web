@@ -6,6 +6,9 @@ import type {
     UrlWithMetadata,
     FooterInputs,
     ResourcesMenuItem,
+    BiblesModule,
+    BiblesModuleBook,
+    ApiAudioChapter,
 } from '$lib/types/file-manager';
 import { calculateUrlsWithMetadataToChange } from '$lib/utils/file-manager';
 
@@ -46,4 +49,17 @@ export const bibleDataForResourcesMenu = derived(bibleData, (bibleData) => {
         selected: index === 0 ? true : false,
     }));
 });
-export const selectedBookId = writable<number | null>(null);
+export const selectedBookCode = writable<string | null>(null);
+export const biblesModuleData = writable<BiblesModule[]>([]);
+export const biblesModuleBook = writable<BiblesModuleBook>({
+    bookCode: '',
+    displayName: '',
+    textSize: 0,
+    audioSize: 0,
+    chapterCount: 0,
+    textUrl: '',
+    audioUrls: {
+        chapters: [] as ApiAudioChapter[],
+    },
+    selected: false,
+});
