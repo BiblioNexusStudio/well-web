@@ -5,7 +5,7 @@
         "exclude": ["/*.{html,js,css,ico,png,svg,webp,webmanifest}"]
     },
     "globalHeaders": {
-        "content-security-policy": "default-src https: 'unsafe-eval' 'unsafe-inline'; object-src 'none'"
+        "content-security-policy": "default-src https: 'unsafe-eval' 'unsafe-inline'; object-src 'none'; media-src * blob:;"
     },
     "mimeTypes": {
         ".json": "text/json"
