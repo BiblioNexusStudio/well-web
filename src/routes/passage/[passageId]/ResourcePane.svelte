@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { CbbtErImageContent } from '$lib/types/file-manager';
+    import type { ImageContent } from '$lib/types/file-manager';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
     import { cachedOrRealUrl } from '$lib/data-cache';
@@ -8,9 +8,9 @@
 
     export let resourcePane: CupertinoPane;
     export let isShowing: boolean;
-    export let images: CbbtErImageContent[] | undefined;
+    export let images: ImageContent[] | undefined;
 
-    let fullscreenImage: CbbtErImageContent | null = null;
+    let fullscreenImage: ImageContent | null = null;
 
     onMount(() => {
         resourcePane = new CupertinoPane('#resource-pane', {
@@ -32,7 +32,7 @@
         });
     });
 
-    function handleImageSelected(image: CbbtErImageContent) {
+    function handleImageSelected(image: ImageContent) {
         fullscreenImage = image;
         isShowing = false;
     }

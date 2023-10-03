@@ -4,19 +4,16 @@
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import type { CbbtErImageContent, CbbtErTextContent, CbbtErAudioContent } from '$lib/types/file-manager';
+    import type { ImageContent, CbbtErTextContent } from '$lib/types/file-manager';
     import type { FrontendChapterContent } from './+page';
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
-    import { asyncFilter } from '$lib/utils/async-array';
-    import { isCachedFromCdn } from '$lib/data-cache';
     import CompassIcon from '$lib/icons/CompassIcon.svelte';
     import DoubleChevronUpIcon from '$lib/icons/DoubleChevronUpIcon.svelte';
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
     import ResourcePane from './ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
-    import { onMount } from 'svelte';
     import BibleUnavailable from './BibleUnavailable.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
     import {
@@ -25,6 +22,9 @@
         type AudioFileInfo,
     } from '$lib/components/AudioPlayer/audio-player-state';
     import { objectKeys } from '$lib/utils/typesafe-standard-lib';
+    import { goto } from '$app/navigation';
+    import { page } from '$app/stores';
+    import type { CbbtErAudioContent } from '$lib/types/resource';
 
     type Tab = 'bible' | 'guide';
 
@@ -43,7 +43,7 @@
     let stepsAvailable: number[] = [];
     let cbbterText: CbbtErTextContent | undefined;
     let cbbterAudio: CbbtErAudioContent | undefined;
-    let cbbterImages: CbbtErImageContent[] | undefined;
+    let cbbterImages: ImageContent[] | undefined;
     let cbbterTitle: string | undefined;
     let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
     let topOfStep: HTMLElement | null = null;
@@ -55,9 +55,7 @@
     let contentLoadedPromise: Promise<void> | undefined;
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
 
-    onMount(() => getContent());
-
-    $: data && getContent(); // when the [slug] changes, the data will change and trigger this
+    $: data.url && getContent(); // when the [passageId] changes, the data will change and trigger this
     $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
     $: audioPlayerKey = selectedTab === 'bible' ? 'bible' : cbbterStepKey(cbbterSelectedStepNumber);
@@ -72,20 +70,26 @@
             cbbterTitle = fetchedResourceContent.title;
             cbbterText = fetchedResourceContent.text?.[0];
             cbbterAudio = fetchedResourceContent.audio?.[0];
-            cbbterImages = await asyncFilter(
-                fetchedResourceContent.images ?? [],
-                async (image) => await isCachedFromCdn(image.url)
-            );
+            cbbterImages = fetchedResourceContent.images ?? [];
             bibleContent = fetchedBibleContent;
             stepsAvailable = Array.from(
                 new Set([
-                    ...(cbbterText?.steps?.map((step) => step?.stepNumber) ?? []),
-                    ...(cbbterAudio?.steps?.map(({ step }) => step) ?? []),
+                    ...(cbbterText?.steps?.map((step) => step.stepNumber) ?? []),
+                    ...(cbbterAudio?.steps?.map((step) => step.stepNumber) ?? []),
                 ])
             );
+            clearBibleIdIfNotAvailable();
             populateAudioState();
             handleNavBarTitleChange();
         })();
+    }
+
+    function clearBibleIdIfNotAvailable() {
+        if (!bibleContent?.chapters?.length && data.bibleId) {
+            const newUrl = new URL($page.url);
+            newUrl?.searchParams?.delete('bibleId');
+            goto(newUrl);
+        }
     }
 
     // Populate the audio state object with key/values like
@@ -93,8 +97,14 @@
     //   guideStep1 => MultiClipAudioState
     //   guideStep2 => MultiClipAudioState
     function populateAudioState() {
+        multiClipAudioStates = {};
         const bibleAudioFiles = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) || []).map(
-            (data) => ({ url: data?.url, startTime: data?.startTimestamp || 0, endTime: data?.endTimestamp })
+            (data) => ({
+                url: data?.url,
+                startTime: data?.startTimestamp || 0,
+                endTime: data?.endTimestamp,
+                type: audioFileTypeForBrowser(),
+            })
         ) as AudioFileInfo[];
         if (bibleAudioFiles.length) {
             multiClipAudioStates = { ...multiClipAudioStates, bible: createMultiClipAudioState(bibleAudioFiles) };
@@ -102,8 +112,8 @@
         const cbbterAudioFiles = cbbterAudio?.steps.map((step) => {
             // return key/value mapping
             return [
-                cbbterStepKey(step.step),
-                createMultiClipAudioState([{ url: step[audioFileTypeForBrowser()].url, startTime: 0 }]),
+                cbbterStepKey(step.stepNumber),
+                createMultiClipAudioState([{ url: step.url, type: audioFileTypeForBrowser(), startTime: 0 }]),
             ];
         });
         if (cbbterAudioFiles?.length) {
@@ -182,7 +192,7 @@
                         {/each}
                     </div>
                 {:else}
-                    <BibleUnavailable bibleLanguageCode={data.bibleLanguageCode} passage={data.passage} />
+                    <BibleUnavailable passage={data.passage} />
                 {/if}
             </div>
             <div class="px-4 py-4 {selectedTab !== 'guide' && 'hidden'}">

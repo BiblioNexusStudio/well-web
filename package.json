@@ -37,12 +37,12 @@
         "async-es": "^3.2.4",
         "cupertino-pane": "^1.4.2",
         "daisyui": "^3.2.1",
-        "howler": "^2.2.3",
         "localforage": "^1.10.0",
         "svelte": "^4.0.0",
         "svelte-awesome": "^3.2.1",
         "svelte-i18n": "^3.7.0",
         "svelte-meta-tags": "^3.0.3",
+        "unzipit": "^1.4.3",
         "workbox-window": "^7.0.0"
     },
     "devDependencies": {
@@ -55,7 +55,6 @@
         "@tailwindcss/typography": "^0.5.9",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/svelte": "^4.0.3",
-        "@types/howler": "^2.2.7",
         "@typescript-eslint/eslint-plugin": "^5.45.0",
         "@typescript-eslint/parser": "^5.45.0",
         "autoprefixer": "^10.4.14",

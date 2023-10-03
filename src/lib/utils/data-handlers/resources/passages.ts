@@ -1,67 +1,62 @@
 import { get } from 'svelte/store';
-import { audioFileTypeForBrowser } from '$lib/utils/browser';
-import type { PassagesForBook } from '$lib/types/passage-form';
 import { data, passagesByBook, selectedBookIndex } from '$lib/stores/passage-form.store';
 import { currentLanguageInfo } from '$lib/stores/current-language.store';
-import { fetchFromCacheOrApi, isCachedFromCdn } from '$lib/data-cache';
-import { asyncEvery, asyncFilter, asyncSome } from '$lib/utils/async-array';
-import type { ApiPassage, ApiBibleVersion, CbbtErAudioContent, ResourceContentUrl } from '$lib/types/file-manager';
+import { fetchFromCacheOrApi, isCachedFromApi } from '$lib/data-cache';
+import { asyncMap, asyncSome, asyncFilter } from '$lib/utils/async-array';
+import type { ApiBible } from '$lib/types/bible-text-content';
+import type { BasePassagesByBook, FrontendPassagesByBook, PassageWithResourceContentIds } from '$lib/types/passage';
+import { ResourceType } from '$lib/types/resource';
+import { resourceContentApiPath } from './resource';
 
-async function getBibleBookIdsToNameAndIndex(languageId: number | null = null) {
+async function getBibleBookCodesToName(languageId: number | null = null) {
     const bibleData = (await fetchFromCacheOrApi(
         `bibles/language/${languageId || get(currentLanguageInfo)?.id}`
-    )) as ApiBibleVersion[];
+    )) as ApiBible[];
     if (bibleData[0]) {
-        return bibleData[0].contents.reduce(
-            (output, { displayName, bookId }, index) => ({ ...output, [bookId]: { displayName, index } }),
-            {} as Record<number, { displayName: string; index: number }>
+        return bibleData[0].books.reduce(
+            (output, { displayName, bookCode }) => ({ ...output, [bookCode]: displayName }),
+            {} as Record<string, string>
         );
     } else {
-        return getBibleBookIdsToNameAndIndex(1);
+        return getBibleBookCodesToName(1);
     }
 }
 
-export async function fetchData(isOnline: boolean) {
+async function passageIdHasCbbterAvailable(passageId: number, isOnline: boolean) {
+    if (isOnline) return true;
+    if (await isCachedFromApi(`passages/${passageId}/language/${get(currentLanguageInfo)?.id}`)) {
+        const passageWithContentIds = (await fetchFromCacheOrApi(
+            `passages/${passageId}/language/${get(currentLanguageInfo)?.id}`
+        )) as PassageWithResourceContentIds;
+        const cbbterResources = passageWithContentIds.contents.filter(
+            ({ typeName }) => typeName === ResourceType.CBBTER
+        );
+        return await asyncSome(cbbterResources, async (resourceContent) => {
+            return isCachedFromApi(resourceContentApiPath(resourceContent));
+        });
+    }
+    return false;
+}
+
+export async function fetchCbbterPassagesByBook(isOnline: boolean) {
     passagesByBook.set([]);
     data.set({ passagesByBook: [] });
     selectedBookIndex.set('default');
 
-    const bibleBookIdsToNameAndIndex = await getBibleBookIdsToNameAndIndex();
-    const passagesWithResources = (await fetchFromCacheOrApi(
-        `passages/resources/language/${get(currentLanguageInfo)?.id}`
-    )) as ApiPassage[];
-    const availableOfflinePassagesWithResources = await asyncFilter(passagesWithResources, async ({ resources }) => {
-        return asyncSome(resources, async ({ mediaType, content }) => {
-            if (isOnline && content) {
-                return true;
-            }
-            if (mediaType === 1 && content) {
-                const textContent = content.content as ResourceContentUrl;
-                return await isCachedFromCdn(textContent.url);
-            } else if (mediaType === 2 && content) {
-                const audioContent = content.content as CbbtErAudioContent;
-                return asyncEvery(
-                    audioContent.steps,
-                    async (step) => await isCachedFromCdn(step[audioFileTypeForBrowser()].url)
-                );
-            } else {
-                return false;
-            }
-        });
-    });
-    passagesByBook.set(
-        availableOfflinePassagesWithResources
-            .reduce((output, passageWithResource) => {
-                const bibleBookNameAndIndex = bibleBookIdsToNameAndIndex[passageWithResource.bookId];
-                output[bibleBookNameAndIndex.index] ||= {
-                    displayName: bibleBookNameAndIndex.displayName,
-                    passages: [],
-                };
-                const bookInfo = output[bibleBookNameAndIndex.index];
-                bookInfo.passages.push(passageWithResource);
-                return output;
-            }, [] as PassagesForBook[])
-            .filter(Boolean)
-    );
+    const bibleBookCodesToName = await getBibleBookCodesToName();
+    const allPassages = (await fetchFromCacheOrApi(
+        `passages/language/${get(currentLanguageInfo)?.id}/resource/CBBTER`
+    )) as BasePassagesByBook[];
+    const byBookWithAvailableResources = (
+        await asyncMap(allPassages, async (byBook, index) => {
+            const passages = await asyncFilter(byBook.passages, async ({ id }) => {
+                return await passageIdHasCbbterAvailable(id, isOnline);
+            });
+            byBook.passages = passages;
+            return { ...byBook, index, bookName: bibleBookCodesToName[byBook.bookCode] };
+        })
+    ).filter(({ passages }) => passages.length > 0) as FrontendPassagesByBook[];
+
+    passagesByBook.set(byBookWithAvailableResources);
     data.set({ passagesByBook: get(passagesByBook) });
 }

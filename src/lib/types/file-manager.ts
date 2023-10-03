@@ -98,6 +98,7 @@ export interface CbbtErTextSingleStepContent {
 }
 
 export interface CbbtErTextContent {
+    displayName: string;
     steps: CbbtErTextSingleStepContent[];
 }
 
@@ -105,8 +106,8 @@ export interface CbbtErAudioContent {
     steps: CbbtErAudioSingleStepContent[];
 }
 
-export interface CbbtErImageContent {
-    displayName: string;
+export interface ImageContent {
+    displayName: string | null;
     url: string;
 }
 
