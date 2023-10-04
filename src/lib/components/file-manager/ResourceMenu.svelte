@@ -5,6 +5,8 @@
     import { resourcesMenu, bibleDataForResourcesMenu } from '$lib/stores/file-manager.store';
     import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
+    import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { currentLanguageInfo } from '$lib/stores/current-language.store';
 
     let resourcesMenuDiv: HTMLElement;
     let menuOpen = false;
@@ -15,27 +17,26 @@
         menuOpen = !menuOpen;
     };
 
+    async function handleResourceSelected(value: string) {
+        // todo make a switch here that will fetch the resource based on the value
+        // and take action based on what type of resource it is.
+
+        let tempVar = await fetchFromCacheOrApi(`/passages/language/${$currentLanguageInfo?.id}/resource/${value}`);
+
+        console.log('carlos tempVar', tempVar);
+    }
+
     onMount(() => {
         $resourcesMenu = [
             ...$bibleDataForResourcesMenu,
             {
                 name: $translate('page.fileManager.resourcesMenu.cbbtEr.value'),
-                value: 'cbbtErResources',
+                value: 'CBBTER',
                 selected: false,
             },
             {
                 name: $translate('page.fileManager.resourcesMenu.tyndaleBibleDictionary.value'),
-                value: 'tyndaleBibleDictionary',
-                selected: false,
-            },
-            {
-                name: $translate('page.fileManager.resourcesMenu.tyndaleStudyNotes.value'),
-                value: 'tyndaleStudyNotes',
-                selected: false,
-            },
-            {
-                name: $translate('page.fileManager.resourcesMenu.videoBibleDictionary.value'),
-                value: 'videoBibleDictionary',
+                value: 'TyndaleBibleDictionary',
                 selected: false,
             },
         ];
@@ -65,7 +66,12 @@
             <!--svelte each-->
             {#each $resourcesMenu as resource}
                 <label class="label cursor-pointer mb-4 justify-start">
-                    <input type="checkbox" bind:checked={resource.selected} class="checkbox checkbox-primary" />
+                    <input
+                        type="checkbox"
+                        bind:checked={resource.selected}
+                        on:click={() => handleResourceSelected(resource.value)}
+                        class="checkbox checkbox-primary"
+                    />
                     <span class="label-text ml-4">{resource.name}</span>
                 </label>
             {/each}

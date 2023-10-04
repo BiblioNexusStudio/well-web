@@ -5,11 +5,12 @@
     import caretUp from 'svelte-awesome/icons/caretUp';
     import caretDown from 'svelte-awesome/icons/caretDown';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { addFrontEndDataToBiblesModuleBook } from '$lib/utils/file-manager';
     import { selectedBookCode, biblesModuleData, biblesModuleBook } from '$lib/stores/file-manager.store';
 
     let lanaguageMenuDiv: HTMLElement;
     let menuOpen = false;
-    let firstBible = $biblesModuleData[0] || { contents: [] };
+    let firstBible = $biblesModuleData[0] || { id: null, contents: [] };
 
     $: bookName = setBookName($selectedBookCode);
 
@@ -19,7 +20,9 @@
 
     const handleBookClick = async (bookCode: string | null) => {
         toggleMenu();
-        $biblesModuleBook = await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${bookCode}`);
+        $biblesModuleBook = addFrontEndDataToBiblesModuleBook(
+            await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${bookCode}`)
+        );
         $selectedBookCode = bookCode;
     };
 

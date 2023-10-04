@@ -27,7 +27,7 @@
                         id="select-all"
                         type="checkbox"
                         class="checkbox checkbox-primary"
-                        disabled={downloadingIsDisabled}
+                        disabled={true}
                         bind:checked={$footerInputs.text}
                     />
                     <label

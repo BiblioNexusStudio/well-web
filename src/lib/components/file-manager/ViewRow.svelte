@@ -12,7 +12,6 @@
 
     export let audioChapter: ApiAudioChapter;
 
-    let selected = false;
     let hasMedia: boolean | null = null;
     const browserType = audioFileTypeForBrowser();
 
@@ -41,7 +40,7 @@
 
 <tr class="w-full h-16 border-b-2 odd:bg-gray-100">
     <td class="text-center">
-        <input type="checkbox" class="checkbox checkbox-primary mx-2" bind:checked={selected} />
+        <input type="checkbox" class="checkbox checkbox-primary mx-2" bind:checked={audioChapter.selected} />
     </td>
 
     <td>

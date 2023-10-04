@@ -8,6 +8,7 @@ import {
     type ApiBibleVersion,
     type FrontendBibleVersion,
     type UrlWithMetadata,
+    type BiblesModuleBook,
     MediaType,
 } from '$lib/types/file-manager';
 import { get } from 'svelte/store';
@@ -153,4 +154,12 @@ export const addFrontEndDataToPassageData = async (inputPassageData: ApiPassage[
         passage.selected = objectValues(passage.resources).every(({ selected }) => selected);
     });
     return outputPassageData;
+};
+
+export const addFrontEndDataToBiblesModuleBook = (inputBiblesModuleBook: BiblesModuleBook) => {
+    inputBiblesModuleBook.audioUrls.chapters.forEach((chapter) => {
+        chapter.selected = false;
+    });
+
+    return inputBiblesModuleBook;
 };

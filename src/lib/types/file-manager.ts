@@ -205,7 +205,7 @@ export interface BiblesModuleBook {
     chapterCount: 0;
     textUrl: string;
     audioUrls: {
-        chapters: ApiAudioChapter;
+        chapters: ApiAudioChapter[];
     };
 }
 
