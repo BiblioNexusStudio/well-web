@@ -1,10 +1,10 @@
 <script lang="ts">
-    import ViewHeader from './ViewHeader.svelte';
     import { biblesModuleBook } from '$lib/stores/file-manager.store';
     import { Icon } from 'svelte-awesome';
     import fileTextO from 'svelte-awesome/icons/fileTextO';
     import volumeUp from 'svelte-awesome/icons/volumeUp';
     import pictureO from 'svelte-awesome/icons/pictureO';
+    import arrowDown from 'svelte-awesome/icons/arrowDown';
     import { _ as translate } from 'svelte-i18n';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
@@ -12,7 +12,20 @@
 </script>
 
 <table class="w-full">
-    <ViewHeader />
+    <thead>
+        <tr class="w-full h-16 border-y-2">
+            <th>
+                <input type="checkbox" class="checkbox checkbox-primary mx-2" id="select-all-resources" />
+            </th>
+            <th class="text-start text-xs">
+                {$translate('page.fileManager.viewHeader.name.value')}
+                <Icon data={arrowDown} />
+            </th>
+            <th class="text-xs"> {$translate('page.fileManager.viewHeader.text.value')} </th>
+            <th class="text-xs"> {$translate('page.fileManager.viewHeader.audio.value')} </th>
+            <th class="text-xs"> {$translate('page.fileManager.viewHeader.media.value')} </th>
+        </tr>
+    </thead>
     <tbody>
         {#each $biblesModuleBook.audioUrls.chapters as audioChapter}
             {@const hasAudio = audioChapter[audioFileTypeForBrowser()].size > 0}
