@@ -1,3 +1,4 @@
+import { isSafariOnMacOrIOS } from '$lib/utils/browser';
 import { writable } from 'svelte/store';
 
 export interface AudioFileInfo {
@@ -17,6 +18,7 @@ class _MultiClipAudioState {
     currentClipIndex: number;
     clipSequence: _AudioClip[];
     syncSeekPositionTimer: ReturnType<typeof setInterval> | null;
+    seekCooldown = 0;
     _rangeValue: number;
     _timeDisplay: string;
     _totalTimeDisplay: string;
@@ -72,6 +74,10 @@ class _MultiClipAudioState {
             this.pauseAllClips();
             this.currentClip().play();
         }
+        if (isSafariOnMacOrIOS()) {
+            // force the seek check to skip 8 cycles (400ms) to let Safari catch up
+            this.seekCooldown = 8;
+        }
         this.calculateDisplayAndNotifyStateChanged();
     }
 
@@ -120,8 +126,12 @@ class _MultiClipAudioState {
     startSyncingSeekPosition() {
         if (this.syncSeekPositionTimer) return;
         this.syncSeekPositionTimer = setInterval(() => {
-            this.currentClip().syncRealSeekedTime();
             this.currentClip().checkPlaybackLimits();
+            if (this.seekCooldown > 0) {
+                this.seekCooldown--;
+                return;
+            }
+            this.currentClip().syncRealSeekedTime();
             this.calculateDisplayAndNotifyStateChanged();
         }, 50);
     }
@@ -152,10 +162,16 @@ class _MultiClipAudioState {
         return () => {
             this.clipSequence[index].isPlaying = false;
             if (this.clipSequence[index + 1]) {
+                this.clipSequence[index].pause();
+                this.clipSequence[index].resetRealSeekedTimeToStartTime();
+
                 this.currentClipIndex = index + 1;
-                this.clipSequence[index + 1].resetRealSeekedTimeToStartTime();
+                this.currentClip().resetRealSeekedTimeToStartTime();
                 this.currentClip().play();
             } else {
+                this.clipSequence[index].pause();
+                this.clipSequence[index].resetRealSeekedTimeToStartTime();
+
                 this.currentClipIndex = 0;
                 this.clipSequence[0].resetRealSeekedTimeToStartTime();
                 this.stopSyncingSeekPosition();
@@ -172,6 +188,9 @@ class _MultiClipAudioState {
     }
 
     formatTime(totalSeconds: number) {
+        if (totalSeconds < 0) {
+            return '00:00';
+        }
         totalSeconds = Math.floor(totalSeconds);
         const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
         const seconds = String(totalSeconds % 60).padStart(2, '0');
@@ -232,23 +251,22 @@ type AudioClipCallbacks = { onload: () => void; onplay: () => void; onpause: () 
 class _AudioClip {
     file: AudioFileInfo;
     realSeekedTime: number;
-    isPlaying: boolean;
-    totalTime: number | null;
-    loading: boolean;
+    isPlaying = false;
+    totalTime: number | null = null;
+    loading = true;
     hasCustomTime: boolean;
     audioElement: HTMLAudioElement;
     startTime: number;
     endTime: number | null;
     callbacks: AudioClipCallbacks;
+    hasPlayedSome = false;
 
     constructor(file: AudioFileInfo, callbacks: AudioClipCallbacks) {
         this.file = file;
         this.realSeekedTime = file.startTime;
-        this.isPlaying = false;
-        this.totalTime = null;
-        this.loading = true;
-        this.startTime = file.startTime;
-        this.endTime = file.endTime !== null && file.endTime !== undefined ? file.endTime - 0.1 : null;
+        this.startTime = Math.round(Math.max(file.startTime - 0.15, 0) * 100) / 100;
+        this.endTime =
+            file.endTime !== null && file.endTime !== undefined ? Math.round((file.endTime - 0.15) * 100) / 100 : null;
         this.hasCustomTime = this.endTime !== null;
         this.callbacks = callbacks;
 
@@ -263,7 +281,6 @@ class _AudioClip {
 
     checkPlaybackLimits() {
         if (this.hasCustomTime && this.audioElement.currentTime >= (this.endTime || this.audioElement.duration)) {
-            this.audioElement.pause();
             this.audioElement.onended && this.audioElement.onended(new Event('onended'));
         }
     }
@@ -278,6 +295,7 @@ class _AudioClip {
 
     resetRealSeekedTimeToStartTime() {
         this.realSeekedTime = this.startTime;
+        this.audioElement.currentTime = this.realSeekedTime;
     }
 
     fileLoaded() {
@@ -292,15 +310,34 @@ class _AudioClip {
     play() {
         if (this.isPlaying) return;
 
-        if (
-            this.audioElement.currentTime < this.startTime ||
-            this.audioElement.currentTime > (this.endTime || this.audioElement.duration)
-        ) {
-            this.realSeekedTime = this.startTime;
-        }
+        if (this.audioElement.paused && this.audioElement.currentTime === 0) {
+            // This means the element hasn't started playing yet
+            // Wait for enough data to be buffered before seeking and playing
+            this.audioElement.oncanplay = () => {
+                if (isSafariOnMacOrIOS()) {
+                    this.audioElement.currentTime = this.realSeekedTime - 0.2;
+                } else {
+                    this.audioElement.currentTime = this.realSeekedTime;
+                }
+                this.audioElement.play();
+                this.audioElement.oncanplay = null; // Cleanup the event listener
+            };
+            this.audioElement.load();
+        } else {
+            if (
+                this.audioElement.currentTime < this.startTime ||
+                this.audioElement.currentTime > (this.endTime || this.audioElement.duration)
+            ) {
+                this.realSeekedTime = this.startTime;
+            }
 
-        this.audioElement.currentTime = this.realSeekedTime;
-        this.audioElement.play();
+            this.audioElement.currentTime = this.realSeekedTime;
+
+            this.audioElement.onseeked = () => {
+                this.audioElement.play();
+                this.audioElement.onseeked = null; // Cleanup the event listener
+            };
+        }
     }
 
     pause() {

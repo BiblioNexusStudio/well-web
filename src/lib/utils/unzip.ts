@@ -10,8 +10,14 @@ export async function readFilesIntoObjectUrlsMapping<T extends ObjectUrlMapping>
     const { entries } = await unzip(zipUrl);
     const fileAndBlob = await asyncMap(Object.entries(entries), async ([key, value]) => [key, await value.blob()]);
     const blobsByFile = Object.fromEntries(fileAndBlob);
-    return mapping.map((map) => ({
-        ...map,
-        url: blobsByFile[map.file] ? URL.createObjectURL(blobsByFile[map.file]) : null,
-    }));
+    return mapping.map((map) => {
+        const fileSplit = map.file.split('.');
+        const extension = fileSplit[fileSplit.length - 1];
+        return {
+            ...map,
+            url: blobsByFile[map.file]
+                ? URL.createObjectURL(new Blob([blobsByFile[map.file]], { type: 'audio/' + extension }))
+                : null,
+        };
+    });
 }
