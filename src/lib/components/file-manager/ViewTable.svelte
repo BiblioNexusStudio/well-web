@@ -7,7 +7,9 @@
     import arrowDown from 'svelte-awesome/icons/arrowDown';
     import { _ as translate } from 'svelte-i18n';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
+    import { convertToReadableSize } from '$lib/utils/file-manager';
 
+    let hasMedia = false;
     $: hasText = $biblesModuleBook.textSize > 0;
 </script>
 
@@ -29,6 +31,28 @@
     <tbody>
         {#each $biblesModuleBook.audioUrls.chapters as audioChapter}
             {@const hasAudio = audioChapter[audioFileTypeForBrowser()].size > 0}
+            {@const numberOfresources = (() => {
+                let resources = 0;
+                if (hasText) {
+                    resources += 1;
+                }
+
+                if (hasAudio) {
+                    resources += 1;
+                }
+                return resources;
+            })()}
+            {@const resourcesSize = (() => {
+                let size = 0;
+                if (hasText) {
+                    size += audioChapter[audioFileTypeForBrowser()].size;
+                }
+
+                if (hasAudio) {
+                    size += audioChapter[audioFileTypeForBrowser()].size;
+                }
+                return size;
+            })()}
             <tr class="w-full h-16 border-b-2 odd:bg-gray-100">
                 <td class="text-center">
                     <input
@@ -41,8 +65,10 @@
                 <td>
                     <div class="font-bold">{`${$biblesModuleBook.displayName} ${audioChapter.number}`}</div>
                     <div>
-                        2
-                        {$translate('page.fileManager.viewRow.resources.value')} | 2 MB
+                        {numberOfresources}
+                        {$translate('page.fileManager.viewRow.resources.value')} | {convertToReadableSize(
+                            resourcesSize
+                        )}
                     </div>
                 </td>
                 <td class="text-center">
@@ -56,7 +82,7 @@
                     {/if}
                 </td>
                 <td class="text-center">
-                    {#if false}
+                    {#if hasMedia}
                         <Icon data={pictureO} />
                     {/if}
                 </td>
