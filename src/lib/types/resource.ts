@@ -1,7 +1,7 @@
 export const ResourceType = {
     CBBTER: 'CBBTER',
     TyndaleBibleDictionary: 'TyndaleBibleDictionary',
-    GenericImage: 'GenericImage',
+    UbsImages: 'UbsImages',
 } as const;
 
 export type ResourceTypeEnum = (typeof MediaType)[keyof typeof MediaType];
