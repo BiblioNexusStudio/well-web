@@ -14,8 +14,11 @@
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import { buildRowData } from '$lib/utils/file-manager';
 
+    let allChaptersSelected = false;
+
     $: hasText = $biblesModuleBook.textSize > 0;
     $: addAdditaonalCbbtErResources($cbbterResources, $selectedBookCode);
+    $: resetSelectAllChapters($selectedBookCode);
 
     async function addAdditaonalCbbtErResources(cbbterResources: CbbterResource[], selectedBookCode: string | null) {
         const cbbtErRourcesByCurrentBook = cbbterResources.find(
@@ -36,13 +39,32 @@
             });
         }
     }
+
+    function resetSelectAllChapters(selectedBookCode: string | null) {
+        if (selectedBookCode) {
+            allChaptersSelected = false;
+        }
+    }
+
+    function selectAllChapters() {
+        $biblesModuleBook.audioUrls.chapters = $biblesModuleBook.audioUrls.chapters.map((chapter) => {
+            chapter.selected = !allChaptersSelected;
+            return chapter;
+        });
+    }
 </script>
 
 <table class="w-full">
     <thead>
         <tr class="w-full h-16 border-y-2">
             <th>
-                <input type="checkbox" class="checkbox checkbox-primary mx-2" id="select-all-resources" />
+                <input
+                    type="checkbox"
+                    class="checkbox checkbox-primary mx-2"
+                    id="select-all-resources"
+                    bind:checked={allChaptersSelected}
+                    on:click={selectAllChapters}
+                />
             </th>
             <th class="text-start text-xs">
                 {$translate('page.fileManager.viewHeader.name.value')}
