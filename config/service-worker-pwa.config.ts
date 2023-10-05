@@ -33,7 +33,7 @@ export const serviceWorkerPwaConfig = {
                 options: {
                     cacheName: 'aquifer-api',
                     cacheableResponse: {
-                        statuses: [0, 200],
+                        statuses: [200],
                     },
                 },
             },
@@ -44,7 +44,7 @@ export const serviceWorkerPwaConfig = {
                 options: {
                     cacheName: 'aquifer-cdn',
                     cacheableResponse: {
-                        statuses: [0, 200],
+                        statuses: [200],
                     },
                 },
             },
