@@ -252,6 +252,17 @@
             "value": "Fael Manija"
         }
     },
+    "updateAppModal": {
+        "message": {
+            "value": "I gat wanpela update, yu laikim update?"
+        },
+        "update": {
+            "value": "Update"
+        },
+        "dismiss": {
+            "value": "Lusim"
+        }
+    },
     "errorMessage": {
         "error": {
             "value": "Erro"

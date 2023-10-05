@@ -252,6 +252,17 @@
             "value": "फ़ाइल प्रबंधक"
         }
     },
+    "updateAppModal": {
+        "message": {
+            "value": "ऐप में अपडेट है, क्या आप ताजा करना चाहते हैं?"
+        },
+        "update": {
+            "value": "अपडेट करें"
+        },
+        "dismiss": {
+            "value": "खारिज करें"
+        }
+    },
     "errorMessage": {
         "error": {
             "value": "त्रुटि"

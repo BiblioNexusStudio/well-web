@@ -8,6 +8,12 @@ const config = {
             pages: 'build',
             assets: 'build',
             fallback: 'index.html',
+            serviceWorker: {
+                register: false,
+            },
+            files: {
+                serviceWorker: 'src/service-worker.ts',
+            },
         }),
         output: { preloadStrategy: 'disabled' },
     },
