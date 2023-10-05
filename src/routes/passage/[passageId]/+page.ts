@@ -179,7 +179,7 @@ async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): 
 
 async function getImageContentForPassage(passage: PassageWithResourceContentIds): Promise<ImageContent[]> {
     const allImageResourceContent = passage.contents.filter(
-        ({ mediaTypeName, typeName }) => typeName === ResourceType.GenericImage && mediaTypeName === MediaType.Image
+        ({ mediaTypeName, typeName }) => typeName === ResourceType.UbsImages && mediaTypeName === MediaType.Image
     );
     const cachedImageResourceContent = await asyncFilter(
         allImageResourceContent,
