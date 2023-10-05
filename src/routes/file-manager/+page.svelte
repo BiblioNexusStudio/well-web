@@ -12,6 +12,7 @@
         passageData,
         selectedBookCode,
         biblesModuleData,
+        biblesModuleBook,
     } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
@@ -22,6 +23,7 @@
     import LanguageMenu from '$lib/components/file-manager/LanguageMenu.svelte';
     import { featureFlags } from '$lib/stores/feature-flags.store';
     import SelectBookMenu from '$lib/components/file-manager/SelectBookMenu.svelte';
+    import { addFrontEndDataToBiblesModuleBook } from '$lib/utils/file-manager';
 
     let fetchAvailableResourcesPromise: Promise<void> | undefined;
 
@@ -30,6 +32,13 @@
             if (currentLanguageId) {
                 $fileManagerLoading = true;
                 $biblesModuleData = await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`);
+
+                if ($selectedBookCode) {
+                    const firstBible = $biblesModuleData[0] || { id: null };
+                    $biblesModuleBook = addFrontEndDataToBiblesModuleBook(
+                        await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${$selectedBookCode}`)
+                    );
+                }
 
                 $fileManagerLoading = false;
             }
