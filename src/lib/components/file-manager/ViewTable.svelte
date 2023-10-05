@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { biblesModuleBook, cbbterResources, resourcesMenu } from '$lib/stores/file-manager.store';
+    import { biblesModuleBook, cbbterResources, resourcesMenu, selectedBookCode } from '$lib/stores/file-manager.store';
     import { Icon } from 'svelte-awesome';
     import fileTextO from 'svelte-awesome/icons/fileTextO';
     import volumeUp from 'svelte-awesome/icons/volumeUp';
@@ -15,11 +15,11 @@
     import { buildRowData } from '$lib/utils/file-manager';
 
     $: hasText = $biblesModuleBook.textSize > 0;
-    $: addAdditaonalCbbtErResources($cbbterResources);
+    $: addAdditaonalCbbtErResources($cbbterResources, $selectedBookCode);
 
-    async function addAdditaonalCbbtErResources(cbbterResources: CbbterResource[]) {
+    async function addAdditaonalCbbtErResources(cbbterResources: CbbterResource[], selectedBookCode: string | null) {
         const cbbtErRourcesByCurrentBook = cbbterResources.find(
-            (cbbterResource) => cbbterResource.bookCode === $biblesModuleBook.bookCode
+            (cbbterResource) => cbbterResource.bookCode === selectedBookCode
         );
 
         if (cbbtErRourcesByCurrentBook) {
