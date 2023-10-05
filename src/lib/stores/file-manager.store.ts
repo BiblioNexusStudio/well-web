@@ -9,6 +9,7 @@ import type {
     BiblesModule,
     BiblesModuleBook,
     ApiAudioChapter,
+    CbbterResource,
 } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
@@ -36,6 +37,8 @@ export const bibleDataForResourcesMenu = derived(biblesModuleData, (bibleData) =
         name: bible.name,
         value: bible.name,
         selected: index === 0 ? true : false,
+        display: index === 0 ? true : false,
+        isBible: true,
     }));
 });
 export const selectedBookCode = writable<string | null>(null);
@@ -50,12 +53,17 @@ export const biblesModuleBook = writable<BiblesModuleBook>({
         chapters: [] as ApiAudioChapter[],
     },
 });
+export const cbbterResources = writable<CbbterResource[]>([]);
 export const downloadData = derived(
-    [biblesModuleBook, footerInputs],
-    ([biblesModuleBook, footerInputs]) => {
+    [biblesModuleBook, footerInputs, resourcesMenu],
+    ([biblesModuleBook, footerInputs, resourcesMenu]) => {
         const urlsAndSizesToDownload = [] as UrlWithMetadata[];
+        const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
+        const cbbterSelectedInResourceMenu = resourcesMenu.some(
+            (resource) => resource.selected && resource.value === 'CBBTER'
+        );
 
-        if (biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected)) {
+        if (biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected) && bibleSelected) {
             urlsAndSizesToDownload.push({
                 mediaType: 'text',
                 url: biblesModuleBook.textUrl,
@@ -63,17 +71,39 @@ export const downloadData = derived(
             });
         }
 
-        if (footerInputs.audio) {
-            biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
-                if (chapter.selected) {
+        biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
+            if (chapter.selected) {
+                if (cbbterSelectedInResourceMenu && chapter.cbbtErResourceWithContents) {
+                    if (footerInputs.text) {
+                        const cbbterText = chapter.cbbtErResourceWithContents.contents.find(
+                            (content) => content.mediaTypeName === 'Text' && content.typeName === 'CBBTER'
+                        );
+                        urlsAndSizesToDownload.push({
+                            mediaType: 'text',
+                            url: `resources/${cbbterText?.contentId}/content` || '',
+                            size: cbbterText?.contentSize || 0,
+                        });
+                    }
+                    if (footerInputs.audio) {
+                        const cbbterAudio = chapter.cbbtErResourceWithContents.contents.find(
+                            (content) => content.mediaTypeName === 'Audio' && content.typeName === 'CBBTER'
+                        );
+                        urlsAndSizesToDownload.push({
+                            mediaType: 'audio',
+                            url: `resources/${cbbterAudio?.contentId}/content` || '',
+                            size: cbbterAudio?.contentSize || 0,
+                        });
+                    }
+                }
+                if (footerInputs.audio && bibleSelected) {
                     urlsAndSizesToDownload.push({
                         mediaType: 'audio',
                         url: chapter[audioFileTypeForBrowser()].url,
                         size: chapter[audioFileTypeForBrowser()].size,
                     });
                 }
-            });
-        }
+            }
+        });
 
         return {
             urlsToDelete: [],

@@ -9,6 +9,8 @@ import {
     type FrontendBibleVersion,
     type UrlWithMetadata,
     type BiblesModuleBook,
+    type ApiAudioChapter,
+    type ResourcesMenuItem,
     MediaType,
 } from '$lib/types/file-manager';
 import { get } from 'svelte/store';
@@ -162,4 +164,51 @@ export const addFrontEndDataToBiblesModuleBook = (inputBiblesModuleBook: BiblesM
     });
 
     return inputBiblesModuleBook;
+};
+
+export const buildRowData = (
+    audioChapter: ApiAudioChapter,
+    resourcesMenu: ResourcesMenuItem[],
+    hasText: boolean,
+    textSize: number
+) => {
+    const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
+    const hasAudio = audioChapter[audioFileTypeForBrowser()].size > 0;
+    let resources = 0;
+    let size = 0;
+
+    if (hasAudio && bibleSelected) {
+        resources++;
+        size = size + audioChapter[audioFileTypeForBrowser()].size;
+    }
+
+    if (hasText && bibleSelected) {
+        resources++;
+        size = size + textSize;
+    }
+
+    if (audioChapter.cbbtErResourceWithContents) {
+        if (
+            audioChapter.cbbtErResourceWithContents.contents.length > 0 &&
+            resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')
+        ) {
+            const cbbterText = audioChapter.cbbtErResourceWithContents.contents.find(
+                ({ mediaTypeName, typeName }) => mediaTypeName === 'Text' && typeName === 'CBBTER'
+            );
+            const cbbterAudio = audioChapter.cbbtErResourceWithContents.contents.find(
+                ({ mediaTypeName, typeName }) => mediaTypeName === 'Audio' && typeName === 'CBBTER'
+            );
+            if (cbbterText) {
+                resources++;
+                size = size + cbbterText.contentSize;
+            }
+
+            if (cbbterAudio) {
+                resources++;
+                size = size + cbbterAudio.contentSize;
+            }
+        }
+    }
+
+    return { resources, size, hasAudio, hasText };
 };

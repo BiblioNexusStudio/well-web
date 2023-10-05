@@ -2,7 +2,7 @@
     import { Icon } from 'svelte-awesome';
     import caretUp from 'svelte-awesome/icons/caretUp';
     import caretDown from 'svelte-awesome/icons/caretDown';
-    import { resourcesMenu, bibleDataForResourcesMenu } from '$lib/stores/file-manager.store';
+    import { resourcesMenu, bibleDataForResourcesMenu, cbbterResources } from '$lib/stores/file-manager.store';
     import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
@@ -18,12 +18,11 @@
     };
 
     async function handleResourceSelected(value: string) {
-        // todo make a switch here that will fetch the resource based on the value
-        // and take action based on what type of resource it is.
-
-        let tempVar = await fetchFromCacheOrApi(`/passages/language/${$currentLanguageInfo?.id}/resource/${value}`);
-
-        console.log('carlos tempVar', tempVar);
+        if (value === 'CBBTER') {
+            $cbbterResources = await fetchFromCacheOrApi(
+                `/passages/language/${$currentLanguageInfo?.id}/resource/${value}`
+            );
+        }
     }
 
     onMount(() => {
@@ -33,11 +32,8 @@
                 name: $translate('page.fileManager.resourcesMenu.cbbtEr.value'),
                 value: 'CBBTER',
                 selected: false,
-            },
-            {
-                name: $translate('page.fileManager.resourcesMenu.tyndaleBibleDictionary.value'),
-                value: 'TyndaleBibleDictionary',
-                selected: false,
+                isBible: false,
+                display: true,
             },
         ];
 
@@ -65,15 +61,17 @@
         <div class="absolute top-16 left-0 border-2-primary bg-white shadow-lg rounded-md menu z-30">
             <!--svelte each-->
             {#each $resourcesMenu as resource}
-                <label class="label cursor-pointer mb-4 justify-start">
-                    <input
-                        type="checkbox"
-                        bind:checked={resource.selected}
-                        on:click={() => handleResourceSelected(resource.value)}
-                        class="checkbox checkbox-primary"
-                    />
-                    <span class="label-text ml-4">{resource.name}</span>
-                </label>
+                {#if resource.display}
+                    <label class="label cursor-pointer mb-4 justify-start">
+                        <input
+                            type="checkbox"
+                            bind:checked={resource.selected}
+                            on:click={() => handleResourceSelected(resource.value)}
+                            class="checkbox checkbox-primary"
+                        />
+                        <span class="label-text ml-4">{resource.name}</span>
+                    </label>
+                {/if}
             {/each}
         </div>
     {/if}

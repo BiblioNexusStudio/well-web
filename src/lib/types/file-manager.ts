@@ -44,6 +44,7 @@ export interface ApiAudioChapter {
     mp3: AudioResource;
     audioTimestamps: AudioTimestamp[] | null;
     selected?: boolean;
+    cbbtErResourceWithContents?: CbbterResourceWithContent;
 }
 
 export interface FrontendAudioChapter extends ApiAudioChapter {
@@ -180,6 +181,8 @@ export interface ResourcesMenuItem {
     name: string;
     value: string;
     selected: boolean;
+    isBible: boolean;
+    display: boolean;
 }
 
 export interface BiblesModule {
@@ -209,25 +212,30 @@ export interface BiblesModuleBook {
     };
 }
 
-export interface PassagesModule {
+export interface CbbterPassage {
     bookCode: string;
-    passages: [
-        {
-            id: 0;
-            bookCode: string;
-            startChapter: 0;
-            endChapter: 0;
-            startVerse: 0;
-            endVerse: 0;
-        }
-    ];
+    endChapter: number;
+    endVerse: number;
+    id: number;
+    startChapter: number;
+    startVerse: number;
+}
+export interface CbbterResource {
+    bookCode: string;
+    passages: CbbterPassage[];
 }
 
-export interface BookRow {
-    book: string;
-    resources: number | null;
-    size: number | null;
-    hasText: boolean | null;
-    hasAudio: boolean | null;
-    hasMedia: boolean | null;
+export interface CbbterTextContent {
+    contentId: number;
+    typeName: string;
+    mediaTypeName: string;
+    contentSize: number;
+}
+
+export interface CbbterResourceWithContent {
+    id: number;
+    bookCode: string;
+    startChapter: number;
+    endChapter: number;
+    contents: CbbterTextContent[];
 }
