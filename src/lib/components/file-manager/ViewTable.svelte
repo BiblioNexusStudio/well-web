@@ -1,5 +1,10 @@
 <script lang="ts">
-    import { biblesModuleBook, cbbterResources, resourcesMenu, selectedBookCode } from '$lib/stores/file-manager.store';
+    import {
+        biblesModuleBook,
+        resourcesApiModule,
+        resourcesMenu,
+        selectedBookCode,
+    } from '$lib/stores/file-manager.store';
     import { Icon } from 'svelte-awesome';
     import fileTextO from 'svelte-awesome/icons/fileTextO';
     import volumeUp from 'svelte-awesome/icons/volumeUp';
@@ -8,36 +13,21 @@
     import { _ as translate } from 'svelte-i18n';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { convertToReadableSize } from '$lib/utils/file-manager';
-    import type { CbbterResource } from '$lib/types/file-manager';
-    import { asyncForEach } from '$lib/utils/async-array';
-    import { fetchFromCacheOrApi } from '$lib/data-cache';
-    import { currentLanguageInfo } from '$lib/stores/current-language.store';
+    import type { ResourcesApiModule } from '$lib/types/file-manager';
     import { buildRowData } from '$lib/utils/file-manager';
 
     let allChaptersSelected = false;
 
     $: hasText = $biblesModuleBook.textSize > 0;
-    $: addAdditaonalCbbtErResources($cbbterResources, $selectedBookCode);
+    $: addAdditaonalResourcesApiModule($resourcesApiModule);
     $: resetSelectAllChapters($selectedBookCode);
 
-    async function addAdditaonalCbbtErResources(cbbterResources: CbbterResource[], selectedBookCode: string | null) {
-        const cbbtErRourcesByCurrentBook = cbbterResources.find(
-            (cbbterResource) => cbbterResource.bookCode === selectedBookCode
-        );
-
-        if (cbbtErRourcesByCurrentBook) {
-            await asyncForEach(cbbtErRourcesByCurrentBook.passages, async (passage) => {
-                const cbbtErResourceWithContents = await fetchFromCacheOrApi(
-                    `passages/${passage.id}/language/${$currentLanguageInfo?.id}`
-                );
-
-                if (cbbtErResourceWithContents.startChapter === cbbtErResourceWithContents.endChapter) {
-                    $biblesModuleBook.audioUrls.chapters[
-                        cbbtErResourceWithContents.startChapter - 1
-                    ].cbbtErResourceWithContents = cbbtErResourceWithContents;
-                }
-            });
-        }
+    async function addAdditaonalResourcesApiModule(resourcesApiModule: ResourcesApiModule) {
+        resourcesApiModule.chapters.forEach((chapter) => {
+            if (chapter.contents.length > 0 && chapter.chapterNumber) {
+                $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1].resourceMenuItems = chapter.contents;
+            }
+        });
     }
 
     function resetSelectAllChapters(selectedBookCode: string | null) {
@@ -51,6 +41,7 @@
             chapter.selected = !allChaptersSelected;
             return chapter;
         });
+        console.log($biblesModuleBook.audioUrls.chapters);
     }
 </script>
 
@@ -77,7 +68,6 @@
     </thead>
     <tbody>
         {#each $biblesModuleBook.audioUrls.chapters as audioChapter}
-            {@const hasMedia = false}
             {@const rowData = buildRowData(
                 audioChapter,
                 $resourcesMenu,
@@ -111,7 +101,7 @@
                     {/if}
                 </td>
                 <td class="text-center">
-                    {#if hasMedia}
+                    {#if rowData.hasImages}
                         <Icon data={pictureO} />
                     {/if}
                 </td>

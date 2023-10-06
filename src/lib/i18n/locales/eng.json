@@ -225,6 +225,10 @@
                 "cbbtEr": {
                     "value": "CBBT-ER",
                     "_context": "Label for the CBBT-ER resource"
+                },
+                "tyndaleBibleDictionary": {
+                    "value": "Tyndale Bible Dictionary",
+                    "_context": "Label for the Tyndale Bible Dictionary resource"
                 }
             },
             "viewRow": {

@@ -176,6 +176,7 @@ export const buildRowData = (
     const hasAudio = audioChapter[audioFileTypeForBrowser()].size > 0;
     let resources = 0;
     let size = 0;
+    let hasImages = false;
 
     if (hasAudio && bibleSelected) {
         resources++;
@@ -187,28 +188,19 @@ export const buildRowData = (
         size = size + textSize;
     }
 
-    if (audioChapter.cbbtErResourceWithContents) {
-        if (
-            audioChapter.cbbtErResourceWithContents.contents.length > 0 &&
-            resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')
-        ) {
-            const cbbterText = audioChapter.cbbtErResourceWithContents.contents.find(
-                ({ mediaTypeName, typeName }) => mediaTypeName === 'Text' && typeName === 'CBBTER'
-            );
-            const cbbterAudio = audioChapter.cbbtErResourceWithContents.contents.find(
-                ({ mediaTypeName, typeName }) => mediaTypeName === 'Audio' && typeName === 'CBBTER'
-            );
-            if (cbbterText) {
-                resources++;
-                size = size + cbbterText.contentSize;
-            }
+    if (audioChapter.resourceMenuItems) {
+        audioChapter.resourceMenuItems.forEach((resourceMenuItem) => {
+            size = size + resourceMenuItem.contentSize;
+            resources++;
 
-            if (cbbterAudio) {
-                resources++;
-                size = size + cbbterAudio.contentSize;
+            if (
+                resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER') &&
+                resourceMenuItem.mediaTypeName === 'Image'
+            ) {
+                hasImages = true;
             }
-        }
+        });
     }
 
-    return { resources, size, hasAudio, hasText };
+    return { resources, size, hasAudio, hasText, hasImages };
 };

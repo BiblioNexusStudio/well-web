@@ -44,7 +44,7 @@ export interface ApiAudioChapter {
     mp3: AudioResource;
     audioTimestamps: AudioTimestamp[] | null;
     selected?: boolean;
-    cbbtErResourceWithContents?: CbbterResourceWithContent;
+    resourceMenuItems?: ResourcesApiModuleChapterContent[];
 }
 
 export interface FrontendAudioChapter extends ApiAudioChapter {
@@ -238,4 +238,20 @@ export interface CbbterResourceWithContent {
     startChapter: number;
     endChapter: number;
     contents: CbbterTextContent[];
+}
+
+export interface ResourcesApiModule {
+    chapters: ResourcesApiModuleChapter[];
+}
+
+export interface ResourcesApiModuleChapter {
+    chapterNumber: number;
+    contents: ResourcesApiModuleChapterContent[];
+}
+
+export interface ResourcesApiModuleChapterContent {
+    contentId: number;
+    typeName: string;
+    mediaTypeName: string;
+    contentSize: number;
 }

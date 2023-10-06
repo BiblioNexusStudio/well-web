@@ -9,9 +9,11 @@ import type {
     BiblesModule,
     BiblesModuleBook,
     ApiAudioChapter,
-    CbbterResource,
+    ResourcesApiModule,
+    ResourcesApiModuleChapter,
 } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
+import { resourceContentApiPath } from '$lib/utils/data-handlers/resources/resource';
 
 export const originalBibleData = writable<FrontendBibleVersion[]>([]);
 export const bibleData = writable<FrontendBibleVersion[]>([]);
@@ -53,17 +55,18 @@ export const biblesModuleBook = writable<BiblesModuleBook>({
         chapters: [] as ApiAudioChapter[],
     },
 });
-export const cbbterResources = writable<CbbterResource[]>([]);
+export const resourcesApiModule = writable<ResourcesApiModule>({ chapters: [] as ResourcesApiModuleChapter[] });
 export const downloadData = derived(
     [biblesModuleBook, footerInputs, resourcesMenu],
     ([biblesModuleBook, footerInputs, resourcesMenu]) => {
         const urlsAndSizesToDownload = [] as UrlWithMetadata[];
         const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
-        const cbbterSelectedInResourceMenu = resourcesMenu.some(
-            (resource) => resource.selected && resource.value === 'CBBTER'
-        );
 
-        if (biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected) && bibleSelected) {
+        if (
+            biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected) &&
+            bibleSelected &&
+            footerInputs.text
+        ) {
             urlsAndSizesToDownload.push({
                 mediaType: 'text',
                 url: biblesModuleBook.textUrl,
@@ -73,35 +76,57 @@ export const downloadData = derived(
 
         biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
             if (chapter.selected) {
-                if (cbbterSelectedInResourceMenu && chapter.cbbtErResourceWithContents) {
-                    if (footerInputs.text) {
-                        const cbbterText = chapter.cbbtErResourceWithContents.contents.find(
-                            (content) => content.mediaTypeName === 'Text' && content.typeName === 'CBBTER'
-                        );
-                        urlsAndSizesToDownload.push({
-                            mediaType: 'text',
-                            url: `resources/${cbbterText?.contentId}/content` || '',
-                            size: cbbterText?.contentSize || 0,
-                        });
-                    }
-                    if (footerInputs.audio) {
-                        const cbbterAudio = chapter.cbbtErResourceWithContents.contents.find(
-                            (content) => content.mediaTypeName === 'Audio' && content.typeName === 'CBBTER'
-                        );
-                        urlsAndSizesToDownload.push({
-                            mediaType: 'audio',
-                            url: `resources/${cbbterAudio?.contentId}/content` || '',
-                            size: cbbterAudio?.contentSize || 0,
-                        });
-                    }
-                }
-                if (footerInputs.audio && bibleSelected) {
+                if (bibleSelected && footerInputs.audio) {
                     urlsAndSizesToDownload.push({
                         mediaType: 'audio',
                         url: chapter[audioFileTypeForBrowser()].url,
                         size: chapter[audioFileTypeForBrowser()].size,
                     });
                 }
+
+                chapter.resourceMenuItems?.forEach((resourceMenuItem) => {
+                    if (footerInputs.text) {
+                        if (resourceMenuItem.mediaTypeName === 'Text') {
+                            if (
+                                resourcesMenu.some(
+                                    ({ selected, value }) => selected && value === resourceMenuItem.typeName
+                                )
+                            ) {
+                                urlsAndSizesToDownload.push({
+                                    mediaType: 'text',
+                                    url: resourceContentApiPath(resourceMenuItem),
+                                    size: resourceMenuItem.contentSize,
+                                });
+                            }
+                        }
+                    }
+
+                    if (footerInputs.audio) {
+                        if (resourceMenuItem.mediaTypeName === 'Audio') {
+                            if (
+                                resourcesMenu.some(
+                                    ({ selected, value }) => selected && value === resourceMenuItem.typeName
+                                )
+                            ) {
+                                urlsAndSizesToDownload.push({
+                                    mediaType: 'audio',
+                                    url: resourceContentApiPath(resourceMenuItem),
+                                    size: resourceMenuItem.contentSize,
+                                });
+                            }
+                        }
+                    }
+
+                    if (footerInputs.media) {
+                        if (resourceMenuItem.mediaTypeName === 'Image') {
+                            urlsAndSizesToDownload.push({
+                                mediaType: 'images',
+                                url: resourceContentApiPath(resourceMenuItem),
+                                size: resourceMenuItem.contentSize,
+                            });
+                        }
+                    }
+                });
             }
         });
 

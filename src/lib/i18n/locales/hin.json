@@ -173,6 +173,9 @@
             "resourcesMenu": {
                 "cbbtEr": {
                     "value": "CBBT-ER"
+                },
+                "tyndaleBibleDictionary": {
+                    "value": "टिंडेल बाइबल शब्दकोश"
                 }
             },
             "viewRow": {
