@@ -45,6 +45,22 @@
                     "_context": "Label for Resources button on navbar"
                 }
             },
+            "resourcePane": {
+                "title": {
+                    "value": "Resources",
+                    "_context": "Title for the top of the resource pane on the passage page"
+                },
+                "basicTab": {
+                    "value": "Basic",
+                    "_context": "Tab with basic resources in the resource pane"
+                },
+                "types": {
+                    "ubsImages": {
+                        "value": "Images (UBS)",
+                        "_context": "Images from the United Bible Society"
+                    }
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "Resource Unavailable",

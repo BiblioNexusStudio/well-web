@@ -35,6 +35,19 @@
                     "value": "Risoses"
                 }
             },
+            "resourcePane": {
+                "title": {
+                    "value": "Risos"
+                },
+                "basicTab": {
+                    "value": "Basis"
+                },
+                "types": {
+                    "ubsImages": {
+                        "value": "Piksa (UBS)"
+                    }
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "Risosis Nogat"

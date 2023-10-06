@@ -5,10 +5,27 @@
     import { cachedOrRealUrl } from '$lib/data-cache';
     import { _ as translate } from 'svelte-i18n';
     import { trapFocus } from '$lib/utils/trap-focus';
+    import type { PassageResourceContent } from '$lib/types/passage';
+    import { ResourceType } from '$lib/types/resource';
+    import { asyncMap } from '$lib/utils/async-array';
+    import {
+        fetchDisplayNameForResourceContent,
+        resourceContentApiFullUrl,
+    } from '$lib/utils/data-handlers/resources/resource';
+
+    interface ImageResource {
+        displayName: string | null;
+        url: string;
+    }
 
     export let resourcePane: CupertinoPane;
     export let isShowing: boolean;
-    export let images: ImageContent[] | undefined;
+    export let resources: PassageResourceContent[] | undefined;
+    export let activeTab: 'basic' | 'advanced' = 'basic';
+
+    let imageResources: ImageResource[] = [];
+
+    $: prepareUbsImageResources(resources || []);
 
     let fullscreenImage: ImageContent | null = null;
 
@@ -18,13 +35,19 @@
             buttonDestroy: false,
             bottomClose: true,
             fastSwipeClose: true,
+            initialBreak: 'top',
+            breaks: {
+                top: {
+                    enabled: true,
+                    height: window.innerHeight - 50,
+                },
+                middle: { enabled: false },
+                bottom: { enabled: false, height: window.screen.height - 300 },
+            },
             lowerThanBottom: true,
-            upperThanTop: false,
             backdrop: true,
             backdropOpacity: 0.4,
-            fitHeight: true,
             simulateTouch: false,
-            maxFitHeight: window.screen.height / 2 + 100,
             events: {
                 onWillDismiss: () => (isShowing = false),
                 onBackdropTap: () => (isShowing = false),
@@ -35,6 +58,16 @@
     function handleImageSelected(image: ImageContent) {
         fullscreenImage = image;
         isShowing = false;
+    }
+
+    async function prepareUbsImageResources(resources: PassageResourceContent[]) {
+        imageResources = await asyncMap(
+            resources.filter(({ typeName }) => typeName === ResourceType.UbsImages),
+            async (resource) => ({
+                displayName: await fetchDisplayNameForResourceContent(resource),
+                url: resourceContentApiFullUrl(resource),
+            })
+        );
     }
 </script>
 
@@ -68,18 +101,45 @@
     </div>
 </button>
 
-<div id="resource-pane" use:trapFocus={isShowing} class="px-4 pb-4 mb-16">
-    <div class="text-lg font-semibold text-base-content pb-4">{$translate('page.passage.nav.resources.value')}</div>
-    <div class="flex flex-col space-y-3">
-        {#each images || [] as image}
-            <button class="flex flex-row items-center" on:click={() => handleImageSelected(image)}>
-                <img
-                    class="ml-1 my-1 h-10 w-10 object-cover rounded-lg border border-gray-300"
-                    src={cachedOrRealUrl(image.url)}
-                    alt={image.displayName}
-                />
-                <span class="text-sm font-medium text-base-700 pl-4">{image.displayName}</span>
-            </button>
-        {/each}
+<div id="resource-pane" use:trapFocus={isShowing} class="flex-grow px-4 pb-4 mb-16">
+    <div class="text-lg font-semibold text-base-content pb-8">
+        {$translate('page.passage.resourcePane.title.value')}
+    </div>
+    <div class="tabs !border-b-0 w-full mb-6">
+        <button
+            class="tab text-sm font-semibold tab-bordered {activeTab === 'basic'
+                ? 'tab-active text-secondary-content !border-secondary-content !border-b-2'
+                : 'text-gray-500 !border-b border-b-gray-200'}"
+            on:click={() => (activeTab = 'basic')}>{$translate('page.passage.resourcePane.basicTab.value')}</button
+        >
+        <div class="flex-grow border-b border-b-gray-200" />
+    </div>
+    <div class={activeTab !== 'basic' ? 'hidden' : ''}>
+        {#if imageResources.length}
+            <div class="text-md font-semibold text-base-content pb-2">
+                {$translate('page.passage.resourcePane.types.ubsImages.value')}
+            </div>
+            <div class="carousel space-x-2">
+                {#each imageResources as image}
+                    <button class="carousel-item flex-col" on:click={() => handleImageSelected(image)}>
+                        <img
+                            class="h-20 w-32 object-cover rounded-lg border border-gray-300 mb-1"
+                            src={cachedOrRealUrl(image.url)}
+                            alt={image.displayName}
+                        />
+                        <span class="text-sm text-neutral">{image.displayName}</span>
+                    </button>
+                {/each}
+            </div>
+        {/if}
     </div>
 </div>
+
+<style>
+    :global(.cupertino-pane-wrapper .backdrop) {
+        z-index: 30;
+    }
+    :global(.cupertino-pane-wrapper .pane) {
+        z-index: 40;
+    }
+</style>
