@@ -12,26 +12,22 @@
     import { updateOnlineStatus } from '$lib/stores/is-online.store';
     import { featureFlags } from '$lib/stores/feature-flags.store';
     import FeatureFlagModal from '$lib/components/FeatureFlagModal.svelte';
-    import UpdateServiceWorkerModal from '$lib/components/UpdateServiceWorkerModal.svelte';
 
     $: log.pageView($page.route.id ?? '');
 
-    let showingUpdateModal = false;
-    let updateServiceWorker: (() => void) | null = null;
-
     async function initialize() {
-        updateServiceWorker = registerSW({
-            // this gets called if VitePWA detects that pre-cached app content has changed
+        const initializedAt = Date.now();
+        const updateServiceWorker = registerSW({
             onNeedRefresh() {
-                if (!import.meta.env.DEV) {
-                    showingUpdateModal = true;
+                // if we receive the "SW update" event within 750ms of the time the app was initialized,
+                // we know that the page must have just been refreshed, and we can go ahead and do the
+                // service worker update without fear of disturbing the user
+                if (Date.now() - initializedAt < 750) {
+                    updateServiceWorker();
                 }
             },
         });
-        if (import.meta.env.DEV) {
-            // to prevent annoyance in dev, always update immediately
-            updateServiceWorker!();
-        }
+
         window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
     }
 
@@ -64,6 +60,5 @@
 <svelte:window on:online={updateOnlineStatus} on:offline={updateOnlineStatus} />
 
 <FeatureFlagModal />
-<UpdateServiceWorkerModal bind:show={showingUpdateModal} onUpdate={updateServiceWorker} />
 
 <slot />

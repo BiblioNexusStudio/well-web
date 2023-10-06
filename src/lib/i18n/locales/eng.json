@@ -325,20 +325,6 @@
             "_context": "The label for the file manager button"
         }
     },
-    "updateAppModal": {
-        "message": {
-            "value": "There's an update available, would you like to update?",
-            "_context": "Message shown when an update to the app is available"
-        },
-        "update": {
-            "value": "Update",
-            "_context": "Button for refreshing to receive app update"
-        },
-        "dismiss": {
-            "value": "Dismiss",
-            "_context": "Button for dismissing modal to skip app update"
-        }
-    },
     "errorMessage": {
         "error": {
             "value": "Error",
