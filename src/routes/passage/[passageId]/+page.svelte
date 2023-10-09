@@ -4,7 +4,7 @@
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import type { ImageContent, CbbtErTextContent } from '$lib/types/file-manager';
+    import type { CbbtErTextContent } from '$lib/types/file-manager';
     import type { FrontendChapterContent } from './+page';
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
@@ -25,6 +25,7 @@
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import type { CbbtErAudioContent } from '$lib/types/resource';
+    import type { PassageResourceContent } from '$lib/types/passage';
 
     type Tab = 'bible' | 'guide';
 
@@ -43,7 +44,7 @@
     let stepsAvailable: number[] = [];
     let cbbterText: CbbtErTextContent | undefined;
     let cbbterAudio: CbbtErAudioContent | undefined;
-    let cbbterImages: ImageContent[] | undefined;
+    let additionalResources: PassageResourceContent[] | undefined;
     let cbbterTitle: string | undefined;
     let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
     let topOfStep: HTMLElement | null = null;
@@ -70,7 +71,7 @@
             cbbterTitle = fetchedResourceContent.title;
             cbbterText = fetchedResourceContent.text?.[0];
             cbbterAudio = fetchedResourceContent.audio?.[0];
-            cbbterImages = fetchedResourceContent.images ?? [];
+            additionalResources = fetchedResourceContent.additionalResources ?? [];
             bibleContent = fetchedBibleContent;
             stepsAvailable = Array.from(
                 new Set([
@@ -150,7 +151,7 @@
     $: showOrDismissResourcePane(isShowingResourcePane);
 </script>
 
-<ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} images={cbbterImages} />
+<ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={additionalResources} />
 
 <div class="btm-nav border-t border-t-primary-300 z-40">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
@@ -159,7 +160,7 @@
     <NavMenuTabItem bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
         <CompassIcon />
     </NavMenuTabItem>
-    {#if cbbterImages?.length}
+    {#if additionalResources?.length}
         <NavMenuTabItem
             bind:isSelected={isShowingResourcePane}
             flipWhenSelected={true}

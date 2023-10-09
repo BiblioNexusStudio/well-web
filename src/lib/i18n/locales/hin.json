@@ -35,6 +35,24 @@
                     "value": "संसाधन"
                 }
             },
+            "resourcePane": {
+                "title": {
+                    "value": "संसाधन"
+                },
+                "basicTab": {
+                    "value": "मूल"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} में से {total}"
+                    }
+                },
+                "types": {
+                    "ubsImages": {
+                        "value": "चित्र (UBS)"
+                    }
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "संसाधन उपलब्ध नहीं है"
