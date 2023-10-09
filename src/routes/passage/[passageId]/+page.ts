@@ -7,7 +7,6 @@ import type {
     AudioTimestamp,
     CbbtErTextContent,
     ResourceContentCbbtErText,
-    ImageContent,
 } from '$lib/types/file-manager';
 import type { BibleBookContentDetails, BibleBookTextContent } from '$lib/types/bible-text-content';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
@@ -19,7 +18,7 @@ import {
 } from '$lib/utils/data-handlers/bible';
 import { range } from '$lib/utils/array';
 import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-to-html';
-import type { BasePassage, PassageWithResourceContentIds } from '$lib/types/passage';
+import type { BasePassage, PassageResourceContent, PassageWithResourceContentIds } from '$lib/types/passage';
 import { MediaType, ResourceType, type CbbtErAudioMetadata, type CbbtErAudioContent } from '$lib/types/resource';
 import {
     fetchDisplayNameForResourceContent,
@@ -177,18 +176,14 @@ async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): 
     ).filter(Boolean) as CbbtErTextContent[];
 }
 
-async function getImageContentForPassage(passage: PassageWithResourceContentIds): Promise<ImageContent[]> {
-    const allImageResourceContent = passage.contents.filter(
-        ({ mediaTypeName, typeName }) => typeName === ResourceType.UbsImages && mediaTypeName === MediaType.Image
-    );
-    const cachedImageResourceContent = await asyncFilter(
-        allImageResourceContent,
+async function getAdditionalResourcesForPassage(
+    passage: PassageWithResourceContentIds
+): Promise<PassageResourceContent[]> {
+    const additionalResourceContent = passage.contents.filter(({ typeName }) => typeName !== ResourceType.CBBTER);
+    return await asyncFilter(
+        additionalResourceContent,
         async (resourceContent) => get(isOnline) || (await isCachedFromApi(resourceContentApiPath(resourceContent)))
     );
-    return await asyncMap(cachedImageResourceContent, async (resourceContent) => ({
-        displayName: await fetchDisplayNameForResourceContent(resourceContent),
-        url: resourceContentApiFullUrl(resourceContent),
-    }));
 }
 
 async function fetchResourceContent(passage: BasePassage) {
@@ -203,13 +198,13 @@ async function fetchResourceContent(passage: BasePassage) {
     if (passageWithResources) {
         const audioResourceContent = await getCbbterAudioForPassage(passageWithResources);
         const textResourceContent = await getCbbterTextForPassage(passageWithResources);
-        const imageResourceContent = await getImageContentForPassage(passageWithResources);
+        const additionalResources = await getAdditionalResourcesForPassage(passageWithResources);
         const title = textResourceContent[0]?.displayName;
         return {
             title,
             text: textResourceContent,
             audio: audioResourceContent,
-            images: imageResourceContent,
+            additionalResources,
         };
     } else {
         return { text: [], audio: [] };
