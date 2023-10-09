@@ -16,7 +16,18 @@
     $: log.pageView($page.route.id ?? '');
 
     async function initialize() {
-        registerSW({}); // force a reload if the user is online and the app updated
+        const initializedAt = Date.now();
+        const updateServiceWorker = registerSW({
+            onNeedRefresh() {
+                // if we receive the "SW update" event within 750ms of the time the app was initialized,
+                // we know that the page must have just been refreshed, and we can go ahead and do the
+                // service worker update without fear of disturbing the user
+                if (Date.now() - initializedAt < 750) {
+                    updateServiceWorker();
+                }
+            },
+        });
+
         window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
     }
 

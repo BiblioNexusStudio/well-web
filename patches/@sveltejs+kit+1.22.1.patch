@@ -12,7 +12,7 @@ index 7d73510..c3c598e 100644
  
  			paths: object({
 diff --git a/node_modules/@sveltejs/kit/src/runtime/server/page/render.js b/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
-index 2a3dfc1..fe6bbe3 100644
+index 2a3dfc1..5d47392 100644
 --- a/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
 +++ b/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
 @@ -282,9 +282,9 @@ export async function render_response({
@@ -66,7 +66,7 @@ index 2a3dfc1..fe6bbe3 100644
 +			blocks.push(`
 +				if ('serviceWorker' in navigator) {
 +					window.addEventListener('load', () => {
-+						navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((registration) => {
++						navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then((registration) => {
 +							if (registration.waiting || !registration.installing) {
 +								startSvelteKit();
 +							} else {
@@ -86,3 +86,10 @@ index 2a3dfc1..fe6bbe3 100644
  		}
  
  		const init_app = `
+diff --git a/node_modules/@sveltejs/kit/tmp/all-translate-calls.txt b/node_modules/@sveltejs/kit/tmp/all-translate-calls.txt
+new file mode 100644
+index 0000000..f69499c
+--- /dev/null
++++ b/node_modules/@sveltejs/kit/tmp/all-translate-calls.txt
+@@ -0,0 +1 @@
++1696537929079
