@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { ImageContent } from '$lib/types/file-manager';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
     import { cachedOrRealUrl } from '$lib/data-cache';
@@ -12,11 +11,8 @@
         fetchDisplayNameForResourceContent,
         resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
-
-    interface ImageResource {
-        displayName: string | null;
-        url: string;
-    }
+    import type { ImageResource } from './types';
+    import FullscreenResource from './FullscreenResource.svelte';
 
     export let resourcePane: CupertinoPane;
     export let isShowing: boolean;
@@ -27,7 +23,10 @@
 
     $: prepareUbsImageResources(resources || []);
 
-    let fullscreenImage: ImageContent | null = null;
+    let fullscreenViewableResources: ImageResource[] = [];
+    $: fullscreenViewableResources = imageResources;
+
+    let currentFullscreenResourceIndex: number | null = null;
 
     onMount(() => {
         resourcePane = new CupertinoPane('#resource-pane', {
@@ -55,15 +54,15 @@
         });
     });
 
-    function handleImageSelected(image: ImageContent) {
-        fullscreenImage = image;
-        isShowing = false;
+    function handleImageSelected(image: ImageResource) {
+        currentFullscreenResourceIndex = fullscreenViewableResources.indexOf(image);
     }
 
     async function prepareUbsImageResources(resources: PassageResourceContent[]) {
         imageResources = await asyncMap(
             resources.filter(({ typeName }) => typeName === ResourceType.UbsImages),
             async (resource) => ({
+                isImage: true,
                 displayName: await fetchDisplayNameForResourceContent(resource),
                 url: resourceContentApiFullUrl(resource),
             })
@@ -74,8 +73,8 @@
 <svelte:window
     on:keydown={(key) => {
         if (key.key === 'Escape') {
-            if (fullscreenImage !== null) {
-                fullscreenImage = null;
+            if (currentFullscreenResourceIndex !== null) {
+                currentFullscreenResourceIndex = null;
             } else if (isShowing) {
                 isShowing = false;
             }
@@ -83,23 +82,7 @@
     }}
 />
 
-<button
-    on:click={() => (fullscreenImage = null)}
-    class="fixed inset-0 z-50 bg-black bg-opacity-40 w-full {fullscreenImage ? 'block' : 'hidden'}"
->
-    <div class="absolute inset-0 flex flex-col">
-        <div
-            aria-label={fullscreenImage?.displayName}
-            style={`background-image: url('${fullscreenImage?.url ? cachedOrRealUrl(fullscreenImage.url) : ''}')`}
-            class="flex-1 bg-center bg-no-repeat bg-contain"
-        />
-        <div class="h-16 bg-secondary flex flex-row">
-            <div class="text-xl text-base-content mx-auto self-center">
-                {fullscreenImage?.displayName}
-            </div>
-        </div>
-    </div>
-</button>
+<FullscreenResource bind:currentIndex={currentFullscreenResourceIndex} resources={fullscreenViewableResources} />
 
 <div id="resource-pane" use:trapFocus={isShowing} class="flex-grow px-4 pb-4 mb-16">
     <div class="text-lg font-semibold text-base-content pb-8">

@@ -42,6 +42,11 @@
                 "basicTab": {
                     "value": "मूल"
                 },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} में से {total}"
+                    }
+                },
                 "types": {
                     "ubsImages": {
                         "value": "चित्र (UBS)"

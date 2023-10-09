@@ -54,6 +54,12 @@
                     "value": "Basic",
                     "_context": "Tab with basic resources in the resource pane"
                 },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} of {total}",
+                        "_context": "Displays the current position out of the total fullscreen elements"
+                    }
+                },
                 "types": {
                     "ubsImages": {
                         "value": "Images (UBS)",
