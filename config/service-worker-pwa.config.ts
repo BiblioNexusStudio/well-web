@@ -3,63 +3,15 @@ import type { SvelteKitPWAOptions } from '@vite-pwa/sveltekit/*';
 const buildTimestamp = new Date().toISOString();
 
 export const serviceWorkerPwaConfig = {
-    registerType: 'autoUpdate',
+    strategies: 'injectManifest',
+    srcDir: 'src',
+    filename: 'service-worker.ts',
+    registerType: 'prompt',
     injectRegister: null,
-    devOptions: { enabled: true, suppressWarnings: true },
-    workbox: {
+    devOptions: { enabled: true, type: 'module', suppressWarnings: true },
+    injectManifest: {
         globPatterns: ['client/**/*.{html,js,css,ico,png,svg,webp,webmanifest}'],
         additionalManifestEntries: [{ url: '/', revision: buildTimestamp }],
-        navigateFallback: '/',
-        cleanupOutdatedCaches: true,
-        runtimeCaching: [
-            {
-                urlPattern: /https:\/\/.*\.applicationinsights\.azure\.com.*/,
-                handler: 'NetworkOnly',
-                method: 'POST',
-                options: {
-                    cacheName: 'application-insights',
-                    backgroundSync: {
-                        name: 'application-insights-syncer',
-                        options: {
-                            maxRetentionTime: 14 * 24 * 60, // two weeks
-                        },
-                    },
-                },
-            },
-            {
-                urlPattern: /https:\/\/aquifer-server-(qa|dev|prod)\.azurewebsites\.net.*/,
-                handler: 'CacheFirst',
-                method: 'GET',
-                options: {
-                    cacheName: 'aquifer-api',
-                    cacheableResponse: {
-                        statuses: [200],
-                    },
-                },
-            },
-            {
-                urlPattern: /https:\/\/cdn\.aquifer\.bible.*/,
-                handler: 'CacheFirst',
-                method: 'GET',
-                options: {
-                    cacheName: 'aquifer-cdn',
-                    cacheableResponse: {
-                        statuses: [200],
-                    },
-                },
-            },
-            {
-                urlPattern: /.*\/__local_recordings\/.*/,
-                handler: 'CacheOnly',
-                method: 'GET',
-                options: {
-                    cacheName: 'local-recordings',
-                },
-            },
-        ],
-
-        // this prevents a warning
-        modifyURLPrefix: {},
     },
     kit: {
         adapterFallback: '/index.html',

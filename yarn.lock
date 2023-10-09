@@ -5009,6 +5009,11 @@ known-css-properties@^0.27.0:
   resolved "https://registry.npmjs.org/known-css-properties/-/known-css-properties-0.27.0.tgz"
   integrity sha512-uMCj6+hZYDoffuvAJjFAPz56E9uoowFHmTkqRtRq5WyC5Q6Cu/fTZKNQpX/RbzChBYLLl3lo8CjFZBAZXq9qFg==
 
+kolorist@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/kolorist/-/kolorist-1.8.0.tgz#edddbbbc7894bc13302cdf740af6374d4a04743c"
+  integrity sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==
+
 leven@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/leven/-/leven-3.1.0.tgz"
@@ -7865,7 +7870,7 @@ wordwrap@^1.0.0:
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==
 
-workbox-background-sync@7.0.0:
+workbox-background-sync@7.0.0, workbox-background-sync@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/workbox-background-sync/-/workbox-background-sync-7.0.0.tgz"
   integrity sha512-S+m1+84gjdueM+jIKZ+I0Lx0BDHkk5Nu6a3kTVxP4fdj3gKouRNmhO8H290ybnJTOPfBDtTMXSQA/QLTvr7PeA==
@@ -7882,7 +7887,7 @@ workbox-broadcast-update@7.0.0:
 
 workbox-build@^7.0.0:
   version "7.0.0"
-  resolved "https://registry.npmjs.org/workbox-build/-/workbox-build-7.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/workbox-build/-/workbox-build-7.0.0.tgz#02ab5ef2991b3369b8b9395703f08912212769b4"
   integrity sha512-CttE7WCYW9sZC+nUYhQg3WzzGPr4IHmrPnjKiu3AMXsiNQKx+l4hHl63WTrnicLmKEKHScWDH8xsGBdrYgtBzg==
   dependencies:
     "@apideck/better-ajv-errors" "^0.3.1"
@@ -7923,14 +7928,14 @@ workbox-build@^7.0.0:
     workbox-sw "7.0.0"
     workbox-window "7.0.0"
 
-workbox-cacheable-response@7.0.0:
+workbox-cacheable-response@7.0.0, workbox-cacheable-response@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/workbox-cacheable-response/-/workbox-cacheable-response-7.0.0.tgz"
   integrity sha512-0lrtyGHn/LH8kKAJVOQfSu3/80WDc9Ma8ng0p2i/5HuUndGttH+mGMSvOskjOdFImLs2XZIimErp7tSOPmu/6g==
   dependencies:
     workbox-core "7.0.0"
 
-workbox-core@7.0.0:
+workbox-core@7.0.0, workbox-core@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/workbox-core/-/workbox-core-7.0.0.tgz"
   integrity sha512-81JkAAZtfVP8darBpfRTovHg8DGAVrKFgHpOArZbdFd78VqHr5Iw65f2guwjE2NlCFbPFDoez3D3/6ZvhI/rwQ==
@@ -7960,7 +7965,7 @@ workbox-navigation-preload@7.0.0:
   dependencies:
     workbox-core "7.0.0"
 
-workbox-precaching@7.0.0:
+workbox-precaching@7.0.0, workbox-precaching@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/workbox-precaching/-/workbox-precaching-7.0.0.tgz"
   integrity sha512-EC0vol623LJqTJo1mkhD9DZmMP604vHqni3EohhQVwhJlTgyKyOkMrZNy5/QHfOby+39xqC01gv4LjOm4HSfnA==
@@ -7988,14 +7993,14 @@ workbox-recipes@7.0.0:
     workbox-routing "7.0.0"
     workbox-strategies "7.0.0"
 
-workbox-routing@7.0.0:
+workbox-routing@7.0.0, workbox-routing@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/workbox-routing/-/workbox-routing-7.0.0.tgz"
   integrity sha512-8YxLr3xvqidnbVeGyRGkaV4YdlKkn5qZ1LfEePW3dq+ydE73hUUJJuLmGEykW3fMX8x8mNdL0XrWgotcuZjIvA==
   dependencies:
     workbox-core "7.0.0"
 
-workbox-strategies@7.0.0:
+workbox-strategies@7.0.0, workbox-strategies@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/workbox-strategies/-/workbox-strategies-7.0.0.tgz"
   integrity sha512-dg3qJU7tR/Gcd/XXOOo7x9QoCI9nk74JopaJaYAQ+ugLi57gPsXycVdBnYbayVj34m6Y8ppPwIuecrzkpBVwbA==
