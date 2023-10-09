@@ -33,10 +33,9 @@
     <AddAudioRecordingModal bind:open={recordingModalOpen} {passage} />
 {/if}
 
-<div class="drawer drawer-end fixed top-0 left-0 bg-base-100 z-50">
+<div class="drawer drawer-end fixed top-0 left-0 bg-base-100 z-20">
     <input id="top-navbar-drawer" type="checkbox" class="drawer-toggle" bind:checked={$isSideMenuOpen} />
     <div class="drawer-content flex flex-col">
-        <!-- Navbar -->
         <div class="w-full navbar">
             <div class="flex-1 px-2 text-lg semi-bold">{title}</div>
             {#if passage && $featureFlags.audioRecording}
