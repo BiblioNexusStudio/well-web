@@ -85,30 +85,6 @@
                 "value": "Download",
                 "_context": "Table column heading for the column with checkboxes allowing the user to select content to download"
             },
-            "language": {
-                "value": "Language",
-                "_context": "Label for a dropdown allowing the user to select their language"
-            },
-            "passage": {
-                "value": "Passage",
-                "_context": "Table column heading for the column displaying passage names"
-            },
-            "book": {
-                "value": "Book",
-                "_context": "Table column heading for the column for displaying book names"
-            },
-            "size": {
-                "value": "Size",
-                "_context": "Table column heading for the column displaying file size"
-            },
-            "expand": {
-                "value": "Expand",
-                "_context": "Table column heading for the column with buttons allowing accordions to be expanded"
-            },
-            "type": {
-                "value": "Type",
-                "_context": "Table column heading for the column displaying media type"
-            },
             "textType": {
                 "value": "Text",
                 "_context": "The media type for text, available to be downloaded"
@@ -121,10 +97,6 @@
                 "value": "Media",
                 "_context": "The media type for media, available to be downloaded"
             },
-            "imagesType": {
-                "value": "Images",
-                "_context": "The media type for images, available to be downloaded"
-            },
             "update": {
                 "value": "Update",
                 "_context": "Button to download/delete content based on what the user selected"
@@ -132,18 +104,6 @@
             "cancel": {
                 "value": "Cancel",
                 "_context": "Button to cancel current action"
-            },
-            "selectLanguage": {
-                "value": "Please select a language.",
-                "_context": "Placeholder for the language dropdown"
-            },
-            "selectResource": {
-                "value": "Please select a resource.",
-                "_context": "Placeholder for the resource dropdown"
-            },
-            "chooseResource": {
-                "value": "Choose a Resource",
-                "_context": "Label for a dropdown allowing the user to select a resource to view"
             },
             "files": {
                 "value": "files",
@@ -163,7 +123,7 @@
                     "_context": "Title of the modal asking the user to confirm changes before syncing"
                 },
                 "description": {
-                    "value": "You are about to download {downloadSize} and delete {deleteSize} of content from your device.",
+                    "value": "You are about to download {downloadSize} of content from your device.",
                     "_context": "Shows on the modal asking the user to confirm changes before syncing"
                 },
                 "question": {
@@ -191,16 +151,6 @@
                 "description": {
                     "value": "This is where you can download and delete Aquifer content from your device.",
                     "_context": "Meta tag description"
-                }
-            },
-            "a11y": {
-                "expandResources": {
-                    "value": "Expand {bookName} Resources",
-                    "_context": "Accessibility label for the button to expand the resources"
-                },
-                "collapseResources": {
-                    "value": "Collapse {bookName} Resources",
-                    "_context": "Accessibility label for the button to collapse the resources"
                 }
             },
             "viewHeader": {

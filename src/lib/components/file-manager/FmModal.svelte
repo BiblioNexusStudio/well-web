@@ -104,7 +104,6 @@
                 {$translate('page.fileManager.modal.description.value', {
                     values: {
                         downloadSize: convertToReadableSize($downloadData.totalSizeToDownload),
-                        deleteSize: convertToReadableSize($downloadData.totalSizeToDelete),
                     },
                 })}
             </p>

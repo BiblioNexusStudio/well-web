@@ -9,7 +9,7 @@ import {
     type FrontendBibleVersion,
     type UrlWithMetadata,
     type BiblesModuleBook,
-    type ApiAudioChapter,
+    type FrontendAudioChapter,
     type ResourcesMenuItem,
     MediaType,
 } from '$lib/types/file-manager';
@@ -167,7 +167,7 @@ export const addFrontEndDataToBiblesModuleBook = (inputBiblesModuleBook: BiblesM
 };
 
 export const buildRowData = (
-    audioChapter: ApiAudioChapter,
+    audioChapter: FrontendAudioChapter,
     resourcesMenu: ResourcesMenuItem[],
     hasText: boolean,
     textSize: number
@@ -202,5 +202,5 @@ export const buildRowData = (
         });
     }
 
-    return { resources, size, hasAudio, hasText, hasImages };
+    return { resources, size, hasAudio, hasText, hasImages, allResourcesCached: false };
 };

@@ -66,24 +66,6 @@
             "download": {
                 "value": "डाउनलोड"
             },
-            "language": {
-                "value": "भाषा"
-            },
-            "passage": {
-                "value": "पाठ"
-            },
-            "book": {
-                "value": "पुस्तक"
-            },
-            "size": {
-                "value": "आकार"
-            },
-            "expand": {
-                "value": "विस्तार"
-            },
-            "type": {
-                "value": "प्रकार"
-            },
             "textType": {
                 "value": "पाठ"
             },
@@ -93,23 +75,11 @@
             "mediaType": {
                 "value": "मीडिया"
             },
-            "imagesType": {
-                "value": "छवियां"
-            },
             "update": {
                 "value": "अपडेट"
             },
             "cancel": {
                 "value": "रद्द करें"
-            },
-            "selectLanguage": {
-                "value": "कृपया एक भाषा चुनें।"
-            },
-            "selectResource": {
-                "value": "कृपया एक संसाधन चुनें।"
-            },
-            "chooseResource": {
-                "value": "एक संसाधन चुनें"
             },
             "files": {
                 "value": "फ़ाइलें"
@@ -125,7 +95,7 @@
                     "value": "पुष्टि"
                 },
                 "description": {
-                    "value": "आप अपने डिवाइस से {downloadSize} डाउनलोड और {deleteSize} को हटाने वाले हैं।"
+                    "value": "आप अपने डिवाइस से {downloadSize} को हटाने वाले हैं।"
                 },
                 "question": {
                     "value": "आप कैसे आगे बढ़ना चाहेंगे?"
@@ -146,14 +116,6 @@
             "metaData": {
                 "description": {
                     "value": "यहां आप अपने डिवाइस से एक्विफर सामग्री डाउनलोड और हटा सकते हैं।"
-                }
-            },
-            "a11y": {
-                "expandResources": {
-                    "value": "{bookName} संसाधनों को विस्तारित करें"
-                },
-                "collapseResources": {
-                    "value": "{bookName} संसाधनों को संकुचित करें"
                 }
             },
             "viewHeader": {

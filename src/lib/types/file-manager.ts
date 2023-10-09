@@ -1,3 +1,5 @@
+import type { PassageResourceContent } from './passage';
+
 export type Url = string;
 export type UrlWithMetadata = { mediaType: MediaTypeEnum; url: Url; size: number };
 export type TiptapContent = object;
@@ -44,11 +46,13 @@ export interface ApiAudioChapter {
     mp3: AudioResource;
     audioTimestamps: AudioTimestamp[] | null;
     selected?: boolean;
-    resourceMenuItems?: ResourcesApiModuleChapterContent[];
 }
 
 export interface FrontendAudioChapter extends ApiAudioChapter {
     selected?: boolean;
+    cached?: boolean;
+    resourceMenuItems?: PassageResourceContent[];
+    cbbterResourceUrls?: UrlWithMetadata[];
 }
 
 export interface AudioResource {
@@ -208,7 +212,7 @@ export interface BiblesModuleBook {
     chapterCount: 0;
     textUrl: string;
     audioUrls: {
-        chapters: ApiAudioChapter[];
+        chapters: FrontendAudioChapter[];
     };
 }
 
@@ -246,12 +250,5 @@ export interface ResourcesApiModule {
 
 export interface ResourcesApiModuleChapter {
     chapterNumber: number;
-    contents: ResourcesApiModuleChapterContent[];
-}
-
-export interface ResourcesApiModuleChapterContent {
-    contentId: number;
-    typeName: string;
-    mediaTypeName: string;
-    contentSize: number;
+    contents: PassageResourceContent[];
 }

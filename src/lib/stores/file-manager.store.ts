@@ -13,7 +13,7 @@ import type {
     ResourcesApiModuleChapter,
 } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
-import { resourceContentApiPath } from '$lib/utils/data-handlers/resources/resource';
+import { resourceContentApiFullUrl } from '$lib/utils/data-handlers/resources/resource';
 
 export const originalBibleData = writable<FrontendBibleVersion[]>([]);
 export const bibleData = writable<FrontendBibleVersion[]>([]);
@@ -86,7 +86,7 @@ export const downloadData = derived(
 
                 chapter.resourceMenuItems?.forEach((resourceMenuItem) => {
                     if (footerInputs.text) {
-                        if (resourceMenuItem.mediaTypeName === 'Text') {
+                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'text') {
                             if (
                                 resourcesMenu.some(
                                     ({ selected, value }) => selected && value === resourceMenuItem.typeName
@@ -94,7 +94,7 @@ export const downloadData = derived(
                             ) {
                                 urlsAndSizesToDownload.push({
                                     mediaType: 'text',
-                                    url: resourceContentApiPath(resourceMenuItem),
+                                    url: resourceContentApiFullUrl(resourceMenuItem),
                                     size: resourceMenuItem.contentSize,
                                 });
                             }
@@ -102,7 +102,7 @@ export const downloadData = derived(
                     }
 
                     if (footerInputs.audio) {
-                        if (resourceMenuItem.mediaTypeName === 'Audio') {
+                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'audio') {
                             if (
                                 resourcesMenu.some(
                                     ({ selected, value }) => selected && value === resourceMenuItem.typeName
@@ -110,7 +110,7 @@ export const downloadData = derived(
                             ) {
                                 urlsAndSizesToDownload.push({
                                     mediaType: 'audio',
-                                    url: resourceContentApiPath(resourceMenuItem),
+                                    url: resourceContentApiFullUrl(resourceMenuItem),
                                     size: resourceMenuItem.contentSize,
                                 });
                             }
@@ -118,10 +118,10 @@ export const downloadData = derived(
                     }
 
                     if (footerInputs.media) {
-                        if (resourceMenuItem.mediaTypeName === 'Image') {
+                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'image') {
                             urlsAndSizesToDownload.push({
                                 mediaType: 'images',
-                                url: resourceContentApiPath(resourceMenuItem),
+                                url: resourceContentApiFullUrl(resourceMenuItem),
                                 size: resourceMenuItem.contentSize,
                             });
                         }
@@ -129,6 +129,20 @@ export const downloadData = derived(
                 });
             }
         });
+
+        if (resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')) {
+            biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
+                if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
+                    chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
+                        urlsAndSizesToDownload.push({
+                            mediaType: 'text',
+                            url: cbbterResourceUrl.url,
+                            size: cbbterResourceUrl.size,
+                        });
+                    });
+                }
+            });
+        }
 
         return {
             urlsToDelete: [],

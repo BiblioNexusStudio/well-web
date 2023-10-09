@@ -25,8 +25,8 @@
     };
 
     async function handleResourceSelected(resourcesMenu: ResourcesMenuItem[], selectedBookCode: string | null) {
-        if (resourcesMenu.some((resources) => resources.selected && !resources.isBible) && $selectedBookCode) {
-            const queryParams = $resourcesMenu.map((resource) => {
+        if (resourcesMenu.some((resources) => resources.selected && !resources.isBible) && selectedBookCode) {
+            const queryParams = resourcesMenu.map((resource) => {
                 if (resource.selected && !resource.isBible) {
                     return `resourceTypes=${resource.value}`;
                 } else {
@@ -35,7 +35,7 @@
             });
 
             $resourcesApiModule = await fetchFromCacheOrApi(
-                `/resources/language/${$currentLanguageInfo?.id}/book/${$selectedBookCode}?${queryParams.join('&')}`
+                `/resources/language/${$currentLanguageInfo?.id}/book/${selectedBookCode}?${queryParams.join('&')}`
             );
         }
     }

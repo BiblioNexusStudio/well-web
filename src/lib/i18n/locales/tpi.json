@@ -66,24 +66,6 @@
             "download": {
                 "value": "Dounload"
             },
-            "language": {
-                "value": "Tok ples"
-            },
-            "passage": {
-                "value": "Hap Buk Baibel"
-            },
-            "book": {
-                "value": "Buk"
-            },
-            "size": {
-                "value": "Sais"
-            },
-            "expand": {
-                "value": "Ekspandim"
-            },
-            "type": {
-                "value": "Taip"
-            },
             "textType": {
                 "value": "Teks"
             },
@@ -93,23 +75,11 @@
             "mediaType": {
                 "value": "Midiya"
             },
-            "imagesType": {
-                "value": "Piksa"
-            },
             "update": {
                 "value": "Apdetim"
             },
             "cancel": {
                 "value": "Kanselim"
-            },
-            "selectLanguage": {
-                "value": "Plis sekim wanpela tokples."
-            },
-            "selectResource": {
-                "value": "Plis sekim wanpela resos."
-            },
-            "chooseResource": {
-                "value": "Chuusim wanpela resos."
             },
             "files": {
                 "value": "Fael"
@@ -125,7 +95,7 @@
                     "value": "Kanfemesen"
                 },
                 "description": {
-                    "value": "Yu i stap long daunlotim {downloadSize} na bagarapim {deleteSize} bilong samting long yu divais."
+                    "value": "Yu i stap long daunlotim {downloadSize} bilong samting long yu divais."
                 },
                 "question": {
                     "value": "Yu laik pas long we?"
@@ -146,14 +116,6 @@
             "metaData": {
                 "description": {
                     "value": "Dispela em i wari yu ken dounload na deletim Aquifer samting long yu divais."
-                }
-            },
-            "a11y": {
-                "expandResources": {
-                    "value": "Ekspandim Resos {bookName}"
-                },
-                "collapseResources": {
-                    "value": "Kolapsim Resos {bookName}"
                 }
             },
             "resourcesMenu": {
