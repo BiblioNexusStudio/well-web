@@ -1,6 +1,6 @@
 import type { PageLoad } from './$types';
 import { get } from 'svelte/store';
-import { fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromApi, isCachedFromCdn } from '$lib/data-cache';
+import { fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
 import { currentLanguageCode, currentLanguageInfo } from '$lib/stores/current-language.store';
 import type {
     FrontendAudioChapter,
@@ -17,7 +17,7 @@ import {
     fetchBibleDataForBookCodeAndLanguageCode,
 } from '$lib/utils/data-handlers/bible';
 import { range } from '$lib/utils/array';
-import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-to-html';
+import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
 import type { BasePassage, PassageResourceContent, PassageWithResourceContentIds } from '$lib/types/passage';
 import { MediaType, ResourceType, type CbbtErAudioMetadata, type CbbtErAudioContent } from '$lib/types/resource';
 import {
@@ -182,7 +182,7 @@ async function getAdditionalResourcesForPassage(
     const additionalResourceContent = passage.contents.filter(({ typeName }) => typeName !== ResourceType.CBBTER);
     return await asyncFilter(
         additionalResourceContent,
-        async (resourceContent) => get(isOnline) || (await isCachedFromApi(resourceContentApiPath(resourceContent)))
+        async (resourceContent) => get(isOnline) || (await isCachedFromCdn(resourceContentApiFullUrl(resourceContent)))
     );
 }
 

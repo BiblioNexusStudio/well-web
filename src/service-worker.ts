@@ -53,7 +53,7 @@ registerRoute(
     /https:\/\/aquifer-server-(qa|dev|prod)\.azurewebsites\.net.*/,
     new CacheFirstAndStaleWhileRevalidateAfterExpiration({
         cacheName: 'aquifer-api',
-        staleAfterDuration: 60 * 60 * 24 * 3, // time in seconds, 3 days
+        staleAfterDuration: 60 * 60 * 24, // time in seconds, 1 day
     }),
     'GET'
 );

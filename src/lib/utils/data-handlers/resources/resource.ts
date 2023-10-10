@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/public';
-import { fetchFromCacheOrApi } from '$lib/data-cache';
+import { fetchFromCacheOrApi, fetchFromCacheOrCdn } from '$lib/data-cache';
 import type { PassageResourceContent } from '$lib/types/passage';
-import { MediaType, type ResourceContentMetadata } from '$lib/types/resource';
+import { MediaType, type ResourceContentMetadata, type ResourceContentTiptap } from '$lib/types/resource';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
 export function resourceContentApiPath(resourceContent: PassageResourceContent) {
@@ -18,6 +18,20 @@ export function resourceContentApiFullUrl(resourceContent: PassageResourceConten
 
 function resourceMetadataApiPath(resourceContent: PassageResourceContent) {
     return `resources/${resourceContent.contentId}/metadata`;
+}
+
+export async function fetchTiptapForResourcContent(
+    resourceContent: PassageResourceContent
+): Promise<ResourceContentTiptap | null> {
+    try {
+        const tiptaps = (await fetchFromCacheOrCdn(resourceContentApiFullUrl(resourceContent))) as
+            | ResourceContentTiptap[]
+            | null;
+        return tiptaps?.length ? tiptaps[0] : null;
+    } catch (_) {
+        // tiptap data not cached
+        return null;
+    }
 }
 
 export async function fetchMetadataForResourceContent(
