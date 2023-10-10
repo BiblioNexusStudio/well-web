@@ -130,7 +130,7 @@
         if (show) {
             resourcePane?.present({ animate: true });
         } else {
-            resourcePane?.destroy({ animate: true });
+            resourcePane?.hide();
         }
     }
 
@@ -196,7 +196,7 @@
                     <BibleUnavailable passage={data.passage} />
                 {/if}
             </div>
-            <div class="px-4 py-4 {selectedTab !== 'guide' && 'hidden'}">
+            <div class="px-4 pb-4 {selectedTab !== 'guide' && 'hidden'}">
                 <div class="max-w-[65ch] m-auto">
                     <ButtonCarousel
                         bind:selectedValue={cbbterSelectedStepNumber}

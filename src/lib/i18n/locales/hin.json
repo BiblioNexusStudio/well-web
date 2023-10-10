@@ -42,14 +42,20 @@
                 "basicTab": {
                     "value": "मूल"
                 },
+                "advancedTab": {
+                    "value": "उन्नत"
+                },
                 "fullscreen": {
                     "currentOfTotalLabel": {
-                        "value": "{current} में से {total}"
+                        "value": "{current} का {total}"
                     }
                 },
                 "types": {
                     "ubsImages": {
                         "value": "चित्र (UBS)"
+                    },
+                    "tyndaleBibleDictionary": {
+                        "value": "बाइबल शब्दकोश (Tyndale)"
                     }
                 }
             },
