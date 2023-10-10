@@ -54,6 +54,10 @@
                     "value": "Basic",
                     "_context": "Tab with basic resources in the resource pane"
                 },
+                "advancedTab": {
+                    "value": "Advanced",
+                    "_context": "Tab with advanced resources in the resource pane"
+                },
                 "fullscreen": {
                     "currentOfTotalLabel": {
                         "value": "{current} of {total}",
@@ -64,6 +68,10 @@
                     "ubsImages": {
                         "value": "Images (UBS)",
                         "_context": "Images from the United Bible Society"
+                    },
+                    "tyndaleBibleDictionary": {
+                        "value": "Bible Dictionary (Tyndale)",
+                        "_context": "Tyndale Bible Dictionary"
                     }
                 }
             },

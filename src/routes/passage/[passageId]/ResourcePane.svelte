@@ -9,24 +9,36 @@
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
+        fetchTiptapForResourcContent,
         resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
-    import type { ImageResource } from './types';
-    import FullscreenResource from './FullscreenResource.svelte';
+    import type { ImageResource, TextResource } from './types';
+    import FullscreenMediaResource from './FullscreenMediaResource.svelte';
+    import FullscreenTextResource from './FullscreenTextResource.svelte';
+    import { parseTiptapJsonToHtml, parseTiptapJsonToText } from '$lib/utils/tiptap-parsers';
+    import { Icon } from 'svelte-awesome';
+    import arrowRight from 'svelte-awesome/icons/arrowRight';
 
     export let resourcePane: CupertinoPane;
     export let isShowing: boolean;
     export let resources: PassageResourceContent[] | undefined;
     export let activeTab: 'basic' | 'advanced' = 'basic';
 
+    $: showBasicTab = imageResources.length > 0;
+    $: showAdvancedTab = tyndaleBibleDictionaryResources.length > 0;
+    $: activeTab = showBasicTab ? 'basic' : 'advanced';
+
     let imageResources: ImageResource[] = [];
+    let tyndaleBibleDictionaryResources: TextResource[] = [];
 
     $: prepareUbsImageResources(resources || []);
+    $: prepareTextResources(resources || []);
 
-    let fullscreenViewableResources: ImageResource[] = [];
-    $: fullscreenViewableResources = imageResources;
+    let mediaResources: ImageResource[] = [];
+    $: mediaResources = imageResources;
 
-    let currentFullscreenResourceIndex: number | null = null;
+    let currentFullscreenMediaResourceIndex: number | null = null;
+    let currentFullscreenTextResource: TextResource | null = null;
 
     onMount(() => {
         resourcePane = new CupertinoPane('#resource-pane', {
@@ -55,7 +67,11 @@
     });
 
     function handleImageSelected(image: ImageResource) {
-        currentFullscreenResourceIndex = fullscreenViewableResources.indexOf(image);
+        currentFullscreenMediaResourceIndex = mediaResources.indexOf(image);
+    }
+
+    function handleTextResourceSelected(textResource: TextResource) {
+        currentFullscreenTextResource = textResource;
     }
 
     async function prepareUbsImageResources(resources: PassageResourceContent[]) {
@@ -68,13 +84,39 @@
             })
         );
     }
+
+    async function prepareTextResources(resources: PassageResourceContent[]) {
+        const filteredResources = resources.filter(({ typeName }) => typeName === ResourceType.TyndaleBibleDictionary);
+        const mappedResources = await asyncMap(filteredResources, async (resource) => {
+            const [displayName, tiptap] = await Promise.all([
+                fetchDisplayNameForResourceContent(resource),
+                fetchTiptapForResourcContent(resource),
+            ]);
+            if (tiptap) {
+                return {
+                    displayName,
+                    html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
+                    preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
+                };
+            } else {
+                return null;
+            }
+        });
+        tyndaleBibleDictionaryResources = mappedResources
+            .filter(Boolean)
+            .sort((a, b) =>
+                a?.displayName && b?.displayName ? a.displayName.localeCompare(b.displayName) : 0
+            ) as TextResource[];
+    }
 </script>
 
 <svelte:window
     on:keydown={(key) => {
         if (key.key === 'Escape') {
-            if (currentFullscreenResourceIndex !== null) {
-                currentFullscreenResourceIndex = null;
+            if (currentFullscreenMediaResourceIndex !== null) {
+                currentFullscreenMediaResourceIndex = null;
+            } else if (currentFullscreenTextResource !== null) {
+                currentFullscreenTextResource = null;
             } else if (isShowing) {
                 isShowing = false;
             }
@@ -82,19 +124,31 @@
     }}
 />
 
-<FullscreenResource bind:currentIndex={currentFullscreenResourceIndex} resources={fullscreenViewableResources} />
+<FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
+<FullscreenTextResource bind:resource={currentFullscreenTextResource} />
 
 <div id="resource-pane" use:trapFocus={isShowing} class="flex-grow px-4 pb-4 mb-16">
     <div class="text-lg font-semibold text-base-content pb-8">
         {$translate('page.passage.resourcePane.title.value')}
     </div>
     <div class="tabs !border-b-0 w-full mb-6">
-        <button
-            class="tab text-sm font-semibold tab-bordered {activeTab === 'basic'
-                ? 'tab-active text-secondary-content !border-secondary-content !border-b-2'
-                : 'text-gray-500 !border-b border-b-gray-200'}"
-            on:click={() => (activeTab = 'basic')}>{$translate('page.passage.resourcePane.basicTab.value')}</button
-        >
+        {#if showBasicTab}
+            <button
+                class="tab text-sm font-semibold tab-bordered {activeTab === 'basic'
+                    ? 'tab-active text-secondary-content !border-secondary-content !border-b-2'
+                    : 'text-gray-500 !border-b border-b-gray-200'}"
+                on:click={() => (activeTab = 'basic')}>{$translate('page.passage.resourcePane.basicTab.value')}</button
+            >
+        {/if}
+        {#if showAdvancedTab}
+            <button
+                class="tab text-sm font-semibold tab-bordered {activeTab === 'advanced'
+                    ? 'tab-active text-secondary-content !border-secondary-content !border-b-2'
+                    : 'text-gray-500 !border-b border-b-gray-200'}"
+                on:click={() => (activeTab = 'advanced')}
+                >{$translate('page.passage.resourcePane.advancedTab.value')}</button
+            >
+        {/if}
         <div class="flex-grow border-b border-b-gray-200" />
     </div>
     <div class={activeTab !== 'basic' ? 'hidden' : ''}>
@@ -116,13 +170,36 @@
             </div>
         {/if}
     </div>
+    <div class={activeTab !== 'advanced' ? 'hidden' : ''}>
+        {#if tyndaleBibleDictionaryResources.length}
+            <div class="text-md font-semibold text-base-content pb-2">
+                {$translate('page.passage.resourcePane.types.tyndaleBibleDictionary.value')}
+            </div>
+            {#each tyndaleBibleDictionaryResources as entry}
+                <button
+                    class="py-3 flex flex-row items-center w-full"
+                    on:click={() => handleTextResourceSelected(entry)}
+                >
+                    <div class="flex flex-col flex-shrink items-start">
+                        <div class="text-sm text-start font-medium text-base-content">{entry.displayName}</div>
+                        <div class="text-sm text-neutral text-start line-clamp-1 break-all">{entry.preview}</div>
+                    </div>
+                    <div class="flex-shrink-0 pl-9 pr-3">
+                        <Icon class="text-neutral" data={arrowRight} />
+                    </div>
+                </button>
+            {/each}
+        {/if}
+    </div>
 </div>
 
-<style>
+<style lang="postcss">
     :global(.cupertino-pane-wrapper .backdrop) {
         z-index: 30;
     }
     :global(.cupertino-pane-wrapper .pane) {
+        @apply bg-primary-content;
         z-index: 40;
+        cursor: initial !important;
     }
 </style>

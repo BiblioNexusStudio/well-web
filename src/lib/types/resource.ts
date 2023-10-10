@@ -21,6 +21,10 @@ export interface ResourceContentMetadata {
     metadata: object;
 }
 
+export interface ResourceContentTiptap {
+    tiptap: object;
+}
+
 export interface UrlWithInfo {
     url: string;
     mediaType: MediaTypeEnum;

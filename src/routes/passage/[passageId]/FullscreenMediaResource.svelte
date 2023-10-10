@@ -80,7 +80,7 @@
             </div>
             <div class="flex-grow" />
             <div>
-                <div class={!isLoading ? 'hidden' : 'absolute inset-0 flex'}>
+                <div class={!isLoading ? 'hidden' : 'absolute inset-0 flex pointer-events-none'}>
                     <Icon class="self-center mx-auto text-gray-50" data={refresh} scale={2} spin />
                 </div>
                 <div class={isLoading ? 'opacity-0' : null}>

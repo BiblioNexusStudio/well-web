@@ -42,6 +42,9 @@
                 "basicTab": {
                     "value": "Basis"
                 },
+                "advancedTab": {
+                    "value": "Advans"
+                },
                 "fullscreen": {
                     "currentOfTotalLabel": {
                         "value": "{current} long {total}"
@@ -50,6 +53,9 @@
                 "types": {
                     "ubsImages": {
                         "value": "Piksa (UBS)"
+                    },
+                    "tyndaleBibleDictionary": {
+                        "value": "Buk Bilong Toktok (Tyndale)"
                     }
                 }
             },
