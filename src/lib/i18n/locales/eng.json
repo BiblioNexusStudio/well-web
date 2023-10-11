@@ -72,6 +72,10 @@
                     "tyndaleBibleDictionary": {
                         "value": "Bible Dictionary (Tyndale)",
                         "_context": "Tyndale Bible Dictionary"
+                    },
+                    "videoBibleDictionary": {
+                        "value": "Videos (Video Bible Dictionary)",
+                        "_context": "Videos from the Video Bible Dictionary"
                     }
                 }
             },

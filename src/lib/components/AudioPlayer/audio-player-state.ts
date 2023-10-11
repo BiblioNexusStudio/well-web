@@ -1,4 +1,5 @@
 import { isSafariOnMacOrIOS } from '$lib/utils/browser';
+import { formatSecondsToTimeDisplay } from '$lib/utils/time';
 import { writable } from 'svelte/store';
 
 export interface AudioFileInfo {
@@ -187,25 +188,15 @@ class _MultiClipAudioState {
         };
     }
 
-    formatTime(totalSeconds: number) {
-        if (totalSeconds < 0) {
-            return '00:00';
-        }
-        totalSeconds = Math.floor(totalSeconds);
-        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-        const seconds = String(totalSeconds % 60).padStart(2, '0');
-        return `${minutes}:${seconds}`;
-    }
-
     calculateDisplayAndNotifyStateChanged() {
         const currentDuration =
             this.clipSequence.slice(0, this.currentClipIndex).reduce((acc, state) => {
                 return acc + (state.totalTime || 0);
             }, 0) + this.currentClip().clipAdjustedTime();
         const totalDuration = this.totalDuration();
-        this._totalTimeDisplay = this.formatTime(totalDuration);
+        this._totalTimeDisplay = formatSecondsToTimeDisplay(totalDuration);
         this._rangeValue = 100 * (currentDuration / totalDuration);
-        this._timeDisplay = this.formatTime(currentDuration);
+        this._timeDisplay = formatSecondsToTimeDisplay(currentDuration);
         this._notifyStateChanged();
     }
 

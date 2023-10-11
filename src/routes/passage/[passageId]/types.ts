@@ -1,7 +1,8 @@
-export interface ImageResource {
-    isImage: true;
+export interface ImageOrVideoResource {
+    type: 'image' | 'video';
     displayName: string | null;
     url: string;
+    duration?: number;
 }
 
 export interface TextResource {

@@ -12,7 +12,7 @@
         fetchTiptapForResourceContent,
         resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
-    import type { ImageResource, TextResource } from './types';
+    import type { ImageOrVideoResource, TextResource } from './types';
     import FullscreenMediaResource from './FullscreenMediaResource.svelte';
     import FullscreenTextResource from './FullscreenTextResource.svelte';
     import { parseTiptapJsonToHtml, parseTiptapJsonToText } from '$lib/utils/tiptap-parsers';
@@ -24,18 +24,19 @@
     export let resources: PassageResourceContent[] | undefined;
     export let activeTab: 'basic' | 'advanced' = 'basic';
 
-    $: showBasicTab = imageResources.length > 0;
+    $: showBasicTab = ubsImageResources.length > 0;
     $: showAdvancedTab = tyndaleBibleDictionaryResources.length > 0;
     $: activeTab = showBasicTab ? 'basic' : 'advanced';
 
-    let imageResources: ImageResource[] = [];
+    let ubsImageResources: ImageOrVideoResource[] = [];
+    let videoBibleDictionaryResources: ImageOrVideoResource[] = [];
     let tyndaleBibleDictionaryResources: TextResource[] = [];
 
-    $: prepareUbsImageResources(resources || []);
+    $: prepareImageAndVideoResources(resources || []);
     $: prepareTextResources(resources || []);
 
-    let mediaResources: ImageResource[] = [];
-    $: mediaResources = imageResources;
+    let mediaResources: ImageOrVideoResource[] = [];
+    $: mediaResources = ubsImageResources.concat(videoBibleDictionaryResources);
 
     let currentFullscreenMediaResourceIndex: number | null = null;
     let currentFullscreenTextResource: TextResource | null = null;
@@ -66,19 +67,36 @@
         });
     });
 
-    function handleImageSelected(image: ImageResource) {
-        currentFullscreenMediaResourceIndex = mediaResources.indexOf(image);
+    function handleMediaResourceSelected(resource: ImageOrVideoResource) {
+        currentFullscreenMediaResourceIndex = mediaResources.indexOf(resource);
     }
 
     function handleTextResourceSelected(textResource: TextResource) {
         currentFullscreenTextResource = textResource;
     }
 
-    async function prepareUbsImageResources(resources: PassageResourceContent[]) {
-        imageResources = await asyncMap(
+    function setVideoBibleDictionaryDuration(videoElement: HTMLVideoElement | null, resource: ImageOrVideoResource) {
+        if (videoElement) {
+            const index = videoBibleDictionaryResources.indexOf(resource);
+            if (index >= 0) {
+                videoBibleDictionaryResources[index].duration = videoElement.duration;
+            }
+        }
+    }
+
+    async function prepareImageAndVideoResources(resources: PassageResourceContent[]) {
+        ubsImageResources = await asyncMap(
             resources.filter(({ typeName }) => typeName === ResourceType.UbsImages),
             async (resource) => ({
-                isImage: true,
+                type: 'image',
+                displayName: await fetchDisplayNameForResourceContent(resource),
+                url: resourceContentApiFullUrl(resource),
+            })
+        );
+        videoBibleDictionaryResources = await asyncMap(
+            resources.filter(({ typeName }) => typeName === ResourceType.VideoBibleDictionary),
+            async (resource) => ({
+                type: 'video',
                 displayName: await fetchDisplayNameForResourceContent(resource),
                 url: resourceContentApiFullUrl(resource),
             })
@@ -127,7 +145,7 @@
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />
 
-<div id="resource-pane" use:trapFocus={isShowing} class="flex-grow px-4 pb-4 mb-16">
+<div id="resource-pane" use:trapFocus={isShowing} class="flex-grow px-4 pb-16">
     <div class="text-lg font-semibold text-base-content pb-8">
         {$translate('page.passage.resourcePane.title.value')}
     </div>
@@ -152,19 +170,37 @@
         <div class="flex-grow border-b border-b-gray-200" />
     </div>
     <div class={activeTab !== 'basic' ? 'hidden' : ''}>
-        {#if imageResources.length}
+        {#if ubsImageResources.length}
             <div class="text-md font-semibold text-base-content pb-2">
                 {$translate('page.passage.resourcePane.types.ubsImages.value')}
             </div>
-            <div class="carousel space-x-2">
-                {#each imageResources as image}
-                    <button class="carousel-item flex-col" on:click={() => handleImageSelected(image)}>
+            <div class="carousel space-x-2 pb-6">
+                {#each ubsImageResources as image}
+                    <button class="carousel-item flex-col" on:click={() => handleMediaResourceSelected(image)}>
                         <img
                             class="h-20 w-32 object-cover rounded-lg border border-gray-300 mb-1"
                             src={cachedOrRealUrl(image.url)}
                             alt={image.displayName}
                         />
                         <span class="text-sm text-neutral">{image.displayName}</span>
+                    </button>
+                {/each}
+            </div>
+        {/if}
+        {#if videoBibleDictionaryResources.length}
+            <div class="text-md font-semibold text-base-content pb-2">
+                {$translate('page.passage.resourcePane.types.videoBibleDictionary.value')}
+            </div>
+            <div class="carousel space-x-2 pb-6">
+                {#each videoBibleDictionaryResources as video}
+                    <button class="carousel-item flex-col" on:click={() => handleMediaResourceSelected(video)}>
+                        <video
+                            class="h-20 w-32 object-cover rounded-lg border border-gray-300 mb-1"
+                            on:loadedmetadata={({ target }) => setVideoBibleDictionaryDuration(target, video)}
+                        >
+                            <source src={`${cachedOrRealUrl(video.url)}#t=0.001`} type="video/mp4" />
+                        </video>
+                        <span class="text-sm text-neutral">{video.displayName}</span>
                     </button>
                 {/each}
             </div>
@@ -199,7 +235,7 @@
     }
     :global(.cupertino-pane-wrapper .pane) {
         @apply bg-primary-content;
-        z-index: 40;
+        z-index: 35;
         cursor: initial !important;
     }
 </style>
