@@ -20,6 +20,7 @@
     import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
 
     let allChaptersSelected = false;
+    let allChaptersCached = false;
 
     $: hasText = $biblesModuleBook.textSize > 0;
     $: addAdditaonalResourcesApiModule($resourcesApiModule);
@@ -72,6 +73,12 @@
                 audioChapter.selected = true;
             }
         });
+
+        const everyChaptersCached = biblesModuleBook.audioUrls.chapters.every((chapter) => chapter.allUrlsCached);
+        if (everyChaptersCached) {
+            allChaptersSelected = true;
+            allChaptersCached = true;
+        }
     }
 
     function resetSelectAllChapters(selectedBookCode: string | null) {
@@ -98,6 +105,7 @@
                     id="select-all-resources"
                     bind:checked={allChaptersSelected}
                     on:click={selectAllChapters}
+                    disabled={allChaptersCached}
                 />
             </th>
             <th class="text-start text-xs">

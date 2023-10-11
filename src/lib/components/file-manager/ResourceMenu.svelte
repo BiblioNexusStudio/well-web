@@ -13,6 +13,7 @@
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import type { ResourcesMenuItem } from '$lib/types/file-manager';
+    import { ResourceType } from '$lib/types/resource';
     import { addFrontEndDataToResourcesMenuItems } from '$lib/utils/file-manager';
 
     let resourcesMenuDiv: HTMLElement;
@@ -52,21 +53,21 @@
             ...$bibleDataForResourcesMenu,
             {
                 name: $translate('page.fileManager.resourcesMenu.cbbtEr.value'),
-                value: 'CBBTER',
+                value: ResourceType.CBBTER,
                 selected: false,
                 isBible: false,
                 display: true,
             },
             {
                 name: $translate('page.fileManager.resourcesMenu.tyndaleBibleDictionary.value'),
-                value: 'TyndaleBibleDictionary',
+                value: ResourceType.TyndaleBibleDictionary,
                 selected: false,
                 isBible: false,
                 display: true,
             },
             {
                 name: $translate('page.fileManager.resourcesMenu.UbsImages.value'),
-                value: 'UbsImages',
+                value: ResourceType.UbsImages,
                 selected: false,
                 isBible: false,
                 display: true,
@@ -95,7 +96,6 @@
     </button>
     {#if menuOpen}
         <div class="absolute top-16 left-0 border-2-primary bg-white shadow-lg rounded-md menu z-30">
-            <!--svelte each-->
             {#each $resourcesMenu as resource}
                 {#if resource.display}
                     <label class="label cursor-pointer mb-4 justify-start">
