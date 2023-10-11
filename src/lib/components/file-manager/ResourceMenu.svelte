@@ -26,13 +26,15 @@
 
     async function handleResourceSelected(resourcesMenu: ResourcesMenuItem[], selectedBookCode: string | null) {
         if (resourcesMenu.some((resources) => resources.selected && !resources.isBible) && selectedBookCode) {
-            const queryParams = resourcesMenu.map((resource) => {
-                if (resource.selected && !resource.isBible) {
-                    return `resourceTypes=${resource.value}`;
-                } else {
-                    return '';
-                }
-            });
+            const queryParams = resourcesMenu
+                .map((resource) => {
+                    if (resource.selected && !resource.isBible) {
+                        return `resourceTypes=${resource.value}`;
+                    } else {
+                        return '';
+                    }
+                })
+                .filter((query) => query !== '');
 
             $resourcesApiModule = await fetchFromCacheOrApi(
                 `/resources/language/${$currentLanguageInfo?.id}/book/${selectedBookCode}?${queryParams.join('&')}`
@@ -53,6 +55,13 @@
             {
                 name: $translate('page.fileManager.resourcesMenu.tyndaleBibleDictionary.value'),
                 value: 'TyndaleBibleDictionary',
+                selected: false,
+                isBible: false,
+                display: true,
+            },
+            {
+                name: $translate('page.fileManager.resourcesMenu.UbsImages.value'),
+                value: 'UbsImages',
                 selected: false,
                 isBible: false,
                 display: true,

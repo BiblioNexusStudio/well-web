@@ -67,7 +67,7 @@
         <div class="w-full flex justify-between">
             <div class="f-full flex items-center">
                 <span class="text-primary text-l font-bold">
-                    {$downloadData.urlsToDownload.length}
+                    {$downloadData.urlsToDownload.filter(({ size }) => size !== 2048).length}
                     {$translate('page.fileManager.files.value')}; {convertToReadableSize(
                         $downloadData.totalSizeToDownload
                     )}

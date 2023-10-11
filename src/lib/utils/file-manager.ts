@@ -161,6 +161,8 @@ export const addFrontEndDataToPassageData = async (inputPassageData: ApiPassage[
 export const addFrontEndDataToBiblesModuleBook = (inputBiblesModuleBook: BiblesModuleBook) => {
     inputBiblesModuleBook.audioUrls.chapters.forEach((chapter) => {
         chapter.selected = false;
+        chapter.cached = false;
+        chapter.cbbterResourceUrls = [];
     });
 
     return inputBiblesModuleBook;
@@ -204,3 +206,17 @@ export const buildRowData = (
 
     return { resources, size, hasAudio, hasText, hasImages, allResourcesCached: false };
 };
+
+export function removeDuplicates(arr: UrlWithMetadata[]): UrlWithMetadata[] {
+    const uniqueUrls = new Set<string>();
+
+    const uniqueArray = arr.filter((item) => {
+        if (!uniqueUrls.has(item.url)) {
+            uniqueUrls.add(item.url);
+            return true;
+        }
+        return false;
+    });
+
+    return uniqueArray;
+}

@@ -12,7 +12,8 @@ export type AllItemsProgress = Record<Url, SingleItemProgress>;
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const _partiallyDownloadedCdnUrls: string[] = [];
 const _partiallyDownloadedApiPaths: string[] = [];
-const apiRegex = 'https://aquifer-server-(qa|dev|prod).azurewebsites.net.*';
+const cdnRegex =
+    'https://cdn.aquifer.bible.*|https://aquifer-server-(qa|dev|prod).azurewebsites.net/resources/\\d+/content|metadata';
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 const fetchFromCacheOrApi = async (path: string) => {
@@ -87,12 +88,12 @@ const cacheManyFromCdnWithProgress = async (
     };
 
     const processUrl = async (url: Url, expectedSize: number) => {
-        const apiUrl = url.match(apiRegex);
+        const cdnUrl = url.match(cdnRegex);
 
-        if (apiUrl) {
-            _partiallyDownloadedApiPaths.push(url);
-        } else {
+        if (cdnUrl) {
             _partiallyDownloadedCdnUrls.push(url);
+        } else {
+            _partiallyDownloadedApiPaths.push(url);
         }
 
         try {
@@ -103,10 +104,10 @@ const cacheManyFromCdnWithProgress = async (
 
             let cachedSize: number | null = null;
 
-            if (apiUrl) {
-                cachedSize = await _cachedApiContentSize(url);
-            } else {
+            if (cdnUrl) {
                 cachedSize = await _cachedCdnContentSize(url);
+            } else {
+                cachedSize = await _cachedApiContentSize(url);
             }
 
             if (cachedSize) {
@@ -134,10 +135,10 @@ const cacheManyFromCdnWithProgress = async (
             }
             updateProgress(url, receivedLength, contentLength ? +contentLength : 0, true);
         } finally {
-            if (apiUrl) {
-                _removeFromArray(_partiallyDownloadedApiPaths, url);
-            } else {
+            if (cdnUrl) {
                 _removeFromArray(_partiallyDownloadedCdnUrls, url);
+            } else {
+                _removeFromArray(_partiallyDownloadedApiPaths, url);
             }
         }
     };

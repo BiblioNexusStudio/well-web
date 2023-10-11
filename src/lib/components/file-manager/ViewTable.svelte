@@ -5,7 +5,6 @@
         resourcesMenu,
         selectedBookCode,
     } from '$lib/stores/file-manager.store';
-    import { env } from '$env/dynamic/public';
     import { Icon } from 'svelte-awesome';
     import fileTextO from 'svelte-awesome/icons/fileTextO';
     import volumeUp from 'svelte-awesome/icons/volumeUp';
@@ -13,11 +12,12 @@
     import arrowDown from 'svelte-awesome/icons/arrowDown';
     import { _ as translate } from 'svelte-i18n';
     import { convertToReadableSize } from '$lib/utils/file-manager';
-    import type { ResourcesApiModule } from '$lib/types/file-manager';
+    import type { ResourcesApiModule, BiblesModuleBook } from '$lib/types/file-manager';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { buildRowData } from '$lib/utils/file-manager';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
+    import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
 
     let allChaptersSelected = false;
 
@@ -33,21 +33,11 @@
         }
 
         resourcesApiModule.chapters.forEach(async (chapter) => {
-            $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1].cbbterResourceUrls = [];
             if (chapter.contents.length > 0 && chapter.chapterNumber) {
                 $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1].resourceMenuItems = chapter.contents;
 
                 if (chapter.contents.some((content) => content.typeName === 'CBBTER') && passageData) {
                     let filteredPassages = passageData.find((data) => data.bookCode === $selectedBookCode);
-                    chapter.contents.forEach((content) => {
-                        if (content.typeName === 'CBBTER' && content.mediaTypeName === 'Audio') {
-                            $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1].cbbterResourceUrls?.push({
-                                url: `${env.PUBLIC_AQUIFER_API_URL}resources/${content.contentId}/metadata`,
-                                mediaType: 'text',
-                                size: 2048,
-                            });
-                        }
-                    });
 
                     if (filteredPassages) {
                         filteredPassages.passages.forEach((passage) => {
@@ -58,7 +48,7 @@
                                 $biblesModuleBook.audioUrls.chapters[
                                     chapter.chapterNumber - 1
                                 ].cbbterResourceUrls?.push({
-                                    url: `${env.PUBLIC_AQUIFER_API_URL}passages/${passage.id}/language/${$currentLanguageInfo?.id}`,
+                                    url: passageContentApiFullPath(passage),
                                     mediaType: 'text',
                                     size: 2048,
                                 });
@@ -114,6 +104,7 @@
                         type="checkbox"
                         class="checkbox checkbox-primary mx-2"
                         bind:checked={audioChapter.selected}
+                        disabled={audioChapter.cached}
                     />
                 </td>
 

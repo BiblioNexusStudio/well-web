@@ -8,12 +8,13 @@ import type {
     ResourcesMenuItem,
     BiblesModule,
     BiblesModuleBook,
-    ApiAudioChapter,
     ResourcesApiModule,
     ResourcesApiModuleChapter,
+    FrontendAudioChapter,
 } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
-import { resourceContentApiFullUrl } from '$lib/utils/data-handlers/resources/resource';
+import { removeDuplicates } from '$lib/utils/file-manager';
+import { resourceContentApiFullUrl, resourceMetadataApiFullPath } from '$lib/utils/data-handlers/resources/resource';
 
 export const originalBibleData = writable<FrontendBibleVersion[]>([]);
 export const bibleData = writable<FrontendBibleVersion[]>([]);
@@ -52,7 +53,7 @@ export const biblesModuleBook = writable<BiblesModuleBook>({
     chapterCount: 0,
     textUrl: '',
     audioUrls: {
-        chapters: [] as ApiAudioChapter[],
+        chapters: [] as FrontendAudioChapter[],
     },
 });
 export const resourcesApiModule = writable<ResourcesApiModule>({ chapters: [] as ResourcesApiModuleChapter[] });
@@ -63,7 +64,7 @@ export const downloadData = derived(
         const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
 
         if (
-            biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected) &&
+            biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected && !chapter.cached) &&
             bibleSelected &&
             footerInputs.text
         ) {
@@ -75,7 +76,7 @@ export const downloadData = derived(
         }
 
         biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
-            if (chapter.selected) {
+            if (chapter.selected && !chapter.cached) {
                 if (bibleSelected && footerInputs.audio) {
                     urlsAndSizesToDownload.push({
                         mediaType: 'audio',
@@ -97,6 +98,11 @@ export const downloadData = derived(
                                     url: resourceContentApiFullUrl(resourceMenuItem),
                                     size: resourceMenuItem.contentSize,
                                 });
+                                urlsAndSizesToDownload.push({
+                                    url: resourceMetadataApiFullPath(resourceMenuItem),
+                                    mediaType: 'text',
+                                    size: 2048,
+                                });
                             }
                         }
                     }
@@ -113,6 +119,11 @@ export const downloadData = derived(
                                     url: resourceContentApiFullUrl(resourceMenuItem),
                                     size: resourceMenuItem.contentSize,
                                 });
+                                urlsAndSizesToDownload.push({
+                                    url: resourceMetadataApiFullPath(resourceMenuItem),
+                                    mediaType: 'audio',
+                                    size: 2048,
+                                });
                             }
                         }
                     }
@@ -123,6 +134,11 @@ export const downloadData = derived(
                                 mediaType: 'images',
                                 url: resourceContentApiFullUrl(resourceMenuItem),
                                 size: resourceMenuItem.contentSize,
+                            });
+                            urlsAndSizesToDownload.push({
+                                url: resourceMetadataApiFullPath(resourceMenuItem),
+                                mediaType: 'images',
+                                size: 2048,
                             });
                         }
                     }
@@ -146,7 +162,7 @@ export const downloadData = derived(
 
         return {
             urlsToDelete: [],
-            urlsToDownload: urlsAndSizesToDownload,
+            urlsToDownload: removeDuplicates(urlsAndSizesToDownload),
             totalSizeToDelete: 0,
             totalSizeToDownload: urlsAndSizesToDownload.reduce((acc, { size }) => size + acc, 0),
         };
