@@ -38,10 +38,6 @@ export async function fetchTiptapForResourcContent(
     }
 }
 
-export function resourceMetadataApiFullPath(resourceContent: PassageResourceContent) {
-    return env.PUBLIC_AQUIFER_API_URL + resourceMetadataApiPath(resourceContent);
-}
-
 export async function fetchMetadataForResourceContent(
     resourceContent: PassageResourceContent
 ): Promise<ResourceContentMetadata | null> {

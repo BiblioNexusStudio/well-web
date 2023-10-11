@@ -24,6 +24,7 @@
     $: hasText = $biblesModuleBook.textSize > 0;
     $: addAdditaonalResourcesApiModule($resourcesApiModule);
     $: resetSelectAllChapters($selectedBookCode);
+    $: addAllUrlsCachedProperty($biblesModuleBook);
 
     async function addAdditaonalResourcesApiModule(resourcesApiModule: ResourcesApiModule) {
         let passageData: BasePassagesByBook[] = [];
@@ -56,6 +57,19 @@
                         });
                     }
                 }
+            }
+        });
+    }
+
+    function addAllUrlsCachedProperty(biblesModuleBook: BiblesModuleBook) {
+        biblesModuleBook.audioUrls.chapters.forEach((audioChapter) => {
+            const allUrlsCached =
+                biblesModuleBook.isTextUrlCached &&
+                audioChapter.isAudioUrlCached &&
+                audioChapter.resourceMenuItems?.every((resourceMenuItem) => resourceMenuItem?.isResourceUrlCached);
+            if (allUrlsCached) {
+                audioChapter.allUrlsCached = true;
+                audioChapter.selected = true;
             }
         });
     }
@@ -104,7 +118,7 @@
                         type="checkbox"
                         class="checkbox checkbox-primary mx-2"
                         bind:checked={audioChapter.selected}
-                        disabled={audioChapter.cached}
+                        disabled={audioChapter.allUrlsCached}
                     />
                 </td>
 

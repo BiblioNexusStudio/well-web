@@ -51,6 +51,7 @@ export interface ApiAudioChapter {
 export interface FrontendAudioChapter extends ApiAudioChapter {
     selected?: boolean;
     isAudioUrlCached?: boolean;
+    allUrlsCached?: boolean;
     resourceMenuItems?: PassageResourceContent[];
     cbbterResourceUrls?: UrlWithMetadata[];
 }

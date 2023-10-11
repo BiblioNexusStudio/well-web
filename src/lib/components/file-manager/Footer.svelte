@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { downloadData, footerInputs } from '$lib/stores/file-manager.store';
+    import { downloadData, footerInputs, biblesModuleBook } from '$lib/stores/file-manager.store';
     import { isOnline } from '$lib/stores/is-online.store';
     import { convertToReadableSize } from '$lib/utils/file-manager';
     import { Icon } from 'svelte-awesome';
@@ -8,6 +8,8 @@
 
     $: downloadingIsDisabled =
         ($downloadData.totalSizeToDownload === 0 && $downloadData.totalSizeToDelete === 0) || !$isOnline;
+
+    $: footerInputsDisabled = $biblesModuleBook.audioUrls.chapters.every((chapter) => !chapter.selected);
 
     const updateFiles = () => {
         const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
@@ -39,7 +41,7 @@
                     id="select-all"
                     type="checkbox"
                     class="checkbox checkbox-primary"
-                    disabled={downloadingIsDisabled}
+                    disabled={footerInputsDisabled}
                     bind:checked={$footerInputs.audio}
                 />
                 <label
@@ -53,7 +55,7 @@
                     id="select-all"
                     type="checkbox"
                     class="checkbox checkbox-primary"
-                    disabled={downloadingIsDisabled}
+                    disabled={footerInputsDisabled}
                     bind:checked={$footerInputs.media}
                 />
                 <label

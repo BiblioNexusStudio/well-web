@@ -67,8 +67,8 @@ export const calculateUrlsWithMetadataToChange = (
     }
 
     biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
-        if (chapter.selected && !chapter.isAudioUrlCached) {
-            if (bibleSelected && footerInputs.audio) {
+        if (chapter.selected) {
+            if (bibleSelected && footerInputs.audio && !chapter.isAudioUrlCached) {
                 urlsAndSizesToDownload.push({
                     mediaType: 'audio',
                     url: chapter[audioFileTypeForBrowser()].url,
@@ -77,56 +77,62 @@ export const calculateUrlsWithMetadataToChange = (
             }
 
             chapter.resourceMenuItems?.forEach((resourceMenuItem) => {
-                if (footerInputs.text) {
-                    if (resourceMenuItem.mediaTypeName.toLowerCase() === 'text') {
-                        if (
-                            resourcesMenu.some(({ selected, value }) => selected && value === resourceMenuItem.typeName)
-                        ) {
+                if (!resourceMenuItem.isResourceUrlCached) {
+                    if (footerInputs.text) {
+                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'text') {
+                            if (
+                                resourcesMenu.some(
+                                    ({ selected, value }) => selected && value === resourceMenuItem.typeName
+                                )
+                            ) {
+                                urlsAndSizesToDownload.push({
+                                    mediaType: 'text',
+                                    url: resourceContentApiFullUrl(resourceMenuItem),
+                                    size: resourceMenuItem.contentSize,
+                                });
+                                urlsAndSizesToDownload.push({
+                                    url: resourceMetadataApiFullPath(resourceMenuItem),
+                                    mediaType: 'text',
+                                    size: 2048,
+                                });
+                            }
+                        }
+                    }
+
+                    if (footerInputs.audio) {
+                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'audio') {
+                            if (
+                                resourcesMenu.some(
+                                    ({ selected, value }) => selected && value === resourceMenuItem.typeName
+                                )
+                            ) {
+                                urlsAndSizesToDownload.push({
+                                    mediaType: 'audio',
+                                    url: resourceContentApiFullUrl(resourceMenuItem),
+                                    size: resourceMenuItem.contentSize,
+                                });
+                                urlsAndSizesToDownload.push({
+                                    url: resourceMetadataApiFullPath(resourceMenuItem),
+                                    mediaType: 'audio',
+                                    size: 2048,
+                                });
+                            }
+                        }
+                    }
+
+                    if (footerInputs.media) {
+                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'image') {
                             urlsAndSizesToDownload.push({
-                                mediaType: 'text',
+                                mediaType: 'images',
                                 url: resourceContentApiFullUrl(resourceMenuItem),
                                 size: resourceMenuItem.contentSize,
                             });
                             urlsAndSizesToDownload.push({
                                 url: resourceMetadataApiFullPath(resourceMenuItem),
-                                mediaType: 'text',
+                                mediaType: 'images',
                                 size: 2048,
                             });
                         }
-                    }
-                }
-
-                if (footerInputs.audio) {
-                    if (resourceMenuItem.mediaTypeName.toLowerCase() === 'audio') {
-                        if (
-                            resourcesMenu.some(({ selected, value }) => selected && value === resourceMenuItem.typeName)
-                        ) {
-                            urlsAndSizesToDownload.push({
-                                mediaType: 'audio',
-                                url: resourceContentApiFullUrl(resourceMenuItem),
-                                size: resourceMenuItem.contentSize,
-                            });
-                            urlsAndSizesToDownload.push({
-                                url: resourceMetadataApiFullPath(resourceMenuItem),
-                                mediaType: 'audio',
-                                size: 2048,
-                            });
-                        }
-                    }
-                }
-
-                if (footerInputs.media) {
-                    if (resourceMenuItem.mediaTypeName.toLowerCase() === 'image') {
-                        urlsAndSizesToDownload.push({
-                            mediaType: 'images',
-                            url: resourceContentApiFullUrl(resourceMenuItem),
-                            size: resourceMenuItem.contentSize,
-                        });
-                        urlsAndSizesToDownload.push({
-                            url: resourceMetadataApiFullPath(resourceMenuItem),
-                            mediaType: 'images',
-                            size: 2048,
-                        });
                     }
                 }
             });
@@ -207,6 +213,7 @@ export const addFrontEndDataToBiblesModuleBook = async (inputBiblesModuleBook: B
     await asyncForEach(inputBiblesModuleBook.audioUrls.chapters, async (chapter) => {
         chapter.isAudioUrlCached = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);
         chapter.selected = false;
+        chapter.allUrlsCached = false;
         chapter.cbbterResourceUrls = [];
         chapter.resourceMenuItems = [];
     });
@@ -235,9 +242,6 @@ export const buildRowData = (
     let resources = 0;
     let size = 0;
     let hasImages = false;
-    const allUrlsCached =
-        audioChapter.isAudioUrlCached &&
-        audioChapter.resourceMenuItems?.every((resourceMenuItem) => resourceMenuItem?.isResourceUrlCached);
 
     if (hasAudio && bibleSelected) {
         resources++;
@@ -258,7 +262,7 @@ export const buildRowData = (
         }
     });
 
-    return { resources, size, hasAudio, hasText, hasImages, allUrlsCached };
+    return { resources, size, hasAudio, hasText, hasImages };
 };
 
 export function removeDuplicates(arr: UrlWithMetadata[]): UrlWithMetadata[] {
