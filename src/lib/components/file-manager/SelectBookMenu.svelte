@@ -20,7 +20,7 @@
 
     const handleBookClick = async (bookCode: string | null) => {
         toggleMenu();
-        $biblesModuleBook = addFrontEndDataToBiblesModuleBook(
+        $biblesModuleBook = await addFrontEndDataToBiblesModuleBook(
             await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${bookCode}`)
         );
         $selectedBookCode = bookCode;

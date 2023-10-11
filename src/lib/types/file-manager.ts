@@ -50,7 +50,7 @@ export interface ApiAudioChapter {
 
 export interface FrontendAudioChapter extends ApiAudioChapter {
     selected?: boolean;
-    cached?: boolean;
+    isAudioUrlCached?: boolean;
     resourceMenuItems?: PassageResourceContent[];
     cbbterResourceUrls?: UrlWithMetadata[];
 }
@@ -211,6 +211,7 @@ export interface BiblesModuleBook {
     audioSize: 0;
     chapterCount: 0;
     textUrl: string;
+    isTextUrlCached?: boolean;
     audioUrls: {
         chapters: FrontendAudioChapter[];
     };

@@ -12,9 +12,7 @@ import type {
     ResourcesApiModuleChapter,
     FrontendAudioChapter,
 } from '$lib/types/file-manager';
-import { audioFileTypeForBrowser } from '$lib/utils/browser';
-import { removeDuplicates } from '$lib/utils/file-manager';
-import { resourceContentApiFullUrl, resourceMetadataApiFullPath } from '$lib/utils/data-handlers/resources/resource';
+import { calculateUrlsWithMetadataToChange } from '$lib/utils/file-manager';
 
 export const originalBibleData = writable<FrontendBibleVersion[]>([]);
 export const bibleData = writable<FrontendBibleVersion[]>([]);
@@ -52,6 +50,7 @@ export const biblesModuleBook = writable<BiblesModuleBook>({
     audioSize: 0,
     chapterCount: 0,
     textUrl: '',
+    isTextUrlCached: false,
     audioUrls: {
         chapters: [] as FrontendAudioChapter[],
     },
@@ -59,114 +58,8 @@ export const biblesModuleBook = writable<BiblesModuleBook>({
 export const resourcesApiModule = writable<ResourcesApiModule>({ chapters: [] as ResourcesApiModuleChapter[] });
 export const downloadData = derived(
     [biblesModuleBook, footerInputs, resourcesMenu],
-    ([biblesModuleBook, footerInputs, resourcesMenu]) => {
-        const urlsAndSizesToDownload = [] as UrlWithMetadata[];
-        const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
-
-        if (
-            biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected && !chapter.cached) &&
-            bibleSelected &&
-            footerInputs.text
-        ) {
-            urlsAndSizesToDownload.push({
-                mediaType: 'text',
-                url: biblesModuleBook.textUrl,
-                size: biblesModuleBook.textSize,
-            });
-        }
-
-        biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
-            if (chapter.selected && !chapter.cached) {
-                if (bibleSelected && footerInputs.audio) {
-                    urlsAndSizesToDownload.push({
-                        mediaType: 'audio',
-                        url: chapter[audioFileTypeForBrowser()].url,
-                        size: chapter[audioFileTypeForBrowser()].size,
-                    });
-                }
-
-                chapter.resourceMenuItems?.forEach((resourceMenuItem) => {
-                    if (footerInputs.text) {
-                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'text') {
-                            if (
-                                resourcesMenu.some(
-                                    ({ selected, value }) => selected && value === resourceMenuItem.typeName
-                                )
-                            ) {
-                                urlsAndSizesToDownload.push({
-                                    mediaType: 'text',
-                                    url: resourceContentApiFullUrl(resourceMenuItem),
-                                    size: resourceMenuItem.contentSize,
-                                });
-                                urlsAndSizesToDownload.push({
-                                    url: resourceMetadataApiFullPath(resourceMenuItem),
-                                    mediaType: 'text',
-                                    size: 2048,
-                                });
-                            }
-                        }
-                    }
-
-                    if (footerInputs.audio) {
-                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'audio') {
-                            if (
-                                resourcesMenu.some(
-                                    ({ selected, value }) => selected && value === resourceMenuItem.typeName
-                                )
-                            ) {
-                                urlsAndSizesToDownload.push({
-                                    mediaType: 'audio',
-                                    url: resourceContentApiFullUrl(resourceMenuItem),
-                                    size: resourceMenuItem.contentSize,
-                                });
-                                urlsAndSizesToDownload.push({
-                                    url: resourceMetadataApiFullPath(resourceMenuItem),
-                                    mediaType: 'audio',
-                                    size: 2048,
-                                });
-                            }
-                        }
-                    }
-
-                    if (footerInputs.media) {
-                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'image') {
-                            urlsAndSizesToDownload.push({
-                                mediaType: 'images',
-                                url: resourceContentApiFullUrl(resourceMenuItem),
-                                size: resourceMenuItem.contentSize,
-                            });
-                            urlsAndSizesToDownload.push({
-                                url: resourceMetadataApiFullPath(resourceMenuItem),
-                                mediaType: 'images',
-                                size: 2048,
-                            });
-                        }
-                    }
-                });
-            }
-        });
-
-        if (resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')) {
-            biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
-                if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
-                    chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
-                        urlsAndSizesToDownload.push({
-                            mediaType: 'text',
-                            url: cbbterResourceUrl.url,
-                            size: cbbterResourceUrl.size,
-                        });
-                    });
-                }
-            });
-        }
-
-        return {
-            urlsToDelete: [],
-            urlsToDownload: removeDuplicates(urlsAndSizesToDownload),
-            totalSizeToDelete: 0,
-            totalSizeToDownload: urlsAndSizesToDownload.reduce((acc, { size }) => size + acc, 0),
-        };
-    },
+    ([biblesModuleBook, footerInputs, resourcesMenu]) =>
+        calculateUrlsWithMetadataToChange(biblesModuleBook, footerInputs, resourcesMenu),
     {
         urlsToDownload: [] as UrlWithMetadata[],
         urlsToDelete: [] as string[],

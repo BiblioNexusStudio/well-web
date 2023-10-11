@@ -18,6 +18,7 @@ export interface PassageResourceContent {
     contentSize: number;
     mediaTypeName: MediaTypeEnum;
     typeName: string;
+    isResourceUrlCached?: boolean;
 }
 
 export interface BasePassagesByBook {

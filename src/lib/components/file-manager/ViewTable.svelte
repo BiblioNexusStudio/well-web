@@ -12,7 +12,7 @@
     import arrowDown from 'svelte-awesome/icons/arrowDown';
     import { _ as translate } from 'svelte-i18n';
     import { convertToReadableSize } from '$lib/utils/file-manager';
-    import type { ResourcesApiModule, BiblesModuleBook } from '$lib/types/file-manager';
+    import type { ResourcesApiModule } from '$lib/types/file-manager';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { buildRowData } from '$lib/utils/file-manager';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
@@ -104,7 +104,6 @@
                         type="checkbox"
                         class="checkbox checkbox-primary mx-2"
                         bind:checked={audioChapter.selected}
-                        disabled={audioChapter.cached}
                     />
                 </td>
 

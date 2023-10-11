@@ -13,6 +13,7 @@
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import type { ResourcesMenuItem } from '$lib/types/file-manager';
+    import { addFrontEndDataToResourcesMenuItems } from '$lib/utils/file-manager';
 
     let resourcesMenuDiv: HTMLElement;
     let menuOpen = false;
@@ -36,8 +37,12 @@
                 })
                 .filter((query) => query !== '');
 
-            $resourcesApiModule = await fetchFromCacheOrApi(
-                `/resources/language/${$currentLanguageInfo?.id}/book/${selectedBookCode}?${queryParams.join('&')}`
+            // add async fucntion here that adds additional resources to the resourcesApiModule
+
+            $resourcesApiModule = await addFrontEndDataToResourcesMenuItems(
+                await fetchFromCacheOrApi(
+                    `/resources/language/${$currentLanguageInfo?.id}/book/${selectedBookCode}?${queryParams.join('&')}`
+                )
             );
         }
     }
