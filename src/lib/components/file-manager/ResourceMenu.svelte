@@ -72,6 +72,13 @@
                 isBible: false,
                 display: true,
             },
+            {
+                name: $translate('page.fileManager.resourcesMenu.UbsImages.value'),
+                value: 'UbsImages',
+                selected: false,
+                isBible: false,
+                display: true,
+            },
         ];
 
         const handleClickOutside = (event: MouseEvent) => {
