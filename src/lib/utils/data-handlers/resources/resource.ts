@@ -37,20 +37,6 @@ export async function fetchTiptapForResourcContent(
     }
 }
 
-export async function fetchTiptapForResourcContent(
-    resourceContent: PassageResourceContent
-): Promise<ResourceContentTiptap | null> {
-    try {
-        const tiptaps = (await fetchFromCacheOrCdn(resourceContentApiFullUrl(resourceContent))) as
-            | ResourceContentTiptap[]
-            | null;
-        return tiptaps?.length ? tiptaps[0] : null;
-    } catch (_) {
-        // tiptap data not cached
-        return null;
-    }
-}
-
 export async function fetchMetadataForResourceContent(
     resourceContent: PassageResourceContent
 ): Promise<ResourceContentMetadata | null> {
