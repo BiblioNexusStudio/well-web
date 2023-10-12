@@ -20,6 +20,10 @@ export interface PassageResourceContent {
     typeName: string;
 }
 
+export interface FrontendPassageResourceContent extends PassageResourceContent {
+    isResourceUrlCached?: boolean;
+}
+
 export interface BasePassagesByBook {
     bookCode: string;
     passages: BasePassage[];

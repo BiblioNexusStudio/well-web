@@ -1,10 +1,16 @@
+import { env } from '$env/dynamic/public';
 import { get } from 'svelte/store';
 import { data, passagesByBook, selectedBookIndex } from '$lib/stores/passage-form.store';
 import { currentLanguageInfo } from '$lib/stores/current-language.store';
 import { fetchFromCacheOrApi, isCachedFromApi } from '$lib/data-cache';
 import { asyncMap, asyncSome, asyncFilter } from '$lib/utils/async-array';
 import type { ApiBible } from '$lib/types/bible-text-content';
-import type { BasePassagesByBook, FrontendPassagesByBook, PassageWithResourceContentIds } from '$lib/types/passage';
+import type {
+    BasePassagesByBook,
+    FrontendPassagesByBook,
+    PassageWithResourceContentIds,
+    BasePassage,
+} from '$lib/types/passage';
 import { ResourceType } from '$lib/types/resource';
 import { resourceContentApiPath } from './resource';
 
@@ -59,4 +65,12 @@ export async function fetchCbbterPassagesByBook(isOnline: boolean) {
 
     passagesByBook.set(byBookWithAvailableResources);
     data.set({ passagesByBook: get(passagesByBook) });
+}
+
+export function passageContentApiPath(passage: BasePassage) {
+    return `passages/${passage.id}/language/${get(currentLanguageInfo)?.id}`;
+}
+
+export function passageContentApiFullPath(passage: BasePassage) {
+    return env.PUBLIC_AQUIFER_API_URL + passageContentApiPath(passage);
 }

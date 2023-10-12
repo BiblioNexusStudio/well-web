@@ -19,8 +19,11 @@ export function resourceContentApiFullUrl(resourceContent: PassageResourceConten
 function resourceMetadataApiPath(resourceContent: PassageResourceContent) {
     return `resources/${resourceContent.contentId}/metadata`;
 }
+export function resourceMetadataApiFullPath(resourceContent: PassageResourceContent) {
+    return env.PUBLIC_AQUIFER_API_URL + resourceMetadataApiPath(resourceContent);
+}
 
-export async function fetchTiptapForResourcContent(
+export async function fetchTiptapForResourceContent(
     resourceContent: PassageResourceContent
 ): Promise<ResourceContentTiptap | null> {
     try {

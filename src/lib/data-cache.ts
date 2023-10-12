@@ -12,6 +12,8 @@ export type AllItemsProgress = Record<Url, SingleItemProgress>;
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const _partiallyDownloadedCdnUrls: string[] = [];
 const _partiallyDownloadedApiPaths: string[] = [];
+const cdnRegex =
+    'https://cdn.aquifer.bible.*|https://aquifer-server-(qa|dev|prod).azurewebsites.net/resources/\\d+/content|metadata';
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 const fetchFromCacheOrApi = async (path: string) => {
@@ -86,14 +88,28 @@ const cacheManyFromCdnWithProgress = async (
     };
 
     const processUrl = async (url: Url, expectedSize: number) => {
-        _partiallyDownloadedCdnUrls.push(url);
+        const cdnUrl = url.match(cdnRegex);
+
+        if (cdnUrl) {
+            _partiallyDownloadedCdnUrls.push(url);
+        } else {
+            _partiallyDownloadedApiPaths.push(url);
+        }
+
         try {
             if (url in staticUrlsMap) {
                 updateProgress(url, expectedSize, expectedSize, true);
                 return;
             }
 
-            const cachedSize = await _cachedCdnContentSize(url);
+            let cachedSize: number | null = null;
+
+            if (cdnUrl) {
+                cachedSize = await _cachedCdnContentSize(url);
+            } else {
+                cachedSize = await _cachedApiContentSize(url);
+            }
+
             if (cachedSize) {
                 updateProgress(url, cachedSize, cachedSize, true);
                 return;
@@ -119,7 +135,11 @@ const cacheManyFromCdnWithProgress = async (
             }
             updateProgress(url, receivedLength, contentLength ? +contentLength : 0, true);
         } finally {
-            _removeFromArray(_partiallyDownloadedCdnUrls, url);
+            if (cdnUrl) {
+                _removeFromArray(_partiallyDownloadedCdnUrls, url);
+            } else {
+                _removeFromArray(_partiallyDownloadedApiPaths, url);
+            }
         }
     };
 
@@ -191,6 +211,19 @@ const _cachedCdnContentSize = async (url: Url, cache: Cache | null = null) => {
         return null;
     }
     const openedCache = cache || (await caches.open('aquifer-cdn'));
+    const response = await openedCache.match(url);
+    if (response) {
+        const blob = await response.blob();
+        return blob.size;
+    }
+    return null;
+};
+
+const _cachedApiContentSize = async (url: Url, cache: Cache | null = null) => {
+    if (!('serviceWorker' in navigator)) {
+        return null;
+    }
+    const openedCache = cache || (await caches.open('aquifer-api'));
     const response = await openedCache.match(url);
     if (response) {
         const blob = await response.blob();
