@@ -76,7 +76,9 @@
                 </div>
                 <select
                     bind:value={selectedBible}
-                    class="select select-info {selectedBible ? 'text-primary' : 'text-base-500'} text-ellipsis"
+                    class="select select-info {selectedBible
+                        ? 'text-primary'
+                        : 'text-base-500'} text-ellipsis font-semibold"
                 >
                     <option disabled value={0}>
                         {$translate('page.passage.noBibleContent.bible.value')}

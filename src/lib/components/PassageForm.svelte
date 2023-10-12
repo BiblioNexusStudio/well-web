@@ -39,7 +39,11 @@
                 >{$translate('page.index.language.value')}</span
             >
         </label>
-        <select on:change={onLanguageSelected} bind:value={$currentLanguageCode} class="select select-info">
+        <select
+            on:change={onLanguageSelected}
+            bind:value={$currentLanguageCode}
+            class="select select-info font-semibold"
+        >
             <option value="" disabled selected>{$translate('page.index.language.value')}</option>
             {#each supportedLanguages as { code, label }}
                 <option value={code}>{label}</option>
@@ -56,7 +60,7 @@
         id="passage-form-book"
         bind:value={$selectedBookIndex}
         on:change={() => ($selectedId = 'default')}
-        class="select select-info"
+        class="select select-info font-semibold"
         disabled={!$data.passagesByBook?.length}
     >
         <option disabled selected value="default">
@@ -77,7 +81,12 @@
             <span class="bold label-text text-primary">{$translate('page.index.passage.value')}</span>
         </label>
     {/if}
-    <select id="passage-form-passage" bind:value={$selectedId} class="select select-info" disabled={!selectedBookInfo}>
+    <select
+        id="passage-form-passage"
+        bind:value={$selectedId}
+        class="select select-info font-semibold"
+        disabled={!selectedBookInfo}
+    >
         <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
         {#if selectedBookInfo}
             {#each selectedBookInfo.passages as passage}
