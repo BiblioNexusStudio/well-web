@@ -2,7 +2,7 @@ import { env } from '$env/dynamic/public';
 import { get } from 'svelte/store';
 import { data, passagesByBook } from '$lib/stores/passage-form.store';
 import { currentLanguageInfo } from '$lib/stores/current-language.store';
-import { fetchFromCacheOrApi, isCachedFromApi } from '$lib/data-cache';
+import { fetchFromCacheOrApi, isCachedFromApi, isCachedFromCdn } from '$lib/data-cache';
 import { asyncMap, asyncSome, asyncFilter } from '$lib/utils/async-array';
 import type { ApiBible } from '$lib/types/bible-text-content';
 import type {
@@ -12,7 +12,7 @@ import type {
     BasePassage,
 } from '$lib/types/passage';
 import { ResourceType } from '$lib/types/resource';
-import { resourceContentApiPath } from './resource';
+import { resourceContentApiFullUrl } from './resource';
 
 async function getBibleBookCodesToName(languageId: number | null = null) {
     const bibleData = (await fetchFromCacheOrApi(
@@ -38,7 +38,7 @@ async function passageIdHasCbbterAvailable(passageId: number, isOnline: boolean)
             ({ typeName }) => typeName === ResourceType.CBBTER
         );
         return await asyncSome(cbbterResources, async (resourceContent) => {
-            return isCachedFromApi(resourceContentApiPath(resourceContent));
+            return isCachedFromCdn(resourceContentApiFullUrl(resourceContent));
         });
     }
     return false;
