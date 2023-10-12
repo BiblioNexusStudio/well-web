@@ -106,7 +106,6 @@
     <div class="grow mx-4">
         <input
             type="range"
-            id="song-percentage-played"
             class="range range-audio range-primary"
             step="any"
             min="0"

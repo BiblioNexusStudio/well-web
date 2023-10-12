@@ -56,6 +56,9 @@
                     },
                     "tyndaleBibleDictionary": {
                         "value": "बाइबल शब्दकोश (Tyndale)"
+                    },
+                    "videoBibleDictionary": {
+                        "value": "वीडियो (Video Bible Dictionary)"
                     }
                 }
             },
