@@ -1,6 +1,6 @@
 import { env } from '$env/dynamic/public';
 import { get } from 'svelte/store';
-import { data, passagesByBook, selectedBookIndex } from '$lib/stores/passage-form.store';
+import { data, passagesByBook } from '$lib/stores/passage-form.store';
 import { currentLanguageInfo } from '$lib/stores/current-language.store';
 import { fetchFromCacheOrApi, isCachedFromApi } from '$lib/data-cache';
 import { asyncMap, asyncSome, asyncFilter } from '$lib/utils/async-array';
@@ -45,10 +45,6 @@ async function passageIdHasCbbterAvailable(passageId: number, isOnline: boolean)
 }
 
 export async function fetchCbbterPassagesByBook(isOnline: boolean) {
-    passagesByBook.set([]);
-    data.set({ passagesByBook: [] });
-    selectedBookIndex.set('default');
-
     const bibleBookCodesToName = await getBibleBookCodesToName();
     const allPassages = (await fetchFromCacheOrApi(
         `passages/language/${get(currentLanguageInfo)?.id}/resource/CBBTER`
