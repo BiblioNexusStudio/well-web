@@ -9,7 +9,7 @@
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
-        fetchTiptapForResourcContent,
+        fetchTiptapForResourceContent,
         resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
     import type { ImageResource, TextResource } from './types';
@@ -90,7 +90,7 @@
         const mappedResources = await asyncMap(filteredResources, async (resource) => {
             const [displayName, tiptap] = await Promise.all([
                 fetchDisplayNameForResourceContent(resource),
-                fetchTiptapForResourcContent(resource),
+                fetchTiptapForResourceContent(resource),
             ]);
             if (tiptap) {
                 return {
