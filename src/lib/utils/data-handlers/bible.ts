@@ -67,7 +67,11 @@ export async function fetchBiblesForLanguageCode(languageCode: string): Promise<
 
     if (!languageId) return [];
 
-    return await fetchFromCacheOrApi(`bibles/language/${languageId}`);
+    try {
+        return await fetchFromCacheOrApi(`bibles/language/${languageId}`);
+    } catch (_) {
+        return [];
+    }
 }
 
 export async function fetchBibleDataForBookCodeAndBibleId(
