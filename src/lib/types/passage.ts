@@ -18,6 +18,9 @@ export interface PassageResourceContent {
     contentSize: number;
     mediaTypeName: MediaTypeEnum;
     typeName: string;
+}
+
+export interface FrontendPassageResourceContent extends PassageResourceContent {
     isResourceUrlCached?: boolean;
 }
 

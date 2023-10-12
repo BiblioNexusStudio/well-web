@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { convertToReadableSize, resetOriginalData } from '$lib/utils/file-manager';
+    import { convertToReadableSize } from '$lib/utils/file-manager';
     import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';
     import { _ as translate } from 'svelte-i18n';
     import { objectKeys, objectValues } from '$lib/utils/typesafe-standard-lib';
@@ -20,7 +20,6 @@
             const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;
             if (modal) {
                 modal.close();
-                resetOriginalData();
             }
         }
     };
@@ -37,7 +36,6 @@
 
         if (downloadFinished) {
             downloadInProgress = false;
-            resetOriginalData();
             downloadedSuccessfully = true;
         }
     };

@@ -38,8 +38,6 @@
                 })
                 .filter((query) => query !== '');
 
-            // add async fucntion here that adds additional resources to the resourcesApiModule
-
             $resourcesApiModule = await addFrontEndDataToResourcesMenuItems(
                 await fetchFromCacheOrApi(
                     `/resources/language/${$currentLanguageInfo?.id}/book/${selectedBookCode}?${queryParams.join('&')}`
@@ -68,13 +66,6 @@
             {
                 name: $translate('page.fileManager.resourcesMenu.UbsImages.value'),
                 value: ResourceType.UbsImages,
-                selected: false,
-                isBible: false,
-                display: true,
-            },
-            {
-                name: $translate('page.fileManager.resourcesMenu.UbsImages.value'),
-                value: 'UbsImages',
                 selected: false,
                 isBible: false,
                 display: true,

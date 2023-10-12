@@ -1,44 +1,8 @@
-import type { PassageResourceContent } from './passage';
+import type { FrontendPassageResourceContent } from './passage';
 
 export type Url = string;
 export type UrlWithMetadata = { mediaType: MediaTypeEnum; url: Url; size: number };
 export type TiptapContent = object;
-
-export interface BaseBibleVersion {
-    languageId: number;
-    name: string;
-}
-
-export interface ApiBibleVersion extends BaseBibleVersion {
-    contents: ApiBibleVersionBookContent[];
-}
-
-export interface FrontendBibleVersion extends BaseBibleVersion {
-    contents: FrontendBibleVersionBookContent[];
-}
-
-export interface BaseBibleVersionBookContent {
-    bookId: number;
-    displayName: string;
-    textUrl: string;
-    textSize: number;
-    audioSize: number;
-}
-
-export interface ApiBibleVersionBookContent extends BaseBibleVersionBookContent {
-    audioUrls: {
-        chapters: ApiAudioChapter[];
-    };
-}
-
-export interface FrontendBibleVersionBookContent extends BaseBibleVersionBookContent {
-    audioUrls: {
-        chapters: FrontendAudioChapter[];
-    };
-    expanded?: boolean;
-    selected?: boolean;
-    textSelected?: boolean;
-}
 
 export interface ApiAudioChapter {
     number: string;
@@ -52,7 +16,7 @@ export interface FrontendAudioChapter extends ApiAudioChapter {
     selected?: boolean;
     isAudioUrlCached?: boolean;
     allUrlsCached?: boolean;
-    resourceMenuItems?: PassageResourceContent[];
+    resourceMenuItems?: FrontendPassageResourceContent[];
     cbbterResourceUrls?: UrlWithMetadata[];
 }
 
@@ -130,13 +94,6 @@ export interface ApiPassage extends BasePassage {
     resources: ApiPassageResource[];
 }
 
-export interface FrontendPassage extends BasePassage {
-    resources: ResourcesByMediaType;
-    expanded?: boolean;
-    selected?: boolean;
-    primaryResourceName?: string;
-}
-
 export interface ApiPassageResource {
     content: ApiPassageContent | null;
     type: number;
@@ -191,16 +148,16 @@ export interface ResourcesMenuItem {
 }
 
 export interface BiblesModule {
-    id: 0;
-    name: 'string';
-    abbreviation: 'string';
+    id: number;
+    name: string;
+    abbreviation: string;
     books: [
         {
-            bookCode: 'string';
-            displayName: 'string';
-            textSize: 0;
-            audioSize: 0;
-            chapterCount: 0;
+            bookCode: string;
+            displayName: string;
+            textSize: number;
+            audioSize: number;
+            chapterCount: number;
         }
     ];
 }
@@ -208,27 +165,14 @@ export interface BiblesModule {
 export interface BiblesModuleBook {
     bookCode: string;
     displayName: string;
-    textSize: 0;
-    audioSize: 0;
-    chapterCount: 0;
+    textSize: number;
+    audioSize: number;
+    chapterCount: number;
     textUrl: string;
     isTextUrlCached?: boolean;
     audioUrls: {
         chapters: FrontendAudioChapter[];
     };
-}
-
-export interface CbbterPassage {
-    bookCode: string;
-    endChapter: number;
-    endVerse: number;
-    id: number;
-    startChapter: number;
-    startVerse: number;
-}
-export interface CbbterResource {
-    bookCode: string;
-    passages: CbbterPassage[];
 }
 
 export interface CbbterTextContent {
@@ -252,5 +196,5 @@ export interface ResourcesApiModule {
 
 export interface ResourcesApiModuleChapter {
     chapterNumber: number;
-    contents: PassageResourceContent[];
+    contents: FrontendPassageResourceContent[];
 }

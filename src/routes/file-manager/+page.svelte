@@ -26,9 +26,12 @@
         fetchAvailableResourcesPromise = (async () => {
             if (currentLanguageId) {
                 $fileManagerLoading = true;
-                $biblesModuleData = await fetchFromCacheOrApi(
-                    `bibles/language/${currentLanguageId === 2 ? 1 : currentLanguageId}`
-                );
+
+                $biblesModuleData = await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`);
+
+                if ($biblesModuleData.length === 0) {
+                    $biblesModuleData = await fetchFromCacheOrApi(`bibles/language/1`);
+                }
 
                 if ($selectedBookCode) {
                     const firstBible = $biblesModuleData[0] || { id: null };

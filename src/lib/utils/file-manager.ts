@@ -1,11 +1,7 @@
-import { bibleData, originalBibleData, originalPassageData, passageData } from '$lib/stores/file-manager.store';
 import { isCachedFromCdn } from '$lib/data-cache';
-import { asyncEvery, asyncForEach } from './async-array';
+import { asyncForEach } from './async-array';
 import { audioFileTypeForBrowser } from './browser';
 import type {
-    ApiPassage,
-    FrontendBibleVersionBookContent,
-    ApiBibleVersion,
     UrlWithMetadata,
     BiblesModuleBook,
     FrontendAudioChapter,
@@ -13,11 +9,6 @@ import type {
     FooterInputs,
     ResourcesApiModule,
 } from '$lib/types/file-manager';
-import { get } from 'svelte/store';
-import type { FrontendPassage } from '$lib/types/file-manager';
-import { objectEntries, objectValues } from './typesafe-standard-lib';
-import { cbbterUrlsWithMetadataForPassage } from './data-handlers/resources/cbbt-er';
-import { groupBy } from './array';
 import { resourceContentApiFullUrl, resourceMetadataApiFullPath } from '$lib/utils/data-handlers/resources/resource';
 
 export const convertToReadableSize = (size: number) => {
@@ -38,11 +29,6 @@ export const convertToReadableSize = (size: number) => {
     } else {
         return `${(size / gb).toFixed(2)} GB`;
     }
-};
-
-export const resetOriginalData = () => {
-    originalPassageData.set(JSON.parse(JSON.stringify(get(passageData))));
-    originalBibleData.set(JSON.parse(JSON.stringify(get(bibleData))));
 };
 
 export const calculateUrlsWithMetadataToChange = (
@@ -159,52 +145,6 @@ export const calculateUrlsWithMetadataToChange = (
         totalSizeToDelete: 0,
         totalSizeToDownload: urlsAndSizesToDownload.reduce((acc, { size }) => size + acc, 0),
     };
-};
-
-export const addFrontEndDataToBibleData = async (inputBibleData: ApiBibleVersion[]) => {
-    await asyncForEach(inputBibleData, async (bibleVersion) => {
-        await asyncForEach(bibleVersion.contents, async (content) => {
-            const outputContent = content as unknown as FrontendBibleVersionBookContent;
-            outputContent.expanded = false;
-            outputContent.textSelected = await isCachedFromCdn(content.textUrl);
-
-            await asyncForEach(outputContent.audioUrls.chapters, async (chapter) => {
-                chapter.selected = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);
-            });
-
-            outputContent.selected =
-                outputContent.textSelected && outputContent.audioUrls.chapters.every((chapter) => chapter.selected);
-        });
-    });
-    return inputBibleData;
-};
-
-export const addFrontEndDataToPassageData = async (inputPassageData: ApiPassage[]) => {
-    const outputPassageData = inputPassageData as unknown as FrontendPassage[];
-    await asyncForEach(outputPassageData, async (passage) => {
-        const inputPassage = passage as unknown as ApiPassage;
-        passage.expanded = false;
-
-        passage.primaryResourceName = inputPassage.resources.find(
-            ({ content }) => content?.displayName
-        )?.content?.displayName;
-
-        passage.resources = groupBy(
-            cbbterUrlsWithMetadataForPassage(inputPassage),
-            (urlWithMediaTypeAndSize) => urlWithMediaTypeAndSize.mediaType,
-            (urlsWithMetadata) => ({ urlsWithMetadata, selected: false })
-        );
-
-        await asyncForEach(objectEntries(passage.resources), async ([_, resourceInfo]) => {
-            resourceInfo.selected = await asyncEvery(
-                resourceInfo.urlsWithMetadata,
-                async ({ url }) => await isCachedFromCdn(url)
-            );
-        });
-
-        passage.selected = objectValues(passage.resources).every(({ selected }) => selected);
-    });
-    return outputPassageData;
 };
 
 export const addFrontEndDataToBiblesModuleBook = async (inputBiblesModuleBook: BiblesModuleBook) => {

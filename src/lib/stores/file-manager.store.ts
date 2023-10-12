@@ -1,8 +1,6 @@
 import { derived, writable } from 'svelte/store';
 import type {
     Language,
-    FrontendPassage,
-    FrontendBibleVersion,
     UrlWithMetadata,
     FooterInputs,
     ResourcesMenuItem,
@@ -14,18 +12,8 @@ import type {
 } from '$lib/types/file-manager';
 import { calculateUrlsWithMetadataToChange } from '$lib/utils/file-manager';
 
-export const originalBibleData = writable<FrontendBibleVersion[]>([]);
-export const bibleData = writable<FrontendBibleVersion[]>([]);
-export const currentBibleVersion = writable<FrontendBibleVersion>({
-    languageId: 0,
-    name: '',
-    contents: [],
-});
 export const fileManagerLoading = writable<boolean>(false);
 export const languages = writable<Language[]>([]);
-export const originalPassageData = writable<FrontendPassage[]>([]);
-export const passageData = writable<FrontendPassage[]>([]);
-export const tableType = writable<string>('bible');
 export const footerInputs = writable<FooterInputs>({
     text: true,
     audio: false,
