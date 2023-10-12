@@ -21,13 +21,13 @@
     let topBarDiv: HTMLDivElement;
     let controlsDiv: HTMLDivElement;
 
-    $: isLoading = videoState.isLoading || imageState.isLoading;
-    $: hasError = videoState.hasError || imageState.hasError;
-
     let videoState = new VideoState();
     let imageState = new ImageState();
 
-    function setupState(index: number | null) {
+    $: isLoading = videoState.isLoading || imageState.isLoading;
+    $: hasError = videoState.hasError || imageState.hasError;
+
+    function setupImageOrVideoState(index: number | null) {
         imageState.reset();
         videoState.reset();
         if (index !== null) {
@@ -40,7 +40,7 @@
         }
     }
 
-    function setDimensions(_: unknown[]) {
+    function setVideoOrImageDimensionsBasedOnAvailableHeight() {
         if (container && topBarDiv && controlsDiv) {
             if (imageState.active && imageState.element) {
                 const availableHeight = container.clientHeight - topBarDiv.clientHeight - controlsDiv.clientHeight;
@@ -72,12 +72,16 @@
         }
     }
 
-    $: setDimensions([videoState.element, videoState.sliderElement, imageState.element]);
+    $: videoElement = videoState.element;
+    $: sliderElement = videoState.sliderElement;
+    $: imageElement = imageState.element;
+    $: [videoElement, sliderElement, imageElement] && setVideoOrImageDimensionsBasedOnAvailableHeight();
 
     let currentResource: ImageOrVideoResource | null = null;
     $: currentResource = currentIndex === null ? null : resources[currentIndex];
 
-    $: setupState(currentIndex);
+    // when the index changes, reset the current state and setup the new one
+    $: setupImageOrVideoState(currentIndex);
 
     function previousItem() {
         if (currentIndex !== null && currentIndex > 0) {
@@ -93,7 +97,7 @@
 </script>
 
 <svelte:window
-    on:resize={() => setDimensions([])}
+    on:resize={setVideoOrImageDimensionsBasedOnAvailableHeight}
     on:keydown={(key) => {
         if (key.key === 'ArrowLeft') {
             previousItem();
@@ -104,14 +108,14 @@
 />
 
 {#if currentIndex !== null}
-    <div use:trapFocus class="fixed inset-0 z-50 bg-black w-full">
+    <div use:trapFocus class="fixed inset-0 z-50 w-full bg-black">
         <div bind:this={container} class="absolute inset-0 flex flex-col items-center">
-            <div bind:this={topBarDiv} class="flex flex-row px-4 py-3 items-center w-full max-w-[65ch]">
+            <div bind:this={topBarDiv} class="flex w-full max-w-[65ch] flex-row items-center px-4 py-3">
                 <button class="btn btn-link text-gray-50" on:click={() => (currentIndex = null)}
                     ><Icon data={chevronLeft} /></button
                 >
                 <div class="flex-grow">
-                    <div class="w-full text-sm text-gray-50 text-center">
+                    <div class="w-full text-center text-sm text-gray-50">
                         {currentResource?.displayName}
                     </div>
                 </div>
@@ -123,11 +127,11 @@
             </div>
             <div class="flex-grow" />
             <div>
-                <div class={!isLoading ? 'hidden' : 'absolute inset-0 flex pointer-events-none'}>
-                    <Icon class="self-center mx-auto text-gray-50" data={refresh} scale={2} spin />
+                <div class={!isLoading ? 'hidden' : 'pointer-events-none absolute inset-0 flex'}>
+                    <Icon class="mx-auto self-center text-gray-50" data={refresh} scale={2} spin />
                 </div>
-                <div class={!hasError ? 'hidden' : 'absolute inset-0 flex pointer-events-none'}>
-                    <Icon class="self-center mx-auto text-gray-50" data={warning} scale={2} />
+                <div class={!hasError ? 'hidden' : 'pointer-events-none absolute inset-0 flex'}>
+                    <Icon class="mx-auto self-center text-gray-50" data={warning} scale={2} />
                 </div>
                 <div class={isLoading ? 'opacity-0' : null}>
                     <div class="px-4">
@@ -145,14 +149,13 @@
             {#if videoState.active && !videoState.isLoading}
                 <VideoSlider bind:videoState />
             {/if}
-            <div bind:this={controlsDiv} class="flex flex-row p-4 w-full max-w-[65ch]">
+            <div bind:this={controlsDiv} class="flex w-full max-w-md flex-row p-4">
                 <div class="flex-grow" />
                 {#if videoState.active && !videoState.isLoading}
-                    <button
-                        class="btn btn-link text-gray-50 mr-8 w-12"
-                        on:click={videoState.toggleMute.bind(videoState)}
+                    <button class="btn btn-link w-12 text-gray-50" on:click={videoState.toggleMute.bind(videoState)}
                         ><Icon data={videoState.isMuted ? volumeOff : volumeUp} /></button
                     >
+                    <div class="flex-grow" />
                 {/if}
                 <button
                     disabled={currentIndex === 0}
@@ -161,12 +164,12 @@
                 >
                 {#if videoState.active && !videoState.isLoading}
                     <button
-                        class="btn btn-primary w-12 h-12 text-gray-50 mx-8"
+                        class="btn btn-primary mx-8 h-12 w-12 text-gray-50"
                         on:click={videoState.playPauseVideo.bind(videoState)}
                         ><Icon data={videoState.isPlaying ? pause : play} /></button
                     >
                 {:else}
-                    <div class="flex-grow" />
+                    <div class="mx-8 h-12 w-12" />
                 {/if}
                 <button
                     disabled={currentIndex === resources.length - 1}
@@ -175,9 +178,9 @@
                     on:click={nextItem}><Icon data={chevronRight} /></button
                 >
                 {#if videoState.active && !videoState.isLoading}
-                    <button
-                        class="btn btn-link text-gray-50 ml-8"
-                        on:click={videoState.makeVideoFullscreen.bind(videoState)}><Icon data={expand} /></button
+                    <div class="flex-grow" />
+                    <button class="btn btn-link text-gray-50" on:click={videoState.makeVideoFullscreen.bind(videoState)}
+                        ><Icon data={expand} /></button
                     >
                 {/if}
                 <div class="flex-grow" />

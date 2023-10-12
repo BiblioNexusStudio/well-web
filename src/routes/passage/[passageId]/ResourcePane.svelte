@@ -18,6 +18,8 @@
     import { parseTiptapJsonToHtml, parseTiptapJsonToText } from '$lib/utils/tiptap-parsers';
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
+    import { play } from 'svelte-awesome/icons';
+    import { formatSecondsToMins } from '$lib/utils/time';
 
     export let resourcePane: CupertinoPane;
     export let isShowing: boolean;
@@ -75,8 +77,9 @@
         currentFullscreenTextResource = textResource;
     }
 
-    function setVideoBibleDictionaryDuration(videoElement: HTMLVideoElement | null, resource: ImageOrVideoResource) {
-        if (videoElement) {
+    function setVideoBibleDictionaryDuration(target: EventTarget | null, resource: ImageOrVideoResource) {
+        if (target) {
+            const videoElement = target as HTMLVideoElement;
             const index = videoBibleDictionaryResources.indexOf(resource);
             if (index >= 0) {
                 videoBibleDictionaryResources[index].duration = videoElement.duration;
@@ -146,23 +149,23 @@
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />
 
 <div id="resource-pane" use:trapFocus={isShowing} class="flex-grow px-4 pb-16">
-    <div class="text-lg font-semibold text-base-content pb-8">
+    <div class="pb-8 text-lg font-semibold text-base-content">
         {$translate('page.passage.resourcePane.title.value')}
     </div>
-    <div class="tabs !border-b-0 w-full mb-6">
+    <div class="tabs mb-6 w-full !border-b-0">
         {#if showBasicTab}
             <button
-                class="tab text-sm font-semibold tab-bordered {activeTab === 'basic'
-                    ? 'tab-active text-secondary-content !border-secondary-content !border-b-2'
-                    : 'text-gray-500 !border-b border-b-gray-200'}"
+                class="tab tab-bordered text-sm font-semibold {activeTab === 'basic'
+                    ? 'tab-active !border-b-2 !border-secondary-content text-secondary-content'
+                    : '!border-b border-b-gray-200 text-gray-500'}"
                 on:click={() => (activeTab = 'basic')}>{$translate('page.passage.resourcePane.basicTab.value')}</button
             >
         {/if}
         {#if showAdvancedTab}
             <button
-                class="tab text-sm font-semibold tab-bordered {activeTab === 'advanced'
-                    ? 'tab-active text-secondary-content !border-secondary-content !border-b-2'
-                    : 'text-gray-500 !border-b border-b-gray-200'}"
+                class="tab tab-bordered text-sm font-semibold {activeTab === 'advanced'
+                    ? 'tab-active !border-b-2 !border-secondary-content text-secondary-content'
+                    : '!border-b border-b-gray-200 text-gray-500'}"
                 on:click={() => (activeTab = 'advanced')}
                 >{$translate('page.passage.resourcePane.advancedTab.value')}</button
             >
@@ -171,14 +174,14 @@
     </div>
     <div class={activeTab !== 'basic' ? 'hidden' : ''}>
         {#if ubsImageResources.length}
-            <div class="text-md font-semibold text-base-content pb-2">
+            <div class="text-md pb-2 font-semibold text-base-content">
                 {$translate('page.passage.resourcePane.types.ubsImages.value')}
             </div>
             <div class="carousel space-x-2 pb-6">
                 {#each ubsImageResources as image}
                     <button class="carousel-item flex-col" on:click={() => handleMediaResourceSelected(image)}>
                         <img
-                            class="h-20 w-32 object-cover rounded-lg border border-gray-300 mb-1"
+                            class="mb-1 h-20 w-32 rounded-lg object-cover"
                             src={cachedOrRealUrl(image.url)}
                             alt={image.displayName}
                         />
@@ -188,18 +191,30 @@
             </div>
         {/if}
         {#if videoBibleDictionaryResources.length}
-            <div class="text-md font-semibold text-base-content pb-2">
+            <div class="text-md pb-2 font-semibold text-base-content">
                 {$translate('page.passage.resourcePane.types.videoBibleDictionary.value')}
             </div>
             <div class="carousel space-x-2 pb-6">
                 {#each videoBibleDictionaryResources as video}
                     <button class="carousel-item flex-col" on:click={() => handleMediaResourceSelected(video)}>
-                        <video
-                            class="h-20 w-32 object-cover rounded-lg border border-gray-300 mb-1"
-                            on:loadedmetadata={({ target }) => setVideoBibleDictionaryDuration(target, video)}
-                        >
-                            <source src={`${cachedOrRealUrl(video.url)}#t=0.001`} type="video/mp4" />
-                        </video>
+                        <div class="relative mb-1">
+                            {#if video.duration}
+                                <div
+                                    class="absolute bottom-1.5 left-1.5 flex flex-row items-center rounded-lg bg-black bg-opacity-80 p-1 pl-2 pr-1.5
+                                text-gray-25"
+                                >
+                                    <Icon data={play} scale={0.5} />
+                                    <div class="pl-1 text-xs font-semibold">{formatSecondsToMins(video.duration)}</div>
+                                </div>
+                            {/if}
+                            <!-- svelte-ignore a11y-media-has-caption -->
+                            <video
+                                class="h-20 w-32 rounded-lg object-cover"
+                                on:loadedmetadata={({ target }) => setVideoBibleDictionaryDuration(target, video)}
+                            >
+                                <source src={`${cachedOrRealUrl(video.url)}#t=0.001`} type="video/mp4" />
+                            </video>
+                        </div>
                         <span class="text-sm text-neutral">{video.displayName}</span>
                     </button>
                 {/each}
@@ -208,17 +223,17 @@
     </div>
     <div class={activeTab !== 'advanced' ? 'hidden' : ''}>
         {#if tyndaleBibleDictionaryResources.length}
-            <div class="text-md font-semibold text-base-content pb-2">
+            <div class="text-md pb-2 font-semibold text-base-content">
                 {$translate('page.passage.resourcePane.types.tyndaleBibleDictionary.value')}
             </div>
             {#each tyndaleBibleDictionaryResources as entry}
                 <button
-                    class="py-3 flex flex-row items-center w-full"
+                    class="flex w-full flex-row items-center py-3"
                     on:click={() => handleTextResourceSelected(entry)}
                 >
-                    <div class="flex flex-col flex-shrink items-start">
-                        <div class="text-sm text-start font-medium text-base-content">{entry.displayName}</div>
-                        <div class="text-sm text-neutral text-start line-clamp-1 break-all">{entry.preview}</div>
+                    <div class="flex flex-shrink flex-col items-start">
+                        <div class="text-start text-sm font-medium text-base-content">{entry.displayName}</div>
+                        <div class="line-clamp-1 break-all text-start text-sm text-neutral">{entry.preview}</div>
                     </div>
                     <div class="flex-shrink-0 pl-9 pr-3">
                         <Icon class="text-neutral" data={arrowRight} />

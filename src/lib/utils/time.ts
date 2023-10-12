@@ -7,3 +7,7 @@ export function formatSecondsToTimeDisplay(seconds: number) {
     const displaySeconds = String(seconds % 60).padStart(2, '0');
     return `${displayMinutes}:${displaySeconds}`;
 }
+
+export function formatSecondsToMins(seconds: number): string {
+    return `${Math.round(seconds / 60)}m`;
+}

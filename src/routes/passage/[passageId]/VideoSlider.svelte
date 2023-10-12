@@ -18,10 +18,13 @@
     $: totalTimeDisplay = formatSecondsToTimeDisplay(videoState.duration);
 </script>
 
-<div bind:this={videoState.sliderElement} class="pt-4 px-4 flex flex-row items-center w-full max-w-xl mx-auto">
+<div bind:this={videoState.sliderElement} class="mx-auto flex w-full max-w-xl flex-row items-center px-4 pt-4">
+    <div class="pr-2 font-mono text-sm text-gray-50">
+        {timeDisplay}
+    </div>
     <input
         type="range"
-        class="range range-video range-primary bg-gray-50"
+        class="range-video range range-primary bg-gray-50"
         step="any"
         min="0"
         max="100"
@@ -29,10 +32,8 @@
         on:input={videoState.stopSyncingSeekPosition.bind(videoState)}
         value={videoState.rangeValue}
     />
-    <div class="text-gray-50 text-sm font-mono pl-2 flex flex-row space-x-1">
-        <div>{timeDisplay}</div>
-        /
-        <div>{totalTimeDisplay}</div>
+    <div class="pl-2 font-mono text-sm text-gray-50">
+        {totalTimeDisplay}
     </div>
 </div>
 

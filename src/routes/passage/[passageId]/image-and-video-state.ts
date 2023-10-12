@@ -46,6 +46,7 @@ export class VideoState {
     }
 
     reset() {
+        this.stopSyncingSeekPosition();
         this.url = null;
         this.isLoading = false;
         this.hasError = false;
@@ -74,11 +75,18 @@ export class VideoState {
 
     makeVideoFullscreen() {
         if (this.element) {
-            if (this.element.webkitEnterFullScreen) {
-                this.element.webkitEnterFullScreen();
-            } else {
-                this.element.requestFullscreen();
-            }
+            const element = this.element;
+            setTimeout(() => {
+                // eslint-disable-next-line
+                // @ts-ignore
+                if (element.webkitEnterFullScreen) {
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    element.webkitEnterFullScreen();
+                } else {
+                    element.requestFullscreen();
+                }
+            }, 0);
         }
     }
 

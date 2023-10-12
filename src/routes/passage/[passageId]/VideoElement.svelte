@@ -1,5 +1,6 @@
 <script lang="ts">
     import { cachedOrRealUrl } from '$lib/data-cache';
+    import { onDestroy } from 'svelte';
     import type { VideoState } from './image-and-video-state';
 
     export let videoState: VideoState;
@@ -47,7 +48,30 @@
             videoState.isMuted = videoState.element.muted;
         }
     }
+
+    // to prevent a rerender on every update we need to cache the isLoading in a local state var first
+    $: isLoading = videoState.isLoading;
+    $: !isLoading && detectMobileLandscapeMode();
+
+    let isMobileLandscapeMode = false;
+
+    function detectMobileLandscapeMode() {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isLandscape = window.innerWidth > window.innerHeight;
+        isMobileLandscapeMode = isMobile && isLandscape;
+        console.log(isMobileLandscapeMode);
+    }
+
+    $: isMobileLandscapeMode && makeVideoFullscreen();
+
+    function makeVideoFullscreen() {
+        videoState.makeVideoFullscreen();
+    }
+
+    onDestroy(() => videoState.reset());
 </script>
+
+<svelte:window on:resize={detectMobileLandscapeMode} />
 
 <!-- svelte-ignore a11y-media-has-caption -->
 <video
