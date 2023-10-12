@@ -1,6 +1,5 @@
 <script lang="ts">
     import { cachedOrRealUrl } from '$lib/data-cache';
-    import { onDestroy } from 'svelte';
     import type { VideoState } from './image-and-video-state';
 
     export let videoState: VideoState;
@@ -67,8 +66,6 @@
     function makeVideoFullscreen() {
         videoState.makeVideoFullscreen();
     }
-
-    onDestroy(() => videoState.reset());
 </script>
 
 <svelte:window on:resize={detectMobileLandscapeMode} />

@@ -13,6 +13,7 @@
     import VideoElement from './VideoElement.svelte';
     import VideoSlider from './VideoSlider.svelte';
     import ImageElement from './ImageElement.svelte';
+    import { onDestroy } from 'svelte';
 
     export let currentIndex: number | null;
     export let resources: ImageOrVideoResource[];
@@ -94,6 +95,11 @@
             currentIndex += 1;
         }
     }
+
+    onDestroy(() => {
+        imageState.reset();
+        videoState.reset();
+    });
 </script>
 
 <svelte:window
@@ -103,6 +109,9 @@
             previousItem();
         } else if (key.key === 'ArrowRight') {
             nextItem();
+        } else if (key.key === ' ' && videoState.active) {
+            key.preventDefault();
+            videoState.playPauseVideo();
         }
     }}
 />
