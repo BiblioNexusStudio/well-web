@@ -153,7 +153,7 @@
 
 <ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={additionalResources} />
 
-<div class="btm-nav border-t border-t-primary-300 z-40">
+<div class="btm-nav z-40 border-t border-t-primary-300">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
         <BookIcon />
     </NavMenuTabItem>
@@ -171,17 +171,17 @@
     {/if}
 </div>
 
-<div id="passage-page" class="w-full h-full">
+<div id="passage-page" class="h-full w-full">
     <TopNavBar title={currentTopNavBarTitle} passage={data.passage} />
     {#await contentLoadedPromise}
         <FullPageSpinner />
     {:then}
         <div
-            class="flex flex-col absolute left-0 right-0 top-0 {audioPlayerShowing
+            class="absolute left-0 right-0 top-0 flex flex-col {audioPlayerShowing
                 ? 'bottom-[7.5rem]'
                 : 'bottom-16'} z-10 pt-16"
         >
-            <div class="flex flex-grow px-4 overflow-y-hidden {selectedTab !== 'bible' && 'hidden'}">
+            <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'bible' && 'hidden'}">
                 {#if bibleContent?.chapters?.length}
                     <div class="prose mx-auto overflow-y-scroll">
                         {#each bibleContent.chapters as chapter}
@@ -197,7 +197,7 @@
                 {/if}
             </div>
             <div class="px-4 pb-4 {selectedTab !== 'guide' && 'hidden'}">
-                <div class="max-w-[65ch] m-auto">
+                <div class="m-auto max-w-[65ch]">
                     <ButtonCarousel
                         bind:selectedValue={cbbterSelectedStepNumber}
                         bind:scroll={cbbterSelectedStepScroll}
@@ -208,7 +208,7 @@
                     />
                 </div>
             </div>
-            <div class="flex flex-grow px-4 overflow-y-hidden {selectedTab !== 'guide' && 'hidden'}">
+            <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'guide' && 'hidden'}">
                 <div class="prose mx-auto flex flex-grow">
                     <span bind:this={topOfStep} />
                     <div class="flex flex-grow">
@@ -219,7 +219,7 @@
                                 )?.contentHTML}
                                 <div
                                     class={cbbterSelectedStepNumber === stepNumber
-                                        ? 'flex flex-col flex-grow'
+                                        ? 'flex flex-grow flex-col'
                                         : 'hidden'}
                                 >
                                     <div class="flex-grow overflow-y-scroll">
@@ -238,7 +238,7 @@
         </div>
         {#if objectKeys(multiClipAudioStates).length}
             <div
-                class="flex justify-items-center z-10 px-4 bg-base-100 fixed bottom-16 max-w-[65ch] m-auto left-0 right-0 h-14 {!audioPlayerShowing &&
+                class="fixed bottom-16 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {!audioPlayerShowing &&
                     'hidden'}"
             >
                 <AudioPlayer {multiClipAudioStates} currentClipKey={audioPlayerKey} />

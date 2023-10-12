@@ -12,10 +12,10 @@ index 7d73510..c3c598e 100644
  
  			paths: object({
 diff --git a/node_modules/@sveltejs/kit/src/runtime/server/page/render.js b/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
-index 2a3dfc1..5d47392 100644
+index 102a612..a9033fa 100644
 --- a/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
 +++ b/node_modules/@sveltejs/kit/src/runtime/server/page/render.js
-@@ -282,9 +282,9 @@ export async function render_response({
+@@ -283,9 +283,9 @@ export async function render_response({
  		for (const path of included_modulepreloads) {
  			// see the kit.output.preloadStrategy option for details on why we have multiple options here
  			link_header_preloads.add(`<${encodeURI(path)}>; rel="modulepreload"; nopush`);
@@ -27,7 +27,7 @@ index 2a3dfc1..5d47392 100644
  				head += `\n\t\t<link rel="modulepreload" href="${path}">`;
  			}
  		}
-@@ -317,9 +317,9 @@ export async function render_response({
+@@ -318,9 +318,9 @@ export async function render_response({
  						${properties.join(',\n\t\t\t\t\t\t')}
  					};`);
  
@@ -39,7 +39,7 @@ index 2a3dfc1..5d47392 100644
  
  		if (page_config.ssr) {
  			const serialized = { form: 'null', error: 'null' };
-@@ -355,23 +355,34 @@ export async function render_response({
+@@ -356,23 +356,34 @@ export async function render_response({
  			args.push(`{\n\t\t\t\t\t\t\t${hydrate.join(',\n\t\t\t\t\t\t\t')}\n\t\t\t\t\t\t}`);
  		}
  

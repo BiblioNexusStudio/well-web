@@ -97,11 +97,11 @@
 
 <table class="w-full">
     <thead>
-        <tr class="w-full h-16 border-y-2">
+        <tr class="h-16 w-full border-y-2">
             <th>
                 <input
                     type="checkbox"
-                    class="checkbox checkbox-primary mx-2"
+                    class="checkbox-primary checkbox mx-2"
                     id="select-all-resources"
                     bind:checked={allChaptersSelected}
                     on:click={selectAllChapters}
@@ -120,11 +120,11 @@
     <tbody>
         {#each $biblesModuleBook.audioUrls.chapters as audioChapter}
             {@const rowData = buildRowData(audioChapter, $resourcesMenu, hasText, $biblesModuleBook.textSize)}
-            <tr class="w-full h-16 border-b-2 odd:bg-gray-100">
+            <tr class="h-16 w-full border-b-2 odd:bg-gray-100">
                 <td class="text-center">
                     <input
                         type="checkbox"
-                        class="checkbox checkbox-primary mx-2"
+                        class="checkbox-primary checkbox mx-2"
                         bind:checked={audioChapter.selected}
                         disabled={audioChapter.allUrlsCached}
                     />

@@ -89,12 +89,12 @@
     });
 </script>
 
-<div class="w-full flex flex-row justify-center items-center rounded-xl">
+<div class="flex w-full flex-row items-center justify-center rounded-xl">
     {#if !allFilesLoaded}
         <div />
-        <Icon class="grow-0 w-[20px] h-[20px] text-primary" data={refresh} spin />
+        <Icon class="h-[20px] w-[20px] grow-0 text-primary" data={refresh} spin />
     {:else}
-        <button class="grow-0 w-[20px] h-[20px] cursor-pointer" on:click={playOrPause}>
+        <button class="h-[20px] w-[20px] grow-0 cursor-pointer" on:click={playOrPause}>
             {#if isPlaying}
                 <PauseMediaIcon />
             {:else}
@@ -103,10 +103,10 @@
         </button>
     {/if}
 
-    <div class="grow mx-4">
+    <div class="mx-4 grow">
         <input
             type="range"
-            class="range range-audio range-primary"
+            class="range-audio range range-primary"
             step="any"
             min="0"
             max="100"
@@ -116,7 +116,7 @@
         />
     </div>
 
-    <span class="items-start text-sm font-medium text-neutral h-[20px] font-mono"
+    <span class="h-[20px] items-start font-mono text-sm font-medium text-neutral"
         >{timeDisplay} / {totalTimeDisplay}</span
     >
 </div>

@@ -32,7 +32,7 @@
     onMount(() => callFetchData());
 </script>
 
-<form action="/passage/{$selectedId}" class="form-control w-full space-y-4 max-w-xs mx-auto">
+<form action="/passage/{$selectedId}" class="form-control mx-auto w-full max-w-xs space-y-4">
     {#if !isSideMenu}
         <label class="label p-0" for="passage-form-book">
             <span class="label-text {isSideMenu ? 'text-primary' : ''} bold"
@@ -74,7 +74,7 @@
 
     {#if isSideMenu}
         <label class="label p-0" for="passage-form-passage">
-            <span class="label-text text-primary bold">{$translate('page.index.passage.value')}</span>
+            <span class="bold label-text text-primary">{$translate('page.index.passage.value')}</span>
         </label>
     {/if}
     <select id="passage-form-passage" bind:value={$selectedId} class="select select-info" disabled={!selectedBookInfo}>

@@ -161,7 +161,7 @@
 
 <div class="flex flex-col items-center">
     {#if noPermission}
-        <div class="align-middle py-2 text-center text-red-500">
+        <div class="py-2 text-center align-middle text-red-500">
             {$translate('navTop.audioRecordingModal.noPermission.value')}
         </div>
     {:else}
@@ -169,11 +169,11 @@
     {/if}
     <div>
         {#if state === 'recording'}
-            <button class="btn btn-primary btn-circle" on:click={pauseRecording}>
+            <button class="btn btn-circle btn-primary" on:click={pauseRecording}>
                 <Icon data={pause} scale={0.85} />
             </button>
         {:else}
-            <button class="btn btn-primary btn-circle" on:click={startRecording}>
+            <button class="btn btn-circle btn-primary" on:click={startRecording}>
                 <Icon data={microphone} />
             </button>
         {/if}

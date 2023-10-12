@@ -179,13 +179,13 @@
             </div>
             <div class="carousel w-full space-x-2 pb-6">
                 {#each ubsImageResources as image}
-                    <button class="carousel-item flex-col w-32" on:click={() => handleMediaResourceSelected(image)}>
+                    <button class="carousel-item w-32 flex-col" on:click={() => handleMediaResourceSelected(image)}>
                         <img
                             class="mb-1 h-20 w-32 rounded-lg object-cover"
                             src={cachedOrRealUrl(image.url)}
                             alt={image.displayName}
                         />
-                        <span class="text-sm text-neutral line-clamp-1 break-all">{image.displayName}</span>
+                        <span class="line-clamp-1 break-all text-sm text-neutral">{image.displayName}</span>
                     </button>
                 {/each}
             </div>
@@ -196,7 +196,7 @@
             </div>
             <div class="carousel w-full space-x-2 pb-6">
                 {#each videoBibleDictionaryResources as video}
-                    <button class="carousel-item flex-col w-32" on:click={() => handleMediaResourceSelected(video)}>
+                    <button class="carousel-item w-32 flex-col" on:click={() => handleMediaResourceSelected(video)}>
                         <div class="relative mb-1">
                             {#if video.duration}
                                 <div
@@ -215,7 +215,7 @@
                                 <source src={`${cachedOrRealUrl(video.url)}#t=0.001`} type="video/mp4" />
                             </video>
                         </div>
-                        <span class="text-sm text-neutral line-clamp-1 break-all">{video.displayName}</span>
+                        <span class="line-clamp-1 break-all text-sm text-neutral">{video.displayName}</span>
                     </button>
                 {/each}
             </div>

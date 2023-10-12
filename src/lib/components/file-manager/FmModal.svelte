@@ -63,7 +63,7 @@
 <dialog id="file-manager-modal" class="modal">
     {#if downloadInProgress}
         <form class="modal-box">
-            <h3 class="font-bold text-lg">{$translate('page.fileManager.modal.downloadProgress.value')}</h3>
+            <h3 class="text-lg font-bold">{$translate('page.fileManager.modal.downloadProgress.value')}</h3>
             <div class="divider" />
             <p class="mb-2">
                 {$translate('page.fileManager.modal.downloadingDescription.value', {
@@ -74,7 +74,7 @@
                 })}
             </p>
             <progress
-                class="progress progress-primary w-100 mb-4"
+                class="w-100 progress progress-primary mb-4"
                 value={totalSizeDownloaded}
                 max={totalSizeToDownload}
             />
@@ -86,7 +86,7 @@
         </form>
     {:else if downloadedSuccessfully && !downloadInProgress}
         <form class="modal-box">
-            <h3 class="font-bold text-lg">{$translate('page.fileManager.modal.success.value')}</h3>
+            <h3 class="text-lg font-bold">{$translate('page.fileManager.modal.success.value')}</h3>
             <div class="divider" />
             <div class="flex justify-end">
                 <button class="btn btn-primary" on:click={closeModal}
@@ -96,7 +96,7 @@
         </form>
     {:else}
         <form class="modal-box">
-            <h3 class="font-bold text-lg">{$translate('page.fileManager.modal.title.value')}</h3>
+            <h3 class="text-lg font-bold">{$translate('page.fileManager.modal.title.value')}</h3>
             <div class="divider" />
             <p class="py-4">
                 {$translate('page.fileManager.modal.description.value', {
@@ -105,7 +105,7 @@
                     },
                 })}
             </p>
-            <p class="py-4 mb-8">{$translate('page.fileManager.modal.question.value')}</p>
+            <p class="mb-8 py-4">{$translate('page.fileManager.modal.question.value')}</p>
             <div class="flex justify-end">
                 <button class="btn btn-neutral mr-4" on:click={cancelUpdateFiles}
                     >{$translate('page.fileManager.cancel.value')}</button

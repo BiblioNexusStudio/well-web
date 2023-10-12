@@ -48,17 +48,17 @@
     $: fetchAvailableResources($currentLanguageInfo?.id);
 </script>
 
-<div class="container mx-auto pt-12 w-full h-full">
+<div class="container mx-auto h-full w-full pt-12">
     <FmModal />
     <TopNavBar title={$translate('page.fileManager.title.value')} />
     {#await fetchAvailableResourcesPromise}
         <FullPageSpinner />
     {:then}
-        <div class="flex mx-4 mt-6 mb-4 justify-between items-center">
+        <div class="mx-4 mb-4 mt-6 flex items-center justify-between">
             <SelectBookMenu />
         </div>
         {#if $selectedBookCode}
-            <div class="flex mx-4 my-4 justify-between items-center">
+            <div class="mx-4 my-4 flex items-center justify-between">
                 <ResouceMenu />
                 <LanguageMenu />
             </div>
