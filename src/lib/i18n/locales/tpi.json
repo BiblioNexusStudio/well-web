@@ -50,6 +50,25 @@
                         "value": "{current} long {total}"
                     }
                 },
+                "seeAll": {
+                    "value": "Lukim Olgeta ({count})"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "Nogat Risos i Stap"
+                    },
+                    "description": {
+                        "value": "Long yu painim \"{searchQuery}\" i no gat risos."
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 risos"
+                    },
+                    "plural": {
+                        "value": "{count} risos"
+                    }
+                },
                 "types": {
                     "ubsImages": {
                         "value": "Piksa (UBS)"
@@ -250,6 +269,16 @@
         },
         "home": {
             "value": "Haus"
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "Lukim"
+            },
+            "clear": {
+                "value": "Kliar"
+            }
         }
     }
 }

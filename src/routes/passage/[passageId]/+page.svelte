@@ -11,7 +11,7 @@
     import CompassIcon from '$lib/icons/CompassIcon.svelte';
     import DoubleChevronUpIcon from '$lib/icons/DoubleChevronUpIcon.svelte';
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
-    import ResourcePane from './ResourcePane.svelte';
+    import ResourcePane from './resource-pane/ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
     import BibleUnavailable from './BibleUnavailable.svelte';

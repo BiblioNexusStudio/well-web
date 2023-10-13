@@ -5,7 +5,7 @@ export const ResourceType = {
     VideoBibleDictionary: 'VideoBibleDictionary',
 } as const;
 
-export type ResourceTypeEnum = (typeof MediaType)[keyof typeof MediaType];
+export type ResourceTypeEnum = (typeof ResourceType)[keyof typeof ResourceType];
 
 export const MediaType = {
     Text: 'Text',

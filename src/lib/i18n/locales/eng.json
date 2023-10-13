@@ -64,6 +64,30 @@
                         "_context": "Displays the current position out of the total fullscreen elements"
                     }
                 },
+                "seeAll": {
+                    "value": "See All ({count})",
+                    "_context": "Button for the user to see all resources of a given resource type"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "No Resources Found",
+                        "_context": "Header to show when no resources are found with the search string"
+                    },
+                    "description": {
+                        "value": "Your search \"{searchQuery}\" did not match any resources.",
+                        "_context": "Description to show no resources are found with the search string"
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 resource",
+                        "_context": "Label for when there is one resource"
+                    },
+                    "plural": {
+                        "value": "{count} resources",
+                        "_context": "Label for when there is more than one resource"
+                    }
+                },
                 "types": {
                     "ubsImages": {
                         "value": "Images (UBS)",
@@ -321,6 +345,18 @@
         "home": {
             "value": "Home",
             "_context": "The label for the home button"
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "Search",
+                "_context": "Placeholder text for the search component"
+            },
+            "clear": {
+                "value": "Clear",
+                "_context": "Button in the search component for clearing entered text"
+            }
         }
     }
 }
