@@ -50,6 +50,25 @@
                         "value": "{current} का {total}"
                     }
                 },
+                "seeAll": {
+                    "value": "सब देखें ({count})"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "कोई संसाधन नहीं मिले"
+                    },
+                    "description": {
+                        "value": "आपकी खोज \"{searchQuery}\" से मेल करने वाला कोई संसाधन नहीं मिला।"
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 संसाधन"
+                    },
+                    "plural": {
+                        "value": "{count} संसाधन"
+                    }
+                },
                 "types": {
                     "ubsImages": {
                         "value": "चित्र (UBS)"
@@ -250,6 +269,16 @@
         },
         "home": {
             "value": "घर"
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "खोजें"
+            },
+            "clear": {
+                "value": "हटाएं"
+            }
         }
     }
 }

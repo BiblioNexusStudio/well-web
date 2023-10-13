@@ -12,6 +12,7 @@ export default {
                 'base-500': 'var(--base-500)',
                 'base-700': 'var(--base-700)',
                 'gray-25': 'var(--gray-25)',
+                'gray-50': 'var(--gray-50)',
             },
         },
     },
@@ -37,6 +38,7 @@ export default {
                     'base-200': '#F9FAFB',
                     'base-100': '#ffffff',
                     '--gray-25': '#FCFCFD',
+                    '--gray-50': '#F2F4F7',
                 },
             },
             {
@@ -57,6 +59,7 @@ export default {
                     'base-200': '#232427',
                     'base-100': '#202020',
                     '--gray-25': '#FCFCFD',
+                    '--gray-50': '#F2F4F7',
                 },
             },
         ],
