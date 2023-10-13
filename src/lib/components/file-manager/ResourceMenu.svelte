@@ -86,18 +86,18 @@
     });
 </script>
 
-<div class="flex h-full items-center relative w-1/2 pr-2" bind:this={resourcesMenuDiv}>
-    <button class="btn btn-primary btn-outline flex justify-between w-full" on:click={toggleMenu}>
+<div class="relative flex h-full w-1/2 items-center pr-2" bind:this={resourcesMenuDiv}>
+    <button class="btn btn-primary btn-outline flex w-full justify-between" on:click={toggleMenu}>
         {$translate('page.fileManager.viewRow.resources.value')} ({selectedResources.length}) <Icon
             data={menuOpen ? caretUp : caretDown}
         />
     </button>
     {#if menuOpen}
-        <div class="absolute top-16 left-0 border-2-primary bg-white shadow-lg rounded-md menu z-30">
+        <div class="border-2-primary menu absolute left-0 top-16 z-30 rounded-md bg-white shadow-lg">
             {#each $resourcesMenu as resource}
                 {#if resource.display}
-                    <label class="label cursor-pointer mb-4 justify-start">
-                        <input type="checkbox" bind:checked={resource.selected} class="checkbox checkbox-primary" />
+                    <label class="label mb-4 cursor-pointer justify-start">
+                        <input type="checkbox" bind:checked={resource.selected} class="checkbox-primary checkbox" />
                         <span class="label-text ml-4">{resource.name}</span>
                     </label>
                 {/if}

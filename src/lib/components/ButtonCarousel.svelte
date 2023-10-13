@@ -28,15 +28,15 @@
 </script>
 
 <div
-    class="carousel space-x-2 text-base-500 bg-base-100 w-full"
+    class="carousel w-full space-x-2 bg-base-100 text-base-500"
     bind:this={carousel}
     on:scroll={() => (scroll = carousel?.scrollLeft)}
 >
     {#each buttons as { value, label }, index}
         <div class="carousel-item">
             <button
-                class="text-sm font-semibold px-3 py-2 rounded-md {selectedValue === value &&
-                    'text-secondary-content bg-primary-50'}"
+                class="rounded-md px-3 py-2 text-sm font-semibold {selectedValue === value &&
+                    'bg-primary-50 text-secondary-content'}"
                 on:click={() => (selectedValue = value)}
                 bind:this={buttonElements[index]}
             >

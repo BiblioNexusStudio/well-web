@@ -38,7 +38,7 @@
 <dialog bind:this={dialog} class="modal" on:close={() => (open = false)}>
     <div role="none" class="modal-backdrop" on:click={() => (open = false)} />
     <div class="modal-box space-y-2">
-        <h3 class="font-bold text-lg">{$translate('navTop.recording.value')}</h3>
+        <h3 class="text-lg font-bold">{$translate('navTop.recording.value')}</h3>
         <div class="form-control w-full">
             <label for="language" class="label">
                 <span class="label-text">{$translate('navTop.audioRecordingModal.languageLabel.value')}</span>

@@ -19,20 +19,20 @@
     };
 </script>
 
-<footer class="footer footer-center p-4 bg-base-100 border-t-2 border-primary text-base-content fixed bottom-0 left-0">
+<footer class="footer footer-center fixed bottom-0 left-0 border-t-2 border-primary bg-base-100 p-4 text-base-content">
     <div class="container mx-auto flex flex-col">
-        <div class="w-full mb-2 flex justify-between">
+        <div class="mb-2 flex w-full justify-between">
             <div class="flex items-center">
                 <input
                     id="select-all"
                     type="checkbox"
-                    class="checkbox checkbox-primary"
+                    class="checkbox-primary checkbox"
                     disabled={true}
                     bind:checked={$footerInputs.text}
                 />
                 <label
                     for="select-all"
-                    class="cursor-pointer ml-2 {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
+                    class="ml-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
                     >{$translate('page.fileManager.textType.value')}</label
                 >
             </div>
@@ -40,13 +40,13 @@
                 <input
                     id="select-all"
                     type="checkbox"
-                    class="checkbox checkbox-primary"
+                    class="checkbox-primary checkbox"
                     disabled={footerInputsDisabled}
                     bind:checked={$footerInputs.audio}
                 />
                 <label
                     for="select-all"
-                    class="cursor-pointer ml-2 {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
+                    class="ml-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
                     >{$translate('page.fileManager.audioType.value')}</label
                 >
             </div>
@@ -54,21 +54,21 @@
                 <input
                     id="select-all"
                     type="checkbox"
-                    class="checkbox checkbox-primary"
+                    class="checkbox-primary checkbox"
                     disabled={footerInputsDisabled}
                     bind:checked={$footerInputs.media}
                 />
                 <label
                     for="select-all"
-                    class="cursor-pointer ml-2 {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
+                    class="ml-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
                     >{$translate('page.fileManager.mediaType.value')}</label
                 >
             </div>
         </div>
 
-        <div class="w-full flex justify-between">
+        <div class="flex w-full justify-between">
             <div class="f-full flex items-center">
-                <span class="text-primary text-l font-bold">
+                <span class="text-l font-bold text-primary">
                     {$downloadData.urlsToDownload.filter(({ size }) => size !== 2048).length}
                     {$translate('page.fileManager.files.value')}; {convertToReadableSize(
                         $downloadData.totalSizeToDownload

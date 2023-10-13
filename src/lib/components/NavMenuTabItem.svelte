@@ -21,16 +21,16 @@
     $: isSelected = selectedTab !== null && tabName !== null ? selectedTab === tabName : false;
 </script>
 
-<button on:click={handleClick} class="group stroke-black active border-none">
+<button on:click={handleClick} class="group active border-none stroke-black">
     <div
-        class="rounded-2xl py-1 px-5 focus:bg-primary-50 group-hover:bg-primary-50 group-hover:stroke-primary {isSelected
+        class="rounded-2xl px-5 py-1 focus:bg-primary-50 group-hover:bg-primary-50 group-hover:stroke-primary {isSelected
             ? 'bg-primary-50 stroke-primary'
             : 'stroke-primary-300'}"
     >
         {#if flipWhenSelected}
             <div
                 style={`transform: rotateX(${isSelected ? '180deg' : '0deg'});`}
-                class="transition-transform duration-300 transform origin-center"
+                class="origin-center transform transition-transform duration-300"
             >
                 <slot />
             </div>
@@ -38,5 +38,5 @@
             <slot />
         {/if}
     </div>
-    <span class="btm-nav-label text-primary text-xs {isSelected && 'font-bold'}">{label}</span>
+    <span class="btm-nav-label text-xs text-primary {isSelected && 'font-bold'}">{label}</span>
 </button>

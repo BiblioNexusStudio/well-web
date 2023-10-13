@@ -34,7 +34,7 @@ export function bibleUrlsWithMetadataForBookAndChapters(
                     url: audioUrl[audioFileTypeForBrowser()].url,
                     size: audioUrl[audioFileTypeForBrowser()].size,
                     mediaType: MediaType.audio,
-                } as UrlWithMetadata)
+                }) as UrlWithMetadata
         )
         .concat({ url: bookData.textUrl, size: bookData.textSize, mediaType: MediaType.text } as UrlWithMetadata);
 }

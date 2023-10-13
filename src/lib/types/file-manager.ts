@@ -158,7 +158,7 @@ export interface BiblesModule {
             textSize: number;
             audioSize: number;
             chapterCount: number;
-        }
+        },
     ];
 }
 

@@ -3,6 +3,6 @@
     import { Icon } from 'svelte-awesome';
 </script>
 
-<div class="flex flex-row h-full w-full">
-    <Icon class="self-center mx-auto stroke-base-content" data={refresh} scale={2} spin />
+<div class="flex h-full w-full flex-row">
+    <Icon class="mx-auto self-center stroke-base-content" data={refresh} scale={2} spin />
 </div>

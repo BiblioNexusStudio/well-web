@@ -64,9 +64,9 @@
 {#if !availableBibles}
     <FullPageSpinner />
 {:else}
-    <div class="flex flex-col items-center py-4 prose mx-auto h-full">
+    <div class="prose mx-auto flex h-full flex-col items-center py-4">
         <div class="flex-1" />
-        <div class="flex flex-col space-y-2 items-center">
+        <div class="flex flex-col items-center space-y-2">
             <div class="font-bold">{$translate('page.passage.noBibleContent.header.value')}</div>
             {#if availableBibles.length}
                 <div class="text-center">
@@ -76,7 +76,9 @@
                 </div>
                 <select
                     bind:value={selectedBible}
-                    class="select select-info {selectedBible ? 'text-primary' : 'text-base-500'} text-ellipsis"
+                    class="select select-info {selectedBible
+                        ? 'text-primary'
+                        : 'text-base-500'} text-ellipsis font-semibold"
                 >
                     <option disabled value={0}>
                         {$translate('page.passage.noBibleContent.bible.value')}

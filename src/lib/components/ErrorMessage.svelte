@@ -7,13 +7,13 @@
     };
 </script>
 
-<div class="flex justify-center items-center h-full">
-    <div class="h-auto w-full mx-6">
-        <div class="bg-primary text-white font-bold rounded-t px-4 py-2">{$translate('errorMessage.error.value')}</div>
-        <div class="bg-white border-2 border-primary p-4">
-            <p class="font-bold text mb-4">{$translate('errorMessage.title.value')}</p>
+<div class="flex h-full items-center justify-center">
+    <div class="mx-6 h-auto w-full">
+        <div class="rounded-t bg-primary px-4 py-2 font-bold text-white">{$translate('errorMessage.error.value')}</div>
+        <div class="border-2 border-primary bg-white p-4">
+            <p class="text mb-4 font-bold">{$translate('errorMessage.title.value')}</p>
             <p class="mb-4">{$translate('errorMessage.message.value')}</p>
-            <div class="flex justify-end items-center">
+            <div class="flex items-center justify-end">
                 <button class="btn btn-primary" on:click={home}>{$translate('errorMessage.home.value')}</button>
             </div>
         </div>

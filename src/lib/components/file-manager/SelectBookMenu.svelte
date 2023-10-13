@@ -46,9 +46,9 @@
     });
 </script>
 
-<div class="flex h-full items-center relative w-full" bind:this={lanaguageMenuDiv}>
+<div class="relative flex h-full w-full items-center" bind:this={lanaguageMenuDiv}>
     <button
-        class="btn btn-primary btn-outline flex justify-between w-full"
+        class="btn btn-primary btn-outline flex w-full justify-between"
         on:click={toggleMenu}
         aria-label={$translate('page.fileManager.selectABook.value')}
     >
@@ -57,12 +57,12 @@
     </button>
     {#if menuOpen}
         <div
-            class="flex flex-col flex-nowrap overflow-y-scroll absolute top-16 left-0 border-2-primary bg-white shadow-lg rounded-md menu z-30 p-4 space-y-8"
+            class="border-2-primary menu absolute left-0 top-16 z-30 flex flex-col flex-nowrap space-y-8 overflow-y-scroll rounded-md bg-white p-4 shadow-lg"
         >
             {#each firstBible.books as book}
                 <button
                     type="button"
-                    class="flex justify-start ml-8 text-primary"
+                    class="ml-8 flex justify-start text-primary"
                     aria-label={book.displayName}
                     on:click={() => handleBookClick(book.bookCode)}
                 >
