@@ -11,6 +11,7 @@ export const serviceWorkerPwaConfig = {
     devOptions: { enabled: true, type: 'module', suppressWarnings: true },
     injectManifest: {
         globPatterns: ['client/**/*.{html,js,css,ico,png,svg,webp,webmanifest}'],
+        globIgnores: ['**/*.webmanifest'],
         additionalManifestEntries: [{ url: '/', revision: buildTimestamp }],
     },
     kit: {
