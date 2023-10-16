@@ -53,6 +53,9 @@
                 "seeAll": {
                     "value": "Lukim Olgeta ({count})"
                 },
+                "noThumbnail": {
+                    "value": "Nogat thumbnail"
+                },
                 "noResourcesFound": {
                     "header": {
                         "value": "Nogat Risos i Stap"

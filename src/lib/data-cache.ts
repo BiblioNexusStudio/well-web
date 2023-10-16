@@ -13,7 +13,7 @@ export type AllItemsProgress = Record<Url, SingleItemProgress>;
 const _partiallyDownloadedCdnUrls: string[] = [];
 const _partiallyDownloadedApiPaths: string[] = [];
 const cdnRegex =
-    'https://cdn.aquifer.bible.*|https://aquifer-server-(qa|dev|prod).azurewebsites.net/resources/\\d+/content|metadata';
+    'https://cdn.aquifer.bible.*|https://aquifer-server-(qa|dev|prod).azurewebsites.net/resources/\\d+/content|metadata|thumbnail';
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 const fetchFromCacheOrApi = async (path: string) => {

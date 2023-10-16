@@ -137,8 +137,9 @@ async function getCbbterAudioForPassage(passage: PassageWithResourceContentIds):
         await asyncMap(allAudioResourceContent, async (resourceContent) => {
             try {
                 const metadata = await fetchMetadataForResourceContent(resourceContent);
-                const audioTypeSteps = (metadata?.metadata as CbbtErAudioMetadata | null)?.[audioFileTypeForBrowser()]
-                    .steps;
+                const audioTypeSteps = ((metadata?.metadata || null) as CbbtErAudioMetadata | null)?.[
+                    audioFileTypeForBrowser()
+                ].steps;
                 if (!audioTypeSteps) return null;
                 const steps = (
                     await readFilesIntoObjectUrlsMapping(resourceContentApiFullUrl(resourceContent), audioTypeSteps)

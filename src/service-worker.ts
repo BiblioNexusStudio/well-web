@@ -6,6 +6,7 @@ import { NetworkOnly, CacheFirst, CacheOnly } from 'workbox-strategies';
 import { BackgroundSyncPlugin } from 'workbox-background-sync';
 import { createHandlerBoundToURL, cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 import { CacheableCdnContentPlugin } from '../src/lib/service-worker/cacheable-cdn-content-plugin';
+import { RangeRequestsPlugin } from 'workbox-range-requests';
 import { CacheFirstAndStaleWhileRevalidateAfterExpiration } from '../src/lib/service-worker/cache-first-and-stale-while-revalidate-after-expiration';
 
 declare let self: ServiceWorkerGlobalScope;
@@ -41,10 +42,10 @@ registerRoute(
 );
 
 registerRoute(
-    /(https:\/\/cdn\.aquifer\.bible.*|https:\/\/aquifer-server-(qa|dev|prod)\.azurewebsites\.net\/resources\/\d+\/(content|metadata))/,
+    /(https:\/\/cdn\.aquifer\.bible.*|https:\/\/aquifer-server-(qa|dev|prod)\.azurewebsites\.net\/resources\/\d+\/(content|metadata|thumbnail))/,
     new CacheFirst({
         cacheName: 'aquifer-cdn',
-        plugins: [new CacheableCdnContentPlugin()],
+        plugins: [new CacheableCdnContentPlugin(), new RangeRequestsPlugin()],
     }),
     'GET'
 );

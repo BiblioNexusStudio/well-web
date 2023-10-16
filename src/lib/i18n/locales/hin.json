@@ -53,6 +53,9 @@
                 "seeAll": {
                     "value": "सब देखें ({count})"
                 },
+                "noThumbnail": {
+                    "value": "कोई थंबनेल नहीं"
+                },
                 "noResourcesFound": {
                     "header": {
                         "value": "कोई संसाधन नहीं मिले"

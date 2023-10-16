@@ -68,6 +68,10 @@
                     "value": "See All ({count})",
                     "_context": "Button for the user to see all resources of a given resource type"
                 },
+                "noThumbnail": {
+                    "value": "No thumbnail",
+                    "_context": "Label for videos that have no thumbnail"
+                },
                 "noResourcesFound": {
                     "header": {
                         "value": "No Resources Found",

@@ -6,10 +6,16 @@ class CacheableCdnContentPlugin implements WorkboxPlugin {
         if (response.status === 200) {
             return response;
         } else if (
-            (response.status === 206 || response.status === 0) &&
+            response.status === 0 &&
             (!request.headers.has('Range') || request.headers.get('Range') === 'bytes=0-')
         ) {
             return response;
+        } else if (
+            response.status === 206 &&
+            !response.headers.get('content-encoding') &&
+            (!request.headers.has('Range') || request.headers.get('Range') === 'bytes=0-')
+        ) {
+            return new Response(response.body, { status: 200, headers: response.headers });
         } else {
             return null;
         }

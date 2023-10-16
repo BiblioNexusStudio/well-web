@@ -34,6 +34,7 @@
                     class="mb-1 h-20 w-32 rounded-lg object-cover"
                     src={cachedOrRealUrl(image.url)}
                     alt={image.displayName}
+                    crossorigin="anonymous"
                 />
                 <span class="line-clamp-1 break-all text-sm text-neutral"
                     >{@html htmlWithHighlightedSearchString(image.displayName, searchQuery)}</span

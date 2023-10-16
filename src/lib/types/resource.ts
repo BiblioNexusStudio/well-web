@@ -19,7 +19,7 @@ export type MediaTypeEnum = (typeof MediaType)[keyof typeof MediaType];
 
 export interface ResourceContentMetadata {
     displayName: string;
-    metadata: object;
+    metadata: Record<string, unknown>;
 }
 
 export interface ResourceContentTiptap {
