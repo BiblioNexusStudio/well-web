@@ -8,8 +8,10 @@
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
+        fetchMetadataForResourceContent,
         fetchTiptapForResourceContent,
         resourceContentApiFullUrl,
+        resourceThumbnailApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
     import type { ImageOrVideoResource, TextResource } from './types';
     import FullscreenMediaResource from './FullscreenMediaResource.svelte';
@@ -23,6 +25,9 @@
     import FullscreenTextResourceSection from './FullscreenTextResourceSection.svelte';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import NoResourcesFound from './NoResourcesFound.svelte';
+    import { isOnline } from '$lib/stores/is-online.store';
+    import { get } from 'svelte/store';
+    import { isCachedFromCdn } from '$lib/data-cache';
 
     export let resourcePane: CupertinoPane;
     export let isShowing: boolean;
@@ -124,11 +129,17 @@
         );
         videoBibleDictionaryResources = await asyncMap(
             resources.filter(({ typeName }) => typeName === ResourceType.VideoBibleDictionary),
-            async (resource) => ({
-                type: 'video',
-                displayName: await fetchDisplayNameForResourceContent(resource),
-                url: resourceContentApiFullUrl(resource),
-            })
+            async (resource) => {
+                const metadata = await fetchMetadataForResourceContent(resource);
+                const thumbnailUrl = resourceThumbnailApiFullUrl(resource);
+                return {
+                    type: 'video',
+                    displayName: metadata?.displayName || null,
+                    url: resourceContentApiFullUrl(resource),
+                    duration: metadata?.metadata?.['duration'] as number | undefined,
+                    thumbnailUrl: get(isOnline) || (await isCachedFromCdn(thumbnailUrl)) ? thumbnailUrl : undefined,
+                };
+            }
         );
         textResourcesByType.TyndaleBibleDictionary = tyndaleBibleDictionaryResources;
         isLoading = false;

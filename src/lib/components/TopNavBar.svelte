@@ -67,7 +67,7 @@
     </div>
     <div class="drawer-side">
         <label for="top-navbar-drawer" class="drawer-overlay" />
-        <div class="menu min-h-full w-80 bg-base-200 p-4">
+        <div class="menu min-h-full w-80 bg-base-200 p-4 pb-16">
             <div class="w-100 flex grow flex-col">
                 <div class="flex items-center justify-between">
                     <h3 class="semi-bold text-lg">{$translate('sideMenu.menu.value')}</h3>

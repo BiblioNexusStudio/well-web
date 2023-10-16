@@ -21,4 +21,5 @@
     class="rounded-lg object-contain"
     src={cachedOrRealUrl(imageState.url ?? '')}
     alt={imageState.displayName}
+    crossorigin="anonymous"
 />

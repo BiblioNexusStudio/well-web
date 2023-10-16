@@ -58,7 +58,6 @@
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         const isLandscape = window.innerWidth > window.innerHeight;
         isMobileLandscapeMode = isMobile && isLandscape;
-        console.log(isMobileLandscapeMode);
     }
 
     $: isMobileLandscapeMode && makeVideoFullscreen();
@@ -81,6 +80,7 @@
     on:ended={onEnded}
     class="rounded-lg object-contain"
     playsinline
+    crossorigin="anonymous"
 >
     <source src={`${cachedOrRealUrl(videoState.url ?? '')}#t=0.001`} />
 </video>

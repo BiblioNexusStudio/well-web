@@ -16,9 +16,18 @@ export function resourceContentApiFullUrl(resourceContent: PassageResourceConten
     return env.PUBLIC_AQUIFER_API_URL + resourceContentApiPath(resourceContent);
 }
 
+function resourceThumbnailApiPath(resourceContent: PassageResourceContent) {
+    return `resources/${resourceContent.contentId}/thumbnail`;
+}
+
+export function resourceThumbnailApiFullUrl(resourceContent: PassageResourceContent) {
+    return env.PUBLIC_AQUIFER_API_URL + resourceThumbnailApiPath(resourceContent);
+}
+
 function resourceMetadataApiPath(resourceContent: PassageResourceContent) {
     return `resources/${resourceContent.contentId}/metadata`;
 }
+
 export function resourceMetadataApiFullPath(resourceContent: PassageResourceContent) {
     return env.PUBLIC_AQUIFER_API_URL + resourceMetadataApiPath(resourceContent);
 }
