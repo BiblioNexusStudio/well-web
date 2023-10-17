@@ -20,9 +20,9 @@ pool:
     vmImage: ubuntu-latest
 
 variables:
-    - group: dev-web
-    - group: qa-web
-    - group: prod-web
+    - group: well-web-dev
+    - group: well-web-qa
+    - group: well-web-prod
     - group: github-app
 
 stages:
@@ -62,7 +62,7 @@ stages:
       parameters:
           DeployEnv: dev
           DependsOn: [setup_cache]
-          AzureDevopsEnvName: dev-web
+          AzureDevopsEnvName: well-web-dev
           CheckoutTemplate: templates/checkout_master.yml@devops
           DeployApiToken: $(AzureStaticWebAppsApiTokenDev)
           DeployUrl: $(AzureStaticWebAppsDeployUrlDev)
@@ -73,7 +73,7 @@ stages:
       parameters:
           DeployEnv: qa
           DependsOn: [setup_cache]
-          AzureDevopsEnvName: qa-web
+          AzureDevopsEnvName: well-web-qa
           CheckoutTemplate: templates/checkout_master.yml@devops
           DeployApiToken: $(AzureStaticWebAppsApiTokenQa)
           DeployUrl: $(AzureStaticWebAppsDeployUrlQa)
@@ -84,7 +84,7 @@ stages:
       parameters:
           DeployEnv: prod
           DependsOn: [setup_cache]
-          AzureDevopsEnvName: prod-web
+          AzureDevopsEnvName: well-web-prod
           CheckoutTemplate: templates/checkout_master.yml@devops
           CreateGithubRelease: true
           DeployApiToken: $(AzureStaticWebAppsApiTokenProd)
