@@ -11,7 +11,7 @@
     import { log } from '$lib/logger';
     import { updateOnlineStatus } from '$lib/stores/is-online.store';
     import { featureFlags } from '$lib/stores/feature-flags.store';
-    import FeatureFlagModal from '$lib/components/FeatureFlagModal.svelte';
+    import DebugModal from '$lib/components/DebugModal.svelte';
 
     $: log.pageView($page.route.id ?? '');
 
@@ -59,6 +59,6 @@
 
 <svelte:window on:online={updateOnlineStatus} on:offline={updateOnlineStatus} />
 
-<FeatureFlagModal />
+<DebugModal />
 
 <slot />

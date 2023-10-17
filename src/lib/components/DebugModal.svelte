@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { clearEntireCache } from '$lib/data-cache';
     import { featureFlags } from '$lib/stores/feature-flags.store';
     import { objectKeys } from '$lib/utils/typesafe-standard-lib';
     import { onMount } from 'svelte';
@@ -60,6 +61,7 @@
 
 <dialog class="modal" open={show}>
     <div class="modal-box">
+        <div class="py-2">Feature Flags</div>
         {#each flagNames as flag}
             <div class="form-control">
                 <label class="label cursor-pointer">
@@ -68,6 +70,8 @@
                 </label>
             </div>
         {/each}
+        <div class="py-2">Clear All Cache Entries</div>
+        <button class="btn" on:click={clearEntireCache}>Clear</button>
         <div class="modal-action">
             <button class="btn" on:click={close}>Close</button>
         </div>
