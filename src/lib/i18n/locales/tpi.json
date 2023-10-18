@@ -71,17 +71,6 @@
                     "plural": {
                         "value": "{count} risos"
                     }
-                },
-                "types": {
-                    "ubsImages": {
-                        "value": "Piksa (UBS)"
-                    },
-                    "tyndaleBibleDictionary": {
-                        "value": "Buk Bilong Toktok (Tyndale)"
-                    },
-                    "videoBibleDictionary": {
-                        "value": "Vidio (Video Bible Dictionary)"
-                    }
                 }
             },
             "noBibleContent": {
@@ -167,17 +156,6 @@
                     "value": "Dispela em i wari yu ken dounload na deletim Aquifer samting long yu divais."
                 }
             },
-            "resourcesMenu": {
-                "cbbtEr": {
-                    "value": "CBBT-ER"
-                },
-                "tyndaleBibleDictionary": {
-                    "value": "Tyndale Baibel Diksenari"
-                },
-                "UbsImages": {
-                    "value": "UBS Imej"
-                }
-            },
             "viewHeader": {
                 "name": {
                     "value": "Nem"
@@ -225,6 +203,23 @@
         }
     },
     "resources": {
+        "types": {
+            "CBBTER": {
+                "value": "CBBT-ER"
+            },
+            "ubsImages": {
+                "value": "Piksa (UBS)"
+            },
+            "tyndaleBibleDictionary": {
+                "value": "Toktok Buk Bilong Baibel (Tyndale)"
+            },
+            "tyndaleStudyNotes": {
+                "value": "Not Bilong Stadi (Tyndale)"
+            },
+            "videoBibleDictionary": {
+                "value": "Vidio (Video Bible Dictionary)"
+            }
+        },
         "cbbt-er": {
             "step1": {
                 "value": "Harim na Bel/Tingting"

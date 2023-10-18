@@ -50,21 +50,28 @@
         $resourcesMenu = [
             ...$bibleDataForResourcesMenu,
             {
-                name: $translate('page.fileManager.resourcesMenu.cbbtEr.value'),
+                name: $translate('resources.types.CBBTER.value'),
                 value: ResourceType.CBBTER,
                 selected: false,
                 isBible: false,
                 display: true,
             },
             {
-                name: $translate('page.fileManager.resourcesMenu.tyndaleBibleDictionary.value'),
+                name: $translate('resources.types.tyndaleBibleDictionary.value'),
                 value: ResourceType.TyndaleBibleDictionary,
                 selected: false,
                 isBible: false,
                 display: true,
             },
             {
-                name: $translate('page.fileManager.resourcesMenu.UbsImages.value'),
+                name: $translate('resources.types.tyndaleStudyNotes.value'),
+                value: ResourceType.TyndaleStudyNotes,
+                selected: false,
+                isBible: false,
+                display: true,
+            },
+            {
+                name: $translate('resources.types.ubsImages.value'),
                 value: ResourceType.UbsImages,
                 selected: false,
                 isBible: false,

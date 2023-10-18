@@ -4,13 +4,14 @@
     import { _ as translate } from 'svelte-i18n';
     import { trapFocus } from '$lib/utils/trap-focus';
     import type { PassageResourceContent } from '$lib/types/passage';
-    import { ResourceType, type ResourceTypeEnum } from '$lib/types/resource';
+    import { MediaType, ResourceType, type ResourceTypeEnum } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
         fetchMetadataForResourceContent,
         fetchTiptapForResourceContent,
         resourceContentApiFullUrl,
+        resourceDisplayNameSorter,
         resourceThumbnailApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
     import type { ImageOrVideoResource, TextResource } from './types';
@@ -37,14 +38,15 @@
 
     let searchQuery: string = '';
 
-    $: showBasicTab = ubsImageResources.length > 0;
-    $: showAdvancedTab = tyndaleBibleDictionaryResources.length > 0;
+    $: showBasicTab = ubsImageResources.length > 0 || videoBibleDictionaryResources.length > 0;
+    $: showAdvancedTab = tyndaleBibleDictionaryResources.length > 0 || tyndaleStudyNotesResources.length > 0;
     $: activeTab = shouldSearch(searchQuery) ? 'searching' : showBasicTab ? 'basic' : 'advanced';
 
     // text resources
     let tyndaleBibleDictionaryResources: TextResource[] = [];
+    let tyndaleStudyNotesResources: TextResource[] = [];
     let textResourcesByType = {} as Record<ResourceTypeEnum, TextResource[]>;
-    $: textResources = tyndaleBibleDictionaryResources;
+    $: textResources = tyndaleBibleDictionaryResources.concat(tyndaleStudyNotesResources);
 
     // image and video resources
     let ubsImageResources: ImageOrVideoResource[] = [];
@@ -63,6 +65,7 @@
     let currentFullscreenTextResourceSectionType: ResourceTypeEnum | null;
 
     onMount(() => {
+        const bottomBarHeight = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4;
         resourcePane = new CupertinoPane('#resource-pane', {
             parentElement: '#passage-page',
             buttonDestroy: false,
@@ -72,7 +75,7 @@
             breaks: {
                 top: {
                     enabled: true,
-                    height: window.innerHeight - 50,
+                    height: window.innerHeight - 50 - bottomBarHeight,
                 },
                 middle: { enabled: false },
                 bottom: { enabled: false, height: window.screen.height - 300 },
@@ -81,6 +84,7 @@
             backdrop: true,
             backdropOpacity: 0.4,
             simulateTouch: false,
+            bottomOffset: bottomBarHeight,
             events: {
                 onWillDismiss: () => (isShowing = false),
                 onBackdropTap: () => (isShowing = false),
@@ -98,27 +102,33 @@
 
     async function prepareResources(resources: PassageResourceContent[]) {
         isLoading = true;
-        const filteredResources = resources.filter(({ typeName }) => typeName === ResourceType.TyndaleBibleDictionary);
-        const mappedResources = await asyncMap(filteredResources, async (resource) => {
-            const [displayName, tiptap] = await Promise.all([
-                fetchDisplayNameForResourceContent(resource),
-                fetchTiptapForResourceContent(resource),
-            ]);
-            if (tiptap) {
-                return {
-                    displayName,
-                    html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
-                    preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
-                };
-            } else {
-                return null;
-            }
-        });
-        tyndaleBibleDictionaryResources = mappedResources
-            .filter(Boolean)
-            .sort((a, b) =>
-                a?.displayName && b?.displayName ? a.displayName.localeCompare(b.displayName) : 0
-            ) as TextResource[];
+        const textResources = (
+            await asyncMap(
+                resources.filter(({ mediaTypeName }) => mediaTypeName === MediaType.Text),
+                async (resource) => {
+                    const [displayName, tiptap] = await Promise.all([
+                        fetchDisplayNameForResourceContent(resource),
+                        fetchTiptapForResourceContent(resource),
+                    ]);
+                    if (tiptap) {
+                        return {
+                            displayName,
+                            html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
+                            preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
+                            typeName: resource.typeName,
+                        };
+                    } else {
+                        return null;
+                    }
+                }
+            )
+        ).filter(Boolean) as TextResource[];
+        tyndaleBibleDictionaryResources = textResources
+            .filter(({ typeName }) => typeName === ResourceType.TyndaleBibleDictionary)
+            .sort(resourceDisplayNameSorter);
+        tyndaleStudyNotesResources = textResources
+            .filter(({ typeName }) => typeName === ResourceType.TyndaleStudyNotes)
+            .sort(resourceDisplayNameSorter);
         ubsImageResources = await asyncMap(
             resources.filter(({ typeName }) => typeName === ResourceType.UbsImages),
             async (resource) => ({
@@ -142,6 +152,7 @@
             }
         );
         textResourcesByType.TyndaleBibleDictionary = tyndaleBibleDictionaryResources;
+        textResourcesByType.TyndaleStudyNotes = tyndaleStudyNotesResources;
         isLoading = false;
     }
 </script>
@@ -172,7 +183,7 @@
 />
 
 <div id="resource-pane" use:trapFocus={isShowing}>
-    <div class="flex h-full flex-col px-4 pb-16">
+    <div class="flex h-full flex-col px-4">
         <div class="pb-4 text-lg font-semibold text-base-content">
             {$translate('page.passage.resourcePane.title.value')}
         </div>
@@ -207,19 +218,27 @@
             {/if}
             <div class={activeTab === 'basic' || activeTab === 'searching' ? 'visible' : 'hidden'}>
                 <ImageResourceSection
-                    title={$translate('page.passage.resourcePane.types.ubsImages.value')}
+                    title={$translate('resources.types.ubsImages.value')}
                     resources={ubsImageResources}
                     resourceSelected={handleMediaResourceSelected}
                     {searchQuery}
                 />
                 <VideoResourceSection
-                    title={$translate('page.passage.resourcePane.types.videoBibleDictionary.value')}
+                    title={$translate('resources.types.videoBibleDictionary.value')}
                     resources={videoBibleDictionaryResources}
                     resourceSelected={handleMediaResourceSelected}
                     {searchQuery}
                 />
             </div>
             <div class={activeTab === 'advanced' || activeTab === 'searching' ? 'visible' : 'hidden'}>
+                <TextResourceSection
+                    type={ResourceType.TyndaleStudyNotes}
+                    resources={tyndaleStudyNotesResources}
+                    resourceSelected={handleTextResourceSelected}
+                    isFullscreen={false}
+                    showTypeFullscreen={(type) => (currentFullscreenTextResourceSectionType = type)}
+                    {searchQuery}
+                />
                 <TextResourceSection
                     type={ResourceType.TyndaleBibleDictionary}
                     resources={tyndaleBibleDictionaryResources}

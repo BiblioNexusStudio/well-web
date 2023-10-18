@@ -1,6 +1,7 @@
 export const ResourceType = {
     CBBTER: 'CBBTER',
     TyndaleBibleDictionary: 'TyndaleBibleDictionary',
+    TyndaleStudyNotes: 'TyndaleStudyNotes',
     UbsImages: 'UbsImages',
     VideoBibleDictionary: 'VideoBibleDictionary',
 } as const;
