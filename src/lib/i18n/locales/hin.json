@@ -71,17 +71,6 @@
                     "plural": {
                         "value": "{count} संसाधन"
                     }
-                },
-                "types": {
-                    "ubsImages": {
-                        "value": "चित्र (UBS)"
-                    },
-                    "tyndaleBibleDictionary": {
-                        "value": "बाइबल शब्दकोश (Tyndale)"
-                    },
-                    "videoBibleDictionary": {
-                        "value": "वीडियो (Video Bible Dictionary)"
-                    }
                 }
             },
             "noBibleContent": {
@@ -181,17 +170,6 @@
                     "value": "मीडिया"
                 }
             },
-            "resourcesMenu": {
-                "cbbtEr": {
-                    "value": "CBBT-ER"
-                },
-                "tyndaleBibleDictionary": {
-                    "value": "टिंडेल बाइबल शब्दकोश"
-                },
-                "UbsImages": {
-                    "value": "UBS छवियाँ"
-                }
-            },
             "viewRow": {
                 "resources": {
                     "value": "संसाधन"
@@ -225,6 +203,23 @@
         }
     },
     "resources": {
+        "types": {
+            "CBBTER": {
+                "value": "CBBT-ER"
+            },
+            "ubsImages": {
+                "value": "छावियाँ (UBS)"
+            },
+            "tyndaleBibleDictionary": {
+                "value": "बाइबिल शब्दकोश (Tyndale)"
+            },
+            "tyndaleStudyNotes": {
+                "value": "अध्ययन नोट्स (Tyndale)"
+            },
+            "videoBibleDictionary": {
+                "value": "वीडियो (Video Bible Dictionary)"
+            }
+        },
         "cbbt-er": {
             "step1": {
                 "value": "सुनें और दिल"

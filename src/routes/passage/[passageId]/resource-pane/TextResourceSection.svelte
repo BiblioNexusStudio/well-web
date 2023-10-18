@@ -22,7 +22,9 @@
 
     $: title =
         type === ResourceType.TyndaleBibleDictionary
-            ? $translate('page.passage.resourcePane.types.tyndaleBibleDictionary.value')
+            ? $translate('resources.types.tyndaleBibleDictionary.value')
+            : type === ResourceType.TyndaleStudyNotes
+            ? $translate('resources.types.tyndaleStudyNotes.value')
             : null;
 
     // resources filtered to:
@@ -72,7 +74,7 @@
         </div>
     {/if}
 
-    <div class={isFullscreen ? 'mx-auto w-full max-w-[65ch] overflow-y-scroll pb-4' : ''}>
+    <div class={isFullscreen ? 'mx-auto w-full max-w-[65ch] overflow-y-scroll pb-4' : 'pb-6'}>
         {#each showingResources as entry}
             <button class="flex w-full flex-row items-center py-3" on:click={() => resourceSelected(entry)}>
                 <div class="flex flex-shrink flex-col items-start">

@@ -91,20 +91,6 @@
                         "value": "{count} resources",
                         "_context": "Label for when there is more than one resource"
                     }
-                },
-                "types": {
-                    "ubsImages": {
-                        "value": "Images (UBS)",
-                        "_context": "Images from the United Bible Society"
-                    },
-                    "tyndaleBibleDictionary": {
-                        "value": "Bible Dictionary (Tyndale)",
-                        "_context": "Tyndale Bible Dictionary"
-                    },
-                    "videoBibleDictionary": {
-                        "value": "Videos (Video Bible Dictionary)",
-                        "_context": "Videos from the Video Bible Dictionary"
-                    }
                 }
             },
             "noBibleContent": {
@@ -233,20 +219,6 @@
                     "_context": "Label for the media column"
                 }
             },
-            "resourcesMenu": {
-                "cbbtEr": {
-                    "value": "CBBT-ER",
-                    "_context": "Label for the CBBT-ER resource"
-                },
-                "tyndaleBibleDictionary": {
-                    "value": "Tyndale Bible Dictionary",
-                    "_context": "Label for the Tyndale Bible Dictionary resource"
-                },
-                "UbsImages": {
-                    "value": "UBS Images",
-                    "_context": "Label for the UBS Images resource"
-                }
-            },
             "viewRow": {
                 "resources": {
                     "value": "Resources",
@@ -288,6 +260,28 @@
         }
     },
     "resources": {
+        "types": {
+            "CBBTER": {
+                "value": "CBBT-ER",
+                "_context": "CBBT-ER guide from SRV"
+            },
+            "ubsImages": {
+                "value": "Images (UBS)",
+                "_context": "Images from the United Bible Society"
+            },
+            "tyndaleBibleDictionary": {
+                "value": "Bible Dictionary (Tyndale)",
+                "_context": "Tyndale Bible Dictionary"
+            },
+            "tyndaleStudyNotes": {
+                "value": "Study Notes (Tyndale)",
+                "_context": "Tyndale Study Notes"
+            },
+            "videoBibleDictionary": {
+                "value": "Videos (Video Bible Dictionary)",
+                "_context": "Videos from the Video Bible Dictionary"
+            }
+        },
         "cbbt-er": {
             "step1": {
                 "value": "Hear and Heart",
