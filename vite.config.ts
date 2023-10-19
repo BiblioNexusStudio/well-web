@@ -6,6 +6,7 @@ import { serviceWorkerPwaConfig } from './config/service-worker-pwa.config';
 export default defineConfig({
     define: {
         'process.env.NODE_ENV': process.env.NODE_ENV === 'production' ? '"production"' : '"development"',
+        'import.meta.env.DEPLOY_ENV': JSON.stringify(process.env.DEPLOY_ENV),
     },
     plugins: [sveltekit(), SvelteKitPWA(serviceWorkerPwaConfig)],
     test: {
