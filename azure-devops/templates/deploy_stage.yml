@@ -39,14 +39,14 @@ stages:
                                   WorkingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
 
                             - ${{ if ne(parameters.SourceBranchForPreviewEnvironment, '') }}:
-                                - script: echo "##vso[task.setvariable variable=DeployPreviewName]pr$(echo $SOURCE_BRANCH | grep -oP "refs/pull/\K[0-9]+")"
-                                  env:
-                                      SOURCE_BRANCH: ${{ parameters.SourceBranchForPreviewEnvironment }}
-                                  displayName: Calculate deploy preview name
+                                  - script: echo "##vso[task.setvariable variable=DeployPreviewName]pr$(echo $SOURCE_BRANCH | grep -oP "refs/pull/\K[0-9]+")"
+                                    env:
+                                        SOURCE_BRANCH: ${{ parameters.SourceBranchForPreviewEnvironment }}
+                                    displayName: Calculate deploy preview name
 
                             - ${{ if eq(parameters.SourceBranchForPreviewEnvironment, '') }}:
-                                - script: echo "##vso[task.setvariable variable=DeployPreviewName]"
-                                  displayName: Skip setting deploy preview name
+                                  - script: echo "##vso[task.setvariable variable=DeployPreviewName]"
+                                    displayName: Skip setting deploy preview name
 
                             - template: install_deps.yml
                               parameters:
@@ -56,7 +56,7 @@ stages:
                               workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
                               displayName: Setup env
 
-                            - script: yarn build
+                            - script: DEPLOY_ENV=${{ parameters.DeployEnv }} yarn build
                               workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
                               displayName: Build
 
@@ -99,12 +99,12 @@ stages:
                                   GITHUB_APP_PRIVATE_KEY_BASE64: ${{ parameters.GithubAppPrivateKeyBase64 }}
 
                             - ${{ if eq(parameters.CreateGithubRelease, true) }}:
-                                - script: |
-                                    $(Pipeline.Workspace)/devops/github-cli/script.sh release \
-                                        --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
-                                        --ref "$(git rev-parse HEAD)" \
-                                        --repo well-web
-                                  env:
-                                      GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)
-                                  workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
-                                  displayName: Create GitHub release
+                                  - script: |
+                                        $(Pipeline.Workspace)/devops/github-cli/script.sh release \
+                                            --privateKeyBase64 "$GITHUB_APP_PRIVATE_KEY_BASE64" \
+                                            --ref "$(git rev-parse HEAD)" \
+                                            --repo well-web
+                                    env:
+                                        GITHUB_APP_PRIVATE_KEY_BASE64: $(GithubAppPrivateKeyBase64)
+                                    workingDirectory: $(Build.SourcesDirectory)/${{ parameters.SourceDirectory }}
+                                    displayName: Create GitHub release

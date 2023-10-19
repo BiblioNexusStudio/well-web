@@ -11,6 +11,10 @@ import { CacheFirstAndStaleWhileRevalidateAfterExpiration } from '../src/lib/ser
 
 declare let self: ServiceWorkerGlobalScope;
 
+const isQa = import.meta.env.DEPLOY_ENV === 'qa';
+const isDev = import.meta.env.DEPLOY_ENV === 'dev';
+const API_CACHE_DURATION_IN_HOURS = isQa || isDev ? 1 : 24;
+
 if (import.meta.env.DEV) {
     self.skipWaiting();
 } else {
@@ -54,7 +58,7 @@ registerRoute(
     /https:\/\/aquifer-server-(qa|dev|prod)\.azurewebsites\.net.*/,
     new CacheFirstAndStaleWhileRevalidateAfterExpiration({
         cacheName: 'aquifer-api',
-        staleAfterDuration: 60 * 60 * 24, // time in seconds, 1 day
+        staleAfterDuration: 60 * 60 * API_CACHE_DURATION_IN_HOURS,
     }),
     'GET'
 );
