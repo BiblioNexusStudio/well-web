@@ -262,6 +262,7 @@ class _AudioClip {
         this.callbacks = callbacks;
 
         this.audioElement = new Audio();
+        this.audioElement.crossOrigin = 'anonymous';
         this.audioElement.oncanplaythrough = callbacks.onload;
         this.audioElement.onplay = callbacks.onplay;
         this.audioElement.onpause = callbacks.onpause;
