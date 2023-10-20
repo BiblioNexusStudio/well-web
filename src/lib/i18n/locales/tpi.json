@@ -216,6 +216,12 @@
             "tyndaleStudyNotes": {
                 "value": "Not Bilong Stadi (Tyndale)"
             },
+            "biblicaBibleDictionary": {
+                "value": "Toktok Buk Bilong Baibel (Biblica)"
+            },
+            "biblicaStudyNotes": {
+                "value": "Not Bilong Stadi (Biblica)"
+            },
             "videoBibleDictionary": {
                 "value": "Vidio (Video Bible Dictionary)"
             }

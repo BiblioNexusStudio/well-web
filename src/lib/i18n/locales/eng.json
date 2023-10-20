@@ -277,6 +277,14 @@
                 "value": "Study Notes (Tyndale)",
                 "_context": "Tyndale Study Notes"
             },
+            "biblicaBibleDictionary": {
+                "value": "Bible Dictionary (Biblica)",
+                "_context": "Biblica Bible Dictionary"
+            },
+            "biblicaStudyNotes": {
+                "value": "Study Notes (Biblica)",
+                "_context": "Biblica Study Notes"
+            },
             "videoBibleDictionary": {
                 "value": "Videos (Video Bible Dictionary)",
                 "_context": "Videos from the Video Bible Dictionary"
