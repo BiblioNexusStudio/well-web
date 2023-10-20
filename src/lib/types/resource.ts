@@ -1,4 +1,6 @@
 export const ResourceType = {
+    BiblicaBibleDictionary: 'BiblicaBibleDictionary',
+    BiblicaStudyNotes: 'BiblicaStudyNotes',
     CBBTER: 'CBBTER',
     TyndaleBibleDictionary: 'TyndaleBibleDictionary',
     TyndaleStudyNotes: 'TyndaleStudyNotes',

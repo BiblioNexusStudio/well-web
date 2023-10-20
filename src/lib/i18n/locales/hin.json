@@ -216,6 +216,12 @@
             "tyndaleStudyNotes": {
                 "value": "अध्ययन नोट्स (Tyndale)"
             },
+            "biblicaBibleDictionary": {
+                "value": "बाइबिल शब्दकोश (Biblica)"
+            },
+            "biblicaStudyNotes": {
+                "value": "अध्ययन नोट्स (Biblica)"
+            },
             "videoBibleDictionary": {
                 "value": "वीडियो (Video Bible Dictionary)"
             }

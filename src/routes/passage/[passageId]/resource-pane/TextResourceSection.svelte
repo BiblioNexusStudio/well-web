@@ -20,12 +20,22 @@
     export let isFullscreen: boolean;
     export let showTypeFullscreen: ((type: ResourceTypeEnum | null) => void) | null = null;
 
-    $: title =
-        type === ResourceType.TyndaleBibleDictionary
-            ? $translate('resources.types.tyndaleBibleDictionary.value')
-            : type === ResourceType.TyndaleStudyNotes
-            ? $translate('resources.types.tyndaleStudyNotes.value')
-            : null;
+    function calculateTitle(type: ResourceTypeEnum) {
+        switch (type) {
+            case ResourceType.TyndaleBibleDictionary:
+                return $translate('resources.types.tyndaleBibleDictionary.value');
+            case ResourceType.TyndaleStudyNotes:
+                return $translate('resources.types.tyndaleStudyNotes.value');
+            case ResourceType.BiblicaBibleDictionary:
+                return $translate('resources.types.biblicaBibleDictionary.value');
+            case ResourceType.BiblicaStudyNotes:
+                return $translate('resources.types.biblicaStudyNotes.value');
+            default:
+                return null;
+        }
+    }
+
+    $: title = calculateTitle(type);
 
     // resources filtered to:
     // - searched results if searching OR

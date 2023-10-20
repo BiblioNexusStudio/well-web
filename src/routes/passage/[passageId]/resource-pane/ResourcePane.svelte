@@ -38,15 +38,24 @@
 
     let searchQuery: string = '';
 
-    $: showBasicTab = ubsImageResources.length > 0 || videoBibleDictionaryResources.length > 0;
+    $: showBasicTab =
+        ubsImageResources.length > 0 ||
+        videoBibleDictionaryResources.length > 0 ||
+        biblicaStudyNotesResources.length > 0 ||
+        biblicaBibleDictionaryResources.length > 0;
     $: showAdvancedTab = tyndaleBibleDictionaryResources.length > 0 || tyndaleStudyNotesResources.length > 0;
     $: activeTab = shouldSearch(searchQuery) ? 'searching' : showBasicTab ? 'basic' : 'advanced';
 
     // text resources
     let tyndaleBibleDictionaryResources: TextResource[] = [];
     let tyndaleStudyNotesResources: TextResource[] = [];
+    let biblicaBibleDictionaryResources: TextResource[] = [];
+    let biblicaStudyNotesResources: TextResource[] = [];
     let textResourcesByType = {} as Record<ResourceTypeEnum, TextResource[]>;
-    $: textResources = tyndaleBibleDictionaryResources.concat(tyndaleStudyNotesResources);
+    $: textResources = tyndaleBibleDictionaryResources
+        .concat(tyndaleStudyNotesResources)
+        .concat(biblicaStudyNotesResources)
+        .concat(biblicaBibleDictionaryResources);
 
     // image and video resources
     let ubsImageResources: ImageOrVideoResource[] = [];
@@ -129,6 +138,12 @@
         tyndaleStudyNotesResources = textResources
             .filter(({ typeName }) => typeName === ResourceType.TyndaleStudyNotes)
             .sort(resourceDisplayNameSorter);
+        biblicaStudyNotesResources = textResources
+            .filter(({ typeName }) => typeName === ResourceType.BiblicaStudyNotes)
+            .sort(resourceDisplayNameSorter);
+        biblicaBibleDictionaryResources = textResources
+            .filter(({ typeName }) => typeName === ResourceType.BiblicaBibleDictionary)
+            .sort(resourceDisplayNameSorter);
         ubsImageResources = await asyncMap(
             resources.filter(({ typeName }) => typeName === ResourceType.UbsImages),
             async (resource) => ({
@@ -153,6 +168,8 @@
         );
         textResourcesByType.TyndaleBibleDictionary = tyndaleBibleDictionaryResources;
         textResourcesByType.TyndaleStudyNotes = tyndaleStudyNotesResources;
+        textResourcesByType.BiblicaBibleDictionary = biblicaBibleDictionaryResources;
+        textResourcesByType.BiblicaStudyNotes = biblicaStudyNotesResources;
         isLoading = false;
     }
 </script>
@@ -227,6 +244,22 @@
                     title={$translate('resources.types.videoBibleDictionary.value')}
                     resources={videoBibleDictionaryResources}
                     resourceSelected={handleMediaResourceSelected}
+                    {searchQuery}
+                />
+                <TextResourceSection
+                    type={ResourceType.BiblicaStudyNotes}
+                    resources={biblicaStudyNotesResources}
+                    resourceSelected={handleTextResourceSelected}
+                    isFullscreen={false}
+                    showTypeFullscreen={(type) => (currentFullscreenTextResourceSectionType = type)}
+                    {searchQuery}
+                />
+                <TextResourceSection
+                    type={ResourceType.BiblicaBibleDictionary}
+                    resources={biblicaBibleDictionaryResources}
+                    resourceSelected={handleTextResourceSelected}
+                    isFullscreen={false}
+                    showTypeFullscreen={(type) => (currentFullscreenTextResourceSectionType = type)}
                     {searchQuery}
                 />
             </div>
