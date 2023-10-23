@@ -13,7 +13,7 @@
     <div class="flex flex-grow flex-col self-center">
         <div class="mx-auto flex w-full max-w-xs px-6 pb-4">
             <div id="bible-well-logo" class="mr-6 flex h-auto w-16">
-                <img src="/logo.svg" alt="Bible Well Logo" />
+                <img class="object-contain" src="/logo-192.png" alt="Bible Well Logo" />
             </div>
             <div class="flex flex-col">
                 <div class="pb-2 text-left text-2xl text-primary">The</div>
