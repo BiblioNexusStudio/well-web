@@ -8,10 +8,12 @@
     import { addFrontEndDataToBiblesModuleBook } from '$lib/utils/file-manager';
     import { selectedBookCode, biblesModuleData, biblesModuleBook } from '$lib/stores/file-manager.store';
 
+    const allowedBooks = ['GEN', 'JOB', 'MAT', 'MRK', 'LUK', 'JHN', 'ACT'];
     let lanaguageMenuDiv: HTMLElement;
     let menuOpen = false;
     let firstBible = $biblesModuleData[0] || { id: null, contents: [] };
 
+    $: books = firstBible.books.filter((book) => allowedBooks.includes(book.bookCode));
     $: bookName = setBookName($selectedBookCode);
 
     const toggleMenu = () => {
@@ -58,8 +60,9 @@
     {#if menuOpen}
         <div
             class="border-2-primary menu absolute left-0 top-16 z-30 flex flex-col flex-nowrap space-y-8 overflow-y-scroll rounded-md bg-white p-4 shadow-lg"
+            style="height: min(66vh, calc({books.length * 3.25}rem + 4px))"
         >
-            {#each firstBible.books as book}
+            {#each books as book}
                 <button
                     type="button"
                     class="ml-8 flex justify-start text-primary"
@@ -76,7 +79,6 @@
 <style>
     .menu {
         width: calc(100vw - 2rem);
-        height: 66vh;
         border: 2px solid #b5ac8b;
     }
 </style>
