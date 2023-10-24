@@ -168,7 +168,7 @@
                 {/if}
                 <button
                     disabled={currentIndex === 0}
-                    class="btn btn-link text-gray-50 disabled:bg-opacity-0 disabled:text-gray-50 disabled:text-opacity-25"
+                    class="btn btn-link text-gray-50 disabled:bg-opacity-0 disabled:text-transparent disabled:text-opacity-25"
                     on:click={previousItem}><Icon data={chevronLeft} /></button
                 >
                 {#if videoState.active && !videoState.isLoading}
@@ -182,7 +182,7 @@
                 {/if}
                 <button
                     disabled={currentIndex === resources.length - 1}
-                    class="btn btn-link text-gray-50 disabled:bg-opacity-0 disabled:text-gray-50
+                    class="btn btn-link text-gray-50 disabled:bg-opacity-0 disabled:text-transparent
                     disabled:text-opacity-25"
                     on:click={nextItem}><Icon data={chevronRight} /></button
                 >

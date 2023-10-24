@@ -21,6 +21,19 @@
             },
             "loading": {
                 "value": "i laodim"
+            },
+            "about": {
+                "value": "Long em"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "Nogut long karim tok bilong lisens"
+            },
+            "license": {
+                "releasedUnder": {
+                    "value": "I kam aut aninit long wanpela {license}"
+                }
             }
         },
         "passage": {

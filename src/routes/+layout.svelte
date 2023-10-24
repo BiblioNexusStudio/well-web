@@ -12,6 +12,7 @@
     import { updateOnlineStatus } from '$lib/stores/is-online.store';
     import { featureFlags } from '$lib/stores/feature-flags.store';
     import DebugModal from '$lib/components/DebugModal.svelte';
+    import { fetchFromCacheOrApi } from '$lib/data-cache';
 
     $: log.pageView($page.route.id ?? '');
 
@@ -19,10 +20,10 @@
         const initializedAt = Date.now();
         const updateServiceWorker = registerSW({
             onNeedRefresh() {
-                // if we receive the "SW update" event within 750ms of the time the app was initialized,
+                // if we receive the "SW update" event within 1.5s of the time the app was initialized,
                 // we know that the page must have just been refreshed, and we can go ahead and do the
                 // service worker update without fear of disturbing the user
-                if (Date.now() - initializedAt < 750) {
+                if (Date.now() - initializedAt < 1500) {
                     updateServiceWorker();
                 }
             },
@@ -31,9 +32,14 @@
         window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
     }
 
+    async function precacheNecessaryCalls() {
+        await fetchFromCacheOrApi('/resources/types');
+    }
+
     onMount(() => {
         updateOnlineStatus();
         initialize();
+        precacheNecessaryCalls();
     });
 
     onMount(() => {

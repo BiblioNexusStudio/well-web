@@ -1,3 +1,5 @@
+import type { LanguageCodeEnum } from '$lib/utils/language-utils';
+
 export const ResourceType = {
     BiblicaBibleDictionary: 'BiblicaBibleDictionary',
     BiblicaStudyNotes: 'BiblicaStudyNotes',
@@ -52,4 +54,17 @@ export interface AudioTypeMetadata {
         file: string;
         stepNumber: number;
     }[];
+}
+
+export interface ApiResourceType {
+    licenseInfo: ApiResourceTypeLicenseInfo | null;
+}
+
+export interface ApiResourceTypeLicenseInfo {
+    title: string;
+    copyright: {
+        dates?: string | null;
+        holder: { name: string; url?: string | null };
+    };
+    license?: Record<LanguageCodeEnum, { name: string; url: string }>;
 }
