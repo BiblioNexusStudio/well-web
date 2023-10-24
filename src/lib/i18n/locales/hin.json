@@ -21,6 +21,19 @@
             },
             "loading": {
                 "value": "लोड हो रहा है"
+            },
+            "about": {
+                "value": "बारे में"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "सामग्री लाइसेंस जानकारी लोड करते समय त्रुटि"
+            },
+            "license": {
+                "releasedUnder": {
+                    "value": "{license} के तहत जारी"
+                }
             }
         },
         "passage": {

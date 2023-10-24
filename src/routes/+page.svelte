@@ -1,15 +1,11 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { goto } from '$app/navigation';
     import PassageForm from '$lib/components/PassageForm.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
-
-    const goToFileManager = () => {
-        goto('/file-manager');
-    };
 </script>
 
-<section class="container mx-auto flex h-screen">
+<section class="container mx-auto flex h-screen flex-col">
+    <div class="flex-[2]" />
     <div class="flex flex-grow flex-col self-center">
         <div class="mx-auto flex w-full max-w-xs px-6 pb-4">
             <div id="bible-well-logo" class="mr-6 flex h-auto w-16">
@@ -24,10 +20,12 @@
             {$translate('page.index.subTitle.value')}
         </h2>
         <PassageForm />
-        <button class="mx-auto mt-6 max-w-xs text-sky-500" on:click|preventDefault={goToFileManager}
+        <a class="mx-auto mt-6 max-w-xs text-sky-500" href="/file-manager"
             >{$isOnline
                 ? $translate('page.index.downloadResourcesForOfflineUse.value')
-                : $translate('sideMenu.fileManager.value')}</button
+                : $translate('sideMenu.fileManager.value')}</a
         >
     </div>
+    <div class="flex-[1]" />
+    <a class="mx-auto my-6 max-w-xs text-sky-500" href="/about">{$translate('page.index.about.value')}</a>
 </section>

@@ -28,6 +28,22 @@
             "loading": {
                 "value": "loading",
                 "_context": "Message to display in the options dropdown when things are loading"
+            },
+            "about": {
+                "value": "About",
+                "_context": "Link to the about page"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "Error loading content license info",
+                "_context": "Message to show when there's an error loading the page for some reason"
+            },
+            "license": {
+                "releasedUnder": {
+                    "value": "Released under a {license}",
+                    "_context": "Description explaining what license the content is released under"
+                }
             }
         },
         "passage": {

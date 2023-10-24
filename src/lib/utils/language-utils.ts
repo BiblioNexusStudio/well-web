@@ -1,8 +1,12 @@
+export const LanguageCode = { ENG: 'eng', HIN: 'hin', TPI: 'tpi' } as const;
+
+export type LanguageCodeEnum = (typeof LanguageCode)[keyof typeof LanguageCode];
+
 export const supportedLanguages = [
-    { code: 'eng', label: 'English' },
-    { code: 'hin', label: 'हिंदी' },
-    { code: 'tpi', label: 'Tok Pisin' },
-];
+    { code: LanguageCode.ENG, label: 'English' },
+    { code: LanguageCode.HIN, label: 'हिंदी' },
+    { code: LanguageCode.TPI, label: 'Tok Pisin' },
+] as { code: LanguageCodeEnum; label: string }[];
 
 export function browserLanguageToISO6393(browserLanguage: string) {
     const twoDigit = browserLanguage.toLowerCase().split('-')[0];
