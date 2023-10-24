@@ -55,3 +55,46 @@ export const downloadData = derived(
         totalSizeToDelete: 0,
     }
 );
+
+const limitChapters = {
+    JOB: ['1', '2'],
+    MAT: [
+        '1',
+        '4',
+        '5',
+        '6',
+        '7',
+        '10',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+        '21',
+        '23',
+        '24',
+        '26',
+        '27',
+        '28',
+    ],
+    LUK: ['1', '2', '3', '4', '5', '6', '7', '8', '16', '17', '18'],
+    JHN: ['4'],
+    ACT: ['7', '8', '9', '10', '11', '12', '13', '14', '17', '18', '19', '20', '21'],
+};
+export const allowedBooks = ['GEN', 'JOB', 'MAT', 'MRK', 'LUK', 'JHN', 'ACT'];
+
+export function limitChaptersIfNecessary(code: string | null, data: typeof biblesModuleBook) {
+    data.update((data) => {
+        data.audioUrls.chapters = data.audioUrls.chapters.filter(({ number }) => {
+            if (code && Object.keys(limitChapters).includes(code)) {
+                const bookCode = code as keyof typeof limitChapters;
+                return limitChapters[bookCode].includes(number);
+            }
+            return true;
+        });
+        return data;
+    });
+}
