@@ -36,7 +36,11 @@
 
         resourcesApiModule.chapters.forEach(async (chapter) => {
             if (chapter.contents.length > 0 && chapter.chapterNumber) {
-                $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1].resourceMenuItems = chapter.contents;
+                const chapterInfoExists = !!$biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1];
+                if (chapterInfoExists) {
+                    $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1].resourceMenuItems =
+                        chapter.contents;
+                }
 
                 if (chapter.contents.some((content) => content.typeName === 'CBBTER') && passageData) {
                     let filteredPassages = passageData.find((data) => data.bookCode === $selectedBookCode);
@@ -44,8 +48,9 @@
                     if (filteredPassages) {
                         filteredPassages.passages.forEach((passage) => {
                             if (
-                                chapter.chapterNumber === passage.startChapter ||
-                                chapter.chapterNumber === passage.endChapter
+                                chapterInfoExists &&
+                                (chapter.chapterNumber === passage.startChapter ||
+                                    chapter.chapterNumber === passage.endChapter)
                             ) {
                                 $biblesModuleBook.audioUrls.chapters[
                                     chapter.chapterNumber - 1

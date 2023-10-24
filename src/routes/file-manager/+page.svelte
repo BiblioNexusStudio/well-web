@@ -9,6 +9,7 @@
         selectedBookCode,
         biblesModuleData,
         biblesModuleBook,
+        limitChaptersIfNecessary,
     } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
@@ -38,6 +39,7 @@
                     $biblesModuleBook = await addFrontEndDataToBiblesModuleBook(
                         await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${$selectedBookCode}`)
                     );
+                    limitChaptersIfNecessary($selectedBookCode, biblesModuleBook);
                 }
 
                 $fileManagerLoading = false;

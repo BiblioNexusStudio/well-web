@@ -6,9 +6,14 @@
     import caretDown from 'svelte-awesome/icons/caretDown';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { addFrontEndDataToBiblesModuleBook } from '$lib/utils/file-manager';
-    import { selectedBookCode, biblesModuleData, biblesModuleBook } from '$lib/stores/file-manager.store';
+    import {
+        selectedBookCode,
+        biblesModuleData,
+        biblesModuleBook,
+        limitChaptersIfNecessary,
+        allowedBooks,
+    } from '$lib/stores/file-manager.store';
 
-    const allowedBooks = ['GEN', 'JOB', 'MAT', 'MRK', 'LUK', 'JHN', 'ACT'];
     let lanaguageMenuDiv: HTMLElement;
     let menuOpen = false;
     let firstBible = $biblesModuleData[0] || { id: null, contents: [] };
@@ -26,6 +31,7 @@
             await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${bookCode}`)
         );
         $selectedBookCode = bookCode;
+        limitChaptersIfNecessary(bookCode, biblesModuleBook);
     };
 
     const setBookName = (bookCode: string | null) => {
