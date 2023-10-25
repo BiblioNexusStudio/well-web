@@ -15,12 +15,25 @@
         const targetElement = buttonElements[index];
 
         if (carousel && targetElement) {
-            const offset = targetElement.offsetLeft - carousel.offsetLeft;
+            const nextElement = buttonElements[index + 1];
+
+            let offset;
+            if (nextElement) {
+                const nextOffset = nextElement.offsetLeft - carousel.offsetLeft;
+                offset = nextOffset + nextElement.offsetWidth - carousel.offsetWidth;
+            } else {
+                offset = carousel.scrollWidth - carousel.offsetWidth;
+            }
+
             carousel.scrollTo({ left: offset, behavior: 'smooth' });
         }
     }
 
     onMount(() => {
+        if (carousel) {
+            // reset the scroll to prevent browsers from saving it
+            carousel.scrollTo({ left: 0, behavior: 'instant' });
+        }
         if (scroll && carousel) {
             carousel.scrollTo({ left: scroll, behavior: 'instant' });
         }

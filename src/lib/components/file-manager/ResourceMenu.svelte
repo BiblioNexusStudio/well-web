@@ -93,14 +93,17 @@
     });
 </script>
 
-<div class="relative flex h-full w-1/2 items-center pr-2" bind:this={resourcesMenuDiv}>
+<div class="relative mr-2 flex h-full w-1/2 items-center" bind:this={resourcesMenuDiv}>
     <button class="btn btn-primary btn-outline flex w-full justify-between" on:click={toggleMenu}>
         {$translate('page.fileManager.viewRow.resources.value')} ({selectedResources.length}) <Icon
             data={menuOpen ? caretUp : caretDown}
         />
     </button>
     {#if menuOpen}
-        <div class="border-2-primary menu absolute left-0 top-16 z-30 rounded-md bg-white shadow-lg">
+        <div
+            class="menu absolute left-0 top-16 z-30 rounded-md border-2 border-primary-300 bg-white shadow-lg"
+            style="width: {resourcesMenuDiv.clientWidth}px;"
+        >
             {#each $resourcesMenu as resource}
                 {#if resource.display}
                     <label class="label mb-4 cursor-pointer justify-start">
@@ -112,10 +115,3 @@
         </div>
     {/if}
 </div>
-
-<style>
-    .menu {
-        width: calc(100vw - 2rem);
-        border: 2px solid #80d4f3;
-    }
-</style>
