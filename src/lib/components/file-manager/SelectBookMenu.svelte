@@ -14,7 +14,7 @@
         allowedBooks,
     } from '$lib/stores/file-manager.store';
 
-    let lanaguageMenuDiv: HTMLElement;
+    let bookMenuDiv: HTMLElement;
     let menuOpen = false;
     let firstBible = $biblesModuleData[0] || { id: null, contents: [] };
 
@@ -41,7 +41,7 @@
 
     onMount(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (lanaguageMenuDiv && !lanaguageMenuDiv.contains(event.target as Node) && menuOpen) {
+            if (bookMenuDiv && !bookMenuDiv.contains(event.target as Node) && menuOpen) {
                 toggleMenu();
             }
         };
@@ -54,7 +54,7 @@
     });
 </script>
 
-<div class="relative flex h-full w-full items-center" bind:this={lanaguageMenuDiv}>
+<div class="relative flex h-full w-full items-center" bind:this={bookMenuDiv}>
     <button
         class="btn btn-primary btn-outline flex w-full justify-between"
         on:click={toggleMenu}
@@ -65,13 +65,13 @@
     </button>
     {#if menuOpen}
         <div
-            class="border-2-primary menu absolute left-0 top-16 z-30 flex flex-col flex-nowrap space-y-8 overflow-y-scroll rounded-md bg-white p-4 shadow-lg"
-            style="height: min(66vh, calc({books.length * 3.25}rem + 4px))"
+            class="menu absolute left-0 top-16 z-30 flex flex-col flex-nowrap space-y-8 overflow-y-scroll rounded-md border-2 border-primary-300 bg-white p-4 shadow-lg"
+            style="height: min(66vh, calc({books.length * 3.25}rem + 4px)); width: {bookMenuDiv.clientWidth}px;"
         >
             {#each books as book}
                 <button
                     type="button"
-                    class="ml-8 flex justify-start text-primary"
+                    class="flex justify-start text-primary"
                     aria-label={book.displayName}
                     on:click={() => handleBookClick(book.bookCode)}
                 >
@@ -81,10 +81,3 @@
         </div>
     {/if}
 </div>
-
-<style>
-    .menu {
-        width: calc(100vw - 2rem);
-        border: 2px solid #80d4f3;
-    }
-</style>

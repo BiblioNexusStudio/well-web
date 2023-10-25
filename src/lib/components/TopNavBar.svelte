@@ -37,7 +37,7 @@
     <input id="top-navbar-drawer" type="checkbox" class="drawer-toggle" bind:checked={$isSideMenuOpen} />
     <div class="drawer-content flex flex-col">
         <div class="navbar w-full">
-            <div class="semi-bold flex-1 px-2 text-lg">{title}</div>
+            <div class="semi-bold line-clamp-1 flex-1 break-all px-2 text-lg">{title}</div>
             {#if passage && $featureFlags.audioRecording}
                 <div class="flex-none">
                     <details class="dropdown dropdown-end">
