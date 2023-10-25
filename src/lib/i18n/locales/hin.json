@@ -31,8 +31,11 @@
                 "value": "सामग्री लाइसेंस जानकारी लोड करते समय त्रुटि"
             },
             "license": {
-                "releasedUnder": {
-                    "value": "{license} के तहत जारी"
+                "releasedUnderSingle": {
+                    "value": "{name} के तहत जारी किया गया"
+                },
+                "releasedUnderMultiple": {
+                    "value": "विभिन्न: {names} के तहत जारी किया गया"
                 }
             }
         },

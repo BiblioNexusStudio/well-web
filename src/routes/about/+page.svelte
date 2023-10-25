@@ -9,11 +9,40 @@
     import { goto } from '$app/navigation';
     import type { BaseBible } from '$lib/types/bible-text-content';
 
-    let resourceLicensesPromise: Promise<ApiLicenseInfo[]> | null = null;
+    let licenseInfosPromise: Promise<ApiLicenseInfo[]> | null = null;
 
     onMount(() => {
-        resourceLicensesPromise = fetchLicenses();
+        licenseInfosPromise = fetchLicenses();
     });
+
+    function calculateLicenseDescription(licenseInfo: ApiLicenseInfo) {
+        const licenses = licenseInfo.licenses.map((license) => license.eng).filter(Boolean);
+        if (licenses.length === 0) {
+            return null;
+        }
+        if (licenses.length === 1) {
+            const license = licenses[0];
+            return $translate('page.about.license.releasedUnderSingle.value', {
+                values: {
+                    name: license.url
+                        ? `<a class="text-sky-500" href="${license.url}">${license.name}</a>`
+                        : license.name,
+                },
+            });
+        } else {
+            return $translate('page.about.license.releasedUnderMultiple.value', {
+                values: {
+                    names: licenses
+                        .map((license) =>
+                            license.url
+                                ? `<a class="text-sky-500" href="${license.url}">${license.name}</a>`
+                                : license.name
+                        )
+                        .join(', '),
+                },
+            });
+        }
+    }
 
     async function fetchLicenses() {
         const [resourceLicenses, bibleLicenses] = await Promise.all([
@@ -37,35 +66,29 @@
         <!-- hack to make text centered -->
         <div class="btn btn-link text-base-500 opacity-0"><Icon data={chevronLeft} /></div>
     </div>
-    {#await resourceLicensesPromise}
+    {#await licenseInfosPromise}
         <FullPageSpinner />
-    {:then resourceLicenses}
+    {:then licenseInfos}
         <div class="flex flex-col self-center px-4">
             <div class="prose my-6">
-                {#if resourceLicenses}
-                    {#each resourceLicenses as license}
-                        <h4>{license.title}</h4>
+                {#if licenseInfos}
+                    {#each licenseInfos as licenseInfo}
+                        {@const licenseDescription = calculateLicenseDescription(licenseInfo)}
+                        <h4>{licenseInfo.title}</h4>
                         <div class="ml-4">
                             <div>
-                                © {license.copyright.dates ?? ''}
-                                {#if license.copyright.holder.url}
-                                    <a class="text-sky-500" href={license.copyright.holder.url}
-                                        >{license.copyright.holder.name}</a
+                                © {licenseInfo.copyright.dates ?? ''}
+                                {#if licenseInfo.copyright.holder.url}
+                                    <a class="text-sky-500" href={licenseInfo.copyright.holder.url}
+                                        >{licenseInfo.copyright.holder.name}</a
                                     >
                                 {:else}
-                                    {license.copyright.holder.name}
+                                    {licenseInfo.copyright.holder.name}
                                 {/if}
                             </div>
-                            {#if license.license?.eng}
+                            {#if licenseDescription}
                                 <div>
-                                    {@html $translate('page.about.license.releasedUnder.value', {
-                                        values: {
-                                            license: license.license.eng.url
-                                                ? `<a class="text-sky-500"
-                                    href="${license.license.eng.url}">${license.license.eng.name}</a>`
-                                                : license.license.eng.name,
-                                        },
-                                    })}
+                                    {@html licenseDescription}
                                 </div>
                             {/if}
                         </div>
