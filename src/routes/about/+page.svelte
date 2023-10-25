@@ -25,7 +25,7 @@
             return $translate('page.about.license.releasedUnderSingle.value', {
                 values: {
                     name: license.url
-                        ? `<a class="text-sky-500" href="${license.url}">${license.name}</a>`
+                        ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}">${license.name}</a>`
                         : license.name,
                 },
             });
@@ -35,7 +35,7 @@
                     names: licenses
                         .map((license) =>
                             license.url
-                                ? `<a class="text-sky-500" href="${license.url}">${license.name}</a>`
+                                ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}">${license.name}</a>`
                                 : license.name
                         )
                         .join(', '),
@@ -79,8 +79,11 @@
                             <div>
                                 © {licenseInfo.copyright.dates ?? ''}
                                 {#if licenseInfo.copyright.holder.url}
-                                    <a class="text-sky-500" href={licenseInfo.copyright.holder.url}
-                                        >{licenseInfo.copyright.holder.name}</a
+                                    <a
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-sky-500"
+                                        href={licenseInfo.copyright.holder.url}>{licenseInfo.copyright.holder.name}</a
                                     >
                                 {:else}
                                     {licenseInfo.copyright.holder.name}
