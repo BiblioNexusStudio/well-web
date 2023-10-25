@@ -116,6 +116,6 @@
 <style>
     .menu {
         width: calc(100vw - 2rem);
-        border: 2px solid #b5ac8b;
+        border: 2px solid #80d4f3;
     }
 </style>

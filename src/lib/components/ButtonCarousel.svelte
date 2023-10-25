@@ -28,7 +28,7 @@
 </script>
 
 <div
-    class="carousel w-full space-x-2 bg-base-100 text-base-500"
+    class="carousel w-full space-x-2 bg-base-100 text-gray-400"
     bind:this={carousel}
     on:scroll={() => (scroll = carousel?.scrollLeft)}
 >
@@ -36,7 +36,7 @@
         <div class="carousel-item">
             <button
                 class="rounded-md px-3 py-2 text-sm font-semibold {selectedValue === value &&
-                    'bg-primary-50 text-secondary-content'}"
+                    'bg-primary-50 text-base-500'}"
                 on:click={() => (selectedValue = value)}
                 bind:this={buttonElements[index]}
             >
