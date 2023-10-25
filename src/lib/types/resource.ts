@@ -66,5 +66,5 @@ export interface ApiLicenseInfo {
         dates?: string | null;
         holder: { name: string; url?: string | null };
     };
-    license?: Record<LanguageCodeEnum, { name: string; url: string }>;
+    licenses: Record<LanguageCodeEnum, { name: string; url?: string | null }>[];
 }

@@ -31,8 +31,11 @@
                 "value": "Nogut long karim tok bilong lisens"
             },
             "license": {
-                "releasedUnder": {
-                    "value": "I kam aut aninit long wanpela {license}"
+                "releasedUnderSingle": {
+                    "value": "Rilis long {name}"
+                },
+                "releasedUnderMultiple": {
+                    "value": "Rilis long ol: {names}"
                 }
             }
         },
