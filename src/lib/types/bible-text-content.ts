@@ -1,4 +1,5 @@
 import type { FrontendAudioChapter } from './file-manager';
+import type { ApiLicenseInfo } from './resource';
 
 export interface BibleBookTextContent {
     chapters: BibleBookTextChapter[];
@@ -18,6 +19,7 @@ export interface BaseBible {
     abbreviation: string;
     id: number;
     name: string;
+    licenseInfo: ApiLicenseInfo | null;
 }
 
 export interface ApiBible extends BaseBible {

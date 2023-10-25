@@ -2,22 +2,30 @@
     import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
-    import type { ApiResourceType, ApiResourceTypeLicenseInfo } from '$lib/types/resource';
+    import type { ApiResourceType, ApiLicenseInfo } from '$lib/types/resource';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { Icon } from 'svelte-awesome';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
     import { goto } from '$app/navigation';
+    import type { BaseBible } from '$lib/types/bible-text-content';
 
-    let resourceLicensesPromise: Promise<ApiResourceTypeLicenseInfo[]> | null = null;
+    let resourceLicensesPromise: Promise<ApiLicenseInfo[]> | null = null;
 
     onMount(() => {
-        resourceLicensesPromise = (fetchFromCacheOrApi('/resources/types') as Promise<ApiResourceType[]>).then(
-            (types) =>
-                (types.map((type) => type.licenseInfo).filter(Boolean) as ApiResourceTypeLicenseInfo[]).sort((a, b) =>
-                    a.title.localeCompare(b.title)
-                )
-        );
+        resourceLicensesPromise = fetchLicenses();
     });
+
+    async function fetchLicenses() {
+        const [resourceLicenses, bibleLicenses] = await Promise.all([
+            fetchFromCacheOrApi('/resources/types') as Promise<ApiResourceType[]>,
+            fetchFromCacheOrApi('/bibles') as Promise<BaseBible[]>,
+        ]);
+        const licenses = resourceLicenses
+            .map((type) => type.licenseInfo)
+            .concat(bibleLicenses.map((bible) => bible.licenseInfo))
+            .filter(Boolean) as ApiLicenseInfo[];
+        return licenses.sort((a, b) => a.title.localeCompare(b.title));
+    }
 </script>
 
 <section class="container mx-auto flex h-screen flex-col">
