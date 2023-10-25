@@ -52,7 +52,7 @@
             {
                 name: $translate('resources.types.CBBTER.value'),
                 value: ResourceType.CBBTER,
-                selected: false,
+                selected: true,
                 isBible: false,
                 display: true,
             },
@@ -107,7 +107,12 @@
             {#each $resourcesMenu as resource}
                 {#if resource.display}
                     <label class="label mb-4 cursor-pointer justify-start">
-                        <input type="checkbox" bind:checked={resource.selected} class="checkbox-primary checkbox" />
+                        <input
+                            type="checkbox"
+                            disabled={resource.value === ResourceType.CBBTER}
+                            bind:checked={resource.selected}
+                            class="checkbox-primary checkbox"
+                        />
                         <span class="label-text ml-4">{resource.name}</span>
                     </label>
                 {/if}
