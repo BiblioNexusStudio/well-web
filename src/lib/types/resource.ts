@@ -57,10 +57,10 @@ export interface AudioTypeMetadata {
 }
 
 export interface ApiResourceType {
-    licenseInfo: ApiResourceTypeLicenseInfo | null;
+    licenseInfo: ApiLicenseInfo | null;
 }
 
-export interface ApiResourceTypeLicenseInfo {
+export interface ApiLicenseInfo {
     title: string;
     copyright: {
         dates?: string | null;

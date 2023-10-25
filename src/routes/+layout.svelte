@@ -33,7 +33,7 @@
     }
 
     async function precacheNecessaryCalls() {
-        await fetchFromCacheOrApi('/resources/types');
+        await Promise.all([fetchFromCacheOrApi('/resources/types'), fetchFromCacheOrApi('/bibles')]);
     }
 
     onMount(() => {
