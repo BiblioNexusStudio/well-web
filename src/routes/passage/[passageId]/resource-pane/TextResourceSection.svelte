@@ -75,7 +75,7 @@
             <div class="text-md font-semibold text-base-content">{title}</div>
             <div class="flex-grow"></div>
             {#if !shouldSearch(searchQuery) && resources.length > 5}
-                <button class="text-sm font-semibold text-secondary-content" on:click={() => showTypeFullscreen?.(type)}
+                <button class="text-sm font-semibold text-base-500" on:click={() => showTypeFullscreen?.(type)}
                     >{$translate('page.passage.resourcePane.seeAll.value', {
                         values: { count: resources.length },
                     })}</button
