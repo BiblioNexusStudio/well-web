@@ -25,6 +25,7 @@
 
     async function callFetchData(isOnline = true) {
         isLoading = true;
+        $selectedBookIndex = 'default';
         await fetchCbbterPassagesByBook(isOnline);
         isLoading = false;
     }
