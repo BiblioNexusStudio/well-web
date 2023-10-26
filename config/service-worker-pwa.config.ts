@@ -9,6 +9,7 @@ export const serviceWorkerPwaConfig = {
     registerType: 'prompt',
     injectRegister: null,
     devOptions: { enabled: true, type: 'module', suppressWarnings: true },
+    base: '/',
     injectManifest: {
         globPatterns: ['client/**/*.{html,js,css,ico,png,svg,webp,webmanifest}'],
         globIgnores: ['**/*.webmanifest'],
