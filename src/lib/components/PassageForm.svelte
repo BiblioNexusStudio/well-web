@@ -17,6 +17,7 @@
 
     let onLanguageSelected = (event: Event) => {
         const { value } = event.target as HTMLSelectElement;
+        $selectedBookIndex = 'default';
         $currentLanguageCode = value;
     };
 
@@ -25,7 +26,6 @@
 
     async function callFetchData(isOnline = true) {
         isLoading = true;
-        $selectedBookIndex = 'default';
         await fetchCbbterPassagesByBook(isOnline);
         isLoading = false;
     }
