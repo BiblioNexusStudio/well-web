@@ -4,9 +4,16 @@ on:
     push:
         branches:
             - master
+    workflow_dispatch:
+        inputs:
+            environment:
+                description: Environment
+                type: environment
+                required: true
 
 jobs:
     deploy_to_dev:
+        if: github.ref == 'refs/heads/master' || github.event.inputs.environment == 'dev'
         name: Deploy to dev
         runs-on: ubuntu-latest
         environment:
@@ -26,6 +33,7 @@ jobs:
     # Unlike the pre-merge QA deploy, this will deploy to the main QA environment.
     # This means the master branch will always be on the main QA frontend URL.
     deploy_to_qa:
+        if: github.ref == 'refs/heads/master' || github.event.inputs.environment == 'qa'
         name: Deploy to qa
         runs-on: ubuntu-latest
         environment:
@@ -43,6 +51,7 @@ jobs:
                   api-token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_QA }}
 
     # deploy_to_prod:
+    #     if: github.ref == 'refs/heads/master' || github.event.inputs.environment == 'prod'
     #     name: Deploy to prod
     #     runs-on: ubuntu-latest
     #     environment:
