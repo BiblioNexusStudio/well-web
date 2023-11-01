@@ -1,0 +1,80 @@
+name: Post-merge
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    deploy_to_dev:
+        name: Deploy to dev
+        runs-on: ubuntu-latest
+        environment:
+            name: dev
+            url: ${{ steps.deploy.outputs.deployed-url }}
+        steps:
+            - name: Checkout source code
+              uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+            - uses: ./.github/actions/build-and-deploy-to-env
+              id: deploy
+              with:
+                  environment: dev
+                  api-token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DEV }}
+
+    # Unlike the pre-merge QA deploy, this will deploy to the main QA environment.
+    # This means the master branch will always be on the main QA frontend URL.
+    deploy_to_qa:
+        name: Deploy to qa
+        runs-on: ubuntu-latest
+        environment:
+            name: qa
+            url: ${{ steps.deploy.outputs.deployed-url }}
+        steps:
+            - name: Checkout source code
+              uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+            - uses: ./.github/actions/build-and-deploy-to-env
+              id: deploy
+              with:
+                  environment: qa
+                  api-token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_QA }}
+
+    # deploy_to_prod:
+    #     name: Deploy to prod
+    #     runs-on: ubuntu-latest
+    #     environment:
+    #         name: prod
+    #         url: ${{ steps.deploy.outputs.deployed-url }}
+    #     steps:
+    #         - name: Checkout source code
+    #           uses: actions/checkout@v3
+    #           with:
+    #               ref: ${{ github.event.pull_request.head.sha }}
+    #         - uses: ./.github/actions/build-and-deploy-to-env
+    #           id: deploy
+    #           with:
+    #               environment: prod
+    #               api-token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PROD }}
+
+    e2e_tests:
+        name: E2E tests
+        runs-on: ubuntu-latest
+        needs: deploy_to_dev
+        steps:
+            - name: Checkout E2E test code
+              uses: actions/checkout@v3
+              with:
+                  repository: BiblioNexusStudio/well-e2e
+                  ssh-key: ${{ secrets.WELL_E2E_SSH_KEY }}
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18.16.0
+                  cache: yarn
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+            - name: Test
+              run: yarn run test
