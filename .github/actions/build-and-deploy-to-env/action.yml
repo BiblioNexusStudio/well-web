@@ -8,6 +8,9 @@ inputs:
     api-token:
         description: API token for deployment
         required: true
+    override-output-url:
+        description: Overrides the output deployed-url
+        required: false
 
 outputs:
     deployed-url:
@@ -47,5 +50,9 @@ runs:
         - name: Calculate URL
           id: calculate-url
           run: |
-              echo "::set-output name=url::${{ steps.deploy-to-webapp.outputs.static_web_app_url }}"
+              if [[ -n "${{ inputs.override-output-url }}" ]]; then
+                  echo "::set-output name=url::${{ inputs.override-output-url }}"
+              else
+                  echo "::set-output name=url::${{ steps.deploy-to-webapp.outputs.static_web_app_url }}"
+              fi
           shell: bash
