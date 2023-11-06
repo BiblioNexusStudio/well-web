@@ -51,8 +51,8 @@ runs:
           id: calculate-url
           run: |
               if [[ -n "${{ inputs.override-output-url }}" ]]; then
-                  echo "::set-output name=url::${{ inputs.override-output-url }}"
+                  echo "url=${{ inputs.override-output-url }}" >> $GITHUB_OUTPUT
               else
-                  echo "::set-output name=url::${{ steps.deploy-to-webapp.outputs.static_web_app_url }}"
+                  echo "url=${{ steps.deploy-to-webapp.outputs.static_web_app_url }}" >> $GITHUB_OUTPUT
               fi
           shell: bash
