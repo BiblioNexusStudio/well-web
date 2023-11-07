@@ -8,12 +8,14 @@ import { createHandlerBoundToURL, cleanupOutdatedCaches, precacheAndRoute } from
 import { CacheableCdnContentPlugin } from '../src/lib/service-worker/cacheable-cdn-content-plugin';
 import { RangeRequestsPlugin } from 'workbox-range-requests';
 import { CacheFirstAndStaleWhileRevalidateAfterExpiration } from '../src/lib/service-worker/cache-first-and-stale-while-revalidate-after-expiration';
+import { AddApiKeyToAllRequestPlugin } from '../src/lib/service-worker/add-api-key-to-all-request-plugin';
 
 declare let self: ServiceWorkerGlobalScope;
 
 const isQa = import.meta.env.DEPLOY_ENV === 'qa';
 const isDev = import.meta.env.DEPLOY_ENV === 'dev';
 const API_CACHE_DURATION_IN_HOURS = isQa || isDev ? 1 : 24;
+const addApiKeyToAllRequestPlugin = new AddApiKeyToAllRequestPlugin(import.meta.env.PUBLIC_AQUIFER_API_KEY);
 
 if (import.meta.env.DEV) {
     self.skipWaiting();
@@ -46,10 +48,10 @@ registerRoute(
 );
 
 registerRoute(
-    /(https:\/\/cdn\.aquifer\.bible.*|https:\/\/aquifer-server-(qa|dev|prod)\.azurewebsites\.net\/resources\/\d+\/(content|metadata|thumbnail))/,
+    /https:\/\/(dev|qa)?\.?api\.aquifer\.bible.*/,
     new CacheFirst({
         cacheName: 'aquifer-cdn',
-        plugins: [new CacheableCdnContentPlugin(), new RangeRequestsPlugin()],
+        plugins: [new CacheableCdnContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],
     }),
     'GET'
 );

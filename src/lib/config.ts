@@ -7,4 +7,5 @@ export interface Configuration {
     PUBLIC_ENV: string;
     PUBLIC_IS_ONLINE_CHECK_URL: string;
     PUBLIC_AQUIFER_API_URL: string;
+    PUBLIC_AQUIFER_API_KEY: string;
 }
