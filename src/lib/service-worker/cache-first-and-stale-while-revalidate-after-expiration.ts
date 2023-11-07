@@ -1,4 +1,4 @@
-import type { HandlerCallbackOptions } from 'workbox-core/types';
+import type { HandlerCallbackOptions, WorkboxPlugin } from 'workbox-core/types';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import type { Strategy } from 'workbox-strategies';
 
@@ -14,10 +14,20 @@ const OBJECT_STORE_NAME = 'timestamps';
 class CacheFirstAndStaleWhileRevalidateAfterExpiration {
     staleAfterDuration: number;
     cacheName: string;
+    plugins: WorkboxPlugin[];
 
-    constructor({ staleAfterDuration, cacheName }: { staleAfterDuration: number; cacheName: string }) {
+    constructor({
+        staleAfterDuration,
+        cacheName,
+        plugins,
+    }: {
+        staleAfterDuration: number;
+        cacheName: string;
+        plugins: WorkboxPlugin[];
+    }) {
         this.staleAfterDuration = staleAfterDuration;
         this.cacheName = cacheName;
+        this.plugins = plugins;
     }
 
     async _getDb(): Promise<IDBDatabase> {
@@ -60,9 +70,15 @@ class CacheFirstAndStaleWhileRevalidateAfterExpiration {
         const age = (now - (timestamp || 0)) / 1000;
 
         if (age < this.staleAfterDuration) {
-            return new CacheFirst({ cacheName: this.cacheName }).handle({ event, request });
+            return new CacheFirst({ cacheName: this.cacheName, plugins: this.plugins }).handle({ event, request });
         } else {
-            const response = await new StaleWhileRevalidate({ cacheName: this.cacheName }).handle({ event, request });
+            const response = await new StaleWhileRevalidate({
+                cacheName: this.cacheName,
+                plugins: this.plugins,
+            }).handle({
+                event,
+                request,
+            });
             if (response) {
                 await this._setTimestamp(request, now);
             }
