@@ -3,14 +3,16 @@
 
     export let buttons: { value: number; label: string }[];
     export let buttonElements: (HTMLElement | null)[] = buttons.map(() => null);
-    export let selectedValue: number;
+    export let selectedValue: number | null;
     export let scroll: number | undefined;
 
     let carousel: HTMLElement | undefined;
 
     $: scrollToButtonWithValue(selectedValue);
 
-    function scrollToButtonWithValue(value: number) {
+    function scrollToButtonWithValue(value: number | null) {
+        if (value === null) return;
+
         const index = buttons.findIndex((button) => button.value === value);
         const targetElement = buttonElements[index];
 

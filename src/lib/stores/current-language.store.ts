@@ -21,6 +21,12 @@ export function lookupLanguageInfoByCode(languageCode: string | null | undefined
     return { ...fetchedLanguageInfo, label: supportedLanguageInfo?.label };
 }
 
+export function lookupLanguageInfoById(languageId: number) {
+    const fetchedLanguageInfo = get(languages).find((lang: Language) => lang.id === languageId);
+    const supportedLanguageInfo = supportedLanguages.find(({ code }) => code === fetchedLanguageInfo?.iso6393Code);
+    return { ...fetchedLanguageInfo, label: supportedLanguageInfo?.label };
+}
+
 export const currentLanguageInfo = derived([currentLanguageCode, languages], ([$currentLanguageCode]) =>
     lookupLanguageInfoByCode($currentLanguageCode)
 );

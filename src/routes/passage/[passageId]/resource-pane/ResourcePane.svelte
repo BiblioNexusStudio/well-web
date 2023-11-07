@@ -37,6 +37,7 @@
     export let isLoading = true;
 
     let searchQuery: string = '';
+    let previousResourceIds = (resources ?? []).map(({ contentId }) => contentId);
 
     $: showBasicTab =
         ubsImageResources.length > 0 ||
@@ -110,6 +111,11 @@
     }
 
     async function prepareResources(resources: PassageResourceContent[]) {
+        const currentResourceIds = resources.map(({ contentId }) => contentId);
+        if (JSON.stringify(previousResourceIds) === JSON.stringify(currentResourceIds)) {
+            return;
+        }
+        previousResourceIds = currentResourceIds;
         isLoading = true;
         const textResources = (
             await asyncMap(
