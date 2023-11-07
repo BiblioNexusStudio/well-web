@@ -48,7 +48,7 @@ registerRoute(
 );
 
 registerRoute(
-    /https:\/\/(dev|qa)?\.?api\.aquifer\.bible.*/,
+    /(https:\/\/cdn\.aquifer\.bible.*|https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/(content|metadata|thumbnail))/,
     new CacheFirst({
         cacheName: 'aquifer-cdn',
         plugins: [new CacheableCdnContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],
@@ -57,10 +57,11 @@ registerRoute(
 );
 
 registerRoute(
-    /https:\/\/aquifer-server-(qa|dev|prod)\.azurewebsites\.net.*/,
+    /https:\/\/((qa|dev)\.)?api\.aquifer\.bible.*\//,
     new CacheFirstAndStaleWhileRevalidateAfterExpiration({
         cacheName: 'aquifer-api',
         staleAfterDuration: 60 * 60 * API_CACHE_DURATION_IN_HOURS,
+        plugins: [addApiKeyToAllRequestPlugin],
     }),
     'GET'
 );
