@@ -63,11 +63,11 @@
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {
-                        "value": "{nau yet} blo {olgeta wantaim}"
+                        "value": "{current} blo {total}"
                     }
                 },
                 "seeAll": {
-                    "value": "Lukim Olgeta({Kaunt})"
+                    "value": "Lukim Olgeta({count})"
                 },
                 "noThumbnail": {
                     "value": "Nogat Liklik Piksa"
@@ -77,7 +77,7 @@
                         "value": "Nogat Risoses i stap"
                     },
                     "description": {
-                        "value": "Sets bilong yu\"{Sekim askim}\"Ino metsim ol risoses."
+                        "value": "Sets bilong yu\"{searchQuery}\"Ino metsim ol risoses."
                     }
                 },
                 "resourceCount": {
@@ -85,7 +85,7 @@
                         "value": "1 Risos"
                     },
                     "plural": {
-                        "value": "{Kaunt} risoses"
+                        "value": "{count} risoses"
                     }
                 }
             },
@@ -94,13 +94,13 @@
                     "value": "Risos Ino Stap"
                 },
                 "description": {
-                    "value": "Nogat Buk Tambu i stap insait long dispela divais blofor {Tokpeles}.<br /> Yu laik yusim narapela tokpeles?"
+                    "value": "Nogat Buk Tambu i stap insait long dispela divais blofor {language}.<br /> Yu laik yusim narapela tokpeles?"
                 },
                 "bible": {
                     "value": "Buk Tambu"
                 },
                 "noneAvailableDescription": {
-                    "value": "Nogat Buk Tambu i stap long dispela divais blo {Tokpeles} o long ol narapela tokpeles.<br /> Plis daunloudim ol samting i stap insait taim yu kam onlain."
+                    "value": "Nogat Buk Tambu i stap long dispela divais blo {language} o long ol narapela tokpeles.<br /> Plis daunloudim ol samting i stap insait taim yu kam onlain."
                 },
                 "show": {
                     "value": "Putim Ples Kilia"
@@ -149,7 +149,7 @@
                     "value": "Konfemeson"
                 },
                 "description": {
-                    "value": "Yu ba nau daunloudim {daunloudsais}  blo dispela ol samting insait long devais bilong yu."
+                    "value": "Yu ba nau daunloudim {downloadSize}  blo dispela ol samting insait long devais bilong yu."
                 },
                 "question": {
                     "value": "Yu laik go nau osem women?"
@@ -164,7 +164,7 @@
                     "value": "Pasim"
                 },
                 "downloadingDescription": {
-                    "value": "Daunloudim {totolsaisdaunloudpinis} blo {totolsaisblodaunloud}."
+                    "value": "Daunloudim {totalSizeDownloaded} blo {totalSizeToDownload}."
                 }
             },
             "metaData": {
