@@ -8,11 +8,13 @@
     let searchQuery = '';
 
     $: filteredBibles = bibles
-        .filter(
-            ({ abbreviation, name }) =>
-                abbreviation.toLowerCase().includes(searchQuery) || name.toLowerCase().includes(searchQuery)
-        )
         .map((bible) => ({ ...bible, languageCode: lookupLanguageInfoById(bible.languageId)?.iso6393Code }))
+        .filter(
+            ({ abbreviation, name, languageCode }) =>
+                languageCode?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                abbreviation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
         .sort(
             (first, second) =>
                 (first.languageCode?.localeCompare(second.languageCode ?? '') ?? 0) +
