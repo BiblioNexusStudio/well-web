@@ -2,25 +2,25 @@
     "page": {
         "index": {
             "language": {
-                "value": "Tok ples"
+                "value": "Language"
             },
             "book": {
                 "value": "Buk"
             },
             "passage": {
-                "value": "Hap Buk Baibel"
+                "value": "hap riding"
             },
             "go": {
                 "value": "Go"
             },
             "downloadResourcesForOfflineUse": {
-                "value": "Yupela go liklik dai? Tromo konten moa."
+                "value": "Igo oflain? Kisim moa samtin insait"
             },
             "subTitle": {
-                "value": "Bibel Pulum: Pusim liklik wara long giraun."
+                "value": "Buk Tambu Wel-Wara: Fed we Akuifa bin raitim "
             },
             "loading": {
-                "value": "i laodim"
+                "value": "louding"
             },
             "about": {
                 "value": "Long em"
@@ -42,7 +42,7 @@
         "passage": {
             "nav": {
                 "bible": {
-                    "value": "Baibel"
+                    "value": "Buk Tambu"
                 },
                 "guide": {
                     "value": "Gaid"
@@ -53,123 +53,123 @@
             },
             "resourcePane": {
                 "title": {
-                    "value": "Risos"
+                    "value": "Risoses"
                 },
                 "basicTab": {
-                    "value": "Basis"
+                    "value": "Besik"
                 },
                 "advancedTab": {
-                    "value": "Advans"
+                    "value": "Igo pas"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {
-                        "value": "{current} long {total}"
+                        "value": "{current} blo {total}"
                     }
                 },
                 "seeAll": {
-                    "value": "Lukim Olgeta ({count})"
+                    "value": "Lukim Olgeta({count})"
                 },
                 "noThumbnail": {
-                    "value": "Nogat thumbnail"
+                    "value": "Nogat Liklik Piksa"
                 },
                 "noResourcesFound": {
                     "header": {
-                        "value": "Nogat Risos i Stap"
+                        "value": "Nogat Risoses i stap"
                     },
                     "description": {
-                        "value": "Long yu painim \"{searchQuery}\" i no gat risos."
+                        "value": "Sets bilong yu\"{searchQuery}\"Ino metsim ol risoses."
                     }
                 },
                 "resourceCount": {
                     "singular": {
-                        "value": "1 risos"
+                        "value": "1 Risos"
                     },
                     "plural": {
-                        "value": "{count} risos"
+                        "value": "{count} risoses"
                     }
                 }
             },
             "noBibleContent": {
                 "header": {
-                    "value": "Risosis Nogat"
+                    "value": "Risos Ino Stap"
                 },
                 "description": {
-                    "value": "Baibel i no stap long dispela divais bilong {language}.<br />Yu likim yusim narapela tokples?"
+                    "value": "Nogat Buk Tambu i stap insait long dispela divais blofor {language}.<br /> Yu laik yusim narapela tokpeles?"
                 },
                 "bible": {
-                    "value": "Baibel"
+                    "value": "Buk Tambu"
                 },
                 "noneAvailableDescription": {
-                    "value": "Baibel i no stap long dispela divais bilong {language} o narapela tokples.<br />Plis daunlodim konten taim yu stap onlain."
+                    "value": "Nogat Buk Tambu i stap long dispela divais blo {language} o long ol narapela tokpeles.<br /> Plis daunloudim ol samting i stap insait taim yu kam onlain."
                 },
                 "show": {
-                    "value": "Soim"
+                    "value": "Putim Ples Kilia"
                 },
                 "checkForMoreResources": {
-                    "value": "Lukim moa risosis..."
+                    "value": "Sekim Moa Risoses..."
                 }
             },
             "noCbbterContent": {
-                "value": "Nogat CBBT-ER stori long dispela hap."
+                "value": "Nogat CBBT-ER samting insait i stap blo dispela hap riding."
             }
         },
         "fileManager": {
             "title": {
-                "value": "Laink Fael Manija"
+                "value": "Lokal Fail Meneja"
             },
             "download": {
-                "value": "Dounload"
+                "value": "Daunloud"
             },
             "textType": {
-                "value": "Teks"
+                "value": "Tex"
             },
             "audioType": {
                 "value": "Odio"
             },
             "mediaType": {
-                "value": "Midiya"
+                "value": "Midia"
             },
             "update": {
-                "value": "Apdetim"
+                "value": "Apdeit"
             },
             "cancel": {
-                "value": "Kanselim"
+                "value": "Kensol"
             },
             "files": {
-                "value": "Fael"
+                "value": "fails"
             },
             "noInternet": {
-                "value": "Nogat internet"
+                "value": "Nogat Intanet"
             },
             "selectABook": {
-                "value": "Plis sekim wanpela buk."
+                "value": "Selektim wanpela Buk"
             },
             "modal": {
                 "title": {
-                    "value": "Kanfemesen"
+                    "value": "Konfemeson"
                 },
                 "description": {
-                    "value": "Yu i stap long daunlotim {downloadSize} bilong samting long yu divais."
+                    "value": "Yu ba nau daunloudim {downloadSize}  blo dispela ol samting insait long devais bilong yu."
                 },
                 "question": {
-                    "value": "Yu laik pas long we?"
+                    "value": "Yu laik go nau osem women?"
                 },
                 "downloadProgress": {
-                    "value": "Daunlot Pragos"
+                    "value": "Daunloud woklo go i stap"
                 },
                 "success": {
-                    "value": "Dounloadim Sukes"
+                    "value": "Daunloud Pinis"
                 },
                 "close": {
-                    "value": "Klosim"
+                    "value": "Pasim"
                 },
                 "downloadingDescription": {
-                    "value": "I dai nau daunlot {totalSizeDownloaded} bilong {totalSizeToDownload}."
+                    "value": "Daunloudim {totalSizeDownloaded} blo {totalSizeToDownload}."
                 }
             },
             "metaData": {
                 "description": {
-                    "value": "Dispela em i wari yu ken dounload na deletim Aquifer samting long yu divais."
+                    "value": "DIspela em we yu ken daunloudim na rausim ol samting I stap insait lo Akuifa long devais bilong yu."
                 }
             },
             "viewHeader": {
@@ -177,18 +177,18 @@
                     "value": "Nem"
                 },
                 "text": {
-                    "value": "Teks"
+                    "value": "Tex"
                 },
                 "audio": {
                     "value": "Odio"
                 },
                 "media": {
-                    "value": "Mideiya"
+                    "value": "Midia"
                 }
             },
             "viewRow": {
                 "resources": {
-                    "value": "Resos"
+                    "value": "Risoses"
                 }
             }
         }
@@ -199,22 +199,22 @@
         },
         "audioRecordingModal": {
             "noPermission": {
-                "value": "Plis senisim seting bilong yu na givim olrait long mikrofon"
+                "value": "Plis apdeitim ol setings bilong yu na givim tokorait lo maikropon blo yu blo yusim"
             },
             "languageLabel": {
-                "value": "Yu toktok long wanem tokples?"
+                "value": "Wonem kain tokpeles yu rekodim stap?"
             },
             "versionLabel": {
-                "value": "Nem bilong dispela translesen em wanem?"
+                "value": "Wonem nem bilong dispela toktoksenis?"
             },
             "versionAbbreviationLabel": {
-                "value": "Wanem em 3-pela leta bilong dispela translesen?"
+                "value": "Wonem 3-pela leta hap wod bilong dispela toktoksenis?"
             },
             "discard": {
-                "value": "Rausim"
+                "value": "Rausim nogat yius blo em"
             },
             "save": {
-                "value": "Sevim"
+                "value": "Seiv"
             }
         }
     },
@@ -227,77 +227,77 @@
                 "value": "Piksa (UBS)"
             },
             "tyndaleBibleDictionary": {
-                "value": "Toktok Buk Bilong Baibel (Tyndale)"
+                "value": "Diksoneri bilong Buk Tambu(Tiendeil)"
             },
             "tyndaleStudyNotes": {
-                "value": "Not Bilong Stadi (Tyndale)"
+                "value": "Nouts bilong stadi(Tiendeil)"
             },
             "biblicaBibleDictionary": {
-                "value": "Toktok Buk Bilong Baibel (Biblica)"
+                "value": "DIksoneri bilong Buk Tambu(Biblika)"
             },
             "biblicaStudyNotes": {
-                "value": "Not Bilong Stadi (Biblica)"
+                "value": "Nouts bilong stadi(Biblika)"
             },
             "videoBibleDictionary": {
-                "value": "Vidio (Video Bible Dictionary)"
+                "value": "Ol vidio(Vidio Diksoneri bilong Buk Tambu)"
             }
         },
         "cbbt-er": {
             "step1": {
-                "value": "Harim na Bel/Tingting"
+                "value": "Harim na Lewa"
             },
             "step2": {
-                "value": "Stretim dispela Hap"
+                "value": "Setim Steij"
             },
             "step3": {
-                "value": "Painim aut dispela hap"
+                "value": "Mekim tok kilia long samting i kamap stap"
             },
             "step4": {
-                "value": "Ektim aut dispela tok"
+                "value": "Em bihainim wonem samting tex i tok"
             },
             "step5": {
-                "value": "Pulapim dispela speis"
+                "value": "Pulmapim ol gep"
             },
             "step6": {
-                "value": "Tokim Olgeta"
+                "value": "Toktok long dispela wod"
             }
         }
     },
     "sideMenu": {
         "home": {
-            "value": "Haus"
+            "value": "Houm"
         },
         "menu": {
-            "value": "Menu"
+            "value": "Meniu"
         },
         "changeLanguage": {
-            "value": "Liklikim Tokples..."
+            "value": "Senisim Tokpeles..."
         },
         "fileManager": {
-            "value": "Fael Manija"
+            "value": "Fail Meneja"
         }
     },
     "errorMessage": {
         "error": {
-            "value": "Erro"
+            "value": "Wanpela samting i rong"
         },
         "title": {
-            "value": "Mi no inap load konten"
+            "value": "hat long loudim samting i stap insait"
         },
         "message": {
-            "value": "Sapos i samting i no stap, plis lukim internet konekson bilong yu."
+            "value": "Sapos dispela isiu em i on yet, plis sekim intanet konekson bilong yu."
         },
         "home": {
-            "value": "Haus"
+            "value": "Houm"
         }
     },
     "components": {
         "search": {
             "placeholder": {
-                "value": "Lukim"
+                "value": "Painim"
             },
             "clear": {
-                "value": "Kliar"
+                "value": "Kilia"
             }
         }
     }
