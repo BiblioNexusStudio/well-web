@@ -4,6 +4,7 @@
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import ViewTable from '$lib/components/file-manager/ViewTable.svelte';
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
+    import DeleteModal from '$lib/components/file-manager/DeleteModal.svelte';
     import {
         fileManagerLoading,
         selectedBookCode,
@@ -52,6 +53,7 @@
 
 <div class="container mx-auto h-full w-full pt-12">
     <FmModal />
+    <DeleteModal />
     <TopNavBar title={$translate('page.fileManager.title.value')} />
     {#await fetchAvailableResourcesPromise}
         <FullPageSpinner />

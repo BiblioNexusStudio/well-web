@@ -144,6 +144,9 @@
             "selectABook": {
                 "value": "Plis sekim wanpela buk."
             },
+            "delete": {
+                "value": "Deletim"
+            },
             "modal": {
                 "title": {
                     "value": "Kanfemesen"
@@ -165,6 +168,14 @@
                 },
                 "downloadingDescription": {
                     "value": "I dai nau daunlot {totalSizeDownloaded} bilong {totalSizeToDownload}."
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "Waring"
+                },
+                "description": {
+                    "value": "Yu sho yu laik deletim dispela fail olgeta taim from yu liklik mak."
                 }
             },
             "metaData": {

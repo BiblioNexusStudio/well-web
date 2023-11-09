@@ -37,6 +37,7 @@ export const calculateUrlsWithMetadataToChange = (
     resourcesMenu: ResourcesMenuItem[]
 ) => {
     const urlsAndSizesToDownload = [] as UrlWithMetadata[];
+    const urlsToDelete = [] as string[];
     const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
 
     if (
@@ -52,6 +53,13 @@ export const calculateUrlsWithMetadataToChange = (
         });
     }
 
+    if (
+        biblesModuleBook.audioUrls.chapters.filter((chapter) => chapter.selected).length === 1 &&
+        biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.deleteResources)
+    ) {
+        urlsToDelete.push(biblesModuleBook.textUrl);
+    }
+
     biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
         if (chapter.selected) {
             if (bibleSelected && footerInputs.audio && !chapter.isAudioUrlCached) {
@@ -60,6 +68,10 @@ export const calculateUrlsWithMetadataToChange = (
                     url: chapter[audioFileTypeForBrowser()].url,
                     size: chapter[audioFileTypeForBrowser()].size,
                 });
+            }
+
+            if (chapter.deleteResources) {
+                urlsToDelete.push(chapter[audioFileTypeForBrowser()].url);
             }
 
             chapter.resourceMenuItems?.forEach((resourceMenuItem) => {
@@ -120,6 +132,9 @@ export const calculateUrlsWithMetadataToChange = (
                             });
                         }
                     }
+                } else if (chapter.deleteResources) {
+                    urlsToDelete.push(resourceContentApiFullUrl(resourceMenuItem));
+                    urlsToDelete.push(resourceMetadataApiFullPath(resourceMenuItem));
                 }
             });
         }
@@ -129,21 +144,25 @@ export const calculateUrlsWithMetadataToChange = (
         biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
                 chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
-                    urlsAndSizesToDownload.push({
-                        mediaType: 'text',
-                        url: cbbterResourceUrl.url,
-                        size: cbbterResourceUrl.size,
-                    });
+                    if (!isCachedFromCdn(cbbterResourceUrl.url)) {
+                        urlsAndSizesToDownload.push({
+                            mediaType: 'text',
+                            url: cbbterResourceUrl.url,
+                            size: cbbterResourceUrl.size,
+                        });
+                    } else if (chapter.deleteResources) {
+                        urlsToDelete.push(cbbterResourceUrl.url);
+                    }
                 });
             }
         });
     }
 
     return {
-        urlsToDelete: [],
+        urlsToDelete,
         urlsToDownload: removeDuplicates(urlsAndSizesToDownload),
         totalSizeToDelete: 0,
-        totalSizeToDownload: urlsAndSizesToDownload.reduce((acc, { size }) => size + acc, 0),
+        totalSizeToDownload: removeDuplicates(urlsAndSizesToDownload).reduce((acc, { size }) => size + acc, 0),
     };
 };
 

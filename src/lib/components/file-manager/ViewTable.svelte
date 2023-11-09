@@ -10,6 +10,8 @@
     import volumeUp from 'svelte-awesome/icons/volumeUp';
     import pictureO from 'svelte-awesome/icons/pictureO';
     import arrowDown from 'svelte-awesome/icons/arrowDown';
+    import ellipsisV from 'svelte-awesome/icons/ellipsisV';
+    import trash from 'svelte-awesome/icons/trash';
     import { _ as translate } from 'svelte-i18n';
     import { convertToReadableSize } from '$lib/utils/file-manager';
     import type { ResourcesApiModule, BiblesModuleBook } from '$lib/types/file-manager';
@@ -98,6 +100,13 @@
             return chapter;
         });
     }
+
+    function openDeleteModal() {
+        const modal = document.getElementById('file-manager-delete-modal') as HTMLDialogElement;
+        if (modal) {
+            modal.showModal();
+        }
+    }
 </script>
 
 <table class="w-full">
@@ -120,12 +129,13 @@
             <th class="text-xs"> {$translate('page.fileManager.viewHeader.text.value')} </th>
             <th class="text-xs"> {$translate('page.fileManager.viewHeader.audio.value')} </th>
             <th class="text-xs"> {$translate('page.fileManager.viewHeader.media.value')} </th>
+            <th />
         </tr>
     </thead>
     <tbody>
         {#each $biblesModuleBook.audioUrls.chapters as audioChapter}
             {@const rowData = buildRowData(audioChapter, $resourcesMenu, hasText, $biblesModuleBook.textSize)}
-            <tr class="h-16 w-full border-b-2 odd:bg-gray-100">
+            <tr class="relative h-16 w-full border-b-2 odd:bg-gray-100">
                 <td class="text-center">
                     <input
                         type="checkbox"
@@ -155,6 +165,29 @@
                 <td class="text-center">
                     {#if rowData.hasImages}
                         <Icon data={pictureO} />
+                    {/if}
+                </td>
+                <td class="h-full text-center">
+                    {#if audioChapter.allUrlsCached}
+                        <button
+                            on:click={() => (audioChapter.deleteMenuOpen = !audioChapter.deleteMenuOpen)}
+                            class={audioChapter.deleteMenuOpen ? 'h-10 rounded-full bg-primary py-2' : 'h-8'}
+                        >
+                            <Icon data={ellipsisV} class="h-full w-6" />
+                        </button>
+                        {#if audioChapter.deleteMenuOpen}
+                            <button
+                                on:click={() => {
+                                    audioChapter.deleteMenuOpen = false;
+                                    audioChapter.deleteResources = true;
+                                    openDeleteModal();
+                                }}
+                                class="absolute -bottom-8 left-0 z-30 mx-2 flex w-[96vw] items-center justify-start rounded-md border-2 border-solid border-primary bg-white px-4 py-2"
+                            >
+                                <Icon data={trash} class="mr-2" />
+                                {$translate('page.fileManager.delete.value')}
+                            </button>
+                        {/if}
                     {/if}
                 </td>
             </tr>
