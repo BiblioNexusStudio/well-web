@@ -4,8 +4,10 @@ import type { StaticUrlsMap } from './types/static-mapping';
 import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 import { asyncForEach } from './utils/async-array';
 
+export const METADATA_ONLY_FAKE_FILE_SIZE = 768;
+
 type CheckCacheChangeItem = { url: Url; expectedSize: number };
-type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean };
+type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean; metadataOnly?: boolean };
 export type AllItemsProgress = Record<Url, SingleItemProgress>;
 
 // The workbox `fetch` caching API will create a cache entry as soon as response headers have been returned, rather than
@@ -91,12 +93,13 @@ export async function cacheManyFromCdnWithProgress(
     concurrentRequests = 6
 ) {
     const progress: AllItemsProgress = urls.reduce(
-        (output, { url, size }) => ({
+        (output, { url, size, metadataOnly }) => ({
             ...output,
             [url]: {
                 downloadedSize: 0,
-                totalSize: size,
+                totalSize: metadataOnly ? METADATA_ONLY_FAKE_FILE_SIZE : size,
                 done: false,
+                metadataOnly,
             },
         }),
         {}
@@ -106,7 +109,14 @@ export async function cacheManyFromCdnWithProgress(
     progressCallback(progress);
 
     const updateProgress = (url: Url, downloadedSize: number, totalSize: number, done: boolean) => {
-        progress[url] = { downloadedSize, totalSize, done };
+        progress[url] = {
+            downloadedSize:
+                progress[url].metadataOnly && done
+                    ? Math.min(METADATA_ONLY_FAKE_FILE_SIZE, downloadedSize)
+                    : downloadedSize,
+            totalSize: progress[url].metadataOnly ? METADATA_ONLY_FAKE_FILE_SIZE : totalSize || progress[url].totalSize,
+            done,
+        };
         progressCallback(progress);
     };
 
