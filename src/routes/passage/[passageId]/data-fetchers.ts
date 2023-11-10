@@ -1,21 +1,17 @@
-import type { PageLoad } from './$types';
 import { get } from 'svelte/store';
 import { fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
-import { currentLanguageCode, currentLanguageInfo } from '$lib/stores/current-language.store';
+import { currentLanguageInfo } from '$lib/stores/current-language.store';
 import type {
     FrontendAudioChapter,
     AudioTimestamp,
     CbbtErTextContent,
     ResourceContentCbbtErText,
 } from '$lib/types/file-manager';
-import type { BibleBookContentDetails, BibleBookTextContent } from '$lib/types/bible-text-content';
+import type { BibleBookTextContent, FrontendBibleBook, FrontendChapterContent } from '$lib/types/bible-text-content';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import { asyncFilter, asyncMap, asyncReduce } from '$lib/utils/async-array';
 import { isOnline } from '$lib/stores/is-online.store';
-import {
-    fetchBibleDataForBookCodeAndBibleId,
-    fetchBibleDataForBookCodeAndLanguageCode,
-} from '$lib/utils/data-handlers/bible';
+import { fetchAllBibles, bookDataForBibleTab } from '$lib/utils/data-handlers/bible';
 import { range } from '$lib/utils/array';
 import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
 import type { BasePassage, PassageResourceContent, PassageWithResourceContentIds } from '$lib/types/passage';
@@ -27,35 +23,20 @@ import {
     resourceContentApiPath,
 } from '$lib/utils/data-handlers/resources/resource';
 import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
+import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 
-export interface FrontendChapterAudioData {
-    url: string;
-    startTimestamp: number | null;
-    endTimestamp: number | null;
-}
+export type PassagePageTab = 'bible' | 'guide';
 
-export interface FrontendChapterContent {
-    number: string;
-    audioData: FrontendChapterAudioData | null;
-    versesText: { number: string; text: string }[];
-}
-
-async function fetchBibleContent(passage: BasePassage, bibleId: number | null) {
-    let bookData: BibleBookContentDetails | null = null;
-    if (bibleId) {
-        bookData = await fetchBibleDataForBookCodeAndBibleId(passage.bookCode, bibleId);
-    } else {
-        bookData = await fetchBibleDataForBookCodeAndLanguageCode(passage.bookCode, get(currentLanguageCode));
-    }
-    if (!bookData) return {};
+export async function fetchBibleContent(passage: BasePassage, bible: FrontendBibleBook) {
+    if (!bible.bookMetadata) return null;
 
     let fullBookText: BibleBookTextContent | null = null;
     try {
-        fullBookText = await fetchFromCacheOrCdn(bookData.textUrl);
+        fullBookText = await fetchFromCacheOrCdn(bible.bookMetadata.textUrl);
     } catch (_) {
         // this means the user hasn't downloaded the Bible text, which is fine, they may have audio still
     }
-    const filteredAudio = bookData.audioUrls.chapters.filter((chapter: FrontendAudioChapter) => {
+    const filteredAudio = bible.bookMetadata.audioUrls.chapters.filter((chapter: FrontendAudioChapter) => {
         const chapterNumber = parseInt(chapter.number);
         return passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber;
     });
@@ -126,7 +107,7 @@ async function fetchBibleContent(passage: BasePassage, bibleId: number | null) {
         },
         [] as FrontendChapterContent[]
     );
-    return { bookName: bookData.displayName, chapters };
+    return { chapters };
 }
 
 async function getCbbterAudioForPassage(passage: PassageWithResourceContentIds): Promise<CbbtErAudioContent[]> {
@@ -170,7 +151,6 @@ async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): 
                 };
             } catch (error) {
                 // stuff not cached
-                console.error(error);
                 return null;
             }
         })
@@ -187,42 +167,83 @@ async function getAdditionalResourcesForPassage(
     );
 }
 
-async function fetchResourceContent(passage: BasePassage) {
+export async function fetchPassage(passageId: string): Promise<BasePassage> {
+    return await fetchFromCacheOrApi(`passages/${passageId}/language/${get(currentLanguageInfo)?.id}`);
+}
+
+function updateAndGetPreferredIds(bibleIdsInCurrentLanguage: number[]) {
+    const defaultCurrentLanguageBibleId = bibleIdsInCurrentLanguage[0];
+    let preferredIds = get(preferredBibleIds);
+    if (
+        defaultCurrentLanguageBibleId &&
+        preferredIds.every((existingId) => !bibleIdsInCurrentLanguage.includes(existingId))
+    ) {
+        preferredIds = preferredIds.concat([defaultCurrentLanguageBibleId]);
+        preferredBibleIds.set(preferredIds);
+    }
+    return preferredIds;
+}
+
+// Fetch Bible data for use in the passage page.
+// Handles online and offline, pulling both the available Bibles (for use in the preferred Bibles modal) and Bibles to
+// show in the tab carousel.
+export async function fetchBibleData(passage: BasePassage) {
+    const bibles = await fetchAllBibles();
+    const currentLanguageId = get(currentLanguageInfo)?.id;
+    const bibleIdsInCurrentLanguage = bibles
+        .filter(({ languageId }) => languageId === currentLanguageId)
+        .map(({ id }) => id);
+    const preferredIds = updateAndGetPreferredIds(bibleIdsInCurrentLanguage);
+    const biblesWithBookData: FrontendBibleBook[] = await asyncMap(bibles, async (bible) => ({
+        ...bible,
+        bookMetadata: await bookDataForBibleTab(passage, bible.id, preferredIds.includes(bible.id)),
+        defaultForCurrentLanguage: bible.id === bibleIdsInCurrentLanguage[0],
+        loadingContent: false,
+        content: null,
+    }));
+
+    // Filter down to Bibles that are actually available for the passage and either the
+    // user has selected the Bible as preferred OR the Bible is in the current language
+    const online = get(isOnline);
+    const availableBibles = biblesWithBookData
+        .sort(
+            (first, second) =>
+                (first.languageId === currentLanguageId ? 0 : 1) -
+                (second.languageId === currentLanguageId ? 0 : 1) +
+                ((preferredIds.includes(first.id) ? 0 : 1) - (preferredIds.includes(second.id) ? 0 : 1))
+        )
+        .filter(({ bookMetadata }) => online || !!bookMetadata);
+    const biblesForTabs = availableBibles.filter(({ id }) => preferredIds.includes(id));
+    return { biblesForTabs, availableBibles };
+}
+
+export async function fetchResourceData(passage: BasePassage) {
+    let text: CbbtErTextContent[] = [];
+    let audio: CbbtErAudioContent[] = [];
+    let title: string | undefined = undefined;
+    let additionalResources: PassageResourceContent[] = [];
     let passageWithResources;
     try {
         passageWithResources = (await fetchFromCacheOrApi(
             `passages/${passage.id}/language/${get(currentLanguageInfo)?.id}`
         )) as PassageWithResourceContentIds;
-    } catch (error) {
-        return { text: [], audio: [] };
+    } catch (_) {
+        // data not cached
     }
+
     if (passageWithResources) {
-        const audioResourceContent = await getCbbterAudioForPassage(passageWithResources);
-        const textResourceContent = await getCbbterTextForPassage(passageWithResources);
-        const additionalResources = await getAdditionalResourcesForPassage(passageWithResources);
-        const title = textResourceContent[0]?.displayName;
-        return {
-            title,
-            text: textResourceContent,
-            audio: audioResourceContent,
-            additionalResources,
-        };
-    } else {
-        return { text: [], audio: [] };
+        audio = await getCbbterAudioForPassage(passageWithResources);
+        text = await getCbbterTextForPassage(passageWithResources);
+        additionalResources = await getAdditionalResourcesForPassage(passageWithResources);
+        title = text[0]?.displayName;
     }
+    return {
+        cbbterText: text[0],
+        cbbterAudio: audio[0],
+        title,
+        additionalResources: additionalResources,
+    };
 }
 
-export const load = (async ({ parent, params, url }) => {
-    const bibleId = url.searchParams.get('bibleId');
-    await parent(); // ensure languages have loaded
-    const passage = await fetchFromCacheOrApi(`passages/${params.passageId}/language/${get(currentLanguageInfo)?.id}`);
-    return {
-        url,
-        passage,
-        bibleId,
-        fetched: {
-            bibleContent: fetchBibleContent(passage, (bibleId && parseInt(bibleId)) || null),
-            resourceContent: fetchResourceContent(passage),
-        },
-    };
-}) satisfies PageLoad;
+export type ResourceData = Awaited<ReturnType<typeof fetchResourceData>>;
+export type BibleData = Awaited<ReturnType<typeof fetchBibleData>>;

@@ -1,11 +1,8 @@
 <script lang="ts">
     import BookIcon from '$lib/icons/BookIcon.svelte';
-    import type { PageData } from './$types';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import type { CbbtErTextContent } from '$lib/types/file-manager';
-    import type { FrontendChapterContent } from './+page';
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
     import CompassIcon from '$lib/icons/CompassIcon.svelte';
@@ -14,7 +11,6 @@
     import ResourcePane from './resource-pane/ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
-    import BibleUnavailable from './BibleUnavailable.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
     import {
         createMultiClipAudioState,
@@ -22,14 +18,22 @@
         type AudioFileInfo,
     } from '$lib/components/AudioPlayer/audio-player-state';
     import { objectKeys } from '$lib/utils/typesafe-standard-lib';
-    import { goto } from '$app/navigation';
     import { page } from '$app/stores';
-    import type { CbbtErAudioContent } from '$lib/types/resource';
-    import type { PassageResourceContent } from '$lib/types/passage';
-
-    type Tab = 'bible' | 'guide';
-
-    export let data: PageData;
+    import {
+        type BibleData,
+        type ResourceData,
+        fetchBibleContent,
+        type PassagePageTab,
+        fetchPassage,
+        fetchResourceData,
+        fetchBibleData,
+    } from './data-fetchers';
+    import BibleUnavailable from './BibleUnavailable.svelte';
+    import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
+    import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible-text-content';
+    import type { BasePassage } from '$lib/types/passage';
+    import { cacheBiblesForPassage } from '$lib/utils/data-handlers/bible';
+    import { isOnline } from '$lib/stores/is-online.store';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -40,90 +44,151 @@
         $translate('resources.cbbt-er.step6.value'),
     ];
 
+    let passage: BasePassage | null = null;
+    let bibleData: BibleData | null = null;
+    let resourceData: ResourceData | null = null;
+
     let cbbterSelectedStepNumber = 1;
     let stepsAvailable: number[] = [];
-    let cbbterText: CbbtErTextContent | undefined;
-    let cbbterAudio: CbbtErAudioContent | undefined;
-    let additionalResources: PassageResourceContent[] | undefined;
-    let cbbterTitle: string | undefined;
-    let bibleContent: { bookName?: string | undefined; chapters?: FrontendChapterContent[] } | undefined;
+    let selectedBibleId: number | null = null;
     let topOfStep: HTMLElement | null = null;
-    let selectedTab: Tab = 'guide';
+    let selectedTab: PassagePageTab = 'guide';
     let isShowingResourcePane = false;
     let resourcePane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
-    let currentTopNavBarTitle: string;
-    let contentLoadedPromise: Promise<void> | undefined;
+    let bibleSelectionScroll: number | undefined;
+    let baseFetchPromise: Promise<void> | undefined;
+    let resourceFetchPromise: Promise<void> | undefined;
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
+    let preferredBiblesModalOpen = false;
 
-    $: data.url && getContent(); // when the [passageId] changes, the data will change and trigger this
-    $: selectedTab && cbbterSelectedStepNumber && handleNavBarTitleChange();
+    $: $page.url && fetchBase(); // when the [passageId] changes, refetch
+    $: passage && fetchBibles(passage, $preferredBibleIds);
+    $: passage && fetchResources(passage);
+    $: fetchContentForBibleId(selectedBibleId);
+
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
-    $: audioPlayerKey = selectedTab === 'bible' ? 'bible' : cbbterStepKey(cbbterSelectedStepNumber);
+    $: audioPlayerKey =
+        selectedTab === 'bible' ? bibleAudioKey(selectedBibleId) : cbbterAudioKey(cbbterSelectedStepNumber);
     $: audioPlayerShowing = !!multiClipAudioStates[audioPlayerKey];
+    $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
 
-    async function getContent() {
-        contentLoadedPromise = (async () => {
-            let [fetchedBibleContent, fetchedResourceContent] = await Promise.all([
-                data.fetched.bibleContent,
-                data.fetched.resourceContent,
-            ]);
-            cbbterTitle = fetchedResourceContent.title;
-            cbbterText = fetchedResourceContent.text?.[0];
-            cbbterAudio = fetchedResourceContent.audio?.[0];
-            additionalResources = fetchedResourceContent.additionalResources ?? [];
-            bibleContent = fetchedBibleContent;
-            stepsAvailable = Array.from(
-                new Set([
-                    ...(cbbterText?.steps?.map((step) => step.stepNumber) ?? []),
-                    ...(cbbterAudio?.steps?.map((step) => step.stepNumber) ?? []),
-                ])
-            );
-            clearBibleIdIfNotAvailable();
-            populateAudioState();
-            handleNavBarTitleChange();
+    function fetchBase() {
+        passage = null;
+        resourceData = null;
+        bibleData = null;
+        multiClipAudioStates = {};
+        baseFetchPromise = (async () => {
+            passage = await fetchPassage($page.params.passageId);
         })();
     }
 
-    function clearBibleIdIfNotAvailable() {
-        if (!bibleContent?.chapters?.length && data.bibleId) {
-            const newUrl = new URL($page.url);
-            newUrl?.searchParams?.delete('bibleId');
-            goto(newUrl);
+    function fetchResources(passage: BasePassage) {
+        resourceFetchPromise = (async () => {
+            resourceData = await fetchResourceData(passage);
+            stepsAvailable = Array.from(
+                new Set([
+                    ...(resourceData.cbbterText?.steps?.map((step) => step.stepNumber) ?? []),
+                    ...(resourceData.cbbterAudio?.steps?.map((step) => step.stepNumber) ?? []),
+                ])
+            );
+            populateCbbterAudioState();
+        })();
+    }
+
+    async function fetchBibles(passage: BasePassage, _: number[]) {
+        const existingContent = Object.fromEntries(
+            bibleData?.biblesForTabs.map(({ id, content }) => [id, content]) ?? []
+        );
+        const newBibleData = await fetchBibleData(passage);
+        newBibleData.biblesForTabs = newBibleData.biblesForTabs.map((bible) => ({
+            ...bible,
+            content: existingContent[bible.id] ?? null,
+            loadingContent: false,
+        }));
+        bibleData = newBibleData;
+        if (!selectedBibleId || !bibleData?.biblesForTabs.map(({ id }) => id).includes(selectedBibleId)) {
+            selectedBibleId = bibleData?.biblesForTabs[0].id ?? null;
+        }
+        await fetchContentForBibleId(selectedBibleId);
+        await cacheNonSelectedBiblesIfOnline();
+    }
+
+    async function fetchContentForBibleId(id: number | null) {
+        const index = bibleData?.biblesForTabs.findIndex((bible) => bible.id === id) ?? -1;
+        if (bibleData && index >= 0) {
+            bibleData.biblesForTabs[index].loadingContent = true;
+            const bibleBook = bibleData.biblesForTabs[index];
+            if (bibleBook && passage) {
+                if (!bibleBook.content) {
+                    const content = await fetchBibleContent(passage, bibleBook);
+                    // make sure the index hasn't changed
+                    if (bibleData.biblesForTabs[index].id === id) {
+                        bibleData.biblesForTabs[index].content = content;
+                        populateBibleAudioState();
+                    }
+                }
+            }
+            const currentIndex = bibleData?.biblesForTabs.findIndex((bible) => bible.id === id) ?? -1;
+            if (currentIndex >= 0) {
+                bibleData.biblesForTabs[currentIndex].loadingContent = false;
+            }
+        }
+    }
+
+    // in order to make sure content is available when the user goes offline, cache all the Bible data for each
+    // non-selected tab
+    async function cacheNonSelectedBiblesIfOnline() {
+        if ($isOnline && passage && bibleData?.biblesForTabs) {
+            await cacheBiblesForPassage(
+                passage,
+                bibleData?.biblesForTabs
+                    .filter(({ id, bookMetadata }) => id !== selectedBibleId && bookMetadata !== null)
+                    .map(({ bookMetadata }) => bookMetadata) as BibleBookContentDetails[]
+            );
         }
     }
 
     // Populate the audio state object with key/values like
-    //   bible => MultiClipAudioState
-    //   guideStep1 => MultiClipAudioState
-    //   guideStep2 => MultiClipAudioState
-    function populateAudioState() {
-        multiClipAudioStates = {};
-        const bibleAudioFiles = (bibleContent?.chapters?.map(({ audioData }) => audioData).filter(Boolean) || []).map(
-            (data) => ({
-                url: data?.url,
-                startTime: data?.startTimestamp || 0,
-                endTime: data?.endTimestamp,
-                type: audioFileTypeForBrowser(),
-            })
-        ) as AudioFileInfo[];
-        if (bibleAudioFiles.length) {
-            multiClipAudioStates = { ...multiClipAudioStates, bible: createMultiClipAudioState(bibleAudioFiles) };
-        }
-        const cbbterAudioFiles = cbbterAudio?.steps.map((step) => {
-            // return key/value mapping
-            return [
-                cbbterStepKey(step.stepNumber),
-                createMultiClipAudioState([{ url: step.url, type: audioFileTypeForBrowser(), startTime: 0 }]),
-            ];
-        });
-        if (cbbterAudioFiles?.length) {
-            multiClipAudioStates = { ...multiClipAudioStates, ...Object.fromEntries(cbbterAudioFiles) };
+    //   bible1 => MultiClipAudioState
+    //   bible2 => MultiClipAudioState
+    function populateBibleAudioState() {
+        if (bibleData) {
+            bibleData.biblesForTabs.forEach((bible) => {
+                if (!Object.keys(multiClipAudioStates).includes(bibleAudioKey(bible.id))) {
+                    const bibleAudioFiles = (
+                        bible.content?.chapters?.map(({ audioData }) => audioData).filter(Boolean) || []
+                    ).map((data) => ({
+                        url: data?.url,
+                        startTime: data?.startTimestamp || 0,
+                        endTime: data?.endTimestamp,
+                        type: audioFileTypeForBrowser(),
+                    })) as AudioFileInfo[];
+                    if (bibleAudioFiles.length) {
+                        multiClipAudioStates[bibleAudioKey(bible.id)] = createMultiClipAudioState(bibleAudioFiles);
+                    }
+                }
+            });
         }
     }
 
-    function cbbterStepKey(step: number) {
+    // Populate the audio state object with key/values like
+    //   guideStep1 => MultiClipAudioState
+    //   guideStep2 => MultiClipAudioState
+    function populateCbbterAudioState() {
+        resourceData?.cbbterAudio?.steps.forEach((step) => {
+            multiClipAudioStates[cbbterAudioKey(step.stepNumber)] = createMultiClipAudioState([
+                { url: step.url, type: audioFileTypeForBrowser(), startTime: 0 },
+            ]);
+        });
+    }
+
+    function cbbterAudioKey(step: number) {
         return `guideStep${step}`;
+    }
+
+    function bibleAudioKey(id: number | null) {
+        return id === null ? 'none' : `bible${id}`;
     }
 
     function showOrDismissResourcePane(show: boolean) {
@@ -134,24 +199,32 @@
         }
     }
 
-    function handleNavBarTitleChange() {
+    function navbarTitle(
+        resourceData: ResourceData | null,
+        currentBible: FrontendBibleBook | undefined,
+        selectedTab: PassagePageTab,
+        selectedStepNumber: number
+    ) {
         if (selectedTab === 'bible') {
-            if (cbbterText?.steps?.length && cbbterTitle) {
-                currentTopNavBarTitle = cbbterTitle;
+            if (resourceData?.cbbterText?.steps?.length && resourceData?.title) {
+                return resourceData?.title;
             } else {
-                currentTopNavBarTitle = `${bibleContent?.bookName ?? ''} ${bibleContent?.chapters?.[0]?.number ?? ''}`;
+                return `${currentBible?.bookMetadata?.displayName ?? ''} ${
+                    currentBible?.content?.chapters?.[0]?.number ?? ''
+                }`;
             }
-        } else if (cbbterTitle) {
-            currentTopNavBarTitle = `${cbbterTitle} - ${steps[cbbterSelectedStepNumber - 1]}`;
+        } else if (resourceData?.title) {
+            return `${resourceData?.title} - ${steps[selectedStepNumber - 1]}`;
         } else {
-            currentTopNavBarTitle = '';
+            return '';
         }
     }
+    $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber);
 
     $: showOrDismissResourcePane(isShowingResourcePane);
 </script>
 
-<ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={additionalResources} />
+<ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={resourceData?.additionalResources} />
 
 <div class="btm-nav z-40 border-t border-t-primary-300">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
@@ -160,7 +233,7 @@
     <NavMenuTabItem bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
         <CompassIcon />
     </NavMenuTabItem>
-    {#if additionalResources?.length}
+    {#if resourceData?.additionalResources?.length}
         <NavMenuTabItem
             bind:isSelected={isShowingResourcePane}
             flipWhenSelected={true}
@@ -172,8 +245,14 @@
 </div>
 
 <div id="passage-page" class="h-full w-full">
-    <TopNavBar title={currentTopNavBarTitle} passage={data.passage} />
-    {#await contentLoadedPromise}
+    <TopNavBar
+        bind:preferredBiblesModalOpen
+        {title}
+        {passage}
+        bibles={bibleData?.availableBibles ?? []}
+        tab={selectedTab}
+    />
+    {#await baseFetchPromise}
         <FullPageSpinner />
     {:then}
         <div
@@ -181,10 +260,28 @@
                 ? 'bottom-[7.5rem]'
                 : 'bottom-16'} z-10 pt-16"
         >
+            {#if selectedBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
+                <div class="px-4 pb-4 {selectedTab !== 'bible' && 'hidden'}">
+                    <div class="m-auto max-w-[65ch]">
+                        <ButtonCarousel
+                            bind:selectedValue={selectedBibleId}
+                            bind:scroll={bibleSelectionScroll}
+                            buttons={(bibleData?.biblesForTabs ?? []).map((bible) => ({
+                                value: bible.id,
+                                label: bible.abbreviation,
+                            }))}
+                        />
+                    </div>
+                </div>
+            {/if}
             <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'bible' && 'hidden'}">
-                {#if bibleContent?.chapters?.length}
+                {#if selectedBibleId === null}
+                    <BibleUnavailable bind:preferredBiblesModalOpen bibles={bibleData?.availableBibles} />
+                {:else if currentBible?.loadingContent}
+                    <FullPageSpinner />
+                {:else if currentBible?.content?.chapters?.length}
                     <div class="prose mx-auto overflow-y-scroll">
-                        {#each bibleContent.chapters as chapter}
+                        {#each currentBible?.content.chapters as chapter}
                             {#each chapter.versesText as { number, text }}
                                 <div class="py-1">
                                     <span class="sup pr-1">{number}</span><span>{@html text}</span>
@@ -192,49 +289,53 @@
                             {/each}
                         {/each}
                     </div>
-                {:else}
-                    <BibleUnavailable passage={data.passage} />
                 {/if}
             </div>
-            <div class="px-4 pb-4 {selectedTab !== 'guide' && 'hidden'}">
-                <div class="m-auto max-w-[65ch]">
-                    <ButtonCarousel
-                        bind:selectedValue={cbbterSelectedStepNumber}
-                        bind:scroll={cbbterSelectedStepScroll}
-                        buttons={stepsAvailable.map((stepNumber) => ({
-                            value: stepNumber,
-                            label: steps[stepNumber - 1],
-                        }))}
-                    />
-                </div>
-            </div>
-            <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'guide' && 'hidden'}">
-                <div class="prose mx-auto flex flex-grow">
-                    <span bind:this={topOfStep} />
-                    <div class="flex flex-grow">
-                        {#if stepsAvailable.length > 0}
-                            {#each stepsAvailable as stepNumber}
-                                {@const contentHTML = cbbterText?.steps?.find(
-                                    (step) => step.stepNumber === stepNumber
-                                )?.contentHTML}
-                                <div
-                                    class={cbbterSelectedStepNumber === stepNumber
-                                        ? 'flex flex-grow flex-col'
-                                        : 'hidden'}
-                                >
-                                    <div class="flex-grow overflow-y-scroll">
-                                        {#if contentHTML}
-                                            {@html contentHTML}
-                                        {/if}
-                                    </div>
-                                </div>
-                            {/each}
-                        {:else}
-                            {$translate('page.passage.noCbbterContent.value')}
-                        {/if}
+            {#await resourceFetchPromise}
+                {#if selectedTab === 'guide'}
+                    <FullPageSpinner />
+                {/if}
+            {:then}
+                <div class="px-4 pb-4 {selectedTab !== 'guide' && 'hidden'}">
+                    <div class="m-auto max-w-[65ch]">
+                        <ButtonCarousel
+                            bind:selectedValue={cbbterSelectedStepNumber}
+                            bind:scroll={cbbterSelectedStepScroll}
+                            buttons={stepsAvailable.map((stepNumber) => ({
+                                value: stepNumber,
+                                label: steps[stepNumber - 1],
+                            }))}
+                        />
                     </div>
                 </div>
-            </div>
+                <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'guide' && 'hidden'}">
+                    <div class="prose mx-auto flex flex-grow">
+                        <span bind:this={topOfStep} />
+                        <div class="flex flex-grow">
+                            {#if stepsAvailable.length > 0}
+                                {#each stepsAvailable as stepNumber}
+                                    {@const contentHTML = resourceData?.cbbterText?.steps?.find(
+                                        (step) => step.stepNumber === stepNumber
+                                    )?.contentHTML}
+                                    <div
+                                        class={cbbterSelectedStepNumber === stepNumber
+                                            ? 'flex flex-grow flex-col'
+                                            : 'hidden'}
+                                    >
+                                        <div class="flex-grow overflow-y-scroll">
+                                            {#if contentHTML}
+                                                {@html contentHTML}
+                                            {/if}
+                                        </div>
+                                    </div>
+                                {/each}
+                            {:else}
+                                {$translate('page.passage.noCbbterContent.value')}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/await}
         </div>
         {#if objectKeys(multiClipAudioStates).length}
             <div

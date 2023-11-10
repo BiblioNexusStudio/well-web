@@ -94,16 +94,13 @@
                     "value": "Risos Ino Stap"
                 },
                 "description": {
-                    "value": "Nogat Buk Tambu i stap insait long dispela divais blofor {language}.<br /> Yu laik yusim narapela tokpeles?"
-                },
-                "bible": {
-                    "value": "Buk Tambu"
+                    "value": "I no gat Baibel long dispela divais bilong {language}.<br />Yu laik yusim Baibel long narapela tokples?"
                 },
                 "noneAvailableDescription": {
                     "value": "Nogat Buk Tambu i stap long dispela divais blo {language} o long ol narapela tokpeles.<br /> Plis daunloudim ol samting i stap insait taim yu kam onlain."
                 },
                 "show": {
-                    "value": "Putim Ples Kilia"
+                    "value": "Seliim Baibel"
                 },
                 "checkForMoreResources": {
                     "value": "Sekim Moa Risoses..."
