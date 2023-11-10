@@ -28,6 +28,7 @@
     $: addAdditaonalResourcesApiModule($resourcesApiModule);
     $: resetSelectAllChapters($selectedBookCode);
     $: addAllUrlsCachedProperty($biblesModuleBook);
+    $: textUrlIsCached = $biblesModuleBook.isTextUrlCached;
 
     async function addAdditaonalResourcesApiModule(resourcesApiModule: ResourcesApiModule) {
         let passageData: BasePassagesByBook[] = [];
@@ -133,7 +134,7 @@
         </tr>
     </thead>
     <tbody>
-        {#each $biblesModuleBook.audioUrls.chapters as audioChapter}
+        {#each $biblesModuleBook.audioUrls.chapters as audioChapter, index (index)}
             {@const rowData = buildRowData(audioChapter, $resourcesMenu, hasText, $biblesModuleBook.textSize)}
             <tr class="relative h-16 w-full border-b-2 odd:bg-gray-100">
                 <td class="text-center">
@@ -168,7 +169,7 @@
                     {/if}
                 </td>
                 <td class="h-full text-center">
-                    {#if audioChapter.allUrlsCached}
+                    {#if audioChapter.allUrlsCached || (index === 0 && textUrlIsCached)}
                         <button
                             on:click={() => (audioChapter.deleteMenuOpen = !audioChapter.deleteMenuOpen)}
                             class={audioChapter.deleteMenuOpen ? 'h-10 rounded-full bg-primary py-2' : 'h-8'}

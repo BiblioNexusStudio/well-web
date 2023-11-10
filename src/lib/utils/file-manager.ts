@@ -39,6 +39,7 @@ export const calculateUrlsWithMetadataToChange = (
     const urlsAndSizesToDownload = [] as UrlWithMetadata[];
     const urlsToDelete = [] as string[];
     const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
+    const selectedChaptersLength = biblesModuleBook.audioUrls.chapters.filter((chapter) => chapter.selected).length;
 
     if (
         biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected) &&
@@ -54,7 +55,7 @@ export const calculateUrlsWithMetadataToChange = (
     }
 
     if (
-        biblesModuleBook.audioUrls.chapters.filter((chapter) => chapter.selected).length === 1 &&
+        (selectedChaptersLength === 1 || selectedChaptersLength == 0) &&
         biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.deleteResources)
     ) {
         urlsToDelete.push(biblesModuleBook.textUrl);
