@@ -17,7 +17,7 @@
     import type { ResourcesApiModule, BiblesModuleBook } from '$lib/types/file-manager';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { buildRowData } from '$lib/utils/file-manager';
-    import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { METADATA_ONLY_FAKE_FILE_SIZE, fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
 
@@ -60,7 +60,8 @@
                                 ].cbbterResourceUrls?.push({
                                     url: passageContentApiFullPath(passage),
                                     mediaType: 'text',
-                                    size: 2048,
+                                    metadataOnly: true,
+                                    size: METADATA_ONLY_FAKE_FILE_SIZE,
                                 });
                             }
                         });

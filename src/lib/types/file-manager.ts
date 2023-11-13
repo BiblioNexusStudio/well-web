@@ -1,7 +1,7 @@
 import type { FrontendPassageResourceContent } from './passage';
 
 export type Url = string;
-export type UrlWithMetadata = { mediaType: MediaTypeEnum; url: Url; size: number };
+export type UrlWithMetadata = { mediaType: MediaTypeEnum; url: Url; size: number; metadataOnly?: boolean };
 export type TiptapContent = object;
 
 export interface ApiAudioChapter {

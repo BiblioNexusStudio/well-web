@@ -1,4 +1,4 @@
-import { isCachedFromCdn } from '$lib/data-cache';
+import { METADATA_ONLY_FAKE_FILE_SIZE, isCachedFromCdn } from '$lib/data-cache';
 import { asyncForEach } from './async-array';
 import { audioFileTypeForBrowser } from './browser';
 import type {
@@ -92,7 +92,8 @@ export const calculateUrlsWithMetadataToChange = (
                                 urlsAndSizesToDownload.push({
                                     url: resourceMetadataApiFullPath(resourceMenuItem),
                                     mediaType: 'text',
-                                    size: 2048,
+                                    metadataOnly: true,
+                                    size: METADATA_ONLY_FAKE_FILE_SIZE,
                                 });
                             }
                         }
@@ -113,7 +114,8 @@ export const calculateUrlsWithMetadataToChange = (
                                 urlsAndSizesToDownload.push({
                                     url: resourceMetadataApiFullPath(resourceMenuItem),
                                     mediaType: 'audio',
-                                    size: 2048,
+                                    metadataOnly: true,
+                                    size: METADATA_ONLY_FAKE_FILE_SIZE,
                                 });
                             }
                         }
@@ -129,7 +131,8 @@ export const calculateUrlsWithMetadataToChange = (
                             urlsAndSizesToDownload.push({
                                 url: resourceMetadataApiFullPath(resourceMenuItem),
                                 mediaType: 'images',
-                                size: 2048,
+                                metadataOnly: true,
+                                size: METADATA_ONLY_FAKE_FILE_SIZE,
                             });
                         }
                     }
@@ -147,11 +150,7 @@ export const calculateUrlsWithMetadataToChange = (
                 await asyncForEach(chapter.cbbterResourceUrls, async (cbbterResourceUrl) => {
                     const isCbbterResourceUrlCached = await isCachedFromCdn(cbbterResourceUrl.url);
                     if (!isCbbterResourceUrlCached) {
-                        urlsAndSizesToDownload.push({
-                            mediaType: 'text',
-                            url: cbbterResourceUrl.url,
-                            size: cbbterResourceUrl.size,
-                        });
+                        urlsAndSizesToDownload.push(cbbterResourceUrl);
                     } else if (chapter.deleteResources) {
                         urlsToDelete.push(cbbterResourceUrl.url);
                     }
