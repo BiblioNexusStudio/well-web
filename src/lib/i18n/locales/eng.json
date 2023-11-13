@@ -181,6 +181,10 @@
                 "value": "Select a Book",
                 "_context": "Label for a dropdown allowing the user to select a book to view"
             },
+            "delete": {
+                "value": "Delete",
+                "_context": "Button to delete content"
+            },
             "modal": {
                 "title": {
                     "value": "Confirmation",
@@ -209,6 +213,16 @@
                 "downloadingDescription": {
                     "value": "Downloading {totalSizeDownloaded} of {totalSizeToDownload}.",
                     "_context": "Shows on the modal showing the user how the download is progressing"
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "Warning!",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
+                },
+                "description": {
+                    "value": "Are you sure you want to permanently delete these files from your device?",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
                 }
             },
             "metaData": {

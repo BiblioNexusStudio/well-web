@@ -37,7 +37,9 @@ export const calculateUrlsWithMetadataToChange = (
     resourcesMenu: ResourcesMenuItem[]
 ) => {
     const urlsAndSizesToDownload = [] as UrlWithMetadata[];
+    const urlsToDelete = [] as string[];
     const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
+    const selectedChaptersLength = biblesModuleBook.audioUrls.chapters.filter((chapter) => chapter.selected).length;
 
     if (
         biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected) &&
@@ -52,6 +54,13 @@ export const calculateUrlsWithMetadataToChange = (
         });
     }
 
+    if (
+        (selectedChaptersLength === 1 || selectedChaptersLength == 0) &&
+        biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.deleteResources)
+    ) {
+        urlsToDelete.push(biblesModuleBook.textUrl);
+    }
+
     biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
         if (chapter.selected) {
             if (bibleSelected && footerInputs.audio && !chapter.isAudioUrlCached) {
@@ -60,6 +69,10 @@ export const calculateUrlsWithMetadataToChange = (
                     url: chapter[audioFileTypeForBrowser()].url,
                     size: chapter[audioFileTypeForBrowser()].size,
                 });
+            }
+
+            if (chapter.deleteResources) {
+                urlsToDelete.push(chapter[audioFileTypeForBrowser()].url);
             }
 
             chapter.resourceMenuItems?.forEach((resourceMenuItem) => {
@@ -120,30 +133,38 @@ export const calculateUrlsWithMetadataToChange = (
                             });
                         }
                     }
+                } else if (chapter.deleteResources) {
+                    urlsToDelete.push(resourceContentApiFullUrl(resourceMenuItem));
+                    urlsToDelete.push(resourceMetadataApiFullPath(resourceMenuItem));
                 }
             });
         }
     });
 
     if (resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')) {
-        biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
+        biblesModuleBook.audioUrls.chapters.forEach(async (chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
-                chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
-                    urlsAndSizesToDownload.push({
-                        mediaType: 'text',
-                        url: cbbterResourceUrl.url,
-                        size: cbbterResourceUrl.size,
-                    });
+                await asyncForEach(chapter.cbbterResourceUrls, async (cbbterResourceUrl) => {
+                    const isCbbterResourceUrlCached = await isCachedFromCdn(cbbterResourceUrl.url);
+                    if (!isCbbterResourceUrlCached) {
+                        urlsAndSizesToDownload.push({
+                            mediaType: 'text',
+                            url: cbbterResourceUrl.url,
+                            size: cbbterResourceUrl.size,
+                        });
+                    } else if (chapter.deleteResources) {
+                        urlsToDelete.push(cbbterResourceUrl.url);
+                    }
                 });
             }
         });
     }
 
     return {
-        urlsToDelete: [],
+        urlsToDelete,
         urlsToDownload: removeDuplicates(urlsAndSizesToDownload),
         totalSizeToDelete: 0,
-        totalSizeToDownload: urlsAndSizesToDownload.reduce((acc, { size }) => size + acc, 0),
+        totalSizeToDownload: removeDuplicates(urlsAndSizesToDownload).reduce((acc, { size }) => size + acc, 0),
     };
 };
 

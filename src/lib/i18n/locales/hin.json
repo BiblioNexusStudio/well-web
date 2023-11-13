@@ -141,6 +141,9 @@
             "selectABook": {
                 "value": "कृपया एक पुस्तक चुनें।"
             },
+            "delete": {
+                "value": "हटाएं"
+            },
             "modal": {
                 "title": {
                     "value": "पुष्टि"
@@ -162,6 +165,14 @@
                 },
                 "downloadingDescription": {
                     "value": "{totalSizeDownloaded} का {totalSizeToDownload} डाउनलोड किया जा रहा है।"
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "चेतावनी"
+                },
+                "description": {
+                    "value": "क्या आप वाकई इन फ़ाइलों को अपनी डिवाइस से स्थायी रूप से हटाना चाहते हैं"
                 }
             },
             "metaData": {

@@ -18,6 +18,8 @@ export interface FrontendAudioChapter extends ApiAudioChapter {
     allUrlsCached?: boolean;
     resourceMenuItems?: FrontendPassageResourceContent[];
     cbbterResourceUrls?: UrlWithMetadata[];
+    deleteMenuOpen?: boolean;
+    deleteResources?: boolean;
 }
 
 export interface AudioResource {

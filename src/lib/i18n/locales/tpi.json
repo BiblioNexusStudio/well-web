@@ -141,6 +141,9 @@
             "selectABook": {
                 "value": "Selektim wanpela Buk"
             },
+            "delete": {
+                "value": "Deletim"
+            },
             "modal": {
                 "title": {
                     "value": "Konfemeson"
@@ -162,6 +165,14 @@
                 },
                 "downloadingDescription": {
                     "value": "Daunloudim {totalSizeDownloaded} blo {totalSizeToDownload}."
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "Waring"
+                },
+                "description": {
+                    "value": "Yu sho yu laik deletim dispela fail olgeta taim from yu liklik mak."
                 }
             },
             "metaData": {
