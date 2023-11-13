@@ -142,10 +142,11 @@ export const calculateUrlsWithMetadataToChange = (
     });
 
     if (resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')) {
-        biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
+        biblesModuleBook.audioUrls.chapters.forEach(async (chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
-                chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
-                    if (!isCachedFromCdn(cbbterResourceUrl.url)) {
+                await asyncForEach(chapter.cbbterResourceUrls, async (cbbterResourceUrl) => {
+                    const isCbbterResourceUrlCached = await isCachedFromCdn(cbbterResourceUrl.url);
+                    if (!isCbbterResourceUrlCached) {
                         urlsAndSizesToDownload.push({
                             mediaType: 'text',
                             url: cbbterResourceUrl.url,
