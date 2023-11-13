@@ -4,6 +4,9 @@ import type { StaticUrlsMap } from './types/static-mapping';
 import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 import { asyncForEach } from './utils/async-array';
 
+// Because we need to download metadata alongside content but we don't know ahead of time what the size of the payload
+// will be, we're defaulting it to 768 bytes (3/4 of a KB). Most metadata sizes as of now seem to be between 0-1000
+// bytes so this seems like a reasonable default.
 export const METADATA_ONLY_FAKE_FILE_SIZE = 768;
 
 type CheckCacheChangeItem = { url: Url; expectedSize: number };
