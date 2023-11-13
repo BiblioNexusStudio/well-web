@@ -35,8 +35,10 @@
     let totalTimeDisplay = '';
     let isPlaying = false;
     let allFilesLoaded = false;
+    let subscribedKeys: string[] = [];
 
     $: updateBasedOnKey(currentClipKey);
+    $: subscribeToClips(multiClipAudioStates);
 
     function updateBasedOnKey(key: ClipKey) {
         updateDisplayValues(multiClipAudioStates?.[key]);
@@ -69,19 +71,24 @@
         multiClipAudioStates?.[currentClipKey]?.onRangeChange(e);
     }
 
+    function subscribeToClips(clips: Record<ClipKey, MultiClipAudioState>) {
+        objectEntries(clips).forEach(([key, clip]) => {
+            if (!subscribedKeys.includes(key)) {
+                clip.subscribe((state) => {
+                    // Only update the component if it's for the current audio player
+                    if (key === currentClipKey) {
+                        updateDisplayValues(state as unknown as MultiClipAudioState);
+                    }
+                });
+                subscribedKeys = [...subscribedKeys, key];
+            }
+        });
+    }
+
     onMount(() => {
         if (files) {
             multiClipAudioStates = { [defaultClipKey]: createMultiClipAudioState(files) };
         }
-
-        objectEntries(multiClipAudioStates).forEach(([key, multiClipAudioState]) => {
-            multiClipAudioState.subscribe((state) => {
-                // Only update the component if it's for the current audio player
-                if (key === currentClipKey) {
-                    updateDisplayValues(state as unknown as MultiClipAudioState);
-                }
-            });
-        });
     });
 
     onDestroy(() => {

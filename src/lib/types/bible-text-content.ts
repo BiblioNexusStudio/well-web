@@ -19,6 +19,7 @@ export interface BaseBible {
     abbreviation: string;
     id: number;
     name: string;
+    languageId: number;
     licenseInfo: ApiLicenseInfo | null;
 }
 
@@ -26,8 +27,11 @@ export interface ApiBible extends BaseBible {
     books: ApiBibleBookContent[];
 }
 
-export interface FrontendBible extends BaseBible {
-    books: BibleBookContentDetails[];
+export interface FrontendBibleBook extends BaseBible {
+    bookMetadata: BibleBookContentDetails | null;
+    defaultForCurrentLanguage: boolean;
+    loadingContent: boolean;
+    content: { chapters: FrontendChapterContent[] } | null;
 }
 
 export interface BaseBibleBookContent {
@@ -43,4 +47,16 @@ export type ApiBibleBookContent = BaseBibleBookContent;
 export interface BibleBookContentDetails extends BaseBibleBookContent {
     textUrl: string;
     audioUrls: { chapters: FrontendAudioChapter[] };
+}
+
+export interface FrontendChapterAudioData {
+    url: string;
+    startTimestamp: number | null;
+    endTimestamp: number | null;
+}
+
+export interface FrontendChapterContent {
+    number: string;
+    audioData: FrontendChapterAudioData | null;
+    versesText: { number: string; text: string }[];
 }

@@ -14,7 +14,7 @@ export type AllItemsProgress = Record<Url, SingleItemProgress>;
 const partiallyDownloadedCdnUrls: string[] = [];
 const partiallyDownloadedApiPaths: string[] = [];
 const cdnRegex =
-    'https://cdn.aquifer.bible.*|https://aquifer-server-(qa|dev|prod).azurewebsites.net/resources/\\d+/content|metadata|thumbnail';
+    /(https:\/\/cdn\.aquifer\.bible.*|https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/(content|metadata|thumbnail))/;
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 export async function fetchFromCacheOrApi(path: string) {
