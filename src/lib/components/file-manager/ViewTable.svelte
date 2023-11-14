@@ -20,6 +20,7 @@
     import { METADATA_ONLY_FAKE_FILE_SIZE, fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
+    import { MediaType } from '$lib/types/resource';
 
     let allChaptersSelected = false;
     let allChaptersCached = false;
@@ -59,7 +60,7 @@
                                     chapter.chapterNumber - 1
                                 ].cbbterResourceUrls?.push({
                                     url: passageContentApiFullPath(passage),
-                                    mediaType: 'text',
+                                    mediaType: MediaType.Text,
                                     metadataOnly: true,
                                     size: METADATA_ONLY_FAKE_FILE_SIZE,
                                 });

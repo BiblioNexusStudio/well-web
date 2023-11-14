@@ -47,6 +47,7 @@ registerRoute(
     'POST'
 );
 
+// content from the CDN or metadata/thumbnails/text content from the API
 registerRoute(
     /(https:\/\/cdn\.aquifer\.bible.*|https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/(content|metadata|thumbnail))/,
     new CacheFirst({
@@ -56,8 +57,18 @@ registerRoute(
     'GET'
 );
 
+// don't cache the batch responses from the API
 registerRoute(
-    /https:\/\/((qa|dev)\.)?api\.aquifer\.bible.*\//,
+    /https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/batch.*/,
+    new NetworkOnly({
+        plugins: [addApiKeyToAllRequestPlugin],
+    }),
+    'GET'
+);
+
+// responses from the API
+registerRoute(
+    /https:\/\/((qa|dev)\.)?api\.aquifer\.bible.*/,
     new CacheFirstAndStaleWhileRevalidateAfterExpiration({
         cacheName: 'aquifer-api',
         staleAfterDuration: 60 * 60 * API_CACHE_DURATION_IN_HOURS,
