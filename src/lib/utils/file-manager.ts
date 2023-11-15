@@ -152,7 +152,7 @@ export const calculateUrlsWithMetadataToChange = (
     });
 
     if (resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')) {
-        biblesModuleBook.audioUrls.chapters.forEach(async (chapter) => {
+        biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
                 chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
                     if (chapter.deleteResources) {
