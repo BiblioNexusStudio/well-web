@@ -27,3 +27,16 @@ export function groupBy<T, K extends PropertyKey, V>(
 export function range(start: number, end: number) {
     return [...Array(end - start + 1).keys()].map((n) => n + start);
 }
+
+export function chunk<T>(array: T[], chunkSize: number): T[][] {
+    const result: T[][] = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+        result.push(array.slice(i, i + chunkSize));
+    }
+    return result;
+}
+
+export function removeFromArray<T>(array: T[], value: T) {
+    const index = array.indexOf(value);
+    if (index > -1) array.splice(index, 1);
+}

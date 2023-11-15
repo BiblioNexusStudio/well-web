@@ -8,11 +8,9 @@ class AddApiKeyToAllRequestPlugin implements WorkboxPlugin {
     }
 
     requestWillFetch: WorkboxPlugin['requestWillFetch'] = async (args: RequestWillFetchCallbackParam) => {
-        const headers = new Headers(args.request.headers);
-        headers.set('api-key', this.apikey);
-        const newRequest = new Request(args.request, { headers });
-
-        return newRequest;
+        const urlObj = new URL(args.request.url);
+        urlObj.searchParams.append('api-key', this.apikey);
+        return new Request(urlObj.toString(), args.request);
     };
 }
 

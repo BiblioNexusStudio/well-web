@@ -1,7 +1,14 @@
 import type { FrontendPassageResourceContent } from './passage';
+import type { MediaType, MediaTypeEnum } from './resource';
 
 export type Url = string;
-export type UrlWithMetadata = { mediaType: MediaTypeEnum; url: Url; size: number; metadataOnly?: boolean };
+export interface UrlWithMetadata {
+    mediaType: MediaTypeEnum;
+    url: Url;
+    contentId?: number;
+    size: number;
+    metadataOnly?: boolean;
+}
 export type TiptapContent = object;
 
 export interface ApiAudioChapter {
@@ -117,23 +124,15 @@ export interface ApiPassageContent {
 }
 
 export interface ResourcesByMediaType {
-    [MediaType.text]: ResourcesForMediaType;
-    [MediaType.audio]: ResourcesForMediaType;
-    [MediaType.images]: ResourcesForMediaType;
+    [MediaType.Text]: ResourcesForMediaType;
+    [MediaType.Audio]: ResourcesForMediaType;
+    [MediaType.Image]: ResourcesForMediaType;
 }
 
 export interface ResourcesForMediaType {
     urlsWithMetadata: UrlWithMetadata[];
     selected: boolean;
 }
-
-export const MediaType = {
-    text: 'text',
-    audio: 'audio',
-    images: 'images',
-} as const;
-
-export type MediaTypeEnum = (typeof MediaType)[keyof typeof MediaType];
 
 export interface FooterInputs {
     text: boolean;
