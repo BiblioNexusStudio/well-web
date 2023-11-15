@@ -68,7 +68,7 @@
                         <summary class="btn btn-link btn-active text-primary">
                             <Icon class="h-6 w-6" data={gear} scale={2} />
                         </summary>
-                        <ul class="dropdown-content menu rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
+                        <ul class="menu dropdown-content rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
                             <li>
                                 <button on:click={() => (recordingModalOpen = true)}>
                                     <Icon data={microphone} />
@@ -99,10 +99,10 @@
                 <PassageForm isSideMenu={true} />
                 <div class="mt-auto flex flex-col">
                     <a href="/" class="semi-bold mb-6 flex text-lg text-primary" on:click={closeSideMenu}
-                        ><span class="mr-2 flex items-center"><HomeIcon /></span>{$translate('sideMenu.home.value')}</a
+                        ><span class="me-2 flex items-center"><HomeIcon /></span>{$translate('sideMenu.home.value')}</a
                     >
                     <a href="/file-manager" class="semi-bold mb-6 flex text-lg text-primary" on:click={closeSideMenu}
-                        ><span class="mr-2 flex items-center"><DownloadIcon /></span>{$translate(
+                        ><span class="me-2 flex items-center"><DownloadIcon /></span>{$translate(
                             'sideMenu.fileManager.value'
                         )}</a
                     >
@@ -111,3 +111,9 @@
         </div>
     </div>
 </div>
+
+<style>
+    [dir='rtl'] .drawer-end .drawer-toggle ~ .drawer-side {
+        justify-items: start;
+    }
+</style>

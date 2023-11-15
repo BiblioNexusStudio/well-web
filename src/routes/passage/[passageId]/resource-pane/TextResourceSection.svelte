@@ -93,7 +93,7 @@
                     </div>
                     <div class="line-clamp-1 break-all text-start text-sm text-neutral">{entry.preview}</div>
                 </div>
-                <div class="flex-shrink-0 pl-9 pr-3">
+                <div class="flex-shrink-0 pe-3 ps-9">
                     <Icon class="text-neutral" data={arrowRight} />
                 </div>
             </button>

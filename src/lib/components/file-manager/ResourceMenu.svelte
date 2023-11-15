@@ -93,7 +93,7 @@
     });
 </script>
 
-<div class="relative mr-2 flex h-full w-1/2 items-center" bind:this={resourcesMenuDiv}>
+<div class="relative me-2 flex h-full w-1/2 items-center" bind:this={resourcesMenuDiv}>
     <button class="btn btn-primary btn-outline flex w-full justify-between" on:click={toggleMenu}>
         {$translate('page.fileManager.viewRow.resources.value')} ({selectedResources.length}) <Icon
             data={menuOpen ? caretUp : caretDown}
@@ -113,7 +113,7 @@
                             bind:checked={resource.selected}
                             class="checkbox-primary checkbox"
                         />
-                        <span class="label-text ml-4">{resource.name}</span>
+                        <span class="label-text ms-4">{resource.name}</span>
                     </label>
                 {/if}
             {/each}

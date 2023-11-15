@@ -284,7 +284,7 @@
                         {#each currentBible?.content.chapters as chapter}
                             {#each chapter.versesText as { number, text }}
                                 <div class="py-1">
-                                    <span class="sup pr-1">{number}</span><span>{@html text}</span>
+                                    <span class="sup pe-1">{number}</span><span>{@html text}</span>
                                 </div>
                             {/each}
                         {/each}

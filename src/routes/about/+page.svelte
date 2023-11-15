@@ -75,7 +75,7 @@
                     {#each licenseInfos as licenseInfo}
                         {@const licenseDescription = calculateLicenseDescription(licenseInfo)}
                         <h4>{licenseInfo.title}</h4>
-                        <div class="ml-4">
+                        <div class="ms-4">
                             <div>
                                 © {licenseInfo.copyright.dates ?? ''}
                                 {#if licenseInfo.copyright.holder.url}

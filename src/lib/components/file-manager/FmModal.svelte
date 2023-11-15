@@ -107,7 +107,7 @@
             </p>
             <p class="mb-8 py-4">{$translate('page.fileManager.modal.question.value')}</p>
             <div class="flex justify-end">
-                <button class="btn btn-neutral mr-4" on:click={cancelUpdateFiles}
+                <button class="btn btn-neutral me-4" on:click={cancelUpdateFiles}
                     >{$translate('page.fileManager.cancel.value')}</button
                 >
                 <button
