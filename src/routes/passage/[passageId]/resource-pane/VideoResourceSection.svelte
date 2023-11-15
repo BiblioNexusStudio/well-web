@@ -31,17 +31,17 @@
     <div bind:this={carousel} class="carousel w-full pb-6 {filteredResources.length > 0 ? 'visible' : 'hidden'}">
         {#each resources as video}
             <button
-                class="carousel-item mr-2 w-32 flex-col {filteredResources.includes(video) ? 'visible' : 'hidden'}"
+                class="carousel-item me-2 w-32 flex-col {filteredResources.includes(video) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(video)}
             >
                 <div class="relative mb-1">
                     {#if video.duration}
                         <div
-                            class="absolute bottom-1.5 left-1.5 flex flex-row items-center rounded-lg bg-black bg-opacity-80 p-1 pl-2 pr-1.5
+                            class="absolute bottom-1.5 left-1.5 flex flex-row items-center rounded-lg bg-black bg-opacity-80 p-1 pe-1.5 ps-2
                             text-gray-25"
                         >
                             <Icon data={play} scale={0.5} />
-                            <div class="pl-1 text-xs font-semibold">{formatSecondsToMins(video.duration)}</div>
+                            <div class="ps-1 text-xs font-semibold">{formatSecondsToMins(video.duration)}</div>
                         </div>
                     {/if}
                     {#if video.thumbnailUrl}

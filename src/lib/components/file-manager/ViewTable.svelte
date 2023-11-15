@@ -17,9 +17,10 @@
     import type { ResourcesApiModule, BiblesModuleBook } from '$lib/types/file-manager';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { buildRowData } from '$lib/utils/file-manager';
-    import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { METADATA_ONLY_FAKE_FILE_SIZE, fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
+    import { MediaType } from '$lib/types/resource';
 
     let allChaptersSelected = false;
     let allChaptersCached = false;
@@ -59,8 +60,9 @@
                                     chapter.chapterNumber - 1
                                 ].cbbterResourceUrls?.push({
                                     url: passageContentApiFullPath(passage),
-                                    mediaType: 'text',
-                                    size: 2048,
+                                    mediaType: MediaType.Text,
+                                    metadataOnly: true,
+                                    size: METADATA_ONLY_FAKE_FILE_SIZE,
                                 });
                             }
                         });
@@ -185,7 +187,7 @@
                                 }}
                                 class="absolute -bottom-8 left-0 z-30 mx-2 flex w-[96vw] items-center justify-start rounded-md border-2 border-solid border-primary bg-white px-4 py-2"
                             >
-                                <Icon data={trash} class="mr-2" />
+                                <Icon data={trash} class="me-2" />
                                 {$translate('page.fileManager.delete.value')}
                             </button>
                         {/if}

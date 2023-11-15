@@ -27,7 +27,7 @@
     <div bind:this={carousel} class="carousel w-full pb-6 {filteredResources.length > 0 ? 'visible' : 'hidden'}">
         {#each resources as image}
             <button
-                class="carousel-item mr-2 w-32 flex-col {filteredResources.includes(image) ? 'visible' : 'hidden'}"
+                class="carousel-item me-2 w-32 flex-col {filteredResources.includes(image) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(image)}
             >
                 <img

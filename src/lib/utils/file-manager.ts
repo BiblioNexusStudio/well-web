@@ -1,4 +1,4 @@
-import { isCachedFromCdn } from '$lib/data-cache';
+import { METADATA_ONLY_FAKE_FILE_SIZE, isCachedFromCdn } from '$lib/data-cache';
 import { asyncForEach } from './async-array';
 import { audioFileTypeForBrowser } from './browser';
 import type {
@@ -10,6 +10,7 @@ import type {
     ResourcesApiModule,
 } from '$lib/types/file-manager';
 import { resourceContentApiFullUrl, resourceMetadataApiFullPath } from '$lib/utils/data-handlers/resources/resource';
+import { MediaType } from '$lib/types/resource';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -48,7 +49,7 @@ export const calculateUrlsWithMetadataToChange = (
         !biblesModuleBook.isTextUrlCached
     ) {
         urlsAndSizesToDownload.push({
-            mediaType: 'text',
+            mediaType: MediaType.Text,
             url: biblesModuleBook.textUrl,
             size: biblesModuleBook.textSize,
         });
@@ -65,7 +66,7 @@ export const calculateUrlsWithMetadataToChange = (
         if (chapter.selected) {
             if (bibleSelected && footerInputs.audio && !chapter.isAudioUrlCached) {
                 urlsAndSizesToDownload.push({
-                    mediaType: 'audio',
+                    mediaType: MediaType.Audio,
                     url: chapter[audioFileTypeForBrowser()].url,
                     size: chapter[audioFileTypeForBrowser()].size,
                 });
@@ -78,58 +79,67 @@ export const calculateUrlsWithMetadataToChange = (
             chapter.resourceMenuItems?.forEach((resourceMenuItem) => {
                 if (!resourceMenuItem.isResourceUrlCached) {
                     if (footerInputs.text) {
-                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'text') {
+                        if (resourceMenuItem.mediaTypeName === MediaType.Text) {
                             if (
                                 resourcesMenu.some(
                                     ({ selected, value }) => selected && value === resourceMenuItem.typeName
                                 )
                             ) {
                                 urlsAndSizesToDownload.push({
-                                    mediaType: 'text',
+                                    mediaType: MediaType.Text,
+                                    contentId: resourceMenuItem.contentId,
                                     url: resourceContentApiFullUrl(resourceMenuItem),
                                     size: resourceMenuItem.contentSize,
                                 });
                                 urlsAndSizesToDownload.push({
                                     url: resourceMetadataApiFullPath(resourceMenuItem),
-                                    mediaType: 'text',
-                                    size: 2048,
+                                    contentId: resourceMenuItem.contentId,
+                                    mediaType: MediaType.Text,
+                                    metadataOnly: true,
+                                    size: METADATA_ONLY_FAKE_FILE_SIZE,
                                 });
                             }
                         }
                     }
 
                     if (footerInputs.audio) {
-                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'audio') {
+                        if (resourceMenuItem.mediaTypeName === MediaType.Audio) {
                             if (
                                 resourcesMenu.some(
                                     ({ selected, value }) => selected && value === resourceMenuItem.typeName
                                 )
                             ) {
                                 urlsAndSizesToDownload.push({
-                                    mediaType: 'audio',
+                                    mediaType: MediaType.Audio,
+                                    contentId: resourceMenuItem.contentId,
                                     url: resourceContentApiFullUrl(resourceMenuItem),
                                     size: resourceMenuItem.contentSize,
                                 });
                                 urlsAndSizesToDownload.push({
                                     url: resourceMetadataApiFullPath(resourceMenuItem),
-                                    mediaType: 'audio',
-                                    size: 2048,
+                                    mediaType: MediaType.Audio,
+                                    contentId: resourceMenuItem.contentId,
+                                    metadataOnly: true,
+                                    size: METADATA_ONLY_FAKE_FILE_SIZE,
                                 });
                             }
                         }
                     }
 
                     if (footerInputs.media) {
-                        if (resourceMenuItem.mediaTypeName.toLowerCase() === 'image') {
+                        if (resourceMenuItem.mediaTypeName === MediaType.Image) {
                             urlsAndSizesToDownload.push({
-                                mediaType: 'images',
+                                mediaType: MediaType.Image,
+                                contentId: resourceMenuItem.contentId,
                                 url: resourceContentApiFullUrl(resourceMenuItem),
                                 size: resourceMenuItem.contentSize,
                             });
                             urlsAndSizesToDownload.push({
                                 url: resourceMetadataApiFullPath(resourceMenuItem),
-                                mediaType: 'images',
-                                size: 2048,
+                                mediaType: MediaType.Image,
+                                contentId: resourceMenuItem.contentId,
+                                metadataOnly: true,
+                                size: METADATA_ONLY_FAKE_FILE_SIZE,
                             });
                         }
                     }
@@ -144,16 +154,11 @@ export const calculateUrlsWithMetadataToChange = (
     if (resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')) {
         biblesModuleBook.audioUrls.chapters.forEach(async (chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
-                await asyncForEach(chapter.cbbterResourceUrls, async (cbbterResourceUrl) => {
-                    const isCbbterResourceUrlCached = await isCachedFromCdn(cbbterResourceUrl.url);
-                    if (!isCbbterResourceUrlCached) {
-                        urlsAndSizesToDownload.push({
-                            mediaType: 'text',
-                            url: cbbterResourceUrl.url,
-                            size: cbbterResourceUrl.size,
-                        });
-                    } else if (chapter.deleteResources) {
+                chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
+                    if (chapter.deleteResources) {
                         urlsToDelete.push(cbbterResourceUrl.url);
+                    } else {
+                        urlsAndSizesToDownload.push(cbbterResourceUrl);
                     }
                 });
             }

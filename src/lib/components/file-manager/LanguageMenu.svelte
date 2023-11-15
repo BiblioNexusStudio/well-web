@@ -35,7 +35,7 @@
     });
 </script>
 
-<div class="relative ml-2 flex h-full w-1/2 items-center" bind:this={languageMenuDiv}>
+<div class="relative ms-2 flex h-full w-1/2 items-center" bind:this={languageMenuDiv}>
     <button class="btn btn-primary btn-outline flex w-full justify-between" on:click={toggleMenu}>
         {currentLanguage?.label} ({$currentLanguageCode}) <Icon data={menuOpen ? caretUp : caretDown} />
     </button>
@@ -51,7 +51,7 @@
                     on:click={() => onLanguageSelected(lanaguage.code)}
                     aria-label={lanaguage.label}
                 >
-                    {lanaguage.label} <span class="ml-2 uppercase"> ({lanaguage.code})</span>
+                    {lanaguage.label} <span class="ms-2 uppercase"> ({lanaguage.code})</span>
                 </button>
             {/each}
         </div>
