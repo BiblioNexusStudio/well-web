@@ -68,7 +68,7 @@
                         <summary class="btn btn-link btn-active text-primary">
                             <Icon class="h-6 w-6" data={gear} scale={2} />
                         </summary>
-                        <ul class="menu dropdown-content rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
+                        <ul class="dropdown-content menu rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
                             <li>
                                 <button on:click={() => (recordingModalOpen = true)}>
                                     <Icon data={microphone} />
