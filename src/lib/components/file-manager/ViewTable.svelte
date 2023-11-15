@@ -185,7 +185,7 @@
                                     audioChapter.deleteResources = true;
                                     openDeleteModal();
                                 }}
-                                class="absolute -bottom-8 left-0 z-30 mx-2 flex w-[96vw] items-center justify-start rounded-md border-2 border-solid border-primary bg-white px-4 py-2"
+                                class="absolute left-0 z-30 mx-2 flex w-[96vw] items-center justify-start rounded-md border-2 border-solid border-primary bg-white px-4 py-2"
                             >
                                 <Icon data={trash} class="me-2" />
                                 {$translate('page.fileManager.delete.value')}
