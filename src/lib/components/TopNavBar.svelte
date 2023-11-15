@@ -99,10 +99,10 @@
                 <PassageForm isSideMenu={true} />
                 <div class="mt-auto flex flex-col">
                     <a href="/" class="semi-bold mb-6 flex text-lg text-primary" on:click={closeSideMenu}
-                        ><span class="mr-2 flex items-center"><HomeIcon /></span>{$translate('sideMenu.home.value')}</a
+                        ><span class="me-2 flex items-center"><HomeIcon /></span>{$translate('sideMenu.home.value')}</a
                     >
                     <a href="/file-manager" class="semi-bold mb-6 flex text-lg text-primary" on:click={closeSideMenu}
-                        ><span class="mr-2 flex items-center"><DownloadIcon /></span>{$translate(
+                        ><span class="me-2 flex items-center"><DownloadIcon /></span>{$translate(
                             'sideMenu.fileManager.value'
                         )}</a
                     >
@@ -111,3 +111,9 @@
         </div>
     </div>
 </div>
+
+<style>
+    [dir='rtl'] .drawer-end .drawer-toggle ~ .drawer-side {
+        justify-items: start;
+    }
+</style>

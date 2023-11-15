@@ -16,7 +16,7 @@
         </button>
     </div>
     <input
-        class="input input-bordered w-full pl-10"
+        class="input input-bordered w-full ps-10"
         placeholder={$translate('components.search.placeholder.value')}
         bind:value={searchQuery}
     />

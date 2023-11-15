@@ -32,7 +32,7 @@
                 />
                 <label
                     for="select-all"
-                    class="ml-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
+                    class="ms-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
                     >{$translate('page.fileManager.textType.value')}</label
                 >
             </div>
@@ -46,7 +46,7 @@
                 />
                 <label
                     for="select-all"
-                    class="ml-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
+                    class="ms-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
                     >{$translate('page.fileManager.audioType.value')}</label
                 >
             </div>
@@ -60,7 +60,7 @@
                 />
                 <label
                     for="select-all"
-                    class="ml-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
+                    class="ms-2 cursor-pointer {downloadingIsDisabled ? 'text-gray-400' : 'text-primary'}"
                     >{$translate('page.fileManager.mediaType.value')}</label
                 >
             </div>
@@ -75,7 +75,7 @@
                     )}
                 </span>
             </div>
-            <button class="btn btn-primary ml-4" disabled={downloadingIsDisabled} on:click={updateFiles}>
+            <button class="btn btn-primary ms-4" disabled={downloadingIsDisabled} on:click={updateFiles}>
                 {#if $isOnline}
                     <Icon data={download} /> {$translate('page.fileManager.download.value')}
                 {:else}

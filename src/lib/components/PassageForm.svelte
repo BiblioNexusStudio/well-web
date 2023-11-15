@@ -43,7 +43,7 @@
         <select
             on:change={onLanguageSelected}
             bind:value={$currentLanguageCode}
-            class="select select-info font-semibold"
+            class="select select-info pe-14 ps-4 font-semibold"
         >
             <option value="" disabled selected>{$translate('page.index.language.value')}</option>
             {#each supportedLanguages as { code, label }}
@@ -61,7 +61,7 @@
         id="passage-form-book"
         bind:value={$selectedBookIndex}
         on:change={() => ($selectedId = 'default')}
-        class="select select-info font-semibold"
+        class="select select-info pe-14 ps-4 font-semibold"
         disabled={!$data.passagesByBook?.length}
     >
         <option disabled selected value="default">
@@ -85,7 +85,7 @@
     <select
         id="passage-form-passage"
         bind:value={$selectedId}
-        class="select select-info font-semibold"
+        class="select select-info pe-14 ps-4 font-semibold"
         disabled={!selectedBookInfo}
     >
         <option disabled selected value="default">{$translate('page.index.passage.value')}</option>

@@ -19,7 +19,7 @@
 </script>
 
 <div bind:this={videoState.sliderElement} class="mx-auto flex w-full max-w-xl flex-row items-center px-4 pt-4">
-    <div class="pr-2 font-mono text-sm text-gray-50">
+    <div class="pe-2 font-mono text-sm text-gray-50">
         {timeDisplay}
     </div>
     <input
@@ -32,7 +32,7 @@
         on:input={videoState.stopSyncingSeekPosition.bind(videoState)}
         value={videoState.rangeValue}
     />
-    <div class="pl-2 font-mono text-sm text-gray-50">
+    <div class="ps-2 font-mono text-sm text-gray-50">
         {totalTimeDisplay}
     </div>
 </div>

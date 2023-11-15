@@ -50,7 +50,7 @@
                 on:change={(event) => updatePreferredBibleIds(bible.id, event)}
                 class="checkbox-primary checkbox"
             />
-            <span class="label-text ml-4">{bible.languageCode} - {bible.name} ({bible.abbreviation})</span>
+            <span class="label-text ms-4">{bible.languageCode} - {bible.name} ({bible.abbreviation})</span>
         </label>
     {/each}
 </div>
