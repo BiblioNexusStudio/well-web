@@ -1,5 +1,5 @@
 import { lookupLanguageInfoByCode } from '$lib/stores/current-language.store';
-import { MediaType, type UrlWithMetadata } from '$lib/types/file-manager';
+import type { UrlWithMetadata } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '../browser';
 import { cacheManyFromCdnWithProgress, fetchFromCacheOrApi, isCachedFromApi, isCachedFromCdn } from '$lib/data-cache';
 import { asyncEvery, asyncReturnFirst } from '../async-array';
@@ -10,6 +10,7 @@ import type { ApiBible, BaseBible, BibleBookContentDetails } from '$lib/types/bi
 import { isOnline } from '$lib/stores/is-online.store';
 import { get } from 'svelte/store';
 import type { BasePassage } from '$lib/types/passage';
+import { MediaType } from '$lib/types/resource';
 
 type BibleRecordingPassage = { url: string };
 type BibleRecordingVersion = {
@@ -33,10 +34,10 @@ function bibleUrlsWithMetadataForBookAndChapters(
                 ({
                     url: audioUrl[audioFileTypeForBrowser()].url,
                     size: audioUrl[audioFileTypeForBrowser()].size,
-                    mediaType: MediaType.audio,
+                    mediaType: MediaType.Audio,
                 }) as UrlWithMetadata
         )
-        .concat({ url: bookData.textUrl, size: bookData.textSize, mediaType: MediaType.text } as UrlWithMetadata);
+        .concat({ url: bookData.textUrl, size: bookData.textSize, mediaType: MediaType.Text } as UrlWithMetadata);
 }
 
 export async function fetchBibleDataForBookCodeAndLanguageCode(

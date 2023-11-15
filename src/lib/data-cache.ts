@@ -3,23 +3,35 @@ import type { Url, UrlWithMetadata } from './types/file-manager';
 import type { StaticUrlsMap } from './types/static-mapping';
 import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 import { asyncForEach } from './utils/async-array';
+import { MediaType } from './types/resource';
+import { chunk, removeFromArray } from './utils/array';
 
 // Because we need to download metadata alongside content but we don't know ahead of time what the size of the payload
 // will be, we're defaulting it to 768 bytes (3/4 of a KB). Most metadata sizes as of now seem to be between 0-1000
 // bytes so this seems like a reasonable default.
 export const METADATA_ONLY_FAKE_FILE_SIZE = 768;
 
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 1000;
+
 type CheckCacheChangeItem = { url: Url; expectedSize: number };
 type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean; metadataOnly?: boolean };
 export type AllItemsProgress = Record<Url, SingleItemProgress>;
+
+interface BatchedUrl {
+    idsToUrls: Record<number, UrlWithMetadata>;
+    baseUrl: Url;
+}
 
 // The workbox `fetch` caching API will create a cache entry as soon as response headers have been returned, rather than
 // after the full response has been downloaded. Without these arrays and their usages, isCachedFromApi and
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const partiallyDownloadedCdnUrls: string[] = [];
 const partiallyDownloadedApiPaths: string[] = [];
-const cdnRegex =
-    /(https:\/\/cdn\.aquifer\.bible.*|https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/(content|metadata|thumbnail))/;
+const apiContentRegex = /https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/content/;
+const apiMetadataRegex = /https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/metadata/;
+const apiThumbnailRegex = /https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/thumbnail/;
+const cdnRegex = /https:\/\/cdn\.aquifer\.bible.*/;
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 export async function fetchFromCacheOrApi(path: string) {
@@ -87,6 +99,20 @@ export function cachedOrRealUrl(url: Url) {
     return url in staticUrlsMap ? (staticUrlsMap[url] as string) : url;
 }
 
+// Retry with exponential backoff
+async function retryRequest(fn: () => Promise<void>, remainingRetries = MAX_RETRIES, delay = RETRY_DELAY_MS) {
+    try {
+        return await fn();
+    } catch (error) {
+        if (remainingRetries > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            return retryRequest(fn, remainingRetries - 1, delay * 2.5);
+        } else {
+            throw error;
+        }
+    }
+}
+
 // Fetch multiple URLs when online and store them in the cache, tracking progress as the downloads happen.
 export async function cacheManyFromCdnWithProgress(
     urls: UrlWithMetadata[],
@@ -107,7 +133,17 @@ export async function cacheManyFromCdnWithProgress(
         }),
         {}
     );
-    const queue = [...urls];
+
+    const textBatchUrls: BatchedUrl[] = chunk(urls.filter(isTextBatchableUrl), 10).map((urlsInBatch) => ({
+        idsToUrls: Object.fromEntries(urlsInBatch.map((url) => [url.contentId, url])),
+        baseUrl: apiUrl('resources/batch/content/text'),
+    }));
+    const metadataBatchUrls: BatchedUrl[] = chunk(urls.filter(isMetadataBatchableUrl), 100).map((urlsInBatch) => ({
+        idsToUrls: Object.fromEntries(urlsInBatch.map((url) => [url.contentId, url])),
+        baseUrl: apiUrl('resources/batch/metadata'),
+    }));
+    const nonBatchUrls = urls.filter((url) => !isTextBatchableUrl(url) && !isMetadataBatchableUrl(url));
+    const queue = [...textBatchUrls, ...metadataBatchUrls, ...nonBatchUrls];
 
     progressCallback(progress);
 
@@ -124,7 +160,11 @@ export async function cacheManyFromCdnWithProgress(
     };
 
     const processUrl = async (url: Url, expectedSize: number) => {
-        const cdnUrl = url.match(cdnRegex);
+        const cdnUrl =
+            url.match(cdnRegex) ||
+            url.match(apiContentRegex) ||
+            url.match(apiMetadataRegex) ||
+            url.match(apiThumbnailRegex);
 
         if (cdnUrl) {
             partiallyDownloadedCdnUrls.push(url);
@@ -151,25 +191,27 @@ export async function cacheManyFromCdnWithProgress(
                 return;
             }
 
-            const response = await fetch(url);
-            const reader = response.body?.getReader();
-            const contentLength = response.headers.get('Content-Length');
-            let receivedLength = 0;
-            if (reader) {
-                let lastProgressTime = Date.now();
-                // eslint-disable-next-line
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    receivedLength += value?.length || 0;
-                    const now = Date.now();
-                    if (now - lastProgressTime >= 100) {
-                        updateProgress(url, receivedLength, contentLength ? +contentLength : 0, false);
-                        lastProgressTime = now;
+            await retryRequest(async () => {
+                const response = await fetch(url);
+                const reader = response.body?.getReader();
+                const contentLength = response.headers.get('Content-Length');
+                let receivedLength = 0;
+                if (reader) {
+                    let lastProgressTime = Date.now();
+                    // eslint-disable-next-line
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        receivedLength += value?.length || 0;
+                        const now = Date.now();
+                        if (now - lastProgressTime >= 100) {
+                            updateProgress(url, receivedLength, contentLength ? +contentLength : 0, false);
+                            lastProgressTime = now;
+                        }
                     }
                 }
-            }
-            updateProgress(url, receivedLength, contentLength ? +contentLength : 0, true);
+                updateProgress(url, receivedLength, contentLength ? +contentLength : 0, true);
+            });
         } finally {
             if (cdnUrl) {
                 removeFromArray(partiallyDownloadedCdnUrls, url);
@@ -179,13 +221,77 @@ export async function cacheManyFromCdnWithProgress(
         }
     };
 
+    const processBatch = async (baseUrl: Url, idsToUrls: Record<number, UrlWithMetadata>) => {
+        const batchIds: number[] = [];
+        await asyncForEach(Object.entries(idsToUrls), async ([id, urlWithMetadata]) => {
+            try {
+                partiallyDownloadedCdnUrls.push(urlWithMetadata.url);
+
+                if (urlWithMetadata.url in staticUrlsMap) {
+                    updateProgress(urlWithMetadata.url, urlWithMetadata.size, urlWithMetadata.size, true);
+                    removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+                    return;
+                }
+
+                const cachedSize = await cachedCdnContentSize(urlWithMetadata.url);
+                if (cachedSize !== null) {
+                    updateProgress(urlWithMetadata.url, cachedSize, cachedSize, true);
+                    removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+                } else {
+                    batchIds.push(parseInt(id));
+                }
+            } catch {
+                removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+            }
+        });
+
+        if (batchIds.length > 0) {
+            try {
+                await retryRequest(async () => {
+                    const response = await fetch(baseUrl + `?${batchIds.map((id) => `ids=${id}`).join('&')}`);
+                    const json = (await response.json()) as { id: number; content: object }[];
+                    const cache = await caches.open('aquifer-cdn');
+
+                    // Iterate through the array returned by the batch endpoint and insert each item into the cache.
+                    // The cache key will be the original URL that the item would've had, so for all intents and
+                    // purposes it's as if we hit the original URL itself and cached the response.
+                    await asyncForEach(json, async (response) => {
+                        const urlWithMetadata = idsToUrls[response.id];
+                        if (urlWithMetadata) {
+                            if (baseUrl.includes('metadata')) {
+                                await cache.put(urlWithMetadata.url, new Response(JSON.stringify(response)));
+                            } else {
+                                await cache.put(urlWithMetadata.url, new Response(JSON.stringify(response.content)));
+                            }
+                            updateProgress(urlWithMetadata.url, urlWithMetadata.size, urlWithMetadata.size, true);
+                            removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error(error);
+                // there was a network error
+            }
+        }
+
+        Object.values(idsToUrls).forEach((urlWithMetadata) => {
+            removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+        });
+    };
+
     const processQueue = async () => {
         const workers = Array(concurrentRequests)
             .fill(null)
             .map(async () => {
                 while (queue.length > 0) {
-                    const { url, size } = queue.shift() as UrlWithMetadata;
-                    if (url) await processUrl(url, size);
+                    const urlWithMetadataOrBatchUrl = queue.shift();
+                    if ((urlWithMetadataOrBatchUrl as BatchedUrl).idsToUrls) {
+                        const { baseUrl, idsToUrls } = urlWithMetadataOrBatchUrl as BatchedUrl;
+                        await processBatch(baseUrl, idsToUrls);
+                    } else {
+                        const { url, size } = urlWithMetadataOrBatchUrl as UrlWithMetadata;
+                        if (url) await processUrl(url, size);
+                    }
                 }
             });
         await Promise.all(workers);
@@ -201,6 +307,14 @@ export async function cacheManyFromCdnWithProgress(
 export async function findStaleDataInCdnCache(items: CheckCacheChangeItem[]) {
     const cache = await caches.open('aquifer-cdn');
     return items.filter(async ({ url, expectedSize }) => expectedSize !== (await cachedCdnContentSize(url, cache)));
+}
+
+function isTextBatchableUrl(url: UrlWithMetadata) {
+    return url.mediaType === MediaType.Text && url.url.match(apiContentRegex);
+}
+
+function isMetadataBatchableUrl(url: UrlWithMetadata) {
+    return url.url.match(apiMetadataRegex);
 }
 
 // Checks if a fully downloaded cache entry exists for the URL.
@@ -237,11 +351,6 @@ export async function isCachedFromApi(path: string) {
 
 function apiUrl(path: string) {
     return config.PUBLIC_AQUIFER_API_URL + (path.startsWith('/') ? path.slice(1) : path);
-}
-
-function removeFromArray<T>(array: T[], value: T) {
-    const index = array.indexOf(value);
-    if (index > -1) array.splice(index, 1);
 }
 
 async function cachedCdnContentSize(url: Url, cache: Cache | null = null) {
