@@ -39,6 +39,19 @@
         return unsubscribe;
     });
 
+    function onError(event: Event) {
+        if ('error' in event) {
+            const error = event.error as Error;
+            log.exception(error);
+        }
+    }
+
+    function onRejection(event: PromiseRejectionEvent) {
+        const error = event.reason as Error;
+        event.preventDefault();
+        log.exception(error);
+    }
+
     // get the manifest info to include in the head
     $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
@@ -48,7 +61,12 @@
     {@html webManifestLink}
 </svelte:head>
 
-<svelte:window on:online={updateOnlineStatus} on:offline={updateOnlineStatus} />
+<svelte:window
+    on:online={updateOnlineStatus}
+    on:offline={updateOnlineStatus}
+    on:error={onError}
+    on:unhandledrejection={onRejection}
+/>
 
 <DebugModal />
 

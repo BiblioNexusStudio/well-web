@@ -5,6 +5,7 @@ import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 import { asyncForEach } from './utils/async-array';
 import { MediaType } from './types/resource';
 import { chunk, removeFromArray } from './utils/array';
+import { log } from './logger';
 
 // Because we need to download metadata alongside content but we don't know ahead of time what the size of the payload
 // will be, we're defaulting it to 768 bytes (3/4 of a KB). Most metadata sizes as of now seem to be between 0-1000
@@ -240,7 +241,8 @@ export async function cacheManyFromCdnWithProgress(
                 } else {
                     batchIds.push(parseInt(id));
                 }
-            } catch {
+            } catch (error) {
+                log.exception(error as Error);
                 removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
             }
         });
@@ -269,8 +271,8 @@ export async function cacheManyFromCdnWithProgress(
                     });
                 });
             } catch (error) {
-                console.error(error);
-                // there was a network error
+                // likely a network error
+                log.exception(error as Error);
             }
         }
 

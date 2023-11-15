@@ -11,7 +11,10 @@
                 if (featureFlags && featureFlags.darkMode) {
                     document.documentElement.setAttribute('data-theme', 'biblioNexusDark');
                 }
-            } catch (e) {}
+            } catch (error) {
+                // no access to app insights here so using a standard console.error
+                console.error(error);
+            }
         </script>
         <style>
             html {

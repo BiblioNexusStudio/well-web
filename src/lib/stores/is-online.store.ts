@@ -19,7 +19,7 @@ async function checkTrueOnlineStatus() {
     try {
         await fetch(config.PUBLIC_IS_ONLINE_CHECK_URL, { mode: 'no-cors', cache: 'no-store' });
         isOnline.set(true);
-    } catch (_) {
+    } catch {
         isOnline.set(false);
     }
 }

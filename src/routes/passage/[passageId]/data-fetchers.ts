@@ -24,6 +24,7 @@ import {
 } from '$lib/utils/data-handlers/resources/resource';
 import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
+import { log } from '$lib/logger';
 
 export type PassagePageTab = 'bible' | 'guide';
 
@@ -33,8 +34,9 @@ export async function fetchBibleContent(passage: BasePassage, bible: FrontendBib
     let fullBookText: BibleBookTextContent | null = null;
     try {
         fullBookText = await fetchFromCacheOrCdn(bible.bookMetadata.textUrl);
-    } catch (_) {
+    } catch (error) {
         // this means the user hasn't downloaded the Bible text, which is fine, they may have audio still
+        log.exception(error as Error);
     }
     const filteredAudio = bible.bookMetadata.audioUrls.chapters.filter((chapter: FrontendAudioChapter) => {
         const chapterNumber = parseInt(chapter.number);
@@ -126,8 +128,9 @@ async function getCbbterAudioForPassage(passage: PassageWithResourceContentIds):
                     await readFilesIntoObjectUrlsMapping(resourceContentApiFullUrl(resourceContent), audioTypeSteps)
                 ).filter(({ url }) => !!url);
                 return { steps };
-            } catch (_) {
+            } catch (error) {
                 // nothing cached
+                log.exception(error as Error);
                 return null;
             }
         })
@@ -151,6 +154,7 @@ async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): 
                 };
             } catch (error) {
                 // stuff not cached
+                log.exception(error as Error);
                 return null;
             }
         })
@@ -227,8 +231,9 @@ export async function fetchResourceData(passage: BasePassage) {
         passageWithResources = (await fetchFromCacheOrApi(
             `passages/${passage.id}/language/${get(currentLanguageInfo)?.id}`
         )) as PassageWithResourceContentIds;
-    } catch (_) {
+    } catch (error) {
         // data not cached
+        log.exception(error as Error);
     }
 
     if (passageWithResources) {
