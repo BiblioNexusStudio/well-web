@@ -5,6 +5,7 @@
     import { Icon } from 'svelte-awesome';
     import microphone from 'svelte-awesome/icons/microphone';
     import pause from 'svelte-awesome/icons/pause';
+    import { log } from '$lib/logger';
 
     export let canSave = false;
 
@@ -120,9 +121,11 @@
                 recorder.addEventListener('dataavailable', processChunk);
                 recorder.addEventListener('stop', handleStopRecording);
             }
-        } catch (e: unknown) {
-            if ((e as Error).name === 'NotAllowedError') {
+        } catch (error) {
+            if ((error as Error).name === 'NotAllowedError') {
                 noPermission = true;
+            } else {
+                log.exception(error as Error);
             }
         }
     }

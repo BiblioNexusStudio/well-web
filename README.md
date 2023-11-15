@@ -20,7 +20,7 @@ Use the appropriate config vars for your env (to specify the API URL among other
 $ yarn use-config local
 
 # dev server
-$ yarn use-config dev
+$ yarn use-config dev-local
 ```
 
 ## Running the app

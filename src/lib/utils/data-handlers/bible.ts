@@ -11,6 +11,7 @@ import { isOnline } from '$lib/stores/is-online.store';
 import { get } from 'svelte/store';
 import type { BasePassage } from '$lib/types/passage';
 import { MediaType } from '$lib/types/resource';
+import { log } from '$lib/logger';
 
 type BibleRecordingPassage = { url: string };
 type BibleRecordingVersion = {
@@ -58,7 +59,7 @@ export async function fetchBibleDataForBookCodeAndLanguageCode(
         return await fetchFromCacheOrApi(`bibles/${firstCachedBibleId}/book/${bookCode}`);
     } catch (error) {
         // this means the user hasn't cached the Bible data or language is invalid
-        console.error(error);
+        log.exception(error as Error);
         return null;
     }
 }
@@ -66,7 +67,8 @@ export async function fetchBibleDataForBookCodeAndLanguageCode(
 export async function fetchAllBibles(): Promise<BaseBible[]> {
     try {
         return await fetchFromCacheOrApi('bibles');
-    } catch (_) {
+    } catch (error) {
+        log.exception(error as Error);
         return [];
     }
 }
@@ -78,7 +80,8 @@ export async function fetchBiblesForLanguageCode(languageCode: string): Promise<
 
     try {
         return await fetchFromCacheOrApi(`bibles/language/${languageId}`);
-    } catch (_) {
+    } catch (error) {
+        log.exception(error as Error);
         return [];
     }
 }
@@ -91,6 +94,7 @@ export async function fetchBibleDataForBookCodeAndBibleId(
         return await fetchFromCacheOrApi(`bibles/${bibleId}/book/${bookCode}`);
     } catch (error) {
         // this means the user hasn't cached the Bible data or bible id is invalid
+        log.exception(error as Error);
         return null;
     }
 }
@@ -116,8 +120,9 @@ export async function bookDataForBibleTab(passage: BasePassage, bibleId: number,
             }
         }
         return null;
-    } catch (e) {
+    } catch (error) {
         // stuff not cached
+        log.exception(error as Error);
         return null;
     }
 }
