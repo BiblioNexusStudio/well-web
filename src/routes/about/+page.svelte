@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
-    import type { ApiResourceType, ApiLicenseInfo } from '$lib/types/resource';
+    import type { ApiParentResource, ApiLicenseInfo } from '$lib/types/resource';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { Icon } from 'svelte-awesome';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
@@ -46,7 +46,7 @@
 
     async function fetchLicenses() {
         const [resourceLicenses, bibleLicenses] = await Promise.all([
-            fetchFromCacheOrApi('/resources/types') as Promise<ApiResourceType[]>,
+            fetchFromCacheOrApi('/resources/parent-resources') as Promise<ApiParentResource[]>,
             fetchFromCacheOrApi('/bibles') as Promise<BaseBible[]>,
         ]);
         const licenses = resourceLicenses

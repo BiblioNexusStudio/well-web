@@ -1,4 +1,4 @@
-import type { ResourceTypeEnum } from '$lib/types/resource';
+import type { ParentResourceNameEnum } from '$lib/types/resource';
 
 export interface ImageOrVideoResource {
     type: 'image' | 'video';
@@ -12,5 +12,5 @@ export interface TextResource {
     displayName: string | null;
     html: string;
     preview: string;
-    typeName: ResourceTypeEnum;
+    parentResourceName: ParentResourceNameEnum;
 }

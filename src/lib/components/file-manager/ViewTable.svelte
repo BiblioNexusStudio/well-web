@@ -19,7 +19,7 @@
     import { METADATA_ONLY_FAKE_FILE_SIZE, fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
-    import { MediaType } from '$lib/types/resource';
+    import { MediaType, ParentResourceName } from '$lib/types/resource';
     import Image from '$lib/icons/Image.svelte';
     import ImageAndVideo from '$lib/icons/ImageAndVideo.svelte';
     import Video from '$lib/icons/Video.svelte';
@@ -36,8 +36,10 @@
     async function addAdditaonalResourcesApiModule(resourcesApiModule: ResourcesApiModule) {
         let passageData: BasePassagesByBook[] = [];
 
-        if ($resourcesMenu.some((resource) => resource.selected && resource.value === 'CBBTER')) {
-            passageData = await fetchFromCacheOrApi(`passages/language/${$currentLanguageInfo?.id}/resource/CBBTER`);
+        if ($resourcesMenu.some((resource) => resource.selected && resource.value === ParentResourceName.CBBTER)) {
+            passageData = await fetchFromCacheOrApi(
+                `passages/language/${$currentLanguageInfo?.id}/resource/${ParentResourceName.CBBTER}`
+            );
         }
 
         resourcesApiModule.chapters.forEach(async (chapter) => {
@@ -48,7 +50,10 @@
                         chapter.contents;
                 }
 
-                if (chapter.contents.some((content) => content.typeName === 'CBBTER') && passageData) {
+                if (
+                    chapter.contents.some((content) => content.parentResourceName === ParentResourceName.CBBTER) &&
+                    passageData
+                ) {
                     let filteredPassages = passageData.find((data) => data.bookCode === $selectedBookCode);
 
                     if (filteredPassages) {

@@ -178,7 +178,7 @@ export interface BiblesModuleBook {
 
 export interface CbbterTextContent {
     contentId: number;
-    typeName: string;
+    parentResourceName: string;
     mediaTypeName: string;
     contentSize: number;
 }

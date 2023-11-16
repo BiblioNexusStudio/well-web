@@ -13,7 +13,7 @@
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import type { ResourcesMenuItem } from '$lib/types/file-manager';
-    import { ResourceType } from '$lib/types/resource';
+    import { ParentResourceName } from '$lib/types/resource';
     import { addFrontEndDataToResourcesMenuItems } from '$lib/utils/file-manager';
 
     let resourcesMenuDiv: HTMLElement;
@@ -31,7 +31,7 @@
             const queryParams = resourcesMenu
                 .map((resource) => {
                     if (resource.selected && !resource.isBible) {
-                        return `resourceTypes=${resource.value}`;
+                        return `parentResourceNames=${resource.value}`;
                     } else {
                         return '';
                     }
@@ -51,35 +51,35 @@
             ...$bibleDataForResourcesMenu,
             {
                 name: $translate('resources.types.CBBTER.value'),
-                value: ResourceType.CBBTER,
+                value: ParentResourceName.CBBTER,
                 selected: true,
                 isBible: false,
                 display: true,
             },
             {
                 name: $translate('resources.types.tyndaleBibleDictionary.value'),
-                value: ResourceType.TyndaleBibleDictionary,
+                value: ParentResourceName.TyndaleBibleDictionary,
                 selected: false,
                 isBible: false,
                 display: true,
             },
             {
                 name: $translate('resources.types.tyndaleStudyNotes.value'),
-                value: ResourceType.TyndaleStudyNotes,
+                value: ParentResourceName.TyndaleStudyNotes,
                 selected: false,
                 isBible: false,
                 display: true,
             },
             {
                 name: $translate('resources.types.ubsImages.value'),
-                value: ResourceType.UbsImages,
+                value: ParentResourceName.UbsImages,
                 selected: false,
                 isBible: false,
                 display: true,
             },
             {
                 name: $translate('resources.types.videoBibleDictionary.value'),
-                value: ResourceType.VideoBibleDictionary,
+                value: ParentResourceName.VideoBibleDictionary,
                 selected: false,
                 isBible: false,
                 display: true,
@@ -116,7 +116,7 @@
                     <label class="label mb-4 cursor-pointer justify-start">
                         <input
                             type="checkbox"
-                            disabled={resource.value === ResourceType.CBBTER}
+                            disabled={resource.value === ParentResourceName.CBBTER}
                             bind:checked={resource.selected}
                             class="checkbox-primary checkbox"
                         />

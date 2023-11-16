@@ -15,7 +15,7 @@ import { fetchAllBibles, bookDataForBibleTab } from '$lib/utils/data-handlers/bi
 import { range } from '$lib/utils/array';
 import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
 import type { BasePassage, PassageResourceContent, PassageWithResourceContentIds } from '$lib/types/passage';
-import { MediaType, ResourceType, type CbbtErAudioMetadata, type CbbtErAudioContent } from '$lib/types/resource';
+import { MediaType, ParentResourceName, type CbbtErAudioMetadata, type CbbtErAudioContent } from '$lib/types/resource';
 import {
     fetchDisplayNameForResourceContent,
     fetchMetadataForResourceContent,
@@ -114,7 +114,8 @@ export async function fetchBibleContent(passage: BasePassage, bible: FrontendBib
 
 async function getCbbterAudioForPassage(passage: PassageWithResourceContentIds): Promise<CbbtErAudioContent[]> {
     const allAudioResourceContent = passage.contents.filter(
-        ({ mediaTypeName, typeName }) => typeName === ResourceType.CBBTER && mediaTypeName === MediaType.Audio
+        ({ mediaTypeName, parentResourceName }) =>
+            parentResourceName === ParentResourceName.CBBTER && mediaTypeName === MediaType.Audio
     );
     return (
         await asyncMap(allAudioResourceContent, async (resourceContent) => {
@@ -139,7 +140,8 @@ async function getCbbterAudioForPassage(passage: PassageWithResourceContentIds):
 
 async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): Promise<CbbtErTextContent[]> {
     const allTextResourceContent = passage.contents.filter(
-        ({ mediaTypeName, typeName }) => typeName === ResourceType.CBBTER && mediaTypeName === MediaType.Text
+        ({ mediaTypeName, parentResourceName }) =>
+            parentResourceName === ParentResourceName.CBBTER && mediaTypeName === MediaType.Text
     );
     return (
         await asyncMap(allTextResourceContent, async (resourceContent) => {
@@ -164,7 +166,9 @@ async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): 
 async function getAdditionalResourcesForPassage(
     passage: PassageWithResourceContentIds
 ): Promise<PassageResourceContent[]> {
-    const additionalResourceContent = passage.contents.filter(({ typeName }) => typeName !== ResourceType.CBBTER);
+    const additionalResourceContent = passage.contents.filter(
+        ({ parentResourceName }) => parentResourceName !== ParentResourceName.CBBTER
+    );
     return await asyncFilter(
         additionalResourceContent,
         async (resourceContent) => get(isOnline) || (await isCachedFromCdn(resourceContentApiFullUrl(resourceContent)))

@@ -2,23 +2,24 @@
     import { trapFocus } from '$lib/utils/trap-focus';
     import type { TextResource } from './types';
     import TextResourceSection from './TextResourceSection.svelte';
-    import type { ResourceTypeEnum } from '$lib/types/resource';
+    import type { ParentResourceNameEnum } from '$lib/types/resource';
 
-    export let type: ResourceTypeEnum | null;
-    export let textResourcesByType: Record<ResourceTypeEnum, TextResource[]>;
+    export let parentResourceName: ParentResourceNameEnum | null;
+    export let textResourcesByParentResource: Record<ParentResourceNameEnum, TextResource[]>;
     export let resourceSelected: (resource: TextResource) => void;
-    export let showTypeFullscreen: ((type: ResourceTypeEnum | null) => void) | null = null;
+    export let showParentResourceFullscreen: ((parentResourceName: ParentResourceNameEnum | null) => void) | null =
+        null;
 
     let searchQuery = '';
 </script>
 
-{#if type}
+{#if parentResourceName}
     <div use:trapFocus class="fixed inset-0 z-[45] flex w-full flex-col bg-primary-content px-4">
         <TextResourceSection
-            {type}
-            resources={textResourcesByType[type]}
+            {parentResourceName}
+            resources={textResourcesByParentResource[parentResourceName]}
             bind:searchQuery
-            {showTypeFullscreen}
+            {showParentResourceFullscreen}
             {resourceSelected}
             isFullscreen={true}
         />

@@ -18,7 +18,7 @@
     }
 
     async function precacheNecessaryCalls() {
-        await Promise.all([fetchFromCacheOrApi('/resources/types'), fetchFromCacheOrApi('/bibles')]);
+        await Promise.all([fetchFromCacheOrApi('/resources/parent-resources'), fetchFromCacheOrApi('/bibles')]);
     }
 
     onMount(() => {

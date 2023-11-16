@@ -17,7 +17,7 @@ export interface PassageResourceContent {
     contentId: number;
     contentSize: number;
     mediaTypeName: MediaTypeEnum;
-    typeName: string;
+    parentResourceName: string;
 }
 
 export interface FrontendPassageResourceContent extends PassageResourceContent {
