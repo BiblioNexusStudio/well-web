@@ -1,6 +1,6 @@
 import type { LanguageCodeEnum } from '$lib/utils/language-utils';
 
-export const ResourceType = {
+export const ParentResourceName = {
     BiblicaBibleDictionary: 'BiblicaBibleDictionary',
     BiblicaStudyNotes: 'BiblicaStudyNotes',
     CBBTER: 'CBBTER',
@@ -10,7 +10,7 @@ export const ResourceType = {
     VideoBibleDictionary: 'VideoBibleDictionary',
 } as const;
 
-export type ResourceTypeEnum = (typeof ResourceType)[keyof typeof ResourceType];
+export type ParentResourceNameEnum = (typeof ParentResourceName)[keyof typeof ParentResourceName];
 
 export const MediaType = {
     Text: 'Text',
@@ -56,7 +56,7 @@ export interface AudioTypeMetadata {
     }[];
 }
 
-export interface ApiResourceType {
+export interface ApiParentResource {
     licenseInfo: ApiLicenseInfo | null;
 }
 

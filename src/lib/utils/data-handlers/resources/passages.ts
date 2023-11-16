@@ -11,7 +11,7 @@ import type {
     PassageWithResourceContentIds,
     BasePassage,
 } from '$lib/types/passage';
-import { ResourceType } from '$lib/types/resource';
+import { ParentResourceName } from '$lib/types/resource';
 import { resourceContentApiFullUrl } from './resource';
 
 async function getBibleBookCodesToName(languageId: number | null = null) {
@@ -35,7 +35,7 @@ async function passageIdHasCbbterAvailable(passageId: number, isOnline: boolean)
             `passages/${passageId}/language/${get(currentLanguageInfo)?.id}`
         )) as PassageWithResourceContentIds;
         const cbbterResources = passageWithContentIds.contents.filter(
-            ({ typeName }) => typeName === ResourceType.CBBTER
+            ({ parentResourceName }) => parentResourceName === ParentResourceName.CBBTER
         );
         return await asyncSome(cbbterResources, async (resourceContent) => {
             return isCachedFromCdn(resourceContentApiFullUrl(resourceContent));

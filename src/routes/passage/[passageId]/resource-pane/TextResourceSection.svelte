@@ -10,32 +10,33 @@
     import { _ as translate } from 'svelte-i18n';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
     import SearchInput from '$lib/components/SearchInput.svelte';
-    import { ResourceType, type ResourceTypeEnum } from '$lib/types/resource';
+    import { ParentResourceName, type ParentResourceNameEnum } from '$lib/types/resource';
     import NoResourcesFound from './NoResourcesFound.svelte';
 
-    export let type: ResourceTypeEnum;
+    export let parentResourceName: ParentResourceNameEnum;
     export let resources: TextResource[];
     export let resourceSelected: (resource: TextResource) => void;
     export let searchQuery: string;
     export let isFullscreen: boolean;
-    export let showTypeFullscreen: ((type: ResourceTypeEnum | null) => void) | null = null;
+    export let showParentResourceFullscreen: ((parentResourceName: ParentResourceNameEnum | null) => void) | null =
+        null;
 
-    function calculateTitle(type: ResourceTypeEnum) {
-        switch (type) {
-            case ResourceType.TyndaleBibleDictionary:
+    function calculateTitle(parentResourceName: ParentResourceNameEnum) {
+        switch (parentResourceName) {
+            case ParentResourceName.TyndaleBibleDictionary:
                 return $translate('resources.types.tyndaleBibleDictionary.value');
-            case ResourceType.TyndaleStudyNotes:
+            case ParentResourceName.TyndaleStudyNotes:
                 return $translate('resources.types.tyndaleStudyNotes.value');
-            case ResourceType.BiblicaBibleDictionary:
+            case ParentResourceName.BiblicaBibleDictionary:
                 return $translate('resources.types.biblicaBibleDictionary.value');
-            case ResourceType.BiblicaStudyNotes:
+            case ParentResourceName.BiblicaStudyNotes:
                 return $translate('resources.types.biblicaStudyNotes.value');
             default:
                 return null;
         }
     }
 
-    $: title = calculateTitle(type);
+    $: title = calculateTitle(parentResourceName);
 
     // resources filtered to:
     // - searched results if searching OR
@@ -52,7 +53,7 @@
     {#if isFullscreen}
         <div class="mx-auto w-full max-w-[65ch]">
             <div class="flex w-full flex-row items-center py-3">
-                <button class="btn btn-link text-base-500" on:click={() => showTypeFullscreen?.(null)}
+                <button class="btn btn-link text-base-500" on:click={() => showParentResourceFullscreen?.(null)}
                     ><Icon data={chevronLeft} /></button
                 >
                 <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">{title}</div>
@@ -75,7 +76,9 @@
             <div class="text-md font-semibold text-base-content">{title}</div>
             <div class="flex-grow"></div>
             {#if !shouldSearch(searchQuery) && resources.length > 5}
-                <button class="text-sm font-semibold text-base-500" on:click={() => showTypeFullscreen?.(type)}
+                <button
+                    class="text-sm font-semibold text-base-500"
+                    on:click={() => showParentResourceFullscreen?.(parentResourceName)}
                     >{$translate('page.passage.resourcePane.seeAll.value', {
                         values: { count: resources.length },
                     })}</button

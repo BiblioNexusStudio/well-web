@@ -14,7 +14,7 @@ import {
     resourceMetadataApiFullPath,
     resourceThumbnailApiFullUrl,
 } from '$lib/utils/data-handlers/resources/resource';
-import { MediaType } from '$lib/types/resource';
+import { MediaType, ParentResourceName } from '$lib/types/resource';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -86,7 +86,7 @@ export const calculateUrlsWithMetadataToChange = (
                         if (resourceMenuItem.mediaTypeName === MediaType.Text) {
                             if (
                                 resourcesMenu.some(
-                                    ({ selected, value }) => selected && value === resourceMenuItem.typeName
+                                    ({ selected, value }) => selected && value === resourceMenuItem.parentResourceName
                                 )
                             ) {
                                 urlsAndSizesToDownload.push({
@@ -110,7 +110,7 @@ export const calculateUrlsWithMetadataToChange = (
                         if (resourceMenuItem.mediaTypeName === MediaType.Audio) {
                             if (
                                 resourcesMenu.some(
-                                    ({ selected, value }) => selected && value === resourceMenuItem.typeName
+                                    ({ selected, value }) => selected && value === resourceMenuItem.parentResourceName
                                 )
                             ) {
                                 urlsAndSizesToDownload.push({
@@ -179,7 +179,7 @@ export const calculateUrlsWithMetadataToChange = (
         }
     });
 
-    if (resourcesMenu.some(({ selected, value }) => selected && value === 'CBBTER')) {
+    if (resourcesMenu.some(({ selected, value }) => selected && value === ParentResourceName.CBBTER)) {
         biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
                 chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {

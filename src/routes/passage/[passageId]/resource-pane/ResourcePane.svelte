@@ -4,7 +4,7 @@
     import { _ as translate } from 'svelte-i18n';
     import { trapFocus } from '$lib/utils/trap-focus';
     import type { PassageResourceContent } from '$lib/types/passage';
-    import { MediaType, ResourceType, type ResourceTypeEnum } from '$lib/types/resource';
+    import { MediaType, ParentResourceName, type ParentResourceNameEnum } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
@@ -52,7 +52,7 @@
     let tyndaleStudyNotesResources: TextResource[] = [];
     let biblicaBibleDictionaryResources: TextResource[] = [];
     let biblicaStudyNotesResources: TextResource[] = [];
-    let textResourcesByType = {} as Record<ResourceTypeEnum, TextResource[]>;
+    let textResourcesByParentResource = {} as Record<ParentResourceNameEnum, TextResource[]>;
     $: textResources = tyndaleBibleDictionaryResources
         .concat(tyndaleStudyNotesResources)
         .concat(biblicaStudyNotesResources)
@@ -72,7 +72,7 @@
 
     let currentFullscreenMediaResourceIndex: number | null = null;
     let currentFullscreenTextResource: TextResource | null = null;
-    let currentFullscreenTextResourceSectionType: ResourceTypeEnum | null;
+    let currentFullscreenTextParentResourceName: ParentResourceNameEnum | null;
 
     onMount(() => {
         const bottomBarHeight = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4;
@@ -130,7 +130,7 @@
                             displayName,
                             html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
                             preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
-                            typeName: resource.typeName,
+                            parentResourceName: resource.parentResourceName,
                         };
                     } else {
                         return null;
@@ -139,19 +139,19 @@
             )
         ).filter(Boolean) as TextResource[];
         tyndaleBibleDictionaryResources = textResources
-            .filter(({ typeName }) => typeName === ResourceType.TyndaleBibleDictionary)
+            .filter(({ parentResourceName }) => parentResourceName === ParentResourceName.TyndaleBibleDictionary)
             .sort(resourceDisplayNameSorter);
         tyndaleStudyNotesResources = textResources
-            .filter(({ typeName }) => typeName === ResourceType.TyndaleStudyNotes)
+            .filter(({ parentResourceName }) => parentResourceName === ParentResourceName.TyndaleStudyNotes)
             .sort(resourceDisplayNameSorter);
         biblicaStudyNotesResources = textResources
-            .filter(({ typeName }) => typeName === ResourceType.BiblicaStudyNotes)
+            .filter(({ parentResourceName }) => parentResourceName === ParentResourceName.BiblicaStudyNotes)
             .sort(resourceDisplayNameSorter);
         biblicaBibleDictionaryResources = textResources
-            .filter(({ typeName }) => typeName === ResourceType.BiblicaBibleDictionary)
+            .filter(({ parentResourceName }) => parentResourceName === ParentResourceName.BiblicaBibleDictionary)
             .sort(resourceDisplayNameSorter);
         ubsImageResources = await asyncMap(
-            resources.filter(({ typeName }) => typeName === ResourceType.UbsImages),
+            resources.filter(({ parentResourceName }) => parentResourceName === ParentResourceName.UbsImages),
             async (resource) => ({
                 type: 'image',
                 displayName: await fetchDisplayNameForResourceContent(resource),
@@ -159,7 +159,9 @@
             })
         );
         videoBibleDictionaryResources = await asyncMap(
-            resources.filter(({ typeName }) => typeName === ResourceType.VideoBibleDictionary),
+            resources.filter(
+                ({ parentResourceName }) => parentResourceName === ParentResourceName.VideoBibleDictionary
+            ),
             async (resource) => {
                 const metadata = await fetchMetadataForResourceContent(resource);
                 const thumbnailUrl = resourceThumbnailApiFullUrl(resource);
@@ -172,10 +174,10 @@
                 };
             }
         );
-        textResourcesByType.TyndaleBibleDictionary = tyndaleBibleDictionaryResources;
-        textResourcesByType.TyndaleStudyNotes = tyndaleStudyNotesResources;
-        textResourcesByType.BiblicaBibleDictionary = biblicaBibleDictionaryResources;
-        textResourcesByType.BiblicaStudyNotes = biblicaStudyNotesResources;
+        textResourcesByParentResource.TyndaleBibleDictionary = tyndaleBibleDictionaryResources;
+        textResourcesByParentResource.TyndaleStudyNotes = tyndaleStudyNotesResources;
+        textResourcesByParentResource.BiblicaBibleDictionary = biblicaBibleDictionaryResources;
+        textResourcesByParentResource.BiblicaStudyNotes = biblicaStudyNotesResources;
         isLoading = false;
     }
 </script>
@@ -187,8 +189,8 @@
                 currentFullscreenMediaResourceIndex = null;
             } else if (currentFullscreenTextResource !== null) {
                 currentFullscreenTextResource = null;
-            } else if (currentFullscreenTextResourceSectionType !== null) {
-                currentFullscreenTextResourceSectionType = null;
+            } else if (currentFullscreenTextParentResourceName !== null) {
+                currentFullscreenTextParentResourceName = null;
             } else if (isShowing) {
                 isShowing = false;
             }
@@ -199,10 +201,11 @@
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />
 <FullscreenTextResourceSection
-    type={currentFullscreenTextResourceSectionType}
-    {textResourcesByType}
+    parentResourceName={currentFullscreenTextParentResourceName}
+    {textResourcesByParentResource}
     resourceSelected={handleTextResourceSelected}
-    showTypeFullscreen={(type) => (currentFullscreenTextResourceSectionType = type)}
+    showParentResourceFullscreen={(parentResourceName) =>
+        (currentFullscreenTextParentResourceName = parentResourceName)}
 />
 
 <div id="resource-pane" use:trapFocus={isShowing}>
@@ -253,37 +256,41 @@
                     {searchQuery}
                 />
                 <TextResourceSection
-                    type={ResourceType.BiblicaStudyNotes}
+                    parentResourceName={ParentResourceName.BiblicaStudyNotes}
                     resources={biblicaStudyNotesResources}
                     resourceSelected={handleTextResourceSelected}
                     isFullscreen={false}
-                    showTypeFullscreen={(type) => (currentFullscreenTextResourceSectionType = type)}
+                    showParentResourceFullscreen={(parentResourceName) =>
+                        (currentFullscreenTextParentResourceName = parentResourceName)}
                     {searchQuery}
                 />
                 <TextResourceSection
-                    type={ResourceType.BiblicaBibleDictionary}
+                    parentResourceName={ParentResourceName.BiblicaBibleDictionary}
                     resources={biblicaBibleDictionaryResources}
                     resourceSelected={handleTextResourceSelected}
                     isFullscreen={false}
-                    showTypeFullscreen={(type) => (currentFullscreenTextResourceSectionType = type)}
+                    showParentResourceFullscreen={(parentResourceName) =>
+                        (currentFullscreenTextParentResourceName = parentResourceName)}
                     {searchQuery}
                 />
             </div>
             <div class={activeTab === 'advanced' || activeTab === 'searching' ? 'visible' : 'hidden'}>
                 <TextResourceSection
-                    type={ResourceType.TyndaleStudyNotes}
+                    parentResourceName={ParentResourceName.TyndaleStudyNotes}
                     resources={tyndaleStudyNotesResources}
                     resourceSelected={handleTextResourceSelected}
                     isFullscreen={false}
-                    showTypeFullscreen={(type) => (currentFullscreenTextResourceSectionType = type)}
+                    showParentResourceFullscreen={(parentResourceName) =>
+                        (currentFullscreenTextParentResourceName = parentResourceName)}
                     {searchQuery}
                 />
                 <TextResourceSection
-                    type={ResourceType.TyndaleBibleDictionary}
+                    parentResourceName={ParentResourceName.TyndaleBibleDictionary}
                     resources={tyndaleBibleDictionaryResources}
                     resourceSelected={handleTextResourceSelected}
                     isFullscreen={false}
-                    showTypeFullscreen={(type) => (currentFullscreenTextResourceSectionType = type)}
+                    showParentResourceFullscreen={(parentResourceName) =>
+                        (currentFullscreenTextParentResourceName = parentResourceName)}
                     {searchQuery}
                 />
             </div>
