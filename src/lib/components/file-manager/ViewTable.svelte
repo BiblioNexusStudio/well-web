@@ -8,7 +8,6 @@
     import { Icon } from 'svelte-awesome';
     import fileTextO from 'svelte-awesome/icons/fileTextO';
     import volumeUp from 'svelte-awesome/icons/volumeUp';
-    import pictureO from 'svelte-awesome/icons/pictureO';
     import arrowDown from 'svelte-awesome/icons/arrowDown';
     import ellipsisV from 'svelte-awesome/icons/ellipsisV';
     import trash from 'svelte-awesome/icons/trash';
@@ -21,6 +20,9 @@
     import { currentLanguageInfo } from '$lib/stores/current-language.store';
     import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
     import { MediaType } from '$lib/types/resource';
+    import Image from '$lib/icons/Image.svelte';
+    import ImageAndVideo from '$lib/icons/ImageAndVideo.svelte';
+    import Video from '$lib/icons/Video.svelte';
 
     let allChaptersSelected = false;
     let allChaptersCached = false;
@@ -166,9 +168,15 @@
                     {/if}
                 </td>
                 <td class="text-center">
-                    {#if rowData.hasImages}
-                        <Icon data={pictureO} />
-                    {/if}
+                    <div class="inline-block">
+                        {#if rowData.hasImages && rowData.hasVideos}
+                            <ImageAndVideo />
+                        {:else if rowData.hasImages}
+                            <Image />
+                        {:else if rowData.hasVideos}
+                            <Video />
+                        {/if}
+                    </div>
                 </td>
                 <td class="h-full text-center">
                     {#if audioChapter.allUrlsCached || (index === 0 && textUrlIsCached)}
