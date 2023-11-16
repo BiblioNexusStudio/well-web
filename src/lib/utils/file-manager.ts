@@ -9,7 +9,11 @@ import type {
     FooterInputs,
     ResourcesApiModule,
 } from '$lib/types/file-manager';
-import { resourceContentApiFullUrl, resourceMetadataApiFullPath } from '$lib/utils/data-handlers/resources/resource';
+import {
+    resourceContentApiFullUrl,
+    resourceMetadataApiFullPath,
+    resourceThumbnailApiFullUrl,
+} from '$lib/utils/data-handlers/resources/resource';
 import { MediaType } from '$lib/types/resource';
 
 export const convertToReadableSize = (size: number) => {
@@ -142,10 +146,34 @@ export const calculateUrlsWithMetadataToChange = (
                                 size: METADATA_ONLY_FAKE_FILE_SIZE,
                             });
                         }
+
+                        if (resourceMenuItem.mediaTypeName === MediaType.Video) {
+                            urlsAndSizesToDownload.push({
+                                mediaType: MediaType.Video,
+                                contentId: resourceMenuItem.contentId,
+                                url: resourceContentApiFullUrl(resourceMenuItem),
+                                size: resourceMenuItem.contentSize,
+                            });
+                            urlsAndSizesToDownload.push({
+                                url: resourceThumbnailApiFullUrl(resourceMenuItem),
+                                mediaType: MediaType.Video,
+                                contentId: resourceMenuItem.contentId,
+                                metadataOnly: true,
+                                size: METADATA_ONLY_FAKE_FILE_SIZE,
+                            });
+                            urlsAndSizesToDownload.push({
+                                url: resourceMetadataApiFullPath(resourceMenuItem),
+                                mediaType: MediaType.Video,
+                                contentId: resourceMenuItem.contentId,
+                                metadataOnly: true,
+                                size: METADATA_ONLY_FAKE_FILE_SIZE,
+                            });
+                        }
                     }
                 } else if (chapter.deleteResources) {
                     urlsToDelete.push(resourceContentApiFullUrl(resourceMenuItem));
                     urlsToDelete.push(resourceMetadataApiFullPath(resourceMenuItem));
+                    urlsToDelete.push(resourceThumbnailApiFullUrl(resourceMenuItem));
                 }
             });
         }
@@ -208,6 +236,7 @@ export const buildRowData = (
     let resources = 0;
     let size = 0;
     let hasImages = false;
+    let hasVideos = false;
 
     if (hasAudio && bibleSelected) {
         resources++;
@@ -223,12 +252,16 @@ export const buildRowData = (
         size = size + resourceMenuItem.contentSize;
         resources++;
 
-        if (resourceMenuItem.mediaTypeName === 'Image') {
+        if (resourceMenuItem.mediaTypeName === MediaType.Image) {
             hasImages = true;
+        }
+
+        if (resourceMenuItem.mediaTypeName === MediaType.Video) {
+            hasVideos = true;
         }
     });
 
-    return { resources, size, hasAudio, hasText, hasImages };
+    return { resources, size, hasAudio, hasText, hasImages, hasVideos };
 };
 
 export function removeDuplicates(arr: UrlWithMetadata[]): UrlWithMetadata[] {

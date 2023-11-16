@@ -77,6 +77,13 @@
                 isBible: false,
                 display: true,
             },
+            {
+                name: $translate('resources.types.videoBibleDictionary.value'),
+                value: ResourceType.VideoBibleDictionary,
+                selected: false,
+                isBible: false,
+                display: true,
+            },
         ];
 
         const handleClickOutside = (event: MouseEvent) => {
