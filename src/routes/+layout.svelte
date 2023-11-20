@@ -10,8 +10,11 @@
     import { featureFlags } from '$lib/stores/feature-flags.store';
     import DebugModal from '$lib/components/DebugModal.svelte';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import type { LayoutData } from './$types';
 
     $: log.pageView($page.route.id ?? '');
+
+    export let data: LayoutData;
 
     async function initialize() {
         window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
@@ -70,4 +73,15 @@
 
 <DebugModal />
 
-<slot />
+{#if data.error}
+    <div class="flex h-full w-full items-center">
+        <div class="flex-grow"></div>
+        <!-- can't be translated since the translation strings failed to load -->
+        <div class="text-lg">
+            Fatal Error: Try refreshing. If you continue to see this error, try clearing your cache.
+        </div>
+        <div class="flex-grow"></div>
+    </div>
+{:else}
+    <slot />
+{/if}
