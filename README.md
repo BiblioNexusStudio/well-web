@@ -106,7 +106,3 @@ $ npx cap sync android
 ```bash
 $ npx cap open android
 ```
-
-## License
-
-Well Web is [MIT licensed](LICENSE).
