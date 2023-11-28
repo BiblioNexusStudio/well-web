@@ -297,6 +297,9 @@
         },
         "home": {
             "value": "Houm"
+        },
+        "browserUnsupported": {
+            "value": "Brausa bilong yu i no sapotim. Plis yusim narapela brausa. Sapos yu stap long pravit/inconito mod, plis traim regula mod."
         }
     },
     "components": {

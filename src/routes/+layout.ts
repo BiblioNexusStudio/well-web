@@ -28,14 +28,26 @@ export const load: LayoutLoad = async () => {
             },
         });
 
+        if ('serviceWorker' in navigator) {
+            const registration = await navigator.serviceWorker.getRegistration();
+
+            // There's an active SW, but no controller for this tab.
+            // This means the user did a hard refresh that we need to recover from.
+            if (registration?.active && !navigator.serviceWorker.controller) {
+                // Perform a soft reload to load everything from the SW and get
+                // a consistent set of resources.
+                window.location.reload();
+            }
+        }
+
         const fetchedLanguages = await fetchFromCacheOrApi(`languages/`);
         languages.set(fetchedLanguages);
 
         await init(get(currentLanguageCode));
         await waitLocale();
-        return { error: false };
+        return { browserSupported: 'serviceWorker' in navigator, error: false };
     } catch (error) {
         log.exception(error as Error);
-        return { error: true };
+        return { browserSupported: 'serviceWorker' in navigator, error: true };
     }
 };
