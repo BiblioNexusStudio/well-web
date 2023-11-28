@@ -42,6 +42,9 @@ export async function fetchFromCacheOrApi(path: string) {
     try {
         const url = apiUrl(path).replace(/\/$/, '');
         const response = await fetch(cachedOrRealUrl(url));
+        if (response.status >= 400) {
+            throw new Error('Bad HTTP response');
+        }
         return await response.json();
     } finally {
         removeFromArray(partiallyDownloadedApiPaths, path);
@@ -54,6 +57,9 @@ export async function fetchFromCacheOrCdn(url: Url, type: 'blob' | 'json' = 'jso
     }
     try {
         const response = await fetch(cachedOrRealUrl(url));
+        if (response.status >= 400) {
+            throw new Error('Bad HTTP response');
+        }
         return await (type === 'blob' ? response.blob() : response.json());
     } finally {
         removeFromArray(partiallyDownloadedCdnUrls, url);

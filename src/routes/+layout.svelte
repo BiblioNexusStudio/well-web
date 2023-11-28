@@ -12,6 +12,7 @@
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { clearEntireCache } from '$lib/data-cache';
     import type { LayoutData } from './$types';
+    import { _ as translate } from 'svelte-i18n';
 
     $: log.pageView($page.route.id ?? '');
 
@@ -74,7 +75,13 @@
 
 <DebugModal />
 
-{#if data.error}
+{#if !data.browserSupported}
+    <div class="mx-auto flex h-full w-full max-w-lg flex-col items-center space-y-4 px-4 text-lg">
+        <div class="flex-grow"></div>
+        <div class="text-center">{$translate('errorMessage.browserUnsupported.value')}</div>
+        <div class="flex-grow"></div>
+    </div>
+{:else if data.error}
     <div class="mx-auto flex h-full w-full max-w-lg flex-col items-center space-y-4 px-4 text-lg">
         <div class="flex-grow"></div>
         <!-- can't be translated since the translation strings failed to load -->

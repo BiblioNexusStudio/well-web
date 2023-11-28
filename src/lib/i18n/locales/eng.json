@@ -381,6 +381,10 @@
         "home": {
             "value": "Home",
             "_context": "The label for the home button"
+        },
+        "browserUnsupported": {
+            "value": "Your browser is not supported. Please use a different browser. If you're in private/incognito mode, please try regular mode.",
+            "_context": "Message for when the browser is missing features"
         }
     },
     "components": {
