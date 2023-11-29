@@ -1,29 +1,23 @@
-import { Heading } from '@tiptap/extension-heading';
-import Italic from '@tiptap/extension-italic';
-import Paragraph from '@tiptap/extension-paragraph';
-import Document from '@tiptap/extension-document';
-import Text from '@tiptap/extension-text';
-import ListItem from '@tiptap/extension-list-item';
-import BulletList from '@tiptap/extension-bullet-list';
-import OrderedList from '@tiptap/extension-ordered-list';
 import Link from '@tiptap/extension-link';
-import Bold from '@tiptap/extension-bold';
 import { generateHTML } from '@tiptap/html';
 import Image from '@tiptap/extension-image';
 import { Mark, generateText } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Highlight from '@tiptap/extension-highlight';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import TextStyle from '@tiptap/extension-text-style';
 
 const extensions = [
-    Bold,
-    BulletList,
-    Document,
-    Heading,
+    StarterKit,
     Image,
-    Italic,
     Link,
-    ListItem,
-    OrderedList,
-    Paragraph,
-    Text,
+    Underline,
+    Highlight,
+    Subscript,
+    Superscript,
+    TextStyle,
     Mark.create({ name: 'bibleReference' }),
     Mark.create({ name: 'resourceReference' }),
 ];
