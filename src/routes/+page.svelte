@@ -2,6 +2,11 @@
     import { _ as translate } from 'svelte-i18n';
     import PassageForm from '$lib/components/PassageForm.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
+    import { currentLanguageDirection } from '$lib/stores/current-language.store';
+
+    $: {
+        document.dir = $currentLanguageDirection;
+    }
 </script>
 
 <section class="container mx-auto flex h-screen flex-col">
