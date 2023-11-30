@@ -95,6 +95,9 @@ export async function clearEntireCache() {
         db.name && indexedDB.deleteDatabase(db.name);
     });
 
+    localStorage.clear();
+    sessionStorage.clear();
+
     const swRegistration = await navigator.serviceWorker.getRegistration();
     if (swRegistration) {
         swRegistration.unregister();
