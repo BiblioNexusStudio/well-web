@@ -32,10 +32,7 @@ export const currentLanguageInfo = derived([currentLanguageCode, languages], ([$
     lookupLanguageInfoByCode($currentLanguageCode)
 );
 
-export const currentLanguageDirectionDebugMode = derived(
-    featureFlags,
-    ($featureFlags) => $featureFlags.currentLanguageDirection
-);
+export const currentLanguageDirectionDebugMode = derived(featureFlags, ($featureFlags) => $featureFlags.forceRTLMode);
 
 export const currentLanguageDirection = derived(
     [currentLanguageCode, currentLanguageDirectionDebugMode],

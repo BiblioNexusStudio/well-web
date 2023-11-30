@@ -5,7 +5,7 @@ import { browser } from '$app/environment';
 const defaultConfig = {
     audioRecording: false,
     darkMode: false,
-    currentLanguageDirection: false,
+    forceRTLMode: false,
 };
 
 export type FeatureFlag = keyof typeof defaultConfig;
