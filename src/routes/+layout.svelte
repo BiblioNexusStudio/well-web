@@ -13,6 +13,11 @@
     import { clearEntireCache } from '$lib/data-cache';
     import type { LayoutData } from './$types';
     import { _ as translate } from 'svelte-i18n';
+    import { currentLanguageDirection } from '$lib/stores/current-language.store';
+
+    $: {
+        document.dir = $currentLanguageDirection;
+    }
 
     $: log.pageView($page.route.id ?? '');
 

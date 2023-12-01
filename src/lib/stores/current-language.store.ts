@@ -2,8 +2,9 @@ import { derived, get, writable } from 'svelte/store';
 import { languages } from './file-manager.store';
 import type { Language } from '$lib/types/file-manager';
 import { browser } from '$app/environment';
-import { browserLanguageToISO6393, supportedLanguages } from '$lib/utils/language-utils';
+import { browserLanguageToISO6393, supportedLanguages, DirectionCode } from '$lib/utils/language-utils';
 import { locale } from 'svelte-i18n';
+import { featureFlags } from './feature-flags.store';
 
 const storedLanguage = browser ? localStorage.getItem('currentLanguage') : null;
 export const currentLanguageCode = writable<string>(
@@ -29,4 +30,17 @@ export function lookupLanguageInfoById(languageId: number) {
 
 export const currentLanguageInfo = derived([currentLanguageCode, languages], ([$currentLanguageCode]) =>
     lookupLanguageInfoByCode($currentLanguageCode)
+);
+
+export const currentLanguageDirectionDebugMode = derived(featureFlags, ($featureFlags) => $featureFlags.forceRTLMode);
+
+export const currentLanguageDirection = derived(
+    [currentLanguageCode, currentLanguageDirectionDebugMode],
+    ([$currentLanguageCode, $currentLanguageDirectionDebugMode]) => {
+        if ($currentLanguageDirectionDebugMode) {
+            return DirectionCode.RTL;
+        }
+        const matchingLanguage = supportedLanguages.find(({ code }) => code === $currentLanguageCode);
+        return matchingLanguage?.direction || DirectionCode.LTR;
+    }
 );

@@ -1,16 +1,22 @@
 import { objectKeys } from '$lib/utils/typesafe-standard-lib';
 import { writable } from 'svelte/store';
+import { browser } from '$app/environment';
 
 const defaultConfig = {
     audioRecording: false,
     darkMode: false,
-    newFileManager: false,
+    forceRTLMode: false,
 };
 
 export type FeatureFlag = keyof typeof defaultConfig;
 export type FeatureFlagConfig = typeof defaultConfig;
 
-const savedFlags = JSON.parse(localStorage.getItem('featureFlags') || '{}');
+let savedFlags = {};
+
+if (browser) {
+    savedFlags = JSON.parse(localStorage.getItem('featureFlags') || '{}');
+}
+
 const initialFlags = { ...defaultConfig, ...savedFlags };
 
 export const featureFlags = writable<FeatureFlagConfig>(initialFlags);
@@ -21,9 +27,11 @@ featureFlags.subscribe((value) => {
         return acc;
     }, {} as FeatureFlagConfig);
 
-    if (objectKeys(diffs).length === 0) {
-        localStorage.removeItem('featureFlags');
-    } else {
-        localStorage.setItem('featureFlags', JSON.stringify(diffs));
+    if (browser) {
+        if (objectKeys(diffs).length === 0) {
+            localStorage.removeItem('featureFlags');
+        } else {
+            localStorage.setItem('featureFlags', JSON.stringify(diffs));
+        }
     }
 });
