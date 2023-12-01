@@ -90,10 +90,12 @@ export async function clearEntireCache() {
         await caches.delete(key);
     });
 
-    const dbs = await indexedDB.databases();
-    dbs.forEach((db) => {
-        db.name && indexedDB.deleteDatabase(db.name);
-    });
+    if (indexedDB.databases) {
+        const dbs = await indexedDB.databases();
+        dbs.forEach((db) => {
+            db.name && indexedDB.deleteDatabase(db.name);
+        });
+    }
 
     localStorage.clear();
     sessionStorage.clear();
