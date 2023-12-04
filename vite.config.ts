@@ -9,8 +9,8 @@ dotenv.config();
 export default defineConfig({
     define: {
         'process.env.NODE_ENV': process.env.NODE_ENV === 'production' ? '"production"' : '"development"',
-        'import.meta.env.DEPLOY_ENV': JSON.stringify(process.env.DEPLOY_ENV),
-        'import.meta.env.PUBLIC_AQUIFER_API_KEY': JSON.stringify(process.env.PUBLIC_AQUIFER_API_KEY),
+        'process.env.DEPLOY_ENV': JSON.stringify(process.env.DEPLOY_ENV),
+        'process.env.PUBLIC_AQUIFER_API_KEY': JSON.stringify(process.env.PUBLIC_AQUIFER_API_KEY),
     },
     plugins: [sveltekit(), SvelteKitPWA(serviceWorkerPwaConfig)],
     test: {

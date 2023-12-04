@@ -14,3 +14,4 @@ package-lock.json
 yarn.lock
 /android/
 /static/cached-data/
+/static/external-js/

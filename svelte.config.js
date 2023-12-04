@@ -16,6 +16,13 @@ const config = {
             },
         }),
         output: { preloadStrategy: 'disabled' },
+        typescript: {
+            config: (config) => ({
+                ...config,
+                include: [...config.include, '../static/js/workbox-plugins/*.js'],
+                exclude: config.exclude.filter((e) => e !== '../src/service-worker.ts'),
+            }),
+        },
     },
     preprocess: vitePreprocess(),
 };

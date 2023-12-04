@@ -1,8 +1,14 @@
-import type { WorkboxPlugin } from 'workbox-core/types.js';
-
 // Caches a response if it's a 200 OR it's a 206 and either the requested Range is not set or it's set to 0- which means all content
-class CacheableCdnContentPlugin implements WorkboxPlugin {
-    cacheWillUpdate: WorkboxPlugin['cacheWillUpdate'] = async ({ request, response }) => {
+// eslint-disable-next-line
+class CacheableCdnContentPlugin {
+    /**
+     * Function to determine whether to cache a response.
+     * @param {Object} params
+     * @param {Request} params.request - The request associated with the response.
+     * @param {Response} params.response - The response to potentially cache.
+     * @returns {Promise<Response|null>} A response to cache or null if not caching.
+     */
+    cacheWillUpdate = async ({ request, response }) => {
         const clonedResponse = response.clone();
         if (
             clonedResponse.status === 200 ||
@@ -17,5 +23,3 @@ class CacheableCdnContentPlugin implements WorkboxPlugin {
         }
     };
 }
-
-export { CacheableCdnContentPlugin };
