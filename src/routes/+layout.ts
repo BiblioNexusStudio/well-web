@@ -40,11 +40,12 @@ export const load: LayoutLoad = async () => {
             }
         }
 
+        await init(get(currentLanguageCode));
+        await waitLocale();
+
         const fetchedLanguages = await fetchFromCacheOrApi(`languages/`);
         languages.set(fetchedLanguages);
 
-        await init(get(currentLanguageCode));
-        await waitLocale();
         return { browserSupported: 'serviceWorker' in navigator, error: false };
     } catch (error) {
         log.exception(error as Error);
