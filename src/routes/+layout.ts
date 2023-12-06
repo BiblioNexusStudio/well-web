@@ -9,6 +9,7 @@ import { currentLanguageCode } from '$lib/stores/current-language.store';
 // @ts-ignore
 import { registerSW } from 'virtual:pwa-register';
 import { log } from '$lib/logger';
+import { browserSupported } from '$lib/utils/browser';
 
 export const ssr = false;
 
@@ -28,7 +29,7 @@ export const load: LayoutLoad = async () => {
             },
         });
 
-        if ('serviceWorker' in navigator) {
+        if (browserSupported) {
             const registration = await navigator.serviceWorker.getRegistration();
 
             // There's an active SW, but no controller for this tab.
@@ -46,9 +47,9 @@ export const load: LayoutLoad = async () => {
         const fetchedLanguages = await fetchFromCacheOrApi(`languages/`);
         languages.set(fetchedLanguages);
 
-        return { browserSupported: 'serviceWorker' in navigator, error: false };
+        return { browserSupported, error: false };
     } catch (error) {
         log.exception(error as Error);
-        return { browserSupported: 'serviceWorker' in navigator, error: true };
+        return { browserSupported, error: true };
     }
 };

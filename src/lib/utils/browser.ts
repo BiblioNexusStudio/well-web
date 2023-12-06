@@ -1,6 +1,8 @@
 // eslint-disable-next-line
 // @ts-nocheck
 
+import { browser } from '$app/environment';
+
 export function isSafariOnMacOrIOS() {
     return (
         !!navigator.userAgent.match(/Version\/[\d.]+.*Safari/) ||
@@ -11,3 +13,5 @@ export function isSafariOnMacOrIOS() {
 export function audioFileTypeForBrowser() {
     return isSafariOnMacOrIOS() ? 'mp3' : 'webm';
 }
+
+export const browserSupported = browser && 'serviceWorker' in navigator;

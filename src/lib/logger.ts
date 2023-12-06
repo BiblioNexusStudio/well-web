@@ -1,5 +1,6 @@
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import config from '$lib/config';
+import { browserSupported } from './utils/browser';
 
 const appInsights = new ApplicationInsights({
     config: {
@@ -20,8 +21,11 @@ const additionalProperties = {
 
 export const log = {
     exception: (error: Error | undefined) => {
-        // Distinguish between network errors (which can't be avoided) and other errors we may want to look into
         if (error && error.name === 'TypeError' && error.message === 'Failed to fetch') {
+            // Don't log network errors to app insights (since they can't be avoided)
+            console.error(error);
+        } else if (!browserSupported) {
+            // Don't log errors of unsupported browsers to app insights (since they can't be avoided)
             console.error(error);
         } else if (error) {
             appInsights.trackException({ exception: error }, additionalProperties);
