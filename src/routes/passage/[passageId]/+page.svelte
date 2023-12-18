@@ -108,7 +108,7 @@
         }));
         bibleData = newBibleData;
         if (!selectedBibleId || !bibleData?.biblesForTabs.map(({ id }) => id).includes(selectedBibleId)) {
-            selectedBibleId = bibleData?.biblesForTabs[0].id ?? null;
+            selectedBibleId = bibleData?.biblesForTabs?.[0].id ?? null;
         }
         await fetchContentForBibleId(selectedBibleId);
         await cacheNonSelectedBiblesIfOnline();
