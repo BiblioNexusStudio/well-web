@@ -36,7 +36,7 @@
 </script>
 
 <div class="relative ms-2 flex h-full w-1/2 items-center" bind:this={languageMenuDiv}>
-    <button class="btn btn-primary btn-outline flex w-full justify-between" on:click={toggleMenu}>
+    <button class="btn btn-outline btn-primary flex w-full justify-between" on:click={toggleMenu}>
         {currentLanguage?.label} ({$currentLanguageCode}) <Icon data={menuOpen ? caretUp : caretDown} />
     </button>
     {#if menuOpen}

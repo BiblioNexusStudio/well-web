@@ -56,7 +56,7 @@
 
 <div class="relative flex h-full w-full items-center" bind:this={bookMenuDiv}>
     <button
-        class="btn btn-primary btn-outline flex w-full justify-between"
+        class="btn btn-outline btn-primary flex w-full justify-between"
         on:click={toggleMenu}
         aria-label={$translate('page.fileManager.selectABook.value')}
     >
