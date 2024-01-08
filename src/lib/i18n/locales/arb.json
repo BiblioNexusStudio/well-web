@@ -1,0 +1,315 @@
+{
+    "page": {
+        "index": {
+            "language": {
+                "value": "اللغة"
+            },
+            "book": {
+                "value": "كتاب"
+            },
+            "passage": {
+                "value": "مقطع"
+            },
+            "go": {
+                "value": "اذهب"
+            },
+            "downloadResourcesForOfflineUse": {
+                "value": "هل تريد العمل بدون إنترنت؟ احصل على مزيد من المحتوى"
+            },
+            "subTitle": {
+                "value": "بئر الكتاب المقدس: مغذى من قبل الخزان"
+            },
+            "loading": {
+                "value": "جار التحميل"
+            },
+            "about": {
+                "value": "حول"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "خطأ في تحميل معلومات ترخيص المحتوى"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "صدر تحت {name}"
+                },
+                "releasedUnderMultiple": {
+                    "value": "صدر تحت عدة: {names}"
+                }
+            }
+        },
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "الكتاب المقدس"
+                },
+                "guide": {
+                    "value": "دليل"
+                },
+                "resources": {
+                    "value": "موارد"
+                }
+            },
+            "resourcePane": {
+                "title": {
+                    "value": "الموارد"
+                },
+                "basicTab": {
+                    "value": "أساسي"
+                },
+                "advancedTab": {
+                    "value": "متقدم"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} من {total}"
+                    }
+                },
+                "seeAll": {
+                    "value": "عرض الكل ({count})"
+                },
+                "noThumbnail": {
+                    "value": "لا يوجد صورة مصغرة"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "لم يتم العثور على موارد"
+                    },
+                    "description": {
+                        "value": "لم تتطابق عملية البحث \"{searchQuery}\" مع أي موارد."
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "مورد واحد"
+                    },
+                    "plural": {
+                        "value": "{count} موارد"
+                    }
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "المورد غير متوفر"
+                },
+                "description": {
+                    "value": "لا يتوفر الكتاب المقدس على هذا الجهاز بلغة {language}.<br />هل تريد استخدام الكتاب المقدس بلغة أخرى؟"
+                },
+                "noneAvailableDescription": {
+                    "value": "لا يتوفر الكتاب المقدس على هذا الجهاز بلغة {language} أو أي لغة أخرى.<br />يرجى تنزيل المحتوى عندما تكون متصلاً بالإنترنت."
+                },
+                "show": {
+                    "value": "اختر الكتاب المقدس"
+                },
+                "checkForMoreResources": {
+                    "value": "تحقق من المزيد من الموارد..."
+                }
+            },
+            "noCbbterContent": {
+                "value": "لم يتم العثور على محتوى CBBT-ER لهذا المقطع."
+            }
+        },
+        "fileManager": {
+            "title": {
+                "value": "مدير الملفات المحلي"
+            },
+            "download": {
+                "value": "تحميل"
+            },
+            "textType": {
+                "value": "نص"
+            },
+            "audioType": {
+                "value": "صوتي"
+            },
+            "mediaType": {
+                "value": "وسائط"
+            },
+            "update": {
+                "value": "تحديث"
+            },
+            "cancel": {
+                "value": "إلغاء"
+            },
+            "files": {
+                "value": "ملفات"
+            },
+            "noInternet": {
+                "value": "لا يوجد إنترنت"
+            },
+            "selectABook": {
+                "value": "اختر كتابًا"
+            },
+            "delete": {
+                "value": "حذف"
+            },
+            "modal": {
+                "title": {
+                    "value": "تأكيد"
+                },
+                "description": {
+                    "value": "أنت على وشك تحميل {downloadSize} من المحتوى على جهازك."
+                },
+                "question": {
+                    "value": "كيف ترغب في المتابعة؟"
+                },
+                "downloadProgress": {
+                    "value": "تقدم التحميل"
+                },
+                "success": {
+                    "value": "تم التحميل بنجاح"
+                },
+                "close": {
+                    "value": "إغلاق"
+                },
+                "downloadingDescription": {
+                    "value": "جاري التحميل {totalSizeDownloaded} من {totalSizeToDownload}."
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "تحذير!"
+                },
+                "description": {
+                    "value": "هل أنت متأكد أنك تريد حذف هذه الملفات نهائيًا من جهازك؟"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "هنا يمكنك تحميل وحذف محتوى Aquifer من جهازك."
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "الاسم"
+                },
+                "text": {
+                    "value": "نص"
+                },
+                "audio": {
+                    "value": "صوتي"
+                },
+                "media": {
+                    "value": "وسائط"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "الموارد"
+                }
+            }
+        }
+    },
+    "navTop": {
+        "recording": {
+            "value": "اصنع تسجيلاً"
+        },
+        "audioRecordingModal": {
+            "noPermission": {
+                "value": "يرجى تحديث إعداداتك والسماح باستخدام الميكروفون"
+            },
+            "languageLabel": {
+                "value": "ما هي اللغة التي ستقوم بالتسجيل بها؟"
+            },
+            "versionLabel": {
+                "value": "ما اسم الترجمة؟"
+            },
+            "versionAbbreviationLabel": {
+                "value": "ما هي الاختصار المكون من 3 أحرف لهذه الترجمة؟"
+            },
+            "discard": {
+                "value": "تجاهل"
+            },
+            "save": {
+                "value": "حفظ"
+            }
+        }
+    },
+    "resources": {
+        "types": {
+            "CBBTER": {
+                "value": "CBBT-ER"
+            },
+            "ubsImages": {
+                "value": "صور (UBS)"
+            },
+            "tyndaleBibleDictionary": {
+                "value": "قاموس الكتاب المقدس (Tyndale)"
+            },
+            "tyndaleStudyNotes": {
+                "value": "ملاحظات الدراسة (Tyndale)"
+            },
+            "biblicaBibleDictionary": {
+                "value": "قاموس الكتاب المقدس (Biblica)"
+            },
+            "biblicaStudyNotes": {
+                "value": "ملاحظات الدراسة (Biblica)"
+            },
+            "videoBibleDictionary": {
+                "value": "فيديوهات (قاموس الكتاب المقدس بالفيديو)"
+            }
+        },
+        "cbbt-er": {
+            "step1": {
+                "value": "السمع والقلب"
+            },
+            "step2": {
+                "value": "تهيئة المسرح"
+            },
+            "step3": {
+                "value": "تعريف المشاهد"
+            },
+            "step4": {
+                "value": "تجسيد النص"
+            },
+            "step5": {
+                "value": "سد الفجوات"
+            },
+            "step6": {
+                "value": "تلفظ الكلمة"
+            }
+        }
+    },
+    "sideMenu": {
+        "home": {
+            "value": "الرئيسية"
+        },
+        "menu": {
+            "value": "القائمة"
+        },
+        "changeLanguage": {
+            "value": "تغيير اللغة..."
+        },
+        "fileManager": {
+            "value": "مدير الملفات"
+        }
+    },
+    "errorMessage": {
+        "error": {
+            "value": "خطأ"
+        },
+        "title": {
+            "value": "تعذر تحميل المحتوى"
+        },
+        "message": {
+            "value": "إذا استمرت المشكلة، يرجى التحقق من اتصالك بالإنترنت."
+        },
+        "home": {
+            "value": "الرئيسية"
+        },
+        "browserUnsupported": {
+            "value": "متصفحك غير مدعوم. يرجى استخدام متصفح آخر. إذا كنت في وضع التصفح الخاص/المتخفي، يرجى المحاولة في الوضع العادي."
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "بحث"
+            },
+            "clear": {
+                "value": "مسح"
+            }
+        }
+    }
+}
