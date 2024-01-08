@@ -21,7 +21,7 @@ const additionalProperties = {
 
 export const log = {
     exception: (error: Error | undefined) => {
-        if (error && error.name === 'TypeError' && error.message === 'Failed to fetch') {
+        if (error && (error.message.includes('Failed to fetch') || error.message.includes('Load failed'))) {
             // Don't log network errors to app insights (since they can't be avoided)
             console.error(error);
         } else if (!browserSupported) {
