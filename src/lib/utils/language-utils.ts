@@ -1,4 +1,4 @@
-export const LanguageCode = { ENG: 'eng', HIN: 'hin', TPI: 'tpi' } as const;
+export const LanguageCode = { ENG: 'eng', HIN: 'hin', TPI: 'tpi', ARB: 'arb' } as const;
 export const DirectionCode = { LTR: 'ltr', RTL: 'rtl' } as const;
 
 export type LanguageCodeEnum = (typeof LanguageCode)[keyof typeof LanguageCode];
@@ -8,6 +8,7 @@ export const supportedLanguages = [
     { code: LanguageCode.ENG, label: 'English', direction: DirectionCode.LTR },
     { code: LanguageCode.HIN, label: 'हिंदी', direction: DirectionCode.LTR },
     { code: LanguageCode.TPI, label: 'Tok Pisin', direction: DirectionCode.LTR },
+    { code: LanguageCode.ARB, label: 'Arabic', direction: DirectionCode.RTL },
 ] as { code: LanguageCodeEnum; label: string; direction: DirectionCodeEnum }[];
 
 export function browserLanguageToISO6393(browserLanguage: string) {

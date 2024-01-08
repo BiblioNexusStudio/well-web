@@ -55,7 +55,7 @@
                             <Icon class="h-6 w-6" data={plus} scale={2} />
                         </summary>
                         <ul
-                            class="dropdown-content rounded-box z-[1] bg-base-100 p-2 shadow max-md:!fixed max-md:!inset-x-4 md:w-96"
+                            class="dropdown-content z-[1] rounded-box bg-base-100 p-2 shadow max-md:!fixed max-md:!inset-x-4 md:w-96"
                         >
                             <PreferredBiblesModal {bibles} />
                         </ul>
@@ -68,7 +68,7 @@
                         <summary class="btn btn-link btn-active text-primary">
                             <Icon class="h-6 w-6" data={gear} scale={2} />
                         </summary>
-                        <ul class="dropdown-content menu rounded-box z-[1] w-52 bg-base-100 p-2 shadow">
+                        <ul class="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow">
                             <li>
                                 <button on:click={() => (recordingModalOpen = true)}>
                                     <Icon data={microphone} />
@@ -111,9 +111,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    [dir='rtl'] .drawer-end .drawer-toggle ~ .drawer-side {
-        justify-items: start;
-    }
-</style>

@@ -223,8 +223,8 @@
                 <div class="tabs mb-6 w-full !border-b-0">
                     {#if showBasicTab}
                         <button
-                            class="tab tab-bordered text-sm font-semibold {activeTab === 'basic'
-                                ? 'tab-active !border-b-2 !border-primary-focus text-primary-focus'
+                            class="tab-bordered tab text-sm font-semibold {activeTab === 'basic'
+                                ? '!border-primary-focus text-primary-focus tab-active !border-b-2'
                                 : '!border-b border-b-gray-200 text-gray-500'}"
                             on:click={() => (activeTab = 'basic')}
                             >{$translate('page.passage.resourcePane.basicTab.value')}</button
@@ -232,8 +232,8 @@
                     {/if}
                     {#if showAdvancedTab}
                         <button
-                            class="tab tab-bordered text-sm font-semibold {activeTab === 'advanced'
-                                ? 'tab-active !border-b-2 !border-primary-focus text-primary-focus'
+                            class="tab-bordered tab text-sm font-semibold {activeTab === 'advanced'
+                                ? '!border-primary-focus text-primary-focus tab-active !border-b-2'
                                 : '!border-b border-b-gray-200 text-gray-500'}"
                             on:click={() => (activeTab = 'advanced')}
                             >{$translate('page.passage.resourcePane.advancedTab.value')}</button

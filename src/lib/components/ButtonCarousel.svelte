@@ -17,14 +17,24 @@
         const targetElement = buttonElements[index];
 
         if (carousel && targetElement) {
-            const nextElement = buttonElements[index + 1];
-
             let offset;
-            if (nextElement) {
-                const nextOffset = nextElement.offsetLeft - carousel.offsetLeft;
-                offset = nextOffset + nextElement.offsetWidth - carousel.offsetWidth;
+            if (document.dir === 'ltr') {
+                const nextElement = buttonElements[index + 1];
+
+                if (nextElement) {
+                    const nextOffset = nextElement.offsetLeft - carousel.offsetLeft;
+                    offset = nextOffset + nextElement.offsetWidth - carousel.offsetWidth;
+                } else {
+                    offset = carousel.scrollWidth - carousel.offsetWidth;
+                }
             } else {
-                offset = carousel.scrollWidth - carousel.offsetWidth;
+                const prevElement = buttonElements[index - 1];
+                if (prevElement) {
+                    const prevOffset = prevElement.offsetLeft - carousel.offsetLeft;
+                    offset = prevOffset + prevElement.offsetWidth - carousel.offsetWidth;
+                } else {
+                    offset = carousel.scrollWidth - carousel.offsetWidth;
+                }
             }
 
             carousel.scrollTo({ left: offset, behavior: 'smooth' });

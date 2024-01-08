@@ -101,7 +101,7 @@
 </script>
 
 <div class="relative me-2 flex h-full w-1/2 items-center" bind:this={resourcesMenuDiv}>
-    <button class="btn btn-primary btn-outline flex w-full justify-between" on:click={toggleMenu}>
+    <button class="btn btn-outline btn-primary flex w-full justify-between" on:click={toggleMenu}>
         {$translate('page.fileManager.viewRow.resources.value')} ({selectedResources.length}) <Icon
             data={menuOpen ? caretUp : caretDown}
         />
