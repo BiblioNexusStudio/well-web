@@ -38,14 +38,14 @@ export async function fetchBibleContent(passage: BasePassage, bible: FrontendBib
         // this means the user hasn't downloaded the Bible text, which is fine, they may have audio still
         log.exception(error as Error);
     }
-    const filteredAudio = bible.bookMetadata.audioUrls.chapters.filter((chapter: FrontendAudioChapter) => {
+    const filteredAudio = bible.bookMetadata.audioUrls?.chapters.filter((chapter: FrontendAudioChapter) => {
         const chapterNumber = parseInt(chapter.number);
         return passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber;
     });
     const chapters = await asyncReduce(
         range(passage.startChapter, passage.endChapter),
         async (output, chapterNumber) => {
-            const audioUrlData = filteredAudio.find((audioChapter: FrontendAudioChapter) => {
+            const audioUrlData = filteredAudio?.find((audioChapter: FrontendAudioChapter) => {
                 const audioChapterNumber = parseInt(audioChapter.number);
                 return audioChapterNumber === chapterNumber;
             });
