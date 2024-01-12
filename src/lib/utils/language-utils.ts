@@ -8,7 +8,7 @@ export const supportedLanguages = [
     { code: LanguageCode.ENG, label: 'English', direction: DirectionCode.LTR },
     { code: LanguageCode.HIN, label: 'हिंदी', direction: DirectionCode.LTR },
     { code: LanguageCode.TPI, label: 'Tok Pisin', direction: DirectionCode.LTR },
-    { code: LanguageCode.ARB, label: 'Arabic', direction: DirectionCode.RTL },
+    { code: LanguageCode.ARB, label: 'عربي', direction: DirectionCode.RTL },
 ] as { code: LanguageCodeEnum; label: string; direction: DirectionCodeEnum }[];
 
 export function browserLanguageToISO6393(browserLanguage: string) {
