@@ -8,6 +8,7 @@ import type {
     ResourcesMenuItem,
     FooterInputs,
     ResourcesApiModule,
+    ApiAudioChapter,
 } from '$lib/types/file-manager';
 import {
     resourceContentApiFullUrl,
@@ -202,6 +203,10 @@ export const calculateUrlsWithMetadataToChange = (
 };
 
 export const addFrontEndDataToBiblesModuleBook = async (inputBiblesModuleBook: BiblesModuleBook) => {
+    if (inputBiblesModuleBook.audioUrls === null) {
+        inputBiblesModuleBook = populateNullAudioChapters(inputBiblesModuleBook);
+    }
+
     inputBiblesModuleBook.isTextUrlCached = await isCachedFromCdn(inputBiblesModuleBook.textUrl);
 
     await asyncForEach(inputBiblesModuleBook.audioUrls.chapters, async (chapter) => {
@@ -276,4 +281,29 @@ export function removeDuplicates(arr: UrlWithMetadata[]): UrlWithMetadata[] {
     });
 
     return uniqueArray;
+}
+
+export function populateNullAudioChapters(data: BiblesModuleBook) {
+    const emptyAudioUrlsChapters: ApiAudioChapter[] = [];
+
+    for (let i = 0; i < data.chapterCount; i++) {
+        emptyAudioUrlsChapters.push({
+            number: `${i + 1}`,
+            webm: {
+                url: '',
+                size: 0,
+            },
+            mp3: {
+                url: '',
+                size: 0,
+            },
+            audioTimestamps: [],
+        });
+    }
+
+    data.audioUrls = {
+        chapters: emptyAudioUrlsChapters,
+    };
+
+    return data;
 }
