@@ -29,9 +29,9 @@ interface BatchedUrl {
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const partiallyDownloadedCdnUrls: string[] = [];
 const partiallyDownloadedApiPaths: string[] = [];
-const apiContentRegex = /https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/content/;
-const apiMetadataRegex = /https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/metadata/;
-const apiThumbnailRegex = /https:\/\/((qa|dev)\.)?api\.aquifer\.bible\/resources\/\d+\/thumbnail/;
+const apiContentRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/content/;
+const apiMetadataRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/metadata/;
+const apiThumbnailRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/thumbnail/;
 const cdnRegex = /https:\/\/cdn\.aquifer\.bible.*/;
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
