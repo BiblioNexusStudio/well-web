@@ -42,7 +42,7 @@ export async function asyncReduce<T, R>(
 ): Promise<R> {
     let acc = initialValue;
     for (let i = 0; i < array.length; i++) {
-        acc = await reducer(acc, array[i], i, array);
+        acc = await reducer(acc, array[i]!, i, array);
     }
     return acc;
 }

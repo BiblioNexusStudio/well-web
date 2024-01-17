@@ -160,14 +160,19 @@ export async function cacheManyFromCdnWithProgress(
     progressCallback(progress);
 
     const updateProgress = (url: Url, downloadedSize: number, totalSize: number, done: boolean) => {
-        progress[url] = {
-            downloadedSize:
-                progress[url].metadataOnly && done
-                    ? Math.min(METADATA_ONLY_FAKE_FILE_SIZE, downloadedSize)
-                    : downloadedSize,
-            totalSize: progress[url].metadataOnly ? METADATA_ONLY_FAKE_FILE_SIZE : totalSize || progress[url].totalSize,
-            done,
-        };
+        const currentProgress = progress[url];
+        if (currentProgress) {
+            progress[url] = {
+                downloadedSize:
+                    currentProgress.metadataOnly && done
+                        ? Math.min(METADATA_ONLY_FAKE_FILE_SIZE, downloadedSize)
+                        : downloadedSize,
+                totalSize: currentProgress.metadataOnly
+                    ? METADATA_ONLY_FAKE_FILE_SIZE
+                    : totalSize || currentProgress.totalSize,
+                done,
+            };
+        }
         progressCallback(progress);
     };
 
