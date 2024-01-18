@@ -46,9 +46,9 @@
             if (chapter.contents.length > 0 && chapter.chapterNumber) {
                 const chapterInfoExists = !!$biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1];
                 if (chapterInfoExists) {
-                    const chapterObject = $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1];
-                    if (chapterObject) {
-                        chapterObject.resourceMenuItems = chapter.contents;
+                    if ($biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1]) {
+                        $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1]!.resourceMenuItems =
+                            chapter.contents;
                     }
                 }
 
