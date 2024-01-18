@@ -32,7 +32,7 @@
             ],
             [0, 0]
         );
-        const downloadFinished = objectKeys(progress).every((key: string) => progress[key].done);
+        const downloadFinished = objectKeys(progress).every((key: string) => progress[key]!.done);
 
         if (downloadFinished) {
             downloadInProgress = false;
