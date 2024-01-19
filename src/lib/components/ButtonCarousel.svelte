@@ -1,22 +1,26 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+    import ChevronRightIcon from '$lib/icons/ChevronRightIcon.svelte';
+    import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
 
     export let buttons: { value: number; label: string }[];
     export let buttonElements: (HTMLElement | null)[] = buttons.map(() => null);
     export let selectedValue: number | null;
     export let scroll: number | undefined;
+    export let displayIcons = false;
 
     let carousel: HTMLElement | undefined;
 
+    $: index = buttons.findIndex((button) => button.value === selectedValue);
+    $: targetElement = buttonElements[index];
     $: scrollToButtonWithValue(selectedValue);
 
     function scrollToButtonWithValue(value: number | null) {
         if (value === null) return;
 
-        const index = buttons.findIndex((button) => button.value === value);
-        const targetElement = buttonElements[index];
-
-        if (carousel && targetElement) {
+        if (carousel && targetElement && displayIcons) {
+            targetElement.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+        } else if (carousel && targetElement) {
             let offset;
             if (document.dir === 'ltr') {
                 const nextElement = buttonElements[index + 1];
@@ -57,6 +61,16 @@
     bind:this={carousel}
     on:scroll={() => (scroll = carousel?.scrollLeft)}
 >
+    {#if targetElement !== buttonElements[0] && displayIcons}
+        <button
+            class="radial-gradient-circle absolute left-0 flex h-full w-[36px] items-center justify-center bg-white"
+            on:click={() => {
+                if (selectedValue !== null) {
+                    selectedValue = selectedValue - 1;
+                }
+            }}><ChevronLeftIcon /></button
+        >
+    {/if}
     {#each buttons as { value, label }, index}
         <div class="carousel-item">
             <button
@@ -69,4 +83,20 @@
             >
         </div>
     {/each}
+    {#if targetElement !== buttonElements[buttonElements.length - 1] && displayIcons}
+        <button
+            class="radial-gradient-circle absolute right-0 flex h-full w-[36px] items-center justify-center bg-white"
+            on:click={() => {
+                if (selectedValue !== null) {
+                    selectedValue = selectedValue + 1;
+                }
+            }}><ChevronRightIcon /></button
+        >
+    {/if}
 </div>
+
+<style>
+    .radial-gradient-circle {
+        background: radial-gradient(circle at center, rgba(255, 255, 255, 1) 55%, rgba(255, 255, 255, 0) 100%);
+    }
+</style>

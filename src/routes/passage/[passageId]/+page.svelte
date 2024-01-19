@@ -298,7 +298,7 @@
                 {/if}
             {:then}
                 <div class="px-4 pb-4 {selectedTab !== 'guide' && 'hidden'}">
-                    <div class="m-auto max-w-[65ch]">
+                    <div class="relative m-auto max-w-[65ch]">
                         <ButtonCarousel
                             bind:selectedValue={cbbterSelectedStepNumber}
                             bind:scroll={cbbterSelectedStepScroll}
@@ -306,6 +306,7 @@
                                 value: stepNumber,
                                 label: steps[stepNumber - 1] ?? '',
                             }))}
+                            displayIcons={true}
                         />
                     </div>
                 </div>
