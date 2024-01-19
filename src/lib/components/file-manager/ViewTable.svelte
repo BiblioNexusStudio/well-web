@@ -46,8 +46,10 @@
             if (chapter.contents.length > 0 && chapter.chapterNumber) {
                 const chapterInfoExists = !!$biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1];
                 if (chapterInfoExists) {
-                    $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1].resourceMenuItems =
-                        chapter.contents;
+                    if ($biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1]) {
+                        $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1]!.resourceMenuItems =
+                            chapter.contents;
+                    }
                 }
 
                 if (
@@ -65,7 +67,7 @@
                             ) {
                                 $biblesModuleBook.audioUrls.chapters[
                                     chapter.chapterNumber - 1
-                                ].cbbterResourceUrls?.push({
+                                ]?.cbbterResourceUrls?.push({
                                     url: passageContentApiFullPath(passage),
                                     mediaType: MediaType.Text,
                                     metadataOnly: true,

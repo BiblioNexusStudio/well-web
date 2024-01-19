@@ -40,7 +40,7 @@ export async function fetchTiptapForResourceContent(
         const tiptaps = (await fetchFromCacheOrCdn(resourceContentApiFullUrl(resourceContent))) as
             | ResourceContentTiptap[]
             | null;
-        return tiptaps?.length ? tiptaps[0] : null;
+        return tiptaps?.[0] ?? null;
     } catch (error) {
         // tiptap data not cached
         log.exception(error as Error);
@@ -71,8 +71,8 @@ export function resourceDisplayNameSorter(a: { displayName: string | null }, b: 
     const aMatch = a.displayName?.match(passageRegex);
     const bMatch = b.displayName?.match(passageRegex);
     if (aMatch && bMatch) {
-        const aId = parseInt(aMatch[1]) * 1000000 + parseInt(aMatch[2]) * 1000 + parseInt(aMatch[3] ?? '0');
-        const bId = parseInt(bMatch[1]) * 1000000 + parseInt(bMatch[2]) * 1000 + parseInt(bMatch[3] ?? '0');
+        const aId = parseInt(aMatch[1]!) * 1000000 + parseInt(aMatch[2]!) * 1000 + parseInt(aMatch[3] ?? '0');
+        const bId = parseInt(bMatch[1]!) * 1000000 + parseInt(bMatch[2]!) * 1000 + parseInt(bMatch[3] ?? '0');
         return aId - bId;
     } else if (a.displayName && b.displayName) {
         return a.displayName.localeCompare(b.displayName);

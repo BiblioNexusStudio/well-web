@@ -79,7 +79,7 @@
     $: [videoElement, sliderElement, imageElement] && setVideoOrImageDimensionsBasedOnAvailableHeight();
 
     let currentResource: ImageOrVideoResource | null = null;
-    $: currentResource = currentIndex === null ? null : resources[currentIndex];
+    $: currentResource = currentIndex === null ? null : resources[currentIndex] ?? null;
 
     // when the index changes, reset the current state and setup the new one
     $: setupImageOrVideoState(currentIndex);

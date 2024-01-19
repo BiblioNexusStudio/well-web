@@ -42,7 +42,7 @@ class _MultiClipAudioState {
     }
 
     playOrPause() {
-        this.currentClip().isPlaying ? this.pauseAllClips() : this.currentClip().play();
+        this.currentClip()?.isPlaying ? this.pauseAllClips() : this.currentClip()?.play();
         this.calculateDisplayAndNotifyStateChanged();
     }
 
@@ -57,10 +57,10 @@ class _MultiClipAudioState {
         const newTime = (parseInt(value) / 100) * this.totalDuration();
         let previousClipDurations = 0;
         let newClipIndex = 0;
-        const isPlaying = this.currentClip().isPlaying;
+        const isPlaying = this.currentClip()?.isPlaying ?? false;
 
         for (; newClipIndex < this.clipSequence.length; newClipIndex++) {
-            const clipTotalTime = this.clipSequence[newClipIndex].totalTime || 0;
+            const clipTotalTime = this.clipSequence[newClipIndex]!.totalTime || 0;
             if (previousClipDurations + clipTotalTime >= newTime) break;
             previousClipDurations += clipTotalTime;
         }
@@ -69,11 +69,11 @@ class _MultiClipAudioState {
             this.currentClipIndex = newClipIndex;
         }
 
-        this.currentClip().updateRealSeekedTimeToClipAdjustedTime(newTime - previousClipDurations);
+        this.currentClip()?.updateRealSeekedTimeToClipAdjustedTime(newTime - previousClipDurations);
 
         if (isPlaying) {
             this.pauseAllClips();
-            this.currentClip().play();
+            this.currentClip()?.play();
         }
         if (isSafariOnMacOrIOS()) {
             // force the seek check to skip 8 cycles (400ms) to let Safari catch up
@@ -83,7 +83,7 @@ class _MultiClipAudioState {
     }
 
     isPlaying() {
-        return this.currentClip().isPlaying;
+        return this.currentClip()?.isPlaying ?? false;
     }
 
     rangeValue() {
@@ -127,12 +127,12 @@ class _MultiClipAudioState {
     startSyncingSeekPosition() {
         if (this.syncSeekPositionTimer) return;
         this.syncSeekPositionTimer = setInterval(() => {
-            this.currentClip().checkPlaybackLimits();
+            this.currentClip()?.checkPlaybackLimits();
             if (this.seekCooldown > 0) {
                 this.seekCooldown--;
                 return;
             }
-            this.currentClip().syncRealSeekedTime();
+            this.currentClip()?.syncRealSeekedTime();
             this.calculateDisplayAndNotifyStateChanged();
         }, 50);
     }
@@ -145,7 +145,9 @@ class _MultiClipAudioState {
 
     onplayFactory(index: number) {
         return () => {
-            this.clipSequence[index].isPlaying = true;
+            if (this.clipSequence[index]) {
+                this.clipSequence[index]!.isPlaying = true;
+            }
             this.startSyncingSeekPosition();
             this.calculateDisplayAndNotifyStateChanged();
         };
@@ -153,7 +155,9 @@ class _MultiClipAudioState {
 
     onpauseFactory(index: number) {
         return () => {
-            this.clipSequence[index].isPlaying = false;
+            if (this.clipSequence[index]) {
+                this.clipSequence[index]!.isPlaying = false;
+            }
             this.stopSyncingSeekPosition();
             this.calculateDisplayAndNotifyStateChanged();
         };
@@ -161,21 +165,25 @@ class _MultiClipAudioState {
 
     onendedFactory(index: number) {
         return () => {
-            this.clipSequence[index].isPlaying = false;
-            if (this.clipSequence[index + 1]) {
-                this.clipSequence[index].pause();
-                this.clipSequence[index].resetRealSeekedTimeToStartTime();
+            if (this.clipSequence[index]) {
+                this.clipSequence[index]!.isPlaying = false;
+                if (this.clipSequence[index + 1]) {
+                    this.clipSequence[index]!.pause();
+                    this.clipSequence[index]!.resetRealSeekedTimeToStartTime();
 
-                this.currentClipIndex = index + 1;
-                this.currentClip().resetRealSeekedTimeToStartTime();
-                this.currentClip().play();
-            } else {
-                this.clipSequence[index].pause();
-                this.clipSequence[index].resetRealSeekedTimeToStartTime();
+                    this.currentClipIndex = index + 1;
+                    this.currentClip()?.resetRealSeekedTimeToStartTime();
+                    this.currentClip()?.play();
+                } else {
+                    this.clipSequence[index]!.pause();
+                    this.clipSequence[index]!.resetRealSeekedTimeToStartTime();
 
-                this.currentClipIndex = 0;
-                this.clipSequence[0].resetRealSeekedTimeToStartTime();
-                this.stopSyncingSeekPosition();
+                    this.currentClipIndex = 0;
+                    if (this.clipSequence[0]) {
+                        this.clipSequence[0].resetRealSeekedTimeToStartTime();
+                    }
+                    this.stopSyncingSeekPosition();
+                }
             }
             this.calculateDisplayAndNotifyStateChanged();
         };
@@ -183,7 +191,9 @@ class _MultiClipAudioState {
 
     onloadFactory(index: number) {
         return () => {
-            this.clipSequence[index].fileLoaded();
+            if (this.clipSequence[index]) {
+                this.clipSequence[index]!.fileLoaded();
+            }
             this.calculateDisplayAndNotifyStateChanged();
         };
     }
@@ -192,7 +202,7 @@ class _MultiClipAudioState {
         const currentDuration =
             this.clipSequence.slice(0, this.currentClipIndex).reduce((acc, state) => {
                 return acc + (state.totalTime || 0);
-            }, 0) + this.currentClip().clipAdjustedTime();
+            }, 0) + (this.currentClip()?.clipAdjustedTime() ?? 0);
         const totalDuration = this.totalDuration();
         this._totalTimeDisplay = formatSecondsToTimeDisplay(totalDuration);
         this._rangeValue = 100 * (currentDuration / totalDuration);

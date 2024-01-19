@@ -16,7 +16,7 @@
 
     let bookMenuDiv: HTMLElement;
     let menuOpen = false;
-    let firstBible = $biblesModuleData[0] || { id: null, contents: [] };
+    let firstBible = $biblesModuleData[0] || { id: null, contents: [], books: [] };
 
     $: books = firstBible.books.filter((book) => allowedBooks.includes(book.bookCode));
     $: bookName = setBookName($selectedBookCode);

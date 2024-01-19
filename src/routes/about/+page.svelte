@@ -21,7 +21,7 @@
             return null;
         }
         if (licenses.length === 1) {
-            const license = licenses[0];
+            const license = licenses[0]!;
             return $translate('page.about.license.releasedUnderSingle.value', {
                 values: {
                     name: license.url

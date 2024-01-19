@@ -80,7 +80,7 @@
         bibleData = null;
         multiClipAudioStates = {};
         baseFetchPromise = (async () => {
-            passage = await fetchPassage($page.params.passageId);
+            passage = await fetchPassage($page.params.passageId!);
         })();
     }
 
@@ -109,7 +109,7 @@
         }));
         bibleData = newBibleData;
         if (!selectedBibleId || !bibleData?.biblesForTabs.map(({ id }) => id).includes(selectedBibleId)) {
-            selectedBibleId = bibleData?.biblesForTabs?.[0].id ?? null;
+            selectedBibleId = bibleData?.biblesForTabs?.[0]?.id ?? null;
         }
         await fetchContentForBibleId(selectedBibleId);
         await cacheNonSelectedBiblesIfOnline();
@@ -117,22 +117,22 @@
 
     async function fetchContentForBibleId(id: number | null) {
         const index = bibleData?.biblesForTabs.findIndex((bible) => bible.id === id) ?? -1;
-        if (bibleData && index >= 0) {
-            bibleData.biblesForTabs[index].loadingContent = true;
+        if (bibleData && bibleData.biblesForTabs[index]) {
+            bibleData.biblesForTabs[index]!.loadingContent = true;
             const bibleBook = bibleData.biblesForTabs[index];
             if (bibleBook && passage) {
                 if (!bibleBook.content) {
                     const content = await fetchBibleContent(passage, bibleBook);
                     // make sure the index hasn't changed
-                    if (bibleData.biblesForTabs[index].id === id) {
-                        bibleData.biblesForTabs[index].content = content;
+                    if (bibleData.biblesForTabs[index]!.id === id) {
+                        bibleData.biblesForTabs[index]!.content = content;
                         populateBibleAudioState();
                     }
                 }
             }
-            const currentIndex = bibleData?.biblesForTabs.findIndex((bible) => bible.id === id) ?? -1;
-            if (currentIndex >= 0) {
-                bibleData.biblesForTabs[currentIndex].loadingContent = false;
+            const currentIndex = bibleData.biblesForTabs.findIndex((bible) => bible.id === id) ?? -1;
+            if (currentIndex >= 0 && bibleData?.biblesForTabs[currentIndex]) {
+                bibleData.biblesForTabs[currentIndex]!.loadingContent = false;
             }
         }
     }
@@ -304,7 +304,7 @@
                             bind:scroll={cbbterSelectedStepScroll}
                             buttons={stepsAvailable.map((stepNumber) => ({
                                 value: stepNumber,
-                                label: steps[stepNumber - 1],
+                                label: steps[stepNumber - 1] ?? '',
                             }))}
                             displayIcons={true}
                         />
