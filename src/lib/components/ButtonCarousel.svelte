@@ -11,13 +11,12 @@
 
     let carousel: HTMLElement | undefined;
 
+    $: index = buttons.findIndex((button) => button.value === selectedValue);
+    $: targetElement = buttonElements[index];
     $: scrollToButtonWithValue(selectedValue);
 
     function scrollToButtonWithValue(value: number | null) {
         if (value === null) return;
-
-        const index = buttons.findIndex((button) => button.value === value);
-        const targetElement = buttonElements[index];
 
         if (carousel && targetElement && displayIcons) {
             targetElement.scrollIntoView({ behavior: 'smooth', inline: 'center' });
@@ -62,7 +61,7 @@
     bind:this={carousel}
     on:scroll={() => (scroll = carousel?.scrollLeft)}
 >
-    {#if selectedValue !== 1 && displayIcons}
+    {#if targetElement !== buttonElements[0] && displayIcons}
         <button
             class="radial-gradient-circle absolute left-0 flex h-full w-[36px] items-center justify-center bg-white"
             on:click={() => {
@@ -84,7 +83,7 @@
             >
         </div>
     {/each}
-    {#if buttons.length !== selectedValue && displayIcons}
+    {#if targetElement !== buttonElements[buttonElements.length - 1] && displayIcons}
         <button
             class="radial-gradient-circle absolute right-0 flex h-full w-[36px] items-center justify-center bg-white"
             on:click={() => {
