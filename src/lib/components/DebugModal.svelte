@@ -20,8 +20,8 @@
     const boxSize = 0.2; // 20% of screen width/height
 
     function handleTap(e: TouchEvent) {
-        const x = e.changedTouches[0].clientX;
-        const y = e.changedTouches[0].clientY;
+        const x = e.changedTouches[0]?.clientX ?? 0;
+        const y = e.changedTouches[0]?.clientY ?? 0;
         const width = window.innerWidth;
         const height = window.innerHeight;
 

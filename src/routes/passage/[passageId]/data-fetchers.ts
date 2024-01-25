@@ -58,17 +58,17 @@ export async function fetchBibleContent(passage: BasePassage, bible: FrontendBib
                             chapterNumber === passage.startChapter
                                 ? audioUrlData.audioTimestamps.find(
                                       ({ verseNumber }: AudioTimestamp) =>
-                                          passage.startVerse === parseInt(verseNumber.split('-')[0])
+                                          passage.startVerse === parseInt(verseNumber.split('-')[0]!)
                                   )?.start
-                                : audioUrlData.audioTimestamps[0].start;
+                                : audioUrlData.audioTimestamps[0]?.start;
 
                         const endTimestamp =
                             chapterNumber === passage.endChapter
                                 ? audioUrlData.audioTimestamps.find(
                                       ({ verseNumber }: AudioTimestamp) =>
-                                          passage.endVerse === parseInt(verseNumber.split('-')[0])
+                                          passage.endVerse === parseInt(verseNumber.split('-')[0]!)
                                   )?.end
-                                : audioUrlData.audioTimestamps[audioUrlData.audioTimestamps.length - 1].end;
+                                : audioUrlData.audioTimestamps[audioUrlData.audioTimestamps.length - 1]?.end;
 
                         audioData = {
                             url,
@@ -93,7 +93,7 @@ export async function fetchBibleContent(passage: BasePassage, bible: FrontendBib
                         audioData,
                         versesText:
                             chapterText?.verses.filter((verse) => {
-                                const verseNumber = parseInt(verse.number.split('-')[0]);
+                                const verseNumber = parseInt(verse.number.split('-')[0]!);
                                 return (
                                     (chapterNumber > passage.startChapter ||
                                         (chapterNumber === passage.startChapter &&
