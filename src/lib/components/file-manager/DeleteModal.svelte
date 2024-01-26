@@ -15,20 +15,22 @@
             removeFromCdnCache(url);
         });
 
-        $biblesModuleBook.audioUrls.chapters = $biblesModuleBook.audioUrls.chapters.map((chapter) => {
-            if (chapter.selected && chapter.deleteResources) {
-                chapter.deleteResources = false;
-                chapter.selected = false;
-                chapter.isAudioUrlCached = false;
-                chapter.allUrlsCached = false;
+        if ($biblesModuleBook.audioUrls) {
+            $biblesModuleBook.audioUrls.chapters = $biblesModuleBook.audioUrls.chapters.map((chapter) => {
+                if (chapter.selected && chapter.deleteResources) {
+                    chapter.deleteResources = false;
+                    chapter.selected = false;
+                    chapter.isAudioUrlCached = false;
+                    chapter.allUrlsCached = false;
 
-                chapter.resourceMenuItems?.forEach((resource) => {
-                    resource.isResourceUrlCached = false;
-                });
-            }
+                    chapter.resourceMenuItems?.forEach((resource) => {
+                        resource.isResourceUrlCached = false;
+                    });
+                }
 
-            return chapter;
-        });
+                return chapter;
+            });
+        }
 
         const modal = document.getElementById('file-manager-delete-modal') as HTMLDialogElement;
 

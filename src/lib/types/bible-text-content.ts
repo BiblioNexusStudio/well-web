@@ -46,7 +46,7 @@ export type ApiBibleBookContent = BaseBibleBookContent;
 
 export interface BibleBookContentDetails extends BaseBibleBookContent {
     textUrl: string;
-    audioUrls: { chapters: FrontendAudioChapter[] };
+    audioUrls: { chapters: FrontendAudioChapter[] } | null;
 }
 
 export interface FrontendChapterAudioData {
