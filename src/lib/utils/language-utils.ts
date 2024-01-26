@@ -1,4 +1,12 @@
-export const LanguageCode = { SWH: 'swh', ENG: 'eng', HIN: 'hin', TPI: 'tpi', ARB: 'arb' } as const;
+export const LanguageCode = {
+    FRA: 'fra',
+    RUS: 'rus',
+    SWH: 'swh',
+    ENG: 'eng',
+    HIN: 'hin',
+    TPI: 'tpi',
+    ARB: 'arb',
+} as const;
 export const DirectionCode = { LTR: 'ltr', RTL: 'rtl' } as const;
 
 export type LanguageCodeEnum = (typeof LanguageCode)[keyof typeof LanguageCode];
@@ -7,6 +15,8 @@ export type DirectionCodeEnum = (typeof DirectionCode)[keyof typeof DirectionCod
 export const supportedLanguages = [
     { code: LanguageCode.ENG, label: 'English', direction: DirectionCode.LTR },
     { code: LanguageCode.SWH, label: 'Kiswahili', direction: DirectionCode.LTR },
+    { code: LanguageCode.FRA, label: 'Français', direction: DirectionCode.LTR },
+    { code: LanguageCode.RUS, label: 'Pусский', direction: DirectionCode.LTR },
     { code: LanguageCode.HIN, label: 'हिंदी', direction: DirectionCode.LTR },
     { code: LanguageCode.TPI, label: 'Tok Pisin', direction: DirectionCode.LTR },
     { code: LanguageCode.ARB, label: 'عربي', direction: DirectionCode.RTL },
