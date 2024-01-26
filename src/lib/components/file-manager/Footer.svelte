@@ -6,10 +6,9 @@
     import { Icon } from 'svelte-awesome';
     import download from 'svelte-awesome/icons/download';
 
-    $: downloadingIsDisabled =
-        ($downloadData.totalSizeToDownload === 0 && $downloadData.totalSizeToDelete === 0) || !$isOnline;
+    $: downloadingIsDisabled = $downloadData.nonMetadataSizeToDownload === 0 || !$isOnline;
 
-    $: footerInputsDisabled = $biblesModuleBook.audioUrls.chapters.every((chapter) => !chapter.selected);
+    $: footerInputsDisabled = $biblesModuleBook.audioUrls?.chapters.every((chapter) => !chapter.selected);
 
     const updateFiles = () => {
         const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;

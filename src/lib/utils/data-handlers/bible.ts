@@ -28,17 +28,20 @@ function bibleUrlsWithMetadataForBookAndChapters(
     bookData: BibleBookContentDetails,
     chapters: number[] | 'all'
 ): UrlWithMetadata[] {
-    return bookData.audioUrls.chapters
-        .filter((chapter) => chapters === 'all' || chapters.includes(parseInt(chapter.number)))
-        .map(
-            (audioUrl) =>
-                ({
-                    url: audioUrl[audioFileTypeForBrowser()].url,
-                    size: audioUrl[audioFileTypeForBrowser()].size,
-                    mediaType: MediaType.Audio,
-                }) as UrlWithMetadata
-        )
-        .concat({ url: bookData.textUrl, size: bookData.textSize, mediaType: MediaType.Text } as UrlWithMetadata);
+    return (
+        bookData.audioUrls?.chapters
+            .filter((chapter) => chapters === 'all' || chapters.includes(parseInt(chapter.number)))
+            .map(
+                (audioUrl) =>
+                    ({
+                        url: audioUrl[audioFileTypeForBrowser()].url,
+                        size: audioUrl[audioFileTypeForBrowser()].size,
+                        mediaType: MediaType.Audio,
+                    }) as UrlWithMetadata
+            )
+            .concat({ url: bookData.textUrl, size: bookData.textSize, mediaType: MediaType.Text } as UrlWithMetadata) ||
+        []
+    );
 }
 
 export async function fetchBibleDataForBookCodeAndLanguageCode(
