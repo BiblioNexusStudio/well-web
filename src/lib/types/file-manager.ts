@@ -50,7 +50,7 @@ export interface Language {
 
 export interface DownloadData {
     totalSizeToDownload: number;
-    totalSizeToDelete: number;
+    nonMetadataSizeToDownload: number;
     urlsToDownload: UrlWithMetadata[];
     urlsToDelete: string[];
 }
@@ -175,7 +175,7 @@ export interface BiblesModuleBook {
     isTextUrlCached?: boolean;
     audioUrls: {
         chapters: FrontendAudioChapter[];
-    };
+    } | null;
 }
 
 export interface CbbterTextContent {

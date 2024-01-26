@@ -45,10 +45,10 @@ export const calculateUrlsWithMetadataToChange = (
     const urlsAndSizesToDownload = [] as UrlWithMetadata[];
     const urlsToDelete = [] as string[];
     const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
-    const selectedChaptersLength = biblesModuleBook.audioUrls.chapters.filter((chapter) => chapter.selected).length;
+    const selectedChaptersLength = biblesModuleBook.audioUrls?.chapters.filter((chapter) => chapter.selected).length;
 
     if (
-        biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.selected) &&
+        biblesModuleBook.audioUrls?.chapters.some((chapter) => chapter.selected) &&
         bibleSelected &&
         footerInputs.text &&
         !biblesModuleBook.isTextUrlCached
@@ -62,12 +62,12 @@ export const calculateUrlsWithMetadataToChange = (
 
     if (
         (selectedChaptersLength === 1 || selectedChaptersLength == 0) &&
-        biblesModuleBook.audioUrls.chapters.some((chapter) => chapter.deleteResources)
+        biblesModuleBook.audioUrls?.chapters.some((chapter) => chapter.deleteResources)
     ) {
         urlsToDelete.push(biblesModuleBook.textUrl);
     }
 
-    biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
+    biblesModuleBook.audioUrls?.chapters.forEach((chapter) => {
         if (chapter.selected) {
             if (bibleSelected && footerInputs.audio && !chapter.isAudioUrlCached) {
                 urlsAndSizesToDownload.push({
@@ -181,7 +181,7 @@ export const calculateUrlsWithMetadataToChange = (
     });
 
     if (resourcesMenu.some(({ selected, value }) => selected && value === ParentResourceName.CBBTER)) {
-        biblesModuleBook.audioUrls.chapters.forEach((chapter) => {
+        biblesModuleBook.audioUrls?.chapters.forEach((chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
                 chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
                     if (chapter.deleteResources) {
@@ -194,11 +194,12 @@ export const calculateUrlsWithMetadataToChange = (
         });
     }
 
+    const uniqueUrls = removeDuplicates(urlsAndSizesToDownload);
     return {
         urlsToDelete,
-        urlsToDownload: removeDuplicates(urlsAndSizesToDownload),
-        totalSizeToDelete: 0,
-        totalSizeToDownload: removeDuplicates(urlsAndSizesToDownload).reduce((acc, { size }) => size + acc, 0),
+        urlsToDownload: uniqueUrls,
+        totalSizeToDownload: uniqueUrls.reduce((acc, { size }) => size + acc, 0),
+        nonMetadataSizeToDownload: uniqueUrls.filter((u) => !u.metadataOnly).reduce((acc, { size }) => size + acc, 0),
     };
 };
 
@@ -209,7 +210,7 @@ export const addFrontEndDataToBiblesModuleBook = async (inputBiblesModuleBook: B
 
     inputBiblesModuleBook.isTextUrlCached = await isCachedFromCdn(inputBiblesModuleBook.textUrl);
 
-    await asyncForEach(inputBiblesModuleBook.audioUrls.chapters, async (chapter) => {
+    await asyncForEach(inputBiblesModuleBook.audioUrls?.chapters ?? [], async (chapter) => {
         chapter.isAudioUrlCached = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);
         chapter.selected = false;
         chapter.allUrlsCached = false;

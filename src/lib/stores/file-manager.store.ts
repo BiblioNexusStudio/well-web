@@ -52,7 +52,7 @@ export const downloadData = derived(
         urlsToDownload: [] as UrlWithMetadata[],
         urlsToDelete: [] as string[],
         totalSizeToDownload: 0,
-        totalSizeToDelete: 0,
+        nonMetadataSizeToDownload: 0,
     }
 );
 
@@ -88,13 +88,15 @@ export const allowedBooks = ['GEN', 'JOB', 'MAT', 'MRK', 'LUK', 'JHN', 'ACT'];
 
 export function limitChaptersIfNecessary(code: string | null, data: typeof biblesModuleBook) {
     data.update((data) => {
-        data.audioUrls.chapters = data.audioUrls.chapters.filter(({ number }) => {
-            if (code && Object.keys(limitChapters).includes(code)) {
-                const bookCode = code as keyof typeof limitChapters;
-                return limitChapters[bookCode].includes(number);
-            }
-            return true;
-        });
+        if (data.audioUrls) {
+            data.audioUrls.chapters = data.audioUrls.chapters.filter(({ number }) => {
+                if (code && Object.keys(limitChapters).includes(code)) {
+                    const bookCode = code as keyof typeof limitChapters;
+                    return limitChapters[bookCode].includes(number);
+                }
+                return true;
+            });
+        }
         return data;
     });
 }

@@ -28,12 +28,12 @@
     let allChaptersCached = false;
 
     $: hasText = $biblesModuleBook.textSize > 0;
-    $: addAdditaonalResourcesApiModule($resourcesApiModule);
+    $: addAdditionalResourcesApiModule($resourcesApiModule);
     $: resetSelectAllChapters($selectedBookCode);
     $: addAllUrlsCachedProperty($biblesModuleBook);
     $: textUrlIsCached = $biblesModuleBook.isTextUrlCached;
 
-    async function addAdditaonalResourcesApiModule(resourcesApiModule: ResourcesApiModule) {
+    async function addAdditionalResourcesApiModule(resourcesApiModule: ResourcesApiModule) {
         let passageData: BasePassagesByBook[] = [];
 
         if ($resourcesMenu.some((resource) => resource.selected && resource.value === ParentResourceName.CBBTER)) {
@@ -44,9 +44,9 @@
 
         resourcesApiModule.chapters.forEach(async (chapter) => {
             if (chapter.contents.length > 0 && chapter.chapterNumber) {
-                const chapterInfoExists = !!$biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1];
+                const chapterInfoExists = !!$biblesModuleBook.audioUrls?.chapters[chapter.chapterNumber - 1];
                 if (chapterInfoExists) {
-                    if ($biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1]) {
+                    if ($biblesModuleBook.audioUrls?.chapters[chapter.chapterNumber - 1]) {
                         $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1]!.resourceMenuItems =
                             chapter.contents;
                     }
@@ -65,7 +65,7 @@
                                 (chapter.chapterNumber === passage.startChapter ||
                                     chapter.chapterNumber === passage.endChapter)
                             ) {
-                                $biblesModuleBook.audioUrls.chapters[
+                                $biblesModuleBook.audioUrls?.chapters[
                                     chapter.chapterNumber - 1
                                 ]?.cbbterResourceUrls?.push({
                                     url: passageContentApiFullPath(passage),
@@ -82,7 +82,7 @@
     }
 
     function addAllUrlsCachedProperty(biblesModuleBook: BiblesModuleBook) {
-        biblesModuleBook.audioUrls.chapters.forEach((audioChapter) => {
+        biblesModuleBook.audioUrls?.chapters.forEach((audioChapter) => {
             const allUrlsCached =
                 biblesModuleBook.isTextUrlCached &&
                 audioChapter.isAudioUrlCached &&
@@ -93,7 +93,7 @@
             }
         });
 
-        const everyChaptersCached = biblesModuleBook.audioUrls.chapters.every((chapter) => chapter.allUrlsCached);
+        const everyChaptersCached = biblesModuleBook.audioUrls?.chapters.every((chapter) => chapter.allUrlsCached);
         if (everyChaptersCached) {
             allChaptersSelected = true;
             allChaptersCached = true;
@@ -107,10 +107,12 @@
     }
 
     function selectAllChapters() {
-        $biblesModuleBook.audioUrls.chapters = $biblesModuleBook.audioUrls.chapters.map((chapter) => {
-            chapter.selected = !allChaptersSelected;
-            return chapter;
-        });
+        if ($biblesModuleBook.audioUrls) {
+            $biblesModuleBook.audioUrls.chapters = $biblesModuleBook.audioUrls.chapters.map((chapter) => {
+                chapter.selected = !allChaptersSelected;
+                return chapter;
+            });
+        }
     }
 
     function openDeleteModal() {
@@ -145,70 +147,74 @@
         </tr>
     </thead>
     <tbody>
-        {#each $biblesModuleBook.audioUrls.chapters as audioChapter, index (index)}
-            {@const rowData = buildRowData(audioChapter, $resourcesMenu, hasText, $biblesModuleBook.textSize)}
-            <tr class="relative h-16 w-full border-b-2 odd:bg-gray-100">
-                <td class="text-center">
-                    <input
-                        type="checkbox"
-                        class="checkbox-primary checkbox mx-2"
-                        bind:checked={audioChapter.selected}
-                        disabled={audioChapter.allUrlsCached}
-                    />
-                </td>
+        {#if $biblesModuleBook.audioUrls}
+            {#each $biblesModuleBook.audioUrls.chapters as audioChapter, index (index)}
+                {@const rowData = buildRowData(audioChapter, $resourcesMenu, hasText, $biblesModuleBook.textSize)}
+                <tr class="relative h-16 w-full border-b-2 odd:bg-gray-100">
+                    <td class="text-center">
+                        <input
+                            type="checkbox"
+                            class="checkbox-primary checkbox mx-2"
+                            bind:checked={audioChapter.selected}
+                            disabled={audioChapter.allUrlsCached}
+                        />
+                    </td>
 
-                <td>
-                    <div class="font-bold">{`${$biblesModuleBook.displayName} ${audioChapter.number}`}</div>
-                    <div>
-                        {rowData.resources}
-                        {$translate('page.fileManager.viewRow.resources.value')} | {convertToReadableSize(rowData.size)}
-                    </div>
-                </td>
-                <td class="text-center">
-                    {#if rowData.hasText}
-                        <Icon data={fileTextO} />
-                    {/if}
-                </td>
-                <td class="text-center">
-                    {#if rowData.hasAudio}
-                        <Icon data={volumeUp} />
-                    {/if}
-                </td>
-                <td class="text-center">
-                    <div class="inline-block">
-                        {#if rowData.hasImages && rowData.hasVideos}
-                            <ImageAndVideo />
-                        {:else if rowData.hasImages}
-                            <Image />
-                        {:else if rowData.hasVideos}
-                            <Video />
+                    <td>
+                        <div class="font-bold">{`${$biblesModuleBook.displayName} ${audioChapter.number}`}</div>
+                        <div>
+                            {rowData.resources}
+                            {$translate('page.fileManager.viewRow.resources.value')} | {convertToReadableSize(
+                                rowData.size
+                            )}
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        {#if rowData.hasText}
+                            <Icon data={fileTextO} />
                         {/if}
-                    </div>
-                </td>
-                <td class="h-full text-center">
-                    {#if audioChapter.allUrlsCached || (index === 0 && textUrlIsCached)}
-                        <button
-                            on:click={() => (audioChapter.deleteMenuOpen = !audioChapter.deleteMenuOpen)}
-                            class={audioChapter.deleteMenuOpen ? 'h-10 rounded-full bg-primary py-2' : 'h-8'}
-                        >
-                            <Icon data={ellipsisV} class="h-full w-6" />
-                        </button>
-                        {#if audioChapter.deleteMenuOpen}
+                    </td>
+                    <td class="text-center">
+                        {#if rowData.hasAudio}
+                            <Icon data={volumeUp} />
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        <div class="inline-block">
+                            {#if rowData.hasImages && rowData.hasVideos}
+                                <ImageAndVideo />
+                            {:else if rowData.hasImages}
+                                <Image />
+                            {:else if rowData.hasVideos}
+                                <Video />
+                            {/if}
+                        </div>
+                    </td>
+                    <td class="h-full text-center">
+                        {#if audioChapter.allUrlsCached || (index === 0 && textUrlIsCached)}
                             <button
-                                on:click={() => {
-                                    audioChapter.deleteMenuOpen = false;
-                                    audioChapter.deleteResources = true;
-                                    openDeleteModal();
-                                }}
-                                class="absolute left-0 z-30 mx-2 flex w-[96vw] items-center justify-start rounded-md border-2 border-solid border-primary bg-white px-4 py-2"
+                                on:click={() => (audioChapter.deleteMenuOpen = !audioChapter.deleteMenuOpen)}
+                                class={audioChapter.deleteMenuOpen ? 'h-10 rounded-full bg-primary py-2' : 'h-8'}
                             >
-                                <Icon data={trash} class="me-2" />
-                                {$translate('page.fileManager.delete.value')}
+                                <Icon data={ellipsisV} class="h-full w-6" />
                             </button>
+                            {#if audioChapter.deleteMenuOpen}
+                                <button
+                                    on:click={() => {
+                                        audioChapter.deleteMenuOpen = false;
+                                        audioChapter.deleteResources = true;
+                                        openDeleteModal();
+                                    }}
+                                    class="absolute left-0 z-30 mx-2 flex w-[96vw] items-center justify-start rounded-md border-2 border-solid border-primary bg-white px-4 py-2"
+                                >
+                                    <Icon data={trash} class="me-2" />
+                                    {$translate('page.fileManager.delete.value')}
+                                </button>
+                            {/if}
                         {/if}
-                    {/if}
-                </td>
-            </tr>
-        {/each}
+                    </td>
+                </tr>
+            {/each}
+        {/if}
     </tbody>
 </table>
