@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
-    import type { ApiParentResource, ApiLicenseInfo } from '$lib/types/resource';
+    import type { ApiParentResource, ApiLicenseInfo, ApiSingleLicense } from '$lib/types/resource';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { Icon } from 'svelte-awesome';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
@@ -16,7 +16,7 @@
     });
 
     function calculateLicenseDescription(licenseInfo: ApiLicenseInfo) {
-        const licenses = licenseInfo.licenses.map((license) => license.eng).filter(Boolean);
+        const licenses = licenseInfo.licenses.map((license) => license['eng']).filter(Boolean) as ApiSingleLicense[];
         if (licenses.length === 0) {
             return null;
         }

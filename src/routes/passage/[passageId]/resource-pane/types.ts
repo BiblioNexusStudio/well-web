@@ -1,4 +1,8 @@
-import type { ParentResourceNameEnum } from '$lib/types/resource';
+import type { ParentResourceName } from '$lib/types/resource';
+
+export type ResourcePaneTab = 'basic' | 'advanced' | 'searching';
+
+export type AnyResource = TextResource | ImageOrVideoResource;
 
 export interface ImageOrVideoResource {
     type: 'image' | 'video';
@@ -6,11 +10,12 @@ export interface ImageOrVideoResource {
     url: string;
     duration?: number;
     thumbnailUrl?: string;
+    parentResourceName: ParentResourceName;
 }
 
 export interface TextResource {
     displayName: string | null;
     html: string;
     preview: string;
-    parentResourceName: ParentResourceNameEnum;
+    parentResourceName: ParentResourceName;
 }

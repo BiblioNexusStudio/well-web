@@ -11,7 +11,7 @@
     import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
-    import { currentLanguageInfo } from '$lib/stores/current-language.store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
     import type { ResourcesMenuItem } from '$lib/types/file-manager';
     import { ParentResourceName } from '$lib/types/resource';
     import { addFrontEndDataToResourcesMenuItems } from '$lib/utils/file-manager';

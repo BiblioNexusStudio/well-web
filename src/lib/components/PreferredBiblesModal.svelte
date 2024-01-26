@@ -2,7 +2,7 @@
     import type { FrontendBibleBook } from '$lib/types/bible-text-content';
     import SearchInput from './SearchInput.svelte';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
-    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/current-language.store';
+    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
 
     export let bibles: FrontendBibleBook[];
     let searchQuery = '';

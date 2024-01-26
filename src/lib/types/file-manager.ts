@@ -1,10 +1,10 @@
-import type { DirectionCodeEnum } from '$lib/utils/language-utils';
+import type { DirectionCode } from '$lib/utils/language-utils';
 import type { FrontendPassageResourceContent } from './passage';
-import type { MediaType, MediaTypeEnum } from './resource';
+import type { MediaType } from './resource';
 
 export type Url = string;
 export interface UrlWithMetadata {
-    mediaType: MediaTypeEnum;
+    mediaType: MediaType;
     url: Url;
     contentId?: number;
     size: number;
@@ -45,7 +45,9 @@ export interface Language {
     id: number;
     iso6393Code: string;
     englishDisplay: string;
-    scriptDirection: DirectionCodeEnum;
+    displayName: string;
+    enabled: boolean;
+    scriptDirection: DirectionCode;
 }
 
 export interface DownloadData {

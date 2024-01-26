@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import { fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
-import { currentLanguageInfo } from '$lib/stores/current-language.store';
+import { currentLanguageInfo } from '$lib/stores/language.store';
 import type {
     FrontendAudioChapter,
     AudioTimestamp,

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { currentLanguageInfo } from '$lib/stores/current-language.store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
     import { isOnline } from '$lib/stores/is-online.store';
     import type { FrontendBibleBook } from '$lib/types/bible-text-content';
 
@@ -15,7 +15,7 @@
         {#if bibles?.length}
             <div class="text-center">
                 {@html $translate('page.passage.noBibleContent.description.value', {
-                    values: { language: $currentLanguageInfo?.label },
+                    values: { language: $currentLanguageInfo?.displayName },
                 })}
             </div>
             <button class="btn btn-primary w-1/4" on:click|stopPropagation={() => (preferredBiblesModalOpen = true)}
@@ -24,7 +24,7 @@
         {:else}
             <div class="text-center">
                 {@html $translate('page.passage.noBibleContent.noneAvailableDescription.value', {
-                    values: { language: $currentLanguageInfo?.label },
+                    values: { language: $currentLanguageInfo?.displayName },
                 })}
             </div>
         {/if}

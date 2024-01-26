@@ -291,6 +291,9 @@
     },
     "resources": {
         "types": {
+            "uwTranslationWords": {
+                "value": "Ключевой Термин (unfoldingWord)"
+            },
             "CBBTER": {
                 "value": "CBBT-ER",
                 "_context": "Руководство по CBBT-ER от SRV"

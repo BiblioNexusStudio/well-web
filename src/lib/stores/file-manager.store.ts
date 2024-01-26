@@ -1,6 +1,5 @@
 import { derived, writable } from 'svelte/store';
 import type {
-    Language,
     UrlWithMetadata,
     FooterInputs,
     ResourcesMenuItem,
@@ -13,7 +12,6 @@ import type {
 import { calculateUrlsWithMetadataToChange } from '$lib/utils/file-manager';
 
 export const fileManagerLoading = writable<boolean>(false);
-export const languages = writable<Language[]>([]);
 export const footerInputs = writable<FooterInputs>({
     text: true,
     audio: false,

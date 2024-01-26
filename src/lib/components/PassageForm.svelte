@@ -5,11 +5,10 @@
     import { closeSideMenu } from '$lib/utils/side-menu';
     import { isOnline } from '$lib/stores/is-online.store';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
-    import { currentLanguageCode } from '$lib/stores/current-language.store';
+    import { currentLanguageInfo, supportedLanguages, updateCurrentLanguageCode } from '$lib/stores/language.store';
     import { fetchCbbterPassagesByBook } from '$lib/utils/data-handlers/resources/passages';
     import { passageToReference } from '$lib/utils/passage-helpers';
     import { selectedId, selectedBookIndex, data } from '$lib/stores/passage-form.store';
-    import { supportedLanguages } from '$lib/utils/language-utils';
 
     export let isSideMenu = false;
 
@@ -18,10 +17,10 @@
     let onLanguageSelected = (event: Event) => {
         const { value } = event.target as HTMLSelectElement;
         $selectedBookIndex = 'default';
-        $currentLanguageCode = value;
+        updateCurrentLanguageCode(value);
     };
 
-    $: $currentLanguageCode && callFetchData($isOnline);
+    $: $currentLanguageInfo && callFetchData($isOnline);
     $: selectedBookInfo = $selectedBookIndex === 'default' ? null : $data.passagesByBook?.[$selectedBookIndex];
 
     async function callFetchData(isOnline = true) {
@@ -42,12 +41,12 @@
         </label>
         <select
             on:change={onLanguageSelected}
-            bind:value={$currentLanguageCode}
+            value={$currentLanguageInfo?.iso6393Code}
             class="select select-info pe-14 ps-4 font-semibold"
         >
             <option value="" disabled selected>{$translate('page.index.language.value')}</option>
-            {#each supportedLanguages as { code, label }}
-                <option value={code}>{label}</option>
+            {#each $supportedLanguages as { iso6393Code, displayName }}
+                <option value={iso6393Code}>{displayName}</option>
             {/each}
         </select>
     {/if}

@@ -291,6 +291,10 @@
     },
     "resources": {
         "types": {
+            "uwTranslationWords": {
+                "value": "Key Terms (unfoldingWord)",
+                "_context": "Key terms from unfoldingWord"
+            },
             "CBBTER": {
                 "value": "CBBT-ER",
                 "_context": "CBBT-ER guide from SRV"

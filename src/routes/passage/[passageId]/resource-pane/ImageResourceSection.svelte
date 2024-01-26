@@ -5,27 +5,31 @@
         htmlWithHighlightedSearchString,
         shouldSearch,
     } from '$lib/utils/search';
-    import type { ImageOrVideoResource } from './types';
+    import type { AnyResource, ImageOrVideoResource } from './types';
 
-    export let title: string;
-    export let resources: ImageOrVideoResource[];
+    export let title: string | null;
+    export let resources: AnyResource[];
     export let resourceSelected: (image: ImageOrVideoResource) => void;
     export let searchQuery: string;
 
     let carousel: HTMLDivElement | null = null;
 
-    $: filteredResources = filterItemsByKeyMatchingSearchQuery(resources, 'displayName', searchQuery);
+    $: imageResources = resources.filter(
+        (resource) => 'type' in resource && resource.type === 'image'
+    ) as ImageOrVideoResource[];
+
+    $: filteredResources = filterItemsByKeyMatchingSearchQuery(imageResources, 'displayName', searchQuery);
 
     // if the user clears the search, scroll the carousel back to the left
     $: !shouldSearch(searchQuery) && carousel?.scrollTo({ left: 0, behavior: 'instant' });
 </script>
 
-{#if resources.length > 0}
+{#if imageResources.length > 0}
     <div class="text-md pb-2 font-semibold text-base-content {filteredResources.length > 0 ? 'visible' : 'hidden'}">
         {title}
     </div>
     <div bind:this={carousel} class="carousel w-full pb-6 {filteredResources.length > 0 ? 'visible' : 'hidden'}">
-        {#each resources as image}
+        {#each imageResources as image}
             <button
                 class="carousel-item me-2 w-32 flex-col {filteredResources.includes(image) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(image)}
