@@ -1,0 +1,402 @@
+{
+    "page": {
+        "index": {
+            "language": {
+                "value": "Lugha",
+                "_context": "Huashiria kwa mtumiaji kwamba anafaa kuchagua 'Lugha' ya programu"
+            },
+            "book": {
+                "value": "Kitabu",
+                "_context": "Inaonyesha kwa mtumiaji kwamba wanapaswa kuchagua 'Kitabu' cha Biblia"
+            },
+            "passage": {
+                "value": "Kifungu",
+                "_context": "Inaonyesha kwa mtumiaji kwamba wanapaswa kuchagua 'kifungu' kutoka 'Kitabu' alichochagua."
+            },
+            "go": {
+                "value": "Enda",
+                "_context": "Huashiria kwa mtumiaji kwamba anaweza kubofya kitufe hiki ili kusogea hadi kwenye ukurasa unaofuata na chaguo zilizopeanwa"
+            },
+            "downloadResourcesForOfflineUse": {
+                "value": "Je, unakwenda Nje ya Mtandao? Pata Maudhui zaidi",
+                "_context": "Maandishi ya kitufe yanayomwambia mtumiaji kupakua rasilimali kwa matumizi ya nje ya mtandao"
+            },
+            "subTitle": {
+                "value": "Kisima cha Biblia: Hulishwa na Chemichemi ya maji",
+                "_context": "Kichwa kikuu cha ukurasa mkuu"
+            },
+            "loading": {
+                "value": "kupakia",
+                "_context": "Ujumbe wa kuonyeshwa kwenye menyu kunjuzi ya chaguo wakati vitu vinapakiwa"
+            },
+            "about": {
+                "value": "Kuhusu",
+                "_context": "Unganisha na ukurasa wa kuhusu"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "Hitilafu katika kupakia maelezo ya leseni ya maudhui",
+                "_context": "Ujumbe wa kuonyesha kunapokuwa na hitilafu ya kupakia ukurasa kwa sababu fulani"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "Imetolewa chini ya {name}",
+                    "_context": "Maelezo yanayoelezea kuwa yaliyomo hutolewa chini ya leseni moja"
+                },
+                "releasedUnderMultiple": {
+                    "value": "Imetolewa chini ya anuwai: {names}",
+                    "_context": "Maelezo yanayofafanua maudhui yanatolewa chini ya leseni nyingi"
+                }
+            }
+        },
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "Biblia",
+                    "_context": "Lebo ya kitufe cha Biblia kwenye upau wa urambazaji"
+                },
+                "guide": {
+                    "value": "Mwongozo",
+                    "_context": "Kitufe cha Lebo ya Mwongozo kwenye upau wa urambazaji"
+                },
+                "resources": {
+                    "value": "Rasilimali",
+                    "_context": "Kitufe cha lebo ya Rasilimali kwenye upau wa urambazaji"
+                }
+            },
+            "resourcePane": {
+                "title": {
+                    "value": "Rasilimali",
+                    "_context": "Kichwa cha sehemu ya juu ya kidirisha cha nyenzo kwenye ukurasa wa kifungu"
+                },
+                "basicTab": {
+                    "value": "Msingi",
+                    "_context": "Kichupo chenye rasilimali msingi kwenye kidirisha cha rasilimali"
+                },
+                "advancedTab": {
+                    "value": "Ya hali ya juu",
+                    "_context": "Kichupo chenye rasilimali za hali ya juu kwenye kidirisha cha rasilimali"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} kati ya {total}",
+                        "_context": "Huonyesha nafasi ya sasa kati ya jumla ya vipengele vya skrini nzima"
+                    }
+                },
+                "seeAll": {
+                    "value": "Tazama Zote ({count})",
+                    "_context": "Kitufe cha mtumiaji kuona nyenzo zote za aina fulani ya nyenzo"
+                },
+                "noThumbnail": {
+                    "value": "Hakuna kijipicha",
+                    "_context": "Lebo kwa video ambazo hazina kijipicha"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "Hakuna Nyezo Zilizopatikana",
+                        "_context": "Kijajuu cha kuonyesha wakati hakuna nyenzo zinazopatikana kwa mfuatano wa utafutaji"
+                    },
+                    "description": {
+                        "value": "Utafutaji wako \"{searchQuery}\" haukulingana na nyenzo zozote.",
+                        "_context": "Maelezo ya kuonyesha hakuna nyenzo zinapatikana kwa mfuatano wa utafutaji"
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 nyenzo",
+                        "_context": "Weka lebo wakati kuna nyenzo moja"
+                    },
+                    "plural": {
+                        "value": "{count} nyenzo",
+                        "_context": "Weka lebo wakati kuna nyenzo zaidi ya moja"
+                    }
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "Nyenzo Haipatikani",
+                    "_context": "Kichwa cha wakati Biblia haipatikani katika lugha ya sasa"
+                },
+                "description": {
+                    "value": "Hakuna Biblia inayopatikana kwenye kifaa hiki kwa {language}. <br> Je, ungependa kutumia Biblia katika lugha nyingine?",
+                    "_context": "Maelezo ya wakati Biblia haipatikani katika lugha ya sasa"
+                },
+                "noneAvailableDescription": {
+                    "value": "Hakuna Biblia inayopatikana kwenye kifaa hiki kwa {language} au lugha nyingine yoyote. <br>Tafadhali pakua maudhui ukiwa mtandaoni.",
+                    "_context": "Maelezo ya wakati Biblia haipatikani katika lugha ya sasa au lugha nyingine yoyote"
+                },
+                "show": {
+                    "value": "Chagua Biblia",
+                    "_context": "Kitufe cha kuunda modali inayoruhusu kuchagua Biblia."
+                },
+                "checkForMoreResources": {
+                    "value": "Angalia nyenzo zaidi...",
+                    "_context": "Kiungo cha kwenda kwa kidhibiti faili na kuona nyenzo zaidi ikiwa Biblia haipatikani katika lugha ya sasa"
+                }
+            },
+            "noCbbterContent": {
+                "value": "Hakuna maudhui ya CBBT-ER yaliyopatikana kwa kifungu hiki.",
+                "_context": "Ujumbe wa kuonyesha wakati maudhui ya CBBT-ER hayajapakuliwa au kupatikana"
+            }
+        },
+        "fileManager": {
+            "title": {
+                "value": "Kidhibiti Faili cha mtaa",
+                "_context": "Kichwa kinaonyeshwa kwenye ukurasa wa kidhibiti faili"
+            },
+            "download": {
+                "value": "Pakua",
+                "_context": "Safu wima ya jedwali yenye kichwa cha safu wima yenye visanduku vya kuteua vinavyomruhusu mtumiaji kuchagua maudhui ya kupakua"
+            },
+            "textType": {
+                "value": "Matini",
+                "_context": "Aina ya midia ya maandishi, inapatikana kwa kupakuliwa"
+            },
+            "audioType": {
+                "value": "Sauti",
+                "_context": "Aina ya midia ya sauti, inapatikana kwa kupakuliwa"
+            },
+            "mediaType": {
+                "value": "Midia",
+                "_context": "Aina ya midia kwa midia, inapatikana kwa kupakuliwa"
+            },
+            "update": {
+                "value": "Sasisha",
+                "_context": "Kitufe cha kupakua/kufuta maudhui kulingana na kile ambacho mtumiaji alichagua"
+            },
+            "cancel": {
+                "value": "Ghairi",
+                "_context": "Kitufe cha kughairi kitendo cha sasa hivi"
+            },
+            "files": {
+                "value": "mafaili",
+                "_context": "Weka lebo kwa faili"
+            },
+            "noInternet": {
+                "value": "Hakuna intaneti",
+                "_context": "Ujumbe wa kuonyesha wakati mtumiaji hana muunganisho wa intaneti"
+            },
+            "selectABook": {
+                "value": "Chagua Kitabu",
+                "_context": "Lebo ya menyu kunjuzi inayomruhusu mtumiaji kuchagua kitabu cha kutazama"
+            },
+            "delete": {
+                "value": "Futa",
+                "_context": "Kitufe cha kufuta maudhui"
+            },
+            "modal": {
+                "title": {
+                    "value": "Uthibitisho",
+                    "_context": "Kichwa cha modali kinachouliza mtumiaji kuthibitisha mabadiliko kabla ya kusawazisha"
+                },
+                "description": {
+                    "value": "Unakaribia kupakua {downloadSize} ya maudhui kutoka kwa kifaa chako.",
+                    "_context": "Inaonyesha kwenye modali ikimuuliza mtumiaji kuthibitisha mabadiliko kabla ya kusawazisha"
+                },
+                "question": {
+                    "value": "Je, ungependa kuendeleaje?",
+                    "_context": "Swali la kuuliza mtumiaji kabla ya kuthibitisha"
+                },
+                "downloadProgress": {
+                    "value": "Maendeleo ya upakuaji",
+                    "_context": "Kichwa cha modali kinachoonyesha mtumiaji jinsi upakuaji unavyoendelea"
+                },
+                "success": {
+                    "value": "Imepakuliwa kikamilifu",
+                    "_context": "Kichwa cha muundo unaoonyesha upakuaji kilifanikiwa"
+                },
+                "close": {
+                    "value": "Funga",
+                    "_context": "Kitufe cha kufunga modali"
+                },
+                "downloadingDescription": {
+                    "value": "Inapakua {totalSizeDownloaded} kati ya {totalSizeToDownload}.",
+                    "_context": "Inaonyesha kwenye modali inayoonyesha mtumiaji jinsi upakuaji unavyoendelea"
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "Onyo!",
+                    "_context": "Kichwa cha modali kinachouliza mtumiaji kuthibitisha mabadiliko kabla ya kusawazisha"
+                },
+                "description": {
+                    "value": "Je, una uhakika unataka kufuta faili hizi kabisa kutoka kwa kifaa chako?",
+                    "_context": "Inaonyesha kwenye modali ikimuuliza mtumiaji kuthibitisha mabadiliko kabla ya kusawazisha"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "Hapa ndipo unaweza kupakua na kufuta maudhui ya Chemichemi kutoka kwa kifaa chako.",
+                    "_context": "Maelezo ya lebo ya Meta"
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "Jina",
+                    "_context": "Weka lebo kwa safu wima ya jina"
+                },
+                "text": {
+                    "value": "Matini",
+                    "_context": "Lebo kwa safu wima ya maandishi"
+                },
+                "audio": {
+                    "value": "Sauti",
+                    "_context": "Weka lebo kwa safu wima ya sauti"
+                },
+                "media": {
+                    "value": "Midia",
+                    "_context": "Lebo kwa safu ya midia"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "Rasilimali",
+                    "_context": "Weka lebo kwa safu mlalo ya rasilimali"
+                }
+            }
+        }
+    },
+    "navTop": {
+        "recording": {
+            "value": "Rekodi",
+            "_context": "Kitufe cha kuunda rekodi ya kifungu"
+        },
+        "audioRecordingModal": {
+            "noPermission": {
+                "value": "Tafadhali sasisha mipangilio yako na upatie ruhusa ili kipaza sauti chako kitumike",
+                "_context": "Maandishi ya kuonyesha wakati mtumiaji hajatoa ruhusa ya kipaza sauti"
+            },
+            "languageLabel": {
+                "value": "Unarekodi lugha gani?",
+                "_context": "Lebo kwa uga wa ingizo la lugha"
+            },
+            "versionLabel": {
+                "value": "Jina la hio tafsiri ni nini?",
+                "_context": "Lebo kwa uga wa ingizo la toleo"
+            },
+            "versionAbbreviationLabel": {
+                "value": "Je, ufupisho wa herufi 3 kwa tafsiri hii ni upi?",
+                "_context": "Lebo kwa uga wa uingizaji wa ufupisho wa toleo"
+            },
+            "discard": {
+                "value": "Tupa",
+                "_context": "Kitufe cha kufunga modali na kutupa mabadiliko"
+            },
+            "save": {
+                "value": "Hifadhi",
+                "_context": "Kitufe cha kuhifadhi rekodi"
+            }
+        }
+    },
+    "resources": {
+        "types": {
+            "CBBTER": {
+                "value": "CBBT-ER",
+                "_context": "Mwongozo wa CBBT-ER kutoka SRV"
+            },
+            "ubsImages": {
+                "value": "Picha (UBS)",
+                "_context": "Picha kutoka Muungano wa Umoja wa Biblia"
+            },
+            "tyndaleBibleDictionary": {
+                "value": "Kamusi ya Biblia (Tyndale)",
+                "_context": "Kamusi ya Biblia ya Tyndale"
+            },
+            "tyndaleStudyNotes": {
+                "value": "Vidokezo vya Utafiti (Tyndale)",
+                "_context": "Vidokezo vya Utafiti wa Tyndale"
+            },
+            "biblicaBibleDictionary": {
+                "value": "Kamusi ya Biblia (Biblia)",
+                "_context": "Kamusi ya Biblia ya Biblia"
+            },
+            "biblicaStudyNotes": {
+                "value": "Vidokezo vya Utafiti (Biblia)",
+                "_context": "Vidokezo vya Utafiti wa Biblia"
+            },
+            "videoBibleDictionary": {
+                "value": "Video (Kamusi ya Biblia ya Video)",
+                "_context": "Video kutoka kwa Kamusi ya Biblia ya Video"
+            }
+        },
+        "cbbt-er": {
+            "step1": {
+                "value": "Hear and Heart",
+                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+            },
+            "step2": {
+                "value": "Kuweka Hatua",
+                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+            },
+            "step3": {
+                "value": "Kufafanua Mandhari",
+                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+            },
+            "step4": {
+                "value": "Kujumuisha Maandishi",
+                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+            },
+            "step5": {
+                "value": "Kujaza hayo mapengo",
+                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+            },
+            "step6": {
+                "value": "Akizungumza Neno",
+                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+            }
+        }
+    },
+    "sideMenu": {
+        "home": {
+            "value": "Nyumbani",
+            "_context": "Lebo ya ukurasa wa nyumbani"
+        },
+        "menu": {
+            "value": "Jina",
+            "_context": "Lebo ya menyu"
+        },
+        "changeLanguage": {
+            "value": "Badilisha Lugha...",
+            "_context": "Lebo ya kitufe cha kubadilisha lugha"
+        },
+        "fileManager": {
+            "value": "Kidhibiti faili",
+            "_context": "Lebo ya kitufe cha msimamizi wa faili"
+        }
+    },
+    "errorMessage": {
+        "error": {
+            "value": "Hitilafu",
+            "_context": "Lebo ya ujumbe wa hitilafu"
+        },
+        "title": {
+            "value": "Haiwezi Kupakia Maudhui",
+            "_context": "Kichwa cha ujumbe wa hitilafu"
+        },
+        "message": {
+            "value": "Tatizo likiendelea, tafadhali angalia muunganisho wako wa intaneti.",
+            "_context": "Ujumbe wa ujumbe wa makosa"
+        },
+        "home": {
+            "value": "Nyumbani",
+            "_context": "Lebo ya kitufe cha nyumbani"
+        },
+        "browserUnsupported": {
+            "value": "Kivinjari chako hakitumiki. Tafadhali tumia kivinjari tofauti. Ikiwa uko katika hali fiche/ya faragha, tafadhali jaribu hali ya kawaida.",
+            "_context": "Ujumbe wa wakati kivinjari kinakosa vipengele"
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "Tafuta",
+                "_context": "Maandishi ya kishika nafasi kwa sehemu ya utafutaji"
+            },
+            "clear": {
+                "value": "Futa",
+                "_context": "Kitufe katika kipengele cha utafutaji cha kufuta maandishi yaliyoingizwa"
+            }
+        }
+    }
+}
