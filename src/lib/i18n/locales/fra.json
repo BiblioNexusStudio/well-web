@@ -1,0 +1,315 @@
+{
+    "page": {
+        "index": {
+            "language": {
+                "value": "Langue"
+            },
+            "book": {
+                "value": "Livre"
+            },
+            "passage": {
+                "value": "Passage"
+            },
+            "go": {
+                "value": "Aller"
+            },
+            "downloadResourcesForOfflineUse": {
+                "value": "Partir hors ligne ? Obtenez plus de contenu"
+            },
+            "subTitle": {
+                "value": "Puits de la Bible : Alimenté par l'Aquifère"
+            },
+            "loading": {
+                "value": "chargement"
+            },
+            "about": {
+                "value": "À propos"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "Erreur de chargement des informations de licence du contenu"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "Publié sous {name}"
+                },
+                "releasedUnderMultiple": {
+                    "value": "Publié sous diverses : {names}"
+                }
+            }
+        },
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "Bible"
+                },
+                "guide": {
+                    "value": "Guide"
+                },
+                "resources": {
+                    "value": "Ressources"
+                }
+            },
+            "resourcePane": {
+                "title": {
+                    "value": "Ressources"
+                },
+                "basicTab": {
+                    "value": "De base"
+                },
+                "advancedTab": {
+                    "value": "Avancé"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} sur {total}"
+                    }
+                },
+                "seeAll": {
+                    "value": "Voir Tout ({count})"
+                },
+                "noThumbnail": {
+                    "value": "Pas de vignette"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "Aucune Ressource Trouvée"
+                    },
+                    "description": {
+                        "value": "Votre recherche \"{searchQuery}\" n'a donné aucun résultat."
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 ressource"
+                    },
+                    "plural": {
+                        "value": "{count} ressources"
+                    }
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "Ressource Indisponible"
+                },
+                "description": {
+                    "value": "Aucune Bible n'est disponible sur cet appareil pour {language}.<br />Voulez-vous utiliser une Bible dans une autre langue ?"
+                },
+                "noneAvailableDescription": {
+                    "value": "Aucune Bible n'est disponible sur cet appareil pour {language} ou toute autre langue.<br />Veuillez télécharger le contenu lorsque vous êtes en ligne."
+                },
+                "show": {
+                    "value": "Sélectionner la Bible"
+                },
+                "checkForMoreResources": {
+                    "value": "Vérifier plus de ressources..."
+                }
+            },
+            "noCbbterContent": {
+                "value": "Aucun contenu CBBT-ER trouvé pour ce passage."
+            }
+        },
+        "fileManager": {
+            "title": {
+                "value": "Gestionnaire de Fichiers Local"
+            },
+            "download": {
+                "value": "Télécharger"
+            },
+            "textType": {
+                "value": "Texte"
+            },
+            "audioType": {
+                "value": "Audio"
+            },
+            "mediaType": {
+                "value": "Média"
+            },
+            "update": {
+                "value": "Mettre à jour"
+            },
+            "cancel": {
+                "value": "Annuler"
+            },
+            "files": {
+                "value": "fichiers"
+            },
+            "noInternet": {
+                "value": "Pas d'Internet"
+            },
+            "selectABook": {
+                "value": "Sélectionnez un Livre"
+            },
+            "delete": {
+                "value": "Supprimer"
+            },
+            "modal": {
+                "title": {
+                    "value": "Confirmation"
+                },
+                "description": {
+                    "value": "Vous êtes sur le point de télécharger {downloadSize} de contenu depuis votre appareil."
+                },
+                "question": {
+                    "value": "Comment souhaitez-vous procéder ?"
+                },
+                "downloadProgress": {
+                    "value": "Progression du téléchargement"
+                },
+                "success": {
+                    "value": "Téléchargement Réussi"
+                },
+                "close": {
+                    "value": "Fermer"
+                },
+                "downloadingDescription": {
+                    "value": "Téléchargement de {totalSizeDownloaded} sur {totalSizeToDownload}."
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "Attention !"
+                },
+                "description": {
+                    "value": "Êtes-vous sûr de vouloir supprimer définitivement ces fichiers de votre appareil ?"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "Ici, vous pouvez télécharger et supprimer le contenu Aquifer de votre appareil."
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "Nom"
+                },
+                "text": {
+                    "value": "Texte"
+                },
+                "audio": {
+                    "value": "Audio"
+                },
+                "media": {
+                    "value": "Média"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "Ressources"
+                }
+            }
+        }
+    },
+    "navTop": {
+        "recording": {
+            "value": "Faire un enregistrement"
+        },
+        "audioRecordingModal": {
+            "noPermission": {
+                "value": "Veuillez mettre à jour vos paramètres et donner la permission d'utiliser votre microphone"
+            },
+            "languageLabel": {
+                "value": "Dans quelle langue enregistrez-vous ?"
+            },
+            "versionLabel": {
+                "value": "Quel est le nom de la traduction ?"
+            },
+            "versionAbbreviationLabel": {
+                "value": "Quelle est l'abréviation en 3 lettres pour cette traduction ?"
+            },
+            "discard": {
+                "value": "Jeter"
+            },
+            "save": {
+                "value": "Sauvegarder"
+            }
+        }
+    },
+    "resources": {
+        "types": {
+            "CBBTER": {
+                "value": "CBBT-ER"
+            },
+            "ubsImages": {
+                "value": "Images (UBS)"
+            },
+            "tyndaleBibleDictionary": {
+                "value": "Dictionnaire Biblique (Tyndale)"
+            },
+            "tyndaleStudyNotes": {
+                "value": "Notes d'Étude (Tyndale)"
+            },
+            "biblicaBibleDictionary": {
+                "value": "Dictionnaire Biblique (Biblica)"
+            },
+            "biblicaStudyNotes": {
+                "value": "Notes d'Étude (Biblica)"
+            },
+            "videoBibleDictionary": {
+                "value": "Vidéos (Dictionnaire Biblique Vidéo)"
+            }
+        },
+        "cbbt-er": {
+            "step1": {
+                "value": "Entendre et Ressentir"
+            },
+            "step2": {
+                "value": "Préparer le Terrain"
+            },
+            "step3": {
+                "value": "Définir les Scènes"
+            },
+            "step4": {
+                "value": "Incarner le Texte"
+            },
+            "step5": {
+                "value": "Combler les Lacunes"
+            },
+            "step6": {
+                "value": "Prononcer la Parole"
+            }
+        }
+    },
+    "sideMenu": {
+        "home": {
+            "value": "Accueil"
+        },
+        "menu": {
+            "value": "Menu"
+        },
+        "changeLanguage": {
+            "value": "Changer de Langue..."
+        },
+        "fileManager": {
+            "value": "Gestionnaire de Fichiers"
+        }
+    },
+    "errorMessage": {
+        "error": {
+            "value": "Erreur"
+        },
+        "title": {
+            "value": "Impossible de Charger le Contenu"
+        },
+        "message": {
+            "value": "Si le problème persiste, veuillez vérifier votre connexion internet."
+        },
+        "home": {
+            "value": "Accueil"
+        },
+        "browserUnsupported": {
+            "value": "Votre navigateur n'est pas pris en charge. Veuillez utiliser un autre navigateur. Si vous êtes en mode privé/incognito, essayez le mode normal."
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "Rechercher"
+            },
+            "clear": {
+                "value": "Effacer"
+            }
+        }
+    }
+}
