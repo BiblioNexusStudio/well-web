@@ -20,11 +20,11 @@ import {
     fetchDisplayNameForResourceContent,
     fetchMetadataForResourceContent,
     resourceContentApiFullUrl,
-    resourceContentApiPath,
 } from '$lib/utils/data-handlers/resources/resource';
 import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
+import { passageDetailsByIdAndLanguage } from '$lib/api-endpoints';
 
 export type PassagePageTab = 'bible' | 'guide';
 
@@ -147,8 +147,8 @@ async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): 
         await asyncMap(allTextResourceContent, async (resourceContent) => {
             try {
                 const displayName = await fetchDisplayNameForResourceContent(resourceContent);
-                const content = (await fetchFromCacheOrApi(
-                    resourceContentApiPath(resourceContent)
+                const content = (await fetchFromCacheOrCdn(
+                    resourceContentApiFullUrl(resourceContent)
                 )) as ResourceContentCbbtErText[];
                 return {
                     displayName,
@@ -176,7 +176,7 @@ async function getAdditionalResourcesForPassage(
 }
 
 export async function fetchPassage(passageId: string): Promise<BasePassage> {
-    return await fetchFromCacheOrApi(`passages/${passageId}/language/${get(currentLanguageInfo)?.id}`);
+    return await fetchFromCacheOrApi(...passageDetailsByIdAndLanguage(passageId, get(currentLanguageInfo)?.id));
 }
 
 function updateAndGetPreferredIds(bibleIdsInCurrentLanguage: number[]) {
@@ -233,7 +233,7 @@ export async function fetchResourceData(passage: BasePassage) {
     let passageWithResources;
     try {
         passageWithResources = (await fetchFromCacheOrApi(
-            `passages/${passage.id}/language/${get(currentLanguageInfo)?.id}`
+            ...passageDetailsByIdAndLanguage(passage.id, get(currentLanguageInfo)?.id)
         )) as PassageWithResourceContentIds;
     } catch (error) {
         // data not cached

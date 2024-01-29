@@ -8,6 +8,7 @@
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
     import { goto } from '$app/navigation';
     import type { BaseBible } from '$lib/types/bible-text-content';
+    import { biblesEndpoint, parentResourcesEndpoint } from '$lib/api-endpoints';
 
     let licenseInfosPromise: Promise<ApiLicenseInfo[]> | null = null;
 
@@ -46,8 +47,8 @@
 
     async function fetchLicenses() {
         const [resourceLicenses, bibleLicenses] = await Promise.all([
-            fetchFromCacheOrApi('/resources/parent-resources') as Promise<ApiParentResource[]>,
-            fetchFromCacheOrApi('/bibles') as Promise<BaseBible[]>,
+            fetchFromCacheOrApi(...parentResourcesEndpoint()) as Promise<ApiParentResource[]>,
+            fetchFromCacheOrApi(...biblesEndpoint()) as Promise<BaseBible[]>,
         ]);
         const licenses = resourceLicenses
             .map((type) => type.licenseInfo)

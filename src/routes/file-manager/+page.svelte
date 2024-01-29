@@ -21,6 +21,7 @@
     import LanguageMenu from '$lib/components/file-manager/LanguageMenu.svelte';
     import SelectBookMenu from '$lib/components/file-manager/SelectBookMenu.svelte';
     import { addFrontEndDataToBiblesModuleBook } from '$lib/utils/file-manager';
+    import { biblesForLanguageEndpoint, bookOfBibleEndpoint } from '$lib/api-endpoints';
 
     let fetchAvailableResourcesPromise: Promise<void> | undefined;
 
@@ -29,16 +30,16 @@
             if (currentLanguageId) {
                 $fileManagerLoading = true;
 
-                $biblesModuleData = await fetchFromCacheOrApi(`bibles/language/${currentLanguageId}`);
+                $biblesModuleData = await fetchFromCacheOrApi(...biblesForLanguageEndpoint(currentLanguageId));
 
                 if ($biblesModuleData.length === 0) {
-                    $biblesModuleData = await fetchFromCacheOrApi(`bibles/language/1`);
+                    $biblesModuleData = await fetchFromCacheOrApi(...biblesForLanguageEndpoint(1));
                 }
 
                 if ($selectedBookCode) {
                     const firstBible = $biblesModuleData[0] || { id: null };
                     $biblesModuleBook = await addFrontEndDataToBiblesModuleBook(
-                        await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${$selectedBookCode}`)
+                        await fetchFromCacheOrApi(...bookOfBibleEndpoint(firstBible.id, $selectedBookCode))
                     );
                     limitChaptersIfNecessary($selectedBookCode, biblesModuleBook);
                 }

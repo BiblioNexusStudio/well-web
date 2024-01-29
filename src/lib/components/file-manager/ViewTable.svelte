@@ -23,6 +23,7 @@
     import Image from '$lib/icons/Image.svelte';
     import ImageAndVideo from '$lib/icons/ImageAndVideo.svelte';
     import Video from '$lib/icons/Video.svelte';
+    import { passagesByLanguageAndParentResourceEndpoint } from '$lib/api-endpoints';
 
     let allChaptersSelected = false;
     let allChaptersCached = false;
@@ -38,7 +39,7 @@
 
         if ($resourcesMenu.some((resource) => resource.selected && resource.value === ParentResourceName.CBBTER)) {
             passageData = await fetchFromCacheOrApi(
-                `passages/language/${$currentLanguageInfo?.id}/resource/${ParentResourceName.CBBTER}`
+                ...passagesByLanguageAndParentResourceEndpoint($currentLanguageInfo?.id, ParentResourceName.CBBTER)
             );
         }
 

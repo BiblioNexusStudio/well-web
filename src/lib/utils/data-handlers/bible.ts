@@ -12,6 +12,7 @@ import { get } from 'svelte/store';
 import type { BasePassage } from '$lib/types/passage';
 import { MediaType } from '$lib/types/resource';
 import { log } from '$lib/logger';
+import { biblesEndpoint, biblesForLanguageEndpoint, bookOfBibleEndpoint } from '$lib/api-endpoints';
 
 type BibleRecordingPassage = { url: string };
 type BibleRecordingVersion = {
@@ -51,7 +52,7 @@ export async function fetchBibleDataForBookCodeAndLanguageCode(
     try {
         const biblesForLanguage = await fetchBiblesForLanguageCode(languageCode);
         const firstCachedBibleId = await asyncReturnFirst(biblesForLanguage, async (bible) => {
-            if (get(isOnline) || (await isCachedFromApi(`bibles/${bible.id}/book/${bookCode}`))) {
+            if (get(isOnline) || (await isCachedFromApi(bookOfBibleEndpoint(bible.id, bookCode)[0]))) {
                 return bible.id;
             } else {
                 return null;
@@ -59,7 +60,7 @@ export async function fetchBibleDataForBookCodeAndLanguageCode(
         });
 
         if (!firstCachedBibleId) return null;
-        return await fetchFromCacheOrApi(`bibles/${firstCachedBibleId}/book/${bookCode}`);
+        return await fetchFromCacheOrApi(...bookOfBibleEndpoint(firstCachedBibleId, bookCode));
     } catch (error) {
         // this means the user hasn't cached the Bible data or language is invalid
         log.exception(error as Error);
@@ -69,7 +70,7 @@ export async function fetchBibleDataForBookCodeAndLanguageCode(
 
 export async function fetchAllBibles(): Promise<BaseBible[]> {
     try {
-        return await fetchFromCacheOrApi('bibles');
+        return await fetchFromCacheOrApi(...biblesEndpoint());
     } catch (error) {
         log.exception(error as Error);
         return [];
@@ -82,7 +83,7 @@ export async function fetchBiblesForLanguageCode(languageCode: string): Promise<
     if (!languageId) return [];
 
     try {
-        return await fetchFromCacheOrApi(`bibles/language/${languageId}`);
+        return await fetchFromCacheOrApi(...biblesForLanguageEndpoint(languageId));
     } catch (error) {
         log.exception(error as Error);
         return [];
@@ -94,7 +95,7 @@ export async function fetchBibleDataForBookCodeAndBibleId(
     bibleId: number
 ): Promise<BibleBookContentDetails | null> {
     try {
-        return await fetchFromCacheOrApi(`bibles/${bibleId}/book/${bookCode}`);
+        return await fetchFromCacheOrApi(...bookOfBibleEndpoint(bibleId, bookCode));
     } catch (error) {
         // this means the user hasn't cached the Bible data or bible id is invalid
         log.exception(error as Error);
@@ -112,7 +113,7 @@ export async function cacheBiblesForPassage(passage: BasePassage, allBookContent
 export async function bookDataForBibleTab(passage: BasePassage, bibleId: number, isPreferredBible: boolean) {
     const online = get(isOnline);
     try {
-        if (!online && !(await isCachedFromApi(`bibles/${bibleId}/book/${passage.bookCode}`))) {
+        if (!online && !(await isCachedFromApi(bookOfBibleEndpoint(bibleId, passage.bookCode)[0]))) {
             // if it's offline and not cached, it's not valid
             return null;
         } else if ((online && isPreferredBible) || !online) {

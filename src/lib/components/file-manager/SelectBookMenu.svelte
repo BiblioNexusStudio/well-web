@@ -13,6 +13,7 @@
         limitChaptersIfNecessary,
         allowedBooks,
     } from '$lib/stores/file-manager.store';
+    import { bookOfBibleEndpoint } from '$lib/api-endpoints';
 
     let bookMenuDiv: HTMLElement;
     let menuOpen = false;
@@ -28,7 +29,7 @@
     const handleBookClick = async (bookCode: string | null) => {
         toggleMenu();
         $biblesModuleBook = await addFrontEndDataToBiblesModuleBook(
-            await fetchFromCacheOrApi(`bibles/${firstBible.id}/book/${bookCode}`)
+            await fetchFromCacheOrApi(...bookOfBibleEndpoint(firstBible.id, bookCode))
         );
         $selectedBookCode = bookCode;
         limitChaptersIfNecessary(bookCode, biblesModuleBook);

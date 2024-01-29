@@ -55,7 +55,7 @@ declare let workbox: {
 
 const { clientsClaim } = workbox.core;
 const { registerRoute, NavigationRoute } = workbox.routing;
-const { NetworkOnly, CacheFirst, CacheOnly, StaleWhileRevalidate } = workbox.strategies;
+const { NetworkOnly, CacheFirst, NetworkFirst, CacheOnly, StaleWhileRevalidate } = workbox.strategies;
 const { BackgroundSyncPlugin } = workbox.backgroundSync;
 const { createHandlerBoundToURL, cleanupOutdatedCaches, precacheAndRoute } = workbox.precaching;
 const { RangeRequestsPlugin } = workbox.rangeRequests;
@@ -146,6 +146,7 @@ registerRoute(
         staleAfterDuration: 60 * 60 * API_CACHE_DURATION_IN_HOURS,
         plugins: [addApiKeyToAllRequestPlugin],
         CacheFirst,
+        NetworkFirst,
         StaleWhileRevalidate,
     }),
     'GET'
