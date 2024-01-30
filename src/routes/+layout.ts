@@ -11,6 +11,7 @@ import { log } from '$lib/logger';
 import { browserSupported } from '$lib/utils/browser';
 import { languages } from '$lib/stores/language.store';
 import { parentResources } from '$lib/stores/parent-resource.store';
+import { biblesEndpoint, languagesEndpoint, parentResourcesEndpoint } from '$lib/api-endpoints';
 
 export const ssr = false;
 
@@ -43,9 +44,9 @@ export const load: LayoutLoad = async () => {
         }
 
         const [fetchedLanguages, fetchedParentResources, _] = await Promise.all([
-            fetchFromCacheOrApi(`/languages`),
-            fetchFromCacheOrApi('/resources/parent-resources'),
-            fetchFromCacheOrApi('/bibles'),
+            fetchFromCacheOrApi(...languagesEndpoint()),
+            fetchFromCacheOrApi(...parentResourcesEndpoint()),
+            fetchFromCacheOrApi(...biblesEndpoint()),
         ]);
         languages.set(fetchedLanguages);
         parentResources.set(fetchedParentResources);

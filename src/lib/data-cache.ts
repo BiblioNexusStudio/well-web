@@ -35,13 +35,17 @@ const apiThumbnailRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resour
 const cdnRegex = /https:\/\/cdn\.aquifer\.bible.*/;
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
-export async function fetchFromCacheOrApi(path: string) {
+export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number) {
     if (!(await isCachedFromApi(path))) {
         partiallyDownloadedApiPaths.push(path);
     }
     try {
         const url = apiUrl(path).replace(/\/$/, '');
-        const response = await fetch(cachedOrRealUrl(url));
+        const response = await fetch(cachedOrRealUrl(url), {
+            // Set this header for the service worker layer to use. It will get stripped off before the request is
+            // actually made against the API.
+            headers: { 'X-Cache-Bust-Version': cacheBustVersion.toString() },
+        });
         if (response.status >= 400) {
             throw new Error('Bad HTTP response');
         }

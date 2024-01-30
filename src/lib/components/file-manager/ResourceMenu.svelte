@@ -15,6 +15,7 @@
     import type { ResourcesMenuItem } from '$lib/types/file-manager';
     import { ParentResourceName } from '$lib/types/resource';
     import { addFrontEndDataToResourcesMenuItems } from '$lib/utils/file-manager';
+    import { resourcesByLanguageAndBookEndpoint } from '$lib/api-endpoints';
 
     let resourcesMenuDiv: HTMLElement;
     let menuOpen = false;
@@ -40,7 +41,7 @@
 
             $resourcesApiModule = await addFrontEndDataToResourcesMenuItems(
                 await fetchFromCacheOrApi(
-                    `/resources/language/${$currentLanguageInfo?.id}/book/${selectedBookCode}?${queryParams.join('&')}`
+                    ...resourcesByLanguageAndBookEndpoint($currentLanguageInfo?.id, selectedBookCode, queryParams)
                 )
             );
         }

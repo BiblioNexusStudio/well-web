@@ -13,10 +13,15 @@ import type {
 } from '$lib/types/passage';
 import { ParentResourceName } from '$lib/types/resource';
 import { resourceContentApiFullUrl } from './resource';
+import {
+    biblesForLanguageEndpoint,
+    passageDetailsByIdAndLanguage,
+    passagesByLanguageAndParentResourceEndpoint,
+} from '$lib/api-endpoints';
 
 async function getBibleBookCodesToName(languageId: number | null = null) {
     const bibleData = (await fetchFromCacheOrApi(
-        `bibles/language/${languageId || get(currentLanguageInfo)?.id}`
+        ...biblesForLanguageEndpoint(languageId || get(currentLanguageInfo)?.id)
     )) as ApiBible[];
     if (bibleData[0]) {
         return bibleData[0].books.reduce(
@@ -30,9 +35,10 @@ async function getBibleBookCodesToName(languageId: number | null = null) {
 
 async function passageIdHasCbbterAvailable(passageId: number, isOnline: boolean) {
     if (isOnline) return true;
-    if (await isCachedFromApi(`passages/${passageId}/language/${get(currentLanguageInfo)?.id}`)) {
+    const languageId = get(currentLanguageInfo)?.id;
+    if (await isCachedFromApi(passageDetailsByIdAndLanguage(passageId, languageId)[0])) {
         const passageWithContentIds = (await fetchFromCacheOrApi(
-            `passages/${passageId}/language/${get(currentLanguageInfo)?.id}`
+            ...passageDetailsByIdAndLanguage(passageId, languageId)
         )) as PassageWithResourceContentIds;
         const cbbterResources = passageWithContentIds.contents.filter(
             ({ parentResourceName }) => parentResourceName === ParentResourceName.CBBTER
@@ -47,7 +53,7 @@ async function passageIdHasCbbterAvailable(passageId: number, isOnline: boolean)
 export async function fetchCbbterPassagesByBook(isOnline: boolean) {
     const bibleBookCodesToName = await getBibleBookCodesToName();
     const allPassages = (await fetchFromCacheOrApi(
-        `passages/language/${get(currentLanguageInfo)?.id}/resource/CBBTER`
+        ...passagesByLanguageAndParentResourceEndpoint(get(currentLanguageInfo)?.id, ParentResourceName.CBBTER)
     )) as BasePassagesByBook[];
     const byBookWithAvailableResources = (
         await asyncMap(allPassages, async (byBook, index) => {

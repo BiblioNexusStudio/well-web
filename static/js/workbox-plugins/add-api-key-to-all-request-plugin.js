@@ -22,10 +22,18 @@ class AddApiKeyToAllRequestPlugin {
      * @returns {Promise<Request>} A new request with the API key appended.
      */
     requestWillFetch = async (args) => {
-        const urlObj = new URL(args.request.url);
+        const { request } = args;
+        const urlObj = new URL(request.url);
         if (this.apikey) {
             urlObj.searchParams.append('api-key', this.apikey);
         }
-        return new Request(urlObj.toString(), args.request);
+
+        const modifiedHeaders = new Headers(request.headers);
+        modifiedHeaders.delete('X-Cache-Bust-Version');
+
+        return new Request(urlObj.toString(), {
+            ...request,
+            headers: modifiedHeaders,
+        });
     };
 }

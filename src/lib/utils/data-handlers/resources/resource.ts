@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/public';
-import { fetchFromCacheOrApi, fetchFromCacheOrCdn } from '$lib/data-cache';
+import { fetchFromCacheOrCdn } from '$lib/data-cache';
 import { log } from '$lib/logger';
 import type { PassageResourceContent } from '$lib/types/passage';
 import { MediaType, type ResourceContentMetadata, type ResourceContentTiptap } from '$lib/types/resource';
@@ -17,20 +17,12 @@ export function resourceContentApiFullUrl(resourceContent: PassageResourceConten
     return env.PUBLIC_AQUIFER_API_URL + resourceContentApiPath(resourceContent);
 }
 
-function resourceThumbnailApiPath(resourceContent: PassageResourceContent) {
-    return `resources/${resourceContent.contentId}/thumbnail`;
-}
-
 export function resourceThumbnailApiFullUrl(resourceContent: PassageResourceContent) {
-    return env.PUBLIC_AQUIFER_API_URL + resourceThumbnailApiPath(resourceContent);
-}
-
-function resourceMetadataApiPath(resourceContent: PassageResourceContent) {
-    return `resources/${resourceContent.contentId}/metadata`;
+    return env.PUBLIC_AQUIFER_API_URL + `resources/${resourceContent.contentId}/thumbnail`;
 }
 
 export function resourceMetadataApiFullPath(resourceContent: PassageResourceContent) {
-    return env.PUBLIC_AQUIFER_API_URL + resourceMetadataApiPath(resourceContent);
+    return env.PUBLIC_AQUIFER_API_URL + `resources/${resourceContent.contentId}/metadata`;
 }
 
 export async function fetchTiptapForResourceContent(
@@ -52,7 +44,9 @@ export async function fetchMetadataForResourceContent(
     resourceContent: PassageResourceContent
 ): Promise<ResourceContentMetadata | null> {
     try {
-        return (await fetchFromCacheOrApi(resourceMetadataApiPath(resourceContent))) as ResourceContentMetadata | null;
+        return (await fetchFromCacheOrCdn(
+            resourceMetadataApiFullPath(resourceContent)
+        )) as ResourceContentMetadata | null;
     } catch (error) {
         // metadata not cached
         log.exception(error as Error);
