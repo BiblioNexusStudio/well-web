@@ -1,4 +1,4 @@
-import { lookupLanguageInfoByCode } from '$lib/stores/current-language.store';
+import { lookupLanguageInfoByCode } from '$lib/stores/language.store';
 import type { UrlWithMetadata } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '../browser';
 import { cacheManyFromCdnWithProgress, fetchFromCacheOrApi, isCachedFromApi, isCachedFromCdn } from '$lib/data-cache';

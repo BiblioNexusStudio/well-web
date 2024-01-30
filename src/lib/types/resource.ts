@@ -1,26 +1,36 @@
-import type { LanguageCodeEnum } from '$lib/utils/language-utils';
+export enum ParentResourceName {
+    BiblicaBibleDictionary = 'BiblicaBibleDictionary',
+    BiblicaStudyNotes = 'BiblicaStudyNotes',
+    CBBTER = 'CBBTER',
+    TyndaleBibleDictionary = 'TyndaleBibleDictionary',
+    TyndaleStudyNotes = 'TyndaleStudyNotes',
+    UWTranslationWords = 'UWTranslationWords',
+    UbsImages = 'UbsImages',
+    VideoBibleDictionary = 'VideoBibleDictionary',
+}
 
-export const ParentResourceName = {
-    BiblicaBibleDictionary: 'BiblicaBibleDictionary',
-    BiblicaStudyNotes: 'BiblicaStudyNotes',
-    CBBTER: 'CBBTER',
-    TyndaleBibleDictionary: 'TyndaleBibleDictionary',
-    TyndaleStudyNotes: 'TyndaleStudyNotes',
-    UbsImages: 'UbsImages',
-    VideoBibleDictionary: 'VideoBibleDictionary',
-} as const;
+export enum MediaType {
+    Text = 'Text',
+    Audio = 'Audio',
+    Video = 'Video',
+    Image = 'Image',
+    Metadata = 'Metadata',
+}
 
-export type ParentResourceNameEnum = (typeof ParentResourceName)[keyof typeof ParentResourceName];
+export enum ParentResourceComplexityLevel {
+    None = 'None',
+    Basic = 'Basic',
+    Advanced = 'Advanced',
+}
 
-export const MediaType = {
-    Text: 'Text',
-    Audio: 'Audio',
-    Video: 'Video',
-    Image: 'Image',
-    Metadata: 'Metadata',
-} as const;
-
-export type MediaTypeEnum = (typeof MediaType)[keyof typeof MediaType];
+export enum ParentResourceType {
+    None = 'None',
+    Guide = 'Guide',
+    Dictionary = 'Dictionary',
+    StudyNotes = 'StudyNotes',
+    Images = 'Images',
+    Videos = 'Videos',
+}
 
 export interface ResourceContentMetadata {
     displayName: string;
@@ -33,7 +43,7 @@ export interface ResourceContentTiptap {
 
 export interface UrlWithInfo {
     url: string;
-    mediaType: MediaTypeEnum;
+    mediaType: MediaType;
     size: number;
 }
 
@@ -57,7 +67,15 @@ export interface AudioTypeMetadata {
 }
 
 export interface ApiParentResource {
+    shortName: string;
+    resourceType: ParentResourceType;
+    complexityLevel: ParentResourceComplexityLevel;
     licenseInfo: ApiLicenseInfo | null;
+}
+
+export interface ApiSingleLicense {
+    name: string;
+    url?: string | null;
 }
 
 export interface ApiLicenseInfo {
@@ -66,5 +84,5 @@ export interface ApiLicenseInfo {
         dates?: string | null;
         holder: { name: string; url?: string | null };
     };
-    licenses: Record<LanguageCodeEnum, { name: string; url?: string | null }>[];
+    licenses: Record<string, ApiSingleLicense>[];
 }

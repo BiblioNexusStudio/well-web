@@ -4,7 +4,12 @@
     import { _ as translate } from 'svelte-i18n';
     import { trapFocus } from '$lib/utils/trap-focus';
     import type { PassageResourceContent } from '$lib/types/passage';
-    import { MediaType, ParentResourceName, type ParentResourceNameEnum } from '$lib/types/resource';
+    import {
+        MediaType,
+        ParentResourceComplexityLevel,
+        ParentResourceType,
+        type ApiParentResource,
+    } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
@@ -14,14 +19,11 @@
         resourceDisplayNameSorter,
         resourceThumbnailApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
-    import type { ImageOrVideoResource, TextResource } from './types';
+    import type { AnyResource, ImageOrVideoResource, ResourcePaneTab, TextResource } from './types';
     import FullscreenMediaResource from './FullscreenMediaResource.svelte';
     import FullscreenTextResource from './FullscreenTextResource.svelte';
     import { parseTiptapJsonToHtml, parseTiptapJsonToText } from '$lib/utils/tiptap-parsers';
     import SearchInput from '$lib/components/SearchInput.svelte';
-    import TextResourceSection from './TextResourceSection.svelte';
-    import VideoResourceSection from './VideoResourceSection.svelte';
-    import ImageResourceSection from './ImageResourceSection.svelte';
     import { filterItemsByKeyMatchingSearchQuery, shouldSearch } from '$lib/utils/search';
     import FullscreenTextResourceSection from './FullscreenTextResourceSection.svelte';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
@@ -29,50 +31,47 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import { get } from 'svelte/store';
     import { isCachedFromCdn } from '$lib/data-cache';
+    import { groupBy } from '$lib/utils/array';
+    import { objectEntries } from '$lib/utils/typesafe-standard-lib';
+    import { parentResourceNameToInfoMap } from '$lib/stores/parent-resource.store';
+    import AnyResourceSection from './AnyResourceSection.svelte';
+
+    const RESOURCE_TYPE_ORDER: ParentResourceType[] = [
+        ParentResourceType.Images,
+        ParentResourceType.Videos,
+        ParentResourceType.StudyNotes,
+        ParentResourceType.Dictionary,
+    ];
 
     export let resourcePane: CupertinoPane;
     export let isShowing: boolean;
     export let resources: PassageResourceContent[] | undefined;
-    export let activeTab: 'basic' | 'advanced' | 'searching' = 'basic';
+    export let activeTab: ResourcePaneTab = 'basic';
     export let isLoading = true;
 
     let searchQuery: string = '';
     let previousResourceIds = (resources ?? []).map(({ contentId }) => contentId);
 
-    $: showBasicTab =
-        ubsImageResources.length > 0 ||
-        videoBibleDictionaryResources.length > 0 ||
-        biblicaStudyNotesResources.length > 0 ||
-        biblicaBibleDictionaryResources.length > 0;
-    $: showAdvancedTab = tyndaleBibleDictionaryResources.length > 0 || tyndaleStudyNotesResources.length > 0;
-    $: activeTab = shouldSearch(searchQuery) ? 'searching' : showBasicTab ? 'basic' : 'advanced';
+    let hasBasicResources = false;
+    let hasAdvancedResources = false;
 
-    // text resources
-    let tyndaleBibleDictionaryResources: TextResource[] = [];
-    let tyndaleStudyNotesResources: TextResource[] = [];
-    let biblicaBibleDictionaryResources: TextResource[] = [];
-    let biblicaStudyNotesResources: TextResource[] = [];
-    let textResourcesByParentResource = {} as Record<ParentResourceNameEnum, TextResource[]>;
-    $: textResources = tyndaleBibleDictionaryResources
-        .concat(tyndaleStudyNotesResources)
-        .concat(biblicaStudyNotesResources)
-        .concat(biblicaBibleDictionaryResources);
+    $: activeTab = shouldSearch(searchQuery) ? 'searching' : hasBasicResources ? 'basic' : 'advanced';
 
-    // image and video resources
-    let ubsImageResources: ImageOrVideoResource[] = [];
-    let videoBibleDictionaryResources: ImageOrVideoResource[] = [];
+    let allResources: AnyResource[] = [];
     let mediaResources: ImageOrVideoResource[] = [];
-    $: mediaResources = ubsImageResources.concat(videoBibleDictionaryResources);
+    let sortedResourceGroups: {
+        parentResource: ApiParentResource;
+        resources: AnyResource[];
+    }[] = [];
+    let groupedResources: Record<string, AnyResource[]> = {};
 
     $: prepareResources(resources || []);
 
-    $: filteredResourceCount =
-        filterItemsByKeyMatchingSearchQuery(mediaResources, 'displayName', searchQuery).length +
-        filterItemsByKeyMatchingSearchQuery(textResources, 'displayName', searchQuery).length;
+    $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(allResources, 'displayName', searchQuery).length;
 
     let currentFullscreenMediaResourceIndex: number | null = null;
     let currentFullscreenTextResource: TextResource | null = null;
-    let currentFullscreenTextParentResourceName: ParentResourceNameEnum | null;
+    let currentFullscreenTextParentResourceName: string | null;
 
     onMount(() => {
         const bottomBarHeight = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4;
@@ -102,12 +101,16 @@
         });
     });
 
-    function handleMediaResourceSelected(resource: ImageOrVideoResource) {
-        currentFullscreenMediaResourceIndex = mediaResources.indexOf(resource);
+    function resourceSelected(resource: AnyResource) {
+        if ('type' in resource) {
+            currentFullscreenMediaResourceIndex = mediaResources.indexOf(resource);
+        } else {
+            currentFullscreenTextResource = resource;
+        }
     }
 
-    function handleTextResourceSelected(textResource: TextResource) {
-        currentFullscreenTextResource = textResource;
+    function showParentResourceFullscreen(parentResourceName: string | null) {
+        currentFullscreenTextParentResourceName = parentResourceName;
     }
 
     async function prepareResources(resources: PassageResourceContent[]) {
@@ -117,67 +120,92 @@
         }
         previousResourceIds = currentResourceIds;
         isLoading = true;
+
         const textResources = (
-            await asyncMap(
-                resources.filter(({ mediaTypeName }) => mediaTypeName === MediaType.Text),
-                async (resource) => {
-                    const [displayName, tiptap] = await Promise.all([
-                        fetchDisplayNameForResourceContent(resource),
-                        fetchTiptapForResourceContent(resource),
-                    ]);
-                    if (tiptap) {
-                        return {
-                            displayName,
-                            html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
-                            preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
-                            parentResourceName: resource.parentResourceName,
-                        };
-                    } else {
-                        return null;
+            (
+                await asyncMap(
+                    resources.filter(({ mediaTypeName }) => mediaTypeName === MediaType.Text),
+                    async (resource) => {
+                        const [displayName, tiptap] = await Promise.all([
+                            fetchDisplayNameForResourceContent(resource),
+                            fetchTiptapForResourceContent(resource),
+                        ]);
+                        if (tiptap) {
+                            return {
+                                displayName,
+                                html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
+                                preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
+                                parentResourceName: resource.parentResourceName,
+                            };
+                        } else {
+                            return null;
+                        }
                     }
-                }
+                )
+            ).filter(Boolean) as TextResource[]
+        ).sort(resourceDisplayNameSorter);
+
+        mediaResources = (
+            (
+                await asyncMap(
+                    resources.filter(({ mediaTypeName }) => mediaTypeName === MediaType.Image),
+                    async (resource) => ({
+                        type: 'image',
+                        displayName: await fetchDisplayNameForResourceContent(resource),
+                        url: resourceContentApiFullUrl(resource),
+                        parentResourceName: resource.parentResourceName,
+                    })
+                )
             )
-        ).filter(Boolean) as TextResource[];
-        tyndaleBibleDictionaryResources = textResources
-            .filter(({ parentResourceName }) => parentResourceName === ParentResourceName.TyndaleBibleDictionary)
-            .sort(resourceDisplayNameSorter);
-        tyndaleStudyNotesResources = textResources
-            .filter(({ parentResourceName }) => parentResourceName === ParentResourceName.TyndaleStudyNotes)
-            .sort(resourceDisplayNameSorter);
-        biblicaStudyNotesResources = textResources
-            .filter(({ parentResourceName }) => parentResourceName === ParentResourceName.BiblicaStudyNotes)
-            .sort(resourceDisplayNameSorter);
-        biblicaBibleDictionaryResources = textResources
-            .filter(({ parentResourceName }) => parentResourceName === ParentResourceName.BiblicaBibleDictionary)
-            .sort(resourceDisplayNameSorter);
-        ubsImageResources = await asyncMap(
-            resources.filter(({ parentResourceName }) => parentResourceName === ParentResourceName.UbsImages),
-            async (resource) => ({
-                type: 'image',
-                displayName: await fetchDisplayNameForResourceContent(resource),
-                url: resourceContentApiFullUrl(resource),
-            })
+                .concat(
+                    await asyncMap(
+                        resources.filter(({ mediaTypeName }) => mediaTypeName === MediaType.Video),
+                        async (resource) => {
+                            const metadata = await fetchMetadataForResourceContent(resource);
+                            const thumbnailUrl = resourceThumbnailApiFullUrl(resource);
+                            return {
+                                type: 'video',
+                                displayName: metadata?.displayName || null,
+                                url: resourceContentApiFullUrl(resource),
+                                duration: metadata?.metadata?.['duration'] as number | undefined,
+                                parentResourceName: resource.parentResourceName,
+                                thumbnailUrl:
+                                    get(isOnline) || (await isCachedFromCdn(thumbnailUrl)) ? thumbnailUrl : undefined,
+                            };
+                        }
+                    )
+                )
+                .filter(Boolean) as ImageOrVideoResource[]
+        ).sort(resourceDisplayNameSorter);
+
+        allResources = (textResources as AnyResource[]).concat(mediaResources);
+        hasBasicResources = allResources.some(
+            (r) =>
+                $parentResourceNameToInfoMap[r.parentResourceName]?.complexityLevel ===
+                ParentResourceComplexityLevel.Basic
         );
-        videoBibleDictionaryResources = await asyncMap(
-            resources.filter(
-                ({ parentResourceName }) => parentResourceName === ParentResourceName.VideoBibleDictionary
-            ),
-            async (resource) => {
-                const metadata = await fetchMetadataForResourceContent(resource);
-                const thumbnailUrl = resourceThumbnailApiFullUrl(resource);
-                return {
-                    type: 'video',
-                    displayName: metadata?.displayName || null,
-                    url: resourceContentApiFullUrl(resource),
-                    duration: metadata?.metadata?.['duration'] as number | undefined,
-                    thumbnailUrl: get(isOnline) || (await isCachedFromCdn(thumbnailUrl)) ? thumbnailUrl : undefined,
-                };
-            }
+        hasAdvancedResources = allResources.some(
+            (r) =>
+                $parentResourceNameToInfoMap[r.parentResourceName]?.complexityLevel ===
+                ParentResourceComplexityLevel.Advanced
         );
-        textResourcesByParentResource.TyndaleBibleDictionary = tyndaleBibleDictionaryResources;
-        textResourcesByParentResource.TyndaleStudyNotes = tyndaleStudyNotesResources;
-        textResourcesByParentResource.BiblicaBibleDictionary = biblicaBibleDictionaryResources;
-        textResourcesByParentResource.BiblicaStudyNotes = biblicaStudyNotesResources;
+        groupedResources = groupBy(
+            allResources,
+            (r) => r.parentResourceName,
+            (v) => v
+        );
+        sortedResourceGroups = (
+            objectEntries(groupedResources)
+                .map(([parentResourceName, resources]) => {
+                    return { parentResource: $parentResourceNameToInfoMap[parentResourceName], resources };
+                })
+                .filter((r) => r.parentResource) as typeof sortedResourceGroups
+        ).sort((a, b) => {
+            return (
+                RESOURCE_TYPE_ORDER.indexOf(a.parentResource.resourceType) -
+                RESOURCE_TYPE_ORDER.indexOf(b.parentResource.resourceType)
+            );
+        });
         isLoading = false;
     }
 </script>
@@ -202,10 +230,9 @@
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />
 <FullscreenTextResourceSection
     parentResourceName={currentFullscreenTextParentResourceName}
-    {textResourcesByParentResource}
-    resourceSelected={handleTextResourceSelected}
-    showParentResourceFullscreen={(parentResourceName) =>
-        (currentFullscreenTextParentResourceName = parentResourceName)}
+    {groupedResources}
+    {resourceSelected}
+    dismissParentResourceFullscreen={() => (currentFullscreenTextParentResourceName = null)}
 />
 
 <div id="resource-pane" use:trapFocus={isShowing}>
@@ -221,7 +248,7 @@
             </div>
             {#if activeTab === 'basic' || activeTab === 'advanced'}
                 <div class="tabs mb-6 w-full !border-b-0">
-                    {#if showBasicTab}
+                    {#if hasBasicResources}
                         <button
                             class="tab-bordered tab text-sm font-semibold {activeTab === 'basic'
                                 ? '!border-primary-focus text-primary-focus tab-active !border-b-2'
@@ -230,7 +257,7 @@
                             >{$translate('page.passage.resourcePane.basicTab.value')}</button
                         >
                     {/if}
-                    {#if showAdvancedTab}
+                    {#if hasAdvancedResources}
                         <button
                             class="tab-bordered tab text-sm font-semibold {activeTab === 'advanced'
                                 ? '!border-primary-focus text-primary-focus tab-active !border-b-2'
@@ -242,57 +269,17 @@
                     <div class="flex-grow border-b border-b-gray-200" />
                 </div>
             {/if}
-            <div class={activeTab === 'basic' || activeTab === 'searching' ? 'visible' : 'hidden'}>
-                <ImageResourceSection
-                    title={$translate('resources.types.ubsImages.value')}
-                    resources={ubsImageResources}
-                    resourceSelected={handleMediaResourceSelected}
-                    {searchQuery}
-                />
-                <VideoResourceSection
-                    title={$translate('resources.types.videoBibleDictionary.value')}
-                    resources={videoBibleDictionaryResources}
-                    resourceSelected={handleMediaResourceSelected}
-                    {searchQuery}
-                />
-                <TextResourceSection
-                    parentResourceName={ParentResourceName.BiblicaStudyNotes}
-                    resources={biblicaStudyNotesResources}
-                    resourceSelected={handleTextResourceSelected}
-                    isFullscreen={false}
-                    showParentResourceFullscreen={(parentResourceName) =>
-                        (currentFullscreenTextParentResourceName = parentResourceName)}
-                    {searchQuery}
-                />
-                <TextResourceSection
-                    parentResourceName={ParentResourceName.BiblicaBibleDictionary}
-                    resources={biblicaBibleDictionaryResources}
-                    resourceSelected={handleTextResourceSelected}
-                    isFullscreen={false}
-                    showParentResourceFullscreen={(parentResourceName) =>
-                        (currentFullscreenTextParentResourceName = parentResourceName)}
-                    {searchQuery}
-                />
-            </div>
-            <div class={activeTab === 'advanced' || activeTab === 'searching' ? 'visible' : 'hidden'}>
-                <TextResourceSection
-                    parentResourceName={ParentResourceName.TyndaleStudyNotes}
-                    resources={tyndaleStudyNotesResources}
-                    resourceSelected={handleTextResourceSelected}
-                    isFullscreen={false}
-                    showParentResourceFullscreen={(parentResourceName) =>
-                        (currentFullscreenTextParentResourceName = parentResourceName)}
-                    {searchQuery}
-                />
-                <TextResourceSection
-                    parentResourceName={ParentResourceName.TyndaleBibleDictionary}
-                    resources={tyndaleBibleDictionaryResources}
-                    resourceSelected={handleTextResourceSelected}
-                    isFullscreen={false}
-                    showParentResourceFullscreen={(parentResourceName) =>
-                        (currentFullscreenTextParentResourceName = parentResourceName)}
-                    {searchQuery}
-                />
+            <div>
+                {#each sortedResourceGroups as { parentResource, resources }}
+                    <AnyResourceSection
+                        {activeTab}
+                        {parentResource}
+                        {resources}
+                        {searchQuery}
+                        {resourceSelected}
+                        {showParentResourceFullscreen}
+                    />
+                {/each}
             </div>
             {#if filteredResourceCount === 0}
                 <NoResourcesFound {searchQuery} />

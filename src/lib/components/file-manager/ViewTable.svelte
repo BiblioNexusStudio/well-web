@@ -17,7 +17,7 @@
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { buildRowData } from '$lib/utils/file-manager';
     import { METADATA_ONLY_FAKE_FILE_SIZE, fetchFromCacheOrApi } from '$lib/data-cache';
-    import { currentLanguageInfo } from '$lib/stores/current-language.store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
     import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
     import { MediaType, ParentResourceName } from '$lib/types/resource';
     import Image from '$lib/icons/Image.svelte';

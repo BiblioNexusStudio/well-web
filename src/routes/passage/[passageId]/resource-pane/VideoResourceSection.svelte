@@ -6,30 +6,34 @@
         shouldSearch,
     } from '$lib/utils/search';
     import { formatSecondsToMins } from '$lib/utils/time';
-    import type { ImageOrVideoResource } from './types';
+    import type { AnyResource, ImageOrVideoResource } from './types';
     import { Icon } from 'svelte-awesome';
     import play from 'svelte-awesome/icons/play';
     import { _ as translate } from 'svelte-i18n';
 
-    export let title: string;
-    export let resources: ImageOrVideoResource[];
+    export let title: string | null;
+    export let resources: AnyResource[];
     export let resourceSelected: (video: ImageOrVideoResource) => void;
     export let searchQuery: string;
 
     let carousel: HTMLDivElement | null = null;
 
-    $: filteredResources = filterItemsByKeyMatchingSearchQuery(resources, 'displayName', searchQuery);
+    $: videoResources = resources.filter(
+        (resource) => 'type' in resource && resource.type === 'video'
+    ) as ImageOrVideoResource[];
+
+    $: filteredResources = filterItemsByKeyMatchingSearchQuery(videoResources, 'displayName', searchQuery);
 
     // if the user clears the search, scroll the carousel back to the left
     $: !shouldSearch(searchQuery) && carousel?.scrollTo({ left: 0, behavior: 'instant' });
 </script>
 
-{#if resources.length > 0}
+{#if videoResources.length > 0}
     <div class="text-md pb-2 font-semibold text-base-content {filteredResources.length > 0 ? 'visible' : 'hidden'}">
         {title}
     </div>
     <div bind:this={carousel} class="carousel w-full pb-6 {filteredResources.length > 0 ? 'visible' : 'hidden'}">
-        {#each resources as video}
+        {#each videoResources as video}
             <button
                 class="carousel-item me-2 w-32 flex-col {filteredResources.includes(video) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(video)}

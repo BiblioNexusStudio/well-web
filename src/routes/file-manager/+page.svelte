@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { currentLanguageInfo } from '$lib/stores/current-language.store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
     import { _ as translate } from 'svelte-i18n';
     import Footer from '$lib/components/file-manager/Footer.svelte';
     import ViewTable from '$lib/components/file-manager/ViewTable.svelte';

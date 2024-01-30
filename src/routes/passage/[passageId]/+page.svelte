@@ -34,7 +34,7 @@
     import type { BasePassage } from '$lib/types/passage';
     import { cacheBiblesForPassage } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { lookupLanguageInfoById } from '$lib/stores/current-language.store';
+    import { lookupLanguageInfoById } from '$lib/stores/language.store';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -284,7 +284,10 @@
                     <div class="prose mx-auto overflow-y-scroll">
                         {#each currentBible?.content.chapters as chapter}
                             {#each chapter.versesText as { number, text }}
-                                <div class="py-1" dir={lookupLanguageInfoById(currentBible.languageId).scriptDirection}>
+                                <div
+                                    class="py-1"
+                                    dir={lookupLanguageInfoById(currentBible.languageId)?.scriptDirection}
+                                >
                                     <span class="sup pe-1">{number}</span><span>{@html text}</span>
                                 </div>
                             {/each}

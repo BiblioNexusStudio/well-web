@@ -9,11 +9,10 @@
     import { isOnline, updateOnlineStatus } from '$lib/stores/is-online.store';
     import { featureFlags } from '$lib/stores/feature-flags.store';
     import DebugModal from '$lib/components/DebugModal.svelte';
-    import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { clearEntireCache } from '$lib/data-cache';
     import type { LayoutData } from './$types';
     import { _ as translate } from 'svelte-i18n';
-    import { currentLanguageDirection } from '$lib/stores/current-language.store';
+    import { currentLanguageDirection } from '$lib/stores/language.store';
 
     $: {
         document.dir = $currentLanguageDirection;
@@ -27,14 +26,9 @@
         window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
     }
 
-    async function precacheNecessaryCalls() {
-        await Promise.all([fetchFromCacheOrApi('/resources/parent-resources'), fetchFromCacheOrApi('/bibles')]);
-    }
-
     onMount(() => {
         updateOnlineStatus();
         initialize();
-        precacheNecessaryCalls();
     });
 
     onMount(() => {

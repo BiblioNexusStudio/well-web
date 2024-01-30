@@ -1,4 +1,4 @@
-import type { MediaTypeEnum } from './resource';
+import type { MediaType } from './resource';
 
 export interface BasePassage {
     bookCode: string;
@@ -16,7 +16,7 @@ export interface PassageWithResourceContentIds extends BasePassage {
 export interface PassageResourceContent {
     contentId: number;
     contentSize: number;
-    mediaTypeName: MediaTypeEnum;
+    mediaTypeName: MediaType;
     parentResourceName: string;
 }
 

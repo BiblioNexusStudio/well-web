@@ -1,15 +1,16 @@
 import { init } from '$lib/i18n';
 import { waitLocale } from 'svelte-i18n';
 import type { LayoutLoad } from './$types';
-import { languages } from '$lib/stores/file-manager.store';
 import { fetchFromCacheOrApi } from '$lib/data-cache';
 import { get } from 'svelte/store';
-import { currentLanguageCode } from '$lib/stores/current-language.store';
+import { currentLanguageInfo } from '$lib/stores/language.store';
 // eslint-disable-next-line
 // @ts-ignore
 import { registerSW } from 'virtual:pwa-register';
 import { log } from '$lib/logger';
 import { browserSupported } from '$lib/utils/browser';
+import { languages } from '$lib/stores/language.store';
+import { parentResources } from '$lib/stores/parent-resource.store';
 
 export const ssr = false;
 
@@ -41,11 +42,16 @@ export const load: LayoutLoad = async () => {
             }
         }
 
-        await init(get(currentLanguageCode));
-        await waitLocale();
-
-        const fetchedLanguages = await fetchFromCacheOrApi(`languages/`);
+        const [fetchedLanguages, fetchedParentResources, _] = await Promise.all([
+            fetchFromCacheOrApi(`/languages`),
+            fetchFromCacheOrApi('/resources/parent-resources'),
+            fetchFromCacheOrApi('/bibles'),
+        ]);
         languages.set(fetchedLanguages);
+        parentResources.set(fetchedParentResources);
+
+        await init(get(currentLanguageInfo)?.iso6393Code);
+        await waitLocale();
 
         return { browserSupported, error: false };
     } catch (error) {

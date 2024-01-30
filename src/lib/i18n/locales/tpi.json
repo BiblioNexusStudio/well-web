@@ -228,6 +228,9 @@
     },
     "resources": {
         "types": {
+            "uwTranslationWords": {
+                "value": "Ol bikpela tok (unfoldingWord)"
+            },
             "CBBTER": {
                 "value": "CBBT-ER"
             },

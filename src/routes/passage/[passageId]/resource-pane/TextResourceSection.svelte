@@ -1,6 +1,6 @@
 <script lang="ts">
     import arrowRight from 'svelte-awesome/icons/arrowRight';
-    import type { TextResource } from './types';
+    import type { AnyResource, TextResource } from './types';
     import { Icon } from 'svelte-awesome';
     import {
         filterItemsByKeyMatchingSearchQuery,
@@ -10,50 +10,34 @@
     import { _ as translate } from 'svelte-i18n';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
     import SearchInput from '$lib/components/SearchInput.svelte';
-    import { ParentResourceName, type ParentResourceNameEnum } from '$lib/types/resource';
     import NoResourcesFound from './NoResourcesFound.svelte';
 
-    export let parentResourceName: ParentResourceNameEnum;
-    export let resources: TextResource[];
+    export let title: string | null;
+    export let resources: AnyResource[];
     export let resourceSelected: (resource: TextResource) => void;
     export let searchQuery: string;
     export let isFullscreen: boolean;
-    export let showParentResourceFullscreen: ((parentResourceName: ParentResourceNameEnum | null) => void) | null =
-        null;
+    export let showParentResourceFullscreen: (() => void) | null = null;
+    export let dismissParentResourceFullscreen: (() => void) | null = null;
 
-    function calculateTitle(parentResourceName: ParentResourceNameEnum) {
-        switch (parentResourceName) {
-            case ParentResourceName.TyndaleBibleDictionary:
-                return $translate('resources.types.tyndaleBibleDictionary.value');
-            case ParentResourceName.TyndaleStudyNotes:
-                return $translate('resources.types.tyndaleStudyNotes.value');
-            case ParentResourceName.BiblicaBibleDictionary:
-                return $translate('resources.types.biblicaBibleDictionary.value');
-            case ParentResourceName.BiblicaStudyNotes:
-                return $translate('resources.types.biblicaStudyNotes.value');
-            default:
-                return null;
-        }
-    }
-
-    $: title = calculateTitle(parentResourceName);
+    $: textResources = resources.filter((resource) => !('type' in resource)) as TextResource[];
 
     // resources filtered to:
     // - searched results if searching OR
     // - all resources if fullscreen OR
     // - first 5 resources
     $: showingResources = shouldSearch(searchQuery)
-        ? filterItemsByKeyMatchingSearchQuery(resources, 'displayName', searchQuery)
+        ? filterItemsByKeyMatchingSearchQuery(textResources, 'displayName', searchQuery)
         : isFullscreen
-        ? resources
-        : resources.slice(0, 5);
+        ? textResources
+        : textResources.slice(0, 5);
 </script>
 
-{#if resources.length > 0}
+{#if textResources.length > 0}
     {#if isFullscreen}
         <div class="mx-auto w-full max-w-[65ch]">
             <div class="flex w-full flex-row items-center py-3">
-                <button class="btn btn-link text-base-500" on:click={() => showParentResourceFullscreen?.(null)}
+                <button class="btn btn-link text-base-500" on:click={dismissParentResourceFullscreen}
                     ><Icon data={chevronLeft} /></button
                 >
                 <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">{title}</div>
@@ -75,12 +59,10 @@
         <div class="flex pb-2 {showingResources.length > 0 ? 'visible' : 'hidden'}">
             <div class="text-md font-semibold text-base-content">{title}</div>
             <div class="flex-grow"></div>
-            {#if !shouldSearch(searchQuery) && resources.length > 5}
-                <button
-                    class="text-sm font-semibold text-base-500"
-                    on:click={() => showParentResourceFullscreen?.(parentResourceName)}
+            {#if !shouldSearch(searchQuery) && textResources.length > 5}
+                <button class="text-sm font-semibold text-base-500" on:click={showParentResourceFullscreen}
                     >{$translate('page.passage.resourcePane.seeAll.value', {
-                        values: { count: resources.length },
+                        values: { count: textResources.length },
                     })}</button
                 >
             {/if}

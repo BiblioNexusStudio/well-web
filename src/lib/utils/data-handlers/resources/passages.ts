@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/public';
 import { get } from 'svelte/store';
 import { data, passagesByBook } from '$lib/stores/passage-form.store';
-import { currentLanguageInfo } from '$lib/stores/current-language.store';
+import { currentLanguageInfo } from '$lib/stores/language.store';
 import { fetchFromCacheOrApi, isCachedFromApi, isCachedFromCdn } from '$lib/data-cache';
 import { asyncMap, asyncSome, asyncFilter } from '$lib/utils/async-array';
 import type { ApiBible } from '$lib/types/bible-text-content';
