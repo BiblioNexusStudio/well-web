@@ -24,6 +24,11 @@ export function groupBy<T, K extends PropertyKey, V>(
     );
 }
 
+export function at<T>(arr: T[], index: number): T | undefined {
+    const posIndex = index < 0 ? arr.length + index : index;
+    return posIndex >= 0 && posIndex < arr.length ? arr[posIndex] : undefined;
+}
+
 export function range(start: number, end: number) {
     return [...Array(end - start + 1).keys()].map((n) => n + start);
 }

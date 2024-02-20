@@ -4,6 +4,7 @@
 // copied from https://github.com/henrygd/trap-focus-svelte with slight modification
 
 import { listen } from 'svelte/internal';
+import { at } from './array';
 
 let stack: HTMLElement[] = [];
 
@@ -22,7 +23,7 @@ function trapFocus(wrap: HTMLElement, active = true) {
     // return  the first and last focusable children
     function getFirstAndLastFocusable() {
         const els = [...wrap.querySelectorAll('*')].filter((element: HTMLElement) => element.tabIndex >= 0);
-        return [els.at(0) ?? wrap, els.at(-1) ?? wrap] as HTMLElement[];
+        return [at(els, 0) ?? wrap, at(els, -1) ?? wrap] as HTMLElement[];
     }
 
     // store document.activeElement to restore focus when untrapped
@@ -32,7 +33,7 @@ function trapFocus(wrap: HTMLElement, active = true) {
     function addToStack() {
         stack.push(wrap);
         lastActiveElement = document.activeElement as HTMLElement;
-        getFirstAndLastFocusable().at(0).focus();
+        at(getFirstAndLastFocusable(), 0)?.focus();
     }
     /** deactivates trap (removes from stack) and restores focus to lastActiveElement */
     function removeFromStack() {
@@ -46,16 +47,16 @@ function trapFocus(wrap: HTMLElement, active = true) {
     }
 
     /** true if element is in the trap most recently added to stack */
-    const inCurrentTrap = (el: HTMLElement) => stack.at(-1)?.contains(el);
+    const inCurrentTrap = (el: HTMLElement) => at(stack, -1)?.contains(el);
 
     /** loop focus if leaving first of last focusable element in wrap */
     const focusOutListener = listen(wrap, 'focusout', (e: FocusEvent) => {
         if (inCurrentTrap(wrap)) {
             const [firstFocusableEl, lastFocusableEl] = getFirstAndLastFocusable();
             if (e.target == firstFocusableEl && shiftTab) {
-                setTimeout(() => lastFocusableEl.focus());
+                setTimeout(() => lastFocusableEl?.focus());
             } else if (e.target == lastFocusableEl && !shiftTab) {
-                setTimeout(() => firstFocusableEl.focus());
+                setTimeout(() => firstFocusableEl?.focus());
             }
         }
     });
@@ -65,7 +66,7 @@ function trapFocus(wrap: HTMLElement, active = true) {
         if (inCurrentTrap(wrap) && !inCurrentTrap(e.target as HTMLElement)) {
             const [first, last] = getFirstAndLastFocusable();
             const focusEl = shiftTab ? last : first;
-            focusEl.focus();
+            focusEl?.focus();
         }
     });
 
