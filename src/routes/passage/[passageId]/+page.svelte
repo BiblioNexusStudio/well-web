@@ -81,6 +81,8 @@
         multiClipAudioStates = {};
         baseFetchPromise = (async () => {
             passage = await fetchPassage($page.params.passageId!);
+            cbbterSelectedStepNumber = 1;
+            cbbterSelectedStepScroll = 1;
         })();
     }
 
