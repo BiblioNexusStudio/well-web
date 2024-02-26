@@ -81,8 +81,6 @@
         multiClipAudioStates = {};
         baseFetchPromise = (async () => {
             passage = await fetchPassage($page.params.passageId!);
-            cbbterSelectedStepNumber = 1;
-            cbbterSelectedStepScroll = 1;
         })();
     }
 
@@ -95,6 +93,8 @@
                     ...(resourceData.cbbterAudio?.steps?.map((step) => step.stepNumber) ?? []),
                 ])
             );
+            cbbterSelectedStepNumber = stepsAvailable[0] ?? 1;
+            cbbterSelectedStepScroll = stepsAvailable[0] ?? 1;
             populateCbbterAudioState();
         })();
     }
