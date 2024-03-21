@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,6 +11,9 @@ const __dirname = dirname(__filename);
 const configName = process.argv[2];
 fs.copyFileSync(join(__dirname, '../config', `.env.global`), join(__dirname, '..', '.env'));
 fs.appendFileSync(join(__dirname, '..', '.env'), fs.readFileSync(join(__dirname, '../config', `.env.${configName}`)));
+
+const commitSha = execSync('git rev-parse HEAD').toString().trim();
+fs.appendFileSync(join(__dirname, '..', '.env'), `PUBLIC_COMMIT_SHA=${commitSha}\n`);
 
 // For the service to work during local development, output the variables to a JS file in `/static`
 
