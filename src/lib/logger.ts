@@ -28,7 +28,13 @@ export const log = {
             // Don't log errors of unsupported browsers to app insights (since they can't be avoided)
             console.error(error);
         } else if (error) {
-            appInsights.trackException({ exception: error }, additionalProperties);
+            appInsights.trackException(
+                { exception: error },
+                {
+                    ...additionalProperties,
+                    commitSha: config.PUBLIC_COMMIT_SHA,
+                }
+            );
         }
     },
     pageView: (routeId: string) => {
