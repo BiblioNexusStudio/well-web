@@ -24,6 +24,9 @@
             },
             "about": {
                 "value": "Long em"
+            },
+            "fileManager": {
+                "value": "Fail Meneja"
             }
         },
         "about": {
@@ -275,20 +278,6 @@
             "step6": {
                 "value": "Toktok long dispela wod"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "Houm"
-        },
-        "menu": {
-            "value": "Meniu"
-        },
-        "changeLanguage": {
-            "value": "Senisim Tokpeles..."
-        },
-        "fileManager": {
-            "value": "Fail Meneja"
         }
     },
     "errorMessage": {

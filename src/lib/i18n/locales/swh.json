@@ -32,6 +32,10 @@
             "about": {
                 "value": "Kuhusu",
                 "_context": "Unganisha na ukurasa wa kuhusu"
+            },
+            "fileManager": {
+                "value": "Kidhibiti faili",
+                "_context": "Lebo ya kitufe cha msimamizi wa faili"
             }
         },
         "about": {
@@ -352,24 +356,6 @@
                 "value": "Akizungumza Neno",
                 "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "Nyumbani",
-            "_context": "Lebo ya ukurasa wa nyumbani"
-        },
-        "menu": {
-            "value": "Jina",
-            "_context": "Lebo ya menyu"
-        },
-        "changeLanguage": {
-            "value": "Badilisha Lugha...",
-            "_context": "Lebo ya kitufe cha kubadilisha lugha"
-        },
-        "fileManager": {
-            "value": "Kidhibiti faili",
-            "_context": "Lebo ya kitufe cha msimamizi wa faili"
         }
     },
     "errorMessage": {

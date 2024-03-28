@@ -24,6 +24,9 @@
             },
             "about": {
                 "value": "حول"
+            },
+            "fileManager": {
+                "value": "مدير الملفات"
             }
         },
         "about": {
@@ -275,20 +278,6 @@
             "step6": {
                 "value": "تلفظ الكلمة"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "الرئيسية"
-        },
-        "menu": {
-            "value": "القائمة"
-        },
-        "changeLanguage": {
-            "value": "تغيير اللغة..."
-        },
-        "fileManager": {
-            "value": "مدير الملفات"
         }
     },
     "errorMessage": {

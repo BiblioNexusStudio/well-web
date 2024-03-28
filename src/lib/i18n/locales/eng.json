@@ -32,6 +32,10 @@
             "about": {
                 "value": "About",
                 "_context": "Link to the about page"
+            },
+            "fileManager": {
+                "value": "File Manager",
+                "_context": "The label for the file manager button"
             }
         },
         "about": {
@@ -353,24 +357,6 @@
                 "value": "Speaking the Word",
                 "_context": "See CBBT-ER for translations of each step name"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "Home",
-            "_context": "The label for the home page"
-        },
-        "menu": {
-            "value": "Menu",
-            "_context": "The label for the menu"
-        },
-        "changeLanguage": {
-            "value": "Change Language...",
-            "_context": "The label for the change language button"
-        },
-        "fileManager": {
-            "value": "File Manager",
-            "_context": "The label for the file manager button"
         }
     },
     "errorMessage": {

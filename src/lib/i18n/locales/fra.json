@@ -24,6 +24,9 @@
             },
             "about": {
                 "value": "À propos"
+            },
+            "fileManager": {
+                "value": "Gestionnaire de Fichiers"
             }
         },
         "about": {
@@ -275,20 +278,6 @@
             "step6": {
                 "value": "Prononcer la Parole"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "Accueil"
-        },
-        "menu": {
-            "value": "Menu"
-        },
-        "changeLanguage": {
-            "value": "Changer de Langue..."
-        },
-        "fileManager": {
-            "value": "Gestionnaire de Fichiers"
         }
     },
     "errorMessage": {

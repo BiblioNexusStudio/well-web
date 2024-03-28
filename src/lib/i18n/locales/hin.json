@@ -24,6 +24,9 @@
             },
             "about": {
                 "value": "बारे में"
+            },
+            "fileManager": {
+                "value": "फ़ाइल प्रबंधक"
             }
         },
         "about": {
@@ -275,20 +278,6 @@
             "step6": {
                 "value": "शब्द बोलना"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "घर"
-        },
-        "menu": {
-            "value": "मेनू"
-        },
-        "changeLanguage": {
-            "value": "भाषा बदलें"
-        },
-        "fileManager": {
-            "value": "फ़ाइल प्रबंधक"
         }
     },
     "errorMessage": {
