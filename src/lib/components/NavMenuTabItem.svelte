@@ -23,9 +23,9 @@
 
 <button on:click={handleClick} class="group active border-none stroke-black">
     <div
-        class="rounded-2xl px-5 py-1 focus:bg-primary-50 group-hover:bg-primary-50 group-hover:stroke-primary {isSelected
-            ? 'bg-primary-50 stroke-primary'
-            : 'stroke-primary-300'}"
+        class="rounded-2xl px-3 py-1 focus:bg-[#F0FAFF] group-hover:bg-[#F0FAFF] group-hover:stroke-primary {isSelected
+            ? 'bg-[#F0FAFF]'
+            : ''}"
     >
         {#if flipWhenSelected}
             <div
@@ -38,5 +38,5 @@
             <slot />
         {/if}
     </div>
-    <span class="btm-nav-label text-xs text-primary {isSelected && 'font-bold'}">{label}</span>
+    <span class="btm-nav-label text-xs text-[#475467] {isSelected && 'font-bold'}">{label}</span>
 </button>

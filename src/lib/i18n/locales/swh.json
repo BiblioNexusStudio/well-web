@@ -60,9 +60,13 @@
                     "value": "Mwongozo",
                     "_context": "Kitufe cha Lebo ya Mwongozo kwenye upau wa urambazaji"
                 },
-                "resources": {
-                    "value": "Rasilimali",
-                    "_context": "Kitufe cha lebo ya Rasilimali kwenye upau wa urambazaji"
+                "library": {
+                    "value": "Maktaba",
+                    "_context": "Kitufe cha lebo ya Maktaba kwenye upau wa urambazaji"
+                },
+                "menu": {
+                    "value": "Menyu",
+                    "_context": "Kitufe cha lebo ya Menyu kwenye upau wa urambazaji"
                 }
             },
             "resourcePane": {

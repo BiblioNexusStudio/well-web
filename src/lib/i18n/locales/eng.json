@@ -60,9 +60,13 @@
                     "value": "Guide",
                     "_context": "Label for Guide button on navbar"
                 },
-                "resources": {
-                    "value": "Resources",
-                    "_context": "Label for Resources button on navbar"
+                "library": {
+                    "value": "Library",
+                    "_context": "Label for Library button on navbar"
+                },
+                "menu": {
+                    "value": "Menu",
+                    "_context": "Label for Menu button on navbar"
                 }
             },
             "resourcePane": {

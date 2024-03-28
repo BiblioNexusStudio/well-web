@@ -47,8 +47,11 @@
                 "guide": {
                     "value": "Gaid"
                 },
-                "resources": {
-                    "value": "Risoses"
+                "library": {
+                    "value": "Libreri"
+                },
+                "menu": {
+                    "value": "Meniu"
                 }
             },
             "resourcePane": {

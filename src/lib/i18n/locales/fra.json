@@ -47,8 +47,11 @@
                 "guide": {
                     "value": "Guide"
                 },
-                "resources": {
-                    "value": "Ressources"
+                "library": {
+                    "value": "Bibliothèque"
+                },
+                "menu": {
+                    "value": "Menu"
                 }
             },
             "resourcePane": {

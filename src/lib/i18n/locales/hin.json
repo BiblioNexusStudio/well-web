@@ -47,8 +47,11 @@
                 "guide": {
                     "value": "मार्गदर्शक"
                 },
-                "resources": {
-                    "value": "संसाधन"
+                "library": {
+                    "value": "लाइब्रेरी"
+                },
+                "menu": {
+                    "value": "मेनू"
                 }
             },
             "resourcePane": {

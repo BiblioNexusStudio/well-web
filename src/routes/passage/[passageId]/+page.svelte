@@ -1,4 +1,6 @@
 <script lang="ts">
+    import LibraryIcon from '$lib/icons/LibraryIcon.svelte';
+    import MenuIcon from '$lib/icons/MenuIcon.svelte';
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
@@ -6,7 +8,6 @@
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
     import CompassIcon from '$lib/icons/CompassIcon.svelte';
-    import DoubleChevronUpIcon from '$lib/icons/DoubleChevronUpIcon.svelte';
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
     import ResourcePane from './resource-pane/ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
@@ -229,7 +230,7 @@
 
 <ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={resourceData?.additionalResources} />
 
-<div class="btm-nav z-40 border-t border-t-primary-300">
+<div class="btm-nav z-40 h-20 border-t">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
         <BookIcon />
     </NavMenuTabItem>
@@ -237,14 +238,13 @@
         <CompassIcon />
     </NavMenuTabItem>
     {#if resourceData?.additionalResources?.length}
-        <NavMenuTabItem
-            bind:isSelected={isShowingResourcePane}
-            flipWhenSelected={true}
-            label={$translate('page.passage.nav.resources.value')}
-        >
-            <DoubleChevronUpIcon />
+        <NavMenuTabItem bind:isSelected={isShowingResourcePane} label={$translate('page.passage.nav.library.value')}>
+            <LibraryIcon />
         </NavMenuTabItem>
     {/if}
+    <NavMenuTabItem bind:selectedTab tabName="menu" label={$translate('page.passage.nav.menu.value')}>
+        <MenuIcon />
+    </NavMenuTabItem>
 </div>
 
 <div id="passage-page" class="h-full w-full">
@@ -346,7 +346,7 @@
         </div>
         {#if objectKeys(multiClipAudioStates).length}
             <div
-                class="fixed bottom-16 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {!audioPlayerShowing &&
+                class="fixed bottom-20 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {!audioPlayerShowing &&
                     'hidden'}"
             >
                 <AudioPlayer {multiClipAudioStates} currentClipKey={audioPlayerKey} />

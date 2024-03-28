@@ -47,8 +47,11 @@
                 "guide": {
                     "value": "دليل"
                 },
-                "resources": {
-                    "value": "موارد"
+                "library": {
+                    "value": "المكتبة"
+                },
+                "menu": {
+                    "value": "القائمة"
                 }
             },
             "resourcePane": {
