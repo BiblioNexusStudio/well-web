@@ -32,6 +32,10 @@
             "about": {
                 "value": "About",
                 "_context": "Link to the about page"
+            },
+            "fileManager": {
+                "value": "File Manager",
+                "_context": "The label for the file manager button"
             }
         },
         "about": {
@@ -60,9 +64,13 @@
                     "value": "Guide",
                     "_context": "Label for Guide button on navbar"
                 },
-                "resources": {
-                    "value": "Resources",
-                    "_context": "Label for Resources button on navbar"
+                "library": {
+                    "value": "Library",
+                    "_context": "Label for Library button on navbar"
+                },
+                "menu": {
+                    "value": "Menu",
+                    "_context": "Label for Menu button on navbar"
                 }
             },
             "resourcePane": {
@@ -255,6 +263,32 @@
                     "_context": "Label for the resources row"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "Home",
+                "_context": "Label for the home button"
+            },
+            "menu": {
+                "value": "Menu",
+                "_context": "Label for the menu button"
+            },
+            "localFileManager": {
+                "value": "Local File Manager",
+                "_context": "Label for the local file manager button"
+            },
+            "language": {
+                "value": "Language",
+                "_context": "Label for the language button"
+            },
+            "shortcuts": {
+                "value": "Shortcuts",
+                "_context": "Label for the shortcuts button"
+            },
+            "changeLanguage": {
+                "value": "Change Language",
+                "_context": "Label for the change language button"
+            }
         }
     },
     "navTop": {
@@ -349,24 +383,6 @@
                 "value": "Speaking the Word",
                 "_context": "See CBBT-ER for translations of each step name"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "Home",
-            "_context": "The label for the home page"
-        },
-        "menu": {
-            "value": "Menu",
-            "_context": "The label for the menu"
-        },
-        "changeLanguage": {
-            "value": "Change Language...",
-            "_context": "The label for the change language button"
-        },
-        "fileManager": {
-            "value": "File Manager",
-            "_context": "The label for the file manager button"
         }
     },
     "errorMessage": {

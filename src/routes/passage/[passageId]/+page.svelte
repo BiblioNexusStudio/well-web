@@ -1,4 +1,6 @@
 <script lang="ts">
+    import LibraryIcon from '$lib/icons/LibraryIcon.svelte';
+    import MenuIcon from '$lib/icons/MenuIcon.svelte';
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
@@ -6,7 +8,6 @@
     import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
     import CompassIcon from '$lib/icons/CompassIcon.svelte';
-    import DoubleChevronUpIcon from '$lib/icons/DoubleChevronUpIcon.svelte';
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
     import ResourcePane from './resource-pane/ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
@@ -35,6 +36,7 @@
     import { cacheBiblesForPassage } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
+    import MenuPage from '$lib/components/MenuPage.svelte';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -229,7 +231,7 @@
 
 <ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={resourceData?.additionalResources} />
 
-<div class="btm-nav z-40 border-t border-t-primary-300">
+<div class="btm-nav z-40 h-20 border-t">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
         <BookIcon />
     </NavMenuTabItem>
@@ -237,29 +239,30 @@
         <CompassIcon />
     </NavMenuTabItem>
     {#if resourceData?.additionalResources?.length}
-        <NavMenuTabItem
-            bind:isSelected={isShowingResourcePane}
-            flipWhenSelected={true}
-            label={$translate('page.passage.nav.resources.value')}
-        >
-            <DoubleChevronUpIcon />
+        <NavMenuTabItem bind:isSelected={isShowingResourcePane} label={$translate('page.passage.nav.library.value')}>
+            <LibraryIcon />
         </NavMenuTabItem>
     {/if}
+    <NavMenuTabItem bind:selectedTab tabName="menu" label={$translate('page.passage.nav.menu.value')}>
+        <MenuIcon />
+    </NavMenuTabItem>
 </div>
 
 <div id="passage-page" class="h-full w-full">
-    <TopNavBar
-        bind:preferredBiblesModalOpen
-        {title}
-        {passage}
-        bibles={bibleData?.availableBibles ?? []}
-        tab={selectedTab}
-    />
+    {#if selectedTab !== 'menu'}
+        <TopNavBar
+            bind:preferredBiblesModalOpen
+            {title}
+            {passage}
+            bibles={bibleData?.availableBibles ?? []}
+            tab={selectedTab}
+        />
+    {/if}
     {#await baseFetchPromise}
         <FullPageSpinner />
     {:then}
         <div
-            class="absolute left-0 right-0 top-0 flex flex-col {audioPlayerShowing
+            class="absolute left-0 right-0 top-0 flex flex-col {selectedTab === 'menu' && 'hidden'} {audioPlayerShowing
                 ? 'bottom-[7.5rem]'
                 : 'bottom-16'} z-10 pt-16"
         >
@@ -346,7 +349,8 @@
         </div>
         {#if objectKeys(multiClipAudioStates).length}
             <div
-                class="fixed bottom-16 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {!audioPlayerShowing &&
+                class="fixed bottom-20 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {(!audioPlayerShowing ||
+                    selectedTab === 'menu') &&
                     'hidden'}"
             >
                 <AudioPlayer {multiClipAudioStates} currentClipKey={audioPlayerKey} />
@@ -355,4 +359,7 @@
     {:catch}
         <ErrorMessage />
     {/await}
+    {#if selectedTab === 'menu'}
+        <MenuPage />
+    {/if}
 </div>

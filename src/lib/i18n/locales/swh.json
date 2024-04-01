@@ -32,6 +32,10 @@
             "about": {
                 "value": "Kuhusu",
                 "_context": "Unganisha na ukurasa wa kuhusu"
+            },
+            "fileManager": {
+                "value": "Kidhibiti faili",
+                "_context": "Lebo ya kitufe cha msimamizi wa faili"
             }
         },
         "about": {
@@ -60,9 +64,13 @@
                     "value": "Mwongozo",
                     "_context": "Kitufe cha Lebo ya Mwongozo kwenye upau wa urambazaji"
                 },
-                "resources": {
-                    "value": "Rasilimali",
-                    "_context": "Kitufe cha lebo ya Rasilimali kwenye upau wa urambazaji"
+                "library": {
+                    "value": "Maktaba",
+                    "_context": "Kitufe cha lebo ya Maktaba kwenye upau wa urambazaji"
+                },
+                "menu": {
+                    "value": "Menyu",
+                    "_context": "Kitufe cha lebo ya Menyu kwenye upau wa urambazaji"
                 }
             },
             "resourcePane": {
@@ -255,6 +263,26 @@
                     "_context": "Weka lebo kwa safu mlalo ya rasilimali"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "Nyumbani"
+            },
+            "menu": {
+                "value": "Menyu"
+            },
+            "localFileManager": {
+                "value": "Kidhibiti Faili cha mtaa"
+            },
+            "language": {
+                "value": "Lugha"
+            },
+            "shortcuts": {
+                "value": "Vidokezo"
+            },
+            "changeLanguage": {
+                "value": "Badilisha Lugha"
+            }
         }
     },
     "navTop": {
@@ -348,24 +376,6 @@
                 "value": "Akizungumza Neno",
                 "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "Nyumbani",
-            "_context": "Lebo ya ukurasa wa nyumbani"
-        },
-        "menu": {
-            "value": "Jina",
-            "_context": "Lebo ya menyu"
-        },
-        "changeLanguage": {
-            "value": "Badilisha Lugha...",
-            "_context": "Lebo ya kitufe cha kubadilisha lugha"
-        },
-        "fileManager": {
-            "value": "Kidhibiti faili",
-            "_context": "Lebo ya kitufe cha msimamizi wa faili"
         }
     },
     "errorMessage": {

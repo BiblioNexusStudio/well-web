@@ -26,7 +26,7 @@ import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
 import { passageDetailsByIdAndLanguage } from '$lib/api-endpoints';
 
-export type PassagePageTab = 'bible' | 'guide';
+export type PassagePageTab = 'bible' | 'guide' | 'menu';
 
 export async function fetchBibleContent(passage: BasePassage, bible: FrontendBibleBook) {
     if (!bible.bookMetadata) return null;

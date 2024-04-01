@@ -24,6 +24,9 @@
             },
             "about": {
                 "value": "حول"
+            },
+            "fileManager": {
+                "value": "مدير الملفات"
             }
         },
         "about": {
@@ -47,8 +50,11 @@
                 "guide": {
                     "value": "دليل"
                 },
-                "resources": {
-                    "value": "موارد"
+                "library": {
+                    "value": "المكتبة"
+                },
+                "menu": {
+                    "value": "القائمة"
                 }
             },
             "resourcePane": {
@@ -199,6 +205,26 @@
                     "value": "الموارد"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "الرئيسية"
+            },
+            "menu": {
+                "value": "القائمة"
+            },
+            "localFileManager": {
+                "value": "مدير الملفات المحلي"
+            },
+            "language": {
+                "value": "اللغة"
+            },
+            "shortcuts": {
+                "value": "اختصارات"
+            },
+            "changeLanguage": {
+                "value": "تغيير اللغة"
+            }
         }
     },
     "navTop": {
@@ -272,20 +298,6 @@
             "step6": {
                 "value": "تلفظ الكلمة"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "الرئيسية"
-        },
-        "menu": {
-            "value": "القائمة"
-        },
-        "changeLanguage": {
-            "value": "تغيير اللغة..."
-        },
-        "fileManager": {
-            "value": "مدير الملفات"
         }
     },
     "errorMessage": {

@@ -24,6 +24,9 @@
             },
             "about": {
                 "value": "À propos"
+            },
+            "fileManager": {
+                "value": "Gestionnaire de Fichiers"
             }
         },
         "about": {
@@ -47,8 +50,11 @@
                 "guide": {
                     "value": "Guide"
                 },
-                "resources": {
-                    "value": "Ressources"
+                "library": {
+                    "value": "Bibliothèque"
+                },
+                "menu": {
+                    "value": "Menu"
                 }
             },
             "resourcePane": {
@@ -199,6 +205,26 @@
                     "value": "Ressources"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "Accueil"
+            },
+            "menu": {
+                "value": "Menu"
+            },
+            "localFileManager": {
+                "value": "Gestionnaire de Fichiers Local"
+            },
+            "language": {
+                "value": "Langue"
+            },
+            "shortcuts": {
+                "value": "Raccourcis"
+            },
+            "changeLanguage": {
+                "value": "Changer de Langue"
+            }
         }
     },
     "navTop": {
@@ -272,20 +298,6 @@
             "step6": {
                 "value": "Prononcer la Parole"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "Accueil"
-        },
-        "menu": {
-            "value": "Menu"
-        },
-        "changeLanguage": {
-            "value": "Changer de Langue..."
-        },
-        "fileManager": {
-            "value": "Gestionnaire de Fichiers"
         }
     },
     "errorMessage": {

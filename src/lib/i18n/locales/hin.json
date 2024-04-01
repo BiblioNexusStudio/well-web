@@ -24,6 +24,9 @@
             },
             "about": {
                 "value": "बारे में"
+            },
+            "fileManager": {
+                "value": "फ़ाइल प्रबंधक"
             }
         },
         "about": {
@@ -47,8 +50,11 @@
                 "guide": {
                     "value": "मार्गदर्शक"
                 },
-                "resources": {
-                    "value": "संसाधन"
+                "library": {
+                    "value": "लाइब्रेरी"
+                },
+                "menu": {
+                    "value": "मेनू"
                 }
             },
             "resourcePane": {
@@ -199,6 +205,26 @@
                     "value": "संसाधन"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "घर"
+            },
+            "menu": {
+                "value": "मेनू"
+            },
+            "localFileManager": {
+                "value": "स्थानीय फ़ाइल प्रबंधक"
+            },
+            "language": {
+                "value": "भाषा"
+            },
+            "shortcuts": {
+                "value": "शॉर्टकट्स"
+            },
+            "changeLanguage": {
+                "value": "भाषा बदलें"
+            }
         }
     },
     "navTop": {
@@ -272,20 +298,6 @@
             "step6": {
                 "value": "शब्द बोलना"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "घर"
-        },
-        "menu": {
-            "value": "मेनू"
-        },
-        "changeLanguage": {
-            "value": "भाषा बदलें"
-        },
-        "fileManager": {
-            "value": "फ़ाइल प्रबंधक"
         }
     },
     "errorMessage": {

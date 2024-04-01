@@ -17,7 +17,7 @@
         <a class="mx-auto mt-6 max-w-xs text-sky-500" href="/file-manager"
             >{$isOnline
                 ? $translate('page.index.downloadResourcesForOfflineUse.value')
-                : $translate('sideMenu.fileManager.value')}</a
+                : $translate('page.index.fileManager.value')}</a
         >
     </div>
     <div class="flex-[1]" />

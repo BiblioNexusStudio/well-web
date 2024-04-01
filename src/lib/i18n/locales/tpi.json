@@ -24,6 +24,9 @@
             },
             "about": {
                 "value": "Long em"
+            },
+            "fileManager": {
+                "value": "Fail Meneja"
             }
         },
         "about": {
@@ -47,8 +50,11 @@
                 "guide": {
                     "value": "Gaid"
                 },
-                "resources": {
-                    "value": "Risoses"
+                "library": {
+                    "value": "Libreri"
+                },
+                "menu": {
+                    "value": "Meniu"
                 }
             },
             "resourcePane": {
@@ -199,6 +205,26 @@
                     "value": "Risoses"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "Houm"
+            },
+            "menu": {
+                "value": "Meniu"
+            },
+            "localFileManager": {
+                "value": "Lokal Fail Meneja"
+            },
+            "language": {
+                "value": "Tokples"
+            },
+            "shortcuts": {
+                "value": "Shortcuts"
+            },
+            "changeLanguage": {
+                "value": "Kisim narapela tokples"
+            }
         }
     },
     "navTop": {
@@ -272,20 +298,6 @@
             "step6": {
                 "value": "Toktok long dispela wod"
             }
-        }
-    },
-    "sideMenu": {
-        "home": {
-            "value": "Houm"
-        },
-        "menu": {
-            "value": "Meniu"
-        },
-        "changeLanguage": {
-            "value": "Senisim Tokpeles..."
-        },
-        "fileManager": {
-            "value": "Fail Meneja"
         }
     },
     "errorMessage": {
