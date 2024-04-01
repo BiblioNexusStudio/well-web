@@ -36,6 +36,7 @@
     import { cacheBiblesForPassage } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
+    import MenuPage from '$lib/components/MenuPage.svelte';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -248,18 +249,20 @@
 </div>
 
 <div id="passage-page" class="h-full w-full">
-    <TopNavBar
-        bind:preferredBiblesModalOpen
-        {title}
-        {passage}
-        bibles={bibleData?.availableBibles ?? []}
-        tab={selectedTab}
-    />
+    {#if selectedTab !== 'menu'}
+        <TopNavBar
+            bind:preferredBiblesModalOpen
+            {title}
+            {passage}
+            bibles={bibleData?.availableBibles ?? []}
+            tab={selectedTab}
+        />
+    {/if}
     {#await baseFetchPromise}
         <FullPageSpinner />
     {:then}
         <div
-            class="absolute left-0 right-0 top-0 flex flex-col {audioPlayerShowing
+            class="absolute left-0 right-0 top-0 flex flex-col {selectedTab === 'menu' && 'hidden'} {audioPlayerShowing
                 ? 'bottom-[7.5rem]'
                 : 'bottom-16'} z-10 pt-16"
         >
@@ -346,7 +349,8 @@
         </div>
         {#if objectKeys(multiClipAudioStates).length}
             <div
-                class="fixed bottom-20 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {!audioPlayerShowing &&
+                class="fixed bottom-20 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {(!audioPlayerShowing ||
+                    selectedTab === 'menu') &&
                     'hidden'}"
             >
                 <AudioPlayer {multiClipAudioStates} currentClipKey={audioPlayerKey} />
@@ -355,4 +359,7 @@
     {:catch}
         <ErrorMessage />
     {/await}
+    {#if selectedTab === 'menu'}
+        <MenuPage />
+    {/if}
 </div>

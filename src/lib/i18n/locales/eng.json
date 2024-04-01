@@ -263,6 +263,32 @@
                     "_context": "Label for the resources row"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "Home",
+                "_context": "Label for the home button"
+            },
+            "menu": {
+                "value": "Menu",
+                "_context": "Label for the menu button"
+            },
+            "localFileManager": {
+                "value": "Local File Manager",
+                "_context": "Label for the local file manager button"
+            },
+            "language": {
+                "value": "Language",
+                "_context": "Label for the language button"
+            },
+            "shortcuts": {
+                "value": "Shortcuts",
+                "_context": "Label for the shortcuts button"
+            },
+            "changeLanguage": {
+                "value": "Change Language",
+                "_context": "Label for the change language button"
+            }
         }
     },
     "navTop": {

@@ -263,6 +263,26 @@
                     "_context": "Символ для строки ресурсов"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "Домой"
+            },
+            "menu": {
+                "value": "Меню"
+            },
+            "localFileManager": {
+                "value": "Файловый менеджер"
+            },
+            "language": {
+                "value": "Язык"
+            },
+            "shortcuts": {
+                "value": "Ярлыки"
+            },
+            "changeLanguage": {
+                "value": "Изменить язык"
+            }
         }
     },
     "navTop": {

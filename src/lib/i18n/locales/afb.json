@@ -205,6 +205,26 @@
                     "value": "الموارد"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "الرئيسية"
+            },
+            "menu": {
+                "value": "القائمة"
+            },
+            "localFileManager": {
+                "value": "مدير الملفات المحلي"
+            },
+            "language": {
+                "value": "اللغة"
+            },
+            "shortcuts": {
+                "value": "اختصارات"
+            },
+            "changeLanguage": {
+                "value": "تغيير اللغة"
+            }
         }
     },
     "navTop": {

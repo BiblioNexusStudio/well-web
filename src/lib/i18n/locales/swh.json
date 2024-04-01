@@ -263,6 +263,26 @@
                     "_context": "Weka lebo kwa safu mlalo ya rasilimali"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "Nyumbani"
+            },
+            "menu": {
+                "value": "Menyu"
+            },
+            "localFileManager": {
+                "value": "Kidhibiti Faili cha mtaa"
+            },
+            "language": {
+                "value": "Lugha"
+            },
+            "shortcuts": {
+                "value": "Vidokezo"
+            },
+            "changeLanguage": {
+                "value": "Badilisha Lugha"
+            }
         }
     },
     "navTop": {

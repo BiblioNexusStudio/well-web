@@ -205,6 +205,26 @@
                     "value": "संसाधन"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "घर"
+            },
+            "menu": {
+                "value": "मेनू"
+            },
+            "localFileManager": {
+                "value": "स्थानीय फ़ाइल प्रबंधक"
+            },
+            "language": {
+                "value": "भाषा"
+            },
+            "shortcuts": {
+                "value": "शॉर्टकट्स"
+            },
+            "changeLanguage": {
+                "value": "भाषा बदलें"
+            }
         }
     },
     "navTop": {

@@ -205,6 +205,26 @@
                     "value": "Risoses"
                 }
             }
+        },
+        "menu": {
+            "home": {
+                "value": "Houm"
+            },
+            "menu": {
+                "value": "Meniu"
+            },
+            "localFileManager": {
+                "value": "Lokal Fail Meneja"
+            },
+            "language": {
+                "value": "Tokples"
+            },
+            "shortcuts": {
+                "value": "Shortcuts"
+            },
+            "changeLanguage": {
+                "value": "Kisim narapela tokples"
+            }
         }
     },
     "navTop": {
