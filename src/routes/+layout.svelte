@@ -13,6 +13,7 @@
     import type { LayoutData } from './$types';
     import { _ as translate } from 'svelte-i18n';
     import { currentLanguageDirection } from '$lib/stores/language.store';
+    import { goto } from '$app/navigation';
 
     $: {
         document.dir = $currentLanguageDirection;
@@ -41,6 +42,12 @@
         });
 
         return unsubscribe;
+    });
+
+    onMount(() => {
+        if (localStorage.getItem('bible-well-language-code-set') !== 'true') {
+            goto('/select-language');
+        }
     });
 
     function onError(event: Event) {

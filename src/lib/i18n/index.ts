@@ -6,7 +6,7 @@ register('fra', () => import('./locales/fra.json'));
 register('rus', () => import('./locales/rus.json'));
 register('tpi', () => import('./locales/tpi.json'));
 register('swh', () => import('./locales/swh.json'));
-register('afb', () => import('./locales/afb.json'));
+register('arb', () => import('./locales/arb.json'));
 
 export async function init(currentLanguageCode: string | undefined) {
     locale.set(currentLanguageCode);

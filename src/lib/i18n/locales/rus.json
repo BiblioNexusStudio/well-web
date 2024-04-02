@@ -283,6 +283,17 @@
             "changeLanguage": {
                 "value": "Изменить язык"
             }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "Добро пожаловать"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "Выберите ваш предпочтительный язык"
+            },
+            "next": {
+                "value": "Далее"
+            }
         }
     },
     "navTop": {

@@ -225,6 +225,17 @@
             "changeLanguage": {
                 "value": "भाषा बदलें"
             }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "आपका स्वागत है"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "अपनी पसंदीदा भाषा चुनें"
+            },
+            "next": {
+                "value": "आगे"
+            }
         }
     },
     "navTop": {

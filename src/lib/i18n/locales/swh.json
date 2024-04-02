@@ -283,6 +283,17 @@
             "changeLanguage": {
                 "value": "Badilisha Lugha"
             }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "Karibu"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "Chagua lugha yako unayopendelea"
+            },
+            "next": {
+                "value": "Ijayo"
+            }
         }
     },
     "navTop": {
