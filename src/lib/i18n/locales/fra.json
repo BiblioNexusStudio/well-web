@@ -225,6 +225,17 @@
             "changeLanguage": {
                 "value": "Changer de Langue"
             }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "Bienvenue"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "Choisissez votre langue préférée"
+            },
+            "next": {
+                "value": "Suivant"
+            }
         }
     },
     "navTop": {

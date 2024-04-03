@@ -16,7 +16,7 @@
     <div class="mb-6 flex flex-col px-6">
         <div class="flex flex-col text-[#344054]">
             <span class="mb-2 text-xs font-bold">{$translate('page.menu.language.value')}</span>
-            <button on:click={() => goto('/')} class="btn btn-outline border-[#EAECF0] text-[#344054]"
+            <button on:click={() => goto('/select-language')} class="btn btn-outline border-[#EAECF0] text-[#344054]"
                 ><LanguageIcon />{$translate('page.menu.changeLanguage.value')}</button
             >
         </div>

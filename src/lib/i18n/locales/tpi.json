@@ -225,6 +225,17 @@
             "changeLanguage": {
                 "value": "Kisim narapela tokples"
             }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "Wanem"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "Chusim tokples bilong yu"
+            },
+            "next": {
+                "value": "Next"
+            }
         }
     },
     "navTop": {

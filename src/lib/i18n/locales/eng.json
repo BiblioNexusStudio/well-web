@@ -289,6 +289,20 @@
                 "value": "Change Language",
                 "_context": "Label for the change language button"
             }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "Welcome",
+                "_context": "Title for the select language page"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "Choose your preferred language",
+                "_context": "Placeholder text for the sub title"
+            },
+            "next": {
+                "value": "Next",
+                "_context": "Label for next button"
+            }
         }
     },
     "navTop": {
