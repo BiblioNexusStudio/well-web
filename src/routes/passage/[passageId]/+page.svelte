@@ -36,7 +36,18 @@
     import { cacheBiblesForPassage } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
-    import MenuPage from '$lib/components/MenuPage.svelte';
+    import MainMenu from '$lib/components/MainMenu.svelte';
+    import { currentGuide, guideResources, setCurrentGuide } from '$lib/stores/parent-resource.store';
+    import {
+        passagePageMenusObject,
+        openMainMenu,
+        openGuideMenu,
+        closeAllPassagePageMenus,
+    } from '$lib/stores/passage-page.store';
+    import GuideMenu from '$lib/components/GuideMenu.svelte';
+    import { onMount } from 'svelte';
+    import { browser } from '$app/environment';
+    import GuidePane from '$lib/components/GuidePane.svelte';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -57,7 +68,9 @@
     let topOfStep: HTMLElement | null = null;
     let selectedTab: PassagePageTab = 'guide';
     let isShowingResourcePane = false;
+    let isShowingGuidePane = false;
     let resourcePane: CupertinoPane;
+    let guidePane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let bibleSelectionScroll: number | undefined;
     let baseFetchPromise: Promise<void> | undefined;
@@ -204,13 +217,21 @@
         }
     }
 
+    function showOrDismissGuidePane(show: boolean) {
+        if (show) {
+            guidePane?.present({ animate: true });
+        } else {
+            guidePane?.hide();
+        }
+    }
+
     function navbarTitle(
         resourceData: ResourceData | null,
         currentBible: FrontendBibleBook | undefined,
         selectedTab: PassagePageTab,
         selectedStepNumber: number
     ) {
-        if (selectedTab === 'bible') {
+        if (selectedTab === 'bible' || selectedTab === 'guide') {
             if (resourceData?.cbbterText?.steps?.length && resourceData?.title) {
                 return resourceData?.title;
             } else {
@@ -225,11 +246,26 @@
         }
     }
     $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber);
+    $: selectedTab === 'mainMenu' ? openMainMenu() : closeAllPassagePageMenus();
 
     $: showOrDismissResourcePane(isShowingResourcePane);
+    $: showOrDismissGuidePane(isShowingGuidePane);
+
+    onMount(() => {
+        if (!$currentGuide && browser) {
+            const shortName = localStorage.getItem('bibleWellCurrentGuide');
+
+            if (shortName) {
+                setCurrentGuide($guideResources.find((guide) => guide.shortName === shortName));
+            } else {
+                openGuideMenu();
+            }
+        }
+    });
 </script>
 
 <ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={resourceData?.additionalResources} />
+<GuidePane bind:guidePane bind:isShowing={isShowingGuidePane} />
 
 <div class="btm-nav z-40 h-20 border-t">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
@@ -243,28 +279,29 @@
             <LibraryIcon />
         </NavMenuTabItem>
     {/if}
-    <NavMenuTabItem bind:selectedTab tabName="menu" label={$translate('page.passage.nav.menu.value')}>
+    <NavMenuTabItem bind:selectedTab tabName="mainMenu" label={$translate('page.passage.nav.menu.value')}>
         <MenuIcon />
     </NavMenuTabItem>
 </div>
 
 <div id="passage-page" class="h-full w-full">
-    {#if selectedTab !== 'menu'}
+    {#if Object.values($passagePageMenusObject).every((menu) => !menu)}
         <TopNavBar
             bind:preferredBiblesModalOpen
             {title}
             {passage}
             bibles={bibleData?.availableBibles ?? []}
             tab={selectedTab}
+            guideShortName={$currentGuide?.shortName ?? ''}
         />
     {/if}
     {#await baseFetchPromise}
         <FullPageSpinner />
     {:then}
         <div
-            class="absolute left-0 right-0 top-0 flex flex-col {selectedTab === 'menu' && 'hidden'} {audioPlayerShowing
-                ? 'bottom-[7.5rem]'
-                : 'bottom-16'} z-10 pt-16"
+            class="absolute left-0 right-0 top-16 flex flex-col {Object.values($passagePageMenusObject).some(
+                (menu) => menu
+            ) && 'hidden'} {audioPlayerShowing ? 'bottom-[7.5rem]' : 'bottom-16'}"
         >
             {#if selectedBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
                 <div class="px-4 pb-4 {selectedTab !== 'bible' && 'hidden'}">
@@ -350,7 +387,7 @@
         {#if objectKeys(multiClipAudioStates).length}
             <div
                 class="fixed bottom-20 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {(!audioPlayerShowing ||
-                    selectedTab === 'menu') &&
+                    Object.values($passagePageMenusObject).some((menu) => menu)) &&
                     'hidden'}"
             >
                 <AudioPlayer {multiClipAudioStates} currentClipKey={audioPlayerKey} />
@@ -359,7 +396,10 @@
     {:catch}
         <ErrorMessage />
     {/await}
-    {#if selectedTab === 'menu'}
-        <MenuPage />
+    {#if $passagePageMenusObject.showMainMenu}
+        <MainMenu />
+    {/if}
+    {#if $passagePageMenusObject.showGuideMenu}
+        <GuideMenu bind:showGuideMenu={isShowingGuidePane} />
     {/if}
 </div>

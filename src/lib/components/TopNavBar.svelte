@@ -10,6 +10,7 @@
     import type { FrontendBibleBook } from '$lib/types/bible-text-content';
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
     import type { PassagePageTab } from '../../routes/passage/[passageId]/data-fetchers';
+    import { openGuideMenu, openPassageMenu } from '$lib/stores/passage-page.store';
 
     export let title = '';
     export let passage: BasePassage | null = null;
@@ -17,6 +18,7 @@
     let recordingModalOpen = false;
     export let preferredBiblesModalOpen = false;
     export let tab: PassagePageTab | null = null;
+    export let guideShortName = '';
 
     function handleWindowClick(event: MouseEvent) {
         const openDetails = document.querySelector('.dropdown[open]');
@@ -36,7 +38,9 @@
     <AddAudioRecordingModal bind:open={recordingModalOpen} {passage} />
 {/if}
 <div class="navbar w-full">
-    <div class="semi-bold line-clamp-1 flex-1 break-all px-2 text-lg">{title}</div>
+    {#if tab !== 'guide'}
+        <div class="semi-bold line-clamp-1 flex-1 break-all px-2 text-lg">{title}</div>
+    {/if}
     {#if passage && tab === 'bible' && bibles.length}
         <div class="flex-none">
             <details bind:open={preferredBiblesModalOpen} class="dropdown md:dropdown-end">
@@ -51,7 +55,7 @@
             </details>
         </div>
     {/if}
-    {#if passage && $featureFlags.audioRecording}
+    {#if passage && $featureFlags.audioRecording && tab !== 'guide'}
         <div class="flex-none">
             <details class="autoclose dropdown dropdown-end">
                 <summary class="btn btn-link btn-active text-primary">
@@ -66,6 +70,22 @@
                     </li>
                 </ul>
             </details>
+        </div>
+    {/if}
+    {#if tab === 'guide'}
+        <div class="ms-2 flex-none">
+            <button
+                on:click={openPassageMenu}
+                class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+            >
+                {title}
+            </button>
+            <button
+                on:click={openGuideMenu}
+                class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+            >
+                {guideShortName}
+            </button>
         </div>
     {/if}
 </div>

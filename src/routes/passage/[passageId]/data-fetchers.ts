@@ -26,7 +26,7 @@ import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
 import { passageDetailsByIdAndLanguage } from '$lib/api-endpoints';
 
-export type PassagePageTab = 'bible' | 'guide' | 'menu';
+export type PassagePageTab = 'bible' | 'guide' | 'mainMenu' | 'guideMenu';
 
 export async function fetchBibleContent(passage: BasePassage, bible: FrontendBibleBook) {
     if (!bible.bookMetadata) return null;
@@ -239,7 +239,6 @@ export async function fetchResourceData(passage: BasePassage) {
         // data not cached
         log.exception(error as Error);
     }
-
     if (passageWithResources) {
         audio = await getCbbterAudioForPassage(passageWithResources);
         text = await getCbbterTextForPassage(passageWithResources);
