@@ -41,13 +41,14 @@
     import {
         passagePageMenusObject,
         openMainMenu,
-        openGuideMenu,
         closeAllPassagePageMenus,
+        openLibraryMenu,
     } from '$lib/stores/passage-page.store';
     import GuideMenu from '$lib/components/GuideMenu.svelte';
     import { onMount } from 'svelte';
-    import { browser } from '$app/environment';
     import GuidePane from '$lib/components/GuidePane.svelte';
+    import LibraryMenu from '$lib/components/LibraryMenu.svelte';
+    import PassageMenu from '$lib/components/PassageMenu.svelte';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -245,22 +246,34 @@
             return '';
         }
     }
+
+    function handleSelectedTabMenu(tab: string) {
+        if (tab === 'libraryMenu') {
+            openLibraryMenu();
+        } else if (tab === 'mainMenu') {
+            openMainMenu();
+        } else {
+            closeAllPassagePageMenus();
+        }
+    }
+
     $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber);
-    $: selectedTab === 'mainMenu' ? openMainMenu() : closeAllPassagePageMenus();
+    $: handleSelectedTabMenu(selectedTab);
 
     $: showOrDismissResourcePane(isShowingResourcePane);
     $: showOrDismissGuidePane(isShowingGuidePane);
 
     onMount(() => {
-        if (!$currentGuide && browser) {
-            const shortName = localStorage.getItem('bibleWellCurrentGuide');
+        setCurrentGuide($guideResources.find((guide) => guide.shortName === 'CBBTER'));
+        // if (!$currentGuide && browser) {
+        //     const shortName = localStorage.getItem('bibleWellCurrentGuide');
 
-            if (shortName) {
-                setCurrentGuide($guideResources.find((guide) => guide.shortName === shortName));
-            } else {
-                openGuideMenu();
-            }
-        }
+        //     if (shortName) {
+        //         setCurrentGuide($guideResources.find((guide) => guide.shortName === shortName));
+        //     } else {
+        //         openGuideMenu();
+        //     }
+        // }
     });
 </script>
 
@@ -275,7 +288,12 @@
         <CompassIcon />
     </NavMenuTabItem>
     {#if resourceData?.additionalResources?.length}
-        <NavMenuTabItem bind:isSelected={isShowingResourcePane} label={$translate('page.passage.nav.library.value')}>
+        <NavMenuTabItem
+            bind:selectedTab
+            tabName="libraryMenu"
+            bind:isSelected={isShowingResourcePane}
+            label={$translate('page.passage.nav.library.value')}
+        >
             <LibraryIcon />
         </NavMenuTabItem>
     {/if}
@@ -401,5 +419,11 @@
     {/if}
     {#if $passagePageMenusObject.showGuideMenu}
         <GuideMenu bind:showGuideMenu={isShowingGuidePane} />
+    {/if}
+    {#if $passagePageMenusObject.showLibraryMenu}
+        <LibraryMenu />
+    {/if}
+    {#if $passagePageMenusObject.showPassageMenu}
+        <PassageMenu />
     {/if}
 </div>
