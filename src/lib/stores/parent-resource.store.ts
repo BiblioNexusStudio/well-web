@@ -1,4 +1,4 @@
-import { derived, writable } from 'svelte/store';
+import { derived, writable, get } from 'svelte/store';
 import type { ApiParentResource } from '$lib/types/resource';
 import { groupBy } from '$lib/utils/array';
 import { browser } from '$app/environment';
@@ -20,13 +20,7 @@ export const guideResources = derived(parentResources, ($parentResources) =>
 const locallyStoredGuide: ApiParentResource | undefined = (() => {
     const localGuideShortName = browser && localStorage.getItem('bibleWellCurrentGuide');
     if (localGuideShortName) {
-        let foundResource: ApiParentResource | undefined;
-
-        guideResources.subscribe((guideResources) => {
-            foundResource = guideResources.find((r) => r.shortName === localGuideShortName);
-        });
-
-        return foundResource;
+        return get(guideResources).find((r) => r.shortName === localGuideShortName);
     }
     return undefined;
 })();
