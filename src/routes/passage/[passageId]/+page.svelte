@@ -39,7 +39,8 @@
     import MainMenu from '$lib/components/MainMenu.svelte';
     import { currentGuide } from '$lib/stores/parent-resource.store';
     import {
-        passagePageMenusObject,
+        PassagePageMenuEnum,
+        passagePageShownMenu,
         openMainMenu,
         closeAllPassagePageMenus,
         openLibraryMenu,
@@ -297,7 +298,7 @@
 </div>
 
 <div id="passage-page" class="h-full w-full">
-    {#if Object.values($passagePageMenusObject).every((menu) => !menu)}
+    {#if $passagePageShownMenu === null}
         <TopNavBar
             bind:preferredBiblesModalOpen
             {title}
@@ -311,9 +312,8 @@
         <FullPageSpinner />
     {:then}
         <div
-            class="absolute left-0 right-0 top-16 flex flex-col {Object.values($passagePageMenusObject).some(
-                (menu) => menu
-            ) && 'hidden'} {audioPlayerShowing ? 'bottom-[7.5rem]' : 'bottom-16'}"
+            class="absolute left-0 right-0 top-16 flex flex-col {$passagePageShownMenu !== null &&
+                'hidden'} {audioPlayerShowing ? 'bottom-[7.5rem]' : 'bottom-16'}"
         >
             {#if selectedBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
                 <div class="px-4 pb-4 {selectedTab !== 'bible' && 'hidden'}">
@@ -399,7 +399,7 @@
         {#if objectKeys(multiClipAudioStates).length}
             <div
                 class="fixed bottom-20 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {(!audioPlayerShowing ||
-                    Object.values($passagePageMenusObject).some((menu) => menu)) &&
+                    $passagePageShownMenu !== null) &&
                     'hidden'}"
             >
                 <AudioPlayer {multiClipAudioStates} currentClipKey={audioPlayerKey} />
@@ -408,16 +408,16 @@
     {:catch}
         <ErrorMessage />
     {/await}
-    {#if $passagePageMenusObject.showMainMenu}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.main}
         <MainMenu />
     {/if}
-    {#if $passagePageMenusObject.showGuideMenu}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.guide}
         <GuideMenu bind:showGuideMenu={isShowingGuidePane} />
     {/if}
-    {#if $passagePageMenusObject.showLibraryMenu}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.library}
         <LibraryMenu />
     {/if}
-    {#if $passagePageMenusObject.showPassageMenu}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.passage}
         <PassageMenu />
     {/if}
 </div>
