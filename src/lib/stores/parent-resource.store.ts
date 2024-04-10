@@ -17,7 +17,21 @@ export const guideResources = derived(parentResources, ($parentResources) =>
     $parentResources.filter((r) => r.resourceType === 'Guide')
 );
 
-export const currentGuide = writable<ApiParentResource | undefined>(undefined);
+const locallyStoredGuide: ApiParentResource | undefined = (() => {
+    const localGuideShortName = browser && localStorage.getItem('bibleWellCurrentGuide');
+    if (localGuideShortName) {
+        let foundResource: ApiParentResource | undefined;
+
+        guideResources.subscribe((guideResources) => {
+            foundResource = guideResources.find((r) => r.shortName === localGuideShortName);
+        });
+
+        return foundResource;
+    }
+    return undefined;
+})();
+
+export const currentGuide = writable<ApiParentResource | undefined>(locallyStoredGuide);
 
 export function setCurrentGuide(guide: ApiParentResource | undefined) {
     if (guide) {
