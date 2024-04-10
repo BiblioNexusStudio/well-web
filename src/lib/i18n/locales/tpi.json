@@ -246,6 +246,9 @@
             },
             "selectGuide": {
                 "value": "Selektim Gaid"
+            },
+            "noGuides": {
+                "value": "Nogat Gaid"
             }
         }
     },

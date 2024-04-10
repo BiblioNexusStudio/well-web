@@ -316,6 +316,9 @@
             "selectGuide": {
                 "value": "Select guide",
                 "_context": "Label for the dropdown"
+            },
+            "noGuides": {
+                "value": "No guides available"
             }
         }
     },

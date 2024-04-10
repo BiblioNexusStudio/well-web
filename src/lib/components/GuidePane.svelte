@@ -52,5 +52,8 @@
                 <span class="text-sm text-[#98A2B3]">{guideResource.shortName}</span>
             </button>
         {/each}
+        {#if $guideResources.length === 0}
+            <h3 class="my-2 font-bold">{$translate('page.guideMenu.noGuides.value')}</h3>
+        {/if}
     </div>
 </div>
