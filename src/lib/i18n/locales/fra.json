@@ -236,6 +236,17 @@
             "next": {
                 "value": "Suivant"
             }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Guides de Traduction"
+            },
+            "chooseGuide": {
+                "value": "Choisir un Guide"
+            },
+            "selectGuide": {
+                "value": "Sélectionner un Guide"
+            }
         }
     },
     "navTop": {

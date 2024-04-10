@@ -236,6 +236,17 @@
             "next": {
                 "value": "आगे"
             }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "अनुवाद मार्गदर्शिकाएँ"
+            },
+            "chooseGuide": {
+                "value": "मार्गदर्शिका चुनें"
+            },
+            "selectGuide": {
+                "value": "मार्गदर्शिका चुनें"
+            }
         }
     },
     "navTop": {

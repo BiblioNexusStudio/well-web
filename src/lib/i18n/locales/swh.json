@@ -294,6 +294,17 @@
             "next": {
                 "value": "Ijayo"
             }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Mwongozo wa Tafsiri"
+            },
+            "chooseGuide": {
+                "value": "Chagua Mwongozo"
+            },
+            "selectGuide": {
+                "value": "Chagua Mwongozo"
+            }
         }
     },
     "navTop": {

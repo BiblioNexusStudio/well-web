@@ -37,12 +37,14 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
+    import { browser } from '$app/environment';
     import { currentGuide, guideResources, setCurrentGuide } from '$lib/stores/parent-resource.store';
     import {
         passagePageMenusObject,
         openMainMenu,
         closeAllPassagePageMenus,
         openLibraryMenu,
+        openGuideMenu,
     } from '$lib/stores/passage-page.store';
     import GuideMenu from '$lib/components/GuideMenu.svelte';
     import { onMount } from 'svelte';
@@ -264,16 +266,15 @@
     $: showOrDismissGuidePane(isShowingGuidePane);
 
     onMount(() => {
-        setCurrentGuide($guideResources.find((guide) => guide.shortName === 'CBBTER'));
-        // if (!$currentGuide && browser) {
-        //     const shortName = localStorage.getItem('bibleWellCurrentGuide');
+        if (!$currentGuide && browser) {
+            const shortName = localStorage.getItem('bibleWellCurrentGuide');
 
-        //     if (shortName) {
-        //         setCurrentGuide($guideResources.find((guide) => guide.shortName === shortName));
-        //     } else {
-        //         openGuideMenu();
-        //     }
-        // }
+            if (shortName) {
+                setCurrentGuide($guideResources.find((guide) => guide.shortName === shortName));
+            } else {
+                openGuideMenu();
+            }
+        }
     });
 </script>
 

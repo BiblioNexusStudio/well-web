@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { _ as translate } from 'svelte-i18n';
+
     export let showGuideMenu: boolean;
 
     function openGuideMenu() {
@@ -12,11 +14,15 @@
             <img src="/menu-swish.png" alt="Menu Swish" class="h-auto w-full rounded-b-3xl" />
         </div>
         <div class="flex flex-col">
-            <h2 class="z-10 mb-2 text-2xl font-bold text-white">Translation Guides</h2>
-            <span class="z-10 text-sm text-white">Choose a guide</span>
+            <h2 class="z-10 mb-2 text-2xl font-bold text-white">
+                {$translate('page.guideMenu.translationGuides.value')}
+            </h2>
+            <span class="z-10 text-sm text-white">{$translate('page.guideMenu.chooseGuide.value')}</span>
         </div>
     </div>
     <div class="mb-24 flex flex-grow items-end px-4">
-        <button on:click={openGuideMenu} class="btn btn-primary w-full">Select a guide</button>
+        <button on:click={openGuideMenu} class="btn btn-primary w-full"
+            >{$translate('page.guideMenu.selectGuide.value')}</button
+        >
     </div>
 </div>

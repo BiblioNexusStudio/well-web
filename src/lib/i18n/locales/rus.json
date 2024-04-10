@@ -294,6 +294,17 @@
             "next": {
                 "value": "Далее"
             }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Руководства по переводу"
+            },
+            "chooseGuide": {
+                "value": "Выберите руководство"
+            },
+            "selectGuide": {
+                "value": "Выберите руководство"
+            }
         }
     },
     "navTop": {

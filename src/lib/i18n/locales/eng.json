@@ -303,6 +303,20 @@
                 "value": "Next",
                 "_context": "Label for next button"
             }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Translation Guides",
+                "_context": "Title for the Translation Guides section"
+            },
+            "chooseGuide": {
+                "value": "Choose a guide",
+                "_context": "Placeholder text for the dropdown"
+            },
+            "selectGuide": {
+                "value": "Select a guide",
+                "_context": "Label for the dropdown"
+            }
         }
     },
     "navTop": {

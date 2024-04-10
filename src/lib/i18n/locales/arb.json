@@ -236,6 +236,17 @@
             "next": {
                 "value": "التالي"
             }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "دليل الترجمة"
+            },
+            "chooseGuide": {
+                "value": "اختر دليل"
+            },
+            "selectGuide": {
+                "value": "اختر دليل الترجمة"
+            }
         }
     },
     "navTop": {
