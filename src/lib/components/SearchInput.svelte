@@ -2,8 +2,10 @@
     import { Icon } from 'svelte-awesome';
     import searchIcon from 'svelte-awesome/icons/search';
     import { _ as translate } from 'svelte-i18n';
+    import type { FocusEventHandler } from 'svelte/elements';
 
     export let searchQuery: string;
+    export let onFocus: FocusEventHandler<HTMLInputElement> | undefined = undefined;
 </script>
 
 <div class="relative">
@@ -19,5 +21,6 @@
         class="input input-bordered w-full ps-10"
         placeholder={$translate('components.search.placeholder.value')}
         bind:value={searchQuery}
+        on:focus={onFocus}
     />
 </div>

@@ -74,10 +74,6 @@
                 }
             },
             "resourcePane": {
-                "title": {
-                    "value": "Resources",
-                    "_context": "Title for the top of the resource pane on the passage page"
-                },
                 "basicTab": {
                     "value": "Basic",
                     "_context": "Tab with basic resources in the resource pane"

@@ -1,8 +1,5 @@
 <script lang="ts">
-    import { CupertinoPane } from 'cupertino-pane';
-    import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
-    import { trapFocus } from '$lib/utils/trap-focus';
     import type { PassageResourceContent } from '$lib/types/passage';
     import {
         MediaType,
@@ -35,6 +32,7 @@
     import { objectEntries } from '$lib/utils/typesafe-standard-lib';
     import { parentResourceNameToInfoMap } from '$lib/stores/parent-resource.store';
     import AnyResourceSection from './AnyResourceSection.svelte';
+    import SwishHeader from '$lib/components/SwishHeader.svelte';
 
     const RESOURCE_TYPE_ORDER: ParentResourceType[] = [
         ParentResourceType.Images,
@@ -43,13 +41,12 @@
         ParentResourceType.Dictionary,
     ];
 
-    export let resourcePane: CupertinoPane;
-    export let isShowing: boolean;
     export let resources: PassageResourceContent[] | undefined;
     export let activeTab: ResourcePaneTab = 'basic';
     export let isLoading = true;
 
     let searchQuery: string = '';
+    let hasQuery: boolean = false;
     let previousResourceIds = (resources ?? []).map(({ contentId }) => contentId);
 
     let hasBasicResources = false;
@@ -68,38 +65,12 @@
     $: prepareResources(resources || []);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(allResources, 'displayName', searchQuery).length;
+    $: hasQuery = searchQuery.length > 0;
+    console.log(`filteredResourceCount ${filteredResourceCount}`);
 
     let currentFullscreenMediaResourceIndex: number | null = null;
     let currentFullscreenTextResource: TextResource | null = null;
     let currentFullscreenTextParentResourceName: string | null;
-
-    onMount(() => {
-        const bottomBarHeight = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4;
-        resourcePane = new CupertinoPane('#resource-pane', {
-            parentElement: '#passage-page',
-            buttonDestroy: false,
-            bottomClose: true,
-            fastSwipeClose: true,
-            initialBreak: 'top',
-            breaks: {
-                top: {
-                    enabled: true,
-                    height: window.innerHeight - 50 - bottomBarHeight,
-                },
-                middle: { enabled: false },
-                bottom: { enabled: false, height: window.screen.height - 300 },
-            },
-            lowerThanBottom: true,
-            backdrop: true,
-            backdropOpacity: 0.4,
-            simulateTouch: false,
-            bottomOffset: bottomBarHeight,
-            events: {
-                onWillDismiss: () => (isShowing = false),
-                onBackdropTap: () => (isShowing = false),
-            },
-        });
-    });
 
     function resourceSelected(resource: AnyResource) {
         if ('type' in resource) {
@@ -114,12 +85,16 @@
     }
 
     async function prepareResources(resources: PassageResourceContent[]) {
+        console.log('preparing');
         const currentResourceIds = resources.map(({ contentId }) => contentId);
-        if (JSON.stringify(previousResourceIds) === JSON.stringify(currentResourceIds)) {
+        console.log(currentResourceIds);
+        if (JSON.stringify(previousResourceIds) === JSON.stringify(currentResourceIds && allResources.length > 0)) {
+            console.log(`prepare Resources returning. isLoading: ${isLoading}`);
             return;
         }
         previousResourceIds = currentResourceIds;
         isLoading = true;
+        console.log('isLoading...');
 
         const textResources = (
             (
@@ -144,6 +119,7 @@
                 )
             ).filter(Boolean) as TextResource[]
         ).sort(resourceDisplayNameSorter);
+        console.log('textResources done');
 
         mediaResources = (
             (
@@ -177,23 +153,28 @@
                 )
                 .filter(Boolean) as ImageOrVideoResource[]
         ).sort(resourceDisplayNameSorter);
+        console.log('mediaResources done');
 
         allResources = (textResources as AnyResource[]).concat(mediaResources);
+        console.log('allResources done');
         hasBasicResources = allResources.some(
             (r) =>
                 $parentResourceNameToInfoMap[r.parentResourceName]?.complexityLevel ===
                 ParentResourceComplexityLevel.Basic
         );
+        console.log('hasBasicResources done');
         hasAdvancedResources = allResources.some(
             (r) =>
                 $parentResourceNameToInfoMap[r.parentResourceName]?.complexityLevel ===
                 ParentResourceComplexityLevel.Advanced
         );
+        console.log('hasAdvancedResources done');
         groupedResources = groupBy(
             allResources,
             (r) => r.parentResourceName,
             (v) => v
         );
+        console.log('groupedResources done');
         sortedResourceGroups = (
             objectEntries(groupedResources)
                 .map(([parentResourceName, resources]) => {
@@ -206,25 +187,12 @@
                 RESOURCE_TYPE_ORDER.indexOf(b.parentResource.resourceType)
             );
         });
+        console.log('sortedResourceGroups done');
         isLoading = false;
     }
 </script>
 
-<svelte:window
-    on:keydown={(key) => {
-        if (key.key === 'Escape') {
-            if (currentFullscreenMediaResourceIndex !== null) {
-                currentFullscreenMediaResourceIndex = null;
-            } else if (currentFullscreenTextResource !== null) {
-                currentFullscreenTextResource = null;
-            } else if (currentFullscreenTextParentResourceName !== null) {
-                currentFullscreenTextParentResourceName = null;
-            } else if (isShowing) {
-                isShowing = false;
-            }
-        }
-    }}
-/>
+<SwishHeader title="Library" subtitle="Find the resource you need" bgcolor="bg-[#439184]" />
 
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />
@@ -235,17 +203,15 @@
     dismissParentResourceFullscreen={() => (currentFullscreenTextParentResourceName = null)}
 />
 
-<div id="resource-pane" use:trapFocus={isShowing}>
-    <div class="flex h-full flex-col px-4">
-        <div class="pb-4 text-lg font-semibold text-base-content">
-            {$translate('page.passage.resourcePane.title.value')}
+<div class="flex h-full flex-col px-4">
+    {#if isLoading}
+        <FullPageSpinner />
+    {:else}
+        <div class="mb-8">
+            <SearchInput bind:searchQuery />
         </div>
-        {#if isLoading}
-            <FullPageSpinner />
-        {:else}
-            <div class="mb-8">
-                <SearchInput bind:searchQuery />
-            </div>
+
+        {#if hasQuery}
             {#if activeTab === 'basic' || activeTab === 'advanced'}
                 <div class="tabs mb-6 w-full !border-b-0">
                     {#if hasBasicResources}
@@ -284,17 +250,8 @@
             {#if filteredResourceCount === 0}
                 <NoResourcesFound {searchQuery} />
             {/if}
+        {:else}
+            <div>Type in a term to search the library</div>
         {/if}
-    </div>
+    {/if}
 </div>
-
-<style lang="postcss">
-    :global(.cupertino-pane-wrapper .backdrop) {
-        z-index: 30;
-    }
-    :global(.cupertino-pane-wrapper .pane) {
-        @apply bg-primary-content;
-        z-index: 35;
-        cursor: initial !important;
-    }
-</style>

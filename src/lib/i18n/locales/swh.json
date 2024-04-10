@@ -74,10 +74,6 @@
                 }
             },
             "resourcePane": {
-                "title": {
-                    "value": "Rasilimali",
-                    "_context": "Kichwa cha sehemu ya juu ya kidirisha cha nyenzo kwenye ukurasa wa kifungu"
-                },
                 "basicTab": {
                     "value": "Msingi",
                     "_context": "Kichupo chenye rasilimali msingi kwenye kidirisha cha rasilimali"

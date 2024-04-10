@@ -58,9 +58,6 @@
                 }
             },
             "resourcePane": {
-                "title": {
-                    "value": "Ressources"
-                },
                 "basicTab": {
                     "value": "De base"
                 },
