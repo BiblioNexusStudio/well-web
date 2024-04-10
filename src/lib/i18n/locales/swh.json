@@ -294,6 +294,20 @@
             "next": {
                 "value": "Ijayo"
             }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Mwongozo wa Tafsiri"
+            },
+            "chooseGuide": {
+                "value": "Chagua Mwongozo"
+            },
+            "selectGuide": {
+                "value": "Chagua Mwongozo"
+            },
+            "noGuides": {
+                "value": "Hakuna mwongozo wa tafsiri uliopatikana kwa lugha hii."
+            }
         }
     },
     "navTop": {

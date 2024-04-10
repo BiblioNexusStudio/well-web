@@ -1,5 +1,10 @@
 import type { MediaType } from './resource';
 
+export enum PassagePageMenuType {
+    mainMenu = 'mainMenu',
+    guideMenu = 'guideMenu',
+}
+
 export interface BasePassage {
     bookCode: string;
     endChapter: number;

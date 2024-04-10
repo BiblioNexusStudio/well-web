@@ -236,6 +236,20 @@
             "next": {
                 "value": "Next"
             }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Toktok Gaid"
+            },
+            "chooseGuide": {
+                "value": "Chusim wanpela Gaid"
+            },
+            "selectGuide": {
+                "value": "Selektim Gaid"
+            },
+            "noGuides": {
+                "value": "Nogat Gaid"
+            }
         }
     },
     "navTop": {
