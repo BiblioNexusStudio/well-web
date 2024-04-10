@@ -314,7 +314,7 @@
                 "_context": "Placeholder text for the dropdown"
             },
             "selectGuide": {
-                "value": "Select a guide",
+                "value": "Select guide",
                 "_context": "Label for the dropdown"
             }
         }
