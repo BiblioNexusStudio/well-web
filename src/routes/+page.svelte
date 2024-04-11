@@ -1,25 +1,26 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import PassageForm from '$lib/components/PassageForm.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
+    import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
 </script>
 
-<section class="container mx-auto flex h-screen flex-col">
-    <div class="flex-[2]" />
-    <div class="flex flex-grow flex-col self-center">
-        <div id="bible-well-logo" class="mx-auto flex h-auto w-full max-w-xs px-6 pb-4">
+<section class="container mx-auto flex h-screen flex-col px-6">
+    <div class="flex flex-col pt-14">
+        <div id="bible-well-logo" class="flex h-auto w-full max-w-xs pb-6">
             <img class="object-contain" src="/bibleWellLogoWithText-568.png" alt="Bible Well Logo" />
         </div>
-        <h2 class="mx-auto max-w-xs pb-4 text-center text-xl font-semibold text-slate-400">
-            {$translate('page.index.subTitle.value')}
-        </h2>
-        <PassageForm />
-        <a class="mx-auto mt-6 max-w-xs text-sky-500" href="/file-manager"
+        <h2 class="text-xl font-semibold">{$translate('page.selectLanguage.welcome.value')}</h2>
+    </div>
+    <div class="flex grow flex-col pt-14">
+        <a class="btn mb-8" href="/file-manager"
             >{$isOnline
                 ? $translate('page.index.downloadResourcesForOfflineUse.value')
                 : $translate('page.index.fileManager.value')}</a
         >
+        <a class="btn mb-8" href="/select-language"><LanguageIcon />{$translate('page.menu.changeLanguage.value')}</a>
+        <a class="btn btn-primary" href="/passage/new">{$translate('page.index.getStarted.value')}</a>
     </div>
-    <div class="flex-[1]" />
-    <a class="mx-auto my-6 max-w-xs text-sky-500" href="/about">{$translate('page.index.about.value')}</a>
+    <div class="flex">
+        <a class="mx-auto my-6 max-w-xs text-sky-500" href="/about">{$translate('page.index.about.value')}</a>
+    </div>
 </section>

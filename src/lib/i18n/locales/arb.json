@@ -16,9 +16,6 @@
             "downloadResourcesForOfflineUse": {
                 "value": "هل تريد العمل بدون إنترنت؟ احصل على مزيد من المحتوى"
             },
-            "subTitle": {
-                "value": "بئر الكتاب المقدس: مغذى من قبل الخزان"
-            },
             "loading": {
                 "value": "جار التحميل"
             },
@@ -27,6 +24,9 @@
             },
             "fileManager": {
                 "value": "مدير الملفات"
+            },
+            "getStarted": {
+                "value": "ابدأ"
             }
         },
         "about": {

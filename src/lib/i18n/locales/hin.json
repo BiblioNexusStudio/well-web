@@ -16,9 +16,6 @@
             "downloadResourcesForOfflineUse": {
                 "value": "ऑफ़लाइन जा रहे हैं? और कंटेंट प्राप्त करें।"
             },
-            "subTitle": {
-                "value": "बाइबिल कुआ: अक्वाइफ़र से भरा हुआ"
-            },
             "loading": {
                 "value": "लोड हो रहा है"
             },
@@ -27,6 +24,9 @@
             },
             "fileManager": {
                 "value": "फ़ाइल प्रबंधक"
+            },
+            "getStarted": {
+                "value": "शुरू करें"
             }
         },
         "about": {
