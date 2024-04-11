@@ -16,9 +16,6 @@
             "downloadResourcesForOfflineUse": {
                 "value": "Partir hors ligne ? Obtenez plus de contenu"
             },
-            "subTitle": {
-                "value": "Puits de la Bible : Alimenté par l'Aquifère"
-            },
             "loading": {
                 "value": "chargement"
             },
@@ -27,6 +24,9 @@
             },
             "fileManager": {
                 "value": "Gestionnaire de Fichiers"
+            },
+            "getStarted": {
+                "value": "Commencer"
             }
         },
         "about": {

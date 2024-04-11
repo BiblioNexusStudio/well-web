@@ -93,6 +93,10 @@
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
 
     function fetchBase() {
+        if ($page.params.passageId === 'new') {
+            openGuideMenu();
+            return;
+        }
         passage = null;
         resourceData = null;
         bibleData = null;
