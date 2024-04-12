@@ -18,18 +18,21 @@ import {
     passageDetailsByIdAndLanguage,
     passagesByLanguageAndParentResourceEndpoint,
 } from '$lib/api-endpoints';
+import { log } from '$lib/logger';
 
 async function getBibleBookCodesToName(languageId: number | null = null) {
-    const bibleData = (await fetchFromCacheOrApi(
-        ...biblesForLanguageEndpoint(languageId || get(currentLanguageInfo)?.id)
-    )) as ApiBible[];
-    if (bibleData[0]) {
-        return bibleData[0].books.reduce(
-            (output, { displayName, bookCode }) => ({ ...output, [bookCode]: displayName }),
-            {} as Record<string, string>
-        );
-    } else {
-        return getBibleBookCodesToName(1);
+    try {
+        const bibleData = (await fetchFromCacheOrApi(
+            ...biblesForLanguageEndpoint(languageId || get(currentLanguageInfo)?.id)
+        )) as ApiBible[];
+        if (bibleData[0]) {
+            return bibleData[0].books.reduce(
+                (output, { displayName, bookCode }) => ({ ...output, [bookCode]: displayName }),
+                {} as Record<string, string>
+            );
+        }
+    } catch (error) {
+        log.exception(error as Error);
     }
 }
 
@@ -61,7 +64,9 @@ export async function fetchCbbterPassagesByBook(isOnline: boolean) {
                 return await passageIdHasCbbterAvailable(id, isOnline);
             });
             byBook.passages = passages;
-            return { ...byBook, index, bookName: bibleBookCodesToName[byBook.bookCode] };
+            return bibleBookCodesToName
+                ? { ...byBook, index, bookName: bibleBookCodesToName[byBook.bookCode] }
+                : { ...byBook, index, bookName: undefined };
         })
     ).filter(({ passages }) => passages.length > 0) as FrontendPassagesByBook[];
 
