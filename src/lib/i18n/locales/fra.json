@@ -250,6 +250,17 @@
             "noGuides": {
                 "value": "Aucun guide de traduction n'est disponible pour ce passage."
             }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "Aucune Bible n'est disponible pour cette langue."
+            },
+            "selectBible": {
+                "value": "Sélectionner une Bible"
+            },
+            "bible": {
+                "value": "Bible"
+            }
         }
     },
     "navTop": {

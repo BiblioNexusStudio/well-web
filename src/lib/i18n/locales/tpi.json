@@ -250,6 +250,17 @@
             "noGuides": {
                 "value": "Nogat Gaid"
             }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "Nogat Baibel"
+            },
+            "selectBible": {
+                "value": "Selektim Baibel"
+            },
+            "bible": {
+                "value": "Buk Tambu"
+            }
         }
     },
     "navTop": {

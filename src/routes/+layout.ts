@@ -12,6 +12,7 @@ import { browserSupported } from '$lib/utils/browser';
 import { languages } from '$lib/stores/language.store';
 import { parentResources } from '$lib/stores/parent-resource.store';
 import { biblesEndpoint, languagesEndpoint, parentResourcesEndpoint } from '$lib/api-endpoints';
+import { bibles } from '$lib/stores/bibles.store';
 
 export const ssr = false;
 
@@ -43,13 +44,14 @@ export const load: LayoutLoad = async () => {
             }
         }
 
-        const [fetchedLanguages, fetchedParentResources, _] = await Promise.all([
+        const [fetchedLanguages, fetchedParentResources, fetchedBibles] = await Promise.all([
             fetchFromCacheOrApi(...languagesEndpoint()),
             fetchFromCacheOrApi(...parentResourcesEndpoint()),
             fetchFromCacheOrApi(...biblesEndpoint()),
         ]);
         languages.set(fetchedLanguages);
         parentResources.set(fetchedParentResources);
+        bibles.set(fetchedBibles);
 
         await init(get(currentLanguageInfo)?.iso6393Code);
         await waitLocale();

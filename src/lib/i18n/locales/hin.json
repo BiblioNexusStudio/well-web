@@ -250,6 +250,17 @@
             "noGuides": {
                 "value": "कोई मार्गदर्शिका उपलब्ध नहीं है"
             }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "कोई बाइबिल उपलब्ध नहीं है"
+            },
+            "selectBible": {
+                "value": "बाइबिल चुनें"
+            },
+            "bible": {
+                "value": "बाइबिल"
+            }
         }
     },
     "navTop": {

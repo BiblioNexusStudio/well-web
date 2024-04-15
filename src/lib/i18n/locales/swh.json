@@ -307,6 +307,17 @@
             "noGuides": {
                 "value": "Hakuna mwongozo wa tafsiri uliopatikana kwa lugha hii."
             }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "Hakuna Biblia iliyopatikana kwa lugha hii."
+            },
+            "selectBible": {
+                "value": "Chagua Biblia"
+            },
+            "bible": {
+                "value": "Biblia"
+            }
         }
     },
     "navTop": {

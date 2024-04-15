@@ -250,6 +250,17 @@
             "noGuides": {
                 "value": "لا توجد دليل ترجمة متاحة"
             }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "لا توجد ترجمات متاحة"
+            },
+            "selectBible": {
+                "value": "اختر ترجمة"
+            },
+            "bible": {
+                "value": "الكتاب المقدس"
+            }
         }
     },
     "navTop": {

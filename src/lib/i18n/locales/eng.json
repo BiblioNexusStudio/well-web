@@ -320,6 +320,20 @@
             "noGuides": {
                 "value": "No guides available"
             }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "No Bibles available",
+                "_context": "Message to display when no Bibles are available"
+            },
+            "selectBible": {
+                "value": "Select a Bible",
+                "_context": "Placeholder text for the dropdown"
+            },
+            "bible": {
+                "value": "Bible",
+                "_context": "Label for the dropdown"
+            }
         }
     },
     "navTop": {
