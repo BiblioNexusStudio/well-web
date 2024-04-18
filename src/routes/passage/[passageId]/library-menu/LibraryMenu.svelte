@@ -1,12 +1,7 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import type { PassageResourceContent } from '$lib/types/passage';
-    import {
-        MediaType,
-        ParentResourceComplexityLevel,
-        ParentResourceType,
-        type ApiParentResource,
-    } from '$lib/types/resource';
+    import { MediaType, ParentResourceType, type ApiParentResource } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
@@ -16,12 +11,12 @@
         resourceDisplayNameSorter,
         resourceThumbnailApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
-    import type { AnyResource, ImageOrVideoResource, ResourcePaneTab, TextResource } from './types';
+    import type { AnyResource, ImageOrVideoResource, TextResource } from './types';
     import FullscreenMediaResource from './FullscreenMediaResource.svelte';
     import FullscreenTextResource from './FullscreenTextResource.svelte';
     import { parseTiptapJsonToHtml, parseTiptapJsonToText } from '$lib/utils/tiptap-parsers';
     import SearchInput from '$lib/components/SearchInput.svelte';
-    import { filterItemsByKeyMatchingSearchQuery, shouldSearch } from '$lib/utils/search';
+    import { filterItemsByKeyMatchingSearchQuery } from '$lib/utils/search';
     import FullscreenTextResourceSection from './FullscreenTextResourceSection.svelte';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import NoResourcesFound from './NoResourcesFound.svelte';
@@ -42,17 +37,11 @@
     ];
 
     export let resources: PassageResourceContent[] | undefined;
-    export let activeTab: ResourcePaneTab = 'basic';
     export let isLoading = true;
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
     let previousResourceIds = (resources ?? []).map(({ contentId }) => contentId);
-
-    let hasBasicResources = false;
-    let hasAdvancedResources = false;
-
-    $: activeTab = shouldSearch(searchQuery) ? 'searching' : hasBasicResources ? 'basic' : 'advanced';
 
     let allResources: AnyResource[] = [];
     let mediaResources: ImageOrVideoResource[] = [];
@@ -65,12 +54,26 @@
     $: prepareResources(resources || []);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(allResources, 'displayName', searchQuery).length;
-    $: hasQuery = searchQuery.length > 0;
-    console.log(`filteredResourceCount ${filteredResourceCount}`);
+    $: hasQuery = searchQuery != '';
 
     let currentFullscreenMediaResourceIndex: number | null = null;
     let currentFullscreenTextResource: TextResource | null = null;
     let currentFullscreenTextParentResourceName: string | null;
+
+    let visibleSwish = true;
+
+    function onHandleSearchFocus() {
+        if (!hasQuery) {
+            visibleSwish = !visibleSwish;
+        }
+    }
+
+    function resetPage(e: MouseEvent) {
+        e.stopPropagation();
+        visibleSwish = true;
+        searchQuery = '';
+        return null;
+    }
 
     function resourceSelected(resource: AnyResource) {
         if ('type' in resource) {
@@ -85,16 +88,12 @@
     }
 
     async function prepareResources(resources: PassageResourceContent[]) {
-        console.log('preparing');
         const currentResourceIds = resources.map(({ contentId }) => contentId);
-        console.log(currentResourceIds);
         if (JSON.stringify(previousResourceIds) === JSON.stringify(currentResourceIds && allResources.length > 0)) {
-            console.log(`prepare Resources returning. isLoading: ${isLoading}`);
             return;
         }
         previousResourceIds = currentResourceIds;
         isLoading = true;
-        console.log('isLoading...');
 
         const textResources = (
             (
@@ -119,7 +118,6 @@
                 )
             ).filter(Boolean) as TextResource[]
         ).sort(resourceDisplayNameSorter);
-        console.log('textResources done');
 
         mediaResources = (
             (
@@ -153,28 +151,15 @@
                 )
                 .filter(Boolean) as ImageOrVideoResource[]
         ).sort(resourceDisplayNameSorter);
-        console.log('mediaResources done');
 
         allResources = (textResources as AnyResource[]).concat(mediaResources);
-        console.log('allResources done');
-        hasBasicResources = allResources.some(
-            (r) =>
-                $parentResourceNameToInfoMap[r.parentResourceName]?.complexityLevel ===
-                ParentResourceComplexityLevel.Basic
-        );
-        console.log('hasBasicResources done');
-        hasAdvancedResources = allResources.some(
-            (r) =>
-                $parentResourceNameToInfoMap[r.parentResourceName]?.complexityLevel ===
-                ParentResourceComplexityLevel.Advanced
-        );
-        console.log('hasAdvancedResources done');
+
         groupedResources = groupBy(
             allResources,
             (r) => r.parentResourceName,
             (v) => v
         );
-        console.log('groupedResources done');
+
         sortedResourceGroups = (
             objectEntries(groupedResources)
                 .map(([parentResourceName, resources]) => {
@@ -187,12 +172,12 @@
                 RESOURCE_TYPE_ORDER.indexOf(b.parentResource.resourceType)
             );
         });
-        console.log('sortedResourceGroups done');
+
         isLoading = false;
     }
 </script>
 
-<SwishHeader title="Library" subtitle="Find the resource you need" bgcolor="bg-[#439184]" />
+<SwishHeader bind:visible={visibleSwish} title="Library" subtitle="Find the resource you need" bgcolor="bg-[#439184]" />
 
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />
@@ -203,55 +188,47 @@
     dismissParentResourceFullscreen={() => (currentFullscreenTextParentResourceName = null)}
 />
 
-<div class="flex h-full flex-col px-4">
-    {#if isLoading}
-        <FullPageSpinner />
-    {:else}
-        <div class="mb-8">
-            <SearchInput bind:searchQuery />
-        </div>
-
-        {#if hasQuery}
-            {#if activeTab === 'basic' || activeTab === 'advanced'}
-                <div class="tabs mb-6 w-full !border-b-0">
-                    {#if hasBasicResources}
-                        <button
-                            class="tab-bordered tab text-sm font-semibold {activeTab === 'basic'
-                                ? '!border-primary-focus text-primary-focus tab-active !border-b-2'
-                                : '!border-b border-b-gray-200 text-gray-500'}"
-                            on:click={() => (activeTab = 'basic')}
-                            >{$translate('page.passage.resourcePane.basicTab.value')}</button
-                        >
-                    {/if}
-                    {#if hasAdvancedResources}
-                        <button
-                            class="tab-bordered tab text-sm font-semibold {activeTab === 'advanced'
-                                ? '!border-primary-focus text-primary-focus tab-active !border-b-2'
-                                : '!border-b border-b-gray-200 text-gray-500'}"
-                            on:click={() => (activeTab = 'advanced')}
-                            >{$translate('page.passage.resourcePane.advancedTab.value')}</button
-                        >
-                    {/if}
-                    <div class="flex-grow border-b border-b-gray-200" />
-                </div>
-            {/if}
+<div class="flex flex-col px-4">
+    <div class="mb-8 flex flex-row {visibleSwish ? '-mt-12' : 'mt-4'}">
+        <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
+        {#if !visibleSwish}
             <div>
-                {#each sortedResourceGroups as { parentResource, resources }}
-                    <AnyResourceSection
-                        {activeTab}
-                        {parentResource}
-                        {resources}
-                        {searchQuery}
-                        {resourceSelected}
-                        {showParentResourceFullscreen}
-                    />
-                {/each}
+                <button on:click={(e) => resetPage(e)} type="button" class="mt-2 pl-4 font-semibold text-primary"
+                    >{$translate('page.passage.resourcePane.cancel.value')}</button
+                >
             </div>
-            {#if filteredResourceCount === 0}
-                <NoResourcesFound {searchQuery} />
-            {/if}
-        {:else}
-            <div>Type in a term to search the library</div>
         {/if}
+    </div>
+    {#if !hasQuery}
+        <div class="flex flex-grow flex-col items-center justify-items-center overflow-y-scroll">
+            <div class="mb-4 flex-shrink-0 text-sm text-neutral">
+                {$translate('page.passage.resourcePane.typeToSearch.value')}
+            </div>
+        </div>
+    {:else if isLoading}
+        <FullPageSpinner />
+    {:else if filteredResourceCount === 0}
+        <NoResourcesFound {searchQuery} />
+    {:else}
+        <div class="flex flex-col items-center justify-items-center">
+            <div class="mb-4 flex-shrink-0 text-sm text-neutral">
+                {filteredResourceCount == 1
+                    ? $translate('page.passage.resourcePane.resourceCount.singular.value')
+                    : $translate('page.passage.resourcePane.resourceCount.plural.value', {
+                          values: { count: filteredResourceCount },
+                      })}
+            </div>
+        </div>
+        <div class="pb-20">
+            {#each sortedResourceGroups as { parentResource, resources }}
+                <AnyResourceSection
+                    {parentResource}
+                    {resources}
+                    {searchQuery}
+                    {resourceSelected}
+                    {showParentResourceFullscreen}
+                />
+            {/each}
+        </div>
     {/if}
 </div>

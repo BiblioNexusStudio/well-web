@@ -58,11 +58,11 @@
                 }
             },
             "resourcePane": {
-                "basicTab": {
-                    "value": "De base"
+                "cancel": {
+                    "value": "Annuler"
                 },
-                "advancedTab": {
-                    "value": "Avancé"
+                "typeToSearch": {
+                    "value": "Tapez un terme pour effectuer une recherche dans la bibliothèque"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {

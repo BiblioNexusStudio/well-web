@@ -58,11 +58,11 @@
                 }
             },
             "resourcePane": {
-                "basicTab": {
-                    "value": "मूल"
+                "cancel": {
+                    "value": "रद्द करें"
                 },
-                "advancedTab": {
-                    "value": "उन्नत"
+                "typeToSearch": {
+                    "value": "लाइब्रेरी खोजने के लिए एक शब्द टाइप करें"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {

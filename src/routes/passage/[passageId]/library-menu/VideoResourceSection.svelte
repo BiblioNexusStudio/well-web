@@ -6,12 +6,14 @@
         shouldSearch,
     } from '$lib/utils/search';
     import { formatSecondsToMins } from '$lib/utils/time';
+    import ResourceSectionHeader from './ResourceSectionHeader.svelte';
     import type { AnyResource, ImageOrVideoResource } from './types';
     import { Icon } from 'svelte-awesome';
     import play from 'svelte-awesome/icons/play';
     import { _ as translate } from 'svelte-i18n';
 
     export let title: string | null;
+    export let subtitle: string | null;
     export let resources: AnyResource[];
     export let resourceSelected: (video: ImageOrVideoResource) => void;
     export let searchQuery: string;
@@ -29,9 +31,7 @@
 </script>
 
 {#if videoResources.length > 0}
-    <div class="text-md pb-2 font-semibold text-base-content {filteredResources.length > 0 ? 'visible' : 'hidden'}">
-        {title}
-    </div>
+    <ResourceSectionHeader isVisible={filteredResources.length > 0} {title} {subtitle} />
     <div bind:this={carousel} class="carousel w-full pb-6 {filteredResources.length > 0 ? 'visible' : 'hidden'}">
         {#each videoResources as video}
             <button
@@ -69,4 +69,7 @@
             </button>
         {/each}
     </div>
+    {#if filteredResources.length > 0}
+        <hr />
+    {/if}
 {/if}

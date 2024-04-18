@@ -5,9 +5,11 @@
         htmlWithHighlightedSearchString,
         shouldSearch,
     } from '$lib/utils/search';
+    import ResourceSectionHeader from './ResourceSectionHeader.svelte';
     import type { AnyResource, ImageOrVideoResource } from './types';
 
     export let title: string | null;
+    export let subtitle: string | null;
     export let resources: AnyResource[];
     export let resourceSelected: (image: ImageOrVideoResource) => void;
     export let searchQuery: string;
@@ -25,13 +27,11 @@
 </script>
 
 {#if imageResources.length > 0}
-    <div class="text-md pb-2 font-semibold text-base-content {filteredResources.length > 0 ? 'visible' : 'hidden'}">
-        {title}
-    </div>
+    <ResourceSectionHeader isVisible={filteredResources.length > 0} {title} {subtitle} />
     <div bind:this={carousel} class="carousel w-full pb-6 {filteredResources.length > 0 ? 'visible' : 'hidden'}">
         {#each imageResources as image}
             <button
-                class="carousel-item me-2 w-32 flex-col {filteredResources.includes(image) ? 'visible' : 'hidden'}"
+                class="carousel-item me-8 w-32 flex-col {filteredResources.includes(image) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(image)}
             >
                 <img
@@ -40,10 +40,13 @@
                     alt={image.displayName}
                     crossorigin="anonymous"
                 />
-                <span class="line-clamp-1 break-all text-sm text-neutral"
+                <span class="text-md line-clamp-1 break-all font-semibold text-blue-title"
                     >{@html htmlWithHighlightedSearchString(image.displayName, searchQuery)}</span
                 >
             </button>
         {/each}
     </div>
+    {#if filteredResources.length > 0}
+        <hr />
+    {/if}
 {/if}

@@ -8,7 +8,7 @@
     export let onFocus: FocusEventHandler<HTMLInputElement> | undefined = undefined;
 </script>
 
-<div class="relative">
+<div class="relative grow">
     <div class="absolute left-4 flex h-full items-center">
         <Icon class="stroke-base-content" data={searchIcon} />
     </div>

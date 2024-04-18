@@ -74,13 +74,13 @@
                 }
             },
             "resourcePane": {
-                "basicTab": {
-                    "value": "Basic",
-                    "_context": "Tab with basic resources in the resource pane"
+                "cancel": {
+                    "value": "Cancel",
+                    "_context": "Button to cancel search"
                 },
-                "advancedTab": {
-                    "value": "Advanced",
-                    "_context": "Tab with advanced resources in the resource pane"
+                "typeToSearch": {
+                    "value": "Type in a term to search the library",
+                    "_context": "Label for searching the library"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {
