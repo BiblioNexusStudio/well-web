@@ -334,6 +334,28 @@
                 "value": "Bible",
                 "_context": "Label for the dropdown"
             }
+        },
+        "BookPassageSelectorMenu": {
+            "loading": {
+                "value": "Loading",
+                "_context": "Message to display when the book and passage selectors are loading"
+            },
+            "stepOneTitle": {
+                "value": "Select a Book",
+                "_context": "Title for the first step in the book and passage selector"
+            },
+            "stepTwoTitle": {
+                "value": "Select a Passage",
+                "_context": "Title for the second step in the book and passage selector"
+            },
+            "noBooks": {
+                "value": "No Books available",
+                "_context": "Message to display when no Books are available"
+            },
+            "noPassages": {
+                "value": "No Passages available",
+                "_context": "Message to display when no Passages are available"
+            }
         }
     },
     "navTop": {

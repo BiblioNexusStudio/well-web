@@ -261,6 +261,23 @@
             "bible": {
                 "value": "Bible"
             }
+        },
+        "BookPassageSelectorMenu": {
+            "loading": {
+                "value": "Chargement..."
+            },
+            "stepOneTitle": {
+                "value": "Sélectionner un Livre"
+            },
+            "stepTwoTitle": {
+                "value": "Sélectionner un Passage"
+            },
+            "noBooks": {
+                "value": "Aucun livre trouvé"
+            },
+            "noPassages": {
+                "value": "Aucun passage trouvé"
+            }
         }
     },
     "navTop": {

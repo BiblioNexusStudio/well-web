@@ -1,4 +1,4 @@
-import { derived, writable, get } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 import type { ApiParentResource } from '$lib/types/resource';
 import { groupBy } from '$lib/utils/array';
 import { browser } from '$app/environment';
@@ -17,19 +17,18 @@ export const guideResources = derived(parentResources, ($parentResources) =>
     $parentResources.filter((r) => r.resourceType === 'Guide')
 );
 
-const locallyStoredGuide: ApiParentResource | undefined = (() => {
-    const localGuideShortName = browser && localStorage.getItem('bibleWellCurrentGuide');
-    if (localGuideShortName) {
-        return get(guideResources).find((r) => r.shortName === localGuideShortName);
-    }
-    return undefined;
-})();
+const bibleWellCurrentGuide = 'LOCAL_BIBLE_WELL_CURRENT_GUIDE';
 
-export const currentGuide = writable<ApiParentResource | undefined>(locallyStoredGuide);
+export const locallyStoredGuide = derived(guideResources, ($guideResources) => {
+    const localGuideShortName = browser && localStorage.getItem(bibleWellCurrentGuide);
+    return $guideResources.find((r) => r.shortName === localGuideShortName);
+});
+
+export const currentGuide = writable<ApiParentResource | undefined>(undefined);
 
 export function setCurrentGuide(guide: ApiParentResource | undefined) {
     if (guide) {
-        browser && localStorage.setItem('bibleWellCurrentGuide', guide.shortName);
+        browser && localStorage.setItem(bibleWellCurrentGuide, guide.shortName);
         currentGuide.set(guide);
     }
 }
