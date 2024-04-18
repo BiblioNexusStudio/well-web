@@ -16,9 +16,6 @@
             "downloadResourcesForOfflineUse": {
                 "value": "Igo oflain? Kisim moa samtin insait"
             },
-            "subTitle": {
-                "value": "Buk Tambu Wel-Wara: Fed we Akuifa bin raitim "
-            },
             "loading": {
                 "value": "louding"
             },
@@ -27,6 +24,9 @@
             },
             "fileManager": {
                 "value": "Fail Meneja"
+            },
+            "getStarted": {
+                "value": "Stat"
             }
         },
         "about": {
@@ -246,6 +246,17 @@
             },
             "noGuides": {
                 "value": "Nogat Gaid"
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "Nogat Baibel"
+            },
+            "selectBible": {
+                "value": "Selektim Baibel"
+            },
+            "bible": {
+                "value": "Buk Tambu"
             }
         }
     },

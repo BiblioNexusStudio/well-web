@@ -19,7 +19,7 @@ import {
     passagesByLanguageAndParentResourceEndpoint,
 } from '$lib/api-endpoints';
 
-async function getBibleBookCodesToName(languageId: number | null = null) {
+async function getBibleBookCodesToName(languageId: number | null = null, retry = true) {
     const bibleData = (await fetchFromCacheOrApi(
         ...biblesForLanguageEndpoint(languageId || get(currentLanguageInfo)?.id)
     )) as ApiBible[];
@@ -29,7 +29,9 @@ async function getBibleBookCodesToName(languageId: number | null = null) {
             {} as Record<string, string>
         );
     } else {
-        return getBibleBookCodesToName(1);
+        if (retry && (languageId !== 1 || get(currentLanguageInfo)?.id !== 1)) {
+            return getBibleBookCodesToName(1, false);
+        }
     }
 }
 
@@ -61,7 +63,9 @@ export async function fetchCbbterPassagesByBook(isOnline: boolean) {
                 return await passageIdHasCbbterAvailable(id, isOnline);
             });
             byBook.passages = passages;
-            return { ...byBook, index, bookName: bibleBookCodesToName[byBook.bookCode] };
+            return bibleBookCodesToName
+                ? { ...byBook, index, bookName: bibleBookCodesToName[byBook.bookCode] }
+                : { ...byBook, index, bookName: undefined };
         })
     ).filter(({ passages }) => passages.length > 0) as FrontendPassagesByBook[];
 

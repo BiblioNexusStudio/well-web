@@ -44,12 +44,16 @@
         closeAllPassagePageMenus,
         openLibraryMenu,
         openGuideMenu,
+        openBibleMenu,
     } from '$lib/stores/passage-page.store';
     import GuideMenu from '$lib/components/GuideMenu.svelte';
     import { onMount } from 'svelte';
     import GuidePane from '$lib/components/GuidePane.svelte';
     import PassageMenu from '$lib/components/PassageMenu.svelte';
     import LibraryMenu from './library-menu/LibraryMenu.svelte';
+    import BibleMenu from '$lib/components/BibleMenu.svelte';
+    import { bibleSetByUser } from '$lib/stores/bibles.store';
+    import BiblePane from '$lib/components/BiblePane.svelte';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -70,7 +74,9 @@
     let topOfStep: HTMLElement | null = null;
     let selectedTab: PassagePageTab = 'guide';
     let isShowingGuidePane = false;
+    let isShowingBiblePane = false;
     let guidePane: CupertinoPane;
+    let biblePane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let bibleSelectionScroll: number | undefined;
     let baseFetchPromise: Promise<void> | undefined;
@@ -90,6 +96,10 @@
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
 
     function fetchBase() {
+        if ($page.params.passageId === 'new') {
+            openGuideMenu();
+            return;
+        }
         passage = null;
         resourceData = null;
         bibleData = null;
@@ -217,6 +227,14 @@
         }
     }
 
+    function showOrDismissBiblePane(show: boolean) {
+        if (show) {
+            biblePane?.present({ animate: true });
+        } else {
+            biblePane?.hide();
+        }
+    }
+
     function navbarTitle(
         resourceData: ResourceData | null,
         currentBible: FrontendBibleBook | undefined,
@@ -243,6 +261,8 @@
             openLibraryMenu();
         } else if (tab === 'mainMenu') {
             openMainMenu();
+        } else if (tab === 'bible' && $bibleSetByUser === null) {
+            openBibleMenu();
         } else {
             closeAllPassagePageMenus();
         }
@@ -252,6 +272,7 @@
     $: handleSelectedTabMenu(selectedTab);
 
     $: showOrDismissGuidePane(isShowingGuidePane);
+    $: showOrDismissBiblePane(isShowingBiblePane);
 
     onMount(() => {
         if (!$currentGuide) {
@@ -261,6 +282,7 @@
 </script>
 
 <GuidePane bind:guidePane bind:isShowing={isShowingGuidePane} />
+<BiblePane bind:biblePane bind:isShowing={isShowingBiblePane} />
 
 <div class="btm-nav z-40 h-20 border-t">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
@@ -401,5 +423,8 @@
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.passage}
         <PassageMenu />
+    {/if}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
+        <BibleMenu bind:showBibleMenu={isShowingBiblePane} />
     {/if}
 </div>

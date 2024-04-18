@@ -21,10 +21,6 @@
                 "value": "Je, unakwenda Nje ya Mtandao? Pata Maudhui zaidi",
                 "_context": "Maandishi ya kitufe yanayomwambia mtumiaji kupakua rasilimali kwa matumizi ya nje ya mtandao"
             },
-            "subTitle": {
-                "value": "Kisima cha Biblia: Hulishwa na Chemichemi ya maji",
-                "_context": "Kichwa kikuu cha ukurasa mkuu"
-            },
             "loading": {
                 "value": "kupakia",
                 "_context": "Ujumbe wa kuonyeshwa kwenye menyu kunjuzi ya chaguo wakati vitu vinapakiwa"
@@ -36,6 +32,9 @@
             "fileManager": {
                 "value": "Kidhibiti faili",
                 "_context": "Lebo ya kitufe cha msimamizi wa faili"
+            },
+            "getStarted": {
+                "value": "Anza"
             }
         },
         "about": {
@@ -301,6 +300,17 @@
             },
             "noGuides": {
                 "value": "Hakuna mwongozo wa tafsiri uliopatikana kwa lugha hii."
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "Hakuna Biblia iliyopatikana kwa lugha hii."
+            },
+            "selectBible": {
+                "value": "Chagua Biblia"
+            },
+            "bible": {
+                "value": "Biblia"
             }
         }
     },

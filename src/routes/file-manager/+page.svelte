@@ -14,7 +14,6 @@
     } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
-    import TopNavBar from '$lib/components/TopNavBar.svelte';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
     import ResouceMenu from '$lib/components/file-manager/ResourceMenu.svelte';
@@ -52,10 +51,14 @@
     $: fetchAvailableResources($currentLanguageInfo?.id);
 </script>
 
-<div class="container mx-auto h-full w-full pt-12">
+<div class="container mx-auto h-full w-full pt-4">
     <FmModal />
     <DeleteModal />
-    <TopNavBar title={$translate('page.fileManager.title.value')} />
+    <div class="mx-4 flex">
+        <h1 class="semi-bold line-clamp-1 flex-1 break-all text-lg">
+            {$translate('page.fileManager.title.value')}
+        </h1>
+    </div>
     {#await fetchAvailableResourcesPromise}
         <FullPageSpinner />
     {:then}

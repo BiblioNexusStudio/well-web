@@ -21,10 +21,6 @@
                 "value": "Going Offline? Get more Content",
                 "_context": "Button text telling the user to download resources for offline use"
             },
-            "subTitle": {
-                "value": "Bible Well: Fed by Aquifer",
-                "_context": "Subtitle for the main page"
-            },
             "loading": {
                 "value": "loading",
                 "_context": "Message to display in the options dropdown when things are loading"
@@ -36,6 +32,10 @@
             "fileManager": {
                 "value": "File Manager",
                 "_context": "The label for the file manager button"
+            },
+            "getStarted": {
+                "value": "Get Started",
+                "_context": "Button to get started with the application"
             }
         },
         "about": {
@@ -315,6 +315,20 @@
             },
             "noGuides": {
                 "value": "No guides available"
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "No Bibles available",
+                "_context": "Message to display when no Bibles are available"
+            },
+            "selectBible": {
+                "value": "Select a Bible",
+                "_context": "Placeholder text for the dropdown"
+            },
+            "bible": {
+                "value": "Bible",
+                "_context": "Label for the dropdown"
             }
         }
     },
