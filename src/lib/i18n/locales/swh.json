@@ -312,6 +312,23 @@
             "bible": {
                 "value": "Biblia"
             }
+        },
+        "BookPassageSelectorMenu": {
+            "loading": {
+                "value": "Kupakia..."
+            },
+            "stepOneTitle": {
+                "value": "Chagua Kitabu"
+            },
+            "stepTwoTitle": {
+                "value": "Chagua Kifungu"
+            },
+            "noBooks": {
+                "value": "Hakuna vitabu vilivyopatikana"
+            },
+            "noPassages": {
+                "value": "Hakuna vifungu vilivyopatikana"
+            }
         }
     },
     "navTop": {

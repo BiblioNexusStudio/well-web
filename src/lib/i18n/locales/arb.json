@@ -258,6 +258,23 @@
             "bible": {
                 "value": "الكتاب المقدس"
             }
+        },
+        "BookPassageSelectorMenu": {
+            "loading": {
+                "value": "جار التحميل"
+            },
+            "stepOneTitle": {
+                "value": "اختر كتابًا"
+            },
+            "stepTwoTitle": {
+                "value": "اختر مقطعًا"
+            },
+            "noBooks": {
+                "value": "لا توجد كتب"
+            },
+            "noPassages": {
+                "value": "لا توجد مقاطع"
+            }
         }
     },
     "navTop": {

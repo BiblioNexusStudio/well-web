@@ -258,6 +258,23 @@
             "bible": {
                 "value": "बाइबिल"
             }
+        },
+        "BookPassageSelectorMenu": {
+            "loading": {
+                "value": "लोड हो रहा है"
+            },
+            "stepOneTitle": {
+                "value": "एक पुस्तक चुनें"
+            },
+            "stepTwoTitle": {
+                "value": "एक पाठ चुनें"
+            },
+            "noBooks": {
+                "value": "कोई पुस्तक उपलब्ध नहीं है"
+            },
+            "noPassages": {
+                "value": "कोई पाठ उपलब्ध नहीं है"
+            }
         }
     },
     "navTop": {

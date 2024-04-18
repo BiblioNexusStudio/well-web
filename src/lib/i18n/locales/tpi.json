@@ -258,6 +258,23 @@
             "bible": {
                 "value": "Buk Tambu"
             }
+        },
+        "BookPassageSelectorMenu": {
+            "loading": {
+                "value": "Loading..."
+            },
+            "stepOneTitle": {
+                "value": "Em tasol wanpela buk"
+            },
+            "stepTwoTitle": {
+                "value": "Em tasol wanpela pasis"
+            },
+            "noBooks": {
+                "value": "Nogat Buk"
+            },
+            "noPassages": {
+                "value": "Nogat Hap Riding"
+            }
         }
     },
     "navTop": {

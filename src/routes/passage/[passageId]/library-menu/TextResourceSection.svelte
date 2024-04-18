@@ -74,7 +74,7 @@
     <div class={isFullscreen ? 'mx-auto w-full max-w-[65ch] overflow-y-scroll pb-4' : 'pb-6'}>
         {#each showingResources as entry}
             <button
-                class="mb-4 flex w-full flex-row items-center rounded-full border py-3 pl-3"
+                class="mb-4 flex w-full flex-row items-center rounded-full border py-3 pl-4"
                 on:click={() => resourceSelected(entry)}
             >
                 <div class="flex flex-shrink flex-col items-start">
