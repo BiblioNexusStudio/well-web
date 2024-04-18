@@ -1,19 +1,26 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
+    import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
-    import { bibles, bibleSetByUser } from '$lib/stores/bibles.store';
+    import { bibles, bibleSetByUser, bibleWellBibleSetByUser } from '$lib/stores/bibles.store';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
 
     export let biblePane: CupertinoPane;
     export let isShowing: boolean;
+    export let showBookPassageMenu: boolean;
 
     function setBibleAndHandleMenus(bible: BaseBible) {
         $bibleSetByUser = bible;
+        localStorage.setItem(bibleWellBibleSetByUser, JSON.stringify(bible.id));
         isShowing = false;
         closeAllPassagePageMenus();
+
+        if ($selectedBookIndex === 'default' || $selectedId === 'default') {
+            showBookPassageMenu = true;
+        }
     }
 
     onMount(() => {
@@ -22,6 +29,7 @@
             backdrop: true,
             topperOverflow: true,
             bottomOffset: bottomBarHeight,
+            fitScreenHeight: true,
             events: {
                 onWillDismiss: () => (isShowing = false),
                 onBackdropTap: () => (isShowing = false),

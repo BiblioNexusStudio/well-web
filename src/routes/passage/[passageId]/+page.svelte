@@ -37,7 +37,7 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
-    import { currentGuide } from '$lib/stores/parent-resource.store';
+    import { currentGuide, locallyStoredGuide } from '$lib/stores/parent-resource.store';
     import {
         PassagePageMenuEnum,
         passagePageShownMenu,
@@ -53,8 +53,12 @@
     import LibraryMenu from '$lib/components/LibraryMenu.svelte';
     import PassageMenu from '$lib/components/PassageMenu.svelte';
     import BibleMenu from '$lib/components/BibleMenu.svelte';
-    import { bibleSetByUser } from '$lib/stores/bibles.store';
+    import { bibleSetByUser, bibleStoredByUser } from '$lib/stores/bibles.store';
     import BiblePane from '$lib/components/BiblePane.svelte';
+    import BookPassageSelectorPane from '$lib/components/BookPassageSelectorPane.svelte';
+    import type { BaseBible } from '$lib/types/bible-text-content';
+    import type { ApiParentResource } from '$lib/types/resource';
+    import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -77,9 +81,11 @@
     let isShowingResourcePane = false;
     let isShowingGuidePane = false;
     let isShowingBiblePane = false;
+    let isShowingBookPassageSelectorPane = false;
     let resourcePane: CupertinoPane;
     let guidePane: CupertinoPane;
     let biblePane: CupertinoPane;
+    let bookPassageSelectorPane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let bibleSelectionScroll: number | undefined;
     let baseFetchPromise: Promise<void> | undefined;
@@ -98,8 +104,28 @@
     $: audioPlayerShowing = !!multiClipAudioStates[audioPlayerKey];
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
 
+    $: setStoredBible($bibleStoredByUser);
+    $: setStoredGuide($locallyStoredGuide);
+
+    function setStoredBible(bible: BaseBible | null) {
+        if (bible && $page.params.passageId !== 'new') {
+            $bibleSetByUser = bible;
+        }
+    }
+
+    function setStoredGuide(guide: ApiParentResource | undefined) {
+        if (guide && $page.params.passageId !== 'new') {
+            $currentGuide = guide;
+        }
+    }
+
     function fetchBase() {
         if ($page.params.passageId === 'new') {
+            $bibleSetByUser = null;
+            $currentGuide = undefined;
+            $selectedBookIndex = 'default';
+            $selectedId = 'default';
+
             openGuideMenu();
             return;
         }
@@ -246,6 +272,14 @@
         }
     }
 
+    function showOrDismissBookPassageSelectorPane(show: boolean) {
+        if (show) {
+            bookPassageSelectorPane?.present({ animate: true });
+        } else {
+            bookPassageSelectorPane?.hide();
+        }
+    }
+
     function navbarTitle(
         resourceData: ResourceData | null,
         currentBible: FrontendBibleBook | undefined,
@@ -285,6 +319,7 @@
     $: showOrDismissResourcePane(isShowingResourcePane);
     $: showOrDismissGuidePane(isShowingGuidePane);
     $: showOrDismissBiblePane(isShowingBiblePane);
+    $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
 
     onMount(() => {
         if (!$currentGuide) {
@@ -295,7 +330,12 @@
 
 <ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={resourceData?.additionalResources} />
 <GuidePane bind:guidePane bind:isShowing={isShowingGuidePane} />
-<BiblePane bind:biblePane bind:isShowing={isShowingBiblePane} />
+<BiblePane
+    bind:biblePane
+    bind:isShowing={isShowingBiblePane}
+    bind:showBookPassageMenu={isShowingBookPassageSelectorPane}
+/>
+<BookPassageSelectorPane bind:bookPassageSelectorPane bind:isShowing={isShowingBookPassageSelectorPane} />
 
 <div class="btm-nav z-40 h-20 border-t">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>

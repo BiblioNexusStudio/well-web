@@ -318,6 +318,23 @@
             "bible": {
                 "value": "Библия"
             }
+        },
+        "BookPassageSelectorMenu": {
+            "loading": {
+                "value": "Загрузка..."
+            },
+            "stepOneTitle": {
+                "value": "Выберите книгу"
+            },
+            "stepTwoTitle": {
+                "value": "Выберите отрывок"
+            },
+            "noBooks": {
+                "value": "Нет доступных книг"
+            },
+            "noPassages": {
+                "value": "Нет доступных отрывков"
+            }
         }
     },
     "navTop": {
