@@ -58,19 +58,16 @@
                 }
             },
             "resourcePane": {
-                "title": {
-                    "value": "Risoses"
-                },
-                "basicTab": {
-                    "value": "Besik"
-                },
-                "advancedTab": {
-                    "value": "Igo pas"
+                "cancel": {
+                    "value": "Kensol"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {
                         "value": "{current} blo {total}"
                     }
+                },
+                "typeToSearch": {
+                    "value": "Typim wanpela toktok long surukim bibliotek"
                 },
                 "seeAll": {
                     "value": "Lukim Olgeta({count})"

@@ -9,7 +9,6 @@
     import { _ as translate } from 'svelte-i18n';
     import CompassIcon from '$lib/icons/CompassIcon.svelte';
     import NavMenuTabItem from '$lib/components/NavMenuTabItem.svelte';
-    import ResourcePane from './resource-pane/ResourcePane.svelte';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
     import TopNavBar from '$lib/components/TopNavBar.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
@@ -50,8 +49,8 @@
     import GuideMenu from '$lib/components/GuideMenu.svelte';
     import { onMount } from 'svelte';
     import GuidePane from '$lib/components/GuidePane.svelte';
-    import LibraryMenu from '$lib/components/LibraryMenu.svelte';
     import PassageMenu from '$lib/components/PassageMenu.svelte';
+    import LibraryMenu from './library-menu/LibraryMenu.svelte';
     import BibleMenu from '$lib/components/BibleMenu.svelte';
     import { bibleSetByUser, bibleStoredByUser } from '$lib/stores/bibles.store';
     import BiblePane from '$lib/components/BiblePane.svelte';
@@ -78,11 +77,9 @@
     let selectedBibleId: number | null = null;
     let topOfStep: HTMLElement | null = null;
     let selectedTab: PassagePageTab = 'guide';
-    let isShowingResourcePane = false;
     let isShowingGuidePane = false;
     let isShowingBiblePane = false;
     let isShowingBookPassageSelectorPane = false;
-    let resourcePane: CupertinoPane;
     let guidePane: CupertinoPane;
     let biblePane: CupertinoPane;
     let bookPassageSelectorPane: CupertinoPane;
@@ -248,14 +245,6 @@
         return id === null ? 'none' : `bible${id}`;
     }
 
-    function showOrDismissResourcePane(show: boolean) {
-        if (show) {
-            resourcePane?.present({ animate: true });
-        } else {
-            resourcePane?.hide();
-        }
-    }
-
     function showOrDismissGuidePane(show: boolean) {
         if (show) {
             guidePane?.present({ animate: true });
@@ -316,7 +305,6 @@
     $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber);
     $: handleSelectedTabMenu(selectedTab);
 
-    $: showOrDismissResourcePane(isShowingResourcePane);
     $: showOrDismissGuidePane(isShowingGuidePane);
     $: showOrDismissBiblePane(isShowingBiblePane);
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
@@ -328,7 +316,6 @@
     });
 </script>
 
-<ResourcePane bind:resourcePane bind:isShowing={isShowingResourcePane} resources={resourceData?.additionalResources} />
 <GuidePane bind:guidePane bind:isShowing={isShowingGuidePane} />
 <BiblePane
     bind:biblePane
@@ -345,12 +332,7 @@
         <CompassIcon />
     </NavMenuTabItem>
     {#if resourceData?.additionalResources?.length}
-        <NavMenuTabItem
-            bind:selectedTab
-            tabName="libraryMenu"
-            bind:isSelected={isShowingResourcePane}
-            label={$translate('page.passage.nav.library.value')}
-        >
+        <NavMenuTabItem bind:selectedTab tabName="libraryMenu" label={$translate('page.passage.nav.library.value')}>
             <LibraryIcon />
         </NavMenuTabItem>
     {/if}
@@ -477,7 +459,7 @@
         <GuideMenu bind:showGuideMenu={isShowingGuidePane} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.library}
-        <LibraryMenu />
+        <LibraryMenu resources={resourceData?.additionalResources} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.passage}
         <PassageMenu />

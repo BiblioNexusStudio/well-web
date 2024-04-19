@@ -18,6 +18,7 @@
     <div use:trapFocus class="fixed inset-0 z-[45] flex w-full flex-col bg-primary-content px-4">
         <TextResourceSection
             title={calculateTitle(parentResourceName)}
+            subtitle={calculateTitle(parentResourceName, true)}
             {resources}
             bind:searchQuery
             {dismissParentResourceFullscreen}

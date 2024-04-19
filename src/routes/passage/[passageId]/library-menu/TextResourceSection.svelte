@@ -1,5 +1,4 @@
 <script lang="ts">
-    import arrowRight from 'svelte-awesome/icons/arrowRight';
     import type { AnyResource, TextResource } from './types';
     import { Icon } from 'svelte-awesome';
     import {
@@ -11,8 +10,10 @@
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
     import SearchInput from '$lib/components/SearchInput.svelte';
     import NoResourcesFound from './NoResourcesFound.svelte';
+    import ResourceSectionHeader from './ResourceSectionHeader.svelte';
 
     export let title: string | null;
+    export let subtitle: string | null;
     export let resources: AnyResource[];
     export let resourceSelected: (resource: TextResource) => void;
     export let searchQuery: string;
@@ -40,7 +41,10 @@
                 <button class="btn btn-link text-base-500" on:click={dismissParentResourceFullscreen}
                     ><Icon data={chevronLeft} /></button
                 >
-                <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">{title}</div>
+                <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">
+                    {title}
+                    ({subtitle})
+                </div>
                 <!-- hack to make text centered -->
                 <div class="btn btn-link text-base-500 opacity-0"><Icon data={chevronLeft} /></div>
             </div>
@@ -56,34 +60,34 @@
             </div>
         </div>
     {:else}
-        <div class="flex pb-2 {showingResources.length > 0 ? 'visible' : 'hidden'}">
-            <div class="text-md font-semibold text-base-content">{title}</div>
-            <div class="flex-grow"></div>
+        <ResourceSectionHeader isVisible={showingResources.length > 0} {title} {subtitle}>
             {#if !shouldSearch(searchQuery) && textResources.length > 5}
                 <button class="text-sm font-semibold text-base-500" on:click={showParentResourceFullscreen}
                     >{$translate('page.passage.resourcePane.seeAll.value', {
                         values: { count: textResources.length },
                     })}</button
                 >
-            {/if}
-        </div>
+            {/if}</ResourceSectionHeader
+        >
     {/if}
 
     <div class={isFullscreen ? 'mx-auto w-full max-w-[65ch] overflow-y-scroll pb-4' : 'pb-6'}>
         {#each showingResources as entry}
-            <button class="flex w-full flex-row items-center py-3" on:click={() => resourceSelected(entry)}>
+            <button
+                class="mb-4 flex w-full flex-row items-center rounded-full border py-3 pl-4"
+                on:click={() => resourceSelected(entry)}
+            >
                 <div class="flex flex-shrink flex-col items-start">
-                    <div class="text-start text-sm font-medium text-base-content">
+                    <div class="text-md text-start font-semibold text-blue-title">
                         {@html htmlWithHighlightedSearchString(entry.displayName, searchQuery)}
                     </div>
-                    <div class="line-clamp-1 break-all text-start text-sm text-neutral">{entry.preview}</div>
-                </div>
-                <div class="flex-shrink-0 pe-3 ps-9">
-                    <Icon class="text-neutral" data={arrowRight} />
                 </div>
             </button>
         {/each}
     </div>
+    {#if showingResources.length > 0}
+        <hr />
+    {/if}
     {#if showingResources.length === 0 && isFullscreen}
         <NoResourcesFound {searchQuery} />
     {/if}

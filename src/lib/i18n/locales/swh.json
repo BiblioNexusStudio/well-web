@@ -73,17 +73,11 @@
                 }
             },
             "resourcePane": {
-                "title": {
-                    "value": "Rasilimali",
-                    "_context": "Kichwa cha sehemu ya juu ya kidirisha cha nyenzo kwenye ukurasa wa kifungu"
+                "cancel": {
+                    "value": "Ghairi"
                 },
-                "basicTab": {
-                    "value": "Msingi",
-                    "_context": "Kichupo chenye rasilimali msingi kwenye kidirisha cha rasilimali"
-                },
-                "advancedTab": {
-                    "value": "Ya hali ya juu",
-                    "_context": "Kichupo chenye rasilimali za hali ya juu kwenye kidirisha cha rasilimali"
+                "typeToSearch": {
+                    "value": "Andika neno ili kutafuta maktaba"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {

@@ -58,14 +58,11 @@
                 }
             },
             "resourcePane": {
-                "title": {
-                    "value": "الموارد"
+                "cancel": {
+                    "value": "إلغاء"
                 },
-                "basicTab": {
-                    "value": "أساسي"
-                },
-                "advancedTab": {
-                    "value": "متقدم"
+                "typeToSearch": {
+                    "value": "اكتب مصطلحًا للبحث في المكتبة"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {

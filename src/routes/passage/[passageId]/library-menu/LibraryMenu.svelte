@@ -1,15 +1,7 @@
 <script lang="ts">
-    import { CupertinoPane } from 'cupertino-pane';
-    import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
-    import { trapFocus } from '$lib/utils/trap-focus';
     import type { PassageResourceContent } from '$lib/types/passage';
-    import {
-        MediaType,
-        ParentResourceComplexityLevel,
-        ParentResourceType,
-        type ApiParentResource,
-    } from '$lib/types/resource';
+    import { MediaType, ParentResourceType, type ApiParentResource } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
@@ -19,12 +11,12 @@
         resourceDisplayNameSorter,
         resourceThumbnailApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
-    import type { AnyResource, ImageOrVideoResource, ResourcePaneTab, TextResource } from './types';
+    import type { AnyResource, ImageOrVideoResource, TextResource } from './types';
     import FullscreenMediaResource from './FullscreenMediaResource.svelte';
     import FullscreenTextResource from './FullscreenTextResource.svelte';
     import { parseTiptapJsonToHtml, parseTiptapJsonToText } from '$lib/utils/tiptap-parsers';
     import SearchInput from '$lib/components/SearchInput.svelte';
-    import { filterItemsByKeyMatchingSearchQuery, shouldSearch } from '$lib/utils/search';
+    import { filterItemsByKeyMatchingSearchQuery } from '$lib/utils/search';
     import FullscreenTextResourceSection from './FullscreenTextResourceSection.svelte';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import NoResourcesFound from './NoResourcesFound.svelte';
@@ -35,6 +27,7 @@
     import { objectEntries } from '$lib/utils/typesafe-standard-lib';
     import { parentResourceNameToInfoMap } from '$lib/stores/parent-resource.store';
     import AnyResourceSection from './AnyResourceSection.svelte';
+    import SwishHeader from '$lib/components/SwishHeader.svelte';
 
     const RESOURCE_TYPE_ORDER: ParentResourceType[] = [
         ParentResourceType.Images,
@@ -43,19 +36,12 @@
         ParentResourceType.Dictionary,
     ];
 
-    export let resourcePane: CupertinoPane;
-    export let isShowing: boolean;
     export let resources: PassageResourceContent[] | undefined;
-    export let activeTab: ResourcePaneTab = 'basic';
     export let isLoading = true;
 
     let searchQuery: string = '';
+    let hasQuery: boolean = false;
     let previousResourceIds = (resources ?? []).map(({ contentId }) => contentId);
-
-    let hasBasicResources = false;
-    let hasAdvancedResources = false;
-
-    $: activeTab = shouldSearch(searchQuery) ? 'searching' : hasBasicResources ? 'basic' : 'advanced';
 
     let allResources: AnyResource[] = [];
     let mediaResources: ImageOrVideoResource[] = [];
@@ -68,38 +54,26 @@
     $: prepareResources(resources || []);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(allResources, 'displayName', searchQuery).length;
+    $: hasQuery = searchQuery != '';
 
     let currentFullscreenMediaResourceIndex: number | null = null;
     let currentFullscreenTextResource: TextResource | null = null;
     let currentFullscreenTextParentResourceName: string | null;
 
-    onMount(() => {
-        const bottomBarHeight = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4;
-        resourcePane = new CupertinoPane('#resource-pane', {
-            parentElement: '#passage-page',
-            buttonDestroy: false,
-            bottomClose: true,
-            fastSwipeClose: true,
-            initialBreak: 'top',
-            breaks: {
-                top: {
-                    enabled: true,
-                    height: window.innerHeight - 50 - bottomBarHeight,
-                },
-                middle: { enabled: false },
-                bottom: { enabled: false, height: window.screen.height - 300 },
-            },
-            lowerThanBottom: true,
-            backdrop: true,
-            backdropOpacity: 0.4,
-            simulateTouch: false,
-            bottomOffset: bottomBarHeight,
-            events: {
-                onWillDismiss: () => (isShowing = false),
-                onBackdropTap: () => (isShowing = false),
-            },
-        });
-    });
+    let visibleSwish = true;
+
+    function onHandleSearchFocus() {
+        if (!hasQuery) {
+            visibleSwish = !visibleSwish;
+        }
+    }
+
+    function resetPage(e: MouseEvent) {
+        e.stopPropagation();
+        visibleSwish = true;
+        searchQuery = '';
+        return null;
+    }
 
     function resourceSelected(resource: AnyResource) {
         if ('type' in resource) {
@@ -115,7 +89,7 @@
 
     async function prepareResources(resources: PassageResourceContent[]) {
         const currentResourceIds = resources.map(({ contentId }) => contentId);
-        if (JSON.stringify(previousResourceIds) === JSON.stringify(currentResourceIds)) {
+        if (JSON.stringify(previousResourceIds) === JSON.stringify(currentResourceIds && allResources.length > 0)) {
             return;
         }
         previousResourceIds = currentResourceIds;
@@ -179,21 +153,13 @@
         ).sort(resourceDisplayNameSorter);
 
         allResources = (textResources as AnyResource[]).concat(mediaResources);
-        hasBasicResources = allResources.some(
-            (r) =>
-                $parentResourceNameToInfoMap[r.parentResourceName]?.complexityLevel ===
-                ParentResourceComplexityLevel.Basic
-        );
-        hasAdvancedResources = allResources.some(
-            (r) =>
-                $parentResourceNameToInfoMap[r.parentResourceName]?.complexityLevel ===
-                ParentResourceComplexityLevel.Advanced
-        );
+
         groupedResources = groupBy(
             allResources,
             (r) => r.parentResourceName,
             (v) => v
         );
+
         sortedResourceGroups = (
             objectEntries(groupedResources)
                 .map(([parentResourceName, resources]) => {
@@ -206,25 +172,12 @@
                 RESOURCE_TYPE_ORDER.indexOf(b.parentResource.resourceType)
             );
         });
+
         isLoading = false;
     }
 </script>
 
-<svelte:window
-    on:keydown={(key) => {
-        if (key.key === 'Escape') {
-            if (currentFullscreenMediaResourceIndex !== null) {
-                currentFullscreenMediaResourceIndex = null;
-            } else if (currentFullscreenTextResource !== null) {
-                currentFullscreenTextResource = null;
-            } else if (currentFullscreenTextParentResourceName !== null) {
-                currentFullscreenTextParentResourceName = null;
-            } else if (isShowing) {
-                isShowing = false;
-            }
-        }
-    }}
-/>
+<SwishHeader bind:visible={visibleSwish} title="Library" subtitle="Find the resource you need" bgcolor="bg-[#439184]" />
 
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />
@@ -235,66 +188,47 @@
     dismissParentResourceFullscreen={() => (currentFullscreenTextParentResourceName = null)}
 />
 
-<div id="resource-pane" use:trapFocus={isShowing}>
-    <div class="flex h-full flex-col px-4">
-        <div class="pb-4 text-lg font-semibold text-base-content">
-            {$translate('page.passage.resourcePane.title.value')}
-        </div>
-        {#if isLoading}
-            <FullPageSpinner />
-        {:else}
-            <div class="mb-8">
-                <SearchInput bind:searchQuery />
-            </div>
-            {#if activeTab === 'basic' || activeTab === 'advanced'}
-                <div class="tabs mb-6 w-full !border-b-0">
-                    {#if hasBasicResources}
-                        <button
-                            class="tab-bordered tab text-sm font-semibold {activeTab === 'basic'
-                                ? '!border-primary-focus text-primary-focus tab-active !border-b-2'
-                                : '!border-b border-b-gray-200 text-gray-500'}"
-                            on:click={() => (activeTab = 'basic')}
-                            >{$translate('page.passage.resourcePane.basicTab.value')}</button
-                        >
-                    {/if}
-                    {#if hasAdvancedResources}
-                        <button
-                            class="tab-bordered tab text-sm font-semibold {activeTab === 'advanced'
-                                ? '!border-primary-focus text-primary-focus tab-active !border-b-2'
-                                : '!border-b border-b-gray-200 text-gray-500'}"
-                            on:click={() => (activeTab = 'advanced')}
-                            >{$translate('page.passage.resourcePane.advancedTab.value')}</button
-                        >
-                    {/if}
-                    <div class="flex-grow border-b border-b-gray-200" />
-                </div>
-            {/if}
+<div class="flex flex-col px-4">
+    <div class="mb-8 flex flex-row {visibleSwish ? '-mt-12' : 'mt-4'}">
+        <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
+        {#if !visibleSwish}
             <div>
-                {#each sortedResourceGroups as { parentResource, resources }}
-                    <AnyResourceSection
-                        {activeTab}
-                        {parentResource}
-                        {resources}
-                        {searchQuery}
-                        {resourceSelected}
-                        {showParentResourceFullscreen}
-                    />
-                {/each}
+                <button on:click={(e) => resetPage(e)} type="button" class="mt-2 pl-4 font-semibold text-primary"
+                    >{$translate('page.passage.resourcePane.cancel.value')}</button
+                >
             </div>
-            {#if filteredResourceCount === 0}
-                <NoResourcesFound {searchQuery} />
-            {/if}
         {/if}
     </div>
+    {#if !hasQuery}
+        <div class="flex flex-grow flex-col items-center justify-items-center overflow-y-scroll">
+            <div class="mb-4 flex-shrink-0 text-sm text-neutral">
+                {$translate('page.passage.resourcePane.typeToSearch.value')}
+            </div>
+        </div>
+    {:else if isLoading}
+        <FullPageSpinner />
+    {:else if filteredResourceCount === 0}
+        <NoResourcesFound {searchQuery} />
+    {:else}
+        <div class="flex flex-col items-center justify-items-center">
+            <div class="mb-4 flex-shrink-0 text-sm text-neutral">
+                {filteredResourceCount == 1
+                    ? $translate('page.passage.resourcePane.resourceCount.singular.value')
+                    : $translate('page.passage.resourcePane.resourceCount.plural.value', {
+                          values: { count: filteredResourceCount },
+                      })}
+            </div>
+        </div>
+        <div class="pb-20">
+            {#each sortedResourceGroups as { parentResource, resources }}
+                <AnyResourceSection
+                    {parentResource}
+                    {resources}
+                    {searchQuery}
+                    {resourceSelected}
+                    {showParentResourceFullscreen}
+                />
+            {/each}
+        </div>
+    {/if}
 </div>
-
-<style lang="postcss">
-    :global(.cupertino-pane-wrapper .backdrop) {
-        z-index: 30;
-    }
-    :global(.cupertino-pane-wrapper .pane) {
-        @apply bg-primary-content;
-        z-index: 35;
-        cursor: initial !important;
-    }
-</style>
