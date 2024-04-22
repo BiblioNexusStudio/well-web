@@ -25,11 +25,10 @@
     }
 
     onMount(() => {
-        const bottomBarHeight = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4;
         guidePane = new CupertinoPane('#guide-pane', {
             backdrop: true,
             topperOverflow: true,
-            bottomOffset: bottomBarHeight,
+            initialBreak: 'top',
             events: {
                 onWillDismiss: () => (isShowing = false),
                 onBackdropTap: () => (isShowing = false),

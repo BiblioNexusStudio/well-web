@@ -37,12 +37,10 @@
 
     onMount(() => {
         fetchDataPromise();
-        const bottomBarHeight = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4;
         bookPassageSelectorPane = new CupertinoPane('#book-passage-selector-pane', {
             backdrop: true,
             topperOverflow: true,
-            bottomOffset: bottomBarHeight,
-            fitScreenHeight: true,
+            initialBreak: 'top',
             events: {
                 onWillDismiss: () => (isShowing = false),
                 onBackdropTap: () => (isShowing = false),
@@ -55,7 +53,7 @@
     <div class="flex w-full flex-col items-center">
         <h3 class="my-2 font-bold">{currentStep.title}</h3>
         <hr class="my-2 w-full" />
-        <div class="flex h-[210px] w-full flex-col items-center overflow-y-auto">
+        <div class="flex w-full flex-col items-center overflow-y-auto">
             {#await fetchDataPromise}
                 <p>{$translate('page.BookPassageSelectorMenu.loading.value')}</p>
             {:then}
