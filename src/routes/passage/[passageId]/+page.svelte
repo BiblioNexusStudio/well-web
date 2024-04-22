@@ -341,20 +341,20 @@
 </div>
 
 <div id="passage-page" class="h-full w-full">
-    {#if $passagePageShownMenu === null}
-        <TopNavBar
-            bind:preferredBiblesModalOpen
-            {title}
-            {passage}
-            bibles={bibleData?.availableBibles ?? []}
-            tab={selectedTab}
-            guideShortName={$currentGuide?.shortName ?? ''}
-            bind:showBiblePane={isShowingBookPassageSelectorPane}
-        />
-    {/if}
     {#await baseFetchPromise}
         <FullPageSpinner />
     {:then}
+        {#if $passagePageShownMenu === null}
+            <TopNavBar
+                bind:preferredBiblesModalOpen
+                {title}
+                {passage}
+                bibles={bibleData?.availableBibles ?? []}
+                tab={selectedTab}
+                guideShortName={$currentGuide?.shortName ?? ''}
+                bind:showBiblePane={isShowingBookPassageSelectorPane}
+            />
+        {/if}
         <div
             class="absolute left-0 right-0 top-16 flex flex-col {$passagePageShownMenu !== null &&
                 'hidden'} {audioPlayerShowing ? 'bottom-[7.5rem]' : 'bottom-16'}"
