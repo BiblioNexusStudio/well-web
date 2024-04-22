@@ -46,15 +46,14 @@
         openGuideMenu,
         openBibleMenu,
     } from '$lib/stores/passage-page.store';
-    import GuideMenu from '$lib/components/GuideMenu.svelte';
+    import GuideMenu from './guide-menu/GuideMenu.svelte';
     import { onMount } from 'svelte';
-    import GuidePane from '$lib/components/GuidePane.svelte';
-    import PassageMenu from '$lib/components/PassageMenu.svelte';
+    import GuidePane from './guide-menu/GuidePane.svelte';
     import LibraryMenu from './library-menu/LibraryMenu.svelte';
-    import BibleMenu from '$lib/components/BibleMenu.svelte';
+    import BibleMenu from './bible-menu/BibleMenu.svelte';
     import { bibleSetByUser, bibleStoredByUser } from '$lib/stores/bibles.store';
-    import BiblePane from '$lib/components/BiblePane.svelte';
-    import BookPassageSelectorPane from '$lib/components/BookPassageSelectorPane.svelte';
+    import BiblePane from './bible-menu/BiblePane.svelte';
+    import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
@@ -316,7 +315,7 @@
     });
 </script>
 
-<GuidePane bind:guidePane bind:isShowing={isShowingGuidePane} />
+<GuidePane bind:selectedTab bind:guidePane bind:isShowing={isShowingGuidePane} />
 <BiblePane
     bind:biblePane
     bind:isShowing={isShowingBiblePane}
@@ -461,9 +460,6 @@
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.library}
         <LibraryMenu resources={resourceData?.additionalResources} />
-    {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.passage}
-        <PassageMenu />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
         <BibleMenu bind:showBibleMenu={isShowingBiblePane} />

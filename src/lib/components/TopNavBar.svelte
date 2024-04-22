@@ -50,7 +50,7 @@
 {#if passage}
     <AddAudioRecordingModal bind:open={recordingModalOpen} {passage} />
 {/if}
-<div class="navbar w-full">
+<div class="navbar flex w-full justify-between">
     {#if tab === 'guide' || tab === 'bible'}
         <div class="ms-2 flex-none">
             <button
