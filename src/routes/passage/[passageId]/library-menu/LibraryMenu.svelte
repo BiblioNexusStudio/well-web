@@ -27,7 +27,7 @@
     import { objectEntries } from '$lib/utils/typesafe-standard-lib';
     import { parentResourceNameToInfoMap } from '$lib/stores/parent-resource.store';
     import AnyResourceSection from './AnyResourceSection.svelte';
-    import SwishHeader from '$lib/components/SwishHeader.svelte';
+    import SwishHeader from './SwishHeader.svelte';
 
     const RESOURCE_TYPE_ORDER: ParentResourceType[] = [
         ParentResourceType.Images,

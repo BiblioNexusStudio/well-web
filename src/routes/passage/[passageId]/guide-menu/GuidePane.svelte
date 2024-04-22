@@ -9,6 +9,7 @@
 
     export let guidePane: CupertinoPane;
     export let isShowing: boolean;
+    export let selectedTab: string | null = null;
 
     function selectGuideAndHandleMenu(guideResource: ApiParentResource) {
         setCurrentGuide(guideResource);
@@ -16,6 +17,7 @@
         closeAllPassagePageMenus();
 
         if ($selectedId === 'default' || $selectedBookIndex === 'default') {
+            selectedTab = 'bible';
             openBibleMenu();
         } else {
             closeAllPassagePageMenus();
