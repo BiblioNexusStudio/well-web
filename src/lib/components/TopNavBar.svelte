@@ -12,6 +12,7 @@
     import type { PassagePageTab } from '../../routes/passage/[passageId]/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import { bibleSetByUser } from '$lib/stores/bibles.store';
 
     export let title = '';
     export let passage: BasePassage | null = null;
@@ -20,6 +21,7 @@
     export let preferredBiblesModalOpen = false;
     export let tab: PassagePageTab | null = null;
     export let guideShortName = '';
+    export let showBiblePane = false;
 
     function handleWindowClick(event: MouseEvent) {
         const openDetails = document.querySelector('.dropdown[open]');
@@ -37,6 +39,10 @@
         $selectedId = 'default';
         openBibleMenu();
     }
+
+    function openBiblePane() {
+        showBiblePane = true;
+    }
 </script>
 
 <svelte:window on:click={handleWindowClick} />
@@ -48,10 +54,16 @@
     {#if tab === 'guide' || tab === 'bible'}
         <div class="ms-2 flex-none">
             <button
-                on:click={handleOpenBibleMenu}
+                on:click={openBiblePane}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
             >
                 {title}
+            </button>
+            <button
+                on:click={handleOpenBibleMenu}
+                class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+            >
+                {$bibleSetByUser?.abbreviation || ''}
             </button>
             <button
                 on:click={openGuideMenu}

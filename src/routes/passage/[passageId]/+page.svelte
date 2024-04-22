@@ -350,6 +350,7 @@
             bibles={bibleData?.availableBibles ?? []}
             tab={selectedTab}
             guideShortName={$currentGuide?.shortName ?? ''}
+            bind:showBiblePane={isShowingBookPassageSelectorPane}
         />
     {/if}
     {#await baseFetchPromise}
