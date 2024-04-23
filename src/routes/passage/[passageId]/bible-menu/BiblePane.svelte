@@ -6,7 +6,7 @@
     import { bibles, bibleSetByUser, bibleWellBibleSetByUser } from '$lib/stores/bibles.store';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
-    import { lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { lookupLanguageInfoById, currentLanguageInfo } from '$lib/stores/language.store';
 
     export let biblePane: CupertinoPane;
     export let isShowing: boolean;
@@ -23,13 +23,20 @@
         }
     }
 
+    $: filteredBibles = $bibles.filter((bible) => {
+        if (bible.languageId === $currentLanguageInfo?.id) {
+            return bible;
+        }
+        if ($currentLanguageInfo?.id === 2 && bible.languageId === 1) {
+            return bible;
+        }
+    });
+
     onMount(() => {
-        const bottomBarHeight = parseFloat(getComputedStyle(document.documentElement).fontSize) * 4;
         biblePane = new CupertinoPane('#bible-pane', {
             backdrop: true,
             topperOverflow: true,
-            bottomOffset: bottomBarHeight,
-            fitScreenHeight: true,
+            initialBreak: 'top',
             events: {
                 onWillDismiss: () => (isShowing = false),
                 onBackdropTap: () => (isShowing = false),
@@ -42,8 +49,8 @@
     <div class="flex w-full flex-col items-center">
         <h3 class="my-2 font-bold">{$translate('page.bibleMenu.selectBible.value')}</h3>
         <hr class="my-2 w-full" />
-        <div class="flex h-[210px] flex-col items-center overflow-y-auto">
-            {#each $bibles as bible}
+        <div class="flex w-full flex-col items-center overflow-y-auto">
+            {#each filteredBibles as bible}
                 {@const isCurrentBible = bible === $bibleSetByUser}
                 <button
                     on:click={() => setBibleAndHandleMenus(bible)}
