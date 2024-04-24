@@ -15,8 +15,9 @@ export function languagesEndpoint(): ApiStringAndCacheBustVersion {
     return ['/languages', 2];
 }
 
-export function parentResourcesEndpoint(): ApiStringAndCacheBustVersion {
-    return ['/resources/parent-resources', 2];
+export function parentResourcesEndpoint(queryParams?: string[]): ApiStringAndCacheBustVersion {
+    const url = queryParams ? `/resources/parent-resources?${queryParams.join('&')}` : '/resources/parent-resources';
+    return [url, 2];
 }
 
 export function biblesEndpoint(): ApiStringAndCacheBustVersion {

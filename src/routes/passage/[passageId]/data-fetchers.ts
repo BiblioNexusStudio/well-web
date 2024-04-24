@@ -15,7 +15,13 @@ import { fetchAllBibles, bookDataForBibleTab } from '$lib/utils/data-handlers/bi
 import { range } from '$lib/utils/array';
 import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
 import type { BasePassage, PassageResourceContent, PassageWithResourceContentIds } from '$lib/types/passage';
-import { MediaType, ParentResourceName, type CbbtErAudioMetadata, type CbbtErAudioContent } from '$lib/types/resource';
+import {
+    MediaType,
+    ParentResourceName,
+    type CbbtErAudioMetadata,
+    type CbbtErAudioContent,
+    type ApiParentResource,
+} from '$lib/types/resource';
 import {
     fetchDisplayNameForResourceContent,
     fetchMetadataForResourceContent,
@@ -24,7 +30,7 @@ import {
 import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
-import { passageDetailsByIdAndLanguage } from '$lib/api-endpoints';
+import { parentResourcesEndpoint, passageDetailsByIdAndLanguage } from '$lib/api-endpoints';
 
 export type PassagePageTab = 'bible' | 'guide' | 'mainMenu' | 'libraryMenu';
 
@@ -179,6 +185,12 @@ export async function fetchPassage(passageId: string): Promise<BasePassage> {
     return await fetchFromCacheOrApi(...passageDetailsByIdAndLanguage(passageId, get(currentLanguageInfo)?.id));
 }
 
+export async function fetchLocalizedGuideData(): Promise<ApiParentResource[]> {
+    return await fetchFromCacheOrApi(
+        ...parentResourcesEndpoint([`LanguageId=${get(currentLanguageInfo)?.id ?? 1}`, 'ResourceType=1'])
+    );
+}
+
 function updateAndGetPreferredIds(bibleIdsInCurrentLanguage: number[]) {
     const defaultCurrentLanguageBibleId = bibleIdsInCurrentLanguage[0];
     let preferredIds = get(preferredBibleIds);
@@ -255,3 +267,4 @@ export async function fetchResourceData(passage: BasePassage) {
 
 export type ResourceData = Awaited<ReturnType<typeof fetchResourceData>>;
 export type BibleData = Awaited<ReturnType<typeof fetchBibleData>>;
+export type GuideData = Awaited<ReturnType<typeof fetchLocalizedGuideData>>;

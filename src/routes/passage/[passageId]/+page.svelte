@@ -27,6 +27,7 @@
         fetchPassage,
         fetchResourceData,
         fetchBibleData,
+        fetchLocalizedGuideData,
     } from './data-fetchers';
     import BibleUnavailable from './BibleUnavailable.svelte';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
@@ -34,7 +35,7 @@
     import type { BasePassage } from '$lib/types/passage';
     import { cacheBiblesForPassage } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
     import { currentGuide, locallyStoredGuide } from '$lib/stores/parent-resource.store';
     import {
@@ -88,8 +89,10 @@
     let resourceFetchPromise: Promise<void> | undefined;
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
     let preferredBiblesModalOpen = false;
+    let localizedGuides: ApiParentResource[];
 
     $: $page.url && fetchBase(); // when the [passageId] changes, refetch
+    $: $currentLanguageInfo?.id && fetchGuides();
     $: passage && fetchBibles(passage, $preferredBibleIds);
     $: passage && fetchResources(passage);
     $: fetchContentForBibleId(selectedBibleId);
@@ -113,6 +116,10 @@
         if (guide && $page.params.passageId !== 'new') {
             $currentGuide = guide;
         }
+    }
+
+    async function fetchGuides() {
+        localizedGuides = await fetchLocalizedGuideData();
     }
 
     function fetchBase() {
@@ -315,7 +322,7 @@
     });
 </script>
 
-<GuidePane bind:selectedTab bind:guidePane bind:isShowing={isShowingGuidePane} />
+<GuidePane bind:selectedTab bind:guidePane bind:isShowing={isShowingGuidePane} bind:localizedGuides />
 <BiblePane
     bind:biblePane
     bind:isShowing={isShowingBiblePane}

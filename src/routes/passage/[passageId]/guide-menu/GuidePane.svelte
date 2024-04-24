@@ -10,6 +10,7 @@
     export let guidePane: CupertinoPane;
     export let isShowing: boolean;
     export let selectedTab: string | null = null;
+    export let localizedGuides: ApiParentResource[] = $guideResources;
 
     function selectGuideAndHandleMenu(guideResource: ApiParentResource) {
         setCurrentGuide(guideResource);
@@ -41,7 +42,7 @@
     <div class="flex w-full flex-col items-center">
         <h3 class="my-2 font-bold capitalize">{$translate('page.guideMenu.selectGuide.value')}</h3>
         <hr class="my-2 w-full" />
-        {#each $guideResources as guideResource}
+        {#each localizedGuides as guideResource}
             {@const isCurrentGuide = guideResource === $currentGuide}
             <button
                 on:click={() => selectGuideAndHandleMenu(guideResource)}
@@ -54,7 +55,7 @@
                 <span class="text-sm text-[#98A2B3]">{guideResource.shortName}</span>
             </button>
         {/each}
-        {#if $guideResources.length === 0}
+        {#if localizedGuides.length === 0}
             <h3 class="my-2 font-bold">{$translate('page.guideMenu.noGuides.value')}</h3>
         {/if}
     </div>
