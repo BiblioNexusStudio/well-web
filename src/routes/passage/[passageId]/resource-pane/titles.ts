@@ -22,7 +22,7 @@ export function calculateTitle(parentResourceName: string) {
         case ParentResourceName.BiblicaStudyNotes:
             return $translate('resources.types.biblicaStudyNotes.value');
         case ParentResourceName.UWTranslationManual:
-            return $translate('resources.types.translationManuelUnfoldingWord.value');
+            return $translate('resources.types.translationManualUnfoldingWord.value');
         case ParentResourceName.UWTranslationNotes:
             return $translate('resources.types.translationNotesUnfoldingWord.value');
         default:

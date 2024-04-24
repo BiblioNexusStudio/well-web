@@ -327,9 +327,9 @@
                 "value": "Translation Notes (unfoldingWord)",
                 "_context": "Translation notes from unfoldingWord"
             },
-            "translationManuelUnfoldingWord": {
-                "value": "Translation Manuel (unfoldingWord)",
-                "_context": "Translation manuel from unfoldingWord"
+            "translationManualUnfoldingWord": {
+                "value": "Translation Manual (unfoldingWord)",
+                "_context": "Translation manual from unfoldingWord"
             }
         },
         "cbbt-er": {
