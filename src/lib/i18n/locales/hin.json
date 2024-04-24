@@ -251,6 +251,12 @@
             },
             "videoBibleDictionary": {
                 "value": "वीडियो (Video Bible Dictionary)"
+            },
+            "translationNotesUnfoldingWord": {
+                "value": "अनुवाद नोट्स (unfoldingWord)"
+            },
+            "translationManuelUnfoldingWord": {
+                "value": "अनुवाद मануएल (unfoldingWord)"
             }
         },
         "cbbt-er": {

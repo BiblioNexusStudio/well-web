@@ -21,7 +21,11 @@ export function calculateTitle(parentResourceName: string) {
             return $translate('resources.types.biblicaBibleDictionary.value');
         case ParentResourceName.BiblicaStudyNotes:
             return $translate('resources.types.biblicaStudyNotes.value');
+        case ParentResourceName.UWTranslationManual:
+            return $translate('resources.types.translationManuelUnfoldingWord.value');
+        case ParentResourceName.UWTranslationNotes:
+            return $translate('resources.types.translationNotesUnfoldingWord.value');
         default:
-            return null;
+            return parentResourceName;
     }
 }

@@ -321,6 +321,12 @@
             "videoBibleDictionary": {
                 "value": "Video (Kamusi ya Biblia ya Video)",
                 "_context": "Video kutoka kwa Kamusi ya Biblia ya Video"
+            },
+            "translationNotesUnfoldingWord": {
+                "value": "Maelezo ya Tafsiri (unfoldingWord)"
+            },
+            "translationManuelUnfoldingWord": {
+                "value": "Manuali ya Tafsiri (unfoldingWord)"
             }
         },
         "cbbt-er": {

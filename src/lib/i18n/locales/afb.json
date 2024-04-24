@@ -251,6 +251,12 @@
             },
             "videoBibleDictionary": {
                 "value": "فيديوهات (قاموس الكتاب المقدس بالفيديو)"
+            },
+            "translationNotesUnfoldingWord": {
+                "value": "ملاحظات الترجمة (unfoldingWord)"
+            },
+            "translationManuelUnfoldingWord": {
+                "value": "دليل الترجمة (unfoldingWord)"
             }
         },
         "cbbt-er": {

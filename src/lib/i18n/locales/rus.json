@@ -321,6 +321,12 @@
             "videoBibleDictionary": {
                 "value": "Видео (Видео Библейский Словарь)",
                 "_context": "Видео из Видео Библейского Словаря"
+            },
+            "translationNotesUnfoldingWord": {
+                "value": "Заметки о переводе (unfoldingWord)"
+            },
+            "translationManuelUnfoldingWord": {
+                "value": "Руководство по переводу (unfoldingWord)"
             }
         },
         "cbbt-er": {

@@ -7,6 +7,8 @@ export enum ParentResourceName {
     UWTranslationWords = 'UWTranslationWords',
     UbsImages = 'UbsImages',
     VideoBibleDictionary = 'VideoBibleDictionary',
+    UWTranslationNotes = 'UWTranslationNotes',
+    UWTranslationManual = 'UWTranslationManual',
 }
 
 export enum MediaType {

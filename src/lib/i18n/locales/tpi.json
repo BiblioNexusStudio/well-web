@@ -251,6 +251,12 @@
             },
             "videoBibleDictionary": {
                 "value": "Ol vidio(Vidio Diksoneri bilong Buk Tambu)"
+            },
+            "translationNotesUnfoldingWord": {
+                "value": "Nôtes bilong Translasen (unfoldingWord)"
+            },
+            "translationManuelUnfoldingWord": {
+                "value": "Manuel bilong Translasen (unfoldingWord)"
             }
         },
         "cbbt-er": {

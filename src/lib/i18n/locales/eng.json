@@ -322,6 +322,14 @@
             "videoBibleDictionary": {
                 "value": "Videos (Video Bible Dictionary)",
                 "_context": "Videos from the Video Bible Dictionary"
+            },
+            "translationNotesUnfoldingWord": {
+                "value": "Translation Notes (unfoldingWord)",
+                "_context": "Translation notes from unfoldingWord"
+            },
+            "translationManuelUnfoldingWord": {
+                "value": "Translation Manuel (unfoldingWord)",
+                "_context": "Translation manuel from unfoldingWord"
             }
         },
         "cbbt-er": {

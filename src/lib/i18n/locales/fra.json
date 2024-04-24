@@ -251,6 +251,12 @@
             },
             "videoBibleDictionary": {
                 "value": "Vidéos (Dictionnaire Biblique Vidéo)"
+            },
+            "translationNotesUnfoldingWord": {
+                "value": "Notes de traduction (unfoldingWord)"
+            },
+            "translationManuelUnfoldingWord": {
+                "value": "Manuel de traduction (unfoldingWord)"
             }
         },
         "cbbt-er": {
