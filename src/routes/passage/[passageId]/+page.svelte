@@ -55,6 +55,7 @@
     import { bibleSetByUser, bibleStoredByUser } from '$lib/stores/bibles.store';
     import BiblePane from './bible-menu/BiblePane.svelte';
     import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
+    import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
@@ -80,9 +81,11 @@
     let isShowingGuidePane = false;
     let isShowingBiblePane = false;
     let isShowingBookPassageSelectorPane = false;
+    let isShowingBookChapterSelectorPane = false;
     let guidePane: CupertinoPane;
     let biblePane: CupertinoPane;
     let bookPassageSelectorPane: CupertinoPane;
+    let bookChapterSelectorPane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let bibleSelectionScroll: number | undefined;
     let baseFetchPromise: Promise<void> | undefined;
@@ -275,6 +278,14 @@
         }
     }
 
+    function showOrDismissBookChapterSelectorPane(show: boolean) {
+        if (show) {
+            bookChapterSelectorPane?.present({ animate: true });
+        } else {
+            bookChapterSelectorPane?.hide();
+        }
+    }
+
     function navbarTitle(
         resourceData: ResourceData | null,
         currentBible: FrontendBibleBook | undefined,
@@ -296,6 +307,13 @@
         }
     }
 
+    function closeAllPaneMenus() {
+        isShowingGuidePane = false;
+        isShowingBiblePane = false;
+        isShowingBookPassageSelectorPane = false;
+        isShowingBookChapterSelectorPane = false;
+    }
+
     function handleSelectedTabMenu(tab: string) {
         if (tab === 'libraryMenu') {
             openLibraryMenu();
@@ -305,6 +323,7 @@
             openBibleMenu();
         } else {
             closeAllPassagePageMenus();
+            closeAllPaneMenus();
         }
     }
 
@@ -314,6 +333,7 @@
     $: showOrDismissGuidePane(isShowingGuidePane);
     $: showOrDismissBiblePane(isShowingBiblePane);
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
+    $: showOrDismissBookChapterSelectorPane(isShowingBookChapterSelectorPane);
 
     onMount(() => {
         if (!$currentGuide) {
@@ -327,8 +347,10 @@
     bind:biblePane
     bind:isShowing={isShowingBiblePane}
     bind:showBookPassageMenu={isShowingBookPassageSelectorPane}
+    bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
 />
 <BookPassageSelectorPane bind:bookPassageSelectorPane bind:isShowing={isShowingBookPassageSelectorPane} />
+<BookChapterSelectorPane bind:bookChapterSelectorPane bind:isShowing={isShowingBookChapterSelectorPane} />
 
 <div class="btm-nav z-40 h-20 border-t">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>

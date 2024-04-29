@@ -17,6 +17,8 @@ import {
     biblesForLanguageEndpoint,
     passageDetailsByIdAndLanguage,
     passagesByLanguageAndParentResourceEndpoint,
+    bibleBooksByBibleId,
+    bibleTextByParams,
 } from '$lib/api-endpoints';
 
 async function getBibleBookCodesToName(languageId: number | null = null, retry = true) {
@@ -79,4 +81,12 @@ export function passageContentApiPath(passage: BasePassage) {
 
 export function passageContentApiFullPath(passage: BasePassage) {
     return env.PUBLIC_AQUIFER_API_URL + passageContentApiPath(passage);
+}
+
+export function getBibleBooksByBibleId(bibleId: number) {
+    return fetchFromCacheOrApi(...bibleBooksByBibleId(bibleId));
+}
+
+export function getBibleTextByParams(bibleId: number, params: string[]) {
+    return fetchFromCacheOrApi(...bibleTextByParams(bibleId, params));
 }

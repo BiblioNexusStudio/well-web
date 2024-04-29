@@ -57,19 +57,19 @@
                 on:click={openBiblePane}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
             >
-                {title}
+                {title ? title : 'Select Bible'}
             </button>
             <button
                 on:click={handleOpenBibleMenu}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
             >
-                {$bibleSetByUser?.abbreviation || ''}
+                {$bibleSetByUser?.abbreviation || 'Select Verse'}
             </button>
             <button
                 on:click={openGuideMenu}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
             >
-                {guideShortName}
+                {guideShortName ? guideShortName : 'Select Guide'}
             </button>
         </div>
     {/if}
