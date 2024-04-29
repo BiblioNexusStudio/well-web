@@ -4,6 +4,8 @@
     import { getBibleBooksByBibleId, getBibleTextByParams } from '$lib/utils/data-handlers/resources/passages';
     import { bibleSetByUser } from '$lib/stores/bibles.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
+    import { Icon } from 'svelte-awesome';
+    import arrowRight from 'svelte-awesome/icons/arrowRight';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -51,8 +53,11 @@
     }
 
     function handleChapterSelection(chapter: Chapter) {
-        currentStep = steps.three;
         currentChapter = chapter;
+    }
+
+    function handleGoToVerses() {
+        currentStep = steps.three;
     }
 
     function buildVerseSet(totalVerses: number, chapterNumber: number) {
@@ -137,13 +142,6 @@
     }
 
     async function handleVerseGoButton() {
-        const firstSelectedVerse = currentBook.chapters.flatMap((c) => c.verseState).find((v) => v.selected)!;
-
-        const lastSelectedVerse = currentBook.chapters
-            .flatMap((c) => c.verseState)
-            .reverse()
-            .find((v) => v.selected)!;
-
         let params = [
             `booknumber=${currentChapter.number}`,
             `startchapter=${firstSelectedVerse.chapterNumber}`,
@@ -157,10 +155,30 @@
         console.log(firstSelectedVerse, lastSelectedVerse, data);
     }
 
+    function formatBibleVerseRange(
+        bookName: string,
+        startChapter: number | string,
+        startVerse: number | string,
+        endChapter: number | string,
+        endVerse: number | string
+    ): string {
+        let formattedRange: string;
+
+        if (!startChapter && !startVerse && !endChapter && !endVerse) {
+            formattedRange = `${bookName}`;
+        } else if (startChapter === endChapter) {
+            formattedRange = `${bookName} ${startChapter}:${startVerse}-${endVerse}`;
+        } else {
+            formattedRange = `${bookName} ${startChapter}:${startVerse}-${endChapter}:${endVerse}`;
+        }
+
+        return formattedRange;
+    }
+
     onMount(async () => {
         bookChapterSelectorPane = new CupertinoPane('#book-chapter-verse-selector-pane', {
             backdrop: true,
-            topperOverflow: true,
+            topperOverflow: false,
             initialBreak: 'top',
             events: {
                 onWillDismiss: () => (isShowing = false),
@@ -170,10 +188,26 @@
     });
 
     $: verseGoButtonDisabled = currentBook?.chapters?.flatMap((c) => c?.verseState).every((v) => !v?.selected);
+    $: currentChapterSelected = currentChapter?.number && currentChapter?.number > 0;
+    $: firstSelectedVerse = currentBook?.chapters?.flatMap((c) => c.verseState)?.find((v) => v.selected) || {
+        chapterNumber: '',
+        number: '',
+    };
+    $: lastSelectedVerse = currentBook?.chapters
+        ?.flatMap((c) => c.verseState)
+        ?.reverse()
+        ?.find((v) => v.selected) || { chapterNumber: '', number: '' };
+    $: verseTitle = formatBibleVerseRange(
+        currentBook?.localizedName,
+        firstSelectedVerse.chapterNumber,
+        firstSelectedVerse.number,
+        lastSelectedVerse.chapterNumber,
+        lastSelectedVerse.number
+    );
 </script>
 
-<div id="book-chapter-verse-selector-pane">
-    <div class="flex w-full flex-col items-center px-4">
+<div id="book-chapter-verse-selector-pane" class="overflow-hidden pb-24">
+    <div class="flex h-full w-full flex-col items-center px-4">
         {#if currentStep !== steps.one}
             <button on:click={handleBack} class="mb-2 flex items-center self-start pe-8">
                 <ChevronLeftIcon />
@@ -183,56 +217,82 @@
             <h3 class="my-2 font-bold">{currentStep.title}</h3>
         {/if}
 
-        <hr class="my-2 w-full" />
-        <div class="flex w-full flex-col items-center overflow-y-scroll">
+        <hr class="my-2 w-screen" />
+        <div class="flex h-full w-full flex-col items-center {currentStep === steps.one ? 'overflow-y-scroll' : ''}">
             {#await promise}
                 <p>Loading...</p>
             {:then books}
                 {#if currentStep === steps.one}
-                    {#each books as book}
-                        {@const isCurrentBook = book === currentBook}
-                        <button
-                            on:click={() => handleBookSelection(book)}
-                            class="my-2 flex w-full flex-wrap rounded-xl border p-4 {isCurrentBook
-                                ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
-                                : 'border'}"
-                        >
-                            {book.localizedName}
-                        </button>
-                    {/each}
+                    <div class="h-full w-full">
+                        {#each books as book}
+                            {@const isCurrentBook = book === currentBook}
+                            <button
+                                on:click={() => handleBookSelection(book)}
+                                class="my-2 flex w-full flex-wrap rounded-xl border p-4 {isCurrentBook
+                                    ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
+                                    : 'border'}"
+                            >
+                                {book.localizedName}
+                            </button>
+                        {/each}
+                    </div>
                 {/if}
                 {#if currentStep === steps.two}
                     <h3 class="mb-4 self-start text-lg font-bold">{currentBook.localizedName}</h3>
                     <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
-                    <div class="grid w-full grid-cols-5 gap-4 overflow-y-auto">
+                    <div class="w-full overflow-y-scroll">
+                        <div class="grid w-full grid-cols-5 gap-4">
+                            {#each currentBook.chapters as chapter}
+                                {@const isCurrentChapter = chapter === currentChapter}
+                                <button
+                                    on:click={() => handleChapterSelection(chapter)}
+                                    class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
+                                >
+                                    {chapter.number}
+                                </button>
+                            {/each}
+                        </div>
+                    </div>
+                    <hr class="my-4 w-screen" />
+                    <button
+                        on:click={handleGoToVerses}
+                        disabled={!currentChapterSelected}
+                        class="btn btn-primary mb-12 w-full"
+                        >Go <Icon data={arrowRight} class="ms-2" />
+                    </button>
+                {/if}
+                {#if currentStep === steps.three}
+                    <h3 class="mb-4 self-start text-lg font-bold">{verseTitle}</h3>
+                    <div class="my-2 flex w-full overflow-x-scroll">
                         {#each currentBook.chapters as chapter}
                             {@const isCurrentChapter = chapter === currentChapter}
                             <button
                                 on:click={() => handleChapterSelection(chapter)}
-                                class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
+                                class="btn me-4 {isCurrentChapter && 'bg-blue-500 text-white'}"
                             >
-                                {chapter.number}
+                                <span class="me-1">{currentBook.localizedName}</span><span>{chapter.number}</span>
                             </button>
                         {/each}
                     </div>
-                {/if}
-                {#if currentStep === steps.three}
-                    <h3 class="mb-4 self-start text-lg font-bold">{currentBook.localizedName}</h3>
                     <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
-                    <div class="grid w-full grid-cols-5 gap-4 overflow-y-auto">
-                        {#each currentChapter.verseState as verse}
-                            <button
-                                on:click={() => handleVerseSelection(verse)}
-                                class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
-                            >
-                                {verse.number}
-                            </button>
-                        {/each}
+                    <div class="w-full overflow-y-scroll">
+                        <div class="grid w-full grid-cols-5 gap-4">
+                            {#each currentChapter.verseState as verse}
+                                <button
+                                    on:click={() => handleVerseSelection(verse)}
+                                    class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
+                                >
+                                    {verse.number}
+                                </button>
+                            {/each}
+                        </div>
                     </div>
+                    <hr class="my-4 w-screen" />
+
                     <button
                         on:click={handleVerseGoButton}
                         disabled={verseGoButtonDisabled}
-                        class="btn btn-primary self-end">Go</button
+                        class="btn btn-primary w-full">Go <Icon data={arrowRight} class="ms-2" /></button
                     >
                 {/if}
             {/await}
