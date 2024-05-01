@@ -329,6 +329,29 @@
             "noPassages": {
                 "value": "Hakuna vifungu vilivyopatikana"
             }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Vitabu Vinavyopatikana"
+            },
+            "book": {
+                "value": "Kitabu"
+            },
+            "selectChapter": {
+                "value": "Chagua Sura"
+            },
+            "chapter": {
+                "value": "Sura"
+            },
+            "selectVerse": {
+                "value": "Chagua Aya"
+            },
+            "go": {
+                "value": "Enda"
+            },
+            "loading": {
+                "value": "Kupakia..."
+            }
         }
     },
     "navTop": {

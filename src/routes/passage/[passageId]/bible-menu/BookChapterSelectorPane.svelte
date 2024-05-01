@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { _ as translate } from 'svelte-i18n';
     import { CupertinoPane } from 'cupertino-pane';
     import { afterUpdate, onMount } from 'svelte';
     import { getBibleBooksByBibleId, getBibleTextByParams } from '$lib/utils/data-handlers/resources/passages';
@@ -19,9 +20,21 @@
     let promise = getBibleBooksByBibleId($bibleSetByUser?.id || 1);
 
     let steps = {
-        one: { title: 'Available Books', subtitle: '', backText: '', backStep: '' },
-        two: { title: 'Book', subtitle: 'Select Chapter', backText: 'Book', backStep: 'one' },
-        three: { title: 'Chapter', subtitle: 'Select Verse', backText: 'Chapter', backStep: 'two' },
+        one: {
+            title: $translate('page.BookChapterSelectorPane.availableBooks.value'),
+            subtitle: '',
+            backText: '',
+        },
+        two: {
+            title: $translate('page.BookChapterSelectorPane.book.value'),
+            subtitle: $translate('page.BookChapterSelectorPane.selectChapter.value'),
+            backText: $translate('page.BookChapterSelectorPane.book.value'),
+        },
+        three: {
+            title: $translate('page.BookChapterSelectorPane.chapter.value'),
+            subtitle: $translate('page.BookChapterSelectorPane.selectVerse.value'),
+            backText: $translate('page.BookChapterSelectorPane.chapter.value'),
+        },
     };
 
     let currentStep = steps.one;
@@ -222,7 +235,7 @@
                 : ''}"
         >
             {#await promise}
-                <p>Loading...</p>
+                <p>{$translate('page.BookChapterSelectorPane.loading.value')}</p>
             {:then books}
                 {#if currentStep === steps.one}
                     <div class="h-full w-full">
@@ -260,7 +273,7 @@
                         on:click={handleGoToVerses}
                         disabled={!currentChapterSelected}
                         class="btn btn-primary w-full"
-                        >Go <Icon data={arrowRight} class="ms-2" />
+                        >{$translate('page.BookChapterSelectorPane.go.value')} <Icon data={arrowRight} class="ms-2" />
                     </button>
                 {/if}
                 {#if currentStep === steps.three}
@@ -295,7 +308,9 @@
                     <button
                         on:click={handleVerseGoButton}
                         disabled={verseGoButtonDisabled}
-                        class="btn btn-primary w-full">Go <Icon data={arrowRight} class="ms-2" /></button
+                        class="btn btn-primary w-full"
+                        >{$translate('page.BookChapterSelectorPane.go.value')}
+                        <Icon data={arrowRight} class="ms-2" /></button
                     >
                 {/if}
             {/await}

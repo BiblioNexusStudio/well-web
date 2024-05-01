@@ -275,6 +275,29 @@
             "noPassages": {
                 "value": "कोई पाठ उपलब्ध नहीं है"
             }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "उपलब्ध पुस्तकें"
+            },
+            "book": {
+                "value": "पुस्तक"
+            },
+            "selectChapter": {
+                "value": "चैप्टर चुनें"
+            },
+            "chapter": {
+                "value": "चैप्टर"
+            },
+            "selectVerse": {
+                "value": "अद्याय चुनें"
+            },
+            "go": {
+                "value": "जाओ"
+            },
+            "loading": {
+                "value": "लोड हो रहा है"
+            }
         }
     },
     "navTop": {

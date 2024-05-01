@@ -275,6 +275,29 @@
             "noPassages": {
                 "value": "Aucun passage trouvé"
             }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Livres Disponibles"
+            },
+            "book": {
+                "value": "Livre"
+            },
+            "selectChapter": {
+                "value": "Sélectionner un Chapitre"
+            },
+            "chapter": {
+                "value": "Chapitre"
+            },
+            "selectVerse": {
+                "value": "Sélectionner un Vers"
+            },
+            "go": {
+                "value": "Aller"
+            },
+            "loading": {
+                "value": "Chargement..."
+            }
         }
     },
     "navTop": {

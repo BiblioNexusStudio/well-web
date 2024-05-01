@@ -329,6 +329,29 @@
             "noPassages": {
                 "value": "Нет доступных отрывков"
             }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Доступные книги"
+            },
+            "book": {
+                "value": "Книга"
+            },
+            "selectChapter": {
+                "value": "Выберите главу"
+            },
+            "chapter": {
+                "value": "Глава"
+            },
+            "selectVerse": {
+                "value": "Выберите стих"
+            },
+            "go": {
+                "value": "Далее"
+            },
+            "loading": {
+                "value": "Загрузка..."
+            }
         }
     },
     "navTop": {
