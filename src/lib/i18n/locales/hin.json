@@ -281,6 +281,15 @@
         "recording": {
             "value": "एक रेकॉर्डिंग बनाएं"
         },
+        "selectPassage": {
+            "value": "पाठ चुनें"
+        },
+        "selectBible": {
+            "value": "बाइबिल चुनें"
+        },
+        "selectGuide": {
+            "value": "मार्गदर्शिका चुनें"
+        },
         "audioRecordingModal": {
             "noPermission": {
                 "value": "कृपया अपनी सेटिंग्स अपडेट करें और माइक्रोफोन का उपयोग करने की अनुमति दें"

@@ -281,6 +281,15 @@
         "recording": {
             "value": "Mekim wanpela rekoding"
         },
+        "selectPassage": {
+            "value": "Selektim Hap Riding"
+        },
+        "selectBible": {
+            "value": "Selektim Baibel"
+        },
+        "selectGuide": {
+            "value": "Selektim Gaid"
+        },
         "audioRecordingModal": {
             "noPermission": {
                 "value": "Plis apdeitim ol setings bilong yu na givim tokorait lo maikropon blo yu blo yusim"

@@ -60,3 +60,43 @@ export interface FrontendChapterContent {
     audioData: FrontendChapterAudioData | null;
     versesText: { number: string; text: string }[];
 }
+
+export type ApiBibleChapter = {
+    number: number;
+    totalVerses: number;
+    verseState: FrontEndVerseForSelectionPane[];
+};
+
+export type ApiBibleBook = {
+    id: number;
+    number: number;
+    code: string;
+    localizedName: string;
+    totalChapters: number;
+    chapters: ApiBibleChapter[];
+};
+
+export type FrontEndVerseForSelectionPane = {
+    number: number;
+    selected: boolean;
+    chapterNumber: number;
+};
+
+export type ApiVerseContents = {
+    number: number;
+    text: string;
+};
+
+export type ApiChapterContents = {
+    number: number;
+    verses: ApiVerseContents[];
+};
+
+export type ApiBibleContents = {
+    bibleName: string;
+    bibleAbbreviation: string;
+    bookName: string;
+    bookCode: string;
+    bookNumber: number;
+    chapters: ApiChapterContents[];
+};

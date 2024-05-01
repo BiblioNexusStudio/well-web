@@ -336,6 +336,15 @@
             "value": "Rekodi",
             "_context": "Kitufe cha kuunda rekodi ya kifungu"
         },
+        "selectPassage": {
+            "value": "Chagua Kifungu"
+        },
+        "selectBible": {
+            "value": "Chagua Biblia"
+        },
+        "selectGuide": {
+            "value": "Chagua Mwongozo"
+        },
         "audioRecordingModal": {
             "noPermission": {
                 "value": "Tafadhali sasisha mipangilio yako na upatie ruhusa ili kipaza sauti chako kitumike",

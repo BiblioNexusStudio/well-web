@@ -281,6 +281,15 @@
         "recording": {
             "value": "اصنع تسجيلاً"
         },
+        "selectPassage": {
+            "value": "اختر مقطعًا"
+        },
+        "selectBible": {
+            "value": "اختر ترجمة"
+        },
+        "selectGuide": {
+            "value": "اختر دليل"
+        },
         "audioRecordingModal": {
             "noPermission": {
                 "value": "يرجى تحديث إعداداتك والسماح باستخدام الميكروفون"
