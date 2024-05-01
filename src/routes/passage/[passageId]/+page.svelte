@@ -298,24 +298,22 @@
         selectedStepNumber: number,
         bibleContents: ApiBibleContents | null
     ) {
-        if (bibleContents?.chapters?.length) {
-            if (bibleContents?.chapters?.length === 1) {
-                let bibleContentsLength = bibleContents?.chapters?.[0]?.verses?.length;
-                let titleString = `${bibleContents.bookName} ${bibleContents?.chapters?.[0]?.number}:${bibleContents?.chapters?.[0]?.verses?.[0]?.number}`;
-                if (bibleContentsLength && bibleContentsLength > 1) {
-                    titleString += `-${
-                        bibleContents?.chapters?.[0]?.verses?.[bibleContents?.chapters?.[0]?.verses?.length - 1]?.number
-                    }`;
-                }
-                return titleString;
-            } else {
-                const firstChapter = bibleContents?.chapters?.[0];
-                const lastChapter = bibleContents?.chapters?.[bibleContents?.chapters?.length - 1];
-
-                return `${bibleContents.bookName} ${firstChapter?.number}:${firstChapter?.verses?.[0]?.number}-${
-                    lastChapter?.number
-                }:${lastChapter?.verses?.[lastChapter?.verses?.length - 1]?.number}`;
+        if (bibleContents?.chapters?.length && bibleContents?.chapters?.length === 1) {
+            let bibleContentsLength = bibleContents?.chapters?.[0]?.verses?.length;
+            let titleString = `${bibleContents.bookName} ${bibleContents?.chapters?.[0]?.number}:${bibleContents?.chapters?.[0]?.verses?.[0]?.number}`;
+            if (bibleContentsLength && bibleContentsLength > 1) {
+                titleString += `-${
+                    bibleContents?.chapters?.[0]?.verses?.[bibleContents?.chapters?.[0]?.verses?.length - 1]?.number
+                }`;
             }
+            return titleString;
+        } else if (bibleContents?.chapters?.length && bibleContents?.chapters?.length > 1) {
+            const firstChapter = bibleContents?.chapters?.[0];
+            const lastChapter = bibleContents?.chapters?.[bibleContents?.chapters?.length - 1];
+
+            return `${bibleContents.bookName} ${firstChapter?.number}:${firstChapter?.verses?.[0]?.number}-${
+                lastChapter?.number
+            }:${lastChapter?.verses?.[lastChapter?.verses?.length - 1]?.number}`;
         }
         if (selectedTab === 'bible' || selectedTab === 'guide') {
             if (resourceData?.cbbterText?.steps?.length && resourceData?.title) {
