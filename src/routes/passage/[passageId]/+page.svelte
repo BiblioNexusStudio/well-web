@@ -58,6 +58,7 @@
     import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import SettingsMenu from './settings-menu/SettingsMenu.svelte';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -470,5 +471,8 @@
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
         <BibleMenu bind:showBibleMenu={isShowingBiblePane} />
+    {/if}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.settings}
+        <SettingsMenu />
     {/if}
 </div>

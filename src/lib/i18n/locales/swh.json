@@ -329,6 +329,11 @@
             "noPassages": {
                 "value": "Hakuna vifungu vilivyopatikana"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Mipangilio"
+            }
         }
     },
     "navTop": {

@@ -329,6 +329,11 @@
             "noPassages": {
                 "value": "Нет доступных отрывков"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Настройки"
+            }
         }
     },
     "navTop": {

@@ -275,6 +275,11 @@
             "noPassages": {
                 "value": "Aucun passage trouvé"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Paramètres"
+            }
         }
     },
     "navTop": {

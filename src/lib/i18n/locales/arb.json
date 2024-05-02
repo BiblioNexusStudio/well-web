@@ -275,6 +275,11 @@
             "noPassages": {
                 "value": "لا توجد مقاطع"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "الإعدادات"
+            }
         }
     },
     "navTop": {

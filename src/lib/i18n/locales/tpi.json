@@ -275,6 +275,11 @@
             "noPassages": {
                 "value": "Nogat Hap Riding"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Setings"
+            }
         }
     },
     "navTop": {

@@ -352,6 +352,12 @@
                 "value": "No Passages available",
                 "_context": "Message to display when no Passages are available"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Settings",
+                "_context": "Title for the settings section"
+            }
         }
     },
     "navTop": {
