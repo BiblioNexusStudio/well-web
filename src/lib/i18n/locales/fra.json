@@ -276,6 +276,11 @@
                 "value": "Aucun passage trouvé"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "Paramètres"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "Livres Disponibles"

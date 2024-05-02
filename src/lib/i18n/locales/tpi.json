@@ -276,6 +276,11 @@
                 "value": "Nogat Hap Riding"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "Setings"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "Buk i stap"

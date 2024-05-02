@@ -276,6 +276,11 @@
                 "value": "कोई पाठ उपलब्ध नहीं है"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "सेटिंग्स"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "उपलब्ध पुस्तकें"

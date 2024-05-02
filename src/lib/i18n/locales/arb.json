@@ -276,6 +276,11 @@
                 "value": "لا توجد مقاطع"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "الإعدادات"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "الكتب المتاحة"

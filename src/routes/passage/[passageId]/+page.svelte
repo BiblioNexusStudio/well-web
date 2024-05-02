@@ -63,6 +63,7 @@
     import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { ApiBibleContents } from '$lib/types/bible-text-content.ts';
 
     const steps = [
@@ -531,5 +532,8 @@
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
         <BibleMenu bind:showBibleMenu={isShowingBiblePane} />
+    {/if}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.settings}
+        <SettingsMenu />
     {/if}
 </div>

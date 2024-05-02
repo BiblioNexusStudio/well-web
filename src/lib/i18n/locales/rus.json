@@ -330,6 +330,11 @@
                 "value": "Нет доступных отрывков"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "Настройки"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "Доступные книги"
