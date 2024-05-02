@@ -1,16 +1,17 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import { currentGuide } from '$lib/stores/parent-resource.store';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
     import { bibles, bibleSetByUser, bibleWellBibleSetByUser } from '$lib/stores/bibles.store';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
-    import { lookupLanguageInfoById, currentLanguageInfo } from '$lib/stores/language.store';
+    import { lookupLanguageInfoById } from '$lib/stores/language.store';
 
     export let biblePane: CupertinoPane;
     export let isShowing: boolean;
     export let showBookPassageMenu: boolean;
+    export let showBookChapterVerseMenu: boolean;
 
     function setBibleAndHandleMenus(bible: BaseBible) {
         $bibleSetByUser = bible;
@@ -18,19 +19,12 @@
         isShowing = false;
         closeAllPassagePageMenus();
 
-        if ($selectedBookIndex === 'default' || $selectedId === 'default') {
+        if ($currentGuide) {
             showBookPassageMenu = true;
+        } else {
+            showBookChapterVerseMenu = true;
         }
     }
-
-    $: filteredBibles = $bibles.filter((bible) => {
-        if (bible.languageId === $currentLanguageInfo?.id) {
-            return bible;
-        }
-        if ($currentLanguageInfo?.id === 2 && bible.languageId === 1) {
-            return bible;
-        }
-    });
 
     onMount(() => {
         biblePane = new CupertinoPane('#bible-pane', {
@@ -50,7 +44,7 @@
         <h3 class="my-2 font-bold">{$translate('page.bibleMenu.selectBible.value')}</h3>
         <hr class="my-2 w-full" />
         <div class="flex w-full flex-col items-center overflow-y-auto">
-            {#each filteredBibles as bible}
+            {#each $bibles as bible}
                 {@const isCurrentBible = bible === $bibleSetByUser}
                 <button
                     on:click={() => setBibleAndHandleMenus(bible)}

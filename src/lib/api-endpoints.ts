@@ -53,3 +53,11 @@ export function passageDetailsByIdAndLanguage(
 ): ApiStringAndCacheBustVersion {
     return [`/passages/${passageId}/language/${languageId}`, 1];
 }
+
+export function bibleBooksByBibleId(bibleId: number | string): ApiStringAndCacheBustVersion {
+    return [`/bibles/${bibleId}/books`, 1];
+}
+
+export function bibleTextByParams(bibleId: number | string, queryParams: string[]): ApiStringAndCacheBustVersion {
+    return [`/bibles/${bibleId}/texts?${queryParams.join('&')}`, 1];
+}

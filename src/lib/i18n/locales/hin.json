@@ -280,11 +280,43 @@
             "settings": {
                 "value": "सेटिंग्स"
             }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "उपलब्ध पुस्तकें"
+            },
+            "book": {
+                "value": "पुस्तक"
+            },
+            "selectChapter": {
+                "value": "चैप्टर चुनें"
+            },
+            "chapter": {
+                "value": "चैप्टर"
+            },
+            "selectVerse": {
+                "value": "अद्याय चुनें"
+            },
+            "go": {
+                "value": "जाओ"
+            },
+            "loading": {
+                "value": "लोड हो रहा है"
+            }
         }
     },
     "navTop": {
         "recording": {
             "value": "एक रेकॉर्डिंग बनाएं"
+        },
+        "selectPassage": {
+            "value": "पाठ चुनें"
+        },
+        "selectBible": {
+            "value": "बाइबिल चुनें"
+        },
+        "selectGuide": {
+            "value": "मार्गदर्शिका चुनें"
         },
         "audioRecordingModal": {
             "noPermission": {

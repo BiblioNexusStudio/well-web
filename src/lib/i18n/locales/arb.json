@@ -280,11 +280,43 @@
             "settings": {
                 "value": "الإعدادات"
             }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "الكتب المتاحة"
+            },
+            "book": {
+                "value": "كتاب"
+            },
+            "selectChapter": {
+                "value": "اختر الفصل"
+            },
+            "chapter": {
+                "value": "الفصل"
+            },
+            "selectVerse": {
+                "value": "اختر الآية"
+            },
+            "go": {
+                "value": "اذهب"
+            },
+            "loading": {
+                "value": "جار التحميل"
+            }
         }
     },
     "navTop": {
         "recording": {
             "value": "اصنع تسجيلاً"
+        },
+        "selectPassage": {
+            "value": "اختر مقطعًا"
+        },
+        "selectBible": {
+            "value": "اختر ترجمة"
+        },
+        "selectGuide": {
+            "value": "اختر دليل"
         },
         "audioRecordingModal": {
             "noPermission": {
