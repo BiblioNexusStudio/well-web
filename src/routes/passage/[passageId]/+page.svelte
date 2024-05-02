@@ -63,6 +63,7 @@
     import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import type { ApiBibleContents } from '$lib/types/bible-text-content.ts';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { ApiBibleContents } from '$lib/types/bible-text-content.ts';
 
