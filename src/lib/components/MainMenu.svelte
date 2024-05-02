@@ -16,7 +16,9 @@
     <div class="mb-6 flex flex-col px-6">
         <div class="flex flex-col text-[#344054]">
             <span class="mb-2 text-xs font-bold">{$translate('page.menu.language.value')}</span>
-            <button on:click={() => goto('/select-language')} class="btn btn-outline border-[#EAECF0] text-[#344054]"
+            <button
+                on:click={() => goto('/select-language')}
+                class="btn btn-outline btn-primary border-[#EAECF0] !text-[#344054]"
                 ><LanguageIcon />{$translate('page.menu.changeLanguage.value')}</button
             >
         </div>
@@ -28,13 +30,13 @@
             <div class="grid grid-cols-2 gap-4">
                 <button
                     on:click={() => goto('/')}
-                    class="btn btn-outline flex h-auto flex-col items-start border-[#EAECF0] p-4 text-[#344054]"
+                    class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
                     ><HomeIcon /><span class="mt-2 text-xs">{$translate('page.menu.home.value')}</span></button
                 >
 
                 <button
                     on:click={() => goto('/file-manager')}
-                    class="btn btn-outline flex h-auto flex-col items-start border-[#EAECF0] p-4 text-[#344054]"
+                    class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
                     ><DownloadIcon /><span class="mt-2 text-xs">{$translate('page.menu.localFileManager.value')}</span
                     ></button
                 >

@@ -275,11 +275,43 @@
             "noPassages": {
                 "value": "Nogat Hap Riding"
             }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Buk i stap"
+            },
+            "book": {
+                "value": "Buk"
+            },
+            "selectChapter": {
+                "value": "Selektim Chapta"
+            },
+            "chapter": {
+                "value": "Chapta"
+            },
+            "selectVerse": {
+                "value": "Selektim Vese"
+            },
+            "go": {
+                "value": "Go"
+            },
+            "loading": {
+                "value": "Loading..."
+            }
         }
     },
     "navTop": {
         "recording": {
             "value": "Mekim wanpela rekoding"
+        },
+        "selectPassage": {
+            "value": "Selektim Hap Riding"
+        },
+        "selectBible": {
+            "value": "Selektim Baibel"
+        },
+        "selectGuide": {
+            "value": "Selektim Gaid"
         },
         "audioRecordingModal": {
             "noPermission": {

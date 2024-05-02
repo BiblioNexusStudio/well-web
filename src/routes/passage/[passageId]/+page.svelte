@@ -29,7 +29,6 @@
         fetchBibleData,
         fetchLocalizedGuideData,
     } from './data-fetchers';
-    import BibleUnavailable from './BibleUnavailable.svelte';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible-text-content';
     import type { BasePassage } from '$lib/types/passage';
@@ -52,12 +51,19 @@
     import GuidePane from './guide-menu/GuidePane.svelte';
     import LibraryMenu from './library-menu/LibraryMenu.svelte';
     import BibleMenu from './bible-menu/BibleMenu.svelte';
-    import { bibleSetByUser, bibleStoredByUser } from '$lib/stores/bibles.store';
+    import {
+        bibleSetByUser,
+        bibleStoredByUser,
+        bibleDataFetchedByUser,
+        loadingContent,
+    } from '$lib/stores/bibles.store';
     import BiblePane from './bible-menu/BiblePane.svelte';
     import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
+    import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import type { ApiBibleContents } from '$lib/types/bible-text-content.ts';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -80,9 +86,11 @@
     let isShowingGuidePane = false;
     let isShowingBiblePane = false;
     let isShowingBookPassageSelectorPane = false;
+    let isShowingBookChapterSelectorPane = false;
     let guidePane: CupertinoPane;
     let biblePane: CupertinoPane;
     let bookPassageSelectorPane: CupertinoPane;
+    let bookChapterSelectorPane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let bibleSelectionScroll: number | undefined;
     let baseFetchPromise: Promise<void> | undefined;
@@ -275,12 +283,38 @@
         }
     }
 
+    function showOrDismissBookChapterSelectorPane(show: boolean) {
+        if (show) {
+            bookChapterSelectorPane?.present({ animate: true });
+        } else {
+            bookChapterSelectorPane?.hide();
+        }
+    }
+
     function navbarTitle(
         resourceData: ResourceData | null,
         currentBible: FrontendBibleBook | undefined,
         selectedTab: PassagePageTab,
-        selectedStepNumber: number
+        selectedStepNumber: number,
+        bibleContents: ApiBibleContents | null
     ) {
+        if (bibleContents?.chapters?.length && bibleContents?.chapters?.length === 1) {
+            let bibleContentsLength = bibleContents?.chapters?.[0]?.verses?.length;
+            let titleString = `${bibleContents.bookName} ${bibleContents?.chapters?.[0]?.number}:${bibleContents?.chapters?.[0]?.verses?.[0]?.number}`;
+            if (bibleContentsLength && bibleContentsLength > 1) {
+                titleString += `-${
+                    bibleContents?.chapters?.[0]?.verses?.[bibleContents?.chapters?.[0]?.verses?.length - 1]?.number
+                }`;
+            }
+            return titleString;
+        } else if (bibleContents?.chapters?.length && bibleContents?.chapters?.length > 1) {
+            const firstChapter = bibleContents?.chapters?.[0];
+            const lastChapter = bibleContents?.chapters?.[bibleContents?.chapters?.length - 1];
+
+            return `${bibleContents.bookName} ${firstChapter?.number}:${firstChapter?.verses?.[0]?.number}-${
+                lastChapter?.number
+            }:${lastChapter?.verses?.[lastChapter?.verses?.length - 1]?.number}`;
+        }
         if (selectedTab === 'bible' || selectedTab === 'guide') {
             if (resourceData?.cbbterText?.steps?.length && resourceData?.title) {
                 return resourceData?.title;
@@ -296,24 +330,35 @@
         }
     }
 
+    function closeAllPaneMenus() {
+        isShowingGuidePane = false;
+        isShowingBiblePane = false;
+        isShowingBookPassageSelectorPane = false;
+        isShowingBookChapterSelectorPane = false;
+    }
+
     function handleSelectedTabMenu(tab: string) {
         if (tab === 'libraryMenu') {
             openLibraryMenu();
+        } else if (tab === 'guide' && $currentGuide === undefined) {
+            openGuideMenu();
         } else if (tab === 'mainMenu') {
             openMainMenu();
         } else if (tab === 'bible' && $bibleSetByUser === null) {
             openBibleMenu();
         } else {
             closeAllPassagePageMenus();
+            closeAllPaneMenus();
         }
     }
 
-    $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber);
+    $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber, $bibleDataFetchedByUser);
     $: handleSelectedTabMenu(selectedTab);
 
     $: showOrDismissGuidePane(isShowingGuidePane);
     $: showOrDismissBiblePane(isShowingBiblePane);
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
+    $: showOrDismissBookChapterSelectorPane(isShowingBookChapterSelectorPane);
 
     onMount(() => {
         if (!$currentGuide) {
@@ -327,8 +372,10 @@
     bind:biblePane
     bind:isShowing={isShowingBiblePane}
     bind:showBookPassageMenu={isShowingBookPassageSelectorPane}
+    bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
 />
 <BookPassageSelectorPane bind:bookPassageSelectorPane bind:isShowing={isShowingBookPassageSelectorPane} />
+<BookChapterSelectorPane bind:bookChapterSelectorPane bind:isShowing={isShowingBookChapterSelectorPane} />
 
 <div class="btm-nav z-40 h-20 border-t">
     <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
@@ -360,11 +407,12 @@
                 tab={selectedTab}
                 guideShortName={$currentGuide?.shortName ?? ''}
                 bind:showBiblePane={isShowingBookPassageSelectorPane}
+                bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
             />
         {/if}
         <div
             class="absolute left-0 right-0 top-16 flex flex-col {$passagePageShownMenu !== null &&
-                'hidden'} {audioPlayerShowing ? 'bottom-[7.5rem]' : 'bottom-16'}"
+                'hidden'} {audioPlayerShowing ? 'bottom-[7.5rem]' : 'bottom-20'}"
         >
             {#if selectedBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
                 <div class="px-4 pb-4 {selectedTab !== 'bible' && 'hidden'}">
@@ -381,9 +429,7 @@
                 </div>
             {/if}
             <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'bible' && 'hidden'}">
-                {#if selectedBibleId === null}
-                    <BibleUnavailable bind:preferredBiblesModalOpen bibles={bibleData?.availableBibles} />
-                {:else if currentBible?.loadingContent}
+                {#if $loadingContent}
                     <FullPageSpinner />
                 {:else if currentBible?.content?.chapters?.length}
                     <div class="prose mx-auto overflow-y-scroll">
@@ -398,6 +444,21 @@
                             {/each}
                         {/each}
                     </div>
+                {:else if $bibleDataFetchedByUser?.chapters?.length}
+                    <div class="prose mx-auto overflow-y-scroll">
+                        {#each $bibleDataFetchedByUser?.chapters as chapter}
+                            {#each chapter.verses as { number, text }}
+                                <div
+                                    class="py-1"
+                                    dir={lookupLanguageInfoById($bibleSetByUser?.languageId || 1)?.scriptDirection}
+                                >
+                                    <span class="sup pe-1">{number}</span><span>{@html text}</span>
+                                </div>
+                            {/each}
+                        {/each}
+                    </div>
+                {:else}
+                    <div></div>
                 {/if}
             </div>
             {#await resourceFetchPromise}
