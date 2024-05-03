@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { settings } from '$lib/stores/settings';
-    import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
+    import { settings } from '$lib/stores/settings.store';
     import { openMainMenu } from '$lib/stores/passage-page.store';
     import { _ as translate } from 'svelte-i18n';
+    import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
 </script>
 
 <div class="flex h-full w-full flex-col p-4">

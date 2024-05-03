@@ -31,6 +31,8 @@ import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
 import { parentResourcesEndpoint, passageDetailsByIdAndLanguage } from '$lib/api-endpoints';
+import { settings } from '$lib/stores/settings.store';
+import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
 
 export type PassagePageTab = 'bible' | 'guide' | 'mainMenu' | 'libraryMenu';
 
@@ -172,9 +174,22 @@ async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): 
 async function getAdditionalResourcesForPassage(
     passage: PassageWithResourceContentIds
 ): Promise<PassageResourceContent[]> {
-    const additionalResourceContent = passage.contents.filter(
-        ({ parentResourceName }) => parentResourceName !== ParentResourceName.CBBTER
-    );
+    let additionalResourceContent: PassageResourceContent[] = [];
+
+    const showOnlySrvResources = get(settings).find((setting: Setting) => {
+        setting.shortName === SettingShortNameEnum.showOnlySrvResources;
+    });
+
+    if (showOnlySrvResources?.value) {
+        additionalResourceContent = passage.contents.filter((content) =>
+            showOnlySrvResources.parentResourceIds.includes(content.parentResourceId)
+        );
+    } else {
+        additionalResourceContent = passage.contents.filter(
+            ({ parentResourceName }) => parentResourceName !== ParentResourceName.CBBTER
+        );
+    }
+
     return await asyncFilter(
         additionalResourceContent,
         async (resourceContent) => get(isOnline) || (await isCachedFromCdn(resourceContentApiFullUrl(resourceContent)))
