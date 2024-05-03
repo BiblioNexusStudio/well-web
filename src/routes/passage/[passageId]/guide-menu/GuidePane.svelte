@@ -6,8 +6,8 @@
     import type { ApiParentResource } from '$lib/types/resource';
     import { closeAllPassagePageMenus, openBibleMenu } from '$lib/stores/passage-page.store';
     import { selectedId, selectedBookIndex } from '$lib/stores/passage-form.store';
-    import { settings } from '$lib/stores/settings';
-    import { SettingShortNameEnum, GuideShortNameEnum, type Setting } from '$lib/types/settings';
+    import { settings } from '$lib/stores/settings.store';
+    import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
 
     export let guidePane: CupertinoPane;
     export let isShowing: boolean;
@@ -33,7 +33,7 @@
         );
 
         if (srvOnlySetting?.value === true) {
-            return localizedGuides.filter((guide) => guide.shortName === GuideShortNameEnum.CBBTER);
+            return localizedGuides.filter((guide) => srvOnlySetting.parentResourceIds.includes(guide.id));
         }
 
         return localizedGuides;
