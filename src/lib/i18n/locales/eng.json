@@ -353,6 +353,16 @@
                 "_context": "Message to display when no Passages are available"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "Settings",
+                "_context": "Title for the settings section"
+            },
+            "showOnlySrvResources": {
+                "value": "Show only SRV resources",
+                "_context": "Label for the toggle to show only SRV resources"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "Available Books",

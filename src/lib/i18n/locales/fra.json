@@ -276,6 +276,14 @@
                 "value": "Aucun passage trouvé"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "Paramètres"
+            },
+            "showOnlySrvResources": {
+                "value": "Afficher uniquement les ressources SRV"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "Livres Disponibles"

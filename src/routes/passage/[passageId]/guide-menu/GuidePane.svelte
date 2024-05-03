@@ -6,6 +6,8 @@
     import type { ApiParentResource } from '$lib/types/resource';
     import { closeAllPassagePageMenus, openBibleMenu } from '$lib/stores/passage-page.store';
     import { selectedId, selectedBookIndex } from '$lib/stores/passage-form.store';
+    import { settings } from '$lib/stores/settings.store';
+    import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
 
     export let guidePane: CupertinoPane;
     export let isShowing: boolean;
@@ -25,6 +27,18 @@
         }
     }
 
+    function filterGuidesPerSettings(localizedGuides: ApiParentResource[], $settings: Setting[]) {
+        const srvOnlySetting = $settings.find(
+            (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
+        );
+
+        if (srvOnlySetting?.value === true) {
+            return localizedGuides.filter((guide) => srvOnlySetting.parentResourceIds.includes(guide.id));
+        }
+
+        return localizedGuides;
+    }
+
     onMount(() => {
         guidePane = new CupertinoPane('#guide-pane', {
             backdrop: true,
@@ -36,13 +50,15 @@
             },
         });
     });
+
+    $: filteredGuides = filterGuidesPerSettings(localizedGuides, $settings);
 </script>
 
 <div id="guide-pane">
     <div class="flex w-full flex-col items-center">
         <h3 class="my-2 font-bold capitalize">{$translate('page.guideMenu.selectGuide.value')}</h3>
         <hr class="my-2 w-full" />
-        {#each localizedGuides as guideResource}
+        {#each filteredGuides as guideResource}
             {@const isCurrentGuide = guideResource === $currentGuide}
             <button
                 on:click={() => selectGuideAndHandleMenu(guideResource)}
@@ -55,7 +71,7 @@
                 <span class="text-sm text-[#98A2B3]">{guideResource.shortName}</span>
             </button>
         {/each}
-        {#if localizedGuides.length === 0}
+        {#if filteredGuides.length === 0}
             <h3 class="my-2 font-bold">{$translate('page.guideMenu.noGuides.value')}</h3>
         {/if}
     </div>

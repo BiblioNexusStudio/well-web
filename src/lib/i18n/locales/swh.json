@@ -330,6 +330,14 @@
                 "value": "Hakuna vifungu vilivyopatikana"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "Mipangilio"
+            },
+            "showOnlySrvResources": {
+                "value": "Onyesha rasilimali za SRV pekee"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "Vitabu Vinavyopatikana"

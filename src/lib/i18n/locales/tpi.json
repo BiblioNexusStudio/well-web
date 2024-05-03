@@ -276,6 +276,14 @@
                 "value": "Nogat Hap Riding"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "Setings"
+            },
+            "showOnlySrvResources": {
+                "value": "Soim tasol SRV Risoses"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "Buk i stap"

@@ -276,6 +276,14 @@
                 "value": "لا توجد مقاطع"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "الإعدادات"
+            },
+            "showOnlySrvResources": {
+                "value": "عرض الموارد المتاحة فقط"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "الكتب المتاحة"

@@ -276,6 +276,14 @@
                 "value": "कोई पाठ उपलब्ध नहीं है"
             }
         },
+        "settingsMenu": {
+            "settings": {
+                "value": "सेटिंग्स"
+            },
+            "showOnlySrvResources": {
+                "value": "केवल SRV संसाधन दिखाएं"
+            }
+        },
         "BookChapterSelectorPane": {
             "availableBooks": {
                 "value": "उपलब्ध पुस्तकें"
