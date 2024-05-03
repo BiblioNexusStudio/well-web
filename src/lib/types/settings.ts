@@ -17,7 +17,6 @@ export enum ParentResourceIdEnum {
 }
 
 export type Setting = {
-    text: string;
     value: boolean;
     shortName: SettingShortNameEnum;
     parentResourceIds: ParentResourceIdEnum[];

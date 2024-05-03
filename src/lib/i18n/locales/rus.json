@@ -333,6 +333,9 @@
         "settingsMenu": {
             "settings": {
                 "value": "Настройки"
+            },
+            "showOnlySrvResources": {
+                "value": "Показать только ресурсы SRV"
             }
         },
         "BookChapterSelectorPane": {

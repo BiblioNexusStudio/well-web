@@ -333,6 +333,9 @@
         "settingsMenu": {
             "settings": {
                 "value": "Mipangilio"
+            },
+            "showOnlySrvResources": {
+                "value": "Onyesha rasilimali za SRV pekee"
             }
         },
         "BookChapterSelectorPane": {

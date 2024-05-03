@@ -3,6 +3,15 @@
     import { openMainMenu } from '$lib/stores/passage-page.store';
     import { _ as translate } from 'svelte-i18n';
     import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
+    import { type Setting, SettingShortNameEnum } from '$lib/types/settings';
+
+    function getSettingsText(setting: Setting) {
+        const translateTextMap = {
+            [SettingShortNameEnum.showOnlySrvResources]: $translate('page.settingsMenu.showOnlySrvResources.value'),
+        };
+
+        return translateTextMap[setting.shortName];
+    }
 </script>
 
 <div class="flex h-full w-full flex-col p-4">
@@ -19,7 +28,7 @@
                 class="toggle me-4 {setting.value ? 'border-none bg-white [--tglbg:#0094c9] hover:bg-white' : ''}"
                 bind:checked={setting.value}
             />
-            <h2>{setting.text}</h2>
+            <h2>{getSettingsText(setting)}</h2>
         </div>
     {/each}
 </div>

@@ -279,6 +279,9 @@
         "settingsMenu": {
             "settings": {
                 "value": "Setings"
+            },
+            "showOnlySrvResources": {
+                "value": "Soim tasol SRV Risoses"
             }
         },
         "BookChapterSelectorPane": {

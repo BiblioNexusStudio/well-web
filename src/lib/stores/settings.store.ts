@@ -5,7 +5,6 @@ import { type Setting, SettingShortNameEnum, ParentResourceIdEnum } from '../typ
 const bibleWellSettingsInLocalStorage = 'BIBLE_WELL_SETTINGS_IN_LOCAL_STORAGE';
 
 const showOnlySrvResources: Setting = {
-    text: 'Show Only SRV Resources',
     value: true,
     shortName: SettingShortNameEnum.showOnlySrvResources,
     parentResourceIds: [ParentResourceIdEnum.CBBTER, ParentResourceIdEnum.VideoBibleDictionary],
