@@ -72,6 +72,7 @@ export interface ApiParentResource {
     resourceType: ParentResourceType;
     complexityLevel: ParentResourceComplexityLevel;
     licenseInfo: ApiLicenseInfo | null;
+    id: number;
 }
 
 export interface ApiSingleLicense {

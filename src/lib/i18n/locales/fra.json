@@ -275,11 +275,51 @@
             "noPassages": {
                 "value": "Aucun passage trouvé"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Paramètres"
+            },
+            "showOnlySrvResources": {
+                "value": "Afficher uniquement les ressources SRV"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Livres Disponibles"
+            },
+            "book": {
+                "value": "Livre"
+            },
+            "selectChapter": {
+                "value": "Sélectionner un Chapitre"
+            },
+            "chapter": {
+                "value": "Chapitre"
+            },
+            "selectVerse": {
+                "value": "Sélectionner un Vers"
+            },
+            "go": {
+                "value": "Aller"
+            },
+            "loading": {
+                "value": "Chargement..."
+            }
         }
     },
     "navTop": {
         "recording": {
             "value": "Faire un enregistrement"
+        },
+        "selectPassage": {
+            "value": "Sélectionner un Passage"
+        },
+        "selectBible": {
+            "value": "Sélectionner une Bible"
+        },
+        "selectGuide": {
+            "value": "Sélectionner un Guide"
         },
         "audioRecordingModal": {
             "noPermission": {

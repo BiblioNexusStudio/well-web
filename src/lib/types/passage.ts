@@ -23,6 +23,7 @@ export interface PassageResourceContent {
     contentSize: number;
     mediaTypeName: MediaType;
     parentResourceName: string;
+    parentResourceId: number;
 }
 
 export interface FrontendPassageResourceContent extends PassageResourceContent {

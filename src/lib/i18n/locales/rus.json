@@ -329,12 +329,52 @@
             "noPassages": {
                 "value": "Нет доступных отрывков"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Настройки"
+            },
+            "showOnlySrvResources": {
+                "value": "Показать только ресурсы SRV"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Доступные книги"
+            },
+            "book": {
+                "value": "Книга"
+            },
+            "selectChapter": {
+                "value": "Выберите главу"
+            },
+            "chapter": {
+                "value": "Глава"
+            },
+            "selectVerse": {
+                "value": "Выберите стих"
+            },
+            "go": {
+                "value": "Далее"
+            },
+            "loading": {
+                "value": "Загрузка..."
+            }
         }
     },
     "navTop": {
         "recording": {
             "value": "Сделать запись",
             "_context": "Кнопка для создания записи к отрывку"
+        },
+        "selectPassage": {
+            "value": "Выберите отрывок"
+        },
+        "selectBible": {
+            "value": "Выберите Библию"
+        },
+        "selectGuide": {
+            "value": "Выберите руководство"
         },
         "audioRecordingModal": {
             "noPermission": {

@@ -329,12 +329,52 @@
             "noPassages": {
                 "value": "Hakuna vifungu vilivyopatikana"
             }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Mipangilio"
+            },
+            "showOnlySrvResources": {
+                "value": "Onyesha rasilimali za SRV pekee"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Vitabu Vinavyopatikana"
+            },
+            "book": {
+                "value": "Kitabu"
+            },
+            "selectChapter": {
+                "value": "Chagua Sura"
+            },
+            "chapter": {
+                "value": "Sura"
+            },
+            "selectVerse": {
+                "value": "Chagua Aya"
+            },
+            "go": {
+                "value": "Enda"
+            },
+            "loading": {
+                "value": "Kupakia..."
+            }
         }
     },
     "navTop": {
         "recording": {
             "value": "Rekodi",
             "_context": "Kitufe cha kuunda rekodi ya kifungu"
+        },
+        "selectPassage": {
+            "value": "Chagua Kifungu"
+        },
+        "selectBible": {
+            "value": "Chagua Biblia"
+        },
+        "selectGuide": {
+            "value": "Chagua Mwongozo"
         },
         "audioRecordingModal": {
             "noPermission": {
