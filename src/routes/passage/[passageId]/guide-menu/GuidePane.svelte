@@ -3,9 +3,9 @@
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
     import { guideResources, setCurrentGuide, currentGuide } from '$lib/stores/parent-resource.store';
-    import type { ApiParentResource } from '$lib/types/resource';
+    import type { ApiParentResource, ParentResourceName } from '$lib/types/resource';
     import { closeAllPassagePageMenus, openBibleMenu } from '$lib/stores/passage-page.store';
-    import { selectedId, selectedBookIndex } from '$lib/stores/passage-form.store';
+    import { selectedBibleSection, selectedBookIndex } from '$lib/stores/passage-form.store';
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
 
@@ -19,7 +19,7 @@
         isShowing = false;
         closeAllPassagePageMenus();
 
-        if ($selectedId === 'default' || $selectedBookIndex === 'default') {
+        if ($selectedBibleSection === null || $selectedBookIndex === 'default') {
             selectedTab = 'bible';
             openBibleMenu();
         } else {
@@ -33,7 +33,9 @@
         );
 
         if (srvOnlySetting?.value === true) {
-            return localizedGuides.filter((guide) => srvOnlySetting.parentResourceIds.includes(guide.id));
+            return localizedGuides.filter((guide) =>
+                srvOnlySetting.parentResources.includes(guide.shortName as ParentResourceName)
+            );
         }
 
         return localizedGuides;

@@ -1,6 +1,5 @@
 import type { DirectionCode } from '$lib/utils/language-utils';
-import type { FrontendPassageResourceContent } from './passage';
-import type { MediaType } from './resource';
+import type { MediaType, ParentResourceName } from './resource';
 
 export type Url = string;
 export interface UrlWithMetadata {
@@ -20,11 +19,19 @@ export interface ApiAudioChapter {
     selected?: boolean;
 }
 
+export interface FileManagerResourceContentInfo {
+    contentId: number;
+    contentSize: number;
+    mediaTypeName: MediaType;
+    parentResourceName: ParentResourceName;
+    isResourceUrlCached?: boolean;
+}
+
 export interface FrontendAudioChapter extends ApiAudioChapter {
     selected?: boolean;
     isAudioUrlCached?: boolean;
     allUrlsCached?: boolean;
-    resourceMenuItems?: FrontendPassageResourceContent[];
+    resourceMenuItems?: FileManagerResourceContentInfo[];
     cbbterResourceUrls?: UrlWithMetadata[];
     deleteMenuOpen?: boolean;
     deleteResources?: boolean;
@@ -103,41 +110,6 @@ export interface BasePassage {
     endVerse: number;
 }
 
-export interface ApiPassage extends BasePassage {
-    resources: ApiPassageResource[];
-}
-
-export interface ApiPassageResource {
-    content: ApiPassageContent | null;
-    type: number;
-    mediaType: number;
-    englishLabel: string;
-    tag: string | null;
-    expanded?: boolean;
-    selected?: boolean;
-    supportingResources: ApiPassageResource[];
-}
-
-export interface ApiPassageContent {
-    languageId: number;
-    displayName: string;
-    summary: string | null;
-    content: CbbtErAudioContent | ResourceContentUrl;
-    contentSize: number;
-    selected?: boolean;
-}
-
-export interface ResourcesByMediaType {
-    [MediaType.Text]: ResourcesForMediaType;
-    [MediaType.Audio]: ResourcesForMediaType;
-    [MediaType.Image]: ResourcesForMediaType;
-}
-
-export interface ResourcesForMediaType {
-    urlsWithMetadata: UrlWithMetadata[];
-    selected: boolean;
-}
-
 export interface FooterInputs {
     text: boolean;
     audio: boolean;
@@ -201,5 +173,5 @@ export interface ResourcesApiModule {
 
 export interface ResourcesApiModuleChapter {
     chapterNumber: number;
-    contents: FrontendPassageResourceContent[];
+    contents: FileManagerResourceContentInfo[];
 }

@@ -14,12 +14,10 @@
     import { _ as translate } from 'svelte-i18n';
     import { convertToReadableSize } from '$lib/utils/file-manager';
     import type { ResourcesApiModule, BiblesModuleBook } from '$lib/types/file-manager';
-    import type { BasePassagesByBook } from '$lib/types/passage';
     import { buildRowData } from '$lib/utils/file-manager';
-    import { METADATA_ONLY_FAKE_FILE_SIZE, fetchFromCacheOrApi } from '$lib/data-cache';
+    import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/language.store';
-    import { passageContentApiFullPath } from '$lib/utils/data-handlers/resources/passages';
-    import { MediaType, ParentResourceName } from '$lib/types/resource';
+    import { ParentResourceName } from '$lib/types/resource';
     import Image from '$lib/icons/Image.svelte';
     import ImageAndVideo from '$lib/icons/ImageAndVideo.svelte';
     import Video from '$lib/icons/Video.svelte';
@@ -34,52 +32,14 @@
     $: addAllUrlsCachedProperty($biblesModuleBook);
     $: textUrlIsCached = $biblesModuleBook.isTextUrlCached;
 
-    async function addAdditionalResourcesApiModule(resourcesApiModule: ResourcesApiModule) {
-        let passageData: BasePassagesByBook[] = [];
-
+    async function addAdditionalResourcesApiModule(_resourcesApiModule: ResourcesApiModule) {
         if ($resourcesMenu.some((resource) => resource.selected && resource.value === ParentResourceName.CBBTER)) {
-            passageData = await fetchFromCacheOrApi(
+            await fetchFromCacheOrApi(
                 ...passagesByLanguageAndParentResourceEndpoint($currentLanguageInfo?.id, ParentResourceName.CBBTER)
             );
         }
 
-        resourcesApiModule.chapters.forEach(async (chapter) => {
-            if (chapter.contents.length > 0 && chapter.chapterNumber) {
-                const chapterInfoExists = !!$biblesModuleBook.audioUrls?.chapters[chapter.chapterNumber - 1];
-                if (chapterInfoExists) {
-                    if ($biblesModuleBook.audioUrls?.chapters[chapter.chapterNumber - 1]) {
-                        $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1]!.resourceMenuItems =
-                            chapter.contents;
-                    }
-                }
-
-                if (
-                    chapter.contents.some((content) => content.parentResourceName === ParentResourceName.CBBTER) &&
-                    passageData
-                ) {
-                    let filteredPassages = passageData.find((data) => data.bookCode === $selectedBookCode);
-
-                    if (filteredPassages) {
-                        filteredPassages.passages.forEach((passage) => {
-                            if (
-                                chapterInfoExists &&
-                                (chapter.chapterNumber === passage.startChapter ||
-                                    chapter.chapterNumber === passage.endChapter)
-                            ) {
-                                $biblesModuleBook.audioUrls?.chapters[
-                                    chapter.chapterNumber - 1
-                                ]?.cbbterResourceUrls?.push({
-                                    url: passageContentApiFullPath(passage),
-                                    mediaType: MediaType.Text,
-                                    metadataOnly: true,
-                                    size: METADATA_ONLY_FAKE_FILE_SIZE,
-                                });
-                            }
-                        });
-                    }
-                }
-            }
-        });
+        // add the /resource/content/by-verse URLs to the list to cache
     }
 
     function addAllUrlsCachedProperty(biblesModuleBook: BiblesModuleBook) {

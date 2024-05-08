@@ -5,11 +5,11 @@ import { cacheManyFromCdnWithProgress, fetchFromCacheOrApi, isCachedFromApi, isC
 import { asyncEvery, asyncReturnFirst } from '../async-array';
 import { range } from '../array';
 import { updateRow } from '../data-storage';
-import { passageToString } from '../passage-helpers';
+import { bibleSectionToString } from '../bible-section-helpers';
 import type { ApiBible, BaseBible, BibleBookContentDetails } from '$lib/types/bible-text-content';
 import { isOnline } from '$lib/stores/is-online.store';
 import { get } from 'svelte/store';
-import type { BasePassage } from '$lib/types/passage';
+import type { BibleSection } from '$lib/types/passage';
 import { MediaType } from '$lib/types/resource';
 import { log } from '$lib/logger';
 import { biblesEndpoint, biblesForLanguageEndpoint, bookOfBibleEndpoint } from '$lib/api-endpoints';
@@ -103,23 +103,29 @@ export async function fetchBibleDataForBookCodeAndBibleId(
     }
 }
 
-export async function cacheBiblesForPassage(passage: BasePassage, allBookContentDetails: BibleBookContentDetails[]) {
+export async function cacheBiblesForBibleSection(
+    bibleSection: BibleSection,
+    allBookContentDetails: BibleBookContentDetails[]
+) {
     const urls = allBookContentDetails.flatMap((bookContentDetails) =>
-        bibleUrlsWithMetadataForBookAndChapters(bookContentDetails, range(passage.startChapter, passage.endChapter))
+        bibleUrlsWithMetadataForBookAndChapters(
+            bookContentDetails,
+            range(bibleSection.startChapter, bibleSection.endChapter)
+        )
     );
     await cacheManyFromCdnWithProgress(urls);
 }
 
-export async function bookDataForBibleTab(passage: BasePassage, bibleId: number, isPreferredBible: boolean) {
+export async function bookDataForBibleTab(bibleSection: BibleSection, bibleId: number, isPreferredBible: boolean) {
     const online = get(isOnline);
     try {
-        if (!online && !(await isCachedFromApi(bookOfBibleEndpoint(bibleId, passage.bookCode)[0]))) {
+        if (!online && !(await isCachedFromApi(bookOfBibleEndpoint(bibleId, bibleSection.bookCode)[0]))) {
             // if it's offline and not cached, it's not valid
             return null;
         } else if ((online && isPreferredBible) || !online) {
             // if it's online and a preferred Bible or offline, we need to get the bookData
-            const bookData = await fetchBibleDataForBookCodeAndBibleId(passage.bookCode, bibleId);
-            if (online || (await isContentCachedForOffline(passage, bookData))) {
+            const bookData = await fetchBibleDataForBookCodeAndBibleId(bibleSection.bookCode, bibleId);
+            if (online || (await isContentCachedForOffline(bibleSection, bookData))) {
                 return bookData;
             }
         }
@@ -131,18 +137,21 @@ export async function bookDataForBibleTab(passage: BasePassage, bibleId: number,
     }
 }
 
-async function isContentCachedForOffline(passage: BasePassage, bookData: BibleBookContentDetails | null) {
+async function isContentCachedForOffline(bibleSection: BibleSection, bookData: BibleBookContentDetails | null) {
     if (bookData) {
         const textCached = !!bookData.textUrl && (await isCachedFromCdn(bookData.textUrl));
         if (textCached) {
             return true;
         }
-        const audioCached = await asyncEvery(range(passage.startChapter, passage.endChapter), async (chapterNumber) => {
-            const chapterAudioUrl = bookData!.audioUrls?.chapters?.find(
-                (chapter) => chapter.number === String(chapterNumber)
-            )?.[audioFileTypeForBrowser()]?.url;
-            return !!chapterAudioUrl && (await isCachedFromCdn(chapterAudioUrl));
-        });
+        const audioCached = await asyncEvery(
+            range(bibleSection.startChapter, bibleSection.endChapter),
+            async (chapterNumber) => {
+                const chapterAudioUrl = bookData!.audioUrls?.chapters?.find(
+                    (chapter) => chapter.number === String(chapterNumber)
+                )?.[audioFileTypeForBrowser()]?.url;
+                return !!chapterAudioUrl && (await isCachedFromCdn(chapterAudioUrl));
+            }
+        );
         if (audioCached) {
             return true;
         }
@@ -154,7 +163,7 @@ export async function saveBibleRecording(
     language: string,
     version: string,
     versionAbbreviation: string,
-    passage: BasePassage,
+    bibleSection: BibleSection,
     filePath: string
 ) {
     await updateRow(bibleRecordingsKey, (current: object) => {
@@ -167,7 +176,7 @@ export async function saveBibleRecording(
             recordingVersion = { language, version, versionAbbreviation, passages: {} };
             bibleRecordings.bibleRecordingVersions.push(recordingVersion!);
         }
-        recordingVersion.passages[passageToString(passage)] = { url: filePath };
+        recordingVersion.passages[bibleSectionToString(bibleSection)] = { url: filePath };
         return bibleRecordings;
     });
 }

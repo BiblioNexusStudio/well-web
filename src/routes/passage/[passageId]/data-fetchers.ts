@@ -14,13 +14,14 @@ import { isOnline } from '$lib/stores/is-online.store';
 import { fetchAllBibles, bookDataForBibleTab } from '$lib/utils/data-handlers/bible';
 import { range } from '$lib/utils/array';
 import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
-import type { BasePassage, PassageResourceContent, PassageWithResourceContentIds } from '$lib/types/passage';
 import {
     MediaType,
     ParentResourceName,
     type CbbtErAudioMetadata,
     type CbbtErAudioContent,
     type ApiParentResource,
+    type ResourceContentInfo,
+    ParentResourceType,
 } from '$lib/types/resource';
 import {
     fetchDisplayNameForResourceContent,
@@ -30,13 +31,15 @@ import {
 import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
-import { parentResourcesEndpoint, passageDetailsByIdAndLanguage } from '$lib/api-endpoints';
+import { parentResourcesEndpoint } from '$lib/api-endpoints';
 import { settings } from '$lib/stores/settings.store';
 import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
+import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/passages';
+import type { BibleSection } from '$lib/types/passage';
 
 export type PassagePageTab = 'bible' | 'guide' | 'mainMenu' | 'libraryMenu';
 
-export async function fetchBibleContent(passage: BasePassage, bible: FrontendBibleBook) {
+export async function fetchBibleContent(passage: BibleSection, bible: FrontendBibleBook) {
     if (!bible.bookMetadata) return null;
 
     let fullBookText: BibleBookTextContent | null = null;
@@ -120,10 +123,9 @@ export async function fetchBibleContent(passage: BasePassage, bible: FrontendBib
     return { chapters };
 }
 
-async function getCbbterAudioForPassage(passage: PassageWithResourceContentIds): Promise<CbbtErAudioContent[]> {
-    const allAudioResourceContent = passage.contents.filter(
-        ({ mediaTypeName, parentResourceName }) =>
-            parentResourceName === ParentResourceName.CBBTER && mediaTypeName === MediaType.Audio
+async function getCbbterAudioForPassage(resourceContents: ResourceContentInfo[]): Promise<CbbtErAudioContent[]> {
+    const allAudioResourceContent = resourceContents.filter(
+        ({ mediaType, parentResource }) => parentResource === ParentResourceName.CBBTER && mediaType === MediaType.Audio
     );
     return (
         await asyncMap(allAudioResourceContent, async (resourceContent) => {
@@ -146,10 +148,9 @@ async function getCbbterAudioForPassage(passage: PassageWithResourceContentIds):
     ).filter(Boolean) as CbbtErAudioContent[];
 }
 
-async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): Promise<CbbtErTextContent[]> {
-    const allTextResourceContent = passage.contents.filter(
-        ({ mediaTypeName, parentResourceName }) =>
-            parentResourceName === ParentResourceName.CBBTER && mediaTypeName === MediaType.Text
+async function getCbbterTextForPassage(resourceContents: ResourceContentInfo[]): Promise<CbbtErTextContent[]> {
+    const allTextResourceContent = resourceContents.filter(
+        ({ mediaType, parentResource }) => parentResource === ParentResourceName.CBBTER && mediaType === MediaType.Text
     );
     return (
         await asyncMap(allTextResourceContent, async (resourceContent) => {
@@ -172,21 +173,23 @@ async function getCbbterTextForPassage(passage: PassageWithResourceContentIds): 
 }
 
 async function getAdditionalResourcesForPassage(
-    passage: PassageWithResourceContentIds
-): Promise<PassageResourceContent[]> {
-    let additionalResourceContent: PassageResourceContent[] = [];
+    resourceContents: ResourceContentInfo[]
+): Promise<ResourceContentInfo[]> {
+    let additionalResourceContent: ResourceContentInfo[] = [];
 
     const showOnlySrvResources = get(settings).find((setting: Setting) => {
         setting.shortName === SettingShortNameEnum.showOnlySrvResources;
     });
 
     if (showOnlySrvResources?.value) {
-        additionalResourceContent = passage.contents.filter((content) =>
-            showOnlySrvResources.parentResourceIds.includes(content.parentResourceId)
+        console.log(showOnlySrvResources.parentResources);
+        additionalResourceContent = resourceContents.filter((content) =>
+            showOnlySrvResources.parentResources.includes(content.parentResource as ParentResourceName)
         );
     } else {
-        additionalResourceContent = passage.contents.filter(
-            ({ parentResourceName }) => parentResourceName !== ParentResourceName.CBBTER
+        console.log(resourceContents);
+        additionalResourceContent = resourceContents.filter(
+            ({ resourceType }) => resourceType !== ParentResourceType.Guide
         );
     }
 
@@ -194,10 +197,6 @@ async function getAdditionalResourcesForPassage(
         additionalResourceContent,
         async (resourceContent) => get(isOnline) || (await isCachedFromCdn(resourceContentApiFullUrl(resourceContent)))
     );
-}
-
-export async function fetchPassage(passageId: string): Promise<BasePassage> {
-    return await fetchFromCacheOrApi(...passageDetailsByIdAndLanguage(passageId, get(currentLanguageInfo)?.id));
 }
 
 export async function fetchLocalizedGuideData(): Promise<ApiParentResource[]> {
@@ -222,7 +221,7 @@ function updateAndGetPreferredIds(bibleIdsInCurrentLanguage: number[]) {
 // Fetch Bible data for use in the passage page.
 // Handles online and offline, pulling both the available Bibles (for use in the preferred Bibles modal) and Bibles to
 // show in the tab carousel.
-export async function fetchBibleData(passage: BasePassage) {
+export async function fetchBibleData(passage: BibleSection) {
     const bibles = await fetchAllBibles();
     const currentLanguageId = get(currentLanguageInfo)?.id;
     const bibleIdsInCurrentLanguage = bibles
@@ -252,24 +251,22 @@ export async function fetchBibleData(passage: BasePassage) {
     return { biblesForTabs, availableBibles };
 }
 
-export async function fetchResourceData(passage: BasePassage) {
+export async function fetchResourceData(passage: BibleSection) {
     let text: CbbtErTextContent[] = [];
     let audio: CbbtErAudioContent[] = [];
     let title: string | undefined = undefined;
-    let additionalResources: PassageResourceContent[] = [];
-    let passageWithResources;
+    let additionalResources: ResourceContentInfo[] = [];
+    let resourceContents: ResourceContentInfo[] | undefined;
     try {
-        passageWithResources = (await fetchFromCacheOrApi(
-            ...passageDetailsByIdAndLanguage(passage.id, get(currentLanguageInfo)?.id)
-        )) as PassageWithResourceContentIds;
+        resourceContents = await resourceContentsForBibleSection(passage);
     } catch (error) {
         // data not cached
         log.exception(error as Error);
     }
-    if (passageWithResources) {
-        audio = await getCbbterAudioForPassage(passageWithResources);
-        text = await getCbbterTextForPassage(passageWithResources);
-        additionalResources = await getAdditionalResourcesForPassage(passageWithResources);
+    if (resourceContents) {
+        audio = await getCbbterAudioForPassage(resourceContents);
+        text = await getCbbterTextForPassage(resourceContents);
+        additionalResources = await getAdditionalResourcesForPassage(resourceContents);
         title = text[0]?.displayName;
     }
     return {

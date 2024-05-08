@@ -88,3 +88,19 @@ export interface ApiLicenseInfo {
     };
     licenses: Record<string, ApiSingleLicense>[];
 }
+
+export interface ResourceContentGroupedByVerses {
+    verses: ResourcesForVerse[];
+}
+
+export interface ResourcesForVerse {
+    number: number;
+    resourceContents: ResourceContentInfo[];
+}
+
+export interface ResourceContentInfo {
+    id: number;
+    mediaType: MediaType;
+    resourceType: ParentResourceType;
+    parentResource: string;
+}

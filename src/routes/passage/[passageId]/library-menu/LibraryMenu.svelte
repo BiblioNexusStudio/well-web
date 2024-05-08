@@ -1,7 +1,11 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import type { PassageResourceContent } from '$lib/types/passage';
-    import { MediaType, ParentResourceType, type ApiParentResource } from '$lib/types/resource';
+    import {
+        MediaType,
+        ParentResourceType,
+        type ApiParentResource,
+        type ResourceContentInfo,
+    } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
         fetchDisplayNameForResourceContent,
@@ -36,12 +40,12 @@
         ParentResourceType.Dictionary,
     ];
 
-    export let resources: PassageResourceContent[] | undefined;
+    export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
-    let previousResourceIds = (resources ?? []).map(({ contentId }) => contentId);
+    let previousResourceIds = (resources ?? []).map(({ id }) => id);
 
     let allResources: AnyResource[] = [];
     let mediaResources: ImageOrVideoResource[] = [];
@@ -87,8 +91,8 @@
         currentFullscreenTextParentResourceName = parentResourceName;
     }
 
-    async function prepareResources(resources: PassageResourceContent[]) {
-        const currentResourceIds = resources.map(({ contentId }) => contentId);
+    async function prepareResources(resources: ResourceContentInfo[]) {
+        const currentResourceIds = resources.map(({ id }) => id);
         if (JSON.stringify(previousResourceIds) === JSON.stringify(currentResourceIds && allResources.length > 0)) {
             return;
         }
@@ -98,7 +102,7 @@
         const textResources = (
             (
                 await asyncMap(
-                    resources.filter(({ mediaTypeName }) => mediaTypeName === MediaType.Text),
+                    resources.filter(({ mediaType }) => mediaType === MediaType.Text),
                     async (resource) => {
                         const [displayName, tiptap] = await Promise.all([
                             fetchDisplayNameForResourceContent(resource),
@@ -109,7 +113,7 @@
                                 displayName,
                                 html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
                                 preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
-                                parentResourceName: resource.parentResourceName,
+                                parentResourceName: resource.parentResource,
                             };
                         } else {
                             return null;
@@ -122,18 +126,18 @@
         mediaResources = (
             (
                 await asyncMap(
-                    resources.filter(({ mediaTypeName }) => mediaTypeName === MediaType.Image),
+                    resources.filter(({ mediaType }) => mediaType === MediaType.Image),
                     async (resource) => ({
                         type: 'image',
                         displayName: await fetchDisplayNameForResourceContent(resource),
                         url: resourceContentApiFullUrl(resource),
-                        parentResourceName: resource.parentResourceName,
+                        parentResourceName: resource.parentResource,
                     })
                 )
             )
                 .concat(
                     await asyncMap(
-                        resources.filter(({ mediaTypeName }) => mediaTypeName === MediaType.Video),
+                        resources.filter(({ mediaType }) => mediaType === MediaType.Video),
                         async (resource) => {
                             const metadata = await fetchMetadataForResourceContent(resource);
                             const thumbnailUrl = resourceThumbnailApiFullUrl(resource);
@@ -142,7 +146,7 @@
                                 displayName: metadata?.displayName || null,
                                 url: resourceContentApiFullUrl(resource),
                                 duration: metadata?.metadata?.['duration'] as number | undefined,
-                                parentResourceName: resource.parentResourceName,
+                                parentResourceName: resource.parentResource,
                                 thumbnailUrl:
                                     get(isOnline) || (await isCachedFromCdn(thumbnailUrl)) ? thumbnailUrl : undefined,
                             };

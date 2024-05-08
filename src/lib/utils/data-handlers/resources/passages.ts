@@ -1,25 +1,26 @@
-import { env } from '$env/dynamic/public';
 import { get } from 'svelte/store';
 import { data, passagesByBook } from '$lib/stores/passage-form.store';
 import { currentLanguageInfo } from '$lib/stores/language.store';
 import { fetchFromCacheOrApi, isCachedFromApi, isCachedFromCdn } from '$lib/data-cache';
-import { asyncMap, asyncSome, asyncFilter } from '$lib/utils/async-array';
+import { asyncMap, asyncFilter, asyncReduce } from '$lib/utils/async-array';
 import type { ApiBible } from '$lib/types/bible-text-content';
-import type {
-    BasePassagesByBook,
-    FrontendPassagesByBook,
-    PassageWithResourceContentIds,
-    BasePassage,
-} from '$lib/types/passage';
-import { ParentResourceName } from '$lib/types/resource';
+import type { BasePassagesByBook, FrontendPassagesByBook, BibleSection } from '$lib/types/passage';
+import {
+    ParentResourceName,
+    ParentResourceType,
+    type ResourceContentInfo,
+    type ResourceContentGroupedByVerses,
+} from '$lib/types/resource';
 import { resourceContentApiFullUrl } from './resource';
 import {
     biblesForLanguageEndpoint,
-    passageDetailsByIdAndLanguage,
     passagesByLanguageAndParentResourceEndpoint,
     bibleBooksByBibleId,
     bibleTextByParams,
+    resourceContentForBookAndChapter,
 } from '$lib/api-endpoints';
+import { range } from '$lib/utils/array';
+import { isOnline } from '$lib/stores/is-online.store';
 
 async function getBibleBookCodesToName(languageId: number | null = null, retry = true) {
     const bibleData = (await fetchFromCacheOrApi(
@@ -37,32 +38,94 @@ async function getBibleBookCodesToName(languageId: number | null = null, retry =
     }
 }
 
-async function passageIdHasCbbterAvailable(passageId: number, isOnline: boolean) {
-    if (isOnline) return true;
+export async function resourceContentsForBibleSection(bibleSection: BibleSection): Promise<ResourceContentInfo[]> {
     const languageId = get(currentLanguageInfo)?.id;
-    if (await isCachedFromApi(passageDetailsByIdAndLanguage(passageId, languageId)[0])) {
-        const passageWithContentIds = (await fetchFromCacheOrApi(
-            ...passageDetailsByIdAndLanguage(passageId, languageId)
-        )) as PassageWithResourceContentIds;
-        const cbbterResources = passageWithContentIds.contents.filter(
-            ({ parentResourceName }) => parentResourceName === ParentResourceName.CBBTER
-        );
-        return await asyncSome(cbbterResources, async (resourceContent) => {
-            return isCachedFromCdn(resourceContentApiFullUrl(resourceContent));
-        });
-    }
-    return false;
+    const online = get(isOnline);
+    return asyncReduce(
+        range(bibleSection.startChapter, bibleSection.endChapter),
+        async (resourceContents, chapter) => {
+            const resourcesForChapter = (await fetchFromCacheOrApi(
+                ...resourceContentForBookAndChapter(languageId, bibleSection.bookCode, chapter)
+            )) as ResourceContentGroupedByVerses;
+            for (const verse of resourcesForChapter.verses) {
+                if (
+                    (chapter === bibleSection.startChapter &&
+                        chapter === bibleSection.endChapter &&
+                        verse.number >= bibleSection.startVerse &&
+                        verse.number <= bibleSection.endVerse) ||
+                    (chapter === bibleSection.startChapter &&
+                        chapter !== bibleSection.endChapter &&
+                        verse.number >= bibleSection.startVerse) ||
+                    (chapter === bibleSection.endChapter &&
+                        chapter !== bibleSection.startChapter &&
+                        verse.number <= bibleSection.endVerse) ||
+                    (chapter > bibleSection.startChapter && chapter < bibleSection.endChapter)
+                ) {
+                    for (const content of verse.resourceContents) {
+                        if (online || (await isCachedFromCdn(resourceContentApiFullUrl(content)))) {
+                            if (!resourceContents.find((rc) => rc.id === content.id)) {
+                                resourceContents.push(content);
+                            }
+                        }
+                    }
+                }
+            }
+            return resourceContents;
+        },
+        [] as ResourceContentInfo[]
+    );
 }
 
-export async function fetchCbbterPassagesByBook(isOnline: boolean) {
+async function guidesAvailableForBibleSection(
+    bibleSection: BibleSection
+): Promise<Record<string, ResourceContentInfo[]>> {
+    const languageId = get(currentLanguageInfo)?.id;
+    const online = get(isOnline);
+    return asyncReduce(
+        range(bibleSection.startChapter, bibleSection.endChapter),
+        async (guidesToContents, chapter) => {
+            if (
+                online ||
+                (await isCachedFromApi(resourceContentForBookAndChapter(languageId, bibleSection.bookCode, chapter)[0]))
+            ) {
+                const potentialGuideResourceContent = (await fetchFromCacheOrApi(
+                    ...resourceContentForBookAndChapter(languageId, bibleSection.bookCode, chapter)
+                )) as ResourceContentGroupedByVerses;
+                for (const verse of potentialGuideResourceContent.verses) {
+                    if (
+                        (chapter === bibleSection.startChapter && verse.number >= bibleSection.startVerse) ||
+                        (chapter === bibleSection.endChapter && verse.number <= bibleSection.endVerse) ||
+                        (chapter != bibleSection.startChapter && chapter !== bibleSection.endChapter)
+                    ) {
+                        for (const content of verse.resourceContents) {
+                            if (
+                                content.resourceType === ParentResourceType.Guide &&
+                                !guidesToContents[content.parentResource]?.find((c) => c.id === content.id)
+                            ) {
+                                if (await isCachedFromCdn(resourceContentApiFullUrl(content))) {
+                                    guidesToContents[content.parentResource]!.push(content);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return guidesToContents;
+        },
+        {} as Record<string, ResourceContentInfo[]>
+    );
+}
+
+export async function fetchCbbterPassagesByBook() {
     const bibleBookCodesToName = await getBibleBookCodesToName();
+    const online = get(isOnline);
     const allPassages = (await fetchFromCacheOrApi(
         ...passagesByLanguageAndParentResourceEndpoint(get(currentLanguageInfo)?.id, ParentResourceName.CBBTER)
     )) as BasePassagesByBook[];
     const byBookWithAvailableResources = (
         await asyncMap(allPassages, async (byBook, index) => {
-            const passages = await asyncFilter(byBook.passages, async ({ id }) => {
-                return await passageIdHasCbbterAvailable(id, isOnline);
+            const passages = await asyncFilter(byBook.passages, async (passage) => {
+                return online || 'CBBTER' in (await guidesAvailableForBibleSection(passage));
             });
             byBook.passages = passages;
             return bibleBookCodesToName
@@ -73,14 +136,6 @@ export async function fetchCbbterPassagesByBook(isOnline: boolean) {
 
     passagesByBook.set(byBookWithAvailableResources);
     data.set({ passagesByBook: get(passagesByBook) });
-}
-
-export function passageContentApiPath(passage: BasePassage) {
-    return `passages/${passage.id}/language/${get(currentLanguageInfo)?.id}`;
-}
-
-export function passageContentApiFullPath(passage: BasePassage) {
-    return env.PUBLIC_AQUIFER_API_URL + passageContentApiPath(passage);
 }
 
 export function getBibleBooksByBibleId(bibleId: number) {

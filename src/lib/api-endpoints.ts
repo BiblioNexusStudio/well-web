@@ -16,8 +16,10 @@ export function languagesEndpoint(): ApiStringAndCacheBustVersion {
 }
 
 export function parentResourcesEndpoint(queryParams?: string[]): ApiStringAndCacheBustVersion {
-    const url = queryParams ? `/resources/parent-resources?${queryParams.join('&')}` : '/resources/parent-resources';
-    return [url, 2];
+    const url = queryParams
+        ? `/resources/parent-resources?${queryParams.sort().join('&')}`
+        : '/resources/parent-resources';
+    return [url, 3];
 }
 
 export function biblesEndpoint(): ApiStringAndCacheBustVersion {
@@ -37,7 +39,7 @@ export function resourcesByLanguageAndBookEndpoint(
     bookCode: string,
     queryParams: string[]
 ): ApiStringAndCacheBustVersion {
-    return [`/resources/language/${languageId}/book/${bookCode}?${queryParams.join('&')}`, 1];
+    return [`/resources/language/${languageId}/book/${bookCode}?${queryParams.sort().join('&')}`, 1];
 }
 
 export function passagesByLanguageAndParentResourceEndpoint(
@@ -47,11 +49,15 @@ export function passagesByLanguageAndParentResourceEndpoint(
     return [`/passages/language/${languageId}/resource/${parentResourceName}`, 1];
 }
 
-export function passageDetailsByIdAndLanguage(
-    passageId: number | string,
-    languageId: number | undefined
+export function resourceContentForBookAndChapter(
+    languageId: number | undefined,
+    bookCode: string,
+    chapterNumber: number
 ): ApiStringAndCacheBustVersion {
-    return [`/passages/${passageId}/language/${languageId}`, 1];
+    return [
+        `/resources/content/grouped-by-verse?languageId=${languageId}&bookCode=${bookCode}&chapter=${chapterNumber}`,
+        1,
+    ];
 }
 
 export function bibleBooksByBibleId(bibleId: number | string): ApiStringAndCacheBustVersion {
@@ -59,5 +65,5 @@ export function bibleBooksByBibleId(bibleId: number | string): ApiStringAndCache
 }
 
 export function bibleTextByParams(bibleId: number | string, queryParams: string[]): ApiStringAndCacheBustVersion {
-    return [`/bibles/${bibleId}/texts?${queryParams.join('&')}`, 1];
+    return [`/bibles/${bibleId}/texts?${queryParams.sort().join('&')}`, 1];
 }
