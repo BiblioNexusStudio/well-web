@@ -98,10 +98,9 @@
     let preferredBiblesModalOpen = false;
     let localizedGuides: ApiParentResource[];
 
-    $: $page.url && fetchBase(); // when the [passageId] changes, refetch
+    $: $page.url && fetchBase($selectedBibleSection); // when the Bible section changes, refetch
     $: $currentLanguageInfo?.id && fetchGuides();
-    $: fetchBibles($selectedBibleSection, $preferredBibleIds);
-    $: fetchResources($selectedBibleSection);
+    $: handlePreferredBiblesChange($preferredBibleIds);
     $: fetchContentForBibleId(selectedBibleId);
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
@@ -129,7 +128,11 @@
         localizedGuides = await fetchLocalizedGuideData();
     }
 
-    function fetchBase() {
+    function fetchBase(bibleSection: BibleSection | null) {
+        resourceData = null;
+        bibleData = null;
+        multiClipAudioStates = {};
+
         if ($page.params.passageId === 'new') {
             $bibleSetByUser = null;
             $currentGuide = undefined;
@@ -138,10 +141,10 @@
 
             openGuideMenu();
             return;
+        } else {
+            fetchBibles(bibleSection);
+            fetchResources(bibleSection);
         }
-        resourceData = null;
-        bibleData = null;
-        multiClipAudioStates = {};
     }
 
     function fetchResources(bibleSection: BibleSection | null) {
@@ -161,7 +164,11 @@
         }
     }
 
-    async function fetchBibles(bibleSection: BibleSection | null, _: number[]) {
+    async function handlePreferredBiblesChange(_: number[]) {
+        fetchBibles($selectedBibleSection);
+    }
+
+    async function fetchBibles(bibleSection: BibleSection | null) {
         if (bibleSection) {
             const existingContent = Object.fromEntries(
                 bibleData?.biblesForTabs.map(({ id, content }) => [id, content]) ?? []

@@ -182,12 +182,10 @@ async function getAdditionalResourcesForPassage(
     });
 
     if (showOnlySrvResources?.value) {
-        console.log(showOnlySrvResources.parentResources);
         additionalResourceContent = resourceContents.filter((content) =>
             showOnlySrvResources.parentResources.includes(content.parentResource as ParentResourceName)
         );
     } else {
-        console.log(resourceContents);
         additionalResourceContent = resourceContents.filter(
             ({ resourceType }) => resourceType !== ParentResourceType.Guide
         );

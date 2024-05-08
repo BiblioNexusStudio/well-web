@@ -9,6 +9,22 @@ export function bibleSectionToString(bibleSection: BibleSection) {
     )}`;
 }
 
+export function stringToBibleSection(sectionString: string): BibleSection {
+    const bookCode = sectionString.slice(0, 3);
+    const startChapter = parseInt(sectionString.slice(3, 6), 10);
+    const startVerse = parseInt(sectionString.slice(6, 9), 10);
+    const endChapter = parseInt(sectionString.slice(10, 13), 10);
+    const endVerse = parseInt(sectionString.slice(13, 16), 10);
+
+    return {
+        bookCode,
+        startChapter,
+        startVerse,
+        endChapter,
+        endVerse,
+    };
+}
+
 export function bibleSectionsEqual(passage1: BibleSection, passage2: BibleSection): boolean {
     return (
         passage1.bookCode === passage2.bookCode &&

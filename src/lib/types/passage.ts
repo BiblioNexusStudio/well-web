@@ -1,5 +1,3 @@
-import type { ResourceContentInfo } from './resource';
-
 export enum PassagePageMenuType {
     mainMenu = 'mainMenu',
     guideMenu = 'guideMenu',
@@ -11,10 +9,6 @@ export interface BibleSection {
     endVerse: number;
     startChapter: number;
     startVerse: number;
-}
-
-export interface BibleSectionWithResourceContents extends BibleSection {
-    contents: ResourceContentInfo[];
 }
 
 export interface BasePassagesByBook {

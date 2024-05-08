@@ -38,6 +38,8 @@ async function getBibleBookCodesToName(languageId: number | null = null, retry =
     }
 }
 
+// for a given Bible section, return all resource contents available
+// when offline, this will return only resource contents that are cached
 export async function resourceContentsForBibleSection(bibleSection: BibleSection): Promise<ResourceContentInfo[]> {
     const languageId = get(currentLanguageInfo)?.id;
     const online = get(isOnline);
@@ -76,6 +78,8 @@ export async function resourceContentsForBibleSection(bibleSection: BibleSection
     );
 }
 
+// for a given Bible section, return the guides available
+// it is a mapping with the guide parent resource short name -> list of resource contents that are part of the guide
 async function guidesAvailableForBibleSection(
     bibleSection: BibleSection
 ): Promise<Record<string, ResourceContentInfo[]>> {
@@ -93,9 +97,17 @@ async function guidesAvailableForBibleSection(
                 )) as ResourceContentGroupedByVerses;
                 for (const verse of potentialGuideResourceContent.verses) {
                     if (
-                        (chapter === bibleSection.startChapter && verse.number >= bibleSection.startVerse) ||
-                        (chapter === bibleSection.endChapter && verse.number <= bibleSection.endVerse) ||
-                        (chapter != bibleSection.startChapter && chapter !== bibleSection.endChapter)
+                        (chapter === bibleSection.startChapter &&
+                            chapter === bibleSection.endChapter &&
+                            verse.number >= bibleSection.startVerse &&
+                            verse.number <= bibleSection.endVerse) ||
+                        (chapter === bibleSection.startChapter &&
+                            chapter !== bibleSection.endChapter &&
+                            verse.number >= bibleSection.startVerse) ||
+                        (chapter === bibleSection.endChapter &&
+                            chapter !== bibleSection.startChapter &&
+                            verse.number <= bibleSection.endVerse) ||
+                        (chapter > bibleSection.startChapter && chapter < bibleSection.endChapter)
                     ) {
                         for (const content of verse.resourceContents) {
                             if (

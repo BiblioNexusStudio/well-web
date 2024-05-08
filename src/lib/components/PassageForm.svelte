@@ -6,9 +6,12 @@
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import { currentLanguageInfo, supportedLanguages, updateCurrentLanguageCode } from '$lib/stores/language.store';
     import { fetchCbbterPassagesByBook } from '$lib/utils/data-handlers/resources/passages';
-    import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
+    import {
+        bibleSectionToReference,
+        bibleSectionToString,
+        stringToBibleSection,
+    } from '$lib/utils/bible-section-helpers';
     import { selectedBibleSection, selectedBookIndex, data } from '$lib/stores/passage-form.store';
-    import type { BibleSection } from '$lib/types/passage';
 
     let isLoading = false;
 
@@ -27,33 +30,12 @@
         isLoading = false;
     }
 
-    function bibleSectionToFakeId(bibleSection: BibleSection | null) {
-        if (!bibleSection) return null;
-        return `${bibleSection.bookCode}|${bibleSection.startChapter}|${bibleSection.startVerse}|${bibleSection.endChapter}|${bibleSection.endVerse}`;
-    }
-
-    function fakeIdToBibleSection(fakeId: string | null): BibleSection | null {
-        if (!fakeId) return null;
-
-        const [bookCode, startChapter, startVerse, endChapter, endVerse] = fakeId.split('|');
-
-        if (!bookCode || !startChapter || !startVerse || !endChapter || !endVerse) return null;
-
-        return {
-            bookCode,
-            startChapter: parseInt(startChapter, 10),
-            startVerse: parseInt(startVerse, 10),
-            endChapter: parseInt(endChapter, 10),
-            endVerse: parseInt(endVerse, 10),
-        };
-    }
-
     function selectPassage(event: Event) {
         const selectTarget = event.target as HTMLSelectElement;
         if (selectTarget.value === '') {
             $selectedBibleSection = null;
         } else {
-            $selectedBibleSection = fakeIdToBibleSection(selectTarget.value);
+            $selectedBibleSection = stringToBibleSection(selectTarget.value);
         }
     }
 
@@ -100,7 +82,7 @@
 
     <select
         id="passage-form-passage"
-        value={bibleSectionToFakeId($selectedBibleSection)}
+        value={$selectedBibleSection === null ? '' : bibleSectionToString($selectedBibleSection)}
         on:change={selectPassage}
         class="select select-info pe-14 ps-4 font-semibold"
         disabled={!selectedBookInfo}
@@ -108,7 +90,7 @@
         <option disabled value="">{$translate('page.index.passage.value')}</option>
         {#if selectedBookInfo}
             {#each selectedBookInfo.passages as passage}
-                <option value={bibleSectionToFakeId(passage)}
+                <option value={bibleSectionToString(passage)}
                     >{selectedBookInfo.bookName}
                     {bibleSectionToReference(passage)}</option
                 >
