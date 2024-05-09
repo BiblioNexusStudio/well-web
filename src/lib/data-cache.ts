@@ -49,6 +49,7 @@ export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number
         if (response.status >= 400) {
             throw new Error('Bad HTTP response');
         }
+        apiCachedUrls.delete(path);
         return await response.json();
     } finally {
         removeFromArray(partiallyDownloadedApiPaths, path);
@@ -64,6 +65,7 @@ export async function fetchFromCacheOrCdn(url: Url, type: 'blob' | 'json' = 'jso
         if (response.status >= 400) {
             throw new Error('Bad HTTP response');
         }
+        cdnCachedUrls.delete(url);
         return await (type === 'blob' ? response.blob() : response.json());
     } finally {
         removeFromArray(partiallyDownloadedCdnUrls, url);
@@ -76,6 +78,7 @@ export async function removeFromApiCache(path: string) {
     }
     const cache = await caches.open('aquifer-api');
     await cache.delete(apiUrl(path));
+    apiCachedUrls.delete(path);
 }
 
 export async function removeFromCdnCache(url: Url) {
@@ -84,6 +87,7 @@ export async function removeFromCdnCache(url: Url) {
     }
     const cache = await caches.open('aquifer-cdn');
     await cache.delete(url);
+    cdnCachedUrls.delete(url);
 }
 
 export async function clearEntireCache() {
@@ -93,6 +97,9 @@ export async function clearEntireCache() {
     await asyncForEach(await caches.keys(), async (key) => {
         await caches.delete(key);
     });
+
+    apiCachedUrls.clear();
+    cdnCachedUrls.clear();
 
     if (indexedDB.databases) {
         const dbs = await indexedDB.databases();
@@ -320,6 +327,8 @@ export async function cacheManyFromCdnWithProgress(
     };
 
     await processQueue();
+    apiCachedUrls.clear();
+    cdnCachedUrls.clear();
 }
 
 // Given a list of URLs and the expected sizes (which comes from the API), determine if any of the cached data has
@@ -339,8 +348,14 @@ function isMetadataBatchableUrl(url: UrlWithMetadata) {
     return url.url.match(apiMetadataRegex);
 }
 
+const cdnCachedUrls = new Map();
+const apiCachedUrls = new Map();
+
 // Checks if a fully downloaded cache entry exists for the URL.
 export async function isCachedFromCdn(url: Url) {
+    if (cdnCachedUrls.has(url)) {
+        return cdnCachedUrls.get(url);
+    }
     if (partiallyDownloadedCdnUrls.includes(url)) {
         return false;
     }
@@ -352,11 +367,16 @@ export async function isCachedFromCdn(url: Url) {
     }
     const cache = await caches.open('aquifer-cdn');
     const response = await cache.match(url);
-    return response != null;
+    const isCached = response != null;
+    cdnCachedUrls.set(url, isCached);
+    return isCached;
 }
 
 // Checks if a fully downloaded cache entry exists for the API path.
 export async function isCachedFromApi(path: string) {
+    if (apiCachedUrls.has(path)) {
+        return apiCachedUrls.get(path);
+    }
     if (partiallyDownloadedApiPaths.includes(path)) {
         return false;
     }
@@ -368,7 +388,9 @@ export async function isCachedFromApi(path: string) {
     }
     const cache = await caches.open('aquifer-api');
     const response = await cache.match(apiUrl(path));
-    return response != null;
+    const isCached = response != null;
+    apiCachedUrls.set(path, isCached);
+    return isCached;
 }
 
 function apiUrl(path: string) {
