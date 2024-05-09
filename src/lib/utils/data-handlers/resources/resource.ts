@@ -1,32 +1,41 @@
 import { env } from '$env/dynamic/public';
 import { fetchFromCacheOrCdn } from '$lib/data-cache';
 import { log } from '$lib/logger';
-import type { PassageResourceContent } from '$lib/types/passage';
-import { MediaType, type ResourceContentMetadata, type ResourceContentTiptap } from '$lib/types/resource';
+import type { FileManagerResourceContentInfo } from '$lib/types/file-manager';
+import {
+    MediaType,
+    type ResourceContentInfo,
+    type ResourceContentMetadata,
+    type ResourceContentTiptap,
+} from '$lib/types/resource';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
-export function resourceContentApiPath(resourceContent: PassageResourceContent) {
-    if (resourceContent.mediaTypeName === MediaType.Audio) {
-        return `resources/${resourceContent.contentId}/content?audioType=${audioFileTypeForBrowser()}`;
+export function resourceContentApiPath(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
+    const mediaType = 'mediaType' in resourceContent ? resourceContent.mediaType : resourceContent.mediaTypeName;
+    const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
+    if (mediaType === MediaType.Audio) {
+        return `resources/${id}/content?audioType=${audioFileTypeForBrowser()}`;
     } else {
-        return `resources/${resourceContent.contentId}/content`;
+        return `resources/${id}/content`;
     }
 }
 
-export function resourceContentApiFullUrl(resourceContent: PassageResourceContent) {
+export function resourceContentApiFullUrl(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
     return env.PUBLIC_AQUIFER_API_URL + resourceContentApiPath(resourceContent);
 }
 
-export function resourceThumbnailApiFullUrl(resourceContent: PassageResourceContent) {
-    return env.PUBLIC_AQUIFER_API_URL + `resources/${resourceContent.contentId}/thumbnail`;
+export function resourceThumbnailApiFullUrl(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
+    const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
+    return env.PUBLIC_AQUIFER_API_URL + `resources/${id}/thumbnail`;
 }
 
-export function resourceMetadataApiFullPath(resourceContent: PassageResourceContent) {
-    return env.PUBLIC_AQUIFER_API_URL + `resources/${resourceContent.contentId}/metadata`;
+export function resourceMetadataApiFullPath(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
+    const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
+    return env.PUBLIC_AQUIFER_API_URL + `resources/${id}/metadata`;
 }
 
 export async function fetchTiptapForResourceContent(
-    resourceContent: PassageResourceContent
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo
 ): Promise<ResourceContentTiptap | null> {
     try {
         const tiptaps = (await fetchFromCacheOrCdn(resourceContentApiFullUrl(resourceContent))) as
@@ -41,7 +50,7 @@ export async function fetchTiptapForResourceContent(
 }
 
 export async function fetchMetadataForResourceContent(
-    resourceContent: PassageResourceContent
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo
 ): Promise<ResourceContentMetadata | null> {
     try {
         return (await fetchFromCacheOrCdn(
@@ -55,7 +64,7 @@ export async function fetchMetadataForResourceContent(
 }
 
 export async function fetchDisplayNameForResourceContent(
-    resourceContent: PassageResourceContent
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo
 ): Promise<string | null> {
     return (await fetchMetadataForResourceContent(resourceContent))?.displayName || null;
 }

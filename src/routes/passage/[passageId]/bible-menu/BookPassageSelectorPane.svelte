@@ -1,13 +1,12 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { data, selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import { data, selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
-    import { isOnline } from '$lib/stores/is-online.store';
     import { fetchCbbterPassagesByBook } from '$lib/utils/data-handlers/resources/passages';
-    import { passageToReference } from '$lib/utils/passage-helpers';
+    import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
     import { goto } from '$app/navigation';
-    import type { BasePassage, BasePassagesByBook } from '$lib/types/passage';
+    import type { BibleSection } from '$lib/types/passage';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -19,20 +18,20 @@
 
     $: selectedBookInfo = $selectedBookIndex === 'default' ? null : $data.passagesByBook?.[$selectedBookIndex];
 
-    function setBookAndChangeSteps(book: BasePassagesByBook, index: number) {
+    function setBookAndChangeSteps(index: number) {
         currentStep = steps.two;
         $selectedBookIndex = index;
     }
 
-    function setPassageAndClosePane(passage: BasePassage) {
-        $selectedId = passage.id.toString();
-        goto(`/passage/${$selectedId}`);
+    function setPassageAndClosePane(passage: BibleSection) {
+        $selectedBibleSection = passage;
+        goto(`/passage/view`);
         currentStep = steps.one;
         isShowing = false;
     }
 
     async function fetchDataPromise() {
-        await fetchCbbterPassagesByBook($isOnline);
+        await fetchCbbterPassagesByBook();
     }
 
     onMount(() => {
@@ -60,7 +59,7 @@
                 {#if steps.one === currentStep && $data.passagesByBook}
                     {#each $data.passagesByBook as book, index}
                         <button
-                            on:click={() => setBookAndChangeSteps(book, index)}
+                            on:click={() => setBookAndChangeSteps(index)}
                             class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4"
                         >
                             <span class="text-sm">{book.bookName}</span>
@@ -77,7 +76,7 @@
                                 on:click={() => setPassageAndClosePane(passage)}
                                 class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4"
                                 >{selectedBookInfo.bookName}
-                                {passageToReference(passage)}</button
+                                {bibleSectionToReference(passage)}</button
                             >
                         {/each}
                         {#if selectedBookInfo.passages.length === 0}

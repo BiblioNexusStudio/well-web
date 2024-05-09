@@ -6,8 +6,12 @@
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import { currentLanguageInfo, supportedLanguages, updateCurrentLanguageCode } from '$lib/stores/language.store';
     import { fetchCbbterPassagesByBook } from '$lib/utils/data-handlers/resources/passages';
-    import { passageToReference } from '$lib/utils/passage-helpers';
-    import { selectedId, selectedBookIndex, data } from '$lib/stores/passage-form.store';
+    import {
+        bibleSectionToReference,
+        bibleSectionToString,
+        stringToBibleSection,
+    } from '$lib/utils/bible-section-helpers';
+    import { selectedBibleSection, selectedBookIndex, data } from '$lib/stores/passage-form.store';
 
     let isLoading = false;
 
@@ -20,16 +24,25 @@
     $: $currentLanguageInfo && callFetchData($isOnline);
     $: selectedBookInfo = $selectedBookIndex === 'default' ? null : $data.passagesByBook?.[$selectedBookIndex];
 
-    async function callFetchData(isOnline = true) {
+    async function callFetchData(_isOnline: boolean = true) {
         isLoading = true;
-        await fetchCbbterPassagesByBook(isOnline);
+        await fetchCbbterPassagesByBook();
         isLoading = false;
+    }
+
+    function selectPassage(event: Event) {
+        const selectTarget = event.target as HTMLSelectElement;
+        if (selectTarget.value === '') {
+            $selectedBibleSection = null;
+        } else {
+            $selectedBibleSection = stringToBibleSection(selectTarget.value);
+        }
     }
 
     onMount(() => callFetchData());
 </script>
 
-<form action="/passage/{$selectedId}" class="form-control mx-auto w-full max-w-xs space-y-4">
+<form action="/passage/{$selectedBibleSection}" class="form-control mx-auto w-full max-w-xs space-y-4">
     <label class="label p-0" for="passage-form-book">
         <span class="bold label-text">{$translate('page.index.language.value')}</span>
     </label>
@@ -50,7 +63,7 @@
     <select
         id="passage-form-book"
         bind:value={$selectedBookIndex}
-        on:change={() => ($selectedId = 'default')}
+        on:change={() => ($selectedBibleSection = null)}
         class="select select-info pe-14 ps-4 font-semibold"
         disabled={!$data.passagesByBook?.length}
     >
@@ -69,22 +82,23 @@
 
     <select
         id="passage-form-passage"
-        bind:value={$selectedId}
+        value={$selectedBibleSection === null ? '' : bibleSectionToString($selectedBibleSection)}
+        on:change={selectPassage}
         class="select select-info pe-14 ps-4 font-semibold"
         disabled={!selectedBookInfo}
     >
-        <option disabled selected value="default">{$translate('page.index.passage.value')}</option>
+        <option disabled value="">{$translate('page.index.passage.value')}</option>
         {#if selectedBookInfo}
             {#each selectedBookInfo.passages as passage}
-                <option value={passage.id}
+                <option value={bibleSectionToString(passage)}
                     >{selectedBookInfo.bookName}
-                    {passageToReference(passage)}</option
+                    {bibleSectionToReference(passage)}</option
                 >
             {/each}
         {/if}
     </select>
 
-    <button class="btn btn-primary mx-auto w-1/3" disabled={$selectedId === 'default'}
+    <button class="btn btn-primary mx-auto w-1/3" disabled={$selectedBibleSection === null}
         >{$translate('page.index.go.value')} <Icon data={arrowRight} /></button
     >
 </form>

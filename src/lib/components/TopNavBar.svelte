@@ -6,16 +6,16 @@
     import microphone from 'svelte-awesome/icons/microphone';
     import AddAudioRecordingModal from './AddAudioRecordingModal.svelte';
     import { featureFlags } from '$lib/stores/feature-flags.store';
-    import type { BasePassage } from '$lib/types/passage';
+    import type { BibleSection } from '$lib/types/passage';
     import type { FrontendBibleBook } from '$lib/types/bible-text-content';
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
     import type { PassagePageTab } from '../../routes/passage/[passageId]/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
-    import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import { bibleSetByUser } from '$lib/stores/bibles.store';
 
     export let title = '';
-    export let passage: BasePassage | null = null;
+    export let bibleSection: BibleSection | null = null;
     export let bibles: FrontendBibleBook[] = [];
     let recordingModalOpen = false;
     export let preferredBiblesModalOpen = false;
@@ -37,7 +37,7 @@
 
     function handleOpenBibleMenu() {
         $selectedBookIndex = 'default';
-        $selectedId = 'default';
+        $selectedBibleSection = null;
         openBibleMenu();
     }
 
@@ -52,8 +52,8 @@
 
 <svelte:window on:click={handleWindowClick} />
 
-{#if passage}
-    <AddAudioRecordingModal bind:open={recordingModalOpen} {passage} />
+{#if bibleSection}
+    <AddAudioRecordingModal bind:open={recordingModalOpen} {bibleSection} />
 {/if}
 <div class="navbar flex w-full justify-between">
     {#if tab === 'guide' || tab === 'bible'}
@@ -78,7 +78,7 @@
             </button>
         </div>
     {/if}
-    {#if passage && tab === 'bible' && bibles.length}
+    {#if bibleSection && tab === 'bible' && bibles.length}
         <div class="flex-none">
             <details bind:open={preferredBiblesModalOpen} class="dropdown md:dropdown-end">
                 <summary class="btn btn-link btn-active text-primary">
@@ -92,7 +92,7 @@
             </details>
         </div>
     {/if}
-    {#if passage && $featureFlags.audioRecording && tab !== 'guide'}
+    {#if bibleSection && $featureFlags.audioRecording && tab !== 'guide'}
         <div class="flex-none">
             <details class="autoclose dropdown dropdown-end">
                 <summary class="btn btn-link btn-active text-primary">

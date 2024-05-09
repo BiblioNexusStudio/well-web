@@ -1,11 +1,11 @@
 <script lang="ts">
     import AudioRecorder from '$lib/components/AudioRecorder.svelte';
-    import type { BasePassage } from '$lib/types/passage';
+    import type { BibleSection } from '$lib/types/passage';
     import { saveBibleRecording } from '$lib/utils/data-handlers/bible';
     import { _ as translate } from 'svelte-i18n';
 
     export let open = false;
-    export let passage: BasePassage | undefined;
+    export let bibleSection: BibleSection | undefined;
 
     let dialog: HTMLDialogElement | undefined;
 
@@ -20,8 +20,8 @@
 
     async function save() {
         const filePath = await audioRecorder?.saveRecording();
-        if (filePath && passage) {
-            await saveBibleRecording(language, translation, abbreviation, passage, filePath);
+        if (filePath && bibleSection) {
+            await saveBibleRecording(language, translation, abbreviation, bibleSection, filePath);
         }
         await discard();
     }

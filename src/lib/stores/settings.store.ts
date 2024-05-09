@@ -1,13 +1,14 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import { type Setting, SettingShortNameEnum, ParentResourceIdEnum } from '../types/settings';
+import { type Setting, SettingShortNameEnum } from '../types/settings';
+import { ParentResourceName } from '$lib/types/resource';
 
 const bibleWellSettingsInLocalStorage = 'BIBLE_WELL_SETTINGS_IN_LOCAL_STORAGE';
 
 const showOnlySrvResources: Setting = {
     value: true,
     shortName: SettingShortNameEnum.showOnlySrvResources,
-    parentResourceIds: [ParentResourceIdEnum.CBBTER, ParentResourceIdEnum.VideoBibleDictionary],
+    parentResources: [ParentResourceName.CBBTER, ParentResourceName.VideoBibleDictionary],
 };
 
 const defaultSettings = [showOnlySrvResources];

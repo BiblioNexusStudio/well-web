@@ -24,15 +24,13 @@
         type ResourceData,
         fetchBibleContent,
         type PassagePageTab,
-        fetchPassage,
         fetchResourceData,
         fetchBibleData,
         fetchLocalizedGuideData,
     } from './data-fetchers';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible-text-content';
-    import type { BasePassage } from '$lib/types/passage';
-    import { cacheBiblesForPassage } from '$lib/utils/data-handlers/bible';
+    import { cacheBiblesForBibleSection } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
     import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
@@ -62,9 +60,10 @@
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
-    import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
+    import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { ApiBibleContents } from '$lib/types/bible-text-content.ts';
+    import type { BibleSection } from '$lib/types/passage';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -75,7 +74,6 @@
         $translate('resources.cbbt-er.step6.value'),
     ];
 
-    let passage: BasePassage | null = null;
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
 
@@ -100,10 +98,9 @@
     let preferredBiblesModalOpen = false;
     let localizedGuides: ApiParentResource[];
 
-    $: $page.url && fetchBase(); // when the [passageId] changes, refetch
+    $: $page.url && fetchBase($selectedBibleSection); // when the Bible section changes, refetch
     $: $currentLanguageInfo?.id && fetchGuides();
-    $: passage && fetchBibles(passage, $preferredBibleIds);
-    $: passage && fetchResources(passage);
+    $: handlePreferredBiblesChange($preferredBibleIds);
     $: fetchContentForBibleId(selectedBibleId);
 
     $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
@@ -131,56 +128,64 @@
         localizedGuides = await fetchLocalizedGuideData();
     }
 
-    function fetchBase() {
+    function fetchBase(bibleSection: BibleSection | null) {
+        resourceData = null;
+        bibleData = null;
+        multiClipAudioStates = {};
+
         if ($page.params.passageId === 'new') {
             $bibleSetByUser = null;
             $currentGuide = undefined;
             $selectedBookIndex = 'default';
-            $selectedId = 'default';
+            $selectedBibleSection = null;
 
             openGuideMenu();
             return;
+        } else {
+            fetchBibles(bibleSection);
+            fetchResources(bibleSection);
         }
-        passage = null;
-        resourceData = null;
-        bibleData = null;
-        multiClipAudioStates = {};
-        baseFetchPromise = (async () => {
-            passage = await fetchPassage($page.params.passageId!);
-        })();
     }
 
-    function fetchResources(passage: BasePassage) {
-        resourceFetchPromise = (async () => {
-            resourceData = await fetchResourceData(passage);
-            stepsAvailable = Array.from(
-                new Set([
-                    ...(resourceData.cbbterText?.steps?.map((step) => step.stepNumber) ?? []),
-                    ...(resourceData.cbbterAudio?.steps?.map((step) => step.stepNumber) ?? []),
-                ])
+    function fetchResources(bibleSection: BibleSection | null) {
+        if (bibleSection) {
+            resourceFetchPromise = (async () => {
+                resourceData = await fetchResourceData(bibleSection);
+                stepsAvailable = Array.from(
+                    new Set([
+                        ...(resourceData.cbbterText?.steps?.map((step) => step.stepNumber) ?? []),
+                        ...(resourceData.cbbterAudio?.steps?.map((step) => step.stepNumber) ?? []),
+                    ])
+                );
+                cbbterSelectedStepNumber = stepsAvailable[0] ?? 1;
+                cbbterSelectedStepScroll = stepsAvailable[0] ?? 1;
+                populateCbbterAudioState();
+            })();
+        }
+    }
+
+    async function handlePreferredBiblesChange(_: number[]) {
+        fetchBibles($selectedBibleSection);
+    }
+
+    async function fetchBibles(bibleSection: BibleSection | null) {
+        if (bibleSection) {
+            const existingContent = Object.fromEntries(
+                bibleData?.biblesForTabs.map(({ id, content }) => [id, content]) ?? []
             );
-            cbbterSelectedStepNumber = stepsAvailable[0] ?? 1;
-            cbbterSelectedStepScroll = stepsAvailable[0] ?? 1;
-            populateCbbterAudioState();
-        })();
-    }
-
-    async function fetchBibles(passage: BasePassage, _: number[]) {
-        const existingContent = Object.fromEntries(
-            bibleData?.biblesForTabs.map(({ id, content }) => [id, content]) ?? []
-        );
-        const newBibleData = await fetchBibleData(passage);
-        newBibleData.biblesForTabs = newBibleData.biblesForTabs.map((bible) => ({
-            ...bible,
-            content: existingContent[bible.id] ?? null,
-            loadingContent: false,
-        }));
-        bibleData = newBibleData;
-        if (!selectedBibleId || !bibleData?.biblesForTabs.map(({ id }) => id).includes(selectedBibleId)) {
-            selectedBibleId = bibleData?.biblesForTabs?.[0]?.id ?? null;
+            const newBibleData = await fetchBibleData(bibleSection);
+            newBibleData.biblesForTabs = newBibleData.biblesForTabs.map((bible) => ({
+                ...bible,
+                content: existingContent[bible.id] ?? null,
+                loadingContent: false,
+            }));
+            bibleData = newBibleData;
+            if (!selectedBibleId || !bibleData?.biblesForTabs.map(({ id }) => id).includes(selectedBibleId)) {
+                selectedBibleId = bibleData?.biblesForTabs?.[0]?.id ?? null;
+            }
+            await fetchContentForBibleId(selectedBibleId);
+            await cacheNonSelectedBiblesIfOnline();
         }
-        await fetchContentForBibleId(selectedBibleId);
-        await cacheNonSelectedBiblesIfOnline();
     }
 
     async function fetchContentForBibleId(id: number | null) {
@@ -188,9 +193,9 @@
         if (bibleData && bibleData.biblesForTabs[index]) {
             bibleData.biblesForTabs[index]!.loadingContent = true;
             const bibleBook = bibleData.biblesForTabs[index];
-            if (bibleBook && passage) {
+            if (bibleBook && $selectedBibleSection) {
                 if (!bibleBook.content) {
-                    const content = await fetchBibleContent(passage, bibleBook);
+                    const content = await fetchBibleContent($selectedBibleSection, bibleBook);
                     // make sure the index hasn't changed
                     if (bibleData.biblesForTabs[index]!.id === id) {
                         bibleData.biblesForTabs[index]!.content = content;
@@ -208,9 +213,9 @@
     // in order to make sure content is available when the user goes offline, cache all the Bible data for each
     // non-selected tab
     async function cacheNonSelectedBiblesIfOnline() {
-        if ($isOnline && passage && bibleData?.biblesForTabs) {
-            await cacheBiblesForPassage(
-                passage,
+        if ($isOnline && $selectedBibleSection && bibleData?.biblesForTabs) {
+            await cacheBiblesForBibleSection(
+                $selectedBibleSection,
                 bibleData?.biblesForTabs
                     .filter(({ id, bookMetadata }) => id !== selectedBibleId && bookMetadata !== null)
                     .map(({ bookMetadata }) => bookMetadata) as BibleBookContentDetails[]
@@ -403,7 +408,7 @@
             <TopNavBar
                 bind:preferredBiblesModalOpen
                 {title}
-                {passage}
+                bibleSection={$selectedBibleSection}
                 bibles={bibleData?.availableBibles ?? []}
                 tab={selectedTab}
                 guideShortName={$currentGuide?.shortName ?? ''}
