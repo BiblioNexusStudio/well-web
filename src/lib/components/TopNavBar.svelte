@@ -14,7 +14,7 @@
     import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import { bibleSetByUser } from '$lib/stores/bibles.store';
 
-    export let title = '';
+    export let bibleSectionTitle = '';
     export let bibleSection: BibleSection | null = null;
     export let bibles: FrontendBibleBook[] = [];
     let recordingModalOpen = false;
@@ -62,7 +62,7 @@
                 on:click={openBiblePane}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
             >
-                {title.trim() ? title : $translate('navTop.selectPassage.value')}
+                {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
             </button>
             <button
                 on:click={handleOpenBibleMenu}

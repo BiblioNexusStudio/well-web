@@ -49,12 +49,7 @@
     import GuidePane from './guide-menu/GuidePane.svelte';
     import LibraryMenu from './library-menu/LibraryMenu.svelte';
     import BibleMenu from './bible-menu/BibleMenu.svelte';
-    import {
-        bibleSetByUser,
-        bibleStoredByUser,
-        bibleDataFetchedByUser,
-        loadingContent,
-    } from '$lib/stores/bibles.store';
+    import { bibleSetByUser, bibleStoredByUser } from '$lib/stores/bibles.store';
     import BiblePane from './bible-menu/BiblePane.svelte';
     import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
@@ -62,8 +57,9 @@
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
-    import type { ApiBibleContents } from '$lib/types/bible-text-content.ts';
     import type { BibleSection } from '$lib/types/passage';
+    import BibleUnavailable from './BibleUnavailable.svelte';
+    import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -297,40 +293,12 @@
         }
     }
 
-    function navbarTitle(
-        resourceData: ResourceData | null,
+    function calculateBibleSectionTitle(
         currentBible: FrontendBibleBook | undefined,
-        selectedTab: PassagePageTab,
-        selectedStepNumber: number,
-        bibleContents: ApiBibleContents | null
+        bibleSection: BibleSection | null
     ) {
-        if (bibleContents?.chapters?.length && bibleContents?.chapters?.length === 1) {
-            let bibleContentsLength = bibleContents?.chapters?.[0]?.verses?.length;
-            let titleString = `${bibleContents.bookName} ${bibleContents?.chapters?.[0]?.number}:${bibleContents?.chapters?.[0]?.verses?.[0]?.number}`;
-            if (bibleContentsLength && bibleContentsLength > 1) {
-                titleString += `-${
-                    bibleContents?.chapters?.[0]?.verses?.[bibleContents?.chapters?.[0]?.verses?.length - 1]?.number
-                }`;
-            }
-            return titleString;
-        } else if (bibleContents?.chapters?.length && bibleContents?.chapters?.length > 1) {
-            const firstChapter = bibleContents?.chapters?.[0];
-            const lastChapter = bibleContents?.chapters?.[bibleContents?.chapters?.length - 1];
-
-            return `${bibleContents.bookName} ${firstChapter?.number}:${firstChapter?.verses?.[0]?.number}-${
-                lastChapter?.number
-            }:${lastChapter?.verses?.[lastChapter?.verses?.length - 1]?.number}`;
-        }
-        if (selectedTab === 'bible' || selectedTab === 'guide') {
-            if (resourceData?.cbbterText?.steps?.length && resourceData?.title) {
-                return resourceData?.title;
-            } else {
-                return `${currentBible?.bookMetadata?.displayName ?? ''} ${
-                    currentBible?.content?.chapters?.[0]?.number ?? ''
-                }`;
-            }
-        } else if (resourceData?.title) {
-            return `${resourceData?.title} - ${steps[selectedStepNumber - 1]}`;
+        if (bibleSection) {
+            return `${currentBible?.bookMetadata?.displayName ?? ''} ${bibleSectionToReference(bibleSection)}`;
         } else {
             return '';
         }
@@ -358,7 +326,7 @@
         }
     }
 
-    $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber, $bibleDataFetchedByUser);
+    $: bibleSectionTitle = calculateBibleSectionTitle(currentBible, $selectedBibleSection);
     $: handleSelectedTabMenu(selectedTab);
 
     $: showOrDismissGuidePane(isShowingGuidePane);
@@ -407,7 +375,7 @@
         {#if $passagePageShownMenu === null}
             <TopNavBar
                 bind:preferredBiblesModalOpen
-                {title}
+                {bibleSectionTitle}
                 bibleSection={$selectedBibleSection}
                 bibles={bibleData?.availableBibles ?? []}
                 tab={selectedTab}
@@ -435,7 +403,9 @@
                 </div>
             {/if}
             <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'bible' && 'hidden'}">
-                {#if $loadingContent}
+                {#if selectedBibleId === null}
+                    <BibleUnavailable bind:preferredBiblesModalOpen bibles={bibleData?.availableBibles} />
+                {:else if currentBible?.loadingContent}
                     <FullPageSpinner />
                 {:else if currentBible?.content?.chapters?.length}
                     <div class="prose mx-auto overflow-y-scroll">
@@ -444,19 +414,6 @@
                                 <div
                                     class="py-1"
                                     dir={lookupLanguageInfoById(currentBible.languageId)?.scriptDirection}
-                                >
-                                    <span class="sup pe-1">{number}</span><span>{@html text}</span>
-                                </div>
-                            {/each}
-                        {/each}
-                    </div>
-                {:else if $bibleDataFetchedByUser?.chapters?.length}
-                    <div class="prose mx-auto overflow-y-scroll">
-                        {#each $bibleDataFetchedByUser?.chapters as chapter}
-                            {#each chapter.verses as { number, text }}
-                                <div
-                                    class="py-1"
-                                    dir={lookupLanguageInfoById($bibleSetByUser?.languageId || 1)?.scriptDirection}
                                 >
                                     <span class="sup pe-1">{number}</span><span>{@html text}</span>
                                 </div>
