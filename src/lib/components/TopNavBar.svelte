@@ -9,12 +9,12 @@
     import type { BibleSection } from '$lib/types/passage';
     import type { FrontendBibleBook } from '$lib/types/bible-text-content';
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
-    import type { PassagePageTab } from '../../routes/passage/[passageId]/data-fetchers';
+    import type { PassagePageTab } from '../../routes/view-content/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import { bibleSetByUser } from '$lib/stores/bibles.store';
 
-    export let title = '';
+    export let bibleSectionTitle = '';
     export let bibleSection: BibleSection | null = null;
     export let bibles: FrontendBibleBook[] = [];
     let recordingModalOpen = false;
@@ -62,7 +62,7 @@
                 on:click={openBiblePane}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
             >
-                {title.trim() ? title : $translate('navTop.selectPassage.value')}
+                {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
             </button>
             <button
                 on:click={handleOpenBibleMenu}

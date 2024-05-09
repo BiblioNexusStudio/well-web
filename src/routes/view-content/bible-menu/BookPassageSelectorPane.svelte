@@ -5,7 +5,6 @@
     import { onMount } from 'svelte';
     import { fetchCbbterPassagesByBook } from '$lib/utils/data-handlers/resources/passages';
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
-    import { goto } from '$app/navigation';
     import type { BibleSection } from '$lib/types/passage';
 
     export let bookPassageSelectorPane: CupertinoPane;
@@ -25,7 +24,6 @@
 
     function setPassageAndClosePane(passage: BibleSection) {
         $selectedBibleSection = passage;
-        goto(`/passage/view`);
         currentStep = steps.one;
         isShowing = false;
     }

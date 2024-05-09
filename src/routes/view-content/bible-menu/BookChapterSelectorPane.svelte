@@ -2,12 +2,13 @@
     import { _ as translate } from 'svelte-i18n';
     import { CupertinoPane } from 'cupertino-pane';
     import { afterUpdate, onMount } from 'svelte';
-    import { getBibleBooksByBibleId, getBibleTextByParams } from '$lib/utils/data-handlers/resources/passages';
-    import { bibleSetByUser, bibleDataFetchedByUser, loadingContent } from '$lib/stores/bibles.store';
+    import { getBibleBooksByBibleId } from '$lib/utils/data-handlers/resources/passages';
+    import { bibleSetByUser } from '$lib/stores/bibles.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible-text-content';
+    import { selectedBibleSection } from '$lib/stores/passage-form.store';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -134,25 +135,22 @@
         }
     }
 
-    async function handleVerseGoButton() {
-        let params = [
-            `booknumber=${currentBook.number}`,
-            `startchapter=${firstSelectedVerse.chapterNumber}`,
-            `startverse=${firstSelectedVerse.number}`,
-            `endchapter=${lastSelectedVerse.chapterNumber}`,
-            `endverse=${lastSelectedVerse.number}`,
-        ];
-
-        isShowing = false;
-        $loadingContent = true;
-
-        let data = await getBibleTextByParams($bibleSetByUser?.id || 1, params);
-
-        if (data?.chapters) {
-            $bibleDataFetchedByUser = data;
-            $loadingContent = false;
-            currentStep = steps.one;
+    function forceToInt(stringOrInt: string | number) {
+        if (typeof stringOrInt === 'number') {
+            return stringOrInt;
         }
+        return parseInt(stringOrInt, 10);
+    }
+
+    async function handleVerseGoButton() {
+        $selectedBibleSection = {
+            bookCode: currentBook.code,
+            startChapter: forceToInt(firstSelectedVerse.chapterNumber),
+            startVerse: forceToInt(firstSelectedVerse.number),
+            endChapter: forceToInt(lastSelectedVerse.chapterNumber),
+            endVerse: forceToInt(lastSelectedVerse.number),
+        };
+        isShowing = false;
     }
 
     function formatBibleVerseRange(
