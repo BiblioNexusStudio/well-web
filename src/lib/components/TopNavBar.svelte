@@ -7,16 +7,14 @@
     import AddAudioRecordingModal from './AddAudioRecordingModal.svelte';
     import { featureFlags } from '$lib/stores/feature-flags.store';
     import type { BasePassage } from '$lib/types/passage';
-    import type { FrontendBibleBook } from '$lib/types/bible-text-content';
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
     import type { PassagePageTab } from '../../routes/passage/[passageId]/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { selectedBookIndex, selectedId } from '$lib/stores/passage-form.store';
-    import { bibleSetByUser } from '$lib/stores/bibles.store';
+    import { fetchedBaseBiblesWithLanguageDefault, currentBibleSetByUser } from '$lib/stores/bibles.store';
 
     export let title = '';
     export let passage: BasePassage | null = null;
-    export let bibles: FrontendBibleBook[] = [];
     let recordingModalOpen = false;
     export let preferredBiblesModalOpen = false;
     export let tab: PassagePageTab | null = null;
@@ -42,7 +40,7 @@
     }
 
     function openBiblePane() {
-        if (guideShortName) {
+        if (tab !== 'bible') {
             showBiblePane = true;
         } else {
             showBookChapterVerseMenu = true;
@@ -68,7 +66,7 @@
                 on:click={handleOpenBibleMenu}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
             >
-                {$bibleSetByUser?.abbreviation || $translate('navTop.selectBible.value')}
+                {$currentBibleSetByUser?.bibleAbbreviation || $translate('navTop.selectBible.value')}
             </button>
             <button
                 on:click={openGuideMenu}
@@ -78,7 +76,7 @@
             </button>
         </div>
     {/if}
-    {#if passage && tab === 'bible' && bibles.length}
+    {#if tab === 'bible' && $fetchedBaseBiblesWithLanguageDefault?.length}
         <div class="flex-none">
             <details bind:open={preferredBiblesModalOpen} class="dropdown md:dropdown-end">
                 <summary class="btn btn-link btn-active text-primary">
@@ -87,7 +85,7 @@
                 <ul
                     class="dropdown-content z-[1] rounded-box bg-base-100 p-2 shadow max-md:!fixed max-md:!inset-x-4 md:w-96"
                 >
-                    <PreferredBiblesModal {bibles} />
+                    <PreferredBiblesModal bibles={$fetchedBaseBiblesWithLanguageDefault} />
                 </ul>
             </details>
         </div>

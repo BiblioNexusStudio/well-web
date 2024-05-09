@@ -12,7 +12,7 @@ import { browserSupported } from '$lib/utils/browser';
 import { languages } from '$lib/stores/language.store';
 import { parentResources } from '$lib/stores/parent-resource.store';
 import { biblesEndpoint, languagesEndpoint, parentResourcesEndpoint } from '$lib/api-endpoints';
-import { bibles } from '$lib/stores/bibles.store';
+import { fetchedBaseBibles } from '$lib/stores/bibles.store';
 
 export const ssr = false;
 
@@ -51,7 +51,7 @@ export const load: LayoutLoad = async () => {
         ]);
         languages.set(fetchedLanguages);
         parentResources.set(fetchedParentResources);
-        bibles.set(fetchedBibles);
+        fetchedBaseBibles.set(fetchedBibles);
 
         await init(get(currentLanguageInfo)?.iso6393Code);
         await waitLocale();

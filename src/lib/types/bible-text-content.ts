@@ -34,6 +34,10 @@ export interface FrontendBibleBook extends BaseBible {
     content: { chapters: FrontendChapterContent[] } | null;
 }
 
+export interface SimpleFrontendBibleBook extends BaseBible {
+    defaultForCurrentLanguage: boolean;
+}
+
 export interface BaseBibleBookContent {
     audioSize: number;
     textSize: number;
@@ -92,11 +96,16 @@ export type ApiChapterContents = {
     verses: ApiVerseContents[];
 };
 
-export type ApiBibleContents = {
+export interface ApiBibleContents {
+    bibleId: number;
     bibleName: string;
     bibleAbbreviation: string;
     bookName: string;
     bookCode: string;
     bookNumber: number;
     chapters: ApiChapterContents[];
-};
+}
+
+export interface FrontEndApiBibleContents extends ApiBibleContents {
+    defaultForCurrentLanguage: boolean;
+}

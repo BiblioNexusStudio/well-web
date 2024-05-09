@@ -229,6 +229,7 @@ export async function fetchBibleData(passage: BasePassage) {
         .filter(({ languageId }) => languageId === currentLanguageId)
         .map(({ id }) => id);
     const preferredIds = updateAndGetPreferredIds(bibleIdsInCurrentLanguage);
+
     const biblesWithBookData: FrontendBibleBook[] = await asyncMap(bibles, async (bible) => ({
         ...bible,
         bookMetadata: await bookDataForBibleTab(passage, bible.id, preferredIds.includes(bible.id)),

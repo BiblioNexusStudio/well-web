@@ -1,10 +1,20 @@
 <script lang="ts">
-    import type { FrontendBibleBook } from '$lib/types/bible-text-content';
+    import type { SimpleFrontendBibleBook, ApiBibleContents } from '$lib/types/bible-text-content';
     import SearchInput from './SearchInput.svelte';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { getBibleTextByParams } from '$lib/utils/data-handlers/resources/passages';
+    import {
+        currentBookNumber,
+        bibleDataFetchedByUser,
+        filterBookByRange,
+        currentStartChapter,
+        currentEndChapter,
+        currentStartVerse,
+        currentEndVerse,
+    } from '$lib/stores/bibles.store';
 
-    export let bibles: FrontendBibleBook[];
+    export let bibles: SimpleFrontendBibleBook[];
     let searchQuery = '';
 
     $: filteredBibles = bibles
@@ -24,7 +34,7 @@
         .filter(({ languageId, id }) => languageId === $currentLanguageInfo?.id && $preferredBibleIds.includes(id))
         .map(({ id }) => id);
 
-    function updatePreferredBibleIds(id: number, event: Event) {
+    async function updatePreferredBibleIds(id: number, event: Event) {
         const checked = (event.currentTarget as HTMLInputElement).checked;
         preferredBibleIds.update((ids) => {
             if (checked && !ids.includes(id)) {
@@ -34,6 +44,21 @@
             }
             return ids;
         });
+
+        if (checked) {
+            const params = [`bookNumber=${$currentBookNumber}`];
+            let data: ApiBibleContents = await getBibleTextByParams(id, params);
+            data.chapters = filterBookByRange(
+                data.chapters,
+                $currentStartChapter,
+                $currentEndChapter,
+                $currentStartVerse,
+                $currentEndVerse
+            );
+            $bibleDataFetchedByUser = [...$bibleDataFetchedByUser, data];
+        } else if (!checked) {
+            $bibleDataFetchedByUser = $bibleDataFetchedByUser.filter((bibleData) => bibleData.bibleId !== id);
+        }
     }
 </script>
 

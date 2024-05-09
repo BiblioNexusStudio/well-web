@@ -52,10 +52,11 @@
     import LibraryMenu from './library-menu/LibraryMenu.svelte';
     import BibleMenu from './bible-menu/BibleMenu.svelte';
     import {
-        bibleSetByUser,
+        baseBibleSetByUser,
         bibleStoredByUser,
         bibleDataFetchedByUser,
         loadingContent,
+        currentBibleSetByUser,
     } from '$lib/stores/bibles.store';
     import BiblePane from './bible-menu/BiblePane.svelte';
     import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
@@ -82,6 +83,7 @@
     let cbbterSelectedStepNumber = 1;
     let stepsAvailable: number[] = [];
     let selectedBibleId: number | null = null;
+    let bibleIdSetByUser: number | null = null;
     let topOfStep: HTMLElement | null = null;
     let selectedTab: PassagePageTab = 'guide';
     let isShowingGuidePane = false;
@@ -111,13 +113,22 @@
         selectedTab === 'bible' ? bibleAudioKey(selectedBibleId) : cbbterAudioKey(cbbterSelectedStepNumber);
     $: audioPlayerShowing = !!multiClipAudioStates[audioPlayerKey];
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
+    $: $currentBibleSetByUser =
+        $bibleDataFetchedByUser?.find((bible) => {
+            if (bibleIdSetByUser !== null) {
+                return bible.bibleId === bibleIdSetByUser;
+            } else if ($baseBibleSetByUser !== null) {
+                bibleIdSetByUser = $baseBibleSetByUser.id;
+            }
+            return bible.bibleId === $baseBibleSetByUser?.id;
+        }) || null;
 
     $: setStoredBible($bibleStoredByUser);
     $: setStoredGuide($locallyStoredGuide);
 
     function setStoredBible(bible: BaseBible | null) {
         if (bible && $page.params.passageId !== 'new') {
-            $bibleSetByUser = bible;
+            $baseBibleSetByUser = bible;
         }
     }
 
@@ -133,7 +144,7 @@
 
     function fetchBase() {
         if ($page.params.passageId === 'new') {
-            $bibleSetByUser = null;
+            $baseBibleSetByUser = null;
             $currentGuide = undefined;
             $selectedBookIndex = 'default';
             $selectedId = 'default';
@@ -169,6 +180,7 @@
         const existingContent = Object.fromEntries(
             bibleData?.biblesForTabs.map(({ id, content }) => [id, content]) ?? []
         );
+
         const newBibleData = await fetchBibleData(passage);
         newBibleData.biblesForTabs = newBibleData.biblesForTabs.map((bible) => ({
             ...bible,
@@ -345,7 +357,7 @@
             openGuideMenu();
         } else if (tab === 'mainMenu') {
             openMainMenu();
-        } else if (tab === 'bible' && $bibleSetByUser === null) {
+        } else if (tab === 'bible' && $baseBibleSetByUser === null) {
             openBibleMenu();
         } else {
             closeAllPassagePageMenus();
@@ -353,7 +365,7 @@
         }
     }
 
-    $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber, $bibleDataFetchedByUser);
+    $: title = navbarTitle(resourceData, currentBible, selectedTab, cbbterSelectedStepNumber, $currentBibleSetByUser);
     $: handleSelectedTabMenu(selectedTab);
 
     $: showOrDismissGuidePane(isShowingGuidePane);
@@ -404,7 +416,6 @@
                 bind:preferredBiblesModalOpen
                 {title}
                 {passage}
-                bibles={bibleData?.availableBibles ?? []}
                 tab={selectedTab}
                 guideShortName={$currentGuide?.shortName ?? ''}
                 bind:showBiblePane={isShowingBookPassageSelectorPane}
@@ -415,15 +426,15 @@
             class="absolute left-0 right-0 top-16 flex flex-col {$passagePageShownMenu !== null &&
                 'hidden'} {audioPlayerShowing ? 'bottom-[7.5rem]' : 'bottom-20'}"
         >
-            {#if selectedBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
+            {#if ($bibleDataFetchedByUser?.length ?? 0) > 1}
                 <div class="px-4 pb-4 {selectedTab !== 'bible' && 'hidden'}">
                     <div class="m-auto max-w-[65ch]">
                         <ButtonCarousel
-                            bind:selectedValue={selectedBibleId}
+                            bind:selectedValue={bibleIdSetByUser}
                             bind:scroll={bibleSelectionScroll}
-                            buttons={(bibleData?.biblesForTabs ?? []).map((bible) => ({
-                                value: bible.id,
-                                label: bible.abbreviation,
+                            buttons={($bibleDataFetchedByUser ?? []).map((bible) => ({
+                                value: bible.bibleId,
+                                label: bible.bibleAbbreviation,
                             }))}
                         />
                     </div>
@@ -445,13 +456,13 @@
                             {/each}
                         {/each}
                     </div>
-                {:else if $bibleDataFetchedByUser?.chapters?.length}
-                    <div class="prose mx-auto overflow-y-scroll">
-                        {#each $bibleDataFetchedByUser?.chapters as chapter}
+                {:else if $currentBibleSetByUser?.chapters?.length}
+                    <div class="flex-start prose w-full overflow-y-scroll">
+                        {#each $currentBibleSetByUser?.chapters as chapter}
                             {#each chapter.verses as { number, text }}
                                 <div
                                     class="py-1"
-                                    dir={lookupLanguageInfoById($bibleSetByUser?.languageId || 1)?.scriptDirection}
+                                    dir={lookupLanguageInfoById($baseBibleSetByUser?.languageId || 1)?.scriptDirection}
                                 >
                                     <span class="sup pe-1">{number}</span><span>{@html text}</span>
                                 </div>

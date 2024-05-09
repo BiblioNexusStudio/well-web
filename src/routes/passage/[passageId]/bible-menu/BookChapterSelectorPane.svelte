@@ -3,11 +3,28 @@
     import { CupertinoPane } from 'cupertino-pane';
     import { afterUpdate, onMount } from 'svelte';
     import { getBibleBooksByBibleId, getBibleTextByParams } from '$lib/utils/data-handlers/resources/passages';
-    import { bibleSetByUser, bibleDataFetchedByUser, loadingContent } from '$lib/stores/bibles.store';
+    import {
+        baseBibleSetByUser,
+        bibleDataFetchedByUser,
+        loadingContent,
+        currentEndChapter,
+        currentStartChapter,
+        currentEndVerse,
+        currentStartVerse,
+        currentBookNumber,
+        filterBookByRange,
+    } from '$lib/stores/bibles.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
-    import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible-text-content';
+    import type {
+        ApiBibleBook,
+        FrontEndVerseForSelectionPane,
+        ApiBibleChapter,
+        ApiBibleContents,
+    } from '$lib/types/bible-text-content';
+    import { asyncMap } from '$lib/utils/async-array';
+    import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -17,7 +34,7 @@
     let buttons: HTMLButtonElement[] = [];
     let scrollBehaviorSmooth = false;
 
-    let promise = getBibleBooksByBibleId($bibleSetByUser?.id || 1);
+    let promise = getBibleBooksByBibleId($baseBibleSetByUser?.id || 1);
 
     let steps = {
         one: {
@@ -135,21 +152,33 @@
     }
 
     async function handleVerseGoButton() {
-        let params = [
-            `booknumber=${currentBook.number}`,
-            `startchapter=${firstSelectedVerse.chapterNumber}`,
-            `startverse=${firstSelectedVerse.number}`,
-            `endchapter=${lastSelectedVerse.chapterNumber}`,
-            `endverse=${lastSelectedVerse.number}`,
-        ];
+        $currentBookNumber = currentBook.number;
+        $currentStartChapter = firstSelectedVerse.chapterNumber;
+        $currentStartVerse = firstSelectedVerse.chapterNumber;
+        $currentEndChapter = lastSelectedVerse.chapterNumber;
+        $currentEndVerse = lastSelectedVerse.number;
+
+        const params = [`bookNumber=${currentBook.number}`];
 
         isShowing = false;
         $loadingContent = true;
 
-        let data = await getBibleTextByParams($bibleSetByUser?.id || 1, params);
+        const data: ApiBibleContents[] = await asyncMap($preferredBibleIds, async (id) => {
+            return await getBibleTextByParams(id, params);
+        });
 
-        if (data?.chapters) {
+        if (data.length > 0) {
             $bibleDataFetchedByUser = data;
+            $bibleDataFetchedByUser = $bibleDataFetchedByUser.map((bible) => {
+                bible.chapters = filterBookByRange(
+                    bible.chapters,
+                    $currentStartChapter,
+                    $currentEndChapter,
+                    $currentStartVerse,
+                    $currentEndVerse
+                );
+                return bible;
+            });
             $loadingContent = false;
             currentStep = steps.one;
         }
@@ -201,13 +230,13 @@
     $: verseGoButtonDisabled = currentBook?.chapters?.flatMap((c) => c?.verseState).every((v) => !v?.selected);
     $: currentChapterSelected = currentChapter?.number && currentChapter?.number > 0;
     $: firstSelectedVerse = currentBook?.chapters?.flatMap((c) => c.verseState)?.find((v) => v.selected) || {
-        chapterNumber: '',
-        number: '',
+        chapterNumber: 0,
+        number: 0,
     };
     $: lastSelectedVerse = currentBook?.chapters
         ?.flatMap((c) => c.verseState)
         ?.reverse()
-        ?.find((v) => v.selected) || { chapterNumber: '', number: '' };
+        ?.find((v) => v.selected) || { chapterNumber: 0, number: 0 };
     $: verseTitle = formatBibleVerseRange(
         currentBook?.localizedName,
         firstSelectedVerse.chapterNumber,
