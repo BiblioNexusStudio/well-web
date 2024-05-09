@@ -55,7 +55,7 @@
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
-    import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { selectedBibleSection } from '$lib/stores/passage-form.store';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { BibleSection } from '$lib/types/passage';
     import BibleUnavailable from './BibleUnavailable.svelte';
@@ -109,13 +109,13 @@
     $: setStoredGuide($locallyStoredGuide);
 
     function setStoredBible(bible: BaseBible | null) {
-        if (bible && $page.params.passageId !== 'new') {
+        if (bible) {
             $bibleSetByUser = bible;
         }
     }
 
     function setStoredGuide(guide: ApiParentResource | undefined) {
-        if (guide && $page.params.passageId !== 'new') {
+        if (guide) {
             $currentGuide = guide;
         }
     }
@@ -129,18 +129,8 @@
         bibleData = null;
         multiClipAudioStates = {};
 
-        if ($page.params.passageId === 'new') {
-            $bibleSetByUser = null;
-            $currentGuide = undefined;
-            $selectedBookIndex = 'default';
-            $selectedBibleSection = null;
-
-            openGuideMenu();
-            return;
-        } else {
-            fetchBibles(bibleSection);
-            fetchResources(bibleSection);
-        }
+        fetchBibles(bibleSection);
+        fetchResources(bibleSection);
     }
 
     function fetchResources(bibleSection: BibleSection | null) {
@@ -408,7 +398,7 @@
                 {:else if currentBible?.loadingContent}
                     <FullPageSpinner />
                 {:else if currentBible?.content?.chapters?.length}
-                    <div class="prose mx-auto overflow-y-scroll">
+                    <div class="flex-start prose w-full overflow-y-scroll">
                         {#each currentBible?.content.chapters as chapter}
                             {#each chapter.versesText as { number, text }}
                                 <div

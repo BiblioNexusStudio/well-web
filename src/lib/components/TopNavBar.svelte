@@ -9,7 +9,7 @@
     import type { BibleSection } from '$lib/types/passage';
     import type { FrontendBibleBook } from '$lib/types/bible-text-content';
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
-    import type { PassagePageTab } from '../../routes/passage/[passageId]/data-fetchers';
+    import type { PassagePageTab } from '../../routes/view-content/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import { bibleSetByUser } from '$lib/stores/bibles.store';

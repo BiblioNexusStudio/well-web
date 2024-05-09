@@ -18,7 +18,7 @@
                 : $translate('page.index.fileManager.value')}</a
         >
         <a class="btn mb-8" href="/select-language"><LanguageIcon />{$translate('page.menu.changeLanguage.value')}</a>
-        <a class="btn btn-primary" href="/passage/new">{$translate('page.index.getStarted.value')}</a>
+        <a class="btn btn-primary" href="/view-content">{$translate('page.index.getStarted.value')}</a>
     </div>
     <div class="flex">
         <a class="mx-auto my-6 max-w-xs text-sky-500" href="/about">{$translate('page.index.about.value')}</a>
