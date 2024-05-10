@@ -1,17 +1,18 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { currentGuide } from '$lib/stores/parent-resource.store';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
     import { bibles, bibleSetByUser, bibleWellBibleSetByUser } from '$lib/stores/bibles.store';
     import type { BaseBible } from '$lib/types/bible-text-content';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
+    import type { PassagePageTab } from '../data-fetchers';
 
     export let biblePane: CupertinoPane;
     export let isShowing: boolean;
     export let showBookPassageMenu: boolean;
     export let showBookChapterVerseMenu: boolean;
+    export let tabName: PassagePageTab;
 
     function setBibleAndHandleMenus(bible: BaseBible) {
         $bibleSetByUser = bible;
@@ -19,10 +20,10 @@
         isShowing = false;
         closeAllPassagePageMenus();
 
-        if ($currentGuide) {
-            showBookPassageMenu = true;
-        } else {
+        if (tabName === 'bible') {
             showBookChapterVerseMenu = true;
+        } else {
+            showBookPassageMenu = true;
         }
     }
 

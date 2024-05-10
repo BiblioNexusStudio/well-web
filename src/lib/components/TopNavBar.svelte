@@ -42,10 +42,10 @@
     }
 
     function openBiblePane() {
-        if (guideShortName) {
-            showBiblePane = true;
-        } else {
+        if (tab === 'bible') {
             showBookChapterVerseMenu = true;
+        } else {
+            showBiblePane = true;
         }
     }
 </script>

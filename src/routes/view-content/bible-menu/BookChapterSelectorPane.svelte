@@ -14,11 +14,11 @@
     export let isShowing: boolean;
 
     let currentBook: ApiBibleBook;
-    let currentChapter: ApiBibleChapter;
+    let currentChapter: ApiBibleChapter | null = null;
     let buttons: HTMLButtonElement[] = [];
     let scrollBehaviorSmooth = false;
 
-    let promise = getBibleBooksByBibleId($bibleSetByUser?.id || 1);
+    $: promise = getBibleBooksByBibleId($bibleSetByUser?.id || 1);
 
     let steps = {
         one: {
@@ -89,7 +89,7 @@
 
             currentBook = { ...currentBook, chapters: newChapters };
             // needed to rerender the view
-            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter.number)!;
+            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter?.number)!;
             return;
         }
 
@@ -123,7 +123,7 @@
                 });
             }
 
-            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter.number)!;
+            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter?.number)!;
         }
     }
 
@@ -151,6 +151,8 @@
             endVerse: forceToInt(lastSelectedVerse.number),
         };
         isShowing = false;
+        currentStep = steps.one;
+        currentChapter = null;
     }
 
     function formatBibleVerseRange(
@@ -186,8 +188,8 @@
     });
 
     afterUpdate(() => {
-        if (buttons.length && buttons[currentChapter.number - 1]) {
-            buttons[currentChapter.number - 1]!.scrollIntoView({
+        if (buttons.length && buttons[(currentChapter?.number || 1) - 1]) {
+            buttons[(currentChapter?.number || 1) - 1]!.scrollIntoView({
                 behavior: scrollBehaviorSmooth ? 'smooth' : 'instant',
                 block: 'nearest',
                 inline: 'start',
@@ -291,14 +293,16 @@
                     <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
                     <div class="w-full flex-grow overflow-y-scroll">
                         <div class="grid w-full grid-cols-5 gap-4">
-                            {#each currentChapter.verseState as verse}
-                                <button
-                                    on:click={() => handleVerseSelection(verse)}
-                                    class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
-                                >
-                                    {verse.number}
-                                </button>
-                            {/each}
+                            {#if currentChapter && currentChapter.verseState}
+                                {#each currentChapter.verseState as verse}
+                                    <button
+                                        on:click={() => handleVerseSelection(verse)}
+                                        class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
+                                    >
+                                        {verse.number}
+                                    </button>
+                                {/each}
+                            {/if}
                         </div>
                     </div>
                     <hr class="my-4 w-screen" />

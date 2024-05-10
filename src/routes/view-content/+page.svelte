@@ -333,6 +333,7 @@
 
 <GuidePane bind:selectedTab bind:guidePane bind:isShowing={isShowingGuidePane} bind:localizedGuides />
 <BiblePane
+    bind:tabName={selectedTab}
     bind:biblePane
     bind:isShowing={isShowingBiblePane}
     bind:showBookPassageMenu={isShowingBookPassageSelectorPane}
