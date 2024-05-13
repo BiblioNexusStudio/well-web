@@ -1,4 +1,4 @@
-import type { ParentResourceName } from './types/resource';
+import type { ParentResourceName, ParentResourceType } from './types/resource';
 
 // In order to cache-bust an API endpoint when the response format is changed, increment the number after the endpoint path.
 // Note: This is a separate problem from breaking changes and only refers to non-breaking additive changes. It's probably
@@ -15,10 +15,14 @@ export function languagesEndpoint(): ApiStringAndCacheBustVersion {
     return ['/languages', 2];
 }
 
-export function parentResourcesEndpoint(queryParams?: string[]): ApiStringAndCacheBustVersion {
-    const url = queryParams
-        ? `/resources/parent-resources?${queryParams.sort().join('&')}`
-        : '/resources/parent-resources';
+export function parentResourcesEndpoint(
+    languageId?: number,
+    resourceType?: ParentResourceType
+): ApiStringAndCacheBustVersion {
+    const url =
+        languageId && resourceType
+            ? `/resources/parent-resources?languageId=${languageId}&resourceType=${resourceType}`
+            : '/resources/parent-resources';
     return [url, 3];
 }
 

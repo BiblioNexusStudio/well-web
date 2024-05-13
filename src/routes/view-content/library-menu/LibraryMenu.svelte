@@ -5,6 +5,7 @@
         ParentResourceType,
         type ApiParentResource,
         type ResourceContentInfo,
+        ParentResourceName,
     } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
@@ -167,7 +168,10 @@
         sortedResourceGroups = (
             objectEntries(groupedResources)
                 .map(([parentResourceName, resources]) => {
-                    return { parentResource: $parentResourceNameToInfoMap[parentResourceName], resources };
+                    return {
+                        parentResource: $parentResourceNameToInfoMap[parentResourceName as ParentResourceName],
+                        resources,
+                    };
                 })
                 .filter((r) => r.parentResource) as typeof sortedResourceGroups
         ).sort((a, b) => {

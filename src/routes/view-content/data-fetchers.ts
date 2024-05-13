@@ -199,7 +199,7 @@ async function getAdditionalResourcesForPassage(
 
 export async function fetchLocalizedGuideData(): Promise<ApiParentResource[]> {
     return await fetchFromCacheOrApi(
-        ...parentResourcesEndpoint([`LanguageId=${get(currentLanguageInfo)?.id ?? 1}`, 'ResourceType=1'])
+        ...parentResourcesEndpoint(get(currentLanguageInfo)?.id ?? 1, ParentResourceType.Guide)
     );
 }
 

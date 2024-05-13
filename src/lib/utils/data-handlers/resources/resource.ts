@@ -106,6 +106,8 @@ export async function resourceContentsForBibleSection(
         'endVerse' in bibleSection &&
         bibleSection.startVerse === bibleSection.endVerse;
 
+    // Because some predetermined passages overlap (e.g. Acts 1:1-9a and Acts 1:9b-15) we want to discard resources if
+    // they only link to one verse. This would indicate it's the resource from the "other side" of the overlap.
     for (let i = resources.length - 1; i > 0; i--) {
         if (
             PredeterminedPassageGuides.includes(resources[i]!.parentResource as ParentResourceName) &&

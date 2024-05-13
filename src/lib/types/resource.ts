@@ -69,11 +69,12 @@ export interface AudioTypeMetadata {
 }
 
 export interface ApiParentResource {
-    shortName: string;
+    shortName: ParentResourceName;
     displayName: string;
     resourceType: ParentResourceType;
     complexityLevel: ParentResourceComplexityLevel;
     licenseInfo: ApiLicenseInfo | null;
+    resourceCountForLanguage: number;
     id: number;
 }
 
