@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { FrontendBibleBook } from '$lib/types/bible-text-content';
+    import type { FrontendBibleBook } from '$lib/types/bible';
     import SearchInput from './SearchInput.svelte';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';

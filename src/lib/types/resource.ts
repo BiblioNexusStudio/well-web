@@ -23,6 +23,8 @@ export enum ParentResourceComplexityLevel {
     Advanced = 'Advanced',
 }
 
+export const PredeterminedPassageGuides = [ParentResourceName.CBBTER];
+
 export enum ParentResourceType {
     None = 'None',
     Guide = 'Guide',

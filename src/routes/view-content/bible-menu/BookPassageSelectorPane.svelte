@@ -3,11 +3,13 @@
     import { data, selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
-    import { fetchCbbterPassagesByBook } from '$lib/utils/data-handlers/resources/passages';
+    import { passagesByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
-    import type { BibleSection } from '$lib/types/passage';
+    import type { BibleSection } from '$lib/types/bible';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
+    import { ParentResourceName } from '$lib/types/resource';
+    import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -18,6 +20,8 @@
     let currentStep = steps.one;
 
     $: selectedBookInfo = $selectedBookIndex === 'default' ? null : $data.passagesByBook?.[$selectedBookIndex];
+
+    let bookCodesToNames: Record<string, string> | undefined;
 
     function setBookAndChangeSteps(index: number) {
         currentStep = steps.two;
@@ -32,7 +36,9 @@
     }
 
     async function fetchDataPromise() {
-        await fetchCbbterPassagesByBook();
+        const available = await passagesByBookAvailableForGuide(ParentResourceName.CBBTER);
+        bookCodesToNames = await getBibleBookCodesToName();
+        data.set({ passagesByBook: available });
     }
 
     function handleBack() {
@@ -78,7 +84,7 @@
                             on:click={() => setBookAndChangeSteps(index)}
                             class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4"
                         >
-                            <span class="text-sm">{book.bookName}</span>
+                            <span class="text-sm">{bookCodesToNames?.[book.bookCode] ?? ''}</span>
                         </button>
                     {/each}
                     {#if $data.passagesByBook.length === 0}
@@ -91,7 +97,7 @@
                             <button
                                 on:click={() => setPassageAndClosePane(passage)}
                                 class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4 text-sm"
-                                >{selectedBookInfo.bookName}
+                                >{bookCodesToNames?.[selectedBookInfo.bookCode]}
                                 {bibleSectionToReference(passage)}</button
                             >
                         {/each}

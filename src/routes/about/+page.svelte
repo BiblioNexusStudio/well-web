@@ -7,7 +7,7 @@
     import { Icon } from 'svelte-awesome';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
     import { goto } from '$app/navigation';
-    import type { BaseBible } from '$lib/types/bible-text-content';
+    import type { BaseBible } from '$lib/types/bible';
     import { biblesEndpoint, parentResourcesEndpoint } from '$lib/api-endpoints';
 
     let licenseInfosPromise: Promise<ApiLicenseInfo[]> | null = null;

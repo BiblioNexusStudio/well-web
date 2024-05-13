@@ -2,7 +2,7 @@
     import { _ as translate } from 'svelte-i18n';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import { isOnline } from '$lib/stores/is-online.store';
-    import type { FrontendBibleBook } from '$lib/types/bible-text-content';
+    import type { FrontendBibleBook } from '$lib/types/bible';
 
     export let bibles: FrontendBibleBook[] | undefined;
     export let preferredBiblesModalOpen: boolean;

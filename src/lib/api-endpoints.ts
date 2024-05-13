@@ -49,6 +49,16 @@ export function passagesByLanguageAndParentResourceEndpoint(
     return [`/passages/language/${languageId}/resource/${parentResourceName}`, 1];
 }
 
+export function booksAndChaptersByLanguageAndParentResourceEndpoint(
+    languageId: number | undefined,
+    parentResourceName: ParentResourceName
+): ApiStringAndCacheBustVersion {
+    return [
+        `/resources/content/available-chapters?languageId=${languageId}&parentResourceName=${parentResourceName}`,
+        1,
+    ];
+}
+
 export function resourceContentForBookAndChapter(
     languageId: number | undefined,
     bookCode: string,
@@ -62,8 +72,4 @@ export function resourceContentForBookAndChapter(
 
 export function bibleBooksByBibleId(bibleId: number | string): ApiStringAndCacheBustVersion {
     return [`/bibles/${bibleId}/books`, 1];
-}
-
-export function bibleTextByParams(bibleId: number | string, queryParams: string[]): ApiStringAndCacheBustVersion {
-    return [`/bibles/${bibleId}/texts?${queryParams.sort().join('&')}`, 1];
 }

@@ -1,4 +1,4 @@
-import { lookupLanguageInfoByCode } from '$lib/stores/language.store';
+import { currentLanguageInfo, lookupLanguageInfoByCode } from '$lib/stores/language.store';
 import type { UrlWithMetadata } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '../browser';
 import { cacheManyFromCdnWithProgress, fetchFromCacheOrApi, isCachedFromApi, isCachedFromCdn } from '$lib/data-cache';
@@ -6,13 +6,18 @@ import { asyncEvery, asyncReturnFirst } from '../async-array';
 import { range } from '../array';
 import { updateRow } from '../data-storage';
 import { bibleSectionToString } from '../bible-section-helpers';
-import type { ApiBible, BaseBible, BibleBookContentDetails } from '$lib/types/bible-text-content';
+import type { ApiBible, ApiBibleBook, BaseBible, BibleBookContentDetails } from '$lib/types/bible';
 import { isOnline } from '$lib/stores/is-online.store';
 import { get } from 'svelte/store';
-import type { BibleSection } from '$lib/types/passage';
+import type { BibleSection } from '$lib/types/bible';
 import { MediaType } from '$lib/types/resource';
 import { log } from '$lib/logger';
-import { biblesEndpoint, biblesForLanguageEndpoint, bookOfBibleEndpoint } from '$lib/api-endpoints';
+import {
+    bibleBooksByBibleId,
+    biblesEndpoint,
+    biblesForLanguageEndpoint,
+    bookOfBibleEndpoint,
+} from '$lib/api-endpoints';
 
 type BibleRecordingPassage = { url: string };
 type BibleRecordingVersion = {
@@ -157,6 +162,26 @@ async function isContentCachedForOffline(bibleSection: BibleSection, bookData: B
         }
     }
     return false;
+}
+
+export async function getBibleBookCodesToName(languageId: number | null = null, retry = true) {
+    const bibleData = (await fetchFromCacheOrApi(
+        ...biblesForLanguageEndpoint(languageId || get(currentLanguageInfo)?.id)
+    )) as ApiBible[];
+    if (bibleData[0]) {
+        return bibleData[0].books.reduce(
+            (output, { displayName, bookCode }) => ({ ...output, [bookCode]: displayName }),
+            {} as Record<string, string>
+        );
+    } else {
+        if (retry && (languageId !== 1 || get(currentLanguageInfo)?.id !== 1)) {
+            return getBibleBookCodesToName(1, false);
+        }
+    }
+}
+
+export function getBibleBooksByBibleId(bibleId: number) {
+    return fetchFromCacheOrApi(...bibleBooksByBibleId(bibleId)) as Promise<ApiBibleBook[]>;
 }
 
 export async function saveBibleRecording(

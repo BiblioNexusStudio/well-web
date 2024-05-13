@@ -2,11 +2,11 @@
     import { _ as translate } from 'svelte-i18n';
     import { CupertinoPane } from 'cupertino-pane';
     import { afterUpdate, onMount } from 'svelte';
-    import { getBibleBooksByBibleId } from '$lib/utils/data-handlers/resources/passages';
+    import { getBibleBooksByBibleId } from '$lib/utils/data-handlers/bible';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
-    import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible-text-content';
+    import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible';
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
 
