@@ -11,8 +11,6 @@
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
     import type { PassagePageTab } from '../../routes/view-content/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
-    import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
-    import { bibleSetByUser } from '$lib/stores/bibles.store';
 
     export let bibleSectionTitle = '';
     export let bibleSection: BibleSection | null = null;
@@ -21,7 +19,6 @@
     export let preferredBiblesModalOpen = false;
     export let tab: PassagePageTab | null = null;
     export let guideShortName = '';
-    export let showBiblePane = false;
     export let showBookChapterVerseMenu: boolean;
 
     function handleWindowClick(event: MouseEvent) {
@@ -35,18 +32,8 @@
         }
     }
 
-    function handleOpenBibleMenu() {
-        $selectedBookIndex = 'default';
-        $selectedBibleSection = null;
-        openBibleMenu();
-    }
-
-    function openBiblePane() {
-        if (tab === 'bible') {
-            showBookChapterVerseMenu = true;
-        } else {
-            showBiblePane = true;
-        }
+    function openBookChapterVerseMenu() {
+        showBookChapterVerseMenu = true;
     }
 </script>
 
@@ -58,24 +45,28 @@
 <div class="navbar flex w-full justify-between">
     {#if tab === 'guide' || tab === 'bible'}
         <div class="ms-2 flex-none">
-            <button
-                on:click={openBiblePane}
-                class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
-            >
-                {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
-            </button>
-            <button
-                on:click={handleOpenBibleMenu}
-                class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
-            >
-                {$bibleSetByUser?.abbreviation || $translate('navTop.selectBible.value')}
-            </button>
-            <button
-                on:click={openGuideMenu}
-                class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
-            >
-                {guideShortName || $translate('navTop.selectGuide.value')}
-            </button>
+            {#if tab === 'bible'}
+                <button
+                    on:click={openBookChapterVerseMenu}
+                    class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                >
+                    {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
+                </button>
+                <button
+                    on:click={openBibleMenu}
+                    class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                >
+                    {$translate('page.passage.nav.bible.value')}
+                </button>
+            {/if}
+            {#if tab === 'guide'}
+                <button
+                    on:click={openGuideMenu}
+                    class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                >
+                    {guideShortName || $translate('navTop.selectGuide.value')}
+                </button>
+            {/if}
         </div>
     {/if}
     {#if bibleSection && tab === 'bible' && bibles.length}

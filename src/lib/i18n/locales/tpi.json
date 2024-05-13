@@ -255,6 +255,9 @@
             "selectBible": {
                 "value": "Selektim Baibel"
             },
+            "goToPassage": {
+                "value": "Go long Hap Riding"
+            },
             "bible": {
                 "value": "Buk Tambu"
             }
@@ -314,9 +317,6 @@
         },
         "selectPassage": {
             "value": "Selektim Hap Riding"
-        },
-        "selectBible": {
-            "value": "Selektim Baibel"
         },
         "selectGuide": {
             "value": "Selektim Gaid"
