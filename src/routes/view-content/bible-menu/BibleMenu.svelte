@@ -32,7 +32,7 @@
             <span class="z-10 text-sm text-white">{$translate('page.bibleMenu.selectBible.value')}</span>
         </div>
     </div>
-    <div class="flex w-full flex-col items-center overflow-y-auto">
+    <div class="flex w-full flex-col items-center overflow-y-scroll">
         {#each $bibles as bible}
             {@const isPreferredBible = $preferredBibleIds.includes(bible.id)}
             <button

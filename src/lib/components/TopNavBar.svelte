@@ -20,6 +20,7 @@
     export let tab: PassagePageTab | null = null;
     export let guideShortName = '';
     export let showBookChapterVerseMenu: boolean;
+    export let showBookPassageSelectorPane: boolean;
 
     function handleWindowClick(event: MouseEvent) {
         const openDetails = document.querySelector('.dropdown[open]');
@@ -32,8 +33,12 @@
         }
     }
 
-    function openBookChapterVerseMenu() {
-        showBookChapterVerseMenu = true;
+    function handlePassageButton() {
+        if (tab === 'bible') {
+            showBookChapterVerseMenu = true;
+        } else if (tab === 'guide') {
+            showBookPassageSelectorPane = true;
+        }
     }
 </script>
 
@@ -45,13 +50,13 @@
 <div class="navbar flex w-full justify-between">
     {#if tab === 'guide' || tab === 'bible'}
         <div class="ms-2 flex-none">
+            <button
+                on:click={handlePassageButton}
+                class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+            >
+                {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
+            </button>
             {#if tab === 'bible'}
-                <button
-                    on:click={openBookChapterVerseMenu}
-                    class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
-                >
-                    {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
-                </button>
                 <button
                     on:click={openBibleMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"

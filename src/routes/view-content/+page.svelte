@@ -26,13 +26,12 @@
         type PassagePageTab,
         fetchResourceData,
         fetchBibleData,
-        fetchLocalizedGuideData,
     } from './data-fetchers';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible-text-content';
     import { cacheBiblesForBibleSection } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { lookupLanguageInfoById } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
     import { currentGuide, locallyStoredGuide } from '$lib/stores/parent-resource.store';
     import {
@@ -46,7 +45,6 @@
     } from '$lib/stores/passage-page.store';
     import GuideMenu from './guide-menu/GuideMenu.svelte';
     import { onMount } from 'svelte';
-    import GuidePane from './guide-menu/GuidePane.svelte';
     import LibraryMenu from './library-menu/LibraryMenu.svelte';
     import BibleMenu from './bible-menu/BibleMenu.svelte';
     import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
@@ -75,10 +73,8 @@
     let selectedBibleId: number | null = null;
     let topOfStep: HTMLElement | null = null;
     let selectedTab: PassagePageTab = 'guide';
-    let isShowingGuidePane = false;
     let isShowingBookPassageSelectorPane = false;
     let isShowingBookChapterSelectorPane = false;
-    let guidePane: CupertinoPane;
     let bookPassageSelectorPane: CupertinoPane;
     let bookChapterSelectorPane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
@@ -87,10 +83,8 @@
     let resourceFetchPromise: Promise<void> | undefined;
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
     let preferredBiblesModalOpen = false;
-    let localizedGuides: ApiParentResource[];
 
     $: $page.url && fetchBase($selectedBibleSection); // when the Bible section changes, refetch
-    $: $currentLanguageInfo?.id && fetchGuides();
     $: handlePreferredBiblesChange($preferredBibleIds);
     $: fetchContentForBibleId(selectedBibleId);
 
@@ -106,10 +100,6 @@
         if (guide) {
             $currentGuide = guide;
         }
-    }
-
-    async function fetchGuides() {
-        localizedGuides = await fetchLocalizedGuideData();
     }
 
     function fetchBase(bibleSection: BibleSection | null) {
@@ -239,14 +229,6 @@
         return id === null ? 'none' : `bible${id}`;
     }
 
-    function showOrDismissGuidePane(show: boolean) {
-        if (show) {
-            guidePane?.present({ animate: true });
-        } else {
-            guidePane?.hide();
-        }
-    }
-
     function showOrDismissBookPassageSelectorPane(show: boolean) {
         if (show) {
             bookPassageSelectorPane?.present({ animate: true });
@@ -275,7 +257,6 @@
     }
 
     function closeAllPaneMenus() {
-        isShowingGuidePane = false;
         isShowingBookPassageSelectorPane = false;
         isShowingBookChapterSelectorPane = false;
     }
@@ -300,7 +281,6 @@
     $: bibleSectionTitle = calculateBibleSectionTitle(currentBible, $selectedBibleSection);
     $: handleSelectedTabMenu(selectedTab);
 
-    $: showOrDismissGuidePane(isShowingGuidePane);
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
     $: showOrDismissBookChapterSelectorPane(isShowingBookChapterSelectorPane);
 
@@ -311,7 +291,6 @@
     });
 </script>
 
-<GuidePane bind:selectedTab bind:guidePane bind:isShowing={isShowingGuidePane} bind:localizedGuides />
 <BookPassageSelectorPane bind:bookPassageSelectorPane bind:isShowing={isShowingBookPassageSelectorPane} />
 <BookChapterSelectorPane bind:bookChapterSelectorPane bind:isShowing={isShowingBookChapterSelectorPane} />
 
@@ -345,6 +324,7 @@
                 tab={selectedTab}
                 guideShortName={$currentGuide?.shortName ?? ''}
                 bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
+                bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
             />
         {/if}
         <div
@@ -450,7 +430,7 @@
         <MainMenu />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.guide}
-        <GuideMenu bind:showGuideMenu={isShowingGuidePane} />
+        <GuideMenu bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.library}
         <LibraryMenu resources={resourceData?.additionalResources} />
