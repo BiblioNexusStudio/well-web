@@ -43,15 +43,22 @@ export async function guidesAvailableForBibleSection(
 export async function guidesAvailableInCurrentLanguage() {
     const languageId = get(currentLanguageInfo)?.id;
     const guidesInCurrentLanguage = await allGuidesForLanguage();
-    return await asyncFilter(guidesInCurrentLanguage, async (guide) => {
-        if (PredeterminedPassageGuides.includes(guide.shortName)) {
-            return await isCachedFromApi(passagesByLanguageAndParentResourceEndpoint(languageId, guide.shortName)[0]);
-        } else {
-            return await isCachedFromApi(
-                booksAndChaptersByLanguageAndParentResourceEndpoint(languageId, guide.shortName)[0]
-            );
-        }
-    });
+    const online = get(isOnline);
+    if (online) {
+        return guidesInCurrentLanguage;
+    } else {
+        return await asyncFilter(guidesInCurrentLanguage, async (guide) => {
+            if (PredeterminedPassageGuides.includes(guide.shortName)) {
+                return await isCachedFromApi(
+                    passagesByLanguageAndParentResourceEndpoint(languageId, guide.shortName)[0]
+                );
+            } else {
+                return await isCachedFromApi(
+                    booksAndChaptersByLanguageAndParentResourceEndpoint(languageId, guide.shortName)[0]
+                );
+            }
+        });
+    }
 }
 
 async function allGuidesForLanguage() {
