@@ -43,6 +43,16 @@ export function resourceMetadataApiFullPath(resourceContent: ResourceContentInfo
     return env.PUBLIC_AQUIFER_API_URL + `resources/${id}/metadata`;
 }
 
+export function resourceContentsForBookAndChapterFullUrl(
+    languageId: number | undefined,
+    bookCode: string,
+    chapter: string
+) {
+    const basePath = env.PUBLIC_AQUIFER_API_URL.replace(/\/$/, '');
+    const endpoint = resourceContentForBookAndChapter(languageId, bookCode, parseInt(chapter))[0].replace(/^\//, '');
+    return `${basePath}/${endpoint}`;
+}
+
 interface ResourceContentInfoWithOccurrences extends ResourceContentInfo {
     occurrences: number;
 }

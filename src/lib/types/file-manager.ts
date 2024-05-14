@@ -1,5 +1,5 @@
 import type { DirectionCode } from '$lib/utils/language-utils';
-import type { MediaType, ParentResourceName } from './resource';
+import type { ApiParentResource, MediaType, ParentResourceName } from './resource';
 
 export type Url = string;
 export interface UrlWithMetadata {
@@ -122,6 +122,7 @@ export interface ResourcesMenuItem {
     selected: boolean;
     isBible: boolean;
     display: boolean;
+    parentResource: ApiParentResource | null;
 }
 
 export interface BiblesModule {

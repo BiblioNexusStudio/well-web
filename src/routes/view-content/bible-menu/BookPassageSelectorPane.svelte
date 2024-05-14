@@ -55,6 +55,7 @@
     onMount(async () => {
         bookPassageSelectorPane = new CupertinoPane('#book-passage-selector-pane', {
             backdrop: true,
+            simulateTouch: false, // prevent weirdness when using mouse
             topperOverflow: true,
             initialBreak: 'top',
             events: {

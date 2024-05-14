@@ -61,12 +61,16 @@ export async function guidesAvailableInCurrentLanguage() {
     }
 }
 
-async function allGuidesForLanguage() {
+export async function parentResourcesForCurrentLanguage() {
     const languageId = get(currentLanguageInfo)?.id;
-    const allGuides = (await fetchFromCacheOrApi(
-        ...parentResourcesEndpoint(languageId, ParentResourceType.Guide)
+    const allParentResources = (await fetchFromCacheOrApi(
+        ...parentResourcesEndpoint(languageId)
     )) as ApiParentResource[];
-    return allGuides.filter((pr) => pr.resourceCountForLanguage > 0);
+    return allParentResources.filter((pr) => pr.resourceCountForLanguage > 0);
+}
+
+async function allGuidesForLanguage() {
+    return (await parentResourcesForCurrentLanguage()).filter((pr) => pr.resourceType === ParentResourceType.Guide);
 }
 
 // given a list of Bible books/chapters available and a specific guide, filters down the list of Bible books/chapters to

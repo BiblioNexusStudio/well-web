@@ -12,10 +12,13 @@ import type {
 } from '$lib/types/file-manager';
 import {
     resourceContentApiFullUrl,
+    resourceContentsForBookAndChapterFullUrl,
     resourceMetadataApiFullPath,
     resourceThumbnailApiFullUrl,
 } from '$lib/utils/data-handlers/resources/resource';
 import { MediaType, ParentResourceName } from '$lib/types/resource';
+import { currentLanguageInfo } from '$lib/stores/language.store';
+import { get } from 'svelte/store';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -42,6 +45,7 @@ export const calculateUrlsWithMetadataToChange = (
     footerInputs: FooterInputs,
     resourcesMenu: ResourcesMenuItem[]
 ) => {
+    const languageId = get(currentLanguageInfo)?.id;
     const urlsAndSizesToDownload = [] as UrlWithMetadata[];
     const urlsToDelete = [] as string[];
     const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
@@ -76,6 +80,13 @@ export const calculateUrlsWithMetadataToChange = (
                     size: chapter[audioFileTypeForBrowser()].size,
                 });
             }
+
+            urlsAndSizesToDownload.push({
+                url: resourceContentsForBookAndChapterFullUrl(languageId, biblesModuleBook.bookCode, chapter.number),
+                mediaType: MediaType.Text,
+                metadataOnly: true,
+                size: METADATA_ONLY_FAKE_FILE_SIZE * 5,
+            });
 
             if (chapter.deleteResources) {
                 urlsToDelete.push(chapter[audioFileTypeForBrowser()].url);

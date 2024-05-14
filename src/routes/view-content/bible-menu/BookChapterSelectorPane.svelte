@@ -183,6 +183,7 @@
     onMount(async () => {
         bookChapterSelectorPane = new CupertinoPane('#book-chapter-verse-selector-pane', {
             backdrop: true,
+            simulateTouch: false, // prevent weirdness when using mouse
             topperOverflow: false,
             initialBreak: 'top',
             events: {

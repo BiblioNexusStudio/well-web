@@ -16,7 +16,7 @@
     import { MetaTags } from 'svelte-meta-tags';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import ErrorMessage from '$lib/components/ErrorMessage.svelte';
-    import ResouceMenu from '$lib/components/file-manager/ResourceMenu.svelte';
+    import ResourceMenu from '$lib/components/file-manager/ResourceMenu.svelte';
     import LanguageMenu from '$lib/components/file-manager/LanguageMenu.svelte';
     import SelectBookMenu from '$lib/components/file-manager/SelectBookMenu.svelte';
     import { addFrontEndDataToBiblesModuleBook } from '$lib/utils/file-manager';
@@ -69,7 +69,7 @@
         </div>
         {#if $selectedBookCode}
             <div class="mx-4 my-4 flex items-center justify-between">
-                <ResouceMenu />
+                <ResourceMenu />
                 <LanguageMenu />
             </div>
             <div class="overflow-x-auto pb-32">
