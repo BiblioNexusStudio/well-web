@@ -18,7 +18,6 @@
         type AudioFileInfo,
     } from '$lib/components/AudioPlayer/audio-player-state';
     import { objectKeys } from '$lib/utils/typesafe-standard-lib';
-    import { page } from '$app/stores';
     import {
         type BibleData,
         type ResourceData,
@@ -79,12 +78,14 @@
     let bookChapterSelectorPane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
     let bibleSelectionScroll: number | undefined;
-    let baseFetchPromise: Promise<void> | undefined;
+    let baseFetchPromise: Promise<[void, void]> | undefined;
     let resourceFetchPromise: Promise<void> | undefined;
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
     let preferredBiblesModalOpen = false;
 
-    $: $page.url && fetchBase($selectedBibleSection); // when the Bible section changes, refetch
+    $: {
+        baseFetchPromise = fetchBase($selectedBibleSection); // when the Bible section changes, refetch
+    }
     $: handlePreferredBiblesChange($preferredBibleIds);
     $: fetchContentForBibleId(selectedBibleId);
 
@@ -107,8 +108,7 @@
         bibleData = null;
         multiClipAudioStates = {};
 
-        fetchBibles(bibleSection);
-        fetchResources(bibleSection);
+        return Promise.all([fetchBibles(bibleSection), fetchResources(bibleSection)]);
     }
 
     function fetchResources(bibleSection: BibleSection | null) {
@@ -267,6 +267,8 @@
         } else if (tab === 'guide' && $currentGuide === undefined) {
             openGuideMenu();
         } else if (tab === 'guide' && $selectedBibleSection === null) {
+            openGuideMenu();
+        } else if (tab === 'guide' && stepsAvailable.length === 0) {
             openGuideMenu();
         } else if (tab === 'mainMenu') {
             openMainMenu();
