@@ -1,23 +1,8 @@
 {
     "page": {
         "index": {
-            "language": {
-                "value": "भाषा"
-            },
-            "book": {
-                "value": "पुस्तक"
-            },
-            "passage": {
-                "value": "पाठ"
-            },
-            "go": {
-                "value": "जाओ"
-            },
             "downloadResourcesForOfflineUse": {
                 "value": "ऑफ़लाइन जा रहे हैं? और कंटेंट प्राप्त करें।"
-            },
-            "loading": {
-                "value": "लोड हो रहा है"
             },
             "about": {
                 "value": "बारे में"

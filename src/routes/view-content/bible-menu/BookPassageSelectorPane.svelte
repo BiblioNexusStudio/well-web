@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { data, selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
     import { passagesByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
@@ -8,8 +8,10 @@
     import type { BibleSection } from '$lib/types/bible';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
-    import { ParentResourceName } from '$lib/types/resource';
     import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
+    import { currentGuide } from '$lib/stores/parent-resource.store';
+    import type { ApiParentResource } from '$lib/types/resource';
+    import type { BasePassagesByBook } from '$lib/types/passage';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -18,8 +20,9 @@
         two: { title: $translate('page.BookPassageSelectorMenu.stepTwoTitle.value') },
     };
     let currentStep = steps.one;
+    let availablePassagesByBook: BasePassagesByBook[] | null = null;
 
-    $: selectedBookInfo = $selectedBookIndex === 'default' ? null : $data.passagesByBook?.[$selectedBookIndex];
+    $: selectedBookInfo = $selectedBookIndex === 'default' ? null : availablePassagesByBook?.[$selectedBookIndex];
 
     let bookCodesToNames: Record<string, string> | undefined;
 
@@ -35,18 +38,21 @@
         closeAllPassagePageMenus();
     }
 
-    async function fetchDataPromise() {
-        const available = await passagesByBookAvailableForGuide(ParentResourceName.CBBTER);
-        bookCodesToNames = await getBibleBookCodesToName();
-        data.set({ passagesByBook: available });
+    $: availablePassagesPromise = fetchAvailablePassages($currentGuide);
+
+    async function fetchAvailablePassages(guide: ApiParentResource | undefined) {
+        if (guide) {
+            availablePassagesByBook = await passagesByBookAvailableForGuide(guide.shortName);
+        } else {
+            availablePassagesByBook = null;
+        }
     }
 
     function handleBack() {
         currentStep = steps.one;
     }
 
-    onMount(() => {
-        fetchDataPromise();
+    onMount(async () => {
         bookPassageSelectorPane = new CupertinoPane('#book-passage-selector-pane', {
             backdrop: true,
             topperOverflow: true,
@@ -56,6 +62,7 @@
                 onBackdropTap: () => (isShowing = false),
             },
         });
+        bookCodesToNames = await getBibleBookCodesToName();
     });
 </script>
 
@@ -75,21 +82,20 @@
 
         <hr class="my-2 w-full" />
         <div class="flex w-full flex-col items-center overflow-y-scroll">
-            {#await fetchDataPromise}
+            {#await availablePassagesPromise}
                 <p>{$translate('page.BookPassageSelectorMenu.loading.value')}</p>
             {:then}
-                {#if steps.one === currentStep && $data.passagesByBook}
-                    {#each $data.passagesByBook as book, index}
+                {#if steps.one === currentStep && availablePassagesByBook}
+                    {#each availablePassagesByBook as book, index}
                         <button
                             on:click={() => setBookAndChangeSteps(index)}
                             class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4"
                         >
                             <span class="text-sm">{bookCodesToNames?.[book.bookCode] ?? ''}</span>
                         </button>
-                    {/each}
-                    {#if $data.passagesByBook.length === 0}
+                    {:else}
                         <h3 class="my-2 font-bold">{$translate('page.BookPassageSelectorMenu.noBooks.value')}</h3>
-                    {/if}
+                    {/each}
                 {/if}
                 {#if steps.two === currentStep}
                     {#if selectedBookInfo}

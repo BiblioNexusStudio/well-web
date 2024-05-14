@@ -1,29 +1,9 @@
 {
     "page": {
         "index": {
-            "language": {
-                "value": "Lugha",
-                "_context": "Huashiria kwa mtumiaji kwamba anafaa kuchagua 'Lugha' ya programu"
-            },
-            "book": {
-                "value": "Kitabu",
-                "_context": "Inaonyesha kwa mtumiaji kwamba wanapaswa kuchagua 'Kitabu' cha Biblia"
-            },
-            "passage": {
-                "value": "Kifungu",
-                "_context": "Inaonyesha kwa mtumiaji kwamba wanapaswa kuchagua 'kifungu' kutoka 'Kitabu' alichochagua."
-            },
-            "go": {
-                "value": "Enda",
-                "_context": "Huashiria kwa mtumiaji kwamba anaweza kubofya kitufe hiki ili kusogea hadi kwenye ukurasa unaofuata na chaguo zilizopeanwa"
-            },
             "downloadResourcesForOfflineUse": {
                 "value": "Je, unakwenda Nje ya Mtandao? Pata Maudhui zaidi",
                 "_context": "Maandishi ya kitufe yanayomwambia mtumiaji kupakua rasilimali kwa matumizi ya nje ya mtandao"
-            },
-            "loading": {
-                "value": "kupakia",
-                "_context": "Ujumbe wa kuonyeshwa kwenye menyu kunjuzi ya chaguo wakati vitu vinapakiwa"
             },
             "about": {
                 "value": "Kuhusu",

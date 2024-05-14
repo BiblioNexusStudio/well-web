@@ -1,23 +1,8 @@
 {
     "page": {
         "index": {
-            "language": {
-                "value": "اللغة"
-            },
-            "book": {
-                "value": "كتاب"
-            },
-            "passage": {
-                "value": "مقطع"
-            },
-            "go": {
-                "value": "اذهب"
-            },
             "downloadResourcesForOfflineUse": {
                 "value": "هل تريد العمل بدون إنترنت؟ احصل على مزيد من المحتوى"
-            },
-            "loading": {
-                "value": "جار التحميل"
             },
             "about": {
                 "value": "حول"

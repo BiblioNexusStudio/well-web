@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
+import { fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
 import { currentLanguageInfo } from '$lib/stores/language.store';
 import type {
     FrontendAudioChapter,
@@ -19,7 +19,6 @@ import {
     ParentResourceName,
     type CbbtErAudioMetadata,
     type CbbtErAudioContent,
-    type ApiParentResource,
     type ResourceContentInfo,
     ParentResourceType,
 } from '$lib/types/resource';
@@ -31,7 +30,6 @@ import {
 import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
-import { parentResourcesEndpoint } from '$lib/api-endpoints';
 import { settings } from '$lib/stores/settings.store';
 import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
 import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/resource';
@@ -197,12 +195,6 @@ async function getAdditionalResourcesForPassage(
     );
 }
 
-export async function fetchLocalizedGuideData(): Promise<ApiParentResource[]> {
-    return await fetchFromCacheOrApi(
-        ...parentResourcesEndpoint(get(currentLanguageInfo)?.id ?? 1, ParentResourceType.Guide)
-    );
-}
-
 function updateAndGetPreferredIds(bibleIdsInCurrentLanguage: number[]) {
     const defaultCurrentLanguageBibleId = bibleIdsInCurrentLanguage[0];
     let preferredIds = get(preferredBibleIds);
@@ -277,4 +269,3 @@ export async function fetchResourceData(passage: BibleSection) {
 
 export type ResourceData = Awaited<ReturnType<typeof fetchResourceData>>;
 export type BibleData = Awaited<ReturnType<typeof fetchBibleData>>;
-export type GuideData = Awaited<ReturnType<typeof fetchLocalizedGuideData>>;

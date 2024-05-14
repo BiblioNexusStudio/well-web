@@ -1,23 +1,8 @@
 {
     "page": {
         "index": {
-            "language": {
-                "value": "Langue"
-            },
-            "book": {
-                "value": "Livre"
-            },
-            "passage": {
-                "value": "Passage"
-            },
-            "go": {
-                "value": "Aller"
-            },
             "downloadResourcesForOfflineUse": {
                 "value": "Partir hors ligne ? Obtenez plus de contenu"
-            },
-            "loading": {
-                "value": "chargement"
             },
             "about": {
                 "value": "À propos"
