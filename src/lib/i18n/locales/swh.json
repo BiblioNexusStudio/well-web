@@ -309,6 +309,9 @@
             "selectBible": {
                 "value": "Chagua Biblia"
             },
+            "goToPassage": {
+                "value": "Go to Passage"
+            },
             "bible": {
                 "value": "Biblia"
             }
@@ -369,9 +372,6 @@
         },
         "selectPassage": {
             "value": "Chagua Kifungu"
-        },
-        "selectBible": {
-            "value": "Chagua Biblia"
         },
         "selectGuide": {
             "value": "Chagua Mwongozo"

@@ -3,22 +3,22 @@
     import { CupertinoPane } from 'cupertino-pane';
     import { afterUpdate, onMount } from 'svelte';
     import { getBibleBooksByBibleId } from '$lib/utils/data-handlers/resources/passages';
-    import { bibleSetByUser } from '$lib/stores/bibles.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible-text-content';
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
 
     let currentBook: ApiBibleBook;
-    let currentChapter: ApiBibleChapter;
+    let currentChapter: ApiBibleChapter | null = null;
     let buttons: HTMLButtonElement[] = [];
     let scrollBehaviorSmooth = false;
 
-    let promise = getBibleBooksByBibleId($bibleSetByUser?.id || 1);
+    $: promise = getBibleBooksByBibleId(1);
 
     let steps = {
         one: {
@@ -89,7 +89,7 @@
 
             currentBook = { ...currentBook, chapters: newChapters };
             // needed to rerender the view
-            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter.number)!;
+            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter?.number)!;
             return;
         }
 
@@ -123,7 +123,7 @@
                 });
             }
 
-            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter.number)!;
+            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter?.number)!;
         }
     }
 
@@ -151,6 +151,7 @@
             endVerse: forceToInt(lastSelectedVerse.number),
         };
         isShowing = false;
+        closeAllPassagePageMenus();
     }
 
     function formatBibleVerseRange(
@@ -183,11 +184,16 @@
                 onBackdropTap: () => (isShowing = false),
             },
         });
+
+        bookChapterSelectorPane.on('onDidDismiss', function () {
+            currentStep = steps.one;
+            currentChapter = null;
+        });
     });
 
     afterUpdate(() => {
-        if (buttons.length && buttons[currentChapter.number - 1]) {
-            buttons[currentChapter.number - 1]!.scrollIntoView({
+        if (buttons.length && buttons[(currentChapter?.number || 1) - 1]) {
+            buttons[(currentChapter?.number || 1) - 1]!.scrollIntoView({
                 behavior: scrollBehaviorSmooth ? 'smooth' : 'instant',
                 block: 'nearest',
                 inline: 'start',
@@ -276,13 +282,13 @@
                 {/if}
                 {#if currentStep === steps.three}
                     <h3 class="mb-2 self-start text-lg font-bold">{verseTitle}</h3>
-                    <div class="flex w-full overflow-x-scroll">
+                    <div class="flex w-full overflow-x-scroll py-4">
                         {#each currentBook.chapters as chapter, index}
                             {@const isCurrentChapter = chapter === currentChapter}
                             <button
                                 on:click={() => handleChapterSelection(chapter)}
                                 bind:this={buttons[index]}
-                                class="btn my-4 me-4 {isCurrentChapter && 'bg-blue-500 text-white'}"
+                                class="btn me-4 {isCurrentChapter && 'bg-blue-500 text-white'}"
                             >
                                 <span class="me-1">{currentBook.localizedName}</span><span>{chapter.number}</span>
                             </button>
@@ -291,14 +297,16 @@
                     <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
                     <div class="w-full flex-grow overflow-y-scroll">
                         <div class="grid w-full grid-cols-5 gap-4">
-                            {#each currentChapter.verseState as verse}
-                                <button
-                                    on:click={() => handleVerseSelection(verse)}
-                                    class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
-                                >
-                                    {verse.number}
-                                </button>
-                            {/each}
+                            {#if currentChapter && currentChapter.verseState}
+                                {#each currentChapter.verseState as verse}
+                                    <button
+                                        on:click={() => handleVerseSelection(verse)}
+                                        class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
+                                    >
+                                        {verse.number}
+                                    </button>
+                                {/each}
+                            {/if}
                         </div>
                     </div>
                     <hr class="my-4 w-screen" />

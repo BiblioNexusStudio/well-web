@@ -26,13 +26,12 @@
         type PassagePageTab,
         fetchResourceData,
         fetchBibleData,
-        fetchLocalizedGuideData,
     } from './data-fetchers';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible-text-content';
     import { cacheBiblesForBibleSection } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { lookupLanguageInfoById } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
     import { currentGuide, locallyStoredGuide } from '$lib/stores/parent-resource.store';
     import {
@@ -46,14 +45,10 @@
     } from '$lib/stores/passage-page.store';
     import GuideMenu from './guide-menu/GuideMenu.svelte';
     import { onMount } from 'svelte';
-    import GuidePane from './guide-menu/GuidePane.svelte';
     import LibraryMenu from './library-menu/LibraryMenu.svelte';
     import BibleMenu from './bible-menu/BibleMenu.svelte';
-    import { bibleSetByUser, bibleStoredByUser } from '$lib/stores/bibles.store';
-    import BiblePane from './bible-menu/BiblePane.svelte';
     import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
-    import type { BaseBible } from '$lib/types/bible-text-content';
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
@@ -78,12 +73,8 @@
     let selectedBibleId: number | null = null;
     let topOfStep: HTMLElement | null = null;
     let selectedTab: PassagePageTab = 'guide';
-    let isShowingGuidePane = false;
-    let isShowingBiblePane = false;
     let isShowingBookPassageSelectorPane = false;
     let isShowingBookChapterSelectorPane = false;
-    let guidePane: CupertinoPane;
-    let biblePane: CupertinoPane;
     let bookPassageSelectorPane: CupertinoPane;
     let bookChapterSelectorPane: CupertinoPane;
     let cbbterSelectedStepScroll: number | undefined;
@@ -92,10 +83,8 @@
     let resourceFetchPromise: Promise<void> | undefined;
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
     let preferredBiblesModalOpen = false;
-    let localizedGuides: ApiParentResource[];
 
     $: $page.url && fetchBase($selectedBibleSection); // when the Bible section changes, refetch
-    $: $currentLanguageInfo?.id && fetchGuides();
     $: handlePreferredBiblesChange($preferredBibleIds);
     $: fetchContentForBibleId(selectedBibleId);
 
@@ -105,23 +94,12 @@
     $: audioPlayerShowing = !!multiClipAudioStates[audioPlayerKey];
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
 
-    $: setStoredBible($bibleStoredByUser);
     $: setStoredGuide($locallyStoredGuide);
-
-    function setStoredBible(bible: BaseBible | null) {
-        if (bible) {
-            $bibleSetByUser = bible;
-        }
-    }
 
     function setStoredGuide(guide: ApiParentResource | undefined) {
         if (guide) {
             $currentGuide = guide;
         }
-    }
-
-    async function fetchGuides() {
-        localizedGuides = await fetchLocalizedGuideData();
     }
 
     function fetchBase(bibleSection: BibleSection | null) {
@@ -251,22 +229,6 @@
         return id === null ? 'none' : `bible${id}`;
     }
 
-    function showOrDismissGuidePane(show: boolean) {
-        if (show) {
-            guidePane?.present({ animate: true });
-        } else {
-            guidePane?.hide();
-        }
-    }
-
-    function showOrDismissBiblePane(show: boolean) {
-        if (show) {
-            biblePane?.present({ animate: true });
-        } else {
-            biblePane?.hide();
-        }
-    }
-
     function showOrDismissBookPassageSelectorPane(show: boolean) {
         if (show) {
             bookPassageSelectorPane?.present({ animate: true });
@@ -295,8 +257,6 @@
     }
 
     function closeAllPaneMenus() {
-        isShowingGuidePane = false;
-        isShowingBiblePane = false;
         isShowingBookPassageSelectorPane = false;
         isShowingBookChapterSelectorPane = false;
     }
@@ -306,9 +266,11 @@
             openLibraryMenu();
         } else if (tab === 'guide' && $currentGuide === undefined) {
             openGuideMenu();
+        } else if (tab === 'guide' && $selectedBibleSection === null) {
+            openGuideMenu();
         } else if (tab === 'mainMenu') {
             openMainMenu();
-        } else if (tab === 'bible' && $bibleSetByUser === null) {
+        } else if (tab === 'bible' && $selectedBibleSection === null) {
             openBibleMenu();
         } else {
             closeAllPassagePageMenus();
@@ -319,8 +281,6 @@
     $: bibleSectionTitle = calculateBibleSectionTitle(currentBible, $selectedBibleSection);
     $: handleSelectedTabMenu(selectedTab);
 
-    $: showOrDismissGuidePane(isShowingGuidePane);
-    $: showOrDismissBiblePane(isShowingBiblePane);
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
     $: showOrDismissBookChapterSelectorPane(isShowingBookChapterSelectorPane);
 
@@ -331,13 +291,6 @@
     });
 </script>
 
-<GuidePane bind:selectedTab bind:guidePane bind:isShowing={isShowingGuidePane} bind:localizedGuides />
-<BiblePane
-    bind:biblePane
-    bind:isShowing={isShowingBiblePane}
-    bind:showBookPassageMenu={isShowingBookPassageSelectorPane}
-    bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
-/>
 <BookPassageSelectorPane bind:bookPassageSelectorPane bind:isShowing={isShowingBookPassageSelectorPane} />
 <BookChapterSelectorPane bind:bookChapterSelectorPane bind:isShowing={isShowingBookChapterSelectorPane} />
 
@@ -370,13 +323,13 @@
                 bibles={bibleData?.availableBibles ?? []}
                 tab={selectedTab}
                 guideShortName={$currentGuide?.shortName ?? ''}
-                bind:showBiblePane={isShowingBookPassageSelectorPane}
                 bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
+                bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
             />
         {/if}
         <div
             class="absolute left-0 right-0 top-16 flex flex-col {$passagePageShownMenu !== null &&
-                'hidden'} {audioPlayerShowing ? 'bottom-[7.5rem]' : 'bottom-20'}"
+                'hidden'} {audioPlayerShowing ? 'bottom-[8.5rem]' : 'bottom-20'}"
         >
             {#if selectedBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
                 <div class="px-4 pb-4 {selectedTab !== 'bible' && 'hidden'}">
@@ -477,13 +430,13 @@
         <MainMenu />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.guide}
-        <GuideMenu bind:showGuideMenu={isShowingGuidePane} />
+        <GuideMenu bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.library}
         <LibraryMenu resources={resourceData?.additionalResources} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
-        <BibleMenu bind:showBibleMenu={isShowingBiblePane} />
+        <BibleMenu bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.settings}
         <SettingsMenu />

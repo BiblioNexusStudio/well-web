@@ -309,6 +309,9 @@
             "selectBible": {
                 "value": "Выберите Библию"
             },
+            "goToPassage": {
+                "value": "Перейти к отрывку"
+            },
             "bible": {
                 "value": "Библия"
             }
@@ -369,9 +372,6 @@
         },
         "selectPassage": {
             "value": "Выберите отрывок"
-        },
-        "selectBible": {
-            "value": "Выберите Библию"
         },
         "selectGuide": {
             "value": "Выберите руководство"

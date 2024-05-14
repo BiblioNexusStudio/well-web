@@ -326,6 +326,10 @@
                 "value": "Select a Bible",
                 "_context": "Placeholder text for the dropdown"
             },
+            "goToPassage": {
+                "value": "Go to Passage",
+                "_context": "Label for the button to go to the passage"
+            },
             "bible": {
                 "value": "Bible",
                 "_context": "Label for the dropdown"
@@ -402,10 +406,6 @@
         "selectPassage": {
             "value": "Select Passage",
             "_context": "Button to select a passage"
-        },
-        "selectBible": {
-            "value": "Select Bible",
-            "_context": "Button to select a Bible"
         },
         "selectGuide": {
             "value": "Select Guide",

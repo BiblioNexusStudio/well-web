@@ -255,6 +255,9 @@
             "selectBible": {
                 "value": "बाइबिल चुनें"
             },
+            "goToPassage": {
+                "value": "पाठ जाएं"
+            },
             "bible": {
                 "value": "बाइबिल"
             }
@@ -314,9 +317,6 @@
         },
         "selectPassage": {
             "value": "पाठ चुनें"
-        },
-        "selectBible": {
-            "value": "बाइबिल चुनें"
         },
         "selectGuide": {
             "value": "मार्गदर्शिका चुनें"
