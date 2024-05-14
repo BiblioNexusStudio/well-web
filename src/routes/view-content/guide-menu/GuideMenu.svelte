@@ -2,30 +2,56 @@
     import { _ as translate } from 'svelte-i18n';
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
-    import { guideResources, setCurrentGuide, currentGuide } from '$lib/stores/parent-resource.store';
+    import { setCurrentGuide, currentGuide } from '$lib/stores/parent-resource.store';
     import type { ApiParentResource, ParentResourceName } from '$lib/types/resource';
+    import {
+        guidesAvailableForBibleSection,
+        guidesAvailableInCurrentLanguage,
+    } from '$lib/utils/data-handlers/resources/guides';
+    import { selectedBibleSection } from '$lib/stores/passage-form.store';
+    import type { Language } from '$lib/types/file-manager';
+    import type { BibleSection } from '$lib/types/bible';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
+    import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
 
-    export let localizedGuides: ApiParentResource[] = $guideResources;
     export let showBookPassageSelectorPane: boolean;
 
-    $: filteredGuides = filterGuidesPerSettings(localizedGuides, $settings);
+    $: availableGuidesPromise = fetchAvailableGuides($selectedBibleSection, $currentLanguageInfo, $settings);
+
+    async function fetchAvailableGuides(
+        bibleSection: BibleSection | null,
+        _currentLanguageInfo: Language | undefined,
+        settings: Setting[]
+    ) {
+        let guides: ApiParentResource[] | undefined;
+        if (bibleSection) {
+            guides = await guidesAvailableForBibleSection(bibleSection);
+        } else {
+            guides = await guidesAvailableInCurrentLanguage();
+        }
+        if (guides) {
+            return filterGuidesPerSettings(guides, settings);
+        } else {
+            return null;
+        }
+    }
 
     function selectGuideAndHandleMenu(guideResource: ApiParentResource) {
         setCurrentGuide(guideResource);
     }
 
-    function filterGuidesPerSettings(localizedGuides: ApiParentResource[], $settings: Setting[]) {
+    function filterGuidesPerSettings(availableGuides: ApiParentResource[], $settings: Setting[]) {
         const srvOnlySetting = $settings.find(
             (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
         );
 
         if (srvOnlySetting?.value === true) {
-            return localizedGuides.filter((guide) =>
+            return availableGuides.filter((guide) =>
                 srvOnlySetting.parentResources.includes(guide.shortName as ParentResourceName)
             );
         }
 
-        return localizedGuides;
+        return availableGuides;
     }
 
     function openGuideMenu() {
@@ -45,29 +71,36 @@
             <span class="z-10 text-sm text-white">{$translate('page.guideMenu.chooseGuide.value')}</span>
         </div>
     </div>
-    <div class="flex w-full flex-col items-center overflow-y-auto">
-        {#each filteredGuides as guideResource}
-            {@const isCurrentGuide = guideResource === $currentGuide}
-            <button
-                on:click={() => selectGuideAndHandleMenu(guideResource)}
-                class="my-2 flex w-11/12 rounded-xl p-4 {isCurrentGuide
-                    ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
-                    : 'border'}"
-            >
-                <span class="text-sm">{guideResource.displayName}</span>
-                <span class="mx-1 text-sm">-</span>
-                <span class="text-sm text-[#98A2B3]">{guideResource.shortName}</span>
-            </button>
-        {/each}
-        {#if filteredGuides.length === 0}
-            <h3 class="my-2">
-                {$translate('page.guideMenu.noGuides.value')}
-            </h3>
+    {#await availableGuidesPromise}
+        <FullPageSpinner />
+    {:then availableGuides}
+        <div class="flex w-full flex-col items-center overflow-y-auto">
+            {#if !availableGuides || availableGuides.length === 0}
+                <h3 class="my-2">
+                    {$translate('page.guideMenu.noGuides.value')}
+                </h3>
+            {:else}
+                {#each availableGuides as guideResource}
+                    {@const isCurrentGuide = guideResource.shortName === $currentGuide?.shortName}
+                    <button
+                        on:click={() => selectGuideAndHandleMenu(guideResource)}
+                        class="my-2 flex w-11/12 rounded-xl p-4 {isCurrentGuide
+                            ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
+                            : 'border'}"
+                    >
+                        <span class="text-sm">{guideResource.displayName}</span>
+                        <span class="mx-1 text-sm">-</span>
+                        <span class="text-sm text-[#98A2B3]">{guideResource.shortName}</span>
+                    </button>
+                {/each}
+            {/if}
+        </div>
+        {#if !!availableGuides && availableGuides.length > 0}
+            <div class="mb-24 flex flex-grow items-end px-4">
+                <button disabled={!$currentGuide} on:click={openGuideMenu} class="btn btn-primary w-full"
+                    >{$translate('page.guideMenu.selectGuide.value')}</button
+                >
+            </div>
         {/if}
-    </div>
-    <div class="mb-24 flex flex-grow items-end px-4">
-        <button on:click={openGuideMenu} class="btn btn-primary w-full"
-            >{$translate('page.guideMenu.selectGuide.value')}</button
-        >
-    </div>
+    {/await}
 </div>

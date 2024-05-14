@@ -185,8 +185,8 @@ export async function getBibleBookCodesToName(languageId: number | null = null, 
     }
 }
 
-export function getBibleBooksByBibleId(bibleId: number) {
-    return fetchFromCacheOrApi(...bibleBooksByBibleId(bibleId)) as Promise<ApiBibleBook[]>;
+async function getBibleBooksByBibleId(bibleId: number) {
+    return (await fetchFromCacheOrApi(...bibleBooksByBibleId(bibleId))) as Promise<ApiBibleBook[]>;
 }
 
 export async function saveBibleRecording(

@@ -8,8 +8,8 @@
     import type { BibleSection } from '$lib/types/bible';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
-    import { ParentResourceName } from '$lib/types/resource';
     import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
+    import { currentGuide } from '$lib/stores/parent-resource.store';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -36,9 +36,12 @@
     }
 
     async function fetchDataPromise() {
-        const available = await passagesByBookAvailableForGuide(ParentResourceName.CBBTER);
-        bookCodesToNames = await getBibleBookCodesToName();
-        data.set({ passagesByBook: available });
+        const guide = $currentGuide?.shortName;
+        if (guide) {
+            const available = await passagesByBookAvailableForGuide(guide);
+            bookCodesToNames = await getBibleBookCodesToName();
+            data.set({ passagesByBook: available });
+        }
     }
 
     function handleBack() {

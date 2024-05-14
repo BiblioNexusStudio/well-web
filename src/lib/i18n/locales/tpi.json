@@ -1,23 +1,8 @@
 {
     "page": {
         "index": {
-            "language": {
-                "value": "Language"
-            },
-            "book": {
-                "value": "Buk"
-            },
-            "passage": {
-                "value": "Hap Riding"
-            },
-            "go": {
-                "value": "Go"
-            },
             "downloadResourcesForOfflineUse": {
                 "value": "Igo oflain? Kisim moa samtin insait"
-            },
-            "loading": {
-                "value": "louding"
             },
             "about": {
                 "value": "Long em"

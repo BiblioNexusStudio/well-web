@@ -2,13 +2,15 @@
     import { _ as translate } from 'svelte-i18n';
     import { CupertinoPane } from 'cupertino-pane';
     import { afterUpdate, onMount } from 'svelte';
-    import { getBibleBooksByBibleId } from '$lib/utils/data-handlers/bible';
+    import { bibleChaptersByBookAvailable } from '$lib/utils/data-handlers/bible';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible';
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
+    import type { Language } from '$lib/types/file-manager';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -18,7 +20,11 @@
     let buttons: HTMLButtonElement[] = [];
     let scrollBehaviorSmooth = false;
 
-    $: promise = getBibleBooksByBibleId(1);
+    $: availableBooksPromise = fetchAvailableBooks($currentLanguageInfo);
+
+    async function fetchAvailableBooks(_currentLanguageInfo: Language | undefined) {
+        return bibleChaptersByBookAvailable();
+    }
 
     let steps = {
         one: {
@@ -238,86 +244,91 @@
                 ? 'overflow-y-scroll'
                 : ''}"
         >
-            {#await promise}
+            {#await availableBooksPromise}
                 <p>{$translate('page.BookChapterSelectorPane.loading.value')}</p>
             {:then books}
-                {#if currentStep === steps.one}
-                    <div class="h-full w-full">
-                        {#each books as book}
-                            {@const isCurrentBook = book === currentBook}
-                            <button
-                                on:click={() => handleBookSelection(book)}
-                                class="my-2 flex w-full flex-wrap rounded-xl border p-4 {isCurrentBook
-                                    ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
-                                    : 'border'}"
-                            >
-                                {book.localizedName}
-                            </button>
-                        {/each}
-                    </div>
-                {/if}
-                {#if currentStep === steps.two}
-                    <h3 class="mb-4 self-start text-lg font-bold">{currentBook.localizedName}</h3>
-                    <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
-                    <div class="w-full flex-grow overflow-y-scroll">
-                        <div class="grid w-full grid-cols-5 gap-4">
-                            {#each currentBook.chapters as chapter}
-                                {@const isCurrentChapter = chapter === currentChapter}
+                {#if books === null}
+                    <p>{$translate('errorMessage.message.value')}</p>
+                {:else}
+                    {#if currentStep === steps.one}
+                        <div class="h-full w-full">
+                            {#each books as book}
+                                {@const isCurrentBook = book === currentBook}
                                 <button
-                                    on:click={() => handleChapterSelection(chapter)}
-                                    class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
+                                    on:click={() => handleBookSelection(book)}
+                                    class="my-2 flex w-full flex-wrap rounded-xl border p-4 {isCurrentBook
+                                        ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
+                                        : 'border'}"
                                 >
-                                    {chapter.number}
+                                    {book.localizedName}
                                 </button>
                             {/each}
                         </div>
-                    </div>
-                    <hr class="my-4 w-screen" />
-                    <button
-                        on:click={handleGoToVerses}
-                        disabled={!currentChapterSelected}
-                        class="btn btn-primary w-full"
-                        >{$translate('page.BookChapterSelectorPane.go.value')} <Icon data={arrowRight} class="ms-2" />
-                    </button>
-                {/if}
-                {#if currentStep === steps.three}
-                    <h3 class="mb-2 self-start text-lg font-bold">{verseTitle}</h3>
-                    <div class="flex w-full overflow-x-scroll py-4">
-                        {#each currentBook.chapters as chapter, index}
-                            {@const isCurrentChapter = chapter === currentChapter}
-                            <button
-                                on:click={() => handleChapterSelection(chapter)}
-                                bind:this={buttons[index]}
-                                class="btn me-4 {isCurrentChapter && 'bg-blue-500 text-white'}"
-                            >
-                                <span class="me-1">{currentBook.localizedName}</span><span>{chapter.number}</span>
-                            </button>
-                        {/each}
-                    </div>
-                    <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
-                    <div class="w-full flex-grow overflow-y-scroll">
-                        <div class="grid w-full grid-cols-5 gap-4">
-                            {#if currentChapter && currentChapter.verseState}
-                                {#each currentChapter.verseState as verse}
+                    {/if}
+                    {#if currentStep === steps.two}
+                        <h3 class="mb-4 self-start text-lg font-bold">{currentBook.localizedName}</h3>
+                        <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
+                        <div class="w-full flex-grow overflow-y-scroll">
+                            <div class="grid w-full grid-cols-5 gap-4">
+                                {#each currentBook.chapters as chapter}
+                                    {@const isCurrentChapter = chapter === currentChapter}
                                     <button
-                                        on:click={() => handleVerseSelection(verse)}
-                                        class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
+                                        on:click={() => handleChapterSelection(chapter)}
+                                        class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
                                     >
-                                        {verse.number}
+                                        {chapter.number}
                                     </button>
                                 {/each}
-                            {/if}
+                            </div>
                         </div>
-                    </div>
-                    <hr class="my-4 w-screen" />
+                        <hr class="my-4 w-screen" />
+                        <button
+                            on:click={handleGoToVerses}
+                            disabled={!currentChapterSelected}
+                            class="btn btn-primary w-full"
+                            >{$translate('page.BookChapterSelectorPane.go.value')}
+                            <Icon data={arrowRight} class="ms-2" />
+                        </button>
+                    {/if}
+                    {#if currentStep === steps.three}
+                        <h3 class="mb-2 self-start text-lg font-bold">{verseTitle}</h3>
+                        <div class="flex w-full overflow-x-scroll py-4">
+                            {#each currentBook.chapters as chapter, index}
+                                {@const isCurrentChapter = chapter === currentChapter}
+                                <button
+                                    on:click={() => handleChapterSelection(chapter)}
+                                    bind:this={buttons[index]}
+                                    class="btn me-4 {isCurrentChapter && 'bg-blue-500 text-white'}"
+                                >
+                                    <span class="me-1">{currentBook.localizedName}</span><span>{chapter.number}</span>
+                                </button>
+                            {/each}
+                        </div>
+                        <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
+                        <div class="w-full flex-grow overflow-y-scroll">
+                            <div class="grid w-full grid-cols-5 gap-4">
+                                {#if currentChapter && currentChapter.verseState}
+                                    {#each currentChapter.verseState as verse}
+                                        <button
+                                            on:click={() => handleVerseSelection(verse)}
+                                            class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
+                                        >
+                                            {verse.number}
+                                        </button>
+                                    {/each}
+                                {/if}
+                            </div>
+                        </div>
+                        <hr class="my-4 w-screen" />
 
-                    <button
-                        on:click={handleVerseGoButton}
-                        disabled={verseGoButtonDisabled}
-                        class="btn btn-primary w-full"
-                        >{$translate('page.BookChapterSelectorPane.go.value')}
-                        <Icon data={arrowRight} class="ms-2" /></button
-                    >
+                        <button
+                            on:click={handleVerseGoButton}
+                            disabled={verseGoButtonDisabled}
+                            class="btn btn-primary w-full"
+                            >{$translate('page.BookChapterSelectorPane.go.value')}
+                            <Icon data={arrowRight} class="ms-2" /></button
+                        >
+                    {/if}
                 {/if}
             {/await}
         </div>
