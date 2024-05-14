@@ -1,4 +1,4 @@
-import type { BibleSection } from '$lib/types/passage';
+import type { BibleSection } from '$lib/types/bible';
 
 export function bibleSectionToString(bibleSection: BibleSection) {
     return `${bibleSection.bookCode}${String(bibleSection.startChapter).padStart(3, '0')}${String(

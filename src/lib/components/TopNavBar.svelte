@@ -6,8 +6,8 @@
     import microphone from 'svelte-awesome/icons/microphone';
     import AddAudioRecordingModal from './AddAudioRecordingModal.svelte';
     import { featureFlags } from '$lib/stores/feature-flags.store';
-    import type { BibleSection } from '$lib/types/passage';
-    import type { FrontendBibleBook } from '$lib/types/bible-text-content';
+    import type { BibleSection } from '$lib/types/bible';
+    import type { FrontendBibleBook } from '$lib/types/bible';
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
     import type { PassagePageTab } from '../../routes/view-content/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';

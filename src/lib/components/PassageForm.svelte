@@ -5,13 +5,15 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import { currentLanguageInfo, supportedLanguages, updateCurrentLanguageCode } from '$lib/stores/language.store';
-    import { fetchCbbterPassagesByBook } from '$lib/utils/data-handlers/resources/passages';
+    import { passagesByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
     import {
         bibleSectionToReference,
         bibleSectionToString,
         stringToBibleSection,
     } from '$lib/utils/bible-section-helpers';
     import { selectedBibleSection, selectedBookIndex, data } from '$lib/stores/passage-form.store';
+    import { ParentResourceName } from '$lib/types/resource';
+    import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
 
     let isLoading = false;
 
@@ -21,12 +23,16 @@
         updateCurrentLanguageCode(value);
     };
 
+    let bookCodesToNames: Record<string, string> | undefined;
+
     $: $currentLanguageInfo && callFetchData($isOnline);
     $: selectedBookInfo = $selectedBookIndex === 'default' ? null : $data.passagesByBook?.[$selectedBookIndex];
 
     async function callFetchData(_isOnline: boolean = true) {
         isLoading = true;
-        await fetchCbbterPassagesByBook();
+        const available = await passagesByBookAvailableForGuide(ParentResourceName.CBBTER);
+        bookCodesToNames = await getBibleBookCodesToName();
+        data.set({ passagesByBook: available });
         isLoading = false;
     }
 
@@ -75,7 +81,7 @@
         </option>
         {#if $data.passagesByBook}
             {#each $data.passagesByBook as book, index}
-                <option value={index}>{book.bookName}</option>
+                <option value={index}>{bookCodesToNames?.[book.bookCode] ?? ''}</option>
             {/each}
         {/if}
     </select>
@@ -91,7 +97,7 @@
         {#if selectedBookInfo}
             {#each selectedBookInfo.passages as passage}
                 <option value={bibleSectionToString(passage)}
-                    >{selectedBookInfo.bookName}
+                    >{bookCodesToNames?.[selectedBookInfo.bookCode] ?? ''}
                     {bibleSectionToReference(passage)}</option
                 >
             {/each}

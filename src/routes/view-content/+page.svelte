@@ -28,7 +28,7 @@
         fetchBibleData,
     } from './data-fetchers';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
-    import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible-text-content';
+    import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible';
     import { cacheBiblesForBibleSection } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
@@ -52,7 +52,7 @@
     import type { ApiParentResource } from '$lib/types/resource';
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
-    import type { BibleSection } from '$lib/types/passage';
+    import type { BibleSection } from '$lib/types/bible';
     import BibleUnavailable from './BibleUnavailable.svelte';
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
 

@@ -7,7 +7,7 @@ import type {
     CbbtErTextContent,
     ResourceContentCbbtErText,
 } from '$lib/types/file-manager';
-import type { BibleBookTextContent, FrontendBibleBook, FrontendChapterContent } from '$lib/types/bible-text-content';
+import type { BibleBookTextContent, FrontendBibleBook, FrontendChapterContent } from '$lib/types/bible';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import { asyncFilter, asyncMap, asyncReduce } from '$lib/utils/async-array';
 import { isOnline } from '$lib/stores/is-online.store';
@@ -34,8 +34,8 @@ import { log } from '$lib/logger';
 import { parentResourcesEndpoint } from '$lib/api-endpoints';
 import { settings } from '$lib/stores/settings.store';
 import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
-import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/passages';
-import type { BibleSection } from '$lib/types/passage';
+import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/resource';
+import type { BibleSection } from '$lib/types/bible';
 
 export type PassagePageTab = 'bible' | 'guide' | 'mainMenu' | 'libraryMenu';
 
@@ -199,7 +199,7 @@ async function getAdditionalResourcesForPassage(
 
 export async function fetchLocalizedGuideData(): Promise<ApiParentResource[]> {
     return await fetchFromCacheOrApi(
-        ...parentResourcesEndpoint([`LanguageId=${get(currentLanguageInfo)?.id ?? 1}`, 'ResourceType=1'])
+        ...parentResourcesEndpoint(get(currentLanguageInfo)?.id ?? 1, ParentResourceType.Guide)
     );
 }
 

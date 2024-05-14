@@ -1,6 +1,20 @@
 import type { FrontendAudioChapter } from './file-manager';
 import type { ApiLicenseInfo } from './resource';
 
+export interface BibleSection {
+    bookCode: string;
+    endChapter: number;
+    endVerse: number;
+    startChapter: number;
+    startVerse: number;
+}
+
+export interface WholeChapterBibleSection {
+    bookCode: string;
+    endChapter: number;
+    startChapter: number;
+}
+
 export interface BibleBookTextContent {
     chapters: BibleBookTextChapter[];
 }

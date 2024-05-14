@@ -1,6 +1,6 @@
 <script lang="ts">
     import AudioRecorder from '$lib/components/AudioRecorder.svelte';
-    import type { BibleSection } from '$lib/types/passage';
+    import type { BibleSection } from '$lib/types/bible';
     import { saveBibleRecording } from '$lib/utils/data-handlers/bible';
     import { _ as translate } from 'svelte-i18n';
 
