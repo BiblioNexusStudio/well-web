@@ -73,27 +73,13 @@
     function buildVerseSet(totalVerses: number, chapterNumber: number) {
         return Array.from({ length: totalVerses }, (_, index) => ({
             number: index + 1,
-            selected: false,
             chapterNumber,
         }));
     }
 
     function handleVerseSelection(verse: FrontEndVerseForSelectionPane) {
         if (!firstSelectedVerse) {
-            firstSelectedVerse = { ...verse, selected: true };
-            currentBook.chapters = currentBook.chapters.map((chapter) => {
-                if (chapter.number === verse.chapterNumber) {
-                    chapter.verseState = chapter.verseState.map((v) => {
-                        if (v.number === verse.number) {
-                            return { ...v, selected: true };
-                        }
-                        return v;
-                    });
-                }
-                return chapter;
-            });
-
-            currentChapter = currentBook.chapters.find((c) => c.number === verse.chapterNumber) || null;
+            firstSelectedVerse = verse;
             return;
         }
 
@@ -103,40 +89,23 @@
                 firstSelectedVerse.chapterNumber === verse.chapterNumber &&
                 firstSelectedVerse.number < verse.number)
         ) {
-            lastSelectedVerse = { ...verse, selected: true };
-            currentBook.chapters = currentBook.chapters.map((chapter) => {
-                if (chapter.number === verse.chapterNumber) {
-                    chapter.verseState = chapter.verseState.map((v) => {
-                        if (v.number === verse.number) {
-                            return { ...v, selected: true };
-                        }
-                        return v;
-                    });
-                }
-                return chapter;
-            });
-
-            currentChapter = currentBook.chapters.find((c) => c.number === verse.chapterNumber) || null;
+            lastSelectedVerse = verse;
             return;
         }
 
         if (firstSelectedVerse && lastSelectedVerse) {
             firstSelectedVerse = null;
             lastSelectedVerse = null;
-            currentBook.chapters = currentBook.chapters.map((chapter) => {
-                chapter.verseState = chapter.verseState.map((v) => {
-                    return { ...v, selected: false };
-                });
-                return chapter;
-            });
-
-            currentChapter = currentBook.chapters.find((c) => c.number === verse.chapterNumber) || null;
             return;
         }
     }
 
-    function isVerseInSelectedRange(verse: FrontEndVerseForSelectionPane) {
-        if (verse.selected) {
+    function isVerseInSelectedRange(
+        verse: FrontEndVerseForSelectionPane,
+        firstSelectedVerse: FrontEndVerseForSelectionPane | null,
+        lastSelectedVerse: FrontEndVerseForSelectionPane | null
+    ) {
+        if (firstSelectedVerse === verse || lastSelectedVerse === verse) {
             return true;
         }
 
@@ -216,6 +185,8 @@
 
         if (!startChapter && !startVerse && !endChapter && !endVerse) {
             formattedRange = `${bookName}`;
+        } else if (startChapter && startVerse && !endChapter && !endVerse) {
+            formattedRange = `${bookName} ${startChapter}:${startVerse}`;
         } else if (startChapter === endChapter) {
             formattedRange = `${bookName} ${startChapter}:${startVerse}-${endVerse}`;
         } else {
@@ -254,7 +225,7 @@
         }
     });
 
-    $: verseGoButtonDisabled = currentBook?.chapters?.flatMap((c) => c?.verseState).every((v) => !v?.selected);
+    $: verseGoButtonDisabled = firstSelectedVerse === null;
     $: currentChapterSelected = currentChapter?.number && currentChapter?.number > 0;
     $: verseTitle = formatBibleVerseRange(
         currentBook?.localizedName,
@@ -347,7 +318,11 @@
                             <div class="grid w-full grid-cols-5 gap-4">
                                 {#if currentChapter && currentChapter.verseState}
                                     {#each currentChapter.verseState as verse}
-                                        {@const isSelected = isVerseInSelectedRange(verse)}
+                                        {@const isSelected = isVerseInSelectedRange(
+                                            verse,
+                                            firstSelectedVerse,
+                                            lastSelectedVerse
+                                        )}
                                         <button
                                             on:click={() => handleVerseSelection(verse)}
                                             class="h-14 w-14 rounded-full {isSelected && 'bg-blue-500 text-white'}"
