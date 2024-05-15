@@ -198,10 +198,7 @@ async function getAdditionalResourcesForPassage(
 function updateAndGetPreferredIds(bibleIdsInCurrentLanguage: number[]) {
     const defaultCurrentLanguageBibleId = bibleIdsInCurrentLanguage[0];
     let preferredIds = get(preferredBibleIds);
-    if (
-        defaultCurrentLanguageBibleId &&
-        preferredIds.every((existingId) => !bibleIdsInCurrentLanguage.includes(existingId))
-    ) {
+    if (defaultCurrentLanguageBibleId && preferredIds.length === 0) {
         preferredIds = preferredIds.concat([defaultCurrentLanguageBibleId]);
         preferredBibleIds.set(preferredIds);
     }

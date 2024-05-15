@@ -12,10 +12,10 @@
     import { _ as translate } from 'svelte-i18n';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/language.store';
-    import type { ResourcesMenuItem } from '$lib/types/file-manager';
-    import { ParentResourceName } from '$lib/types/resource';
+    import type { Language, ResourcesMenuItem } from '$lib/types/file-manager';
     import { addFrontEndDataToResourcesMenuItems } from '$lib/utils/file-manager';
     import { resourcesByLanguageAndBookEndpoint } from '$lib/api-endpoints';
+    import { parentResourcesForCurrentLanguage } from '$lib/utils/data-handlers/resources/guides';
 
     let resourcesMenuDiv: HTMLElement;
     let menuOpen = false;
@@ -47,46 +47,23 @@
         }
     }
 
-    onMount(() => {
+    $: initializeResourceMenu($currentLanguageInfo);
+
+    async function initializeResourceMenu(_currentLanguageInfo: Language | undefined) {
         $resourcesMenu = [
             ...$bibleDataForResourcesMenu,
-            {
-                name: $translate('resources.types.CBBTER.value'),
-                value: ParentResourceName.CBBTER,
-                selected: true,
-                isBible: false,
-                display: true,
-            },
-            {
-                name: $translate('resources.types.tyndaleBibleDictionary.value'),
-                value: ParentResourceName.TyndaleBibleDictionary,
+            ...(await parentResourcesForCurrentLanguage()).map((pr) => ({
+                name: pr.displayName,
+                value: pr.shortName,
                 selected: false,
                 isBible: false,
                 display: true,
-            },
-            {
-                name: $translate('resources.types.tyndaleStudyNotes.value'),
-                value: ParentResourceName.TyndaleStudyNotes,
-                selected: false,
-                isBible: false,
-                display: true,
-            },
-            {
-                name: $translate('resources.types.ubsImages.value'),
-                value: ParentResourceName.UbsImages,
-                selected: false,
-                isBible: false,
-                display: true,
-            },
-            {
-                name: $translate('resources.types.videoBibleDictionary.value'),
-                value: ParentResourceName.VideoBibleDictionary,
-                selected: false,
-                isBible: false,
-                display: true,
-            },
+                parentResource: pr,
+            })),
         ];
+    }
 
+    onMount(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (resourcesMenuDiv && !resourcesMenuDiv.contains(event.target as Node) && menuOpen) {
                 toggleMenu();
@@ -115,12 +92,7 @@
             {#each $resourcesMenu as resource}
                 {#if resource.display}
                     <label class="label mb-4 cursor-pointer justify-start">
-                        <input
-                            type="checkbox"
-                            disabled={resource.value === ParentResourceName.CBBTER}
-                            bind:checked={resource.selected}
-                            class="checkbox-primary checkbox"
-                        />
+                        <input type="checkbox" bind:checked={resource.selected} class="checkbox-primary checkbox" />
                         <span class="label-text ms-4">{resource.name}</span>
                     </label>
                 {/if}

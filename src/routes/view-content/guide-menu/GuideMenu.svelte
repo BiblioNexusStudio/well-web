@@ -13,15 +13,17 @@
     import type { BibleSection } from '$lib/types/bible';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
+    import { isOnline } from '$lib/stores/is-online.store';
 
     export let showBookPassageSelectorPane: boolean;
 
-    $: availableGuidesPromise = fetchAvailableGuides($selectedBibleSection, $currentLanguageInfo, $settings);
+    $: availableGuidesPromise = fetchAvailableGuides($selectedBibleSection, $settings, $currentLanguageInfo, $isOnline);
 
     async function fetchAvailableGuides(
         bibleSection: BibleSection | null,
+        settings: Setting[],
         _currentLanguageInfo: Language | undefined,
-        settings: Setting[]
+        _online: boolean
     ) {
         let guides: ApiParentResource[] | undefined;
         if (bibleSection) {

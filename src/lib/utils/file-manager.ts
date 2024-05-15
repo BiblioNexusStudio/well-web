@@ -12,10 +12,14 @@ import type {
 } from '$lib/types/file-manager';
 import {
     resourceContentApiFullUrl,
-    resourceMetadataApiFullPath,
+    resourceContentsForBookAndChapterFullUrl,
+    resourceMetadataApiFullUrl,
     resourceThumbnailApiFullUrl,
 } from '$lib/utils/data-handlers/resources/resource';
 import { MediaType, ParentResourceName } from '$lib/types/resource';
+import { currentLanguageInfo } from '$lib/stores/language.store';
+import { get } from 'svelte/store';
+import { bibleBooksByBibleIdFullUrl } from './data-handlers/bible';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -42,6 +46,7 @@ export const calculateUrlsWithMetadataToChange = (
     footerInputs: FooterInputs,
     resourcesMenu: ResourcesMenuItem[]
 ) => {
+    const languageId = get(currentLanguageInfo)?.id;
     const urlsAndSizesToDownload = [] as UrlWithMetadata[];
     const urlsToDelete = [] as string[];
     const bibleSelected = resourcesMenu.some(({ selected, isBible }) => selected && isBible);
@@ -53,6 +58,11 @@ export const calculateUrlsWithMetadataToChange = (
         footerInputs.text &&
         !biblesModuleBook.isTextUrlCached
     ) {
+        urlsAndSizesToDownload.push({
+            mediaType: MediaType.Text,
+            url: bibleBooksByBibleIdFullUrl(biblesModuleBook.bibleId!),
+            size: METADATA_ONLY_FAKE_FILE_SIZE * 10,
+        });
         urlsAndSizesToDownload.push({
             mediaType: MediaType.Text,
             url: biblesModuleBook.textUrl,
@@ -77,6 +87,13 @@ export const calculateUrlsWithMetadataToChange = (
                 });
             }
 
+            urlsAndSizesToDownload.push({
+                url: resourceContentsForBookAndChapterFullUrl(languageId, biblesModuleBook.bookCode, chapter.number),
+                mediaType: MediaType.Text,
+                metadataOnly: true,
+                size: METADATA_ONLY_FAKE_FILE_SIZE * 5,
+            });
+
             if (chapter.deleteResources) {
                 urlsToDelete.push(chapter[audioFileTypeForBrowser()].url);
             }
@@ -97,7 +114,7 @@ export const calculateUrlsWithMetadataToChange = (
                                     size: resourceMenuItem.contentSize,
                                 });
                                 urlsAndSizesToDownload.push({
-                                    url: resourceMetadataApiFullPath(resourceMenuItem),
+                                    url: resourceMetadataApiFullUrl(resourceMenuItem),
                                     contentId: resourceMenuItem.contentId,
                                     mediaType: MediaType.Text,
                                     metadataOnly: true,
@@ -121,7 +138,7 @@ export const calculateUrlsWithMetadataToChange = (
                                     size: resourceMenuItem.contentSize,
                                 });
                                 urlsAndSizesToDownload.push({
-                                    url: resourceMetadataApiFullPath(resourceMenuItem),
+                                    url: resourceMetadataApiFullUrl(resourceMenuItem),
                                     mediaType: MediaType.Audio,
                                     contentId: resourceMenuItem.contentId,
                                     metadataOnly: true,
@@ -140,7 +157,7 @@ export const calculateUrlsWithMetadataToChange = (
                                 size: resourceMenuItem.contentSize,
                             });
                             urlsAndSizesToDownload.push({
-                                url: resourceMetadataApiFullPath(resourceMenuItem),
+                                url: resourceMetadataApiFullUrl(resourceMenuItem),
                                 mediaType: MediaType.Image,
                                 contentId: resourceMenuItem.contentId,
                                 metadataOnly: true,
@@ -163,7 +180,7 @@ export const calculateUrlsWithMetadataToChange = (
                                 size: METADATA_ONLY_FAKE_FILE_SIZE,
                             });
                             urlsAndSizesToDownload.push({
-                                url: resourceMetadataApiFullPath(resourceMenuItem),
+                                url: resourceMetadataApiFullUrl(resourceMenuItem),
                                 mediaType: MediaType.Video,
                                 contentId: resourceMenuItem.contentId,
                                 metadataOnly: true,
@@ -173,7 +190,7 @@ export const calculateUrlsWithMetadataToChange = (
                     }
                 } else if (chapter.deleteResources) {
                     urlsToDelete.push(resourceContentApiFullUrl(resourceMenuItem));
-                    urlsToDelete.push(resourceMetadataApiFullPath(resourceMenuItem));
+                    urlsToDelete.push(resourceMetadataApiFullUrl(resourceMenuItem));
                     urlsToDelete.push(resourceThumbnailApiFullUrl(resourceMenuItem));
                 }
             });

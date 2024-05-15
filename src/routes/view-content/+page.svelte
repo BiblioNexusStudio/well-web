@@ -28,7 +28,7 @@
     } from './data-fetchers';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible';
-    import { cacheBiblesForBibleSection } from '$lib/utils/data-handlers/bible';
+    import { cacheBibleMetadata, cacheBiblesForBibleSection } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
@@ -128,8 +128,9 @@
         }
     }
 
-    async function handlePreferredBiblesChange(_: number[]) {
+    async function handlePreferredBiblesChange(preferredBibleIds: number[]) {
         fetchBibles($selectedBibleSection);
+        cacheBibleMetadata(preferredBibleIds);
     }
 
     async function fetchBibles(bibleSection: BibleSection | null) {

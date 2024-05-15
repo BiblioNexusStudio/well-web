@@ -1,6 +1,5 @@
-import { env } from '$env/dynamic/public';
 import { resourceContentForBookAndChapter } from '$lib/api-endpoints';
-import { fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
+import { apiUrl, fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
 import { log } from '$lib/logger';
 import { isOnline } from '$lib/stores/is-online.store';
 import { currentLanguageInfo } from '$lib/stores/language.store';
@@ -23,24 +22,32 @@ export function resourceContentApiPath(resourceContent: ResourceContentInfo | Fi
     const mediaType = 'mediaType' in resourceContent ? resourceContent.mediaType : resourceContent.mediaTypeName;
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
     if (mediaType === MediaType.Audio) {
-        return `resources/${id}/content?audioType=${audioFileTypeForBrowser()}`;
+        return `/resources/${id}/content?audioType=${audioFileTypeForBrowser()}`;
     } else {
-        return `resources/${id}/content`;
+        return `/resources/${id}/content`;
     }
 }
 
 export function resourceContentApiFullUrl(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
-    return env.PUBLIC_AQUIFER_API_URL + resourceContentApiPath(resourceContent);
+    return apiUrl(resourceContentApiPath(resourceContent));
 }
 
 export function resourceThumbnailApiFullUrl(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
-    return env.PUBLIC_AQUIFER_API_URL + `resources/${id}/thumbnail`;
+    return apiUrl(`/resources/${id}/thumbnail`);
 }
 
-export function resourceMetadataApiFullPath(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
+export function resourceMetadataApiFullUrl(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
-    return env.PUBLIC_AQUIFER_API_URL + `resources/${id}/metadata`;
+    return apiUrl(`/resources/${id}/metadata`);
+}
+
+export function resourceContentsForBookAndChapterFullUrl(
+    languageId: number | undefined,
+    bookCode: string,
+    chapter: string
+) {
+    return apiUrl(resourceContentForBookAndChapter(languageId, bookCode, parseInt(chapter))[0]);
 }
 
 interface ResourceContentInfoWithOccurrences extends ResourceContentInfo {
@@ -141,7 +148,7 @@ export async function fetchMetadataForResourceContent(
 ): Promise<ResourceContentMetadata | null> {
     try {
         return (await fetchFromCacheOrCdn(
-            resourceMetadataApiFullPath(resourceContent)
+            resourceMetadataApiFullUrl(resourceContent)
         )) as ResourceContentMetadata | null;
     } catch (error) {
         // metadata not cached

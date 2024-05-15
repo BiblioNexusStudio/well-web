@@ -1,7 +1,14 @@
 import { currentLanguageInfo, lookupLanguageInfoByCode } from '$lib/stores/language.store';
 import type { UrlWithMetadata } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '../browser';
-import { cacheManyFromCdnWithProgress, fetchFromCacheOrApi, isCachedFromApi, isCachedFromCdn } from '$lib/data-cache';
+import {
+    METADATA_ONLY_FAKE_FILE_SIZE,
+    apiUrl,
+    cacheManyFromCdnWithProgress,
+    fetchFromCacheOrApi,
+    isCachedFromApi,
+    isCachedFromCdn,
+} from '$lib/data-cache';
 import { asyncEvery, asyncFilter, asyncSome } from '../async-array';
 import { range } from '../array';
 import { updateRow } from '../data-storage';
@@ -18,7 +25,6 @@ import {
     biblesForLanguageEndpoint,
     bookOfBibleEndpoint,
 } from '$lib/api-endpoints';
-import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 
 type BibleRecordingPassage = { url: string };
 type BibleRecordingVersion = {
@@ -53,18 +59,21 @@ function bibleUrlsWithMetadataForBookAndChapters(
 
 // returns a list of localized Bible books and for each chapter the corresponding chapter data
 // when offline, returns only the Bible books that are cached
-export async function bibleChaptersByBookAvailable() {
-    const online = get(isOnline);
-    const preferredIds = get(preferredBibleIds);
+export async function bibleChaptersByBookAvailable(online: boolean, preferredBibleIds: number[]) {
     const allBibles = await fetchAllBibles();
     const languageId = get(currentLanguageInfo)?.id;
-    const primaryBibleId = allBibles.find((b) => preferredIds.includes(b.id) && b.languageId === languageId);
-    const bibleBookandChapterInfo = await getBibleBooksByBibleId(primaryBibleId?.id ?? 1);
+    const currentLanguagePreferredBibleId = allBibles.find(
+        (b) => preferredBibleIds.includes(b.id) && b.languageId === languageId
+    );
+    const preferredBibleId = allBibles.find((b) => preferredBibleIds.includes(b.id));
+    const bibleBookandChapterInfo = await getBibleBooksByBibleId(
+        currentLanguagePreferredBibleId?.id ?? preferredBibleId?.id ?? 1
+    );
     if (online) {
         return bibleBookandChapterInfo;
     }
     return await asyncFilter(bibleBookandChapterInfo, async (bookAndChapterInfo) => {
-        return await asyncSome(preferredIds, async (bibleId) => {
+        return await asyncSome(preferredBibleIds, async (bibleId) => {
             if (await isCachedFromApi(bookOfBibleEndpoint(bibleId, bookAndChapterInfo.code)[0])) {
                 const textUrl = (
                     (await fetchFromCacheOrApi(
@@ -76,6 +85,33 @@ export async function bibleChaptersByBookAvailable() {
             return false;
         });
     });
+}
+
+// returns all Bibles that are available
+// when offline, returns only Bibles that have at least one book cached
+export async function availableBibles(online: boolean) {
+    const allBibles = await fetchAllBibles();
+    if (online) {
+        return allBibles;
+    } else {
+        return await asyncFilter(allBibles, async (bible) => {
+            if (await isCachedFromApi(bibleBooksByBibleId(bible.id)[0])) {
+                const bibleBookandChapterInfo = await getBibleBooksByBibleId(bible.id);
+                return await asyncSome(bibleBookandChapterInfo, async (bookAndChapterInfo) => {
+                    if (await isCachedFromApi(bookOfBibleEndpoint(bible.id, bookAndChapterInfo.code)[0])) {
+                        const textUrl = (
+                            (await fetchFromCacheOrApi(
+                                ...bookOfBibleEndpoint(bible.id, bookAndChapterInfo.code)
+                            )) as BibleBookContentDetails
+                        ).textUrl;
+                        return await isCachedFromCdn(textUrl);
+                    }
+                    return false;
+                });
+            }
+            return false;
+        });
+    }
 }
 
 export async function fetchAllBibles(): Promise<BaseBible[]> {
@@ -123,6 +159,15 @@ export async function cacheBiblesForBibleSection(
             range(bibleSection.startChapter, bibleSection.endChapter)
         )
     );
+    await cacheManyFromCdnWithProgress(urls);
+}
+
+export async function cacheBibleMetadata(bibleIds: number[]) {
+    const urls = bibleIds.map((bibleId) => ({
+        url: apiUrl(bibleBooksByBibleId(bibleId)[0]),
+        size: METADATA_ONLY_FAKE_FILE_SIZE,
+        mediaType: MediaType.Text,
+    }));
     await cacheManyFromCdnWithProgress(urls);
 }
 
@@ -187,6 +232,10 @@ export async function getBibleBookCodesToName(languageId: number | null = null, 
 
 async function getBibleBooksByBibleId(bibleId: number) {
     return (await fetchFromCacheOrApi(...bibleBooksByBibleId(bibleId))) as Promise<ApiBibleBook[]>;
+}
+
+export function bibleBooksByBibleIdFullUrl(bibleId: number) {
+    return apiUrl(bibleBooksByBibleId(bibleId)[0]);
 }
 
 export async function saveBibleRecording(

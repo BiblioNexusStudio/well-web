@@ -26,6 +26,7 @@ export const bibleDataForResourcesMenu = derived(biblesModuleData, (bibleData) =
         selected: index === 0 ? true : false,
         display: index === 0 ? true : false,
         isBible: true,
+        parentResource: null,
     }));
 });
 export const selectedBookCode = writable<string | null>(null);
@@ -37,6 +38,7 @@ export const biblesModuleBook = writable<BiblesModuleBook>({
     chapterCount: 0,
     textUrl: '',
     isTextUrlCached: false,
+    bibleId: null,
     audioUrls: {
         chapters: [] as FrontendAudioChapter[],
     },
