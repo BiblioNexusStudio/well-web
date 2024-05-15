@@ -92,7 +92,6 @@ export type ApiBibleBook = {
 
 export type FrontEndVerseForSelectionPane = {
     number: number;
-    selected: boolean;
     chapterNumber: number;
 };
 
