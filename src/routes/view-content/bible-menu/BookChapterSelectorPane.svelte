@@ -19,6 +19,8 @@
     let currentChapter: ApiBibleChapter | null = null;
     let buttons: HTMLButtonElement[] = [];
     let scrollBehaviorSmooth = false;
+    let firstSelectedVerse: FrontEndVerseForSelectionPane | null = null;
+    let lastSelectedVerse: FrontEndVerseForSelectionPane | null = null;
 
     $: availableBooksPromise = fetchAvailableBooks($currentLanguageInfo);
 
@@ -71,21 +73,13 @@
     }
 
     function handleVerseSelection(verse: FrontEndVerseForSelectionPane) {
-        const selectedVerses = currentBook.chapters
-            .flatMap((c) => c.verseState.filter((v) => v.selected))
-            .sort((a, b) => {
-                if (a.chapterNumber === b.chapterNumber) {
-                    return a.number - b.number;
-                }
-                return a.chapterNumber - b.chapterNumber;
-            });
-
-        if (selectedVerses.length === 0 || (selectedVerses.length === 1 && selectedVerses[0] === verse)) {
-            const newChapters = currentBook.chapters.map((chapter) => {
+        if (!firstSelectedVerse) {
+            firstSelectedVerse = { ...verse, selected: true };
+            currentBook.chapters = currentBook.chapters.map((chapter) => {
                 if (chapter.number === verse.chapterNumber) {
                     chapter.verseState = chapter.verseState.map((v) => {
-                        if (v.number === verse.number && v.chapterNumber === verse.chapterNumber) {
-                            return { ...v, selected: !v.selected };
+                        if (v.number === verse.number) {
+                            return { ...v, selected: true };
                         }
                         return v;
                     });
@@ -93,44 +87,81 @@
                 return chapter;
             });
 
-            currentBook = { ...currentBook, chapters: newChapters };
-            // needed to rerender the view
-            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter?.number)!;
+            currentChapter = currentBook.chapters.find((c) => c.number === verse.chapterNumber) || null;
             return;
         }
 
-        if (selectedVerses.length > 0) {
-            const firstSelectedVerse = selectedVerses[0]!;
+        if (
+            (!lastSelectedVerse && firstSelectedVerse.chapterNumber < verse.chapterNumber) ||
+            (!lastSelectedVerse &&
+                firstSelectedVerse.chapterNumber === verse.chapterNumber &&
+                firstSelectedVerse.number < verse.number)
+        ) {
+            lastSelectedVerse = { ...verse, selected: true };
+            currentBook.chapters = currentBook.chapters.map((chapter) => {
+                if (chapter.number === verse.chapterNumber) {
+                    chapter.verseState = chapter.verseState.map((v) => {
+                        if (v.number === verse.number) {
+                            return { ...v, selected: true };
+                        }
+                        return v;
+                    });
+                }
+                return chapter;
+            });
 
-            if (selectedVerses.length === 1) {
-                currentBook.chapters = currentBook.chapters.map((chapter) => {
-                    if (chapter.number === verse.chapterNumber) {
-                        chapter.verseState = chapter.verseState.map((v) => {
-                            if (v.number >= firstSelectedVerse.number && v.number <= verse.number) {
-                                return { ...v, selected: true };
-                            }
-                            return v;
-                        });
-                    }
-                    return chapter;
-                });
-            } else {
-                const lastSelectedVerse = selectedVerses[selectedVerses.length - 1]!;
-                currentBook.chapters = currentBook.chapters.map((chapter) => {
-                    if (chapter.number === verse.chapterNumber) {
-                        chapter.verseState = chapter.verseState.map((v) => {
-                            if (v.number >= firstSelectedVerse.number && v.number <= lastSelectedVerse.number) {
-                                return { ...v, selected: false };
-                            }
-                            return v;
-                        });
-                    }
-                    return chapter;
-                });
-            }
-
-            currentChapter = currentBook.chapters.find((c) => c.number === currentChapter?.number)!;
+            currentChapter = currentBook.chapters.find((c) => c.number === verse.chapterNumber) || null;
+            return;
         }
+
+        if (firstSelectedVerse && lastSelectedVerse) {
+            firstSelectedVerse = null;
+            lastSelectedVerse = null;
+            currentBook.chapters = currentBook.chapters.map((chapter) => {
+                chapter.verseState = chapter.verseState.map((v) => {
+                    return { ...v, selected: false };
+                });
+                return chapter;
+            });
+
+            currentChapter = currentBook.chapters.find((c) => c.number === verse.chapterNumber) || null;
+            return;
+        }
+    }
+
+    function isVerseInSelectedRange(verse: FrontEndVerseForSelectionPane) {
+        if (verse.selected) {
+            return true;
+        }
+
+        if (!firstSelectedVerse || !lastSelectedVerse) {
+            return false;
+        }
+
+        if (firstSelectedVerse.chapterNumber === lastSelectedVerse.chapterNumber) {
+            return (
+                verse.chapterNumber === firstSelectedVerse.chapterNumber &&
+                verse.number >= firstSelectedVerse.number &&
+                verse.number <= lastSelectedVerse.number
+            );
+        }
+
+        if (verse.chapterNumber === firstSelectedVerse.chapterNumber) {
+            return verse.number >= firstSelectedVerse.number;
+        }
+
+        if (verse.chapterNumber === lastSelectedVerse.chapterNumber) {
+            return verse.number <= lastSelectedVerse.number;
+        }
+
+        if (
+            verse.chapterNumber > firstSelectedVerse.chapterNumber &&
+            verse.chapterNumber < lastSelectedVerse.chapterNumber
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     function handleBack() {
@@ -151,10 +182,18 @@
     async function handleVerseGoButton() {
         $selectedBibleSection = {
             bookCode: currentBook.code,
-            startChapter: forceToInt(firstSelectedVerse.chapterNumber),
-            startVerse: forceToInt(firstSelectedVerse.number),
-            endChapter: forceToInt(lastSelectedVerse.chapterNumber),
-            endVerse: forceToInt(lastSelectedVerse.number),
+            startChapter: firstSelectedVerse ? forceToInt(firstSelectedVerse.chapterNumber) : 0,
+            startVerse: firstSelectedVerse ? forceToInt(firstSelectedVerse.number) : 0,
+            endChapter: lastSelectedVerse
+                ? forceToInt(lastSelectedVerse.chapterNumber)
+                : firstSelectedVerse
+                ? forceToInt(firstSelectedVerse.chapterNumber)
+                : 0,
+            endVerse: lastSelectedVerse
+                ? forceToInt(lastSelectedVerse.number)
+                : firstSelectedVerse
+                ? forceToInt(firstSelectedVerse.number)
+                : 0,
         };
         isShowing = false;
         closeAllPassagePageMenus();
@@ -210,20 +249,12 @@
 
     $: verseGoButtonDisabled = currentBook?.chapters?.flatMap((c) => c?.verseState).every((v) => !v?.selected);
     $: currentChapterSelected = currentChapter?.number && currentChapter?.number > 0;
-    $: firstSelectedVerse = currentBook?.chapters?.flatMap((c) => c.verseState)?.find((v) => v.selected) || {
-        chapterNumber: '',
-        number: '',
-    };
-    $: lastSelectedVerse = currentBook?.chapters
-        ?.flatMap((c) => c.verseState)
-        ?.reverse()
-        ?.find((v) => v.selected) || { chapterNumber: '', number: '' };
     $: verseTitle = formatBibleVerseRange(
         currentBook?.localizedName,
-        firstSelectedVerse.chapterNumber,
-        firstSelectedVerse.number,
-        lastSelectedVerse.chapterNumber,
-        lastSelectedVerse.number
+        firstSelectedVerse?.chapterNumber || '',
+        firstSelectedVerse?.number || '',
+        lastSelectedVerse?.chapterNumber || '',
+        lastSelectedVerse?.number || ''
     );
 </script>
 
@@ -309,9 +340,10 @@
                             <div class="grid w-full grid-cols-5 gap-4">
                                 {#if currentChapter && currentChapter.verseState}
                                     {#each currentChapter.verseState as verse}
+                                        {@const isSelected = isVerseInSelectedRange(verse)}
                                         <button
                                             on:click={() => handleVerseSelection(verse)}
-                                            class="h-14 w-14 rounded-full {verse.selected && 'bg-blue-500 text-white'}"
+                                            class="h-14 w-14 rounded-full {isSelected && 'bg-blue-500 text-white'}"
                                         >
                                             {verse.number}
                                         </button>
