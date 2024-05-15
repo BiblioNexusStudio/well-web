@@ -1,10 +1,14 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { bibles } from '$lib/stores/bibles.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
+    import { isOnline } from '$lib/stores/is-online.store';
+    import { availableBibles } from '$lib/utils/data-handlers/bible';
+    import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
 
     export let showBookChapterVerseMenu: boolean;
+
+    $: availableBiblesPromise = availableBibles($isOnline);
 
     function openBookChapterVerseMenu() {
         showBookChapterVerseMenu = true;
@@ -32,28 +36,33 @@
             <span class="z-10 text-sm text-white">{$translate('page.bibleMenu.selectBible.value')}</span>
         </div>
     </div>
-    <div class="flex w-full flex-col items-center overflow-y-scroll">
-        {#each $bibles as bible}
-            {@const isPreferredBible = $preferredBibleIds.includes(bible.id)}
-            <button
-                on:click={() => updatePreferredBibleIds(bible.id, isPreferredBible)}
-                class="my-2 flex w-11/12 flex-wrap rounded-xl p-4 {isPreferredBible
-                    ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
-                    : 'border'}"
-            >
-                <span class="text-sm">{bible.name} ({bible.abbreviation})</span>
-                <span class="mx-1 text-sm">-</span>
-                <span class="text-sm text-[#98A2B3]">{lookupLanguageInfoById(bible.languageId)?.iso6393Code}</span>
-            </button>
-        {/each}
-        {#if $bibles.length === 0}
-            <h3 class="my-2">{$translate('page.bibleMenu.noBibles.value')}</h3>
-        {/if}
-    </div>
+    {#await availableBiblesPromise}
+        <FullPageSpinner />
+    {:then bibles}
+        <div class="flex w-full flex-col items-center overflow-y-scroll">
+            {#each bibles as bible}
+                {@const isPreferredBible = $preferredBibleIds.includes(bible.id)}
+                <button
+                    on:click={() => updatePreferredBibleIds(bible.id, isPreferredBible)}
+                    class="my-2 flex w-11/12 flex-wrap rounded-xl p-4 {isPreferredBible
+                        ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
+                        : 'border'}"
+                >
+                    <span class="text-sm">{bible.name} ({bible.abbreviation})</span>
+                    <span class="mx-1 text-sm">-</span>
+                    <span class="text-sm text-[#98A2B3]">{lookupLanguageInfoById(bible.languageId)?.iso6393Code}</span>
+                </button>
+            {:else}
+                <h3 class="my-2">{$translate('page.bibleMenu.noBibles.value')}</h3>
+            {/each}
+        </div>
 
-    <div class="mb-24 flex flex-grow items-end px-4">
-        <button on:click={openBookChapterVerseMenu} class="btn btn-primary w-full"
-            >{$translate('page.bibleMenu.goToPassage.value')}</button
-        >
-    </div>
+        <div class="mb-24 flex flex-grow items-end px-4">
+            <button
+                disabled={$preferredBibleIds.length === 0}
+                on:click={openBookChapterVerseMenu}
+                class="btn btn-primary w-full">{$translate('page.bibleMenu.goToPassage.value')}</button
+            >
+        </div>
+    {/await}
 </div>

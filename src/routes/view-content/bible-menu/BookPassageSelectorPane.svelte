@@ -12,6 +12,7 @@
     import { currentGuide } from '$lib/stores/parent-resource.store';
     import type { ApiParentResource } from '$lib/types/resource';
     import type { BasePassagesByBook } from '$lib/types/passage';
+    import { isOnline } from '$lib/stores/is-online.store';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -38,9 +39,9 @@
         closeAllPassagePageMenus();
     }
 
-    $: availablePassagesPromise = fetchAvailablePassages($currentGuide);
+    $: availablePassagesPromise = fetchAvailablePassages($currentGuide, $isOnline);
 
-    async function fetchAvailablePassages(guide: ApiParentResource | undefined) {
+    async function fetchAvailablePassages(guide: ApiParentResource | undefined, _online: boolean) {
         if (guide) {
             availablePassagesByBook = await passagesByBookAvailableForGuide(guide.shortName);
         } else {
@@ -55,6 +56,7 @@
     onMount(async () => {
         bookPassageSelectorPane = new CupertinoPane('#book-passage-selector-pane', {
             backdrop: true,
+            simulateTouch: false, // prevent weirdness when using mouse
             topperOverflow: true,
             initialBreak: 'top',
             events: {

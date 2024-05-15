@@ -17,11 +17,14 @@
     import { buildRowData } from '$lib/utils/file-manager';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/language.store';
-    import { ParentResourceName } from '$lib/types/resource';
+    import { ParentResourceName, ParentResourceType, PredeterminedPassageGuides } from '$lib/types/resource';
     import Image from '$lib/icons/Image.svelte';
     import ImageAndVideo from '$lib/icons/ImageAndVideo.svelte';
     import Video from '$lib/icons/Video.svelte';
-    import { passagesByLanguageAndParentResourceEndpoint } from '$lib/api-endpoints';
+    import {
+        booksAndChaptersByLanguageAndParentResourceEndpoint,
+        passagesByLanguageAndParentResourceEndpoint,
+    } from '$lib/api-endpoints';
 
     let allChaptersSelected = false;
     let allChaptersCached = false;
@@ -32,14 +35,43 @@
     $: addAllUrlsCachedProperty($biblesModuleBook);
     $: textUrlIsCached = $biblesModuleBook.isTextUrlCached;
 
-    async function addAdditionalResourcesApiModule(_resourcesApiModule: ResourcesApiModule) {
-        if ($resourcesMenu.some((resource) => resource.selected && resource.value === ParentResourceName.CBBTER)) {
-            await fetchFromCacheOrApi(
-                ...passagesByLanguageAndParentResourceEndpoint($currentLanguageInfo?.id, ParentResourceName.CBBTER)
-            );
-        }
+    async function addAdditionalResourcesApiModule(resourcesApiModule: ResourcesApiModule) {
+        resourcesApiModule.chapters.forEach((chapter) => {
+            if (chapter.contents.length > 0 && chapter.chapterNumber) {
+                const chapterInfoExists = !!$biblesModuleBook.audioUrls?.chapters[chapter.chapterNumber - 1];
+                if (chapterInfoExists) {
+                    if ($biblesModuleBook.audioUrls?.chapters[chapter.chapterNumber - 1]) {
+                        $biblesModuleBook.audioUrls.chapters[chapter.chapterNumber - 1]!.resourceMenuItems =
+                            chapter.contents;
+                    }
+                }
+            }
+        });
 
-        // add the /resource/content/by-verse URLs to the list to cache
+        await Promise.all([
+            $resourcesMenu
+                .filter(
+                    (resource) =>
+                        resource.selected && resource.parentResource?.resourceType === ParentResourceType.Guide
+                )
+                .map((resource) => {
+                    if (PredeterminedPassageGuides.includes(resource.value as ParentResourceName)) {
+                        return fetchFromCacheOrApi(
+                            ...passagesByLanguageAndParentResourceEndpoint(
+                                $currentLanguageInfo?.id,
+                                resource.value as ParentResourceName
+                            )
+                        );
+                    } else {
+                        return fetchFromCacheOrApi(
+                            ...booksAndChaptersByLanguageAndParentResourceEndpoint(
+                                $currentLanguageInfo?.id,
+                                resource.value as ParentResourceName
+                            )
+                        );
+                    }
+                }),
+        ]);
     }
 
     function addAllUrlsCachedProperty(biblesModuleBook: BiblesModuleBook) {

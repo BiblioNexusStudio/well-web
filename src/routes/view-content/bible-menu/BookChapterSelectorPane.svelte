@@ -11,6 +11,8 @@
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import type { Language } from '$lib/types/file-manager';
+    import { isOnline } from '$lib/stores/is-online.store';
+    import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -22,10 +24,14 @@
     let firstSelectedVerse: FrontEndVerseForSelectionPane | null = null;
     let lastSelectedVerse: FrontEndVerseForSelectionPane | null = null;
 
-    $: availableBooksPromise = fetchAvailableBooks($currentLanguageInfo);
+    $: availableBooksPromise = fetchAvailableBooks($currentLanguageInfo, $isOnline, $preferredBibleIds);
 
-    async function fetchAvailableBooks(_currentLanguageInfo: Language | undefined) {
-        return bibleChaptersByBookAvailable();
+    async function fetchAvailableBooks(
+        _currentLanguageInfo: Language | undefined,
+        online: boolean,
+        preferredBibleIds: number[]
+    ) {
+        return bibleChaptersByBookAvailable(online, preferredBibleIds);
     }
 
     let steps = {
@@ -222,6 +228,7 @@
     onMount(async () => {
         bookChapterSelectorPane = new CupertinoPane('#book-chapter-verse-selector-pane', {
             backdrop: true,
+            simulateTouch: false, // prevent weirdness when using mouse
             topperOverflow: false,
             initialBreak: 'top',
             events: {

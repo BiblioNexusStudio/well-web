@@ -28,7 +28,7 @@ interface BatchedUrl {
 // after the full response has been downloaded. Without these arrays and their usages, isCachedFromApi and
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const partiallyDownloadedCdnUrls: string[] = [];
-const partiallyDownloadedApiPaths: string[] = [];
+const partiallyDownloadedApiUrls: string[] = [];
 const apiContentRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/content/;
 const apiMetadataRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/metadata/;
 const apiThumbnailRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/thumbnail/;
@@ -36,11 +36,11 @@ const cdnRegex = /https:\/\/cdn\.aquifer\.bible.*/;
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number) {
+    const url = apiUrl(path);
     if (!(await isCachedFromApi(path))) {
-        partiallyDownloadedApiPaths.push(path);
+        partiallyDownloadedApiUrls.push(url);
     }
     try {
-        const url = apiUrl(path).replace(/\/$/, '');
         const response = await fetch(cachedOrRealUrl(url), {
             // Set this header for the service worker layer to use. It will get stripped off before the request is
             // actually made against the API.
@@ -49,10 +49,10 @@ export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number
         if (response.status >= 400) {
             throw new Error('Bad HTTP response');
         }
-        apiCachedUrls.delete(path);
+        apiCachedUrls.delete(url);
         return await response.json();
     } finally {
-        removeFromArray(partiallyDownloadedApiPaths, path);
+        removeFromArray(partiallyDownloadedApiUrls, url);
     }
 }
 
@@ -73,12 +73,13 @@ export async function fetchFromCacheOrCdn(url: Url, type: 'blob' | 'json' = 'jso
 }
 
 export async function removeFromApiCache(path: string) {
+    const url = apiUrl(path);
     if (!('serviceWorker' in navigator)) {
         return;
     }
     const cache = await caches.open('aquifer-api');
-    await cache.delete(apiUrl(path));
-    apiCachedUrls.delete(path);
+    await cache.delete(url);
+    apiCachedUrls.delete(url);
 }
 
 export async function removeFromCdnCache(url: Url) {
@@ -197,7 +198,7 @@ export async function cacheManyFromCdnWithProgress(
         if (cdnUrl) {
             partiallyDownloadedCdnUrls.push(url);
         } else {
-            partiallyDownloadedApiPaths.push(url);
+            partiallyDownloadedApiUrls.push(url);
         }
 
         try {
@@ -244,7 +245,7 @@ export async function cacheManyFromCdnWithProgress(
             if (cdnUrl) {
                 removeFromArray(partiallyDownloadedCdnUrls, url);
             } else {
-                removeFromArray(partiallyDownloadedApiPaths, url);
+                removeFromArray(partiallyDownloadedApiUrls, url);
             }
         }
     };
@@ -374,27 +375,28 @@ export async function isCachedFromCdn(url: Url) {
 
 // Checks if a fully downloaded cache entry exists for the API path.
 export async function isCachedFromApi(path: string) {
-    if (apiCachedUrls.has(path)) {
-        return apiCachedUrls.get(path);
+    const url = apiUrl(path);
+    if (apiCachedUrls.has(url)) {
+        return apiCachedUrls.get(url);
     }
-    if (partiallyDownloadedApiPaths.includes(path)) {
+    if (partiallyDownloadedApiUrls.includes(url)) {
         return false;
     }
-    if (apiUrl(path) in staticUrlsMap) {
+    if (url in staticUrlsMap) {
         return true;
     }
     if (!('serviceWorker' in navigator)) {
         return false;
     }
     const cache = await caches.open('aquifer-api');
-    const response = await cache.match(apiUrl(path));
+    const response = await cache.match(url);
     const isCached = response != null;
-    apiCachedUrls.set(path, isCached);
+    apiCachedUrls.set(url, isCached);
     return isCached;
 }
 
-function apiUrl(path: string) {
-    return config.PUBLIC_AQUIFER_API_URL + (path.startsWith('/') ? path.slice(1) : path);
+export function apiUrl(path: string) {
+    return (config.PUBLIC_AQUIFER_API_URL + (path.startsWith('/') ? path.slice(1) : path)).replace(/\/$/, '');
 }
 
 async function cachedCdnContentSize(url: Url, cache: Cache | null = null) {
