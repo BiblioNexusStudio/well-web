@@ -1,9 +1,10 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { bibles } from '$lib/stores/bibles.store';
     import { lookupLanguageInfoById } from '$lib/stores/language.store';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
+    import type { FrontendBibleBook } from '$lib/types/bible';
 
+    export let bibles: FrontendBibleBook[] = [];
     export let showBookChapterVerseMenu: boolean;
 
     function openBookChapterVerseMenu() {
@@ -33,7 +34,7 @@
         </div>
     </div>
     <div class="flex w-full flex-col items-center overflow-y-scroll">
-        {#each $bibles as bible}
+        {#each bibles as bible}
             {@const isPreferredBible = $preferredBibleIds.includes(bible.id)}
             <button
                 on:click={() => updatePreferredBibleIds(bible.id, isPreferredBible)}
@@ -45,10 +46,9 @@
                 <span class="mx-1 text-sm">-</span>
                 <span class="text-sm text-[#98A2B3]">{lookupLanguageInfoById(bible.languageId)?.iso6393Code}</span>
             </button>
-        {/each}
-        {#if $bibles.length === 0}
+        {:else}
             <h3 class="my-2">{$translate('page.bibleMenu.noBibles.value')}</h3>
-        {/if}
+        {/each}
     </div>
 
     <div class="mb-24 flex flex-grow items-end px-4">

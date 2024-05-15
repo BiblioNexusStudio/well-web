@@ -148,6 +148,7 @@ export interface BiblesModuleBook {
     chapterCount: number;
     textUrl: string;
     isTextUrlCached?: boolean;
+    bibleId: number | null;
     audioUrls: {
         chapters: FrontendAudioChapter[];
     } | null;

@@ -438,7 +438,10 @@
         <LibraryMenu resources={resourceData?.additionalResources} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
-        <BibleMenu bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane} />
+        <BibleMenu
+            bibles={bibleData?.availableBibles ?? []}
+            bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
+        />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.settings}
         <SettingsMenu />

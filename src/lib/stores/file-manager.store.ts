@@ -38,6 +38,7 @@ export const biblesModuleBook = writable<BiblesModuleBook>({
     chapterCount: 0,
     textUrl: '',
     isTextUrlCached: false,
+    bibleId: null,
     audioUrls: {
         chapters: [] as FrontendAudioChapter[],
     },

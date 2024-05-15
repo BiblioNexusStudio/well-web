@@ -41,6 +41,7 @@
                     $biblesModuleBook = await addFrontEndDataToBiblesModuleBook(
                         await fetchFromCacheOrApi(...bookOfBibleEndpoint(firstBible.id, $selectedBookCode))
                     );
+                    $biblesModuleBook.bibleId = firstBible.id;
                     limitChaptersIfNecessary($selectedBookCode, biblesModuleBook);
                 }
 
