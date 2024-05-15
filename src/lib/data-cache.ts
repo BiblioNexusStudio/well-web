@@ -28,7 +28,7 @@ interface BatchedUrl {
 // after the full response has been downloaded. Without these arrays and their usages, isCachedFromApi and
 // isCachedFromCdn would return true even when the data isn't fully there yet.
 const partiallyDownloadedCdnUrls: string[] = [];
-const partiallyDownloadedApiPaths: string[] = [];
+const partiallyDownloadedApiUrls: string[] = [];
 const apiContentRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/content/;
 const apiMetadataRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/metadata/;
 const apiThumbnailRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/thumbnail/;
@@ -37,8 +37,8 @@ export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number) {
     const url = apiUrl(path);
-    if (!(await isCachedFromApi(url))) {
-        partiallyDownloadedApiPaths.push(url);
+    if (!(await isCachedFromApi(path))) {
+        partiallyDownloadedApiUrls.push(url);
     }
     try {
         const response = await fetch(cachedOrRealUrl(url), {
@@ -52,7 +52,7 @@ export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number
         apiCachedUrls.delete(url);
         return await response.json();
     } finally {
-        removeFromArray(partiallyDownloadedApiPaths, url);
+        removeFromArray(partiallyDownloadedApiUrls, url);
     }
 }
 
@@ -198,7 +198,7 @@ export async function cacheManyFromCdnWithProgress(
         if (cdnUrl) {
             partiallyDownloadedCdnUrls.push(url);
         } else {
-            partiallyDownloadedApiPaths.push(url);
+            partiallyDownloadedApiUrls.push(url);
         }
 
         try {
@@ -245,7 +245,7 @@ export async function cacheManyFromCdnWithProgress(
             if (cdnUrl) {
                 removeFromArray(partiallyDownloadedCdnUrls, url);
             } else {
-                removeFromArray(partiallyDownloadedApiPaths, url);
+                removeFromArray(partiallyDownloadedApiUrls, url);
             }
         }
     };
@@ -379,7 +379,7 @@ export async function isCachedFromApi(path: string) {
     if (apiCachedUrls.has(url)) {
         return apiCachedUrls.get(url);
     }
-    if (partiallyDownloadedApiPaths.includes(url)) {
+    if (partiallyDownloadedApiUrls.includes(url)) {
         return false;
     }
     if (url in staticUrlsMap) {
