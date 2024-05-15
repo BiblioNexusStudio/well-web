@@ -5,10 +5,10 @@ import { browser } from '$app/environment';
 
 export const parentResources = writable<ApiParentResource[]>([]);
 
-export const parentResourceNameToInfoMap = derived(parentResources, ($parentResources) =>
+export const parentResourceIdToInfoMap = derived(parentResources, ($parentResources) =>
     groupBy(
         $parentResources,
-        (p) => p.shortName,
+        (p) => p.id,
         (r) => r[0]
     )
 );
@@ -20,15 +20,18 @@ export const guideResources = derived(parentResources, ($parentResources) =>
 const bibleWellCurrentGuide = 'LOCAL_BIBLE_WELL_CURRENT_GUIDE';
 
 export const locallyStoredGuide = derived(guideResources, ($guideResources) => {
-    const localGuideShortName = browser && localStorage.getItem(bibleWellCurrentGuide);
-    return $guideResources.find((r) => r.shortName === localGuideShortName);
+    const localGuideId =
+        browser &&
+        localStorage.getItem(bibleWellCurrentGuide) &&
+        parseInt(localStorage.getItem(bibleWellCurrentGuide)!);
+    return $guideResources.find((r) => r.id === localGuideId);
 });
 
 export const currentGuide = writable<ApiParentResource | undefined>(undefined);
 
 export function setCurrentGuide(guide: ApiParentResource | undefined) {
     if (guide) {
-        browser && localStorage.setItem(bibleWellCurrentGuide, guide.shortName);
+        browser && localStorage.setItem(bibleWellCurrentGuide, guide.id.toString());
         currentGuide.set(guide);
     }
 }

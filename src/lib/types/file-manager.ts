@@ -1,5 +1,5 @@
 import type { DirectionCode } from '$lib/utils/language-utils';
-import type { ApiParentResource, MediaType, ParentResourceName } from './resource';
+import type { ApiParentResource, MediaType, ParentResourceId } from './resource';
 
 export type Url = string;
 export interface UrlWithMetadata {
@@ -23,7 +23,7 @@ export interface FileManagerResourceContentInfo {
     contentId: number;
     contentSize: number;
     mediaTypeName: MediaType;
-    parentResourceName: ParentResourceName;
+    parentResourceId: ParentResourceId;
     isResourceUrlCached?: boolean;
 }
 
@@ -118,7 +118,6 @@ export interface FooterInputs {
 
 export interface ResourcesMenuItem {
     name: string;
-    value: string;
     selected: boolean;
     isBible: boolean;
     display: boolean;
@@ -156,7 +155,7 @@ export interface BiblesModuleBook {
 
 export interface CbbterTextContent {
     contentId: number;
-    parentResourceName: string;
+    parentResourceId: string;
     mediaTypeName: string;
     contentSize: number;
 }

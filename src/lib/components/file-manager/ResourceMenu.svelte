@@ -32,7 +32,7 @@
             const queryParams = resourcesMenu
                 .map((resource) => {
                     if (resource.selected && !resource.isBible) {
-                        return `parentResourceNames=${resource.value}`;
+                        return `parentResourceIds=${resource.parentResource?.id}`;
                     } else {
                         return '';
                     }
@@ -54,7 +54,6 @@
             ...$bibleDataForResourcesMenu,
             ...(await parentResourcesForCurrentLanguage()).map((pr) => ({
                 name: pr.displayName,
-                value: pr.shortName,
                 selected: false,
                 isBible: false,
                 display: true,

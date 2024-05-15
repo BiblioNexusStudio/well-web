@@ -7,7 +7,6 @@ import type { FileManagerResourceContentInfo } from '$lib/types/file-manager';
 import type { BibleSection, WholeChapterBibleSection } from '$lib/types/bible';
 import {
     MediaType,
-    ParentResourceName,
     PredeterminedPassageGuides,
     type ResourceContentGroupedByVerses,
     type ResourceContentInfo,
@@ -117,7 +116,7 @@ export async function resourceContentsForBibleSection(
     // they only link to one verse. This would indicate it's the resource from the "other side" of the overlap.
     for (let i = resources.length - 1; i > 0; i--) {
         if (
-            PredeterminedPassageGuides.includes(resources[i]!.parentResource as ParentResourceName) &&
+            PredeterminedPassageGuides.includes(resources[i]!.parentResourceId) &&
             resources[i]!.occurrences === 1 &&
             !isForSingleVerse
         ) {

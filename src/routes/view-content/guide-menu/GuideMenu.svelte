@@ -3,7 +3,7 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
     import { setCurrentGuide, currentGuide } from '$lib/stores/parent-resource.store';
-    import type { ApiParentResource, ParentResourceName } from '$lib/types/resource';
+    import type { ApiParentResource, ParentResourceId } from '$lib/types/resource';
     import {
         guidesAvailableForBibleSection,
         guidesAvailableInCurrentLanguage,
@@ -49,7 +49,7 @@
 
         if (srvOnlySetting?.value === true) {
             return availableGuides.filter((guide) =>
-                srvOnlySetting.parentResources.includes(guide.shortName as ParentResourceName)
+                srvOnlySetting.parentResources.includes(guide.id as ParentResourceId)
             );
         }
 
@@ -83,7 +83,7 @@
                 </h3>
             {:else}
                 {#each availableGuides as guideResource}
-                    {@const isCurrentGuide = guideResource.shortName === $currentGuide?.shortName}
+                    {@const isCurrentGuide = guideResource.id === $currentGuide?.id}
                     <button
                         on:click={() => selectGuideAndHandleMenu(guideResource)}
                         class="my-2 flex w-11/12 rounded-xl p-4 {isCurrentGuide

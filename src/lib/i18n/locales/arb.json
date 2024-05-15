@@ -328,32 +328,6 @@
         }
     },
     "resources": {
-        "types": {
-            "uwTranslationWords": {
-                "value": "المصطلحات الرئيسية (unfoldingWord)"
-            },
-            "CBBTER": {
-                "value": "CBBT-ER"
-            },
-            "ubsImages": {
-                "value": "صور (UBS)"
-            },
-            "tyndaleBibleDictionary": {
-                "value": "قاموس الكتاب المقدس (Tyndale)"
-            },
-            "tyndaleStudyNotes": {
-                "value": "ملاحظات الدراسة (Tyndale)"
-            },
-            "biblicaBibleDictionary": {
-                "value": "قاموس الكتاب المقدس (Biblica)"
-            },
-            "biblicaStudyNotes": {
-                "value": "ملاحظات الدراسة (Biblica)"
-            },
-            "videoBibleDictionary": {
-                "value": "فيديوهات (قاموس الكتاب المقدس بالفيديو)"
-            }
-        },
         "cbbt-er": {
             "step1": {
                 "value": "السمع والقلب"

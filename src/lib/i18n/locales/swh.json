@@ -382,39 +382,6 @@
         }
     },
     "resources": {
-        "types": {
-            "uwTranslationWords": {
-                "value": "Muhimu ya Muda (unfoldingWord)"
-            },
-            "CBBTER": {
-                "value": "CBBT-ER",
-                "_context": "Mwongozo wa CBBT-ER kutoka SRV"
-            },
-            "ubsImages": {
-                "value": "Picha (UBS)",
-                "_context": "Picha kutoka Muungano wa Umoja wa Biblia"
-            },
-            "tyndaleBibleDictionary": {
-                "value": "Kamusi ya Biblia (Tyndale)",
-                "_context": "Kamusi ya Biblia ya Tyndale"
-            },
-            "tyndaleStudyNotes": {
-                "value": "Vidokezo vya Utafiti (Tyndale)",
-                "_context": "Vidokezo vya Utafiti wa Tyndale"
-            },
-            "biblicaBibleDictionary": {
-                "value": "Kamusi ya Biblia (Biblia)",
-                "_context": "Kamusi ya Biblia ya Biblia"
-            },
-            "biblicaStudyNotes": {
-                "value": "Vidokezo vya Utafiti (Biblia)",
-                "_context": "Vidokezo vya Utafiti wa Biblia"
-            },
-            "videoBibleDictionary": {
-                "value": "Video (Kamusi ya Biblia ya Video)",
-                "_context": "Video kutoka kwa Kamusi ya Biblia ya Video"
-            }
-        },
         "cbbt-er": {
             "step1": {
                 "value": "Hear and Heart",
