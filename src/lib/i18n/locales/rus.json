@@ -382,39 +382,6 @@
         }
     },
     "resources": {
-        "types": {
-            "uwTranslationWords": {
-                "value": "Ключевой Термин (unfoldingWord)"
-            },
-            "CBBTER": {
-                "value": "CBBT-ER",
-                "_context": "Руководство по CBBT-ER от SRV"
-            },
-            "ubsImages": {
-                "value": "Изображения (ОБО)",
-                "_context": "Изображения от Объединенного Библейского Общества"
-            },
-            "tyndaleBibleDictionary": {
-                "value": "Библейский словарь (Тиндейл)",
-                "_context": "Библейский словарь Тиндейла"
-            },
-            "tyndaleStudyNotes": {
-                "value": "Примечания для изучения (Тиндейл)",
-                "_context": "Примечания к изучению от Тиндейла"
-            },
-            "biblicaBibleDictionary": {
-                "value": "Библейский словарь (Библика)",
-                "_context": "Библейский словарь от Библики"
-            },
-            "biblicaStudyNotes": {
-                "value": "Примечания к изучению (Библика)",
-                "_context": "Примечания к изучению от Библики"
-            },
-            "videoBibleDictionary": {
-                "value": "Видео (Видео Библейский Словарь)",
-                "_context": "Видео из Видео Библейского Словаря"
-            }
-        },
         "cbbt-er": {
             "step1": {
                 "value": "Слушание и сердце",

@@ -1,4 +1,4 @@
-import type { ParentResourceName } from '$lib/types/resource';
+import type { ParentResourceId } from '$lib/types/resource';
 
 export type ResourcePaneTab = 'basic' | 'advanced' | 'searching';
 
@@ -10,12 +10,12 @@ export interface ImageOrVideoResource {
     url: string;
     duration?: number;
     thumbnailUrl?: string;
-    parentResourceName: ParentResourceName;
+    parentResourceId: ParentResourceId;
 }
 
 export interface TextResource {
     displayName: string | null;
     html: string;
     preview: string;
-    parentResourceName: ParentResourceName;
+    parentResourceId: ParentResourceId;
 }

@@ -1,4 +1,4 @@
-import type { ParentResourceName } from './types/resource';
+import type { ParentResourceId } from './types/resource';
 
 // In order to cache-bust an API endpoint when the response format is changed, increment the number after the endpoint path.
 // Note: This is a separate problem from breaking changes and only refers to non-breaking additive changes. It's probably
@@ -16,8 +16,7 @@ export function languagesEndpoint(): ApiStringAndCacheBustVersion {
 }
 
 export function parentResourcesEndpoint(languageId?: number): ApiStringAndCacheBustVersion {
-    const url = languageId ? `/resources/parent-resources?languageId=${languageId}` : '/resources/parent-resources';
-    return [url, 3];
+    return [`/resources/parent-resources?languageId=${languageId ?? 1}`, 3];
 }
 
 export function biblesEndpoint(): ApiStringAndCacheBustVersion {
@@ -37,24 +36,21 @@ export function resourcesByLanguageAndBookEndpoint(
     bookCode: string,
     queryParams: string[]
 ): ApiStringAndCacheBustVersion {
-    return [`/resources/language/${languageId}/book/${bookCode}?${queryParams.sort().join('&')}`, 1];
+    return [`/resources/language/${languageId}/book/${bookCode}?${queryParams.sort().join('&')}`, 2];
 }
 
 export function passagesByLanguageAndParentResourceEndpoint(
     languageId: number | undefined,
-    parentResourceName: ParentResourceName
+    parentResourceId: ParentResourceId | undefined
 ): ApiStringAndCacheBustVersion {
-    return [`/passages/language/${languageId}/resource/${parentResourceName}`, 1];
+    return [`/passages/language/${languageId}/resource/${parentResourceId}`, 2];
 }
 
 export function booksAndChaptersByLanguageAndParentResourceEndpoint(
     languageId: number | undefined,
-    parentResourceName: ParentResourceName
+    parentResourceId: ParentResourceId | undefined
 ): ApiStringAndCacheBustVersion {
-    return [
-        `/resources/content/available-chapters?languageId=${languageId}&parentResourceName=${parentResourceName}`,
-        1,
-    ];
+    return [`/resources/content/available-chapters?languageId=${languageId}&parentResourceId=${parentResourceId}`, 2];
 }
 
 export function resourceContentForBookAndChapter(

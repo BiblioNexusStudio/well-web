@@ -15,9 +15,9 @@
     import { convertToReadableSize } from '$lib/utils/file-manager';
     import type { ResourcesApiModule, BiblesModuleBook } from '$lib/types/file-manager';
     import { buildRowData } from '$lib/utils/file-manager';
-    import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { METADATA_ONLY_FAKE_FILE_SIZE, apiUrl, cacheManyFromCdnWithProgress } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/language.store';
-    import { ParentResourceName, ParentResourceType, PredeterminedPassageGuides } from '$lib/types/resource';
+    import { MediaType, ParentResourceType, PredeterminedPassageGuides } from '$lib/types/resource';
     import Image from '$lib/icons/Image.svelte';
     import ImageAndVideo from '$lib/icons/ImageAndVideo.svelte';
     import Video from '$lib/icons/Video.svelte';
@@ -48,30 +48,43 @@
             }
         });
 
-        await Promise.all([
-            $resourcesMenu
-                .filter(
-                    (resource) =>
-                        resource.selected && resource.parentResource?.resourceType === ParentResourceType.Guide
-                )
-                .map((resource) => {
-                    if (PredeterminedPassageGuides.includes(resource.value as ParentResourceName)) {
-                        return fetchFromCacheOrApi(
-                            ...passagesByLanguageAndParentResourceEndpoint(
+        await cacheGuidePassagesOrChapters();
+    }
+
+    // When the user selects a guide in the resource menu we want to cache the appropriate data.
+    // We'll use the list of passages or the list of chapters as a starting point for determining
+    // what can be shown when the guide is selected.
+    async function cacheGuidePassagesOrChapters() {
+        const urlsToCache = $resourcesMenu
+            .filter(
+                (resource) => resource.selected && resource.parentResource?.resourceType === ParentResourceType.Guide
+            )
+            .map((resource) => {
+                if (resource.parentResource?.id && PredeterminedPassageGuides.includes(resource.parentResource.id)) {
+                    return {
+                        url: apiUrl(
+                            passagesByLanguageAndParentResourceEndpoint(
                                 $currentLanguageInfo?.id,
-                                resource.value as ParentResourceName
-                            )
-                        );
-                    } else {
-                        return fetchFromCacheOrApi(
-                            ...booksAndChaptersByLanguageAndParentResourceEndpoint(
+                                resource.parentResource?.id
+                            )[0]
+                        ),
+                        size: METADATA_ONLY_FAKE_FILE_SIZE,
+                        mediaType: MediaType.Text,
+                    };
+                } else {
+                    return {
+                        url: apiUrl(
+                            booksAndChaptersByLanguageAndParentResourceEndpoint(
                                 $currentLanguageInfo?.id,
-                                resource.value as ParentResourceName
-                            )
-                        );
-                    }
-                }),
-        ]);
+                                resource.parentResource?.id
+                            )[0]
+                        ),
+                        size: METADATA_ONLY_FAKE_FILE_SIZE,
+                        mediaType: MediaType.Text,
+                    };
+                }
+            });
+        await cacheManyFromCdnWithProgress(urlsToCache);
     }
 
     function addAllUrlsCachedProperty(biblesModuleBook: BiblesModuleBook) {

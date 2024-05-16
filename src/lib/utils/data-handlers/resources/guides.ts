@@ -4,7 +4,7 @@ import { fetchFromCacheOrApi, isCachedFromApi } from '$lib/data-cache';
 import { asyncMap, asyncFilter, asyncSome } from '$lib/utils/async-array';
 import type { BasePassagesByBook } from '$lib/types/passage';
 import {
-    ParentResourceName,
+    ParentResourceId,
     ParentResourceType,
     type ApiParentResource,
     PredeterminedPassageGuides,
@@ -28,14 +28,14 @@ export async function guidesAvailableForBibleSection(
         resourceContentsForBibleSection(bibleSection),
         allGuidesForLanguage(),
     ]);
-    const availableGuideNames = [
+    const availableGuideIds = [
         ...new Set(
             allResourceContents
                 .filter((rc) => rc.resourceType === ParentResourceType.Guide)
-                .map((rc) => rc.parentResource as ParentResourceName)
+                .map((rc) => rc.parentResourceId)
         ),
     ];
-    return guides.filter((g) => availableGuideNames.includes(g.shortName));
+    return guides.filter((g) => availableGuideIds.includes(g.id));
 }
 
 // return the full list of guides available for the current language
@@ -48,13 +48,11 @@ export async function guidesAvailableInCurrentLanguage() {
         return guidesInCurrentLanguage;
     } else {
         return await asyncFilter(guidesInCurrentLanguage, async (guide) => {
-            if (PredeterminedPassageGuides.includes(guide.shortName)) {
-                return await isCachedFromApi(
-                    passagesByLanguageAndParentResourceEndpoint(languageId, guide.shortName)[0]
-                );
+            if (PredeterminedPassageGuides.includes(guide.id)) {
+                return await isCachedFromApi(passagesByLanguageAndParentResourceEndpoint(languageId, guide.id)[0]);
             } else {
                 return await isCachedFromApi(
-                    booksAndChaptersByLanguageAndParentResourceEndpoint(languageId, guide.shortName)[0]
+                    booksAndChaptersByLanguageAndParentResourceEndpoint(languageId, guide.id)[0]
                 );
             }
         });
@@ -78,7 +76,7 @@ async function allGuidesForLanguage() {
 // if offline, returns only chapters with cached content
 export async function bibleChaptersByBookAvailableForGuide(
     bibleBooks: ApiBibleBook[],
-    parentResource: ParentResourceName
+    parentResource: ParentResourceId
 ) {
     const languageId = get(currentLanguageInfo)?.id;
     const online = get(isOnline);
@@ -101,7 +99,7 @@ export async function bibleChaptersByBookAvailableForGuide(
                         startChapter: chapter.number,
                         endChapter: chapter.number,
                     });
-                    return guides.some((g) => g.shortName === parentResource);
+                    return guides.some((g) => g.id === parentResource);
                 });
             } else {
                 bibleBook.chapters = [];
@@ -113,7 +111,7 @@ export async function bibleChaptersByBookAvailableForGuide(
 
 // given a specific guide, returns the list of predetermined passages that the guide has
 // if offline, returns only passages with cached content
-export async function passagesByBookAvailableForGuide(parentResource: ParentResourceName) {
+export async function passagesByBookAvailableForGuide(parentResource: ParentResourceId) {
     const online = get(isOnline);
     const languageId = get(currentLanguageInfo)?.id;
     const allPassages = (await fetchFromCacheOrApi(
@@ -130,7 +128,7 @@ export async function passagesByBookAvailableForGuide(parentResource: ParentReso
                 );
                 if (!resourceListForChapterIsCached) return false;
                 const guides = await guidesAvailableForBibleSection(passage);
-                return guides.some((g) => g.shortName === parentResource);
+                return guides.some((g) => g.id === parentResource);
             });
             byBook.passages = availablePassages;
             return byBook;

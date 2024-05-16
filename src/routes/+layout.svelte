@@ -9,22 +9,34 @@
     import { isOnline, updateOnlineStatus } from '$lib/stores/is-online.store';
     import { featureFlags } from '$lib/stores/feature-flags.store';
     import DebugModal from '$lib/components/DebugModal.svelte';
-    import { clearEntireCache } from '$lib/data-cache';
+    import { clearEntireCache, fetchFromCacheOrApi } from '$lib/data-cache';
     import type { LayoutData } from './$types';
     import { _ as translate } from 'svelte-i18n';
-    import { currentLanguageDirection } from '$lib/stores/language.store';
+    import { currentLanguageDirection, currentLanguageInfo } from '$lib/stores/language.store';
     import { goto } from '$app/navigation';
+    import type { Language } from '$lib/types/file-manager';
+    import { parentResources } from '$lib/stores/parent-resource.store';
+    import { parentResourcesEndpoint } from '$lib/api-endpoints';
+    import { get } from 'svelte/store';
 
     $: {
         document.dir = $currentLanguageDirection;
     }
 
     $: log.pageView($page.route.id ?? '');
+    $: setParentResources($currentLanguageInfo);
 
     export let data: LayoutData;
 
     async function initialize() {
         window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
+    }
+
+    async function setParentResources(language: Language | undefined) {
+        const currentLanguageParentResources = await fetchFromCacheOrApi(...parentResourcesEndpoint(language?.id));
+        if (get(currentLanguageInfo)?.id === language?.id) {
+            parentResources.set(currentLanguageParentResources);
+        }
     }
 
     onMount(() => {

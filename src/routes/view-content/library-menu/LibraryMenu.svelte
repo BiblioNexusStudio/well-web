@@ -5,7 +5,7 @@
         ParentResourceType,
         type ApiParentResource,
         type ResourceContentInfo,
-        ParentResourceName,
+        ParentResourceId,
     } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
@@ -30,7 +30,7 @@
     import { isCachedFromCdn } from '$lib/data-cache';
     import { groupBy } from '$lib/utils/array';
     import { objectEntries } from '$lib/utils/typesafe-standard-lib';
-    import { parentResourceNameToInfoMap } from '$lib/stores/parent-resource.store';
+    import { parentResourceIdToInfoMap } from '$lib/stores/parent-resource.store';
     import AnyResourceSection from './AnyResourceSection.svelte';
     import SwishHeader from './SwishHeader.svelte';
 
@@ -54,7 +54,7 @@
         parentResource: ApiParentResource;
         resources: AnyResource[];
     }[] = [];
-    let groupedResources: Record<string, AnyResource[]> = {};
+    let groupedResources: Partial<Record<ParentResourceId, AnyResource[]>> = {};
 
     $: prepareResources(resources || []);
 
@@ -63,7 +63,7 @@
 
     let currentFullscreenMediaResourceIndex: number | null = null;
     let currentFullscreenTextResource: TextResource | null = null;
-    let currentFullscreenTextParentResourceName: string | null;
+    let currentFullscreenTextParentResourceId: ParentResourceId | null;
 
     let visibleSwish = true;
 
@@ -88,8 +88,8 @@
         }
     }
 
-    function showParentResourceFullscreen(parentResourceName: string | null) {
-        currentFullscreenTextParentResourceName = parentResourceName;
+    function showParentResourceFullscreen(parentResourceId: ParentResourceId | null) {
+        currentFullscreenTextParentResourceId = parentResourceId;
     }
 
     async function prepareResources(resources: ResourceContentInfo[]) {
@@ -114,7 +114,7 @@
                                 displayName,
                                 html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
                                 preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
-                                parentResourceName: resource.parentResource,
+                                parentResourceId: resource.parentResourceId,
                             };
                         } else {
                             return null;
@@ -132,7 +132,7 @@
                         type: 'image',
                         displayName: await fetchDisplayNameForResourceContent(resource),
                         url: resourceContentApiFullUrl(resource),
-                        parentResourceName: resource.parentResource,
+                        parentResourceId: resource.parentResourceId,
                     })
                 )
             )
@@ -147,7 +147,7 @@
                                 displayName: metadata?.displayName || null,
                                 url: resourceContentApiFullUrl(resource),
                                 duration: metadata?.metadata?.['duration'] as number | undefined,
-                                parentResourceName: resource.parentResource,
+                                parentResourceId: resource.parentResourceId,
                                 thumbnailUrl:
                                     get(isOnline) || (await isCachedFromCdn(thumbnailUrl)) ? thumbnailUrl : undefined,
                             };
@@ -161,15 +161,15 @@
 
         groupedResources = groupBy(
             allResources,
-            (r) => r.parentResourceName,
+            (r) => r.parentResourceId,
             (v) => v
         );
 
         sortedResourceGroups = (
             objectEntries(groupedResources)
-                .map(([parentResourceName, resources]) => {
+                .map(([parentResourceId, resources]) => {
                     return {
-                        parentResource: $parentResourceNameToInfoMap[parentResourceName as ParentResourceName],
+                        parentResource: $parentResourceIdToInfoMap[parentResourceId],
                         resources,
                     };
                 })
@@ -190,10 +190,11 @@
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />
 <FullscreenTextResourceSection
-    parentResourceName={currentFullscreenTextParentResourceName}
+    parentResourceId={currentFullscreenTextParentResourceId}
+    parentResourceIdToInfoMap={$parentResourceIdToInfoMap}
     {groupedResources}
     {resourceSelected}
-    dismissParentResourceFullscreen={() => (currentFullscreenTextParentResourceName = null)}
+    dismissParentResourceFullscreen={() => (currentFullscreenTextParentResourceId = null)}
 />
 
 <div class="flex flex-col px-4">

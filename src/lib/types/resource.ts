@@ -1,12 +1,5 @@
-export enum ParentResourceName {
-    BiblicaBibleDictionary = 'BiblicaBibleDictionary',
-    BiblicaStudyNotes = 'BiblicaStudyNotes',
-    CBBTER = 'CBBTER',
-    TyndaleBibleDictionary = 'TyndaleBibleDictionary',
-    TyndaleStudyNotes = 'TyndaleStudyNotes',
-    UWTranslationWords = 'UWTranslationWords',
-    UbsImages = 'UbsImages',
-    VideoBibleDictionary = 'VideoBibleDictionary',
+export enum ParentResourceId {
+    CBBTER = 1,
 }
 
 export enum MediaType {
@@ -23,7 +16,7 @@ export enum ParentResourceComplexityLevel {
     Advanced = 'Advanced',
 }
 
-export const PredeterminedPassageGuides = [ParentResourceName.CBBTER];
+export const PredeterminedPassageGuides = [ParentResourceId.CBBTER];
 
 export enum ParentResourceType {
     None = 'None',
@@ -69,13 +62,13 @@ export interface AudioTypeMetadata {
 }
 
 export interface ApiParentResource {
-    shortName: ParentResourceName;
+    shortName: string;
     displayName: string;
     resourceType: ParentResourceType;
     complexityLevel: ParentResourceComplexityLevel;
     licenseInfo: ApiLicenseInfo | null;
     resourceCountForLanguage: number;
-    id: number;
+    id: ParentResourceId;
 }
 
 export interface ApiSingleLicense {
@@ -105,5 +98,5 @@ export interface ResourceContentInfo {
     id: number;
     mediaType: MediaType;
     resourceType: ParentResourceType;
-    parentResource: string;
+    parentResourceId: ParentResourceId;
 }

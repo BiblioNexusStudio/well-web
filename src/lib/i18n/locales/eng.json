@@ -419,40 +419,6 @@
         }
     },
     "resources": {
-        "types": {
-            "uwTranslationWords": {
-                "value": "Key Terms (unfoldingWord)",
-                "_context": "Key terms from unfoldingWord"
-            },
-            "CBBTER": {
-                "value": "CBBT-ER",
-                "_context": "CBBT-ER guide from SRV"
-            },
-            "ubsImages": {
-                "value": "Images (UBS)",
-                "_context": "Images from the United Bible Society"
-            },
-            "tyndaleBibleDictionary": {
-                "value": "Bible Dictionary (Tyndale)",
-                "_context": "Tyndale Bible Dictionary"
-            },
-            "tyndaleStudyNotes": {
-                "value": "Study Notes (Tyndale)",
-                "_context": "Tyndale Study Notes"
-            },
-            "biblicaBibleDictionary": {
-                "value": "Bible Dictionary (Biblica)",
-                "_context": "Biblica Bible Dictionary"
-            },
-            "biblicaStudyNotes": {
-                "value": "Study Notes (Biblica)",
-                "_context": "Biblica Study Notes"
-            },
-            "videoBibleDictionary": {
-                "value": "Videos (Video Bible Dictionary)",
-                "_context": "Videos from the Video Bible Dictionary"
-            }
-        },
         "cbbt-er": {
             "step1": {
                 "value": "Hear and Heart",

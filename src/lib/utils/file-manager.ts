@@ -16,7 +16,7 @@ import {
     resourceMetadataApiFullUrl,
     resourceThumbnailApiFullUrl,
 } from '$lib/utils/data-handlers/resources/resource';
-import { MediaType, ParentResourceName } from '$lib/types/resource';
+import { MediaType, ParentResourceId } from '$lib/types/resource';
 import { currentLanguageInfo } from '$lib/stores/language.store';
 import { get } from 'svelte/store';
 import { bibleBooksByBibleIdFullUrl } from './data-handlers/bible';
@@ -104,7 +104,8 @@ export const calculateUrlsWithMetadataToChange = (
                         if (resourceMenuItem.mediaTypeName === MediaType.Text) {
                             if (
                                 resourcesMenu.some(
-                                    ({ selected, value }) => selected && value === resourceMenuItem.parentResourceName
+                                    ({ selected, parentResource }) =>
+                                        selected && parentResource?.id === resourceMenuItem.parentResourceId
                                 )
                             ) {
                                 urlsAndSizesToDownload.push({
@@ -128,7 +129,8 @@ export const calculateUrlsWithMetadataToChange = (
                         if (resourceMenuItem.mediaTypeName === MediaType.Audio) {
                             if (
                                 resourcesMenu.some(
-                                    ({ selected, value }) => selected && value === resourceMenuItem.parentResourceName
+                                    ({ selected, parentResource }) =>
+                                        selected && parentResource?.id === resourceMenuItem.parentResourceId
                                 )
                             ) {
                                 urlsAndSizesToDownload.push({
@@ -197,7 +199,9 @@ export const calculateUrlsWithMetadataToChange = (
         }
     });
 
-    if (resourcesMenu.some(({ selected, value }) => selected && value === ParentResourceName.CBBTER)) {
+    if (
+        resourcesMenu.some(({ selected, parentResource }) => selected && parentResource?.id === ParentResourceId.CBBTER)
+    ) {
         biblesModuleBook.audioUrls?.chapters.forEach((chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
                 chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {

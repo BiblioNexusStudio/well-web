@@ -43,7 +43,7 @@
 
     async function fetchAvailablePassages(guide: ApiParentResource | undefined, _online: boolean) {
         if (guide) {
-            availablePassagesByBook = await passagesByBookAvailableForGuide(guide.shortName);
+            availablePassagesByBook = await passagesByBookAvailableForGuide(guide.id);
         } else {
             availablePassagesByBook = null;
         }

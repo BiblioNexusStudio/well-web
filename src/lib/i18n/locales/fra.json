@@ -328,32 +328,6 @@
         }
     },
     "resources": {
-        "types": {
-            "uwTranslationWords": {
-                "value": "Terme Clé (unfoldingWord)"
-            },
-            "CBBTER": {
-                "value": "CBBT-ER"
-            },
-            "ubsImages": {
-                "value": "Images (UBS)"
-            },
-            "tyndaleBibleDictionary": {
-                "value": "Dictionnaire Biblique (Tyndale)"
-            },
-            "tyndaleStudyNotes": {
-                "value": "Notes d'Étude (Tyndale)"
-            },
-            "biblicaBibleDictionary": {
-                "value": "Dictionnaire Biblique (Biblica)"
-            },
-            "biblicaStudyNotes": {
-                "value": "Notes d'Étude (Biblica)"
-            },
-            "videoBibleDictionary": {
-                "value": "Vidéos (Dictionnaire Biblique Vidéo)"
-            }
-        },
         "cbbt-er": {
             "step1": {
                 "value": "Entendre et Ressentir"

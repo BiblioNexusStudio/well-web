@@ -328,32 +328,6 @@
         }
     },
     "resources": {
-        "types": {
-            "uwTranslationWords": {
-                "value": "Ol bikpela tok (unfoldingWord)"
-            },
-            "CBBTER": {
-                "value": "CBBT-ER"
-            },
-            "ubsImages": {
-                "value": "Piksa (UBS)"
-            },
-            "tyndaleBibleDictionary": {
-                "value": "Diksoneri bilong Buk Tambu(Tiendeil)"
-            },
-            "tyndaleStudyNotes": {
-                "value": "Nouts bilong stadi(Tiendeil)"
-            },
-            "biblicaBibleDictionary": {
-                "value": "DIksoneri bilong Buk Tambu(Biblika)"
-            },
-            "biblicaStudyNotes": {
-                "value": "Nouts bilong stadi(Biblika)"
-            },
-            "videoBibleDictionary": {
-                "value": "Ol vidio(Vidio Diksoneri bilong Buk Tambu)"
-            }
-        },
         "cbbt-er": {
             "step1": {
                 "value": "Harim na Lewa"

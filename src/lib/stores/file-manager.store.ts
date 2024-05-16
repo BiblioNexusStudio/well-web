@@ -22,7 +22,6 @@ export const biblesModuleData = writable<BiblesModule[]>([]);
 export const bibleDataForResourcesMenu = derived(biblesModuleData, (bibleData) => {
     return bibleData.map((bible, index) => ({
         name: bible.name,
-        value: bible.name,
         selected: index === 0 ? true : false,
         display: index === 0 ? true : false,
         isBible: true,

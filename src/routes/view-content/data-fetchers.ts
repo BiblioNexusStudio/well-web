@@ -16,7 +16,7 @@ import { range } from '$lib/utils/array';
 import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
 import {
     MediaType,
-    ParentResourceName,
+    ParentResourceId,
     type CbbtErAudioMetadata,
     type CbbtErAudioContent,
     type ResourceContentInfo,
@@ -123,7 +123,8 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
 
 async function getCbbterAudioForPassage(resourceContents: ResourceContentInfo[]): Promise<CbbtErAudioContent[]> {
     const allAudioResourceContent = resourceContents.filter(
-        ({ mediaType, parentResource }) => parentResource === ParentResourceName.CBBTER && mediaType === MediaType.Audio
+        ({ mediaType, parentResourceId }) =>
+            parentResourceId === ParentResourceId.CBBTER && mediaType === MediaType.Audio
     );
     return (
         await asyncMap(allAudioResourceContent, async (resourceContent) => {
@@ -148,7 +149,8 @@ async function getCbbterAudioForPassage(resourceContents: ResourceContentInfo[])
 
 async function getCbbterTextForPassage(resourceContents: ResourceContentInfo[]): Promise<CbbtErTextContent[]> {
     const allTextResourceContent = resourceContents.filter(
-        ({ mediaType, parentResource }) => parentResource === ParentResourceName.CBBTER && mediaType === MediaType.Text
+        ({ mediaType, parentResourceId }) =>
+            parentResourceId === ParentResourceId.CBBTER && mediaType === MediaType.Text
     );
     return (
         await asyncMap(allTextResourceContent, async (resourceContent) => {
@@ -181,7 +183,7 @@ async function getAdditionalResourcesForPassage(
 
     if (showOnlySrvResources?.value) {
         additionalResourceContent = resourceContents.filter((content) =>
-            showOnlySrvResources.parentResources.includes(content.parentResource as ParentResourceName)
+            showOnlySrvResources.parentResources.includes(content.parentResourceId)
         );
     } else {
         additionalResourceContent = resourceContents.filter(
