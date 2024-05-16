@@ -2,6 +2,12 @@
     import { _ as translate } from 'svelte-i18n';
     import { isOnline } from '$lib/stores/is-online.store';
     import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
+    import { selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { onMount } from 'svelte';
+
+    onMount(() => {
+        selectedBibleSection.set(null);
+    });
 </script>
 
 <section class="container mx-auto flex h-screen flex-col px-6">
