@@ -294,7 +294,7 @@
                 "_context": "Label for the dropdown"
             },
             "noGuides": {
-                "value": "No guides available"
+                "value": "No guides available for the selected passage"
             }
         },
         "bibleMenu": {
