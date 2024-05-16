@@ -32,7 +32,7 @@
     import { objectEntries } from '$lib/utils/typesafe-standard-lib';
     import { parentResourceIdToInfoMap } from '$lib/stores/parent-resource.store';
     import AnyResourceSection from './AnyResourceSection.svelte';
-    import SwishHeader from './SwishHeader.svelte';
+    import SwishHeader from '$lib/components/SwishHeader.svelte';
 
     const RESOURCE_TYPE_ORDER: ParentResourceType[] = [
         ParentResourceType.Images,
@@ -185,7 +185,12 @@
     }
 </script>
 
-<SwishHeader bind:visible={visibleSwish} title="Library" subtitle="Find the resource you need" bgcolor="bg-[#439184]" />
+<SwishHeader
+    bind:visible={visibleSwish}
+    title={$translate('page.passage.resourcePane.libraryTitle.value')}
+    subtitle={$translate('page.passage.resourcePane.librarySubtitle.value')}
+    bgcolor="bg-[#439184]"
+/>
 
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
 <FullscreenTextResource bind:resource={currentFullscreenTextResource} />

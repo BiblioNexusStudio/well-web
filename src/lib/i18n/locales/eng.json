@@ -58,6 +58,14 @@
                     "value": "Cancel",
                     "_context": "Button to cancel search"
                 },
+                "libraryTitle": {
+                    "value": "Library",
+                    "_context": "Title for the Library Menu"
+                },
+                "librarySubtitle": {
+                    "value": "Find the resources you need",
+                    "_context": "Subtitle for the Library Menu"
+                },
                 "typeToSearch": {
                     "value": "Type in a term to search the library",
                     "_context": "Label for searching the library"
