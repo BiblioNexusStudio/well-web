@@ -8,7 +8,7 @@ const bibleWellSettingsInLocalStorage = 'BIBLE_WELL_SETTINGS_IN_LOCAL_STORAGE';
 const showOnlySrvResources: Setting = {
     value: true,
     shortName: SettingShortNameEnum.showOnlySrvResources,
-    parentResources: [ParentResourceId.CBBTER],
+    parentResources: [ParentResourceId.FIA],
 };
 
 const defaultSettings = [showOnlySrvResources];

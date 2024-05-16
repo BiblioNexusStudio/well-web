@@ -68,7 +68,9 @@ export async function parentResourcesForCurrentLanguage() {
 }
 
 async function allGuidesForLanguage() {
-    return (await parentResourcesForCurrentLanguage()).filter((pr) => pr.resourceType === ParentResourceType.Guide);
+    return (await parentResourcesForCurrentLanguage()).filter(
+        (pr) => pr.resourceType === ParentResourceType.Guide && pr.id === ParentResourceId.FIA
+    );
 }
 
 // given a list of Bible books/chapters available and a specific guide, filters down the list of Bible books/chapters to
