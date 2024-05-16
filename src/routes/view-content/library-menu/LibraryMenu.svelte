@@ -112,8 +112,8 @@
                         if (tiptap) {
                             return {
                                 displayName,
-                                html: parseTiptapJsonToHtml(tiptap.tiptap, { excludeHeader1: true }),
-                                preview: parseTiptapJsonToText(tiptap.tiptap, { excludeHeader1: true }).slice(0, 100),
+                                html: parseTiptapJsonToHtml(tiptap.tiptap),
+                                preview: parseTiptapJsonToText(tiptap.tiptap).slice(0, 100),
                                 parentResourceId: resource.parentResourceId,
                             };
                         } else {

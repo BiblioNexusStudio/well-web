@@ -22,37 +22,27 @@ const extensions = [
     Mark.create({ name: 'resourceReference' }),
 ];
 
-interface TiptapParsingOptions {
-    excludeHeader1: boolean;
-}
-
 interface BasicTiptapJson {
     content: { type: string; attrs?: { level?: number } }[];
 }
 
-export function parseTiptapJsonToHtml(
-    json: object,
-    { excludeHeader1 }: TiptapParsingOptions = { excludeHeader1: false }
-) {
+export function parseTiptapJsonToHtml(json: object) {
     const tiptapJson = json as BasicTiptapJson;
     return generateHTML(
         {
             ...json,
-            content: tiptapJson.content.filter((c) => !excludeHeader1 || c.type !== 'heading' || c.attrs?.level !== 1),
+            content: tiptapJson.content,
         },
         extensions
     );
 }
 
-export function parseTiptapJsonToText(
-    json: object,
-    { excludeHeader1 }: TiptapParsingOptions = { excludeHeader1: false }
-) {
+export function parseTiptapJsonToText(json: object) {
     const tiptapJson = json as BasicTiptapJson;
     return generateText(
         {
             ...json,
-            content: tiptapJson.content.filter((c) => !excludeHeader1 || c.type !== 'heading' || c.attrs?.level !== 1),
+            content: tiptapJson.content,
         },
         extensions
     );

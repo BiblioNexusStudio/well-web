@@ -199,9 +199,7 @@ export const calculateUrlsWithMetadataToChange = (
         }
     });
 
-    if (
-        resourcesMenu.some(({ selected, parentResource }) => selected && parentResource?.id === ParentResourceId.CBBTER)
-    ) {
+    if (resourcesMenu.some(({ selected, parentResource }) => selected && parentResource?.id === ParentResourceId.FIA)) {
         biblesModuleBook.audioUrls?.chapters.forEach((chapter) => {
             if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
                 chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {

@@ -123,8 +123,7 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
 
 async function getCbbterAudioForPassage(resourceContents: ResourceContentInfo[]): Promise<CbbtErAudioContent[]> {
     const allAudioResourceContent = resourceContents.filter(
-        ({ mediaType, parentResourceId }) =>
-            parentResourceId === ParentResourceId.CBBTER && mediaType === MediaType.Audio
+        ({ mediaType, parentResourceId }) => parentResourceId === ParentResourceId.FIA && mediaType === MediaType.Audio
     );
     return (
         await asyncMap(allAudioResourceContent, async (resourceContent) => {
@@ -149,8 +148,7 @@ async function getCbbterAudioForPassage(resourceContents: ResourceContentInfo[])
 
 async function getCbbterTextForPassage(resourceContents: ResourceContentInfo[]): Promise<CbbtErTextContent[]> {
     const allTextResourceContent = resourceContents.filter(
-        ({ mediaType, parentResourceId }) =>
-            parentResourceId === ParentResourceId.CBBTER && mediaType === MediaType.Text
+        ({ mediaType, parentResourceId }) => parentResourceId === ParentResourceId.FIA && mediaType === MediaType.Text
     );
     return (
         await asyncMap(allTextResourceContent, async (resourceContent) => {

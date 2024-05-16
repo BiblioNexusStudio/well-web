@@ -1,5 +1,5 @@
 export enum ParentResourceId {
-    CBBTER = 1,
+    FIA = 1,
 }
 
 export enum MediaType {
@@ -16,7 +16,7 @@ export enum ParentResourceComplexityLevel {
     Advanced = 'Advanced',
 }
 
-export const PredeterminedPassageGuides = [ParentResourceId.CBBTER];
+export const PredeterminedPassageGuides = [ParentResourceId.FIA];
 
 export enum ParentResourceType {
     None = 'None',
