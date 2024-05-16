@@ -55,6 +55,14 @@
                 "cancel": {
                     "value": "Ghairi"
                 },
+                "libraryTitle": {
+                    "value": "Maktaba",
+                    "_context": "Kichwa kwa Menyu ya Maktaba"
+                },
+                "librarySubtitle": {
+                    "value": "Pata rasilimali unazohitaji",
+                    "_context": "Kichwa cha kando kwa Menyu ya Maktaba"
+                },
                 "typeToSearch": {
                     "value": "Andika neno ili kutafuta maktaba"
                 },

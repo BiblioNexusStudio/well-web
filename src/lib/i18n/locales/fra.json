@@ -46,6 +46,14 @@
                 "cancel": {
                     "value": "Annuler"
                 },
+                "libraryTitle": {
+                    "value": "Bibliothèque",
+                    "_context": "Titre pour le menu de la bibliothèque"
+                },
+                "librarySubtitle": {
+                    "value": "Trouvez les ressources dont vous avez besoin",
+                    "_context": "Sous-titre pour le menu de la bibliothèque"
+                },
                 "typeToSearch": {
                     "value": "Tapez un terme pour effectuer une recherche dans la bibliothèque"
                 },

@@ -51,6 +51,14 @@
                         "value": "{current} blo {total}"
                     }
                 },
+                "libraryTitle": {
+                    "value": "Bukmakmak",
+                    "_context": "Taitol long Menyu bilong Bukmakmak"
+                },
+                "librarySubtitle": {
+                    "value": "Lukautim ol resors yu nid",
+                    "_context": "Saposol long Menyu bilong Bukmakmak"
+                },
                 "typeToSearch": {
                     "value": "Typim wanpela toktok long surukim bibliotek"
                 },
