@@ -7,8 +7,8 @@
             "about": {
                 "value": "À propos"
             },
-            "fileManager": {
-                "value": "Gestionnaire de Fichiers"
+            "downloadManager": {
+                "value": "Gestionnaire de Téléchargement"
             },
             "getStarted": {
                 "value": "Commencer"
@@ -99,8 +99,8 @@
             }
         },
         "fileManager": {
-            "title": {
-                "value": "Gestionnaire de Fichiers Local"
+            "downloadManager": {
+                "value": "Gestionnaire de Téléchargement"
             },
             "download": {
                 "value": "Télécharger"
@@ -195,8 +195,8 @@
             "menu": {
                 "value": "Menu"
             },
-            "localFileManager": {
-                "value": "Gestionnaire de Fichiers Local"
+            "downloadManager": {
+                "value": "Gestionnaire de Téléchargement"
             },
             "language": {
                 "value": "Langue"

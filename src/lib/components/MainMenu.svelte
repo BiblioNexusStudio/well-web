@@ -45,7 +45,7 @@
                 <button
                     on:click={() => goto('/file-manager')}
                     class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
-                    ><DownloadIcon /><span class="mt-2 text-xs">{$translate('page.menu.localFileManager.value')}</span
+                    ><DownloadIcon /><span class="mt-2 text-xs">{$translate('page.menu.downloadManager.value')}</span
                     ></button
                 >
             </div>

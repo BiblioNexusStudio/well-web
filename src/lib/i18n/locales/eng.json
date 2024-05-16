@@ -9,9 +9,9 @@
                 "value": "About",
                 "_context": "Link to the about page"
             },
-            "fileManager": {
-                "value": "File Manager",
-                "_context": "The label for the file manager button"
+            "downloadManager": {
+                "value": "Download Manager",
+                "_context": "The label for the download manager button"
             },
             "getStarted": {
                 "value": "Get Started",
@@ -125,9 +125,9 @@
             }
         },
         "fileManager": {
-            "title": {
-                "value": "Local File Manager",
-                "_context": "Title displayed on the file manager page"
+            "downloadManager": {
+                "value": "Download Manager",
+                "_context": "Title displayed on the download manager page"
             },
             "download": {
                 "value": "Download",
@@ -249,9 +249,9 @@
                 "value": "Menu",
                 "_context": "Label for the menu button"
             },
-            "localFileManager": {
-                "value": "Local File Manager",
-                "_context": "Label for the local file manager button"
+            "downloadManager": {
+                "value": "Download Manager",
+                "_context": "Label for the download manager button"
             },
             "language": {
                 "value": "Language",

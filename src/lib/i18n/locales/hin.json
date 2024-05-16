@@ -7,8 +7,8 @@
             "about": {
                 "value": "बारे में"
             },
-            "fileManager": {
-                "value": "फ़ाइल प्रबंधक"
+            "downloadManager": {
+                "value": "डाउनलोड प्रबंधक"
             },
             "getStarted": {
                 "value": "शुरू करें"
@@ -99,8 +99,8 @@
             }
         },
         "fileManager": {
-            "title": {
-                "value": "फ़ाइल प्रबंधक"
+            "downloadManager": {
+                "value": "डाउनलोड प्रबंधक"
             },
             "download": {
                 "value": "डाउनलोड"
@@ -195,8 +195,8 @@
             "menu": {
                 "value": "मेनू"
             },
-            "localFileManager": {
-                "value": "स्थानीय फ़ाइल प्रबंधक"
+            "downloadManager": {
+                "value": "डाउनलोड प्रबंधक"
             },
             "language": {
                 "value": "भाषा"
