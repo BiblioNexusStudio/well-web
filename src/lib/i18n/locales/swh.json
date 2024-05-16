@@ -9,9 +9,8 @@
                 "value": "Kuhusu",
                 "_context": "Unganisha na ukurasa wa kuhusu"
             },
-            "fileManager": {
-                "value": "Kidhibiti faili",
-                "_context": "Lebo ya kitufe cha msimamizi wa faili"
+            "downloadManager": {
+                "value": "Kidhibiti Pakua"
             },
             "getStarted": {
                 "value": "Anza"
@@ -122,9 +121,8 @@
             }
         },
         "fileManager": {
-            "title": {
-                "value": "Kidhibiti Faili cha mtaa",
-                "_context": "Kichwa kinaonyeshwa kwenye ukurasa wa kidhibiti faili"
+            "downloadManager": {
+                "value": "Kidhibiti Pakua"
             },
             "download": {
                 "value": "Pakua",
@@ -244,8 +242,8 @@
             "menu": {
                 "value": "Menyu"
             },
-            "localFileManager": {
-                "value": "Kidhibiti Faili cha mtaa"
+            "downloadManager": {
+                "value": "Kidhibiti Pakua"
             },
             "language": {
                 "value": "Lugha"

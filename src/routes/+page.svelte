@@ -15,7 +15,7 @@
         <a class="btn mb-8" href="/file-manager"
             >{$isOnline
                 ? $translate('page.index.downloadResourcesForOfflineUse.value')
-                : $translate('page.index.fileManager.value')}</a
+                : $translate('page.index.downloadManager.value')}</a
         >
         <a class="btn mb-8" href="/select-language"><LanguageIcon />{$translate('page.menu.changeLanguage.value')}</a>
         <a class="btn btn-primary" href="/view-content">{$translate('page.index.getStarted.value')}</a>

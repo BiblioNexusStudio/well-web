@@ -7,8 +7,8 @@
             "about": {
                 "value": "Long em"
             },
-            "fileManager": {
-                "value": "Fail Meneja"
+            "downloadManager": {
+                "value": "Daunloud Meneja"
             },
             "getStarted": {
                 "value": "Stat"
@@ -99,8 +99,8 @@
             }
         },
         "fileManager": {
-            "title": {
-                "value": "Lokal Fail Meneja"
+            "downloadManager": {
+                "value": "Daunloud Meneja"
             },
             "download": {
                 "value": "Daunloud"
@@ -195,8 +195,8 @@
             "menu": {
                 "value": "Meniu"
             },
-            "localFileManager": {
-                "value": "Lokal Fail Meneja"
+            "downloadManager": {
+                "value": "Daunloud Meneja"
             },
             "language": {
                 "value": "Tokples"

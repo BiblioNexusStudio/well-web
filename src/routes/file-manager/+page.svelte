@@ -58,7 +58,7 @@
     <DeleteModal />
     <div class="mx-4 flex justify-between">
         <h1 class="semi-bold line-clamp-1 flex-1 break-all text-lg">
-            {$translate('page.fileManager.title.value')}
+            {$translate('page.fileManager.downloadManager.value')}
         </h1>
         <a href="/"><HomeIcon /></a>
     </div>
