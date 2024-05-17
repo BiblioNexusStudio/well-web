@@ -18,6 +18,10 @@ export enum ParentResourceComplexityLevel {
 
 export const PredeterminedPassageGuides = [ParentResourceId.FIA];
 
+// because guides come with their own custom UIs we need to be able to filter out guides that aren't supported by the
+// client yet
+export const EnabledGuides = [ParentResourceId.FIA];
+
 export enum ParentResourceType {
     None = 'None',
     Guide = 'Guide',
@@ -62,6 +66,7 @@ export interface AudioTypeMetadata {
 }
 
 export interface ApiParentResource {
+    enabled: boolean;
     shortName: string;
     displayName: string;
     resourceType: ParentResourceType;

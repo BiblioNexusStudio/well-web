@@ -35,6 +35,11 @@ const apiThumbnailRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resour
 const cdnRegex = /https:\/\/cdn\.aquifer\.bible.*/;
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
+export class WellFetchError extends Error {
+    url?: string;
+    cacheBustVersion?: number;
+}
+
 export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number) {
     const url = apiUrl(path);
     if (!(await isCachedFromApi(path))) {
@@ -51,12 +56,19 @@ export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number
         }
         apiCachedUrls.delete(url);
         return await response.json();
+    } catch (error) {
+        const castError = error as Error;
+        const fetchError = new WellFetchError(castError.message, { cause: castError.cause });
+        fetchError.stack = castError.stack;
+        fetchError.url = url;
+        fetchError.cacheBustVersion = cacheBustVersion;
+        throw fetchError;
     } finally {
         removeFromArray(partiallyDownloadedApiUrls, url);
     }
 }
 
-export async function fetchFromCacheOrCdn(url: Url, type: 'blob' | 'json' = 'json') {
+export async function fetchFromCacheOrCdn(url: Url) {
     if (!(await isCachedFromCdn(url))) {
         partiallyDownloadedCdnUrls.push(url);
     }
@@ -66,7 +78,13 @@ export async function fetchFromCacheOrCdn(url: Url, type: 'blob' | 'json' = 'jso
             throw new Error('Bad HTTP response');
         }
         cdnCachedUrls.delete(url);
-        return await (type === 'blob' ? response.blob() : response.json());
+        return await response.json();
+    } catch (error) {
+        const castError = error as Error;
+        const fetchError = new WellFetchError(castError.message, { cause: castError.cause });
+        fetchError.stack = castError.stack;
+        fetchError.url = url;
+        throw fetchError;
     } finally {
         removeFromArray(partiallyDownloadedCdnUrls, url);
     }
