@@ -61,6 +61,7 @@
         class="btn btn-outline btn-primary flex w-full justify-between"
         on:click={toggleMenu}
         aria-label={$translate('page.fileManager.selectABook.value')}
+        data-app-insights-event-name="file-manager-book-menu-selected"
     >
         {bookName}
         <Icon data={menuOpen ? caretUp : caretDown} />
@@ -76,6 +77,7 @@
                     class="flex justify-start text-primary"
                     aria-label={book.displayName}
                     on:click={() => handleBookClick(book.bookCode)}
+                    data-app-insights-event-name={`file-manager-${book.displayName}-selected`}
                 >
                     {book.displayName} ({book.bookCode})
                 </button>

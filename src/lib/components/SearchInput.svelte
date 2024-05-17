@@ -13,7 +13,11 @@
         <Icon class="stroke-base-content" data={searchIcon} />
     </div>
     <div class="absolute right-4 flex h-full items-center {searchQuery === '' && 'hidden'}">
-        <button class="text-sm font-medium text-secondary-content underline" on:click={() => (searchQuery = '')}>
+        <button
+            class="text-sm font-medium text-secondary-content underline"
+            on:click={() => (searchQuery = '')}
+            data-app-insights-event-name="search-input-button-clicked"
+        >
             {$translate('components.search.clear.value')}
         </button>
     </div>

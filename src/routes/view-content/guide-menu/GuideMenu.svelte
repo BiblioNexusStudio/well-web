@@ -89,6 +89,7 @@
                         class="my-2 flex w-11/12 rounded-xl p-4 {isCurrentGuide
                             ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                             : 'border'}"
+                        data-app-insights-event-name={`guide-menu-${guideResource.displayName}-selected`}
                     >
                         <span class="text-sm">{guideResource.displayName}</span>
                         <span class="mx-1 text-sm">-</span>
@@ -99,8 +100,13 @@
         </div>
         {#if !!availableGuides && availableGuides.length > 0}
             <div class="mb-24 flex flex-grow items-end px-4">
-                <button disabled={!$currentGuide} on:click={openGuideMenu} class="btn btn-primary w-full"
-                    >{$translate('page.guideMenu.selectGuide.value')}</button
+                <button
+                    disabled={!$currentGuide}
+                    on:click={openGuideMenu}
+                    class="btn btn-primary w-full"
+                    data-app-insights-event-name="guide-menu-select-guide-button-clicked"
+                >
+                    {$translate('page.guideMenu.selectGuide.value')}</button
                 >
             </div>
         {/if}

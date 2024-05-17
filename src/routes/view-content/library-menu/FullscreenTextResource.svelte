@@ -11,8 +11,10 @@
     <div use:trapFocus class="fixed inset-0 z-50 flex w-full flex-col bg-primary-content">
         <div class="px-4">
             <div class="mx-auto flex w-full max-w-[65ch] flex-row items-center py-3">
-                <button class="btn btn-link text-base-500" on:click={() => (resource = null)}
-                    ><Icon data={chevronLeft} /></button
+                <button
+                    class="btn btn-link text-base-500"
+                    on:click={() => (resource = null)}
+                    data-app-insights-event-name="fullscreen-close-button-clicked"><Icon data={chevronLeft} /></button
                 >
                 <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">
                     {resource.displayName}

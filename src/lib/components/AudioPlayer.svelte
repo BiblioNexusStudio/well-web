@@ -101,7 +101,11 @@
         <div />
         <Icon class="h-[20px] w-[20px] grow-0 text-primary" data={refresh} spin />
     {:else}
-        <button class="h-[35px] w-[35px] grow-0 cursor-pointer" on:click={playOrPause}>
+        <button
+            class="h-[35px] w-[35px] grow-0 cursor-pointer"
+            on:click={playOrPause}
+            data-app-insights-event-name="audio-player-play-or-pause-button-clicked"
+        >
             {#if isPlaying}
                 <PauseMediaIcon />
             {:else}
@@ -120,6 +124,7 @@
             on:change={onRangeChange}
             on:input={stopSyncingSeekPosition}
             value={rangeValue}
+            data-app-insights-event-name="audio-player-range-area-clicked"
         />
     </div>
 

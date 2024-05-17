@@ -46,13 +46,21 @@
         <div class="divider" />
         <p class="mb-6">{$translate('page.fileManager.deleteModal.description.value')}</p>
         <div class="flex justify-between">
-            <button class="btn" on:click={deleteFiles}>{$translate('page.fileManager.delete.value')}</button>
-            <button class="btn btn-primary" on:click={cancelDelete}
+            <button
+                class="btn"
+                on:click={deleteFiles}
+                data-app-insights-event-name="file-manager-delete-files-button-clicked"
+                >{$translate('page.fileManager.delete.value')}</button
+            >
+            <button
+                class="btn btn-primary"
+                on:click={cancelDelete}
+                data-app-insights-event-name="file-manager-cancel-delete-button-clicked"
                 >{$translate('page.fileManager.cancel.value')}</button
             >
         </div>
     </form>
     <form method="dialog" class="modal-backdrop">
-        <button>close</button>
+        <button data-app-insights-event-name="file-manager-close-button-clicked">close</button>
     </form>
 </dialog>

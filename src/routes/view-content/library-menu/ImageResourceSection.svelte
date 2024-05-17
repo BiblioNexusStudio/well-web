@@ -33,6 +33,7 @@
             <button
                 class="carousel-item me-8 w-32 flex-col {filteredResources.includes(image) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(image)}
+                data-app-insights-event-name="image-resource-clicked"
             >
                 <img
                     class="mb-1 h-20 w-32 rounded-lg object-cover"

@@ -21,7 +21,11 @@
     $: isSelected = selectedTab !== null && tabName !== null ? selectedTab === tabName : false;
 </script>
 
-<button on:click={handleClick} class="group active border-none stroke-black">
+<button
+    on:click={handleClick}
+    class="group active border-none stroke-black"
+    data-app-insights-event-name={`footer-nav-tab-${selectedTab}-clicked`}
+>
     <div
         class="rounded-2xl px-3 py-1 focus:bg-[#F0FAFF] group-hover:bg-[#F0FAFF] group-hover:stroke-primary {isSelected
             ? 'bg-[#F0FAFF]'

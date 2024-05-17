@@ -66,14 +66,21 @@
             <div class="form-control">
                 <label class="label cursor-pointer">
                     <span class="label-text">{flag}</span>
-                    <input type="checkbox" bind:checked={$featureFlags[flag]} class="checkbox" />
+                    <input
+                        type="checkbox"
+                        bind:checked={$featureFlags[flag]}
+                        class="checkbox"
+                        data-app-insights-event-name={`debug-modal-${flag}-selected`}
+                    />
                 </label>
             </div>
         {/each}
         <div class="py-2">Clear All Cache Entries</div>
         <button class="btn" on:click={clearEntireCache}>Clear</button>
         <div class="modal-action">
-            <button class="btn" on:click={close}>Close</button>
+            <button class="btn" on:click={close} data-app-insights-event-name="debug-modal-close-button-clicked"
+                >Close</button
+            >
         </div>
     </div>
 </dialog>

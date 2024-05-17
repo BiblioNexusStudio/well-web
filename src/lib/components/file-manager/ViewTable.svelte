@@ -140,6 +140,7 @@
                     bind:checked={allChaptersSelected}
                     on:click={selectAllChapters}
                     disabled={allChaptersCached}
+                    data-app-insights-event-name="file-manager-select-all-resources-checkbox"
                 />
             </th>
             <th class="text-start text-xs">
@@ -163,6 +164,7 @@
                             class="checkbox-primary checkbox mx-2"
                             bind:checked={audioChapter.selected}
                             disabled={audioChapter.allUrlsCached}
+                            data-app-insights-event-name={`file-manager-${$biblesModuleBook.displayName}-${audioChapter.number}-checkbox-selected`}
                         />
                     </td>
 
@@ -201,6 +203,7 @@
                             <button
                                 on:click={() => (audioChapter.deleteMenuOpen = !audioChapter.deleteMenuOpen)}
                                 class={audioChapter.deleteMenuOpen ? 'h-10 rounded-full bg-primary py-2' : 'h-8'}
+                                data-app-insights-event-name="file-manager-view-row-delete-button-clicked"
                             >
                                 <Icon data={ellipsisV} class="h-full w-6" />
                             </button>
@@ -212,6 +215,7 @@
                                         openDeleteModal();
                                     }}
                                     class="absolute left-0 z-30 mx-2 flex w-[96vw] items-center justify-start rounded-md border-2 border-solid border-primary bg-white px-4 py-2"
+                                    data-app-insights-event-name="file-manager-delete-button-clicked"
                                 >
                                     <Icon data={trash} class="me-2" />
                                     {$translate('page.fileManager.delete.value')}

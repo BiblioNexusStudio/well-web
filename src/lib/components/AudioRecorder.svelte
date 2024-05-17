@@ -172,11 +172,19 @@
     {/if}
     <div>
         {#if state === 'recording'}
-            <button class="btn btn-circle btn-primary" on:click={pauseRecording}>
+            <button
+                class="btn btn-circle btn-primary"
+                on:click={pauseRecording}
+                data-app-insights-event-name="audio-recording-pause-button-clicked"
+            >
                 <Icon data={pause} scale={0.85} />
             </button>
         {:else}
-            <button class="btn btn-circle btn-primary" on:click={startRecording}>
+            <button
+                class="btn btn-circle btn-primary"
+                on:click={startRecording}
+                data-app-insights-event-name="audio-recording-start-button-clicked"
+            >
                 <Icon data={microphone} />
             </button>
         {/if}

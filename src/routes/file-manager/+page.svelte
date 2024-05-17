@@ -60,7 +60,7 @@
         <h1 class="semi-bold line-clamp-1 flex-1 break-all text-lg">
             {$translate('page.fileManager.downloadManager.value')}
         </h1>
-        <a href="/"><HomeIcon /></a>
+        <a href="/" data-app-insights-event-name="download-manager-home-icon-clicked"><HomeIcon /></a>
     </div>
     {#await fetchAvailableResourcesPromise}
         <FullPageSpinner />

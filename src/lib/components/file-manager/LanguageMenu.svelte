@@ -33,7 +33,11 @@
 </script>
 
 <div class="relative ms-2 flex h-full w-1/2 items-center" bind:this={languageMenuDiv}>
-    <button class="btn btn-outline btn-primary flex w-full justify-between" on:click={toggleMenu}>
+    <button
+        class="btn btn-outline btn-primary flex w-full justify-between"
+        on:click={toggleMenu}
+        data-app-insights-event-name="file-manager-language-menu-selected"
+    >
         {$currentLanguageInfo?.displayName} ({$currentLanguageInfo?.iso6393Code}) <Icon
             data={menuOpen ? caretUp : caretDown}
         />
@@ -49,6 +53,7 @@
                     class="flex justify-start text-primary"
                     on:click={() => onLanguageSelected(language.iso6393Code)}
                     aria-label={language.displayName}
+                    data-app-insights-event-name={`file-manager-${language.displayName}-selected`}
                 >
                     {language.displayName} <span class="ms-2 uppercase"> ({language.iso6393Code})</span>
                 </button>

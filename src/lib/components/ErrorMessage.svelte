@@ -14,7 +14,12 @@
             <p class="text mb-4 font-bold">{$translate('errorMessage.title.value')}</p>
             <p class="mb-4">{$translate('errorMessage.message.value')}</p>
             <div class="flex items-center justify-end">
-                <button class="btn btn-primary" on:click={home}>{$translate('errorMessage.home.value')}</button>
+                <button
+                    class="btn btn-primary"
+                    on:click={home}
+                    data-app-insights-event-name="error-message-home-button-clicked"
+                    >{$translate('errorMessage.home.value')}</button
+                >
             </div>
         </div>
     </div>
