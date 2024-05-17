@@ -354,7 +354,7 @@
                 {:else if currentBible?.loadingContent}
                     <FullPageSpinner />
                 {:else if currentBible?.content?.chapters?.length}
-                    <div class="flex-start prose w-full overflow-y-scroll">
+                    <div class="flex-start prose mx-auto w-full overflow-y-scroll">
                         {#each currentBible?.content.chapters as chapter}
                             {#each chapter.versesText as { number, text }}
                                 <div

@@ -8,6 +8,7 @@ import {
     ParentResourceType,
     type ApiParentResource,
     PredeterminedPassageGuides,
+    EnabledGuides,
 } from '$lib/types/resource';
 import { resourceContentsForBibleSection, type AvailableChaptersForResource } from './resource';
 import {
@@ -64,12 +65,12 @@ export async function parentResourcesForCurrentLanguage() {
     const allParentResources = (await fetchFromCacheOrApi(
         ...parentResourcesEndpoint(languageId)
     )) as ApiParentResource[];
-    return allParentResources.filter((pr) => pr.resourceCountForLanguage > 0);
+    return allParentResources.filter((pr) => pr.enabled && pr.resourceCountForLanguage > 0);
 }
 
 async function allGuidesForLanguage() {
     return (await parentResourcesForCurrentLanguage()).filter(
-        (pr) => pr.resourceType === ParentResourceType.Guide && pr.id === ParentResourceId.FIA
+        (pr) => pr.resourceType === ParentResourceType.Guide && EnabledGuides.includes(pr.id)
     );
 }
 
