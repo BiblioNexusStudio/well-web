@@ -2,6 +2,8 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import config from '$lib/config';
 import { browserSupported } from './utils/browser';
 import { browser } from '$app/environment';
+import type { WellFetchError } from './data-cache';
+
 
 const appInsights = new ApplicationInsights({
     config: {
@@ -22,17 +24,25 @@ const additionalProperties = {
 
 export const log = {
     exception: (error: Error | undefined) => {
-        if (error && (error.message.includes('Failed to fetch') || error.message.includes('Load failed'))) {
+        if (
+            error &&
+            (error.message.includes('Failed to fetch') ||
+                error.message.includes('Load failed') ||
+                error.message.includes('NetworkError when attempting to fetch'))
+        ) {
             // Don't log network errors to app insights (since they can't be avoided)
             console.error(error);
         } else if (!browserSupported) {
             // Don't log errors of unsupported browsers to app insights (since they can't be avoided)
             console.error(error);
         } else if (error) {
+            const { url, cacheBustVersion } =
+                'url' in error ? (error as WellFetchError) : { url: null, cacheBustVersion: null };
             appInsights.trackException(
                 { exception: error },
                 {
                     ...additionalProperties,
+                    ...(url ? { url, cacheBustVersion } : null),
                     commitSha: config.PUBLIC_COMMIT_SHA,
                 }
             );
