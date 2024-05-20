@@ -37,6 +37,7 @@
             <button
                 class="carousel-item me-2 w-32 flex-col {filteredResources.includes(video) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(video)}
+                data-app-insights-event-name="video-resource-button-clicked"
             >
                 <div class="relative mb-1">
                     {#if video.duration}

@@ -47,6 +47,7 @@
                     class="my-2 flex w-11/12 flex-wrap rounded-xl p-4 {isPreferredBible
                         ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                         : 'border'}"
+                    data-app-insights-event-name={`bible-menu-${bible.name}-selected`}
                 >
                     <span class="text-sm">{bible.name} ({bible.abbreviation})</span>
                     <span class="mx-1 text-sm">-</span>
@@ -61,7 +62,9 @@
             <button
                 disabled={$preferredBibleIds.length === 0}
                 on:click={openBookChapterVerseMenu}
-                class="btn btn-primary w-full">{$translate('page.bibleMenu.goToPassage.value')}</button
+                class="btn btn-primary w-full"
+                data-app-insights-event-name="bible-menu-go-to-passage-button-clicked"
+                >{$translate('page.bibleMenu.goToPassage.value')}</button
             >
         </div>
     {/await}

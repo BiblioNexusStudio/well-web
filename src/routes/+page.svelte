@@ -18,15 +18,29 @@
         <h2 class="text-xl font-semibold">{$translate('page.selectLanguage.welcome.value')}</h2>
     </div>
     <div class="flex grow flex-col pt-14">
-        <a class="btn mb-8" href="/file-manager"
+        <a class="btn mb-8" href="/file-manager" data-app-insights-event-name="landing-page-file-manager-link-clicked"
             >{$isOnline
                 ? $translate('page.index.downloadResourcesForOfflineUse.value')
                 : $translate('page.index.downloadManager.value')}</a
         >
-        <a class="btn mb-8" href="/select-language"><LanguageIcon />{$translate('page.menu.changeLanguage.value')}</a>
-        <a class="btn btn-primary" href="/view-content">{$translate('page.index.getStarted.value')}</a>
+        <a
+            class="btn mb-8"
+            href="/select-language"
+            data-app-insights-event-name="landing-page-change-language-link-clicked"
+            ><LanguageIcon />{$translate('page.menu.changeLanguage.value')}</a
+        >
+        <a
+            class="btn btn-primary"
+            href="/view-content"
+            data-app-insights-event-name="landing-page-get-started-link-clicked"
+            >{$translate('page.index.getStarted.value')}</a
+        >
     </div>
     <div class="flex">
-        <a class="mx-auto my-6 max-w-xs text-sky-500" href="/about">{$translate('page.index.about.value')}</a>
+        <a
+            class="mx-auto my-6 max-w-xs text-sky-500"
+            href="/about"
+            data-app-insights-event-name="landing-page-about-link-clicked">{$translate('page.index.about.value')}</a
+        >
     </div>
 </section>

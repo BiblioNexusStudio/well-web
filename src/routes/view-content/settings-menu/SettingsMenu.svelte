@@ -16,7 +16,11 @@
 
 <div class="flex h-full w-full flex-col p-4">
     <div class="flex justify-end">
-        <button class="my-4 flex w-1/4 justify-end" on:click={openMainMenu}>
+        <button
+            class="my-4 flex w-1/4 justify-end"
+            on:click={openMainMenu}
+            data-app-insights-event-name="settings-menu-close-button-click"
+        >
             <XMarkIcon />
         </button>
     </div>
@@ -27,6 +31,7 @@
                 type="checkbox"
                 class="toggle me-4 {setting.value ? 'border-none bg-white [--tglbg:#0094c9] hover:bg-white' : ''}"
                 bind:checked={setting.value}
+                data-app-insights-event-name={`settings-menu-${getSettingsText(setting)}-toggled`}
             />
             <h2>{getSettingsText(setting)}</h2>
         </div>

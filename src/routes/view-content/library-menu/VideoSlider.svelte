@@ -31,6 +31,7 @@
         on:change={onRangeChange}
         on:input={videoState.stopSyncingSeekPosition.bind(videoState)}
         value={videoState.rangeValue}
+        data-app-insights-event-name="video-player-range-area-clicked"
     />
     <div class="ps-2 font-mono text-sm text-gray-50">
         {totalTimeDisplay}

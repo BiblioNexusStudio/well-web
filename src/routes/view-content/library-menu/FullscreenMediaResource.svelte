@@ -120,8 +120,10 @@
     <div use:trapFocus class="fixed inset-0 z-50 w-full bg-black">
         <div bind:this={container} class="absolute inset-0 flex flex-col items-center">
             <div bind:this={topBarDiv} class="flex w-full max-w-[65ch] flex-row items-center px-4 py-3">
-                <button class="btn btn-link text-gray-50" on:click={() => (currentIndex = null)}
-                    ><Icon data={chevronLeft} /></button
+                <button
+                    class="btn btn-link text-gray-50"
+                    on:click={() => (currentIndex = null)}
+                    data-app-insights-event-name="fullscreen-close-button-clicked"><Icon data={chevronLeft} /></button
                 >
                 <div class="flex-grow">
                     <div class="w-full text-center text-sm text-gray-50">
@@ -161,7 +163,10 @@
             <div bind:this={controlsDiv} class="flex w-full max-w-md flex-row p-4">
                 <div class="flex-grow" />
                 {#if videoState.active && !videoState.isLoading}
-                    <button class="btn btn-link w-12 text-gray-50" on:click={videoState.toggleMute.bind(videoState)}
+                    <button
+                        class="btn btn-link w-12 text-gray-50"
+                        on:click={videoState.toggleMute.bind(videoState)}
+                        data-app-insights-event-name="fullscreen-mute-button-clicked"
                         ><Icon data={videoState.isMuted ? volumeOff : volumeUp} /></button
                     >
                     <div class="flex-grow" />
@@ -169,12 +174,14 @@
                 <button
                     disabled={currentIndex === 0}
                     class="btn btn-link text-gray-50 disabled:bg-opacity-0 disabled:text-transparent disabled:text-opacity-25"
+                    data-app-insights-event-name="fullscreen-previous-button-clicked"
                     on:click={previousItem}><Icon data={chevronLeft} /></button
                 >
                 {#if videoState.active && !videoState.isLoading}
                     <button
                         class="btn btn-primary mx-8 h-12 w-12 text-gray-50"
                         on:click={videoState.playPauseVideo.bind(videoState)}
+                        data-app-insights-event-name="fullscreen-play-pause-button-clicked"
                         ><Icon data={videoState.isPlaying ? pause : play} /></button
                     >
                 {:else}
@@ -184,12 +191,15 @@
                     disabled={currentIndex === resources.length - 1}
                     class="btn btn-link text-gray-50 disabled:bg-opacity-0 disabled:text-transparent
                     disabled:text-opacity-25"
+                    data-app-insights-event-name="fullscreen-next-button-clicked"
                     on:click={nextItem}><Icon data={chevronRight} /></button
                 >
                 {#if videoState.active && !videoState.isLoading}
                     <div class="flex-grow" />
-                    <button class="btn btn-link text-gray-50" on:click={videoState.makeVideoFullscreen.bind(videoState)}
-                        ><Icon data={expand} /></button
+                    <button
+                        class="btn btn-link text-gray-50"
+                        on:click={videoState.makeVideoFullscreen.bind(videoState)}
+                        data-app-insights-event-name="fullscreen-expand-button-clicked"><Icon data={expand} /></button
                     >
                 {/if}
                 <div class="flex-grow" />

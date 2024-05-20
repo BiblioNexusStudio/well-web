@@ -26,7 +26,7 @@
             return $translate('page.about.license.releasedUnderSingle.value', {
                 values: {
                     name: license.url
-                        ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}">${license.name}</a>`
+                        ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}" data-app-insights-event-name="about-page-${license.name}-link-clicked">${license.name}</a>`
                         : license.name,
                 },
             });
@@ -36,7 +36,7 @@
                     names: licenses
                         .map((license) =>
                             license.url
-                                ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}">${license.name}</a>`
+                                ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}" data-app-insights-event-name="about-page-${license.name}-link-clicked">${license.name}</a>`
                                 : license.name
                         )
                         .join(', '),
@@ -60,7 +60,11 @@
 
 <section class="container mx-auto flex h-screen flex-col">
     <div class="mx-auto flex w-full max-w-[65ch] flex-row items-center py-3">
-        <button class="btn btn-link text-base-500" on:click={() => goto('/')}><Icon data={chevronLeft} /></button>
+        <button
+            class="btn btn-link text-base-500"
+            on:click={() => goto('/')}
+            data-app-insights-event-name={`about-page-back-button-clicked`}><Icon data={chevronLeft} /></button
+        >
         <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">
             {$translate('page.index.about.value')}
         </div>
@@ -84,7 +88,9 @@
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         class="text-sky-500"
-                                        href={licenseInfo.copyright.holder.url}>{licenseInfo.copyright.holder.name}</a
+                                        href={licenseInfo.copyright.holder.url}
+                                        data-app-insights-event-name={`about-page-${licenseInfo.copyright.holder.name}-link-clicked`}
+                                        >{licenseInfo.copyright.holder.name}</a
                                     >
                                 {:else}
                                     {licenseInfo.copyright.holder.name}

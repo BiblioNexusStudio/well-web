@@ -79,7 +79,10 @@
                 max={totalSizeToDownload}
             />
             <div class="flex justify-end">
-                <button class="btn btn-primary" on:click={cancelCurrentDownload}
+                <button
+                    class="btn btn-primary"
+                    on:click={cancelCurrentDownload}
+                    data-app-insights-event-name="file-manager-cancel-download-button-clicked"
                     >{$translate('page.fileManager.cancel.value')}</button
                 >
             </div>
@@ -89,7 +92,10 @@
             <h3 class="text-lg font-bold">{$translate('page.fileManager.modal.success.value')}</h3>
             <div class="divider" />
             <div class="flex justify-end">
-                <button class="btn btn-primary" on:click={closeModal}
+                <button
+                    class="btn btn-primary"
+                    on:click={closeModal}
+                    data-app-insights-event-name="file-manager-close-button-clicked"
                     >{$translate('page.fileManager.modal.close.value')}</button
                 >
             </div>
@@ -107,18 +113,23 @@
             </p>
             <p class="mb-8 py-4">{$translate('page.fileManager.modal.question.value')}</p>
             <div class="flex justify-end">
-                <button class="btn btn-neutral me-4" on:click={cancelUpdateFiles}
+                <button
+                    class="btn btn-neutral me-4"
+                    on:click={cancelUpdateFiles}
+                    data-app-insights-event-name="file-manager-cancel-update-button-clicked"
                     >{$translate('page.fileManager.cancel.value')}</button
                 >
                 <button
                     class="btn btn-primary"
                     disabled={$downloadData.urlsToDelete.length === 0 && $downloadData.urlsToDownload.length === 0}
-                    on:click={continueUpdateFiles}>{$translate('page.fileManager.update.value')}</button
+                    on:click={continueUpdateFiles}
+                    data-app-insights-event-name="file-manager-continue-update-button-clicked"
+                    >{$translate('page.fileManager.update.value')}</button
                 >
             </div>
         </form>
     {/if}
     <form method="dialog" class="modal-backdrop">
-        <button>close</button>
+        <button data-app-insights-event-name="file-manager-close-button-clicked">close</button>
     </form>
 </dialog>

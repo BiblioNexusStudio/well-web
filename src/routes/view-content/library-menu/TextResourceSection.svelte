@@ -38,8 +38,10 @@
     {#if isFullscreen}
         <div class="mx-auto w-full max-w-[65ch]">
             <div class="flex w-full flex-row items-center py-3">
-                <button class="btn btn-link text-base-500" on:click={dismissParentResourceFullscreen}
-                    ><Icon data={chevronLeft} /></button
+                <button
+                    class="btn btn-link text-base-500"
+                    on:click={dismissParentResourceFullscreen}
+                    data-app-insights-event-name="fullscreen-close-button-clicked"><Icon data={chevronLeft} /></button
                 >
                 <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">
                     {title}
@@ -62,7 +64,10 @@
     {:else}
         <ResourceSectionHeader isVisible={showingResources.length > 0} {title} {subtitle}>
             {#if !shouldSearch(searchQuery) && textResources.length > 5}
-                <button class="text-sm font-semibold text-base-500" on:click={showParentResourceFullscreen}
+                <button
+                    class="text-sm font-semibold text-base-500"
+                    on:click={showParentResourceFullscreen}
+                    data-app-insights-event-name="see-all-resources-clicked"
                     >{$translate('page.passage.resourcePane.seeAll.value', {
                         values: { count: textResources.length },
                     })}</button
@@ -76,6 +81,7 @@
             <button
                 class="mb-4 flex w-full flex-row items-center rounded-full border py-3 pl-4"
                 on:click={() => resourceSelected(entry)}
+                data-app-insights-event-name="text-resource-clicked"
             >
                 <div class="flex flex-shrink flex-col items-start">
                     <div class="text-md text-start font-semibold text-blue-title">

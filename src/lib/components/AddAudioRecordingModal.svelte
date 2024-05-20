@@ -62,13 +62,17 @@
         <AudioRecorder bind:this={audioRecorder} bind:canSave={recordingAvailableToSave} />
 
         <div class="modal-action justify-center pt-4">
-            <button class="btn btn-secondary" on:click={discard}
+            <button
+                class="btn btn-secondary"
+                on:click={discard}
+                data-app-insights-event-name="audio-recording-discard-button-clicked"
                 >{$translate('navTop.audioRecordingModal.discard.value')}</button
             >
             <button
                 class="btn btn-primary"
                 on:click={save}
                 disabled={!recordingAvailableToSave || !language || !translation || !abbreviation}
+                data-app-insights-event-name="audio-recording-save-button-clicked"
                 >{$translate('navTop.audioRecordingModal.save.value')}</button
             >
         </div>

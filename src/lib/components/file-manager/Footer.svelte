@@ -28,6 +28,7 @@
                     class="checkbox-primary checkbox"
                     disabled={true}
                     bind:checked={$footerInputs.text}
+                    data-app-insights-event-name="file-manager-footer-text-checkbox-toggled"
                 />
                 <label
                     for="select-all"
@@ -42,6 +43,7 @@
                     class="checkbox-primary checkbox"
                     disabled={footerInputsDisabled}
                     bind:checked={$footerInputs.audio}
+                    data-app-insights-event-name="file-manager-footer-audio-checkbox-toggled"
                 />
                 <label
                     for="select-all"
@@ -56,6 +58,7 @@
                     class="checkbox-primary checkbox"
                     disabled={footerInputsDisabled}
                     bind:checked={$footerInputs.media}
+                    data-app-insights-event-name="file-manager-footer-media-checkbox-toggled"
                 />
                 <label
                     for="select-all"
@@ -74,7 +77,12 @@
                     )}
                 </span>
             </div>
-            <button class="btn btn-primary ms-4" disabled={downloadingIsDisabled} on:click={updateFiles}>
+            <button
+                class="btn btn-primary ms-4"
+                disabled={downloadingIsDisabled}
+                on:click={updateFiles}
+                data-app-insights-event-name="file-manager-footer-download-button-clicked"
+            >
                 {#if $isOnline}
                     <Icon data={download} /> {$translate('page.fileManager.download.value')}
                 {:else}

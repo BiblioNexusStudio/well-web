@@ -75,6 +75,18 @@
         log.exception(error);
     }
 
+    function onInteraction(e: MouseEvent) {
+        let element = e.target as HTMLElement;
+        for (let i = 0; i < 5; i++) {
+            if (element?.dataset?.appInsightsEventName) {
+                console.log(element.dataset.appInsightsEventName.replace(/\s/g, ''));
+                log.trackEvent(element.dataset.appInsightsEventName.replace(/\s/g, ''));
+                break;
+            }
+            element = element?.parentNode as HTMLElement;
+        }
+    }
+
     // get the manifest info to include in the head
     $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
@@ -89,6 +101,7 @@
     on:offline={updateOnlineStatus}
     on:error={onError}
     on:unhandledrejection={onRejection}
+    on:click={onInteraction}
 />
 
 <DebugModal />

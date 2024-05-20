@@ -1,6 +1,7 @@
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import config from '$lib/config';
 import { browserSupported } from './utils/browser';
+import { browser } from '$app/environment';
 import type { WellFetchError } from './data-cache';
 
 const appInsights = new ApplicationInsights({
@@ -51,5 +52,14 @@ export const log = {
             name: routeId,
             properties: additionalProperties,
         });
+    },
+    trackEvent: (eventName: string) => {
+        browser &&
+            appInsights.trackEvent({
+                name: eventName,
+                properties: {
+                    ...additionalProperties,
+                },
+            });
     },
 };

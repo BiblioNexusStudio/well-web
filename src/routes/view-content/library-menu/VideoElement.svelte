@@ -81,6 +81,7 @@
     class="rounded-lg object-contain"
     playsinline
     crossorigin="anonymous"
+    data-app-insights-event-name="video-player-clicked"
 >
     <source src={`${cachedOrRealUrl(videoState.url ?? '')}#t=0.001`} />
 </video>

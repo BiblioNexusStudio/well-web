@@ -16,7 +16,11 @@
 
         <div class="flex w-full justify-between">
             <h2 class="z-10 text-2xl font-bold text-white">{$translate('page.menu.menu.value')}</h2>
-            <button on:click={openSettingsMenu} class="z-10 flex items-start">
+            <button
+                on:click={openSettingsMenu}
+                class="z-10 flex items-start"
+                data-app-insights-event-name="main-menu-settings-button-clicked"
+            >
                 <CogIcon />
             </button>
         </div>
@@ -27,6 +31,7 @@
             <button
                 on:click={() => goto('/select-language')}
                 class="btn btn-outline btn-primary border-[#EAECF0] !text-[#344054]"
+                data-app-insights-event-name="main-menu-change-language-button-clicked"
                 ><LanguageIcon />{$translate('page.menu.changeLanguage.value')}</button
             >
         </div>
@@ -39,12 +44,14 @@
                 <button
                     on:click={() => goto('/')}
                     class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
+                    data-app-insights-event-name="main-menu-home-button-clicked"
                     ><HomeIcon /><span class="mt-2 text-xs">{$translate('page.menu.home.value')}</span></button
                 >
 
                 <button
                     on:click={() => goto('/file-manager')}
                     class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
+                    data-app-insights-event-name="main-menu-download-manager-button-clicked"
                     ><DownloadIcon /><span class="mt-2 text-xs">{$translate('page.menu.downloadManager.value')}</span
                     ></button
                 >

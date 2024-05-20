@@ -207,7 +207,11 @@
         <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
         {#if !visibleSwish}
             <div>
-                <button on:click={(e) => resetPage(e)} type="button" class="mt-2 pl-4 font-semibold text-primary"
+                <button
+                    on:click={(e) => resetPage(e)}
+                    type="button"
+                    class="mt-2 pl-4 font-semibold text-primary"
+                    data-app-insights-event-name="library-menu-reset-page-button-clicked"
                     >{$translate('page.passage.resourcePane.cancel.value')}</button
                 >
             </div>

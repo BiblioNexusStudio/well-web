@@ -78,7 +78,11 @@
 </script>
 
 <div class="relative me-2 flex h-full w-1/2 items-center" bind:this={resourcesMenuDiv}>
-    <button class="btn btn-outline btn-primary flex w-full justify-between" on:click={toggleMenu}>
+    <button
+        class="btn btn-outline btn-primary flex w-full justify-between"
+        on:click={toggleMenu}
+        data-app-insights-event-name="file-manager-resource-menu-selected"
+    >
         {$translate('page.fileManager.viewRow.resources.value')} ({selectedResources.length}) <Icon
             data={menuOpen ? caretUp : caretDown}
         />
@@ -91,7 +95,12 @@
             {#each $resourcesMenu as resource}
                 {#if resource.display}
                     <label class="label mb-4 cursor-pointer justify-start">
-                        <input type="checkbox" bind:checked={resource.selected} class="checkbox-primary checkbox" />
+                        <input
+                            type="checkbox"
+                            bind:checked={resource.selected}
+                            class="checkbox-primary checkbox"
+                            data-app-insights-event-name={`file-manager-resource-menu-${resource.name}-selected`}
+                        />
                         <span class="label-text ms-4">{resource.name}</span>
                     </label>
                 {/if}

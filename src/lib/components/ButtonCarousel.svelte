@@ -64,6 +64,7 @@
     {#if targetElement !== buttonElements[0] && displayIcons}
         <button
             class="radial-gradient-circle absolute left-0 flex h-full w-[36px] items-center justify-center bg-white"
+            data-app-insights-event-name="button-carousel-left-arrow-clicked"
             on:click={() => {
                 if (selectedValue !== null) {
                     selectedValue = selectedValue - 1;
@@ -78,6 +79,7 @@
                     'bg-primary-50 text-base-500'}"
                 on:click={() => (selectedValue = value)}
                 bind:this={buttonElements[index]}
+                data-app-insights-event-name={`button-carousel-${label}-clicked`}
             >
                 {label}</button
             >
@@ -86,6 +88,7 @@
     {#if targetElement !== buttonElements[buttonElements.length - 1] && displayIcons}
         <button
             class="radial-gradient-circle absolute right-0 flex h-full w-[36px] items-center justify-center bg-white"
+            data-app-insights-event-name="button-carousel-right-arrow-clicked"
             on:click={() => {
                 if (selectedValue !== null) {
                     selectedValue = selectedValue + 1;

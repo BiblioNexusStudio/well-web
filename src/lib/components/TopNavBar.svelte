@@ -53,6 +53,7 @@
             <button
                 on:click={handlePassageButton}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                data-app-insights-event-name="top-nav-passage-button-clicked"
             >
                 {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
             </button>
@@ -60,6 +61,7 @@
                 <button
                     on:click={openBibleMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                    data-app-insights-event-name="top-nav-open-bible-menu-button-clicked"
                 >
                     {$translate('page.passage.nav.bible.value')}
                 </button>
@@ -68,6 +70,7 @@
                 <button
                     on:click={openGuideMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                    data-app-insights-event-name="top-nav-open-guide-menu-button-clicked"
                 >
                     {guideShortName || $translate('navTop.selectGuide.value')}
                 </button>
@@ -76,7 +79,11 @@
     {/if}
     {#if bibleSection && tab === 'bible' && bibles.length}
         <div class="flex-none">
-            <details bind:open={preferredBiblesModalOpen} class="dropdown md:dropdown-end">
+            <details
+                bind:open={preferredBiblesModalOpen}
+                class="dropdown md:dropdown-end"
+                data-app-insights-event-name="top-nav-preferred-bibles-modal-button-clicked"
+            >
                 <summary class="btn btn-link btn-active text-primary">
                     <Icon class="h-6 w-6" data={plus} scale={2} />
                 </summary>
@@ -96,7 +103,10 @@
                 </summary>
                 <ul class="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow">
                     <li>
-                        <button on:click={() => (recordingModalOpen = true)}>
+                        <button
+                            on:click={() => (recordingModalOpen = true)}
+                            data-app-insights-event-name="top-nav-record-button-clicked"
+                        >
                             <Icon data={microphone} />
                             {$translate('navTop.recording.value')}...
                         </button>
