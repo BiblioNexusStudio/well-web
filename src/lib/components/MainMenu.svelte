@@ -4,8 +4,9 @@
     import DownloadIcon from '$lib/icons/DownloadIcon.svelte';
     import HomeIcon from '$lib/icons/HomeIcon.svelte';
     import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
+    import ShareIcon from '$lib/icons/ShareIcon.svelte';
     import CogIcon from '$lib/icons/CogIcon.svelte';
-    import { openSettingsMenu } from '$lib/stores/passage-page.store';
+    import { openSettingsMenu, openShareMenu } from '$lib/stores/passage-page.store';
 </script>
 
 <div class="z-50 flex h-full w-full flex-col">
@@ -54,6 +55,13 @@
                     data-app-insights-event-name="main-menu-download-manager-button-clicked"
                     ><DownloadIcon /><span class="mt-2 text-xs">{$translate('page.menu.downloadManager.value')}</span
                     ></button
+                >
+
+                <button
+                    on:click={openShareMenu}
+                    class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
+                    data-app-insights-event-name="main-menu-download-manager-button-clicked"
+                    ><ShareIcon /><span class="mt-2 text-xs">Share</span></button
                 >
             </div>
         </div>
