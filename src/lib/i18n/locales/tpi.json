@@ -302,6 +302,35 @@
             "loading": {
                 "value": "Loading..."
             }
+        },
+        "quickShare": {
+            "share": {
+                "value": "Wantaim narapela"
+            },
+            "inAWebBrowser": {
+                "value": "Insait long wanpela web brauza (olsem Chrome), go long:"
+            },
+            "orScan": {
+                "value": "O scanim:"
+            },
+            "toInstallBibleWell": {
+                "value": "Long putim Bible Well:"
+            },
+            "stepOne": {
+                "value": "1. Opim wanpela web brauza (olsem Chrome)"
+            },
+            "stepTwo": {
+                "value": "2. Go long"
+            },
+            "stepThree": {
+                "value": "3. Go long Setim"
+            },
+            "stepFour": {
+                "value": "4. Klik \"Putim\" (lukim long daun)"
+            },
+            "close": {
+                "value": "Klosim"
+            }
         }
     },
     "navTop": {

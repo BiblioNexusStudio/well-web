@@ -302,6 +302,35 @@
             "loading": {
                 "value": "Chargement..."
             }
+        },
+        "quickShare": {
+            "share": {
+                "value": "Partager"
+            },
+            "inAWebBrowser": {
+                "value": "Dans un navigateur web (comme Chrome), allez à:"
+            },
+            "orScan": {
+                "value": "Ou scannez:"
+            },
+            "toInstallBibleWell": {
+                "value": "Pour installer Bible Well:"
+            },
+            "stepOne": {
+                "value": "1. Ouvrez un navigateur web (comme Chrome)"
+            },
+            "stepTwo": {
+                "value": "2. Naviguez vers"
+            },
+            "stepThree": {
+                "value": "3. Allez dans Paramètres"
+            },
+            "stepFour": {
+                "value": "4. Cliquez sur \"Installer\" (voir ci-dessous)"
+            },
+            "close": {
+                "value": "Fermer"
+            }
         }
     },
     "navTop": {

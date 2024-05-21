@@ -1715,6 +1715,13 @@
     magic-string "^0.25.0"
     string.prototype.matchall "^4.0.6"
 
+"@svelte-put/qr@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@svelte-put/qr/-/qr-1.2.1.tgz#d785848c7b38ceb076df743b97cfed641dab86da"
+  integrity sha512-VIAze6mCVWdiyq6xnMFhbD3dbTvz9CDFVN3lVkDvx6SYFcstgHuIyb7Pi3aJIr2ClDc4U+W2U+SGhFuQBskvBg==
+  dependencies:
+    qrcode-generator "^1.4.4"
+
 "@sveltejs/adapter-auto@^2.0.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@sveltejs/adapter-auto/-/adapter-auto-2.1.0.tgz#cb36fd7081e3c4b1c9a9192b1a23c8c82dce8a1b"
@@ -6299,6 +6306,11 @@ q@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
+
+qrcode-generator@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/qrcode-generator/-/qrcode-generator-1.4.4.tgz#63f771224854759329a99048806a53ed278740e7"
+  integrity sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==
 
 querystringify@^2.1.1:
   version "2.2.0"

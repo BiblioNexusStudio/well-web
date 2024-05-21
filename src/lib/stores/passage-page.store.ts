@@ -7,6 +7,7 @@ export enum PassagePageMenuEnum {
     library = 'library',
     bible = 'bible',
     settings = 'settings',
+    share = 'share',
 }
 
 export const passagePageShownMenu = writable<PassagePageMenuEnum | null>(null);
@@ -33,6 +34,10 @@ export function openBibleMenu() {
 
 export function openSettingsMenu() {
     passagePageShownMenu.set(PassagePageMenuEnum.settings);
+}
+
+export function openShareMenu() {
+    passagePageShownMenu.set(PassagePageMenuEnum.share);
 }
 
 export function closeAllPassagePageMenus() {

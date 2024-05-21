@@ -349,6 +349,35 @@
             "loading": {
                 "value": "Загрузка..."
             }
+        },
+        "quickShare": {
+            "share": {
+                "value": "Поделиться"
+            },
+            "inAWebBrowser": {
+                "value": "В веб-браузере (например, Chrome) перейдите по адресу:"
+            },
+            "orScan": {
+                "value": "Или сканируйте:"
+            },
+            "toInstallBibleWell": {
+                "value": "Для установки Bible Well:"
+            },
+            "stepOne": {
+                "value": "1. Откройте веб-браузер (например, Chrome)"
+            },
+            "stepTwo": {
+                "value": "2. Перейдите по адресу"
+            },
+            "stepThree": {
+                "value": "3. Зайдите в Настройки"
+            },
+            "stepFour": {
+                "value": "4. Нажмите \"Установить\" (см. ниже)"
+            },
+            "close": {
+                "value": "Закрыть"
+            }
         }
     },
     "navTop": {

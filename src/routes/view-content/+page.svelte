@@ -54,6 +54,7 @@
     import type { BibleSection } from '$lib/types/bible';
     import BibleUnavailable from './BibleUnavailable.svelte';
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
+    import QuickShare from './quick-share/QuickShare.svelte';
 
     const steps = [
         $translate('resources.cbbt-er.step1.value'),
@@ -443,5 +444,8 @@
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.settings}
         <SettingsMenu />
+    {/if}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.share}
+        <QuickShare />
     {/if}
 </div>
