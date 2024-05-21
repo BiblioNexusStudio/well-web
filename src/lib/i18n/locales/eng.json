@@ -384,6 +384,44 @@
                 "value": "Loading",
                 "_context": "Message to display when the book and chapter selectors are loading"
             }
+        },
+        "quickShare": {
+            "share": {
+                "value": "Share",
+                "_context": "over all title"
+            },
+            "inAWebBrowser": {
+                "value": "In a web browser (like Chrome), navigate to:",
+                "_context": "this tells the user to go to a web browser and navigate to a specific URL"
+            },
+            "orScan": {
+                "value": "Or scan:",
+                "_context": "this tells the user to scan a QR code instead of going to a URL"
+            },
+            "toInstallBibleWell": {
+                "value": "To install Bible Well:",
+                "_context": "this is the title of the installation instructions"
+            },
+            "stepOne": {
+                "value": "1. Open a web browser (like Chrome)",
+                "_context": "this is the first step in the installation instructions"
+            },
+            "stepTwo": {
+                "value": "2. Navigate to",
+                "_context": "this is the second step in the installation instructions"
+            },
+            "stepThree": {
+                "value": "3. Go to Settings",
+                "_context": "this is the third step in the installation instructions"
+            },
+            "stepFour": {
+                "value": "4. Click \"Install\" (see below)",
+                "_context": "this is the fourth step in the installation instructions"
+            },
+            "close": {
+                "value": "Close",
+                "_context": "this is the button to close the quick share view"
+            }
         }
     },
     "navTop": {

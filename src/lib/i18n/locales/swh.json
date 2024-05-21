@@ -349,6 +349,35 @@
             "loading": {
                 "value": "Kupakia..."
             }
+        },
+        "quickShare": {
+            "share": {
+                "value": "Shiriki"
+            },
+            "inAWebBrowser": {
+                "value": "Katika kivinjari cha wavuti (kama Chrome), nenda kwa:"
+            },
+            "orScan": {
+                "value": "Au skanisha:"
+            },
+            "toInstallBibleWell": {
+                "value": "Kusakinisha Bible Well:"
+            },
+            "stepOne": {
+                "value": "1. Fungua kivinjari cha wavuti (kama Chrome)"
+            },
+            "stepTwo": {
+                "value": "2. Nenda kwa"
+            },
+            "stepThree": {
+                "value": "3. Nenda kwenye Mipangilio"
+            },
+            "stepFour": {
+                "value": "4. Bonyeza \"Sakinisha\" (angalia hapa chini)"
+            },
+            "close": {
+                "value": "Funga"
+            }
         }
     },
     "navTop": {

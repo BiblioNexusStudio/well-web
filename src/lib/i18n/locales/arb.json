@@ -302,6 +302,35 @@
             "loading": {
                 "value": "جار التحميل"
             }
+        },
+        "quickShare": {
+            "share": {
+                "value": "مشاركة"
+            },
+            "inAWebBrowser": {
+                "value": "في متصفح الويب (مثل Chrome)، انتقل إلى:"
+            },
+            "orScan": {
+                "value": "أو مسح:"
+            },
+            "toInstallBibleWell": {
+                "value": "لتثبيت برنامج الكتاب المقدس بشكل جيد:"
+            },
+            "stepOne": {
+                "value": "1. افتح متصفح ويب (مثل Chrome)"
+            },
+            "stepTwo": {
+                "value": "2. انتقل إلى"
+            },
+            "stepThree": {
+                "value": "3. اذهب إلى الإعدادات"
+            },
+            "stepFour": {
+                "value": "4. انقر على \"تثبيت\" (انظر أدناه)"
+            },
+            "close": {
+                "value": "إغلاق"
+            }
         }
     },
     "navTop": {

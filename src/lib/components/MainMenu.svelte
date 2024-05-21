@@ -60,8 +60,8 @@
                 <button
                     on:click={openShareMenu}
                     class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
-                    data-app-insights-event-name="main-menu-download-manager-button-clicked"
-                    ><ShareIcon /><span class="mt-2 text-xs">Share</span></button
+                    data-app-insights-event-name="main-menu-share-button-clicked"
+                    ><ShareIcon /><span class="mt-2 text-xs">{$translate('page.quickShare.share.value')}</span></button
                 >
             </div>
         </div>
