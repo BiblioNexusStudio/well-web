@@ -1,35 +1,70 @@
 <script lang="ts">
     import { cachedOrRealUrl } from '$lib/data-cache';
+    import type { ResourceContentInfoWithMetadata } from '$lib/types/resource';
     import {
         filterItemsByKeyMatchingSearchQuery,
         htmlWithHighlightedSearchString,
         shouldSearch,
     } from '$lib/utils/search';
+    import type { LibraryResourceGrouping } from '../library-resource-loader';
+    import ResourceFullscreenHeader from './ResourceFullscreenHeader.svelte';
     import ResourceSectionHeader from './ResourceSectionHeader.svelte';
-    import type { AnyResource, ImageOrVideoResource } from './types';
+    import { _ as translate } from 'svelte-i18n';
 
-    export let title: string | null;
-    export let subtitle: string | null;
-    export let resources: AnyResource[];
-    export let resourceSelected: (image: ImageOrVideoResource) => void;
+    const imagesToShowBeforeSeeAll = 3;
+
+    export let resourceGrouping: LibraryResourceGrouping;
+    export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
     export let searchQuery: string;
+    export let showAll: () => void;
+    export let dismissFullscreen: () => void;
+    export let isFullscreen: boolean;
 
     let carousel: HTMLDivElement | null = null;
 
-    $: imageResources = resources.filter(
-        (resource) => 'type' in resource && resource.type === 'image'
-    ) as ImageOrVideoResource[];
+    $: unfilteredResources =
+        !isFullscreen && !shouldSearch(searchQuery)
+            ? resourceGrouping.resources.slice(0, imagesToShowBeforeSeeAll)
+            : resourceGrouping.resources;
 
-    $: filteredResources = filterItemsByKeyMatchingSearchQuery(imageResources, 'displayName', searchQuery);
+    $: filteredResources = !isFullscreen
+        ? resourceGrouping.resources.slice(0, imagesToShowBeforeSeeAll)
+        : filterItemsByKeyMatchingSearchQuery(resourceGrouping.resources, 'displayName', searchQuery);
 
     // if the user clears the search, scroll the carousel back to the left
     $: !shouldSearch(searchQuery) && carousel?.scrollTo({ left: 0, behavior: 'instant' });
 </script>
 
-{#if imageResources.length > 0}
-    <ResourceSectionHeader isVisible={filteredResources.length > 0} {title} {subtitle} />
-    <div bind:this={carousel} class="carousel w-full pb-6 {filteredResources.length > 0 ? 'visible' : 'hidden'}">
-        {#each imageResources as image}
+{#if resourceGrouping.resources.length > 0}
+    {#if isFullscreen}
+        <ResourceFullscreenHeader
+            {resourceGrouping}
+            resourcesCount={filteredResources.length}
+            {dismissFullscreen}
+            bind:searchQuery
+        />
+    {:else}
+        <ResourceSectionHeader isVisible={filteredResources.length > 0} {resourceGrouping}>
+            {#if !shouldSearch(searchQuery) && resourceGrouping.resources.length > imagesToShowBeforeSeeAll}
+                <button
+                    class="text-sm font-semibold text-base-500"
+                    on:click={showAll}
+                    data-app-insights-event-name="see-all-resources-clicked"
+                    >{$translate('page.passage.resourcePane.seeAll.value', {
+                        values: { count: resourceGrouping.resources.length },
+                    })}</button
+                >
+            {/if}</ResourceSectionHeader
+        >
+    {/if}
+
+    <div
+        bind:this={carousel}
+        class="carousel w-full pb-6 {isFullscreen && 'mx-auto max-w-[65ch]'} {filteredResources.length > 0
+            ? 'visible'
+            : 'hidden'}"
+    >
+        {#each unfilteredResources as image}
             <button
                 class="carousel-item me-8 w-32 flex-col {filteredResources.includes(image) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(image)}
@@ -37,12 +72,12 @@
             >
                 <img
                     class="mb-1 h-20 w-32 rounded-lg object-cover"
-                    src={cachedOrRealUrl(image.url)}
+                    src={cachedOrRealUrl(image.url ?? '')}
                     alt={image.displayName}
                     crossorigin="anonymous"
                 />
                 <span class="text-md line-clamp-1 break-all font-semibold text-blue-title"
-                    >{@html htmlWithHighlightedSearchString(image.displayName, searchQuery)}</span
+                    >{@html htmlWithHighlightedSearchString(image.displayName ?? '', searchQuery)}</span
                 >
             </button>
         {/each}
