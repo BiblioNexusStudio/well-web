@@ -1,5 +1,6 @@
 <script lang="ts">
     import LibraryIcon from '$lib/icons/LibraryIcon.svelte';
+    import ClipboardIcon from '$lib/icons/ClipboardIcon.svelte';
     import MenuIcon from '$lib/icons/MenuIcon.svelte';
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
@@ -41,10 +42,11 @@
         openLibraryMenu,
         openGuideMenu,
         openBibleMenu,
+        openResourcesMenu,
     } from '$lib/stores/passage-page.store';
     import GuideMenu from './guide-menu/GuideMenu.svelte';
     import { onMount } from 'svelte';
-    import LibraryMenu from './library-menu/LibraryMenu.svelte';
+    import LibraryResourceMenu from './library-resource-menu/LibraryResourceMenu.svelte';
     import BibleMenu from './bible-menu/BibleMenu.svelte';
     import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
@@ -266,6 +268,8 @@
     function handleSelectedTabMenu(tab: string) {
         if (tab === 'libraryMenu') {
             openLibraryMenu();
+        } else if (tab === 'resources') {
+            openResourcesMenu();
         } else if (tab === 'guide' && $currentGuide === undefined) {
             openGuideMenu();
         } else if (tab === 'guide' && $selectedBibleSection === null) {
@@ -295,7 +299,11 @@
     });
 </script>
 
-<BookPassageSelectorPane bind:bookPassageSelectorPane bind:isShowing={isShowingBookPassageSelectorPane} />
+<BookPassageSelectorPane
+    bind:bookPassageSelectorPane
+    bind:isShowing={isShowingBookPassageSelectorPane}
+    bind:tab={selectedTab}
+/>
 <BookChapterSelectorPane bind:bookChapterSelectorPane bind:isShowing={isShowingBookChapterSelectorPane} />
 
 <div class="btm-nav z-40 h-20 border-t">
@@ -306,6 +314,11 @@
         <CompassIcon />
     </NavMenuTabItem>
     {#if resourceData?.additionalResources?.length}
+        <NavMenuTabItem bind:selectedTab tabName="resources" label={$translate('page.passage.nav.resources.value')}>
+            <ClipboardIcon />
+        </NavMenuTabItem>
+    {/if}
+    {#if false}
         <NavMenuTabItem bind:selectedTab tabName="libraryMenu" label={$translate('page.passage.nav.library.value')}>
             <LibraryIcon />
         </NavMenuTabItem>
@@ -319,7 +332,7 @@
     {#await baseFetchPromise}
         <FullPageSpinner />
     {:then}
-        {#if $passagePageShownMenu === null}
+        {#if $passagePageShownMenu === null || $passagePageShownMenu === PassagePageMenuEnum.resources}
             <TopNavBar
                 bind:preferredBiblesModalOpen
                 {bibleSectionTitle}
@@ -436,8 +449,8 @@
     {#if $passagePageShownMenu === PassagePageMenuEnum.guide}
         <GuideMenu bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane} />
     {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.library}
-        <LibraryMenu resources={resourceData?.additionalResources} />
+    {#if $passagePageShownMenu === PassagePageMenuEnum.library || $passagePageShownMenu === PassagePageMenuEnum.resources}
+        <LibraryResourceMenu resources={resourceData?.additionalResources} tab={selectedTab} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
         <BibleMenu bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane} />

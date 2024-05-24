@@ -171,6 +171,8 @@
                 : 0,
         };
         isShowing = false;
+        currentStep = steps.one;
+        currentChapter = null;
         closeAllPassagePageMenus();
     }
 

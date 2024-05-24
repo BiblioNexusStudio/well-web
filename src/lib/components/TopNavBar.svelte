@@ -36,7 +36,7 @@
     function handlePassageButton() {
         if (tab === 'bible') {
             showBookChapterVerseMenu = true;
-        } else if (tab === 'guide') {
+        } else if (tab === 'guide' || tab === 'resources') {
             showBookPassageSelectorPane = true;
         }
     }
@@ -48,7 +48,7 @@
     <AddAudioRecordingModal bind:open={recordingModalOpen} {bibleSection} />
 {/if}
 <div class="navbar flex w-full justify-between">
-    {#if tab === 'guide' || tab === 'bible'}
+    {#if tab === 'guide' || tab === 'bible' || tab === 'resources'}
         <div class="ms-2 flex-none">
             <button
                 on:click={handlePassageButton}
