@@ -158,8 +158,12 @@ export async function fetchMetadataForResourceContent(
 
 export async function fetchDisplayNameForResourceContent(
     resourceContent: ResourceContentInfo | FileManagerResourceContentInfo
-): Promise<string | null> {
-    return (await fetchMetadataForResourceContent(resourceContent))?.displayName || null;
+): Promise<string | undefined> {
+    return (
+        ('displayName' in resourceContent && resourceContent.displayName) ||
+        (await fetchMetadataForResourceContent(resourceContent))?.displayName ||
+        undefined
+    );
 }
 
 export function resourceDisplayNameSorter(a: { displayName: string | null }, b: { displayName: string | null }) {

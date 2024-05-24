@@ -1,39 +1,73 @@
 <script lang="ts">
     import { cachedOrRealUrl } from '$lib/data-cache';
+    import type { ResourceContentInfoWithMetadata } from '$lib/types/resource';
     import {
         filterItemsByKeyMatchingSearchQuery,
         htmlWithHighlightedSearchString,
         shouldSearch,
     } from '$lib/utils/search';
     import { formatSecondsToMins } from '$lib/utils/time';
+    import type { LibraryResourceGrouping } from '../library-resource-loader';
     import ResourceSectionHeader from './ResourceSectionHeader.svelte';
-    import type { AnyResource, ImageOrVideoResource } from './types';
     import { Icon } from 'svelte-awesome';
     import play from 'svelte-awesome/icons/play';
     import { _ as translate } from 'svelte-i18n';
+    import ResourceFullscreenHeader from './ResourceFullscreenHeader.svelte';
 
-    export let title: string | null;
-    export let subtitle: string | null;
-    export let resources: AnyResource[];
-    export let resourceSelected: (video: ImageOrVideoResource) => void;
+    const videosToShowBeforeSeeAll = 3;
+
+    export let resourceGrouping: LibraryResourceGrouping;
+    export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
     export let searchQuery: string;
+    export let isFullscreen: boolean;
+    export let showAll: () => void;
+    export let dismissFullscreen: () => void;
 
     let carousel: HTMLDivElement | null = null;
 
-    $: videoResources = resources.filter(
-        (resource) => 'type' in resource && resource.type === 'video'
-    ) as ImageOrVideoResource[];
+    $: unfilteredResources =
+        !isFullscreen && !shouldSearch(searchQuery)
+            ? resourceGrouping.resources.slice(0, videosToShowBeforeSeeAll)
+            : resourceGrouping.resources;
 
-    $: filteredResources = filterItemsByKeyMatchingSearchQuery(videoResources, 'displayName', searchQuery);
+    $: filteredResources = !isFullscreen
+        ? resourceGrouping.resources.slice(0, videosToShowBeforeSeeAll)
+        : filterItemsByKeyMatchingSearchQuery(resourceGrouping.resources, 'displayName', searchQuery);
 
     // if the user clears the search, scroll the carousel back to the left
     $: !shouldSearch(searchQuery) && carousel?.scrollTo({ left: 0, behavior: 'instant' });
 </script>
 
-{#if videoResources.length > 0}
-    <ResourceSectionHeader isVisible={filteredResources.length > 0} {title} {subtitle} />
-    <div bind:this={carousel} class="carousel w-full pb-6 {filteredResources.length > 0 ? 'visible' : 'hidden'}">
-        {#each videoResources as video}
+{#if resourceGrouping.resources.length > 0}
+    {#if isFullscreen}
+        <ResourceFullscreenHeader
+            {resourceGrouping}
+            resourcesCount={filteredResources.length}
+            {dismissFullscreen}
+            bind:searchQuery
+        />
+    {:else}
+        <ResourceSectionHeader isVisible={filteredResources.length > 0} {resourceGrouping}>
+            {#if !shouldSearch(searchQuery) && resourceGrouping.resources.length > videosToShowBeforeSeeAll}
+                <button
+                    class="text-sm font-semibold text-base-500"
+                    on:click={showAll}
+                    data-app-insights-event-name="see-all-resources-clicked"
+                    >{$translate('page.passage.resourcePane.seeAll.value', {
+                        values: { count: resourceGrouping.resources.length },
+                    })}</button
+                >
+            {/if}</ResourceSectionHeader
+        >
+    {/if}
+
+    <div
+        bind:this={carousel}
+        class="carousel w-full pb-6 {isFullscreen && 'mx-auto max-w-[65ch]'} {filteredResources.length > 0
+            ? 'visible'
+            : 'hidden'}"
+    >
+        {#each unfilteredResources as video}
             <button
                 class="carousel-item me-2 w-32 flex-col {filteredResources.includes(video) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(video)}
@@ -65,7 +99,7 @@
                     {/if}
                 </div>
                 <span class="line-clamp-1 break-all text-sm text-neutral"
-                    >{@html htmlWithHighlightedSearchString(video.displayName, searchQuery)}</span
+                    >{@html htmlWithHighlightedSearchString(video.displayName ?? '', searchQuery)}</span
                 >
             </button>
         {/each}

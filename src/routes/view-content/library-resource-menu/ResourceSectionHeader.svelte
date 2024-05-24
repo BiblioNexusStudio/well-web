@@ -1,7 +1,12 @@
 <script lang="ts">
+    import type { LibraryResourceGrouping } from '../library-resource-loader';
+    import { parseSubtitle, parseTitle } from './titles';
+
     export let isVisible = true;
-    export let title: string | null;
-    export let subtitle: string | null;
+    export let resourceGrouping: LibraryResourceGrouping;
+
+    $: title = parseTitle(resourceGrouping.parentResource.displayName);
+    $: subtitle = parseSubtitle(resourceGrouping.parentResource.displayName);
 </script>
 
 <div class={isVisible ? 'visible' : 'hidden'}>

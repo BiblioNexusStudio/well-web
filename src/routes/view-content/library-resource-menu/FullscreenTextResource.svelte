@@ -1,10 +1,15 @@
 <script lang="ts">
     import { trapFocus } from '$lib/utils/trap-focus';
     import { Icon } from 'svelte-awesome';
-    import type { TextResource } from './types';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
+    import type { ResourceContentInfoWithMetadata } from '$lib/types/resource';
+    import { _ as translate } from 'svelte-i18n';
+    import { loadTextContent } from '../library-resource-loader';
+    import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
 
-    export let resource: TextResource | null;
+    export let resource: ResourceContentInfoWithMetadata | null;
+
+    $: textResourcePromise = resource && loadTextContent(resource);
 </script>
 
 {#if resource !== null}
@@ -24,7 +29,15 @@
             </div>
         </div>
         <div class="prose mx-auto overflow-y-scroll px-4 pb-4 md:px-0">
-            {@html resource.html}
+            {#await textResourcePromise}
+                <FullPageSpinner />
+            {:then textResource}
+                {#if textResource}
+                    {@html textResource}
+                {:else}
+                    {$translate('page.about.error.value')}
+                {/if}
+            {/await}
         </div>
     </div>
 {/if}

@@ -5,7 +5,6 @@
     import pause from 'svelte-awesome/icons/pause';
     import refresh from 'svelte-awesome/icons/refresh';
     import { Icon } from 'svelte-awesome';
-    import type { ImageOrVideoResource } from './types';
     import { _ as translate } from 'svelte-i18n';
     import { trapFocus } from '$lib/utils/trap-focus';
     import { expand, volumeOff, volumeUp, warning } from 'svelte-awesome/icons';
@@ -14,9 +13,10 @@
     import VideoSlider from './VideoSlider.svelte';
     import ImageElement from './ImageElement.svelte';
     import { onDestroy } from 'svelte';
+    import { MediaType, type ResourceContentInfoWithMetadata } from '$lib/types/resource';
 
     export let currentIndex: number | null;
-    export let resources: ImageOrVideoResource[];
+    export let resources: ResourceContentInfoWithMetadata[];
 
     let container: HTMLDivElement;
     let topBarDiv: HTMLDivElement;
@@ -33,10 +33,10 @@
         videoState.reset();
         if (index !== null) {
             const resource = resources[index];
-            if (resource?.type === 'video') {
+            if (resource?.mediaType === MediaType.Video && resource.url) {
                 videoState.activate(resource.url);
-            } else if (resource?.type === 'image') {
-                imageState.activate(resource.url, resource.displayName);
+            } else if (resource?.mediaType === MediaType.Image && resource.url) {
+                imageState.activate(resource.url, resource.displayName ?? '');
             }
         }
     }
@@ -78,7 +78,7 @@
     $: imageElement = imageState.element;
     $: [videoElement, sliderElement, imageElement] && setVideoOrImageDimensionsBasedOnAvailableHeight();
 
-    let currentResource: ImageOrVideoResource | null = null;
+    let currentResource: ResourceContentInfoWithMetadata | null = null;
     $: currentResource = currentIndex === null ? null : resources[currentIndex] ?? null;
 
     // when the index changes, reset the current state and setup the new one

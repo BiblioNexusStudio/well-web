@@ -1,43 +1,52 @@
 <script lang="ts">
-    import { type ApiParentResource, ParentResourceType, ParentResourceId } from '$lib/types/resource';
+    import { ParentResourceType, type ResourceContentInfoWithMetadata } from '$lib/types/resource';
     import ImageResourceSection from './ImageResourceSection.svelte';
     import VideoResourceSection from './VideoResourceSection.svelte';
     import TextResourceSection from './TextResourceSection.svelte';
-    import type { AnyResource } from './types';
-    import { parseSubtitle, parseTitle } from './titles';
+    import type { LibraryResourceGrouping } from '../library-resource-loader';
 
-    export let parentResource: ApiParentResource;
-    export let resources: AnyResource[];
+    export let resourceGrouping: LibraryResourceGrouping;
     export let searchQuery: string;
-    export let resourceSelected: (resource: AnyResource) => void;
-    export let showParentResourceFullscreen: (parentResourceId: ParentResourceId | null) => void;
+    export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
+    export let showResourceGroupingFullscreen:
+        | ((resourceGrouping: LibraryResourceGrouping | null) => void)
+        | undefined = undefined;
+    export let isFullscreen: boolean;
+
+    function showAll() {
+        showResourceGroupingFullscreen?.(resourceGrouping);
+    }
+
+    function dismissFullscreen() {
+        showResourceGroupingFullscreen?.(null);
+    }
 </script>
 
-{#if parentResource.resourceType === ParentResourceType.Images}
+{#if resourceGrouping.parentResource.resourceType === ParentResourceType.Images}
     <ImageResourceSection
-        title={parseTitle(parentResource.displayName)}
-        subtitle={parseSubtitle(parentResource.displayName)}
-        {resources}
+        {resourceGrouping}
         {resourceSelected}
         {searchQuery}
+        {isFullscreen}
+        {showAll}
+        {dismissFullscreen}
     />
-{:else if parentResource.resourceType === ParentResourceType.Videos}
+{:else if resourceGrouping.parentResource.resourceType === ParentResourceType.Videos}
     <VideoResourceSection
-        title={parseTitle(parentResource.displayName)}
-        subtitle={parseSubtitle(parentResource.displayName)}
-        {resources}
+        {resourceGrouping}
         {resourceSelected}
         {searchQuery}
+        {isFullscreen}
+        {showAll}
+        {dismissFullscreen}
     />
 {:else}
     <TextResourceSection
-        title={parseTitle(parentResource.displayName)}
-        subtitle={parseSubtitle(parentResource.displayName)}
-        {resources}
+        {resourceGrouping}
         {resourceSelected}
         {searchQuery}
-        isFullscreen={false}
-        showParentResourceFullscreen={() => showParentResourceFullscreen(parentResource.id)}
-        dismissParentResourceFullscreen={() => showParentResourceFullscreen(null)}
+        {isFullscreen}
+        {showAll}
+        {dismissFullscreen}
     />
 {/if}

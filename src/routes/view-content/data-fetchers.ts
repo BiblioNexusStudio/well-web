@@ -170,9 +170,7 @@ async function getCbbterTextForPassage(resourceContents: ResourceContentInfo[]):
     ).filter(Boolean) as CbbtErTextContent[];
 }
 
-async function getAdditionalResourcesForPassage(
-    resourceContents: ResourceContentInfo[]
-): Promise<ResourceContentInfo[]> {
+async function getAdditionalResourceInfo(resourceContents: ResourceContentInfo[]): Promise<ResourceContentInfo[]> {
     let additionalResourceContent: ResourceContentInfo[] = [];
 
     const showOnlySrvResources = get(settings).find((setting: Setting) => {
@@ -242,7 +240,7 @@ export async function fetchResourceData(passage: BibleSection) {
     let text: CbbtErTextContent[] = [];
     let audio: CbbtErAudioContent[] = [];
     let title: string | undefined = undefined;
-    let additionalResources: ResourceContentInfo[] = [];
+    let additionalResourceInfo: ResourceContentInfo[] = [];
     let resourceContents: ResourceContentInfo[] | undefined;
     try {
         resourceContents = await resourceContentsForBibleSection(passage);
@@ -253,14 +251,14 @@ export async function fetchResourceData(passage: BibleSection) {
     if (resourceContents) {
         audio = await getCbbterAudioForPassage(resourceContents);
         text = await getCbbterTextForPassage(resourceContents);
-        additionalResources = await getAdditionalResourcesForPassage(resourceContents);
+        additionalResourceInfo = await getAdditionalResourceInfo(resourceContents);
         title = text[0]?.displayName;
     }
     return {
         cbbterText: text[0],
         cbbterAudio: audio[0],
         title,
-        additionalResources: additionalResources,
+        additionalResourceInfo: additionalResourceInfo,
     };
 }
 

@@ -313,7 +313,7 @@
     <NavMenuTabItem bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
         <CompassIcon />
     </NavMenuTabItem>
-    {#if resourceData?.additionalResources?.length}
+    {#if resourceData?.additionalResourceInfo?.length}
         <NavMenuTabItem bind:selectedTab tabName="resources" label={$translate('page.passage.nav.resources.value')}>
             <ClipboardIcon />
         </NavMenuTabItem>
@@ -450,7 +450,7 @@
         <GuideMenu bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.library || $passagePageShownMenu === PassagePageMenuEnum.resources}
-        <LibraryResourceMenu resources={resourceData?.additionalResources} tab={selectedTab} />
+        <LibraryResourceMenu resources={resourceData?.additionalResourceInfo} tab={selectedTab} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
         <BibleMenu bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane} />

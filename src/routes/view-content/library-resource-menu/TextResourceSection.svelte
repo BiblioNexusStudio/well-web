@@ -1,75 +1,51 @@
 <script lang="ts">
-    import type { AnyResource, TextResource } from './types';
-    import { Icon } from 'svelte-awesome';
     import {
         filterItemsByKeyMatchingSearchQuery,
         htmlWithHighlightedSearchString,
         shouldSearch,
     } from '$lib/utils/search';
     import { _ as translate } from 'svelte-i18n';
-    import chevronLeft from 'svelte-awesome/icons/chevronLeft';
-    import SearchInput from '$lib/components/SearchInput.svelte';
     import NoResourcesFound from './NoResourcesFound.svelte';
     import ResourceSectionHeader from './ResourceSectionHeader.svelte';
+    import type { LibraryResourceGrouping } from '../library-resource-loader';
+    import ResourceFullscreenHeader from './ResourceFullscreenHeader.svelte';
+    import type { ResourceContentInfoWithMetadata } from '$lib/types/resource';
 
-    export let title: string | null;
-    export let subtitle: string | null;
-    export let resources: AnyResource[];
-    export let resourceSelected: (resource: TextResource) => void;
+    export let resourceGrouping: LibraryResourceGrouping;
+    export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
     export let searchQuery: string;
     export let isFullscreen: boolean;
-    export let showParentResourceFullscreen: (() => void) | null = null;
-    export let dismissParentResourceFullscreen: (() => void) | null = null;
-
-    $: textResources = resources.filter((resource) => !('type' in resource)) as TextResource[];
+    export let showAll: (() => void) | null = null;
+    export let dismissFullscreen: () => void;
 
     // resources filtered to:
     // - searched results if searching OR
     // - all resources if fullscreen OR
     // - first 5 resources
     $: showingResources = shouldSearch(searchQuery)
-        ? filterItemsByKeyMatchingSearchQuery(textResources, 'displayName', searchQuery)
+        ? filterItemsByKeyMatchingSearchQuery(resourceGrouping.resources, 'displayName', searchQuery)
         : isFullscreen
-        ? textResources
-        : textResources.slice(0, 5);
+        ? resourceGrouping.resources
+        : resourceGrouping.resources.slice(0, 5);
 </script>
 
-{#if textResources.length > 0}
+{#if resourceGrouping.resources.length > 0}
     {#if isFullscreen}
-        <div class="mx-auto w-full max-w-[65ch]">
-            <div class="flex w-full flex-row items-center py-3">
-                <button
-                    class="btn btn-link text-base-500"
-                    on:click={dismissParentResourceFullscreen}
-                    data-app-insights-event-name="fullscreen-close-button-clicked"><Icon data={chevronLeft} /></button
-                >
-                <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">
-                    {title}
-                    ({subtitle})
-                </div>
-                <!-- hack to make text centered -->
-                <div class="btn btn-link text-base-500 opacity-0"><Icon data={chevronLeft} /></div>
-            </div>
-            <SearchInput bind:searchQuery />
-            <div class="py-4 text-sm text-base-500">
-                {#if showingResources.length === 1}
-                    {$translate('page.passage.resourcePane.resourceCount.singular.value')}
-                {:else}
-                    {$translate('page.passage.resourcePane.resourceCount.plural.value', {
-                        values: { count: showingResources.length },
-                    })}
-                {/if}
-            </div>
-        </div>
+        <ResourceFullscreenHeader
+            {resourceGrouping}
+            resourcesCount={showingResources.length}
+            {dismissFullscreen}
+            bind:searchQuery
+        />
     {:else}
-        <ResourceSectionHeader isVisible={showingResources.length > 0} {title} {subtitle}>
-            {#if !shouldSearch(searchQuery) && textResources.length > 5}
+        <ResourceSectionHeader isVisible={showingResources.length > 0} {resourceGrouping}>
+            {#if !shouldSearch(searchQuery) && resourceGrouping.resources.length > 5}
                 <button
                     class="text-sm font-semibold text-base-500"
-                    on:click={showParentResourceFullscreen}
+                    on:click={showAll}
                     data-app-insights-event-name="see-all-resources-clicked"
                     >{$translate('page.passage.resourcePane.seeAll.value', {
-                        values: { count: textResources.length },
+                        values: { count: resourceGrouping.resources.length },
                     })}</button
                 >
             {/if}</ResourceSectionHeader
@@ -85,7 +61,7 @@
             >
                 <div class="flex flex-shrink flex-col items-start">
                     <div class="text-md text-start font-semibold text-blue-title">
-                        {@html htmlWithHighlightedSearchString(entry.displayName, searchQuery)}
+                        {@html htmlWithHighlightedSearchString(entry.displayName ?? '', searchQuery)}
                     </div>
                 </div>
             </button>
