@@ -33,6 +33,7 @@
     import { parentResourceIdToInfoMap } from '$lib/stores/parent-resource.store';
     import AnyResourceSection from './AnyResourceSection.svelte';
     import SwishHeader from '$lib/components/SwishHeader.svelte';
+    import type { PassagePageTab } from '../data-fetchers';
 
     const RESOURCE_TYPE_ORDER: ParentResourceType[] = [
         ParentResourceType.Images,
@@ -43,6 +44,7 @@
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
+    export let tab: PassagePageTab;
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
@@ -65,10 +67,10 @@
     let currentFullscreenTextResource: TextResource | null = null;
     let currentFullscreenTextParentResourceId: ParentResourceId | null;
 
-    let visibleSwish = true;
+    let visibleSwish = tab === 'libraryMenu';
 
     function onHandleSearchFocus() {
-        if (!hasQuery) {
+        if (!hasQuery && tab === 'libraryMenu') {
             visibleSwish = !visibleSwish;
         }
     }
@@ -205,7 +207,7 @@
 <div class="flex flex-col px-4">
     <div class="mb-8 flex flex-row {visibleSwish ? '-mt-12' : 'mt-4'}">
         <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
-        {#if !visibleSwish}
+        {#if !visibleSwish && tab === 'libraryMenu'}
             <div>
                 <button
                     on:click={(e) => resetPage(e)}
@@ -217,7 +219,7 @@
             </div>
         {/if}
     </div>
-    {#if !hasQuery}
+    {#if !resources}
         <div class="flex flex-grow flex-col items-center justify-items-center overflow-y-scroll">
             <div class="mb-4 flex-shrink-0 text-sm text-neutral">
                 {$translate('page.passage.resourcePane.typeToSearch.value')}

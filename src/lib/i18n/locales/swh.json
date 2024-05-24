@@ -49,6 +49,9 @@
                 "menu": {
                     "value": "Menyu",
                     "_context": "Kitufe cha lebo ya Menyu kwenye upau wa urambazaji"
+                },
+                "resources": {
+                    "value": "Rasilimali"
                 }
             },
             "resourcePane": {
@@ -279,9 +282,6 @@
                 "value": "Mwongozo wa Tafsiri"
             },
             "chooseGuide": {
-                "value": "Chagua Mwongozo"
-            },
-            "selectGuide": {
                 "value": "Chagua Mwongozo"
             },
             "noGuides": {

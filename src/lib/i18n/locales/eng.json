@@ -51,6 +51,10 @@
                 "menu": {
                     "value": "Menu",
                     "_context": "Label for Menu button on navbar"
+                },
+                "resources": {
+                    "value": "Resources",
+                    "_context": "Label for Resources button on navbar"
                 }
             },
             "resourcePane": {
@@ -296,10 +300,6 @@
             "chooseGuide": {
                 "value": "Choose a guide",
                 "_context": "Placeholder text for the dropdown"
-            },
-            "selectGuide": {
-                "value": "Select guide",
-                "_context": "Label for the dropdown"
             },
             "noGuides": {
                 "value": "No guides available for the selected passage"

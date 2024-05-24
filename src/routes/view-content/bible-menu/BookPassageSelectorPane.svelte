@@ -13,9 +13,12 @@
     import type { ApiParentResource } from '$lib/types/resource';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { isOnline } from '$lib/stores/is-online.store';
+    import type { PassagePageTab } from '../data-fetchers';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
+    export let tab: PassagePageTab;
+
     let steps = {
         one: { title: $translate('page.BookPassageSelectorMenu.stepOneTitle.value') },
         two: { title: $translate('page.BookPassageSelectorMenu.stepTwoTitle.value') },
@@ -36,6 +39,7 @@
         $selectedBibleSection = passage;
         currentStep = steps.one;
         isShowing = false;
+        tab = 'guide';
         closeAllPassagePageMenus();
     }
 

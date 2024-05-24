@@ -171,6 +171,10 @@
                 : 0,
         };
         isShowing = false;
+        currentStep = steps.one;
+        currentChapter = null;
+        firstSelectedVerse = null;
+        lastSelectedVerse = null;
         closeAllPassagePageMenus();
     }
 
@@ -211,6 +215,8 @@
         bookChapterSelectorPane.on('onDidDismiss', function () {
             currentStep = steps.one;
             currentChapter = null;
+            firstSelectedVerse = null;
+            lastSelectedVerse = null;
         });
     });
 

@@ -35,7 +35,7 @@ import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
 import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/resource';
 import type { BibleSection } from '$lib/types/bible';
 
-export type PassagePageTab = 'bible' | 'guide' | 'mainMenu' | 'libraryMenu';
+export type PassagePageTab = 'bible' | 'guide' | 'mainMenu' | 'libraryMenu' | 'resources';
 
 export async function fetchBibleContent(passage: BibleSection, bible: FrontendBibleBook) {
     if (!bible.bookMetadata) return null;

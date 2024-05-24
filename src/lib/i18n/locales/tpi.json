@@ -40,6 +40,9 @@
                 },
                 "menu": {
                     "value": "Meniu"
+                },
+                "resources": {
+                    "value": "Risoses"
                 }
             },
             "resourcePane": {
@@ -233,9 +236,6 @@
             },
             "chooseGuide": {
                 "value": "Chusim wanpela Gaid"
-            },
-            "selectGuide": {
-                "value": "Selektim Gaid"
             },
             "noGuides": {
                 "value": "Nogat Gaid i stap long dispela hap riding"
