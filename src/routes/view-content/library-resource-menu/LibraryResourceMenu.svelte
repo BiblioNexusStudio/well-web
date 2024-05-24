@@ -9,12 +9,22 @@
     import NoResourcesFound from './NoResourcesFound.svelte';
     import AnyResourceSection from './AnyResourceSection.svelte';
     import SwishHeader from '$lib/components/SwishHeader.svelte';
-    import { MediaType, type ResourceContentInfo, type ResourceContentInfoWithMetadata } from '$lib/types/resource';
+    import {
+        MediaType,
+        ParentResourceType,
+        type ResourceContentInfo,
+        type ResourceContentInfoWithMetadata,
+    } from '$lib/types/resource';
     import {
         buildLibraryResourceGroupingsWithMetadata,
         type LibraryResourceGrouping,
     } from '../library-resource-loader';
     import type { PassagePageTab } from '../data-fetchers';
+    import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { get } from 'svelte/store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
+    import { searchResourcesEndpoint } from '$lib/api-endpoints';
+    import { debounce } from '$lib/utils/debounce';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -36,7 +46,10 @@
     let currentFullscreenResource: ResourceContentInfoWithMetadata | null = null;
     let currentFullscreenResourceGrouping: LibraryResourceGrouping | null;
 
-    let visibleSwish = tab === 'libraryMenu';
+    let isFullLibrary = tab === 'libraryMenu';
+    let visibleSwish = isFullLibrary;
+
+    $: searchQueryChanged(searchQuery);
 
     function onHandleSearchFocus() {
         if (!hasQuery && tab === 'libraryMenu') {
@@ -50,6 +63,31 @@
         searchQuery = '';
         return null;
     }
+
+    async function searchQueryChanged(query: string) {
+        if (isFullLibrary) {
+            if (query.length < 3) {
+                resources = undefined;
+            } else {
+                isLoading = true;
+                debouncedFetchSearchResultsFromApi(query);
+            }
+        }
+    }
+
+    const debouncedFetchSearchResultsFromApi = debounce(async (query: string) => {
+        if (query.length < 3) {
+            resources = undefined;
+        } else {
+            const currentLanguageId = get(currentLanguageInfo)?.id;
+            resources = (await fetchFromCacheOrApi(
+                ...searchResourcesEndpoint(currentLanguageId, query, [
+                    ParentResourceType.Images,
+                    ParentResourceType.Dictionary,
+                ])
+            )) as ResourceContentInfo[];
+        }
+    }, 750);
 
     function resourceSelected(resource: ResourceContentInfoWithMetadata) {
         if (resource.mediaType === MediaType.Image || resource.mediaType === MediaType.Video) {
@@ -90,7 +128,7 @@
 <div class="flex flex-col px-4">
     <div class="mb-8 flex flex-row {visibleSwish ? '-mt-12' : 'mt-4'}">
         <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
-        {#if !visibleSwish && tab === 'libraryMenu'}
+        {#if !visibleSwish && isFullLibrary}
             <div>
                 <button
                     on:click={(e) => resetPage(e)}
@@ -102,14 +140,14 @@
             </div>
         {/if}
     </div>
-    {#if !resources}
+    {#if isLoading}
+        <FullPageSpinner />
+    {:else if !resources}
         <div class="flex flex-grow flex-col items-center justify-items-center overflow-y-scroll">
             <div class="mb-4 flex-shrink-0 text-sm text-neutral">
                 {$translate('page.passage.resourcePane.typeToSearch.value')}
             </div>
         </div>
-    {:else if isLoading}
-        <FullPageSpinner />
     {:else if filteredResourceCount === 0}
         <NoResourcesFound {searchQuery} />
     {:else}
@@ -128,6 +166,7 @@
                     {resourceGrouping}
                     isFullscreen={false}
                     {searchQuery}
+                    skipClientSideFiltering={isFullLibrary}
                     {resourceSelected}
                     {showResourceGroupingFullscreen}
                 />

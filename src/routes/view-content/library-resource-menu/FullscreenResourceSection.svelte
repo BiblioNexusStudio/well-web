@@ -16,6 +16,7 @@
         <AnyResourceSection
             resourceGrouping={currentFullscreenResourceGrouping}
             isFullscreen={true}
+            skipClientSideFiltering={false}
             {searchQuery}
             {resourceSelected}
             {showResourceGroupingFullscreen}

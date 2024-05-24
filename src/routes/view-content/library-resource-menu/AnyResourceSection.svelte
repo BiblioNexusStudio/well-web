@@ -7,6 +7,7 @@
 
     export let resourceGrouping: LibraryResourceGrouping;
     export let searchQuery: string;
+    export let skipClientSideFiltering: boolean;
     export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
     export let showResourceGroupingFullscreen:
         | ((resourceGrouping: LibraryResourceGrouping | null) => void)
@@ -27,6 +28,7 @@
         {resourceGrouping}
         {resourceSelected}
         {searchQuery}
+        {skipClientSideFiltering}
         {isFullscreen}
         {showAll}
         {dismissFullscreen}
@@ -36,6 +38,7 @@
         {resourceGrouping}
         {resourceSelected}
         {searchQuery}
+        {skipClientSideFiltering}
         {isFullscreen}
         {showAll}
         {dismissFullscreen}
@@ -45,6 +48,7 @@
         {resourceGrouping}
         {resourceSelected}
         {searchQuery}
+        {skipClientSideFiltering}
         {isFullscreen}
         {showAll}
         {dismissFullscreen}

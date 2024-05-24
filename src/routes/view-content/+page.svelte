@@ -318,7 +318,7 @@
             <ClipboardIcon />
         </NavMenuTabItem>
     {/if}
-    {#if false}
+    {#if $isOnline}
         <NavMenuTabItem bind:selectedTab tabName="libraryMenu" label={$translate('page.passage.nav.library.value')}>
             <LibraryIcon />
         </NavMenuTabItem>
@@ -449,8 +449,11 @@
     {#if $passagePageShownMenu === PassagePageMenuEnum.guide}
         <GuideMenu bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane} />
     {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.library || $passagePageShownMenu === PassagePageMenuEnum.resources}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.resources}
         <LibraryResourceMenu resources={resourceData?.additionalResourceInfo} tab={selectedTab} />
+    {/if}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.library}
+        <LibraryResourceMenu resources={undefined} tab={selectedTab} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
         <BibleMenu bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane} />

@@ -14,15 +14,18 @@
     export let resourceGrouping: LibraryResourceGrouping;
     export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
     export let searchQuery: string;
+    export let skipClientSideFiltering: boolean;
     export let isFullscreen: boolean;
     export let showAll: (() => void) | null = null;
     export let dismissFullscreen: () => void;
+
+    $: filterResultsClientSide = shouldSearch(searchQuery) && !skipClientSideFiltering;
 
     // resources filtered to:
     // - searched results if searching OR
     // - all resources if fullscreen OR
     // - first 5 resources
-    $: showingResources = shouldSearch(searchQuery)
+    $: showingResources = filterResultsClientSide
         ? filterItemsByKeyMatchingSearchQuery(resourceGrouping.resources, 'displayName', searchQuery)
         : isFullscreen
         ? resourceGrouping.resources
@@ -39,7 +42,7 @@
         />
     {:else}
         <ResourceSectionHeader isVisible={showingResources.length > 0} {resourceGrouping}>
-            {#if !shouldSearch(searchQuery) && resourceGrouping.resources.length > 5}
+            {#if !filterResultsClientSide && resourceGrouping.resources.length > 5}
                 <button
                     class="text-sm font-semibold text-base-500"
                     on:click={showAll}
@@ -67,7 +70,7 @@
             </button>
         {/each}
     </div>
-    {#if showingResources.length > 0}
+    {#if !isFullscreen && showingResources.length > 0}
         <hr />
     {/if}
     {#if showingResources.length === 0 && isFullscreen}
