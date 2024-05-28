@@ -126,9 +126,9 @@
                     "_context": "Kiungo cha kwenda kwa kidhibiti faili na kuona nyenzo zaidi ikiwa Biblia haipatikani katika lugha ya sasa"
                 }
             },
-            "noCbbterContent": {
-                "value": "Hakuna maudhui ya CBBT-ER yaliyopatikana kwa kifungu hiki.",
-                "_context": "Ujumbe wa kuonyesha wakati maudhui ya CBBT-ER hayajapakuliwa au kupatikana"
+            "noFiaContent": {
+                "value": "Hakuna maudhui ya FIA yaliyopatikana kwa kifungu hiki.",
+                "_context": "Ujumbe wa kuonyesha wakati maudhui ya FIA hayajapakuliwa au kupatikana"
             }
         },
         "fileManager": {
@@ -419,30 +419,30 @@
         }
     },
     "resources": {
-        "cbbt-er": {
+        "fia": {
             "step1": {
                 "value": "Hear and Heart",
-                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+                "_context": "Tazama FIA kwa tafsiri za kila jina la hatua"
             },
             "step2": {
                 "value": "Kuweka Hatua",
-                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+                "_context": "Tazama FIA kwa tafsiri za kila jina la hatua"
             },
             "step3": {
                 "value": "Kufafanua Mandhari",
-                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+                "_context": "Tazama FIA kwa tafsiri za kila jina la hatua"
             },
             "step4": {
                 "value": "Kujumuisha Maandishi",
-                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+                "_context": "Tazama FIA kwa tafsiri za kila jina la hatua"
             },
             "step5": {
                 "value": "Kujaza hayo mapengo",
-                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+                "_context": "Tazama FIA kwa tafsiri za kila jina la hatua"
             },
             "step6": {
                 "value": "Akizungumza Neno",
-                "_context": "Tazama CBBT-ER kwa tafsiri za kila jina la hatua"
+                "_context": "Tazama FIA kwa tafsiri za kila jina la hatua"
             }
         }
     },

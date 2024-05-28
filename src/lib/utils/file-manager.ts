@@ -201,12 +201,12 @@ export const calculateUrlsWithMetadataToChange = (
 
     if (resourcesMenu.some(({ selected, parentResource }) => selected && parentResource?.id === ParentResourceId.FIA)) {
         biblesModuleBook.audioUrls?.chapters.forEach((chapter) => {
-            if (chapter.cbbterResourceUrls?.length && chapter.cbbterResourceUrls?.length > 0) {
-                chapter.cbbterResourceUrls.forEach((cbbterResourceUrl) => {
+            if (chapter.fiaResourceUrls?.length && chapter.fiaResourceUrls?.length > 0) {
+                chapter.fiaResourceUrls.forEach((fiaResourceUrl) => {
                     if (chapter.deleteResources) {
-                        urlsToDelete.push(cbbterResourceUrl.url);
+                        urlsToDelete.push(fiaResourceUrl.url);
                     } else {
-                        urlsAndSizesToDownload.push(cbbterResourceUrl);
+                        urlsAndSizesToDownload.push(fiaResourceUrl);
                     }
                 });
             }
@@ -233,7 +233,7 @@ export const addFrontEndDataToBiblesModuleBook = async (inputBiblesModuleBook: B
         chapter.isAudioUrlCached = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);
         chapter.selected = false;
         chapter.allUrlsCached = false;
-        chapter.cbbterResourceUrls = [];
+        chapter.fiaResourceUrls = [];
         chapter.resourceMenuItems = [];
     });
 

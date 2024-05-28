@@ -32,7 +32,7 @@ export interface FrontendAudioChapter extends ApiAudioChapter {
     isAudioUrlCached?: boolean;
     allUrlsCached?: boolean;
     resourceMenuItems?: FileManagerResourceContentInfo[];
-    cbbterResourceUrls?: UrlWithMetadata[];
+    fiaResourceUrls?: UrlWithMetadata[];
     deleteMenuOpen?: boolean;
     deleteResources?: boolean;
 }
@@ -72,33 +72,8 @@ export interface ResourceContentTiptap {
     tiptap: TiptapContent;
 }
 
-export interface ResourceContentCbbtErText extends ResourceContentTiptap {
+export interface ResourceContentFiaText extends ResourceContentTiptap {
     stepNumber: number;
-}
-
-export interface CbbtErAudioSingleStepContent {
-    step: number;
-    webm: AudioResource;
-    mp3: AudioResource;
-}
-
-export interface CbbtErTextSingleStepContent {
-    stepNumber: number;
-    contentHTML: string;
-}
-
-export interface CbbtErTextContent {
-    displayName: string;
-    steps: CbbtErTextSingleStepContent[];
-}
-
-export interface CbbtErAudioContent {
-    steps: CbbtErAudioSingleStepContent[];
-}
-
-export interface ImageContent {
-    displayName: string | null;
-    url: string;
 }
 
 export interface BasePassage {
@@ -151,21 +126,6 @@ export interface BiblesModuleBook {
     audioUrls: {
         chapters: FrontendAudioChapter[];
     } | null;
-}
-
-export interface CbbterTextContent {
-    contentId: number;
-    parentResourceId: string;
-    mediaTypeName: string;
-    contentSize: number;
-}
-
-export interface CbbterResourceWithContent {
-    id: number;
-    bookCode: string;
-    startChapter: number;
-    endChapter: number;
-    contents: CbbterTextContent[];
 }
 
 export interface ResourcesApiModule {

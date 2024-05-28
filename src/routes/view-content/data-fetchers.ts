@@ -1,33 +1,15 @@
 import { get } from 'svelte/store';
 import { fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
 import { currentLanguageInfo } from '$lib/stores/language.store';
-import type {
-    FrontendAudioChapter,
-    AudioTimestamp,
-    CbbtErTextContent,
-    ResourceContentCbbtErText,
-} from '$lib/types/file-manager';
+import type { FrontendAudioChapter, AudioTimestamp } from '$lib/types/file-manager';
 import type { BibleBookTextContent, FrontendBibleBook, FrontendChapterContent } from '$lib/types/bible';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import { asyncFilter, asyncMap, asyncReduce } from '$lib/utils/async-array';
 import { isOnline } from '$lib/stores/is-online.store';
 import { fetchAllBibles, bookDataForBibleTab } from '$lib/utils/data-handlers/bible';
 import { range } from '$lib/utils/array';
-import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
-import {
-    MediaType,
-    ParentResourceId,
-    type CbbtErAudioMetadata,
-    type CbbtErAudioContent,
-    type ResourceContentInfo,
-    ParentResourceType,
-} from '$lib/types/resource';
-import {
-    fetchDisplayNameForResourceContent,
-    fetchMetadataForResourceContent,
-    resourceContentApiFullUrl,
-} from '$lib/utils/data-handlers/resources/resource';
-import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
+import { type ResourceContentInfo, ParentResourceType } from '$lib/types/resource';
+import { resourceContentApiFullUrl } from '$lib/utils/data-handlers/resources/resource';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
 import { settings } from '$lib/stores/settings.store';
@@ -121,56 +103,7 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
     return { chapters };
 }
 
-async function getCbbterAudioForPassage(resourceContents: ResourceContentInfo[]): Promise<CbbtErAudioContent[]> {
-    const allAudioResourceContent = resourceContents.filter(
-        ({ mediaType, parentResourceId }) => parentResourceId === ParentResourceId.FIA && mediaType === MediaType.Audio
-    );
-    return (
-        await asyncMap(allAudioResourceContent, async (resourceContent) => {
-            try {
-                const metadata = await fetchMetadataForResourceContent(resourceContent);
-                const audioTypeSteps = ((metadata?.metadata || null) as CbbtErAudioMetadata | null)?.[
-                    audioFileTypeForBrowser()
-                ].steps;
-                if (!audioTypeSteps) return null;
-                const steps = (
-                    await readFilesIntoObjectUrlsMapping(resourceContentApiFullUrl(resourceContent), audioTypeSteps)
-                ).filter(({ url }) => !!url);
-                return { steps };
-            } catch (error) {
-                // nothing cached
-                log.exception(error as Error);
-                return null;
-            }
-        })
-    ).filter(Boolean) as CbbtErAudioContent[];
-}
-
-async function getCbbterTextForPassage(resourceContents: ResourceContentInfo[]): Promise<CbbtErTextContent[]> {
-    const allTextResourceContent = resourceContents.filter(
-        ({ mediaType, parentResourceId }) => parentResourceId === ParentResourceId.FIA && mediaType === MediaType.Text
-    );
-    return (
-        await asyncMap(allTextResourceContent, async (resourceContent) => {
-            try {
-                const displayName = await fetchDisplayNameForResourceContent(resourceContent);
-                const content = (await fetchFromCacheOrCdn(
-                    resourceContentApiFullUrl(resourceContent)
-                )) as ResourceContentCbbtErText[];
-                return {
-                    displayName,
-                    steps: content.map((step) => ({ ...step, contentHTML: parseTiptapJsonToHtml(step.tiptap) })),
-                };
-            } catch (error) {
-                // stuff not cached
-                log.exception(error as Error);
-                return null;
-            }
-        })
-    ).filter(Boolean) as CbbtErTextContent[];
-}
-
-async function getAdditionalResourceInfo(resourceContents: ResourceContentInfo[]): Promise<ResourceContentInfo[]> {
+async function filterToAdditionalResourceInfo(resourceContents: ResourceContentInfo[]) {
     let additionalResourceContent: ResourceContentInfo[] = [];
 
     const showOnlySrvResources = get(settings).find((setting: Setting) => {
@@ -189,6 +122,23 @@ async function getAdditionalResourceInfo(resourceContents: ResourceContentInfo[]
 
     return await asyncFilter(
         additionalResourceContent,
+        async (resourceContent) => get(isOnline) || (await isCachedFromCdn(resourceContentApiFullUrl(resourceContent)))
+    );
+}
+
+async function filterToGuideResourceInfo(resourceContents: ResourceContentInfo[]) {
+    const showOnlySrvResources = get(settings).find((setting: Setting) => {
+        setting.shortName === SettingShortNameEnum.showOnlySrvResources;
+    });
+
+    const onlyGuides = resourceContents.filter(
+        (content) =>
+            (content.resourceType === ParentResourceType.Guide && !showOnlySrvResources?.value) ||
+            showOnlySrvResources?.parentResources.includes(content.parentResourceId)
+    );
+
+    return await asyncFilter(
+        onlyGuides,
         async (resourceContent) => get(isOnline) || (await isCachedFromCdn(resourceContentApiFullUrl(resourceContent)))
     );
 }
@@ -237,10 +187,8 @@ export async function fetchBibleData(passage: BibleSection) {
 }
 
 export async function fetchResourceData(passage: BibleSection) {
-    let text: CbbtErTextContent[] = [];
-    let audio: CbbtErAudioContent[] = [];
-    let title: string | undefined = undefined;
     let additionalResourceInfo: ResourceContentInfo[] = [];
+    let guideResourceInfo: ResourceContentInfo[] = [];
     let resourceContents: ResourceContentInfo[] | undefined;
     try {
         resourceContents = await resourceContentsForBibleSection(passage);
@@ -249,16 +197,12 @@ export async function fetchResourceData(passage: BibleSection) {
         log.exception(error as Error);
     }
     if (resourceContents) {
-        audio = await getCbbterAudioForPassage(resourceContents);
-        text = await getCbbterTextForPassage(resourceContents);
-        additionalResourceInfo = await getAdditionalResourceInfo(resourceContents);
-        title = text[0]?.displayName;
+        additionalResourceInfo = await filterToAdditionalResourceInfo(resourceContents);
+        guideResourceInfo = await filterToGuideResourceInfo(resourceContents);
     }
     return {
-        cbbterText: text[0],
-        cbbterAudio: audio[0],
-        title,
-        additionalResourceInfo: additionalResourceInfo,
+        additionalResourceInfo,
+        guideResourceInfo,
     };
 }
 

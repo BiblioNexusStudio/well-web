@@ -46,25 +46,6 @@ export interface UrlWithInfo {
     size: number;
 }
 
-export interface CbbtErAudioContent {
-    steps: {
-        stepNumber: number;
-        url: string;
-    }[];
-}
-
-export interface CbbtErAudioMetadata {
-    webm: AudioTypeMetadata;
-    mp3: AudioTypeMetadata;
-}
-
-export interface AudioTypeMetadata {
-    steps: {
-        file: string;
-        stepNumber: number;
-    }[];
-}
-
 export interface ApiParentResource {
     enabled: boolean;
     shortName: string;
