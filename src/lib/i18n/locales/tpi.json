@@ -105,8 +105,8 @@
                     "value": "Sekim Moa Risoses..."
                 }
             },
-            "noCbbterContent": {
-                "value": "Nogat CBBT-ER samting insait i stap blo dispela hap riding."
+            "noFiaContent": {
+                "value": "Nogat FIA samting insait i stap blo dispela hap riding."
             }
         },
         "fileManager": {
@@ -365,7 +365,7 @@
         }
     },
     "resources": {
-        "cbbt-er": {
+        "fia": {
             "step1": {
                 "value": "Harim na Lewa"
             },

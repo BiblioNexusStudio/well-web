@@ -105,8 +105,8 @@
                     "value": "अधिक संसाधनों के लिए जाँच करें..."
                 }
             },
-            "noCbbterContent": {
-                "value": "इस पासेज के लिए कोई CBBT-ER सामग्री नहीं मिली।"
+            "noFiaContent": {
+                "value": "इस पासेज के लिए कोई FIA सामग्री नहीं मिली।"
             }
         },
         "fileManager": {
@@ -365,7 +365,7 @@
         }
     },
     "resources": {
-        "cbbt-er": {
+        "fia": {
             "step1": {
                 "value": "सुनें और दिल"
             },

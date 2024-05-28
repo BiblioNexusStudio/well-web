@@ -131,9 +131,9 @@
                     "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
                 }
             },
-            "noCbbterContent": {
-                "value": "No CBBT-ER content found for this passage.",
-                "_context": "Message to display when the CBBT-ER content is not downloaded or available"
+            "noFiaContent": {
+                "value": "No FIA content found for this passage.",
+                "_context": "Message to display when the FIA content is not downloaded or available"
             }
         },
         "fileManager": {
@@ -465,30 +465,30 @@
         }
     },
     "resources": {
-        "cbbt-er": {
+        "fia": {
             "step1": {
                 "value": "Hear and Heart",
-                "_context": "See CBBT-ER for translations of each step name"
+                "_context": "See FIA for translations of each step name"
             },
             "step2": {
                 "value": "Setting the Stage",
-                "_context": "See CBBT-ER for translations of each step name"
+                "_context": "See FIA for translations of each step name"
             },
             "step3": {
                 "value": "Defining the Scenes",
-                "_context": "See CBBT-ER for translations of each step name"
+                "_context": "See FIA for translations of each step name"
             },
             "step4": {
                 "value": "Embodying the Text",
-                "_context": "See CBBT-ER for translations of each step name"
+                "_context": "See FIA for translations of each step name"
             },
             "step5": {
                 "value": "Filling the Gaps",
-                "_context": "See CBBT-ER for translations of each step name"
+                "_context": "See FIA for translations of each step name"
             },
             "step6": {
                 "value": "Speaking the Word",
-                "_context": "See CBBT-ER for translations of each step name"
+                "_context": "See FIA for translations of each step name"
             }
         }
     },

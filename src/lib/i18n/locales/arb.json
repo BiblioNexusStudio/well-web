@@ -105,8 +105,8 @@
                     "value": "تحقق من المزيد من الموارد..."
                 }
             },
-            "noCbbterContent": {
-                "value": "لم يتم العثور على محتوى CBBT-ER لهذا المقطع."
+            "noFiaContent": {
+                "value": "لم يتم العثور على محتوى FIA لهذا المقطع."
             }
         },
         "fileManager": {
@@ -365,7 +365,7 @@
         }
     },
     "resources": {
-        "cbbt-er": {
+        "fia": {
             "step1": {
                 "value": "السمع والقلب"
             },

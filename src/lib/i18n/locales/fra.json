@@ -105,8 +105,8 @@
                     "value": "Vérifier plus de ressources..."
                 }
             },
-            "noCbbterContent": {
-                "value": "Aucun contenu CBBT-ER trouvé pour ce passage."
+            "noFiaContent": {
+                "value": "Aucun contenu FIA trouvé pour ce passage."
             }
         },
         "fileManager": {
@@ -365,7 +365,7 @@
         }
     },
     "resources": {
-        "cbbt-er": {
+        "fia": {
             "step1": {
                 "value": "Entendre et Ressentir"
             },

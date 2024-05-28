@@ -57,34 +57,23 @@
     import BibleUnavailable from './BibleUnavailable.svelte';
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
     import QuickShare from './quick-share/QuickShare.svelte';
-
-    const steps = [
-        $translate('resources.cbbt-er.step1.value'),
-        $translate('resources.cbbt-er.step2.value'),
-        $translate('resources.cbbt-er.step3.value'),
-        $translate('resources.cbbt-er.step4.value'),
-        $translate('resources.cbbt-er.step5.value'),
-        $translate('resources.cbbt-er.step6.value'),
-    ];
+    import GuideContent from './guide-content/GuideContent.svelte';
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
 
-    let cbbterSelectedStepNumber = 1;
-    let stepsAvailable: number[] = [];
     let selectedBibleId: number | null = null;
-    let topOfStep: HTMLElement | null = null;
     let selectedTab: PassagePageTab = 'guide';
     let isShowingBookPassageSelectorPane = false;
     let isShowingBookChapterSelectorPane = false;
     let bookPassageSelectorPane: CupertinoPane;
     let bookChapterSelectorPane: CupertinoPane;
-    let cbbterSelectedStepScroll: number | undefined;
     let bibleSelectionScroll: number | undefined;
     let baseFetchPromise: Promise<[void, void]> | undefined;
     let resourceFetchPromise: Promise<void> | undefined;
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
     let preferredBiblesModalOpen = false;
+    let audioPlayerKey: string | undefined;
 
     $: {
         baseFetchPromise = fetchBase($selectedBibleSection); // when the Bible section changes, refetch
@@ -92,10 +81,8 @@
     $: handlePreferredBiblesChange($preferredBibleIds);
     $: fetchContentForBibleId(selectedBibleId);
 
-    $: cbbterSelectedStepNumber && topOfStep?.scrollIntoView();
-    $: audioPlayerKey =
-        selectedTab === 'bible' ? bibleAudioKey(selectedBibleId) : cbbterAudioKey(cbbterSelectedStepNumber);
-    $: audioPlayerShowing = !!multiClipAudioStates[audioPlayerKey];
+    $: selectedTab === 'bible' && setBibleAudioPlayerForBible(selectedBibleId);
+    $: audioPlayerShowing = audioPlayerKey && !!multiClipAudioStates[audioPlayerKey];
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
 
     $: setStoredGuide($locallyStoredGuide);
@@ -118,15 +105,6 @@
         if (bibleSection) {
             resourceFetchPromise = (async () => {
                 resourceData = await fetchResourceData(bibleSection);
-                stepsAvailable = Array.from(
-                    new Set([
-                        ...(resourceData.cbbterText?.steps?.map((step) => step.stepNumber) ?? []),
-                        ...(resourceData.cbbterAudio?.steps?.map((step) => step.stepNumber) ?? []),
-                    ])
-                );
-                cbbterSelectedStepNumber = stepsAvailable[0] ?? 1;
-                cbbterSelectedStepScroll = stepsAvailable[0] ?? 1;
-                populateCbbterAudioState();
             })();
         }
     }
@@ -214,23 +192,12 @@
         }
     }
 
-    // Populate the audio state object with key/values like
-    //   guideStep1 => MultiClipAudioState
-    //   guideStep2 => MultiClipAudioState
-    function populateCbbterAudioState() {
-        resourceData?.cbbterAudio?.steps.forEach((step) => {
-            multiClipAudioStates[cbbterAudioKey(step.stepNumber)] = createMultiClipAudioState([
-                { url: step.url, type: audioFileTypeForBrowser(), startTime: 0 },
-            ]);
-        });
-    }
-
-    function cbbterAudioKey(step: number) {
-        return `guideStep${step}`;
-    }
-
     function bibleAudioKey(id: number | null) {
         return id === null ? 'none' : `bible${id}`;
+    }
+
+    function setBibleAudioPlayerForBible(id: number | null) {
+        audioPlayerKey = bibleAudioKey(id);
     }
 
     function showOrDismissBookPassageSelectorPane(show: boolean) {
@@ -273,8 +240,6 @@
         } else if (tab === 'guide' && $currentGuide === undefined) {
             openGuideMenu();
         } else if (tab === 'guide' && $selectedBibleSection === null) {
-            openGuideMenu();
-        } else if (tab === 'guide' && stepsAvailable.length === 0) {
             openGuideMenu();
         } else if (tab === 'mainMenu') {
             openMainMenu();
@@ -389,46 +354,13 @@
                     <FullPageSpinner />
                 {/if}
             {:then}
-                <div class="px-4 pb-4 {selectedTab !== 'guide' && 'hidden'}">
-                    <div class="relative m-auto max-w-[65ch]">
-                        <ButtonCarousel
-                            bind:selectedValue={cbbterSelectedStepNumber}
-                            bind:scroll={cbbterSelectedStepScroll}
-                            buttons={stepsAvailable.map((stepNumber) => ({
-                                value: stepNumber,
-                                label: steps[stepNumber - 1] ?? '',
-                            }))}
-                            displayIcons={true}
-                        />
-                    </div>
-                </div>
-                <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'guide' && 'hidden'}">
-                    <div class="prose mx-auto flex flex-grow">
-                        <span bind:this={topOfStep} />
-                        <div class="flex flex-grow">
-                            {#if stepsAvailable.length > 0}
-                                {#each stepsAvailable as stepNumber}
-                                    {@const contentHTML = resourceData?.cbbterText?.steps?.find(
-                                        (step) => step.stepNumber === stepNumber
-                                    )?.contentHTML}
-                                    <div
-                                        class={cbbterSelectedStepNumber === stepNumber
-                                            ? 'flex flex-grow flex-col'
-                                            : 'hidden'}
-                                    >
-                                        <div class="flex-grow overflow-y-scroll">
-                                            {#if contentHTML}
-                                                {@html contentHTML}
-                                            {/if}
-                                        </div>
-                                    </div>
-                                {/each}
-                            {:else}
-                                {$translate('page.passage.noCbbterContent.value')}
-                            {/if}
-                        </div>
-                    </div>
-                </div>
+                <GuideContent
+                    bind:multiClipAudioStates
+                    bind:audioPlayerKey
+                    currentGuide={$currentGuide}
+                    guideResourceInfo={resourceData?.guideResourceInfo}
+                    isShowing={selectedTab === 'guide'}
+                />
             {/await}
         </div>
         {#if objectKeys(multiClipAudioStates).length}
