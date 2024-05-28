@@ -13,26 +13,36 @@
     import play from 'svelte-awesome/icons/play';
     import { _ as translate } from 'svelte-i18n';
     import ResourceFullscreenHeader from './ResourceFullscreenHeader.svelte';
+    import NoResourcesFound from './NoResourcesFound.svelte';
 
     const videosToShowBeforeSeeAll = 3;
 
     export let resourceGrouping: LibraryResourceGrouping;
     export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
     export let searchQuery: string;
+    export let skipClientSideFiltering: boolean;
     export let isFullscreen: boolean;
     export let showAll: () => void;
     export let dismissFullscreen: () => void;
 
     let carousel: HTMLDivElement | null = null;
 
+    $: filterResultsClientSide = shouldSearch(searchQuery) && !skipClientSideFiltering;
+
     $: unfilteredResources =
-        !isFullscreen && !shouldSearch(searchQuery)
+        !isFullscreen && !filterResultsClientSide
             ? resourceGrouping.resources.slice(0, videosToShowBeforeSeeAll)
             : resourceGrouping.resources;
 
-    $: filteredResources = !isFullscreen
-        ? resourceGrouping.resources.slice(0, videosToShowBeforeSeeAll)
-        : filterItemsByKeyMatchingSearchQuery(resourceGrouping.resources, 'displayName', searchQuery);
+    // resources filtered to:
+    // - searched results if searching OR
+    // - all resources if fullscreen OR
+    // - first X resources
+    $: showingResources = filterResultsClientSide
+        ? filterItemsByKeyMatchingSearchQuery(resourceGrouping.resources, 'displayName', searchQuery)
+        : isFullscreen
+        ? resourceGrouping.resources
+        : resourceGrouping.resources.slice(0, videosToShowBeforeSeeAll);
 
     // if the user clears the search, scroll the carousel back to the left
     $: !shouldSearch(searchQuery) && carousel?.scrollTo({ left: 0, behavior: 'instant' });
@@ -42,13 +52,13 @@
     {#if isFullscreen}
         <ResourceFullscreenHeader
             {resourceGrouping}
-            resourcesCount={filteredResources.length}
+            resourcesCount={showingResources.length}
             {dismissFullscreen}
             bind:searchQuery
         />
     {:else}
-        <ResourceSectionHeader isVisible={filteredResources.length > 0} {resourceGrouping}>
-            {#if !shouldSearch(searchQuery) && resourceGrouping.resources.length > videosToShowBeforeSeeAll}
+        <ResourceSectionHeader isVisible={showingResources.length > 0} {resourceGrouping}>
+            {#if !filterResultsClientSide && resourceGrouping.resources.length > videosToShowBeforeSeeAll}
                 <button
                     class="text-sm font-semibold text-base-500"
                     on:click={showAll}
@@ -63,13 +73,13 @@
 
     <div
         bind:this={carousel}
-        class="carousel w-full pb-6 {isFullscreen && 'mx-auto max-w-[65ch]'} {filteredResources.length > 0
+        class="carousel w-full pb-6 {isFullscreen && 'mx-auto max-w-[65ch]'} {showingResources.length > 0
             ? 'visible'
             : 'hidden'}"
     >
         {#each unfilteredResources as video}
             <button
-                class="carousel-item me-2 w-32 flex-col {filteredResources.includes(video) ? 'visible' : 'hidden'}"
+                class="carousel-item me-2 w-32 flex-col {showingResources.includes(video) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(video)}
                 data-app-insights-event-name="video-resource-button-clicked"
             >
@@ -104,7 +114,10 @@
             </button>
         {/each}
     </div>
-    {#if filteredResources.length > 0}
+    {#if !isFullscreen && showingResources.length > 0}
         <hr />
+    {/if}
+    {#if showingResources.length === 0 && isFullscreen}
+        <NoResourcesFound {searchQuery} />
     {/if}
 {/if}
