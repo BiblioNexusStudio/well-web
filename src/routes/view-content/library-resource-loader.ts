@@ -11,11 +11,9 @@ import { asyncMap } from '$lib/utils/async-array';
 import {
     fetchDisplayNameForResourceContent,
     fetchMetadataForResourceContent,
-    fetchTiptapForResourceContent,
     resourceContentApiFullUrl,
     resourceThumbnailApiFullUrl,
 } from '$lib/utils/data-handlers/resources/resource';
-import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
 import { objectEntries } from '$lib/utils/typesafe-standard-lib';
 import { get } from 'svelte/store';
 
@@ -75,12 +73,4 @@ export async function buildLibraryResourceGroupingsWithMetadata(allResources: Re
         );
     });
     return groupings;
-}
-
-export async function loadTextContent(resource: ResourceContentInfoWithMetadata) {
-    const tiptap = await fetchTiptapForResourceContent(resource);
-    if (tiptap) {
-        return parseTiptapJsonToHtml(tiptap.tiptap);
-    }
-    return null;
 }

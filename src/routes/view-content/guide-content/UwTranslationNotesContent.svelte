@@ -1,12 +1,13 @@
 <script lang="ts">
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import { fetchFromCacheOrCdn } from '$lib/data-cache';
     import { log } from '$lib/logger';
-    import { ParentResourceId, MediaType, type ResourceContentTiptap } from '$lib/types/resource';
+    import { isOnline } from '$lib/stores/is-online.store';
+    import { ParentResourceId, MediaType } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import {
-        fetchDisplayNameForResourceContent,
-        resourceContentApiFullUrl,
+        fetchMetadataForResourceContent,
+        fetchTiptapForResourceContent,
+        filterToAvailableAssociatedResourceContent,
         type ResourceContentInfoWithFrontendData,
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
@@ -14,6 +15,7 @@
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
+    export let audioPlayerKey: string | undefined;
 
     interface ResourceContentInfoWithFrontendDataAndHtml extends ResourceContentInfoWithFrontendData {
         displayName: string | undefined;
@@ -24,6 +26,7 @@
     let isLoading = false;
 
     $: fetchContent(guideResourceInfo);
+    $: isShowing && (audioPlayerKey = undefined);
 
     async function fetchContent(guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined) {
         try {
@@ -46,15 +49,19 @@
         const resourcesWithHtml = (
             await asyncMap(allTextResourceContent, async (resourceContent) => {
                 try {
-                    const [displayName, content] = await Promise.all([
-                        fetchDisplayNameForResourceContent(resourceContent),
-                        fetchFromCacheOrCdn<ResourceContentTiptap[]>(resourceContentApiFullUrl(resourceContent)),
+                    const [metadata, tiptap] = await Promise.all([
+                        fetchMetadataForResourceContent(resourceContent),
+                        fetchTiptapForResourceContent(resourceContent),
                     ]);
-                    if (content[0]) {
+                    if (tiptap) {
+                        const availableAssociatedResources = await filterToAvailableAssociatedResourceContent(
+                            $isOnline,
+                            metadata?.associatedResources
+                        );
                         return {
                             ...resourceContent,
-                            displayName,
-                            contentHTML: parseTiptapJsonToHtml(content[0].tiptap),
+                            displayName: metadata?.displayName,
+                            contentHTML: parseTiptapJsonToHtml(tiptap.tiptap, availableAssociatedResources),
                         };
                     }
                 } catch (error) {

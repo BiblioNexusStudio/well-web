@@ -8,16 +8,21 @@ import type { BibleSection, WholeChapterBibleSection } from '$lib/types/bible';
 import {
     MediaType,
     PredeterminedPassageGuides,
+    type AssociatedResource,
     type ResourceContentGroupedByVerses,
     type ResourceContentInfo,
     type ResourceContentMetadata,
     type ResourceContentTiptap,
+    type TextResourceContentJustId,
 } from '$lib/types/resource';
 import { range } from '$lib/utils/array';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import { get } from 'svelte/store';
+import { asyncFilter } from '$lib/utils/async-array';
 
-export function resourceContentApiPath(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
+export function resourceContentApiPath(
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
+) {
     const mediaType = 'mediaType' in resourceContent ? resourceContent.mediaType : resourceContent.mediaTypeName;
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
     if (mediaType === MediaType.Audio) {
@@ -27,7 +32,9 @@ export function resourceContentApiPath(resourceContent: ResourceContentInfo | Fi
     }
 }
 
-export function resourceContentApiFullUrl(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
+export function resourceContentApiFullUrl(
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
+) {
     return apiUrl(resourceContentApiPath(resourceContent));
 }
 
@@ -36,7 +43,9 @@ export function resourceThumbnailApiFullUrl(resourceContent: ResourceContentInfo
     return apiUrl(`/resources/${id}/thumbnail`);
 }
 
-export function resourceMetadataApiFullUrl(resourceContent: ResourceContentInfo | FileManagerResourceContentInfo) {
+export function resourceMetadataApiFullUrl(
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
+) {
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
     return apiUrl(`/resources/${id}/metadata`);
 }
@@ -128,7 +137,7 @@ export async function resourceContentsForBibleSection(bibleSection: BibleSection
 }
 
 export async function fetchTiptapForResourceContent(
-    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
 ): Promise<ResourceContentTiptap | null> {
     try {
         const tiptaps = (await fetchFromCacheOrCdn(resourceContentApiFullUrl(resourceContent))) as
@@ -143,7 +152,7 @@ export async function fetchTiptapForResourceContent(
 }
 
 export async function fetchMetadataForResourceContent(
-    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
 ): Promise<ResourceContentMetadata | null> {
     try {
         return (await fetchFromCacheOrCdn(
@@ -154,6 +163,22 @@ export async function fetchMetadataForResourceContent(
         log.exception(error as Error);
         return null;
     }
+}
+
+export async function filterToAvailableAssociatedResourceContent(
+    online: boolean,
+    associatedResources: AssociatedResource[] | undefined
+) {
+    if (!associatedResources || online) {
+        return associatedResources;
+    }
+    return asyncFilter(associatedResources, async (resource) => {
+        const textResourceContentJustId: TextResourceContentJustId = {
+            id: resource.contentId,
+            mediaType: MediaType.Text,
+        };
+        return await isCachedFromCdn(resourceContentApiFullUrl(textResourceContentJustId));
+    });
 }
 
 export async function fetchDisplayNameForResourceContent(
