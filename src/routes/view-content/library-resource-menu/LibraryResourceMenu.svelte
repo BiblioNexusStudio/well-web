@@ -1,7 +1,6 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import FullscreenMediaResource from './FullscreenMediaResource.svelte';
-    import FullscreenTextResource from './FullscreenTextResource.svelte';
     import SearchInput from '$lib/components/SearchInput.svelte';
     import { filterItemsByKeyMatchingSearchQuery } from '$lib/utils/search';
     import FullscreenResourceSection from './FullscreenResourceSection.svelte';
@@ -14,6 +13,7 @@
         ParentResourceType,
         type ResourceContentInfo,
         type ResourceContentInfoWithMetadata,
+        type TextResourceContentJustId,
     } from '$lib/types/resource';
     import {
         buildLibraryResourceGroupingsWithMetadata,
@@ -29,6 +29,7 @@
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
     export let tab: PassagePageTabEnum;
+    export let fullscreenTextResourceStack: (ResourceContentInfoWithMetadata | TextResourceContentJustId)[];
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
@@ -43,7 +44,6 @@
     $: hasQuery = searchQuery != '';
 
     let currentFullscreenMediaResourceIndex: number | null = null;
-    let currentFullscreenResource: ResourceContentInfoWithMetadata | null = null;
     let currentFullscreenResourceGrouping: LibraryResourceGrouping | null;
 
     let isFullLibrary = tab === PassagePageTabEnum.LibraryMenu;
@@ -93,7 +93,8 @@
         if (resource.mediaType === MediaType.Image || resource.mediaType === MediaType.Video) {
             currentFullscreenMediaResourceIndex = mediaResources.indexOf(resource);
         } else {
-            currentFullscreenResource = resource;
+            fullscreenTextResourceStack.push(resource);
+            fullscreenTextResourceStack = fullscreenTextResourceStack;
         }
     }
 
@@ -122,7 +123,6 @@
 />
 
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
-<FullscreenTextResource bind:resource={currentFullscreenResource} />
 <FullscreenResourceSection {currentFullscreenResourceGrouping} {resourceSelected} {showResourceGroupingFullscreen} />
 
 <div class="flex flex-col px-4">

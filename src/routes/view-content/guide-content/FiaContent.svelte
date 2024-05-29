@@ -172,7 +172,10 @@
                         resourceContentApiFullUrl(resourceContent)
                     )) as ResourceContentFiaText[];
                     return {
-                        steps: content.map((step) => ({ ...step, contentHTML: parseTiptapJsonToHtml(step.tiptap) })),
+                        steps: content.map((step) => ({
+                            ...step,
+                            contentHTML: parseTiptapJsonToHtml(step.tiptap, undefined),
+                        })),
                     };
                 } catch (error) {
                     // stuff not cached

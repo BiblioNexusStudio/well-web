@@ -50,7 +50,12 @@
     import BibleMenu from './bible-menu/BibleMenu.svelte';
     import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
-    import type { ApiParentResource } from '$lib/types/resource';
+    import {
+        MediaType,
+        type ApiParentResource,
+        type ResourceContentInfoWithMetadata,
+        type TextResourceContentJustId,
+    } from '$lib/types/resource';
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { BibleSection } from '$lib/types/bible';
@@ -58,9 +63,11 @@
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
     import QuickShare from './quick-share/QuickShare.svelte';
     import GuideContent from './guide-content/GuideContent.svelte';
+    import FullscreenTextResource from './library-resource-menu/FullscreenTextResource.svelte';
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
+    let fullscreenTextResourceStack: (ResourceContentInfoWithMetadata | TextResourceContentJustId)[] = [];
 
     let selectedBibleId: number | null = null;
     let selectedTab = PassagePageTabEnum.Guide;
@@ -262,6 +269,15 @@
         if (!$currentGuide) {
             openGuideMenu();
         }
+
+        window.onResourceReferenceClick = (contentId: number) => {
+            fullscreenTextResourceStack.push({ id: contentId, mediaType: MediaType.Text });
+            fullscreenTextResourceStack = fullscreenTextResourceStack;
+        };
+
+        return () => {
+            window.onResourceReferenceClick = undefined;
+        };
     });
 </script>
 
@@ -275,6 +291,8 @@
     bind:isShowing={isShowingBookChapterSelectorPane}
     filterByCurrentGuide={selectedTab === PassagePageTabEnum.Guide}
 />
+
+<FullscreenTextResource bind:fullscreenTextResourceStack />
 
 <div class="btm-nav z-40 h-20 border-t">
     <NavMenuTabItem
@@ -410,10 +428,14 @@
         />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.resources}
-        <LibraryResourceMenu resources={resourceData?.additionalResourceInfo} tab={selectedTab} />
+        <LibraryResourceMenu
+            bind:fullscreenTextResourceStack
+            resources={resourceData?.additionalResourceInfo}
+            tab={selectedTab}
+        />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.library}
-        <LibraryResourceMenu resources={undefined} tab={selectedTab} />
+        <LibraryResourceMenu bind:fullscreenTextResourceStack resources={undefined} tab={selectedTab} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
         <BibleMenu bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane} />

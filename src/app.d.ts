@@ -13,6 +13,7 @@ declare global {
     interface Window {
         __CONFIG: Record<string, string | number | boolean>;
         webkitAudioContext: AudioContext;
+        onResourceReferenceClick: ((contentId: number) => void) | undefined;
     }
 }
 

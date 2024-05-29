@@ -34,7 +34,14 @@ export enum ParentResourceType {
 
 export interface ResourceContentMetadata {
     displayName: string;
+    associatedResources: AssociatedResource[];
     metadata: Record<string, unknown>;
+}
+
+export interface AssociatedResource {
+    resourceId: number;
+    contentId: number;
+    externalId: string;
 }
 
 export interface UrlWithInfo {
@@ -85,10 +92,16 @@ export interface ResourceContentInfo {
     displayName?: string;
 }
 
+export interface TextResourceContentJustId {
+    mediaType: MediaType.Text;
+    id: number;
+}
+
 export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
     url?: string;
     thumbnailUrl?: string;
     duration?: number;
+    associatedResources?: AssociatedResource[];
 }
 
 export type TiptapContent = object;
