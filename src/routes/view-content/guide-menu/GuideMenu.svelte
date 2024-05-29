@@ -14,6 +14,7 @@
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
+    import SwishHeader from '$lib/components/SwishHeader.svelte';
 
     export let showBookPassageSelectorPane: boolean;
     export let showBookChapterVerseMenu: boolean;
@@ -68,17 +69,11 @@
 </script>
 
 <div class="z-50 flex h-full w-full flex-col">
-    <div class="relative mb-6 flex h-[166px] w-full rounded-b-3xl bg-[#EAAA08] ps-6 pt-12">
-        <div class="absolute bottom-0 left-0 w-full">
-            <img src="/menu-swish.png" alt="Menu Swish" class="h-auto w-full rounded-b-3xl" />
-        </div>
-        <div class="flex flex-col">
-            <h2 class="z-10 mb-2 text-2xl font-bold text-white">
-                {$translate('page.guideMenu.translationGuides.value')}
-            </h2>
-            <span class="z-10 text-sm text-white">{$translate('page.guideMenu.chooseGuide.value')}</span>
-        </div>
-    </div>
+    <SwishHeader
+        bgcolor="bg-[#EAAA08]"
+        title={$translate('page.guideMenu.translationGuides.value')}
+        subtitle={$translate('page.guideMenu.chooseGuide.value')}
+    />
     {#await availableGuidesPromise}
         <FullPageSpinner />
     {:then availableGuides}

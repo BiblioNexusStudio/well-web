@@ -101,7 +101,6 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
     url?: string;
     thumbnailUrl?: string;
     duration?: number;
-    associatedResources?: AssociatedResource[];
 }
 
 export type TiptapContent = object;
