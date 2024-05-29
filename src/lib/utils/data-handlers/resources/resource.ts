@@ -49,8 +49,9 @@ export function resourceContentsForBookAndChapterFullUrl(
     return apiUrl(resourceContentForBookAndChapter(languageId, bookCode, parseInt(chapter))[0]);
 }
 
-interface ResourceContentInfoWithOccurrences extends ResourceContentInfo {
+export interface ResourceContentInfoWithFrontendData extends ResourceContentInfo {
     occurrences: number;
+    verses: { chapter: number; verse: number }[];
 }
 
 export interface AvailableChaptersForResource {
@@ -60,12 +61,10 @@ export interface AvailableChaptersForResource {
 
 // for a given Bible section, return all resource contents available
 // when offline, this will return only resource contents that are cached
-export async function resourceContentsForBibleSection(
-    bibleSection: BibleSection | WholeChapterBibleSection
-): Promise<ResourceContentInfo[]> {
+export async function resourceContentsForBibleSection(bibleSection: BibleSection | WholeChapterBibleSection) {
     const languageId = get(currentLanguageInfo)?.id;
     const online = get(isOnline);
-    const resources = [] as ResourceContentInfoWithOccurrences[];
+    const resources = [] as ResourceContentInfoWithFrontendData[];
 
     for (const chapter of range(bibleSection.startChapter, bibleSection.endChapter)) {
         let resourcesForChapter: ResourceContentGroupedByVerses | undefined;
@@ -97,8 +96,9 @@ export async function resourceContentsForBibleSection(
                         const existing = resources.find((rc) => rc.id === content.id);
                         if (existing) {
                             existing.occurrences += 1;
+                            existing.verses.push({ chapter, verse: verse.number });
                         } else {
-                            resources.push({ ...content, occurrences: 1 });
+                            resources.push({ ...content, occurrences: 1, verses: [{ chapter, verse: verse.number }] });
                         }
                     }
                 }

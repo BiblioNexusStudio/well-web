@@ -9,7 +9,10 @@ import { isOnline } from '$lib/stores/is-online.store';
 import { fetchAllBibles, bookDataForBibleTab } from '$lib/utils/data-handlers/bible';
 import { range } from '$lib/utils/array';
 import { type ResourceContentInfo, ParentResourceType } from '$lib/types/resource';
-import { resourceContentApiFullUrl } from '$lib/utils/data-handlers/resources/resource';
+import {
+    resourceContentApiFullUrl,
+    type ResourceContentInfoWithFrontendData,
+} from '$lib/utils/data-handlers/resources/resource';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
 import { settings } from '$lib/stores/settings.store';
@@ -17,7 +20,13 @@ import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
 import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/resource';
 import type { BibleSection } from '$lib/types/bible';
 
-export type PassagePageTab = 'bible' | 'guide' | 'mainMenu' | 'libraryMenu' | 'resources';
+export enum PassagePageTabEnum {
+    bible = 'bible',
+    guide = 'guide',
+    mainMenu = 'mainMenu',
+    libraryMenu = 'libraryMenu',
+    resources = 'resources',
+}
 
 export async function fetchBibleContent(passage: BibleSection, bible: FrontendBibleBook) {
     if (!bible.bookMetadata) return null;
@@ -126,7 +135,7 @@ async function filterToAdditionalResourceInfo(resourceContents: ResourceContentI
     );
 }
 
-async function filterToGuideResourceInfo(resourceContents: ResourceContentInfo[]) {
+async function filterToGuideResourceInfo(resourceContents: ResourceContentInfoWithFrontendData[]) {
     const showOnlySrvResources = get(settings).find((setting: Setting) => {
         setting.shortName === SettingShortNameEnum.showOnlySrvResources;
     });
@@ -188,8 +197,8 @@ export async function fetchBibleData(passage: BibleSection) {
 
 export async function fetchResourceData(passage: BibleSection) {
     let additionalResourceInfo: ResourceContentInfo[] = [];
-    let guideResourceInfo: ResourceContentInfo[] = [];
-    let resourceContents: ResourceContentInfo[] | undefined;
+    let guideResourceInfo: ResourceContentInfoWithFrontendData[] = [];
+    let resourceContents: ResourceContentInfoWithFrontendData[] | undefined;
     try {
         resourceContents = await resourceContentsForBibleSection(passage);
     } catch (error) {

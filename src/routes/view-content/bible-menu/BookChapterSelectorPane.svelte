@@ -13,9 +13,13 @@
     import type { Language } from '$lib/types/file-manager';
     import { isOnline } from '$lib/stores/is-online.store';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
+    import { bibleChaptersByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
+    import { currentGuide } from '$lib/stores/parent-resource.store';
+    import { get } from 'svelte/store';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
+    export let filterByCurrentGuide: boolean;
 
     let currentBook: ApiBibleBook;
     let currentChapter: ApiBibleChapter | null = null;
@@ -24,14 +28,26 @@
     let firstSelectedVerse: FrontEndVerseForSelectionPane | null = null;
     let lastSelectedVerse: FrontEndVerseForSelectionPane | null = null;
 
-    $: availableBooksPromise = fetchAvailableBooks($currentLanguageInfo, $isOnline, $preferredBibleIds);
+    $: availableBooksPromise = fetchAvailableBooks(
+        $currentLanguageInfo,
+        $isOnline,
+        filterByCurrentGuide,
+        $preferredBibleIds
+    );
 
     async function fetchAvailableBooks(
         _currentLanguageInfo: Language | undefined,
         online: boolean,
+        filterByCurrentGuide: boolean,
         preferredBibleIds: number[]
     ) {
-        return bibleChaptersByBookAvailable(online, preferredBibleIds);
+        const currentGuideId = get(currentGuide)?.id;
+        const allAvailable = await bibleChaptersByBookAvailable(online, preferredBibleIds);
+        if (filterByCurrentGuide && currentGuideId) {
+            return await bibleChaptersByBookAvailableForGuide(allAvailable, currentGuideId);
+        } else {
+            return allAvailable;
+        }
     }
 
     let steps = {
@@ -254,10 +270,10 @@
                 <span class="ms-4">{currentStep.backText}</span>
             </button>
         {:else}
-            <h3 class="my-2 font-bold">{currentStep.title}</h3>
+            <h3 class="my-2 block font-bold">{currentStep.title}</h3>
         {/if}
 
-        <hr class="my-2 w-screen" />
+        <hr class="my-2 w-full" />
         <div
             class="flex h-[calc(100%-48px)] w-full flex-col items-center {currentStep === steps.one
                 ? 'overflow-y-scroll'
@@ -286,8 +302,8 @@
                         </div>
                     {/if}
                     {#if currentStep === steps.two}
-                        <h3 class="mb-4 self-start text-lg font-bold">{currentBook.localizedName}</h3>
-                        <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
+                        <h3 class="mb-4 block self-start text-lg font-bold">{currentBook.localizedName}</h3>
+                        <h4 class="mb-4 block self-start">{currentStep.subtitle}</h4>
                         <div class="w-full flex-grow overflow-y-scroll">
                             <div class="grid w-full grid-cols-5 gap-4">
                                 {#each currentBook.chapters as chapter}
@@ -302,7 +318,7 @@
                                 {/each}
                             </div>
                         </div>
-                        <hr class="my-4 w-screen" />
+                        <hr class="my-4 w-full" />
                         <button
                             on:click={handleGoToVerses}
                             disabled={!currentChapterSelected}
@@ -313,21 +329,21 @@
                         </button>
                     {/if}
                     {#if currentStep === steps.three}
-                        <h3 class="mb-2 self-start text-lg font-bold">{verseTitle}</h3>
-                        <div class="flex w-full overflow-x-scroll py-4">
+                        <h3 class="mb-2 block self-start text-lg font-bold">{verseTitle}</h3>
+                        <div class="flex w-full flex-shrink-0 overflow-x-scroll">
                             {#each currentBook.chapters as chapter, index}
                                 {@const isCurrentChapter = chapter === currentChapter}
                                 <button
                                     on:click={() => handleChapterSelection(chapter)}
                                     bind:this={buttons[index]}
-                                    class="btn me-4 {isCurrentChapter && 'bg-blue-500 text-white'}"
+                                    class="btn me-4 block {isCurrentChapter && 'bg-blue-500 text-white'}"
                                     data-app-insights-event-name={`book-chapter-selector-pane-${currentBook.code}-chapter-carousel-${chapter.number}-selected`}
                                 >
                                     <span class="me-1">{currentBook.localizedName}</span><span>{chapter.number}</span>
                                 </button>
                             {/each}
                         </div>
-                        <h4 class="mb-4 self-start">{currentStep.subtitle}</h4>
+                        <h4 class="mb-4 mt-1 block self-start">{currentStep.subtitle}</h4>
                         <div class="w-full flex-grow overflow-y-scroll">
                             <div class="grid w-full grid-cols-5 gap-4">
                                 {#if currentChapter && currentChapter.verseState}
@@ -348,7 +364,7 @@
                                 {/if}
                             </div>
                         </div>
-                        <hr class="my-4 w-screen" />
+                        <hr class="my-4 w-full" />
 
                         <button
                             on:click={handleVerseGoButton}

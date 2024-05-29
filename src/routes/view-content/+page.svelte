@@ -23,7 +23,7 @@
         type BibleData,
         type ResourceData,
         fetchBibleContent,
-        type PassagePageTab,
+        PassagePageTabEnum,
         fetchResourceData,
         fetchBibleData,
     } from './data-fetchers';
@@ -63,7 +63,7 @@
     let resourceData: ResourceData | null = null;
 
     let selectedBibleId: number | null = null;
-    let selectedTab: PassagePageTab = 'guide';
+    let selectedTab = PassagePageTabEnum.guide;
     let isShowingBookPassageSelectorPane = false;
     let isShowingBookChapterSelectorPane = false;
     let bookPassageSelectorPane: CupertinoPane;
@@ -269,26 +269,50 @@
     bind:isShowing={isShowingBookPassageSelectorPane}
     bind:tab={selectedTab}
 />
-<BookChapterSelectorPane bind:bookChapterSelectorPane bind:isShowing={isShowingBookChapterSelectorPane} />
+<BookChapterSelectorPane
+    bind:bookChapterSelectorPane
+    bind:isShowing={isShowingBookChapterSelectorPane}
+    filterByCurrentGuide={selectedTab === PassagePageTabEnum.guide}
+/>
 
 <div class="btm-nav z-40 h-20 border-t">
-    <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
+    <NavMenuTabItem
+        bind:selectedTab
+        tabName={PassagePageTabEnum.bible}
+        label={$translate('page.passage.nav.bible.value')}
+    >
         <BookIcon />
     </NavMenuTabItem>
-    <NavMenuTabItem bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
+    <NavMenuTabItem
+        bind:selectedTab
+        tabName={PassagePageTabEnum.guide}
+        label={$translate('page.passage.nav.guide.value')}
+    >
         <CompassIcon />
     </NavMenuTabItem>
     {#if resourceData?.additionalResourceInfo?.length}
-        <NavMenuTabItem bind:selectedTab tabName="resources" label={$translate('page.passage.nav.resources.value')}>
+        <NavMenuTabItem
+            bind:selectedTab
+            tabName={PassagePageTabEnum.resources}
+            label={$translate('page.passage.nav.resources.value')}
+        >
             <ClipboardIcon />
         </NavMenuTabItem>
     {/if}
     {#if $isOnline}
-        <NavMenuTabItem bind:selectedTab tabName="libraryMenu" label={$translate('page.passage.nav.library.value')}>
+        <NavMenuTabItem
+            bind:selectedTab
+            tabName={PassagePageTabEnum.libraryMenu}
+            label={$translate('page.passage.nav.library.value')}
+        >
             <LibraryIcon />
         </NavMenuTabItem>
     {/if}
-    <NavMenuTabItem bind:selectedTab tabName="mainMenu" label={$translate('page.passage.nav.menu.value')}>
+    <NavMenuTabItem
+        bind:selectedTab
+        tabName={PassagePageTabEnum.mainMenu}
+        label={$translate('page.passage.nav.menu.value')}
+    >
         <MenuIcon />
     </NavMenuTabItem>
 </div>
@@ -379,7 +403,10 @@
         <MainMenu />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.guide}
-        <GuideMenu bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane} />
+        <GuideMenu
+            bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
+            bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
+        />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.resources}
         <LibraryResourceMenu resources={resourceData?.additionalResourceInfo} tab={selectedTab} />

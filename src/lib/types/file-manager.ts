@@ -9,7 +9,6 @@ export interface UrlWithMetadata {
     size: number;
     metadataOnly?: boolean;
 }
-export type TiptapContent = object;
 
 export interface ApiAudioChapter {
     number: string;
@@ -66,14 +65,6 @@ export interface DownloadData {
 
 export interface ResourceContentUrl {
     url: string;
-}
-
-export interface ResourceContentTiptap {
-    tiptap: TiptapContent;
-}
-
-export interface ResourceContentFiaText extends ResourceContentTiptap {
-    stepNumber: number;
 }
 
 export interface BasePassage {

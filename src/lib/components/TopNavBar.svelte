@@ -9,15 +9,17 @@
     import type { BibleSection } from '$lib/types/bible';
     import type { FrontendBibleBook } from '$lib/types/bible';
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
-    import type { PassagePageTab } from '../../routes/view-content/data-fetchers';
+    import type { PassagePageTabEnum } from '../../routes/view-content/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
+    import { PredeterminedPassageGuides } from '$lib/types/resource';
+    import { currentGuide } from '$lib/stores/parent-resource.store';
 
     export let bibleSectionTitle = '';
     export let bibleSection: BibleSection | null = null;
     export let bibles: FrontendBibleBook[] = [];
     let recordingModalOpen = false;
     export let preferredBiblesModalOpen = false;
-    export let tab: PassagePageTab | null = null;
+    export let tab: PassagePageTabEnum | null = null;
     export let guideShortName = '';
     export let showBookChapterVerseMenu: boolean;
     export let showBookPassageSelectorPane: boolean;
@@ -37,7 +39,13 @@
         if (tab === 'bible') {
             showBookChapterVerseMenu = true;
         } else if (tab === 'guide' || tab === 'resources') {
-            showBookPassageSelectorPane = true;
+            const currentGuideId = $currentGuide?.id;
+            if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
+                showBookPassageSelectorPane = true;
+            }
+            {
+                showBookChapterVerseMenu = true;
+            }
         }
     }
 </script>

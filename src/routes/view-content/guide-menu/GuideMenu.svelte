@@ -3,7 +3,7 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
     import { setCurrentGuide, currentGuide } from '$lib/stores/parent-resource.store';
-    import type { ApiParentResource, ParentResourceId } from '$lib/types/resource';
+    import { PredeterminedPassageGuides, type ApiParentResource, type ParentResourceId } from '$lib/types/resource';
     import {
         guidesAvailableForBibleSection,
         guidesAvailableInCurrentLanguage,
@@ -16,6 +16,7 @@
     import { isOnline } from '$lib/stores/is-online.store';
 
     export let showBookPassageSelectorPane: boolean;
+    export let showBookChapterVerseMenu: boolean;
 
     $: availableGuidesPromise = fetchAvailableGuides($selectedBibleSection, $settings, $currentLanguageInfo, $isOnline);
 
@@ -57,7 +58,12 @@
     }
 
     function openGuideMenu() {
-        showBookPassageSelectorPane = true;
+        const currentGuideId = $currentGuide?.id;
+        if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
+            showBookPassageSelectorPane = true;
+        } else {
+            showBookChapterVerseMenu = true;
+        }
     }
 </script>
 

@@ -10,14 +10,14 @@
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
     import { currentGuide } from '$lib/stores/parent-resource.store';
-    import type { ApiParentResource } from '$lib/types/resource';
+    import { PredeterminedPassageGuides, type ApiParentResource } from '$lib/types/resource';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { isOnline } from '$lib/stores/is-online.store';
-    import type { PassagePageTab } from '../data-fetchers';
+    import { PassagePageTabEnum } from '../data-fetchers';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
-    export let tab: PassagePageTab;
+    export let tab: PassagePageTabEnum;
 
     let steps = {
         one: { title: $translate('page.BookPassageSelectorMenu.stepOneTitle.value') },
@@ -39,14 +39,14 @@
         $selectedBibleSection = passage;
         currentStep = steps.one;
         isShowing = false;
-        tab = 'guide';
+        tab = PassagePageTabEnum.guide;
         closeAllPassagePageMenus();
     }
 
     $: availablePassagesPromise = fetchAvailablePassages($currentGuide, $isOnline);
 
     async function fetchAvailablePassages(guide: ApiParentResource | undefined, _online: boolean) {
-        if (guide) {
+        if (guide && PredeterminedPassageGuides.includes(guide.id)) {
             availablePassagesByBook = await passagesByBookAvailableForGuide(guide.id);
         } else {
             availablePassagesByBook = null;

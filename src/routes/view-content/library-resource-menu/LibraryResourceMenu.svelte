@@ -19,7 +19,7 @@
         buildLibraryResourceGroupingsWithMetadata,
         type LibraryResourceGrouping,
     } from '../library-resource-loader';
-    import type { PassagePageTab } from '../data-fetchers';
+    import { PassagePageTabEnum } from '../data-fetchers';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { get } from 'svelte/store';
     import { currentLanguageInfo } from '$lib/stores/language.store';
@@ -28,7 +28,7 @@
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
-    export let tab: PassagePageTab;
+    export let tab: PassagePageTabEnum;
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
@@ -46,13 +46,13 @@
     let currentFullscreenResource: ResourceContentInfoWithMetadata | null = null;
     let currentFullscreenResourceGrouping: LibraryResourceGrouping | null;
 
-    let isFullLibrary = tab === 'libraryMenu';
+    let isFullLibrary = tab === PassagePageTabEnum.libraryMenu;
     let visibleSwish = isFullLibrary;
 
     $: searchQueryChanged(searchQuery);
 
     function onHandleSearchFocus() {
-        if (!hasQuery && tab === 'libraryMenu') {
+        if (!hasQuery && tab === PassagePageTabEnum.libraryMenu) {
             visibleSwish = !visibleSwish;
         }
     }
