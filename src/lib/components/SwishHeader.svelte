@@ -10,7 +10,7 @@
 {#if visible}
     <div
         transition:slide={{ duration: 1000 }}
-        class="relative mb-6 flex h-[166px] w-full rounded-b-3xl {bgcolor} pl-6 pt-12"
+        class="relative mb-6 flex h-[166px] w-full rounded-b-3xl {bgcolor} ps-6 pt-12"
     >
         <div class="absolute bottom-0 left-0 w-full">
             <img src="/menu-swish.png" alt="Menu Swish" class="h-auto w-full rounded-b-3xl" />

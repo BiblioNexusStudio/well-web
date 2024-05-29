@@ -46,13 +46,13 @@
     let currentFullscreenResource: ResourceContentInfoWithMetadata | null = null;
     let currentFullscreenResourceGrouping: LibraryResourceGrouping | null;
 
-    let isFullLibrary = tab === PassagePageTabEnum.libraryMenu;
+    let isFullLibrary = tab === PassagePageTabEnum.LibraryMenu;
     let visibleSwish = isFullLibrary;
 
     $: searchQueryChanged(searchQuery);
 
     function onHandleSearchFocus() {
-        if (!hasQuery && tab === PassagePageTabEnum.libraryMenu) {
+        if (!hasQuery && isFullLibrary) {
             visibleSwish = !visibleSwish;
         }
     }
@@ -133,7 +133,7 @@
                 <button
                     on:click={(e) => resetPage(e)}
                     type="button"
-                    class="mt-2 pl-4 font-semibold text-primary"
+                    class="mt-2 ps-4 font-semibold text-primary"
                     data-app-insights-event-name="library-menu-reset-page-button-clicked"
                     >{$translate('page.passage.resourcePane.cancel.value')}</button
                 >

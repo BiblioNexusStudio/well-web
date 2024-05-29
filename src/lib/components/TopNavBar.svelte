@@ -9,7 +9,7 @@
     import type { BibleSection } from '$lib/types/bible';
     import type { FrontendBibleBook } from '$lib/types/bible';
     import PreferredBiblesModal from './PreferredBiblesModal.svelte';
-    import type { PassagePageTabEnum } from '../../routes/view-content/data-fetchers';
+    import { PassagePageTabEnum } from '../../routes/view-content/data-fetchers';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { PredeterminedPassageGuides } from '$lib/types/resource';
     import { currentGuide } from '$lib/stores/parent-resource.store';
@@ -36,14 +36,13 @@
     }
 
     function handlePassageButton() {
-        if (tab === 'bible') {
+        if (tab === PassagePageTabEnum.Bible) {
             showBookChapterVerseMenu = true;
-        } else if (tab === 'guide' || tab === 'resources') {
+        } else if (tab === PassagePageTabEnum.Guide || tab === PassagePageTabEnum.Resources) {
             const currentGuideId = $currentGuide?.id;
             if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
                 showBookPassageSelectorPane = true;
-            }
-            {
+            } else {
                 showBookChapterVerseMenu = true;
             }
         }
@@ -56,7 +55,7 @@
     <AddAudioRecordingModal bind:open={recordingModalOpen} {bibleSection} />
 {/if}
 <div class="navbar flex w-full justify-between">
-    {#if tab === 'guide' || tab === 'bible' || tab === 'resources'}
+    {#if tab === PassagePageTabEnum.Guide || tab === PassagePageTabEnum.Bible || tab === PassagePageTabEnum.Resources}
         <div class="ms-2 flex-none">
             <button
                 on:click={handlePassageButton}
@@ -65,7 +64,7 @@
             >
                 {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
             </button>
-            {#if tab === 'bible'}
+            {#if tab === PassagePageTabEnum.Bible}
                 <button
                     on:click={openBibleMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
@@ -74,7 +73,7 @@
                     {$translate('page.passage.nav.bible.value')}
                 </button>
             {/if}
-            {#if tab === 'guide'}
+            {#if tab === PassagePageTabEnum.Guide}
                 <button
                     on:click={openGuideMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
@@ -85,7 +84,7 @@
             {/if}
         </div>
     {/if}
-    {#if bibleSection && tab === 'bible' && bibles.length}
+    {#if bibleSection && tab === PassagePageTabEnum.Bible && bibles.length}
         <div class="flex-none">
             <details
                 bind:open={preferredBiblesModalOpen}
@@ -103,7 +102,7 @@
             </details>
         </div>
     {/if}
-    {#if bibleSection && $featureFlags.audioRecording && tab !== 'guide'}
+    {#if bibleSection && $featureFlags.audioRecording && tab !== PassagePageTabEnum.Guide}
         <div class="flex-none">
             <details class="autoclose dropdown dropdown-end">
                 <summary class="btn btn-link btn-active text-primary">

@@ -39,7 +39,7 @@
         $selectedBibleSection = passage;
         currentStep = steps.one;
         isShowing = false;
-        tab = PassagePageTabEnum.guide;
+        tab = PassagePageTabEnum.Guide;
         closeAllPassagePageMenus();
     }
 

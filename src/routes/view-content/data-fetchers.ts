@@ -21,11 +21,11 @@ import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resour
 import type { BibleSection } from '$lib/types/bible';
 
 export enum PassagePageTabEnum {
-    bible = 'bible',
-    guide = 'guide',
-    mainMenu = 'mainMenu',
-    libraryMenu = 'libraryMenu',
-    resources = 'resources',
+    Bible = 'Bible',
+    Guide = 'Guide',
+    MainMenu = 'MainMenu',
+    LibraryMenu = 'LibraryMenu',
+    Resources = 'Resources',
 }
 
 export async function fetchBibleContent(passage: BibleSection, bible: FrontendBibleBook) {

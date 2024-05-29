@@ -15,7 +15,7 @@
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import { bibleChaptersByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
     import { currentGuide } from '$lib/stores/parent-resource.store';
-    import { get } from 'svelte/store';
+    import type { ApiParentResource } from '$lib/types/resource';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -30,6 +30,7 @@
 
     $: availableBooksPromise = fetchAvailableBooks(
         $currentLanguageInfo,
+        $currentGuide,
         $isOnline,
         filterByCurrentGuide,
         $preferredBibleIds
@@ -37,14 +38,14 @@
 
     async function fetchAvailableBooks(
         _currentLanguageInfo: Language | undefined,
+        currentGuide: ApiParentResource | undefined,
         online: boolean,
         filterByCurrentGuide: boolean,
         preferredBibleIds: number[]
     ) {
-        const currentGuideId = get(currentGuide)?.id;
         const allAvailable = await bibleChaptersByBookAvailable(online, preferredBibleIds);
-        if (filterByCurrentGuide && currentGuideId) {
-            return await bibleChaptersByBookAvailableForGuide(allAvailable, currentGuideId);
+        if (filterByCurrentGuide && currentGuide?.id) {
+            return await bibleChaptersByBookAvailableForGuide(allAvailable, currentGuide.id);
         } else {
             return allAvailable;
         }

@@ -92,7 +92,7 @@
                 {#each textContent as note, index (note.id)}
                     <div class="py-1">
                         <div class="font-bold">{note.displayName ?? ''}</div>
-                        <div class="pl-2">
+                        <div class="ps-2">
                             {@html note.contentHTML}
                         </div>
                         {#if index !== textContent.length - 1}
