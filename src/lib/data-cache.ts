@@ -68,7 +68,7 @@ export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number
     }
 }
 
-export async function fetchFromCacheOrCdn(url: Url) {
+export async function fetchFromCacheOrCdn<T>(url: Url) {
     if (!(await isCachedFromCdn(url))) {
         partiallyDownloadedCdnUrls.push(url);
     }
@@ -78,7 +78,7 @@ export async function fetchFromCacheOrCdn(url: Url) {
             throw new Error('Bad HTTP response');
         }
         cdnCachedUrls.delete(url);
-        return await response.json();
+        return (await response.json()) as T;
     } catch (error) {
         const castError = error as Error;
         const fetchError = new WellFetchError(castError.message, { cause: castError.cause });

@@ -23,7 +23,7 @@
         type BibleData,
         type ResourceData,
         fetchBibleContent,
-        type PassagePageTab,
+        PassagePageTabEnum,
         fetchResourceData,
         fetchBibleData,
     } from './data-fetchers';
@@ -63,7 +63,7 @@
     let resourceData: ResourceData | null = null;
 
     let selectedBibleId: number | null = null;
-    let selectedTab: PassagePageTab = 'guide';
+    let selectedTab = PassagePageTabEnum.Guide;
     let isShowingBookPassageSelectorPane = false;
     let isShowingBookChapterSelectorPane = false;
     let bookPassageSelectorPane: CupertinoPane;
@@ -81,7 +81,7 @@
     $: handlePreferredBiblesChange($preferredBibleIds);
     $: fetchContentForBibleId(selectedBibleId);
 
-    $: selectedTab === 'bible' && setBibleAudioPlayerForBible(selectedBibleId);
+    $: selectedTab === PassagePageTabEnum.Bible && setBibleAudioPlayerForBible(selectedBibleId);
     $: audioPlayerShowing = audioPlayerKey && !!multiClipAudioStates[audioPlayerKey];
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
 
@@ -232,18 +232,19 @@
         isShowingBookChapterSelectorPane = false;
     }
 
-    function handleSelectedTabMenu(tab: string) {
-        if (tab === 'libraryMenu') {
+    function handleSelectedTabMenu(tab: PassagePageTabEnum) {
+        if (tab === PassagePageTabEnum.LibraryMenu) {
             openLibraryMenu();
-        } else if (tab === 'resources') {
+        } else if (tab === PassagePageTabEnum.Resources) {
             openResourcesMenu();
-        } else if (tab === 'guide' && $currentGuide === undefined) {
+        } else if (
+            tab === PassagePageTabEnum.Guide &&
+            ($currentGuide === undefined || $selectedBibleSection === null)
+        ) {
             openGuideMenu();
-        } else if (tab === 'guide' && $selectedBibleSection === null) {
-            openGuideMenu();
-        } else if (tab === 'mainMenu') {
+        } else if (tab === PassagePageTabEnum.MainMenu) {
             openMainMenu();
-        } else if (tab === 'bible' && $selectedBibleSection === null) {
+        } else if (tab === PassagePageTabEnum.Bible && $selectedBibleSection === null) {
             openBibleMenu();
         } else {
             closeAllPassagePageMenus();
@@ -269,26 +270,50 @@
     bind:isShowing={isShowingBookPassageSelectorPane}
     bind:tab={selectedTab}
 />
-<BookChapterSelectorPane bind:bookChapterSelectorPane bind:isShowing={isShowingBookChapterSelectorPane} />
+<BookChapterSelectorPane
+    bind:bookChapterSelectorPane
+    bind:isShowing={isShowingBookChapterSelectorPane}
+    filterByCurrentGuide={selectedTab === PassagePageTabEnum.Guide}
+/>
 
 <div class="btm-nav z-40 h-20 border-t">
-    <NavMenuTabItem bind:selectedTab tabName="bible" label={$translate('page.passage.nav.bible.value')}>
+    <NavMenuTabItem
+        bind:selectedTab
+        tabName={PassagePageTabEnum.Bible}
+        label={$translate('page.passage.nav.bible.value')}
+    >
         <BookIcon />
     </NavMenuTabItem>
-    <NavMenuTabItem bind:selectedTab tabName="guide" label={$translate('page.passage.nav.guide.value')}>
+    <NavMenuTabItem
+        bind:selectedTab
+        tabName={PassagePageTabEnum.Guide}
+        label={$translate('page.passage.nav.guide.value')}
+    >
         <CompassIcon />
     </NavMenuTabItem>
     {#if resourceData?.additionalResourceInfo?.length}
-        <NavMenuTabItem bind:selectedTab tabName="resources" label={$translate('page.passage.nav.resources.value')}>
+        <NavMenuTabItem
+            bind:selectedTab
+            tabName={PassagePageTabEnum.Resources}
+            label={$translate('page.passage.nav.resources.value')}
+        >
             <ClipboardIcon />
         </NavMenuTabItem>
     {/if}
     {#if $isOnline}
-        <NavMenuTabItem bind:selectedTab tabName="libraryMenu" label={$translate('page.passage.nav.library.value')}>
+        <NavMenuTabItem
+            bind:selectedTab
+            tabName={PassagePageTabEnum.LibraryMenu}
+            label={$translate('page.passage.nav.library.value')}
+        >
             <LibraryIcon />
         </NavMenuTabItem>
     {/if}
-    <NavMenuTabItem bind:selectedTab tabName="mainMenu" label={$translate('page.passage.nav.menu.value')}>
+    <NavMenuTabItem
+        bind:selectedTab
+        tabName={PassagePageTabEnum.MainMenu}
+        label={$translate('page.passage.nav.menu.value')}
+    >
         <MenuIcon />
     </NavMenuTabItem>
 </div>
@@ -314,7 +339,7 @@
                 'hidden'} {audioPlayerShowing ? 'bottom-[8.5rem]' : 'bottom-20'}"
         >
             {#if selectedBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
-                <div class="px-4 pb-4 {selectedTab !== 'bible' && 'hidden'}">
+                <div class="px-4 pb-4 {selectedTab !== PassagePageTabEnum.Bible && 'hidden'}">
                     <div class="m-auto max-w-[65ch]">
                         <ButtonCarousel
                             bind:selectedValue={selectedBibleId}
@@ -327,7 +352,7 @@
                     </div>
                 </div>
             {/if}
-            <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== 'bible' && 'hidden'}">
+            <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== PassagePageTabEnum.Bible && 'hidden'}">
                 {#if selectedBibleId === null}
                     <BibleUnavailable bind:preferredBiblesModalOpen bibles={bibleData?.availableBibles} />
                 {:else if currentBible?.loadingContent}
@@ -350,7 +375,7 @@
                 {/if}
             </div>
             {#await resourceFetchPromise}
-                {#if selectedTab === 'guide'}
+                {#if selectedTab === PassagePageTabEnum.Guide}
                     <FullPageSpinner />
                 {/if}
             {:then}
@@ -359,7 +384,7 @@
                     bind:audioPlayerKey
                     currentGuide={$currentGuide}
                     guideResourceInfo={resourceData?.guideResourceInfo}
-                    isShowing={selectedTab === 'guide'}
+                    isShowing={selectedTab === PassagePageTabEnum.Guide}
                 />
             {/await}
         </div>
@@ -379,7 +404,10 @@
         <MainMenu />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.guide}
-        <GuideMenu bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane} />
+        <GuideMenu
+            bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
+            bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
+        />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.resources}
         <LibraryResourceMenu resources={resourceData?.additionalResourceInfo} tab={selectedTab} />

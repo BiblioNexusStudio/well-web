@@ -3,7 +3,7 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
     import { setCurrentGuide, currentGuide } from '$lib/stores/parent-resource.store';
-    import type { ApiParentResource, ParentResourceId } from '$lib/types/resource';
+    import { PredeterminedPassageGuides, type ApiParentResource, type ParentResourceId } from '$lib/types/resource';
     import {
         guidesAvailableForBibleSection,
         guidesAvailableInCurrentLanguage,
@@ -16,6 +16,7 @@
     import { isOnline } from '$lib/stores/is-online.store';
 
     export let showBookPassageSelectorPane: boolean;
+    export let showBookChapterVerseMenu: boolean;
 
     $: availableGuidesPromise = fetchAvailableGuides($selectedBibleSection, $settings, $currentLanguageInfo, $isOnline);
 
@@ -57,12 +58,17 @@
     }
 
     function openGuideMenu() {
-        showBookPassageSelectorPane = true;
+        const currentGuideId = $currentGuide?.id;
+        if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
+            showBookPassageSelectorPane = true;
+        } else {
+            showBookChapterVerseMenu = true;
+        }
     }
 </script>
 
 <div class="z-50 flex h-full w-full flex-col">
-    <div class="relative mb-6 flex h-[166px] w-full rounded-b-3xl bg-[#EAAA08] pl-6 pt-12">
+    <div class="relative mb-6 flex h-[166px] w-full rounded-b-3xl bg-[#EAAA08] ps-6 pt-12">
         <div class="absolute bottom-0 left-0 w-full">
             <img src="/menu-swish.png" alt="Menu Swish" class="h-auto w-full rounded-b-3xl" />
         </div>

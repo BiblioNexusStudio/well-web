@@ -1,5 +1,6 @@
 export enum ParentResourceId {
     FIA = 1,
+    UwTranslationNotes = 11,
 }
 
 export enum MediaType {
@@ -20,7 +21,7 @@ export const PredeterminedPassageGuides = [ParentResourceId.FIA];
 
 // because guides come with their own custom UIs we need to be able to filter out guides that aren't supported by the
 // client yet
-export const EnabledGuides = [ParentResourceId.FIA];
+export const EnabledGuides = [ParentResourceId.FIA, ParentResourceId.UwTranslationNotes];
 
 export enum ParentResourceType {
     None = 'None',
@@ -34,10 +35,6 @@ export enum ParentResourceType {
 export interface ResourceContentMetadata {
     displayName: string;
     metadata: Record<string, unknown>;
-}
-
-export interface ResourceContentTiptap {
-    tiptap: object;
 }
 
 export interface UrlWithInfo {
@@ -92,4 +89,10 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
     url?: string;
     thumbnailUrl?: string;
     duration?: number;
+}
+
+export type TiptapContent = object;
+
+export interface ResourceContentTiptap {
+    tiptap: TiptapContent;
 }

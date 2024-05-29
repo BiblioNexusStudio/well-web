@@ -14,7 +14,7 @@
         <div class="text-md font-semibold text-blue-title">
             {title}
         </div>
-        <div class="font-sans-serif flex items-end pb-[1px] pl-1 text-sm font-light text-base-700 opacity-50">
+        <div class="font-sans-serif flex items-end pb-[1px] ps-1 text-sm font-light text-base-700 opacity-50">
             {subtitle ?? ''}
         </div>
 

@@ -8,12 +8,15 @@
     import { fetchFromCacheOrCdn } from '$lib/data-cache';
     import { log } from '$lib/logger';
     import { openGuideMenu } from '$lib/stores/passage-page.store';
-    import type { ResourceContentFiaText } from '$lib/types/file-manager';
-    import { ParentResourceId, type ResourceContentInfo, MediaType } from '$lib/types/resource';
+    import {
+        ParentResourceId,
+        type ResourceContentInfo,
+        MediaType,
+        type ResourceContentTiptap,
+    } from '$lib/types/resource';
     import { asyncMap } from '$lib/utils/async-array';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import {
-        fetchDisplayNameForResourceContent,
         fetchMetadataForResourceContent,
         resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
@@ -29,12 +32,14 @@
     }
 
     interface FiaTextContent {
-        displayName: string;
         steps: FiaTextSingleStepContent[];
     }
 
-    interface FiaTextSingleStepContent {
+    interface ResourceContentFiaText extends ResourceContentTiptap {
         stepNumber: number;
+    }
+
+    interface FiaTextSingleStepContent extends ResourceContentFiaText {
         contentHTML: string;
     }
 
@@ -77,9 +82,9 @@
     ];
 
     async function fetchContent(guideResourceInfo: ResourceContentInfo[] | undefined) {
-        isLoading = true;
         try {
             if (guideResourceInfo) {
+                isLoading = true;
                 let audioContent = (await fetchAudio(guideResourceInfo))[0];
                 textContent = (await fetchText(guideResourceInfo))[0];
                 stepsAvailable = Array.from(
@@ -163,12 +168,10 @@
         return (
             await asyncMap(allTextResourceContent, async (resourceContent) => {
                 try {
-                    const displayName = await fetchDisplayNameForResourceContent(resourceContent);
                     const content = (await fetchFromCacheOrCdn(
                         resourceContentApiFullUrl(resourceContent)
                     )) as ResourceContentFiaText[];
                     return {
-                        displayName,
                         steps: content.map((step) => ({ ...step, contentHTML: parseTiptapJsonToHtml(step.tiptap) })),
                     };
                 } catch (error) {

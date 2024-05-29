@@ -27,7 +27,7 @@
 </script>
 
 <div class="z-50 flex h-full w-full flex-col">
-    <div class="relative mb-6 flex h-[166px] w-full rounded-b-3xl bg-[#6172F3] pl-6 pt-12">
+    <div class="relative mb-6 flex h-[166px] w-full rounded-b-3xl bg-[#6172F3] ps-6 pt-12">
         <div class="absolute bottom-0 left-0 w-full">
             <img src="/menu-swish.png" alt="Menu Swish" class="h-auto w-full rounded-b-3xl" />
         </div>
