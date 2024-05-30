@@ -89,7 +89,7 @@
     </button>
     {#if menuOpen}
         <div
-            class="menu absolute left-0 top-16 z-30 flex max-h-[calc(100vh-20rem)] w-auto max-w-[calc(200%+1rem)] flex-col flex-nowrap
+            class="menu absolute start-0 top-16 z-30 flex max-h-[calc(100vh-20rem)] w-auto max-w-[calc(200%+1rem)] flex-col flex-nowrap
             space-y-2 overflow-y-scroll rounded-md
             border-2 border-primary-300 bg-white shadow-lg"
         >
