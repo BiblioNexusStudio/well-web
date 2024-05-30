@@ -16,7 +16,6 @@
     import {
         createMultiClipAudioState,
         type MultiClipAudioState,
-        type AudioFileInfo,
     } from '$lib/components/AudioPlayer/audio-player-state';
     import { objectKeys } from '$lib/utils/typesafe-standard-lib';
     import {
@@ -64,6 +63,7 @@
     import GuideContent from './guide-content/GuideContent.svelte';
     import FullscreenTextResource from './library-resource-menu/FullscreenTextResource.svelte';
     import type { Language } from '$lib/types/file-manager';
+    import { filterBoolean } from '$lib/utils/array';
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
@@ -185,14 +185,14 @@
         if (bibleData) {
             bibleData.biblesForTabs.forEach((bible) => {
                 if (!Object.keys(multiClipAudioStates).includes(bibleAudioKey(bible.id))) {
-                    const bibleAudioFiles = (
-                        bible.content?.chapters?.map(({ audioData }) => audioData).filter(Boolean) || []
+                    const bibleAudioFiles = filterBoolean(
+                        bible.content?.chapters?.map(({ audioData }) => audioData)
                     ).map((data) => ({
-                        url: data?.url,
-                        startTime: data?.startTimestamp || 0,
-                        endTime: data?.endTimestamp,
+                        url: data.url,
+                        startTime: data.startTimestamp || 0,
+                        endTime: data.endTimestamp,
                         type: audioFileTypeForBrowser(),
-                    })) as AudioFileInfo[];
+                    }));
                     if (bibleAudioFiles.length) {
                         multiClipAudioStates[bibleAudioKey(bible.id)] = createMultiClipAudioState(bibleAudioFiles);
                     }

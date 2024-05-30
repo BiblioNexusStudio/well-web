@@ -1,5 +1,5 @@
 import { METADATA_ONLY_FAKE_FILE_SIZE, isCachedFromCdn } from '$lib/data-cache';
-import { asyncForEach } from './async-array';
+import { asyncUnorderedForEach } from './async-array';
 import { audioFileTypeForBrowser } from './browser';
 import type {
     UrlWithMetadata,
@@ -234,7 +234,7 @@ export const addFrontEndDataToBiblesModuleBook = async (inputBiblesModuleBook: B
 
     inputBiblesModuleBook.isTextUrlCached = await isCachedFromCdn(inputBiblesModuleBook.textUrl);
 
-    await asyncForEach(inputBiblesModuleBook.audioUrls?.chapters ?? [], async (chapter) => {
+    await asyncUnorderedForEach(inputBiblesModuleBook.audioUrls?.chapters ?? [], async (chapter) => {
         chapter.isAudioUrlCached = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);
         chapter.selected = false;
         chapter.allUrlsCached = false;
@@ -246,8 +246,8 @@ export const addFrontEndDataToBiblesModuleBook = async (inputBiblesModuleBook: B
 };
 
 export const addFrontEndDataToResourcesMenuItems = async (inputResourcesApiModule: ResourcesApiModule) => {
-    await asyncForEach(inputResourcesApiModule.chapters, async (chapter) => {
-        await asyncForEach(chapter.contents, async (content) => {
+    await asyncUnorderedForEach(inputResourcesApiModule.chapters, async (chapter) => {
+        await asyncUnorderedForEach(chapter.contents, async (content) => {
             content.isResourceUrlCached = await isCachedFromCdn(resourceContentApiFullUrl(content));
         });
     });

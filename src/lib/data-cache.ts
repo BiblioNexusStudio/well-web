@@ -2,7 +2,7 @@ import config from './config';
 import type { Url, UrlWithMetadata } from './types/file-manager';
 import type { StaticUrlsMap } from './types/static-mapping';
 import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
-import { asyncForEach } from './utils/async-array';
+import { asyncUnorderedForEach } from './utils/async-array';
 import { MediaType } from './types/resource';
 import { chunk, removeFromArray } from './utils/array';
 import { log } from './logger';
@@ -95,7 +95,7 @@ export async function removeFromApiCache(path: string) {
     if (!('serviceWorker' in navigator)) {
         return;
     }
-    const cache = await caches.open('aquifer-api');
+    const cache = await getApiCache();
     await cache.delete(url);
     apiCachedUrls.delete(url);
 }
@@ -104,7 +104,7 @@ export async function removeFromCdnCache(url: Url) {
     if (!('serviceWorker' in navigator)) {
         return;
     }
-    const cache = await caches.open('aquifer-cdn');
+    const cache = await getCdnCache();
     await cache.delete(url);
     cdnCachedUrls.delete(url);
 }
@@ -113,7 +113,7 @@ export async function clearEntireCache() {
     if (!('serviceWorker' in navigator)) {
         return;
     }
-    await asyncForEach(await caches.keys(), async (key) => {
+    await asyncUnorderedForEach(await caches.keys(), async (key) => {
         await caches.delete(key);
     });
 
@@ -270,7 +270,7 @@ export async function cacheManyFromCdnWithProgress(
 
     const processBatch = async (baseUrl: Url, idsToUrls: Record<number, UrlWithMetadata>) => {
         const batchIds: number[] = [];
-        await asyncForEach(Object.entries(idsToUrls), async ([id, urlWithMetadata]) => {
+        await asyncUnorderedForEach(Object.entries(idsToUrls), async ([id, urlWithMetadata]) => {
             try {
                 partiallyDownloadedCdnUrls.push(urlWithMetadata.url);
 
@@ -294,27 +294,23 @@ export async function cacheManyFromCdnWithProgress(
         });
 
         if (batchIds.length > 0) {
+            const isMetadata = idsToUrls[0]?.url.includes('metadata');
+
             try {
                 await retryRequest(async () => {
-                    const response = await fetch(baseUrl + `?${batchIds.map((id) => `ids=${id}`).join('&')}`);
-                    const json = (await response.json()) as { id: number; content: object }[];
-                    const cache = await caches.open('aquifer-cdn');
-
-                    // Iterate through the array returned by the batch endpoint and insert each item into the cache.
-                    // The cache key will be the original URL that the item would've had, so for all intents and
-                    // purposes it's as if we hit the original URL itself and cached the response.
-                    await asyncForEach(json, async (response) => {
-                        const urlWithMetadata = idsToUrls[response.id];
-                        if (urlWithMetadata) {
-                            if (baseUrl.includes('metadata')) {
-                                await cache.put(urlWithMetadata.url, new Response(JSON.stringify(response)));
-                            } else {
-                                await cache.put(urlWithMetadata.url, new Response(JSON.stringify(response.content)));
+                    await fetchBatchAndPopulateCdnCache(
+                        baseUrl,
+                        batchIds,
+                        (id) => idsToUrls[id]?.url,
+                        (response) => (isMetadata ? response : response.content),
+                        (id) => {
+                            const urlWithMetadata = idsToUrls[id];
+                            if (urlWithMetadata) {
+                                updateProgress(urlWithMetadata.url, urlWithMetadata.size, urlWithMetadata.size, true);
+                                removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
                             }
-                            updateProgress(urlWithMetadata.url, urlWithMetadata.size, urlWithMetadata.size, true);
-                            removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
                         }
-                    });
+                    );
                 });
             } catch (error) {
                 // likely a network error
@@ -350,12 +346,95 @@ export async function cacheManyFromCdnWithProgress(
     cdnCachedUrls.clear();
 }
 
+// Take a batch of ids and apply them to the base URL as `ids` query params, fetch that batch then populate the cache
+// using the key and value functions. Returns a map of id to fetched value.
+export async function fetchBatchAndPopulateCdnCache(
+    batchUrl: string,
+    ids: number[],
+    calculateNonBatchUrl: (id: number) => string | undefined,
+    calculateValueToCache: (response: { id: number; content: object }) => object,
+    completedCallback?: (id: number) => void
+) {
+    const cache = await getCdnCache();
+    const idsParams = ids.map((id) => `ids=${id}`).join('&');
+    const url = `${batchUrl}?${idsParams}`;
+    const response = await fetch(url);
+    const json = (await response.json()) as { id: number; content: object }[];
+
+    const output = new Map<number, object>();
+
+    // Iterate through the array returned by the batch endpoint and insert each item into the cache.
+    // The cache key is meant to be the original URL that the item would've had, so for all intents and
+    // purposes it's as if we hit the original URL itself and cached the response.
+    await asyncUnorderedForEach(json, async (response) => {
+        const key = calculateNonBatchUrl(response.id);
+        const value = calculateValueToCache(response);
+        output.set(response.id, value);
+        if (key && value) {
+            await cache.put(key, new Response(JSON.stringify(value)));
+        }
+        completedCallback?.(response.id);
+    });
+
+    cdnCachedUrls.clear();
+
+    return output;
+}
+
+// Take a list of ids and detect which ones have been cached and which ones have not. For the uncached ones, use the
+// batch function to fetch them quickly. For the cached ones, use the normal fetch functions. Returns a map of id to fetched value.
+export async function fetchBatchAndAlreadyCached<T>(
+    batchUrl: string,
+    ids: number[],
+    calculateNonBatchUrl: (id: number) => string | undefined,
+    calculateValueToCache: (response: { id: number; content: object }) => object,
+    chunkSize: number
+) {
+    const cached = [] as { url: string; id: number }[];
+    const uncached = [] as number[];
+
+    await asyncUnorderedForEach(ids, async (id) => {
+        const url = calculateNonBatchUrl(id);
+        if (url && (await isCachedFromCdn(url))) {
+            cached.push({ id, url });
+        } else {
+            uncached.push(id);
+        }
+    });
+
+    const chunked = chunk(uncached, chunkSize);
+    const output = new Map<number, T | null>();
+
+    await Promise.all([
+        asyncUnorderedForEach(cached, async ({ id, url }) => {
+            output.set(id, await fetchFromCacheOrCdn(url));
+        }),
+        asyncUnorderedForEach(chunked, async (chunk) => {
+            try {
+                const chunkIdsToContent = await fetchBatchAndPopulateCdnCache(
+                    batchUrl,
+                    chunk,
+                    calculateNonBatchUrl,
+                    calculateValueToCache
+                );
+                for (const [id, value] of chunkIdsToContent.entries()) {
+                    output.set(id, (value as T | undefined | null) ?? null);
+                }
+            } catch {
+                // not cached, that's fine
+            }
+        }),
+    ]);
+
+    return output;
+}
+
 // Given a list of URLs and the expected sizes (which comes from the API), determine if any of the cached data has
 // different sizes and therefore needs to be re-downloaded. This won't always catch cache changes since it's possible
 // for different content to have the same sizes, but it should be good enough for our use cases (data isn't changing
 // that much).
 export async function findStaleDataInCdnCache(items: CheckCacheChangeItem[]) {
-    const cache = await caches.open('aquifer-cdn');
+    const cache = await getCdnCache();
     return items.filter(async ({ url, expectedSize }) => expectedSize !== (await cachedCdnContentSize(url, cache)));
 }
 
@@ -367,13 +446,21 @@ function isMetadataBatchableUrl(url: UrlWithMetadata) {
     return url.url.match(apiMetadataRegex);
 }
 
-const cdnCachedUrls = new Map();
-const apiCachedUrls = new Map();
+export async function getApiCache() {
+    return await caches.open('aquifer-api');
+}
+
+export async function getCdnCache() {
+    return await caches.open('aquifer-cdn');
+}
+
+const cdnCachedUrls: Map<string, boolean> = new Map();
+const apiCachedUrls: Map<string, boolean> = new Map();
 
 // Checks if a fully downloaded cache entry exists for the URL.
 export async function isCachedFromCdn(url: Url) {
     if (cdnCachedUrls.has(url)) {
-        return cdnCachedUrls.get(url);
+        return cdnCachedUrls.get(url)!;
     }
     if (partiallyDownloadedCdnUrls.includes(url)) {
         return false;
@@ -384,7 +471,7 @@ export async function isCachedFromCdn(url: Url) {
     if (!('serviceWorker' in navigator)) {
         return false;
     }
-    const cache = await caches.open('aquifer-cdn');
+    const cache = await getCdnCache();
     const response = await cache.match(url);
     const isCached = response != null;
     cdnCachedUrls.set(url, isCached);
@@ -395,7 +482,7 @@ export async function isCachedFromCdn(url: Url) {
 export async function isCachedFromApi(path: string) {
     const url = apiUrl(path);
     if (apiCachedUrls.has(url)) {
-        return apiCachedUrls.get(url);
+        return apiCachedUrls.get(url)!;
     }
     if (partiallyDownloadedApiUrls.includes(url)) {
         return false;
@@ -406,7 +493,7 @@ export async function isCachedFromApi(path: string) {
     if (!('serviceWorker' in navigator)) {
         return false;
     }
-    const cache = await caches.open('aquifer-api');
+    const cache = await getApiCache();
     const response = await cache.match(url);
     const isCached = response != null;
     apiCachedUrls.set(url, isCached);
@@ -421,7 +508,7 @@ async function cachedCdnContentSize(url: Url, cache: Cache | null = null) {
     if (!('serviceWorker' in navigator)) {
         return null;
     }
-    const openedCache = cache || (await caches.open('aquifer-cdn'));
+    const openedCache = cache || (await getCdnCache());
     const response = await openedCache.match(url);
     if (response) {
         const blob = await response.blob();
@@ -434,7 +521,7 @@ async function cachedApiContentSize(url: Url, cache: Cache | null = null) {
     if (!('serviceWorker' in navigator)) {
         return null;
     }
-    const openedCache = cache || (await caches.open('aquifer-api'));
+    const openedCache = cache || (await getApiCache());
     const response = await openedCache.match(url);
     if (response) {
         const blob = await response.blob();

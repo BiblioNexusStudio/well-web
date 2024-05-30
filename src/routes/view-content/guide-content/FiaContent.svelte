@@ -14,6 +14,7 @@
         MediaType,
         type ResourceContentTiptap,
     } from '$lib/types/resource';
+    import { filterBoolean, filterBooleanByKey } from '$lib/utils/array';
     import { asyncMap } from '$lib/utils/async-array';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import {
@@ -139,7 +140,7 @@
             ({ mediaType, parentResourceId }) =>
                 parentResourceId === ParentResourceId.FIA && mediaType === MediaType.Audio
         );
-        return (
+        return filterBoolean(
             await asyncMap(allAudioResourceContent, async (resourceContent) => {
                 try {
                     const metadata = await fetchMetadataForResourceContent(resourceContent);
@@ -147,9 +148,13 @@
                         audioFileTypeForBrowser()
                     ].steps;
                     if (!audioTypeSteps) return null;
-                    const steps = (
-                        await readFilesIntoObjectUrlsMapping(resourceContentApiFullUrl(resourceContent), audioTypeSteps)
-                    ).filter(({ url }) => !!url);
+                    const steps = filterBooleanByKey(
+                        await readFilesIntoObjectUrlsMapping(
+                            resourceContentApiFullUrl(resourceContent),
+                            audioTypeSteps
+                        ),
+                        'url'
+                    );
                     return { steps };
                 } catch (error) {
                     // nothing cached
@@ -157,7 +162,7 @@
                     return null;
                 }
             })
-        ).filter(Boolean) as FiaAudioContent[];
+        );
     }
 
     async function fetchText(resourceContents: ResourceContentInfo[]) {
@@ -165,7 +170,7 @@
             ({ mediaType, parentResourceId }) =>
                 parentResourceId === ParentResourceId.FIA && mediaType === MediaType.Text
         );
-        return (
+        return filterBoolean(
             await asyncMap(allTextResourceContent, async (resourceContent) => {
                 try {
                     const content = (await fetchFromCacheOrCdn(
@@ -183,7 +188,7 @@
                     return null;
                 }
             })
-        ).filter(Boolean) as FiaTextContent[];
+        );
     }
 </script>
 

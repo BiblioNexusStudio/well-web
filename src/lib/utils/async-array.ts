@@ -13,7 +13,9 @@ export async function asyncSome<T>(array: T[], asyncPredicate: (element: T) => P
     return results.some(Boolean);
 }
 
-export async function asyncForEach<T>(
+// As the function name suggests, it's important to keep in mind that unlike a normal forEach, order is not guaranteed
+// by this function.
+export async function asyncUnorderedForEach<T>(
     array: T[],
     asyncCallback: (element: T, index: number, array: T[]) => Promise<void>
 ): Promise<void> {
@@ -25,24 +27,4 @@ export async function asyncMap<T, R>(
     asyncMapper: (element: T, index: number, array: T[]) => Promise<R>
 ): Promise<R[]> {
     return await Promise.all(array.map(asyncMapper));
-}
-
-export async function asyncReturnFirst<T, V>(array: T[], asyncApply: (element: T) => Promise<V>): Promise<V | null> {
-    for (const item of array) {
-        const result = await asyncApply(item);
-        if (result) return result;
-    }
-    return null;
-}
-
-export async function asyncReduce<T, R>(
-    array: T[],
-    reducer: (accumulator: R, element: T, index: number, array: T[]) => Promise<R>,
-    initialValue: R
-): Promise<R> {
-    let acc = initialValue;
-    for (let i = 0; i < array.length; i++) {
-        acc = await reducer(acc, array[i]!, i, array);
-    }
-    return acc;
 }
