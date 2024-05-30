@@ -77,7 +77,7 @@
     });
 </script>
 
-<div class="relative me-2 flex h-full w-1/2 items-center" bind:this={resourcesMenuDiv}>
+<div class="relative me-2 flex h-full flex-1 items-center" bind:this={resourcesMenuDiv}>
     <button
         class="btn btn-outline btn-primary flex w-full justify-between"
         on:click={toggleMenu}
@@ -89,19 +89,20 @@
     </button>
     {#if menuOpen}
         <div
-            class="menu absolute left-0 top-16 z-30 rounded-md border-2 border-primary-300 bg-white shadow-lg"
-            style="width: {resourcesMenuDiv.clientWidth}px;"
+            class="menu absolute left-0 top-16 z-30 flex max-h-[calc(100vh-20rem)] w-auto max-w-[calc(200%+1rem)] flex-col flex-nowrap
+            space-y-2 overflow-y-scroll rounded-md
+            border-2 border-primary-300 bg-white shadow-lg"
         >
             {#each $resourcesMenu as resource}
                 {#if resource.display}
-                    <label class="label mb-4 cursor-pointer justify-start">
+                    <label class="label cursor-pointer justify-start">
                         <input
                             type="checkbox"
                             bind:checked={resource.selected}
                             class="checkbox-primary checkbox"
                             data-app-insights-event-name={`file-manager-resource-menu-${resource.name}-selected`}
                         />
-                        <span class="label-text ms-4">{resource.name}</span>
+                        <span class="label-text ms-4 truncate">{resource.name}</span>
                     </label>
                 {/if}
             {/each}
