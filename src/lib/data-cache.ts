@@ -133,8 +133,8 @@ export async function clearEntireCache() {
     const swRegistration = await navigator.serviceWorker.getRegistration();
     if (swRegistration) {
         swRegistration.unregister();
-        location.reload();
     }
+    location.reload();
 }
 
 export function cachedOrRealUrl(url: Url) {

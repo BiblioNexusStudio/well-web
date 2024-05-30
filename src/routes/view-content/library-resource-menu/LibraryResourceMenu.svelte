@@ -125,8 +125,14 @@
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
 <FullscreenResourceSection {currentFullscreenResourceGrouping} {resourceSelected} {showResourceGroupingFullscreen} />
 
-<div class="flex flex-col px-4">
-    <div class="mb-8 flex flex-row {visibleSwish ? '-mt-12' : 'mt-4'}">
+<div
+    class="absolute bottom-20 left-0 right-0 {visibleSwish
+        ? 'top-40'
+        : isFullLibrary
+        ? 'top-0'
+        : 'top-16'} flex flex-col px-4 transition-[top] duration-500 ease-in-out"
+>
+    <div class="my-4 flex flex-row">
         <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
         {#if !visibleSwish && isFullLibrary}
             <div>
@@ -160,7 +166,7 @@
                       })}
             </div>
         </div>
-        <div class="pb-20">
+        <div class="overflow-y-scroll">
             {#each resourceGroupings as resourceGrouping}
                 <AnyResourceSection
                     {resourceGrouping}

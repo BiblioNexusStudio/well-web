@@ -1,4 +1,3 @@
-import Link from '@tiptap/extension-link';
 import { generateHTML } from '@tiptap/html';
 import Image from '@tiptap/extension-image';
 import { Mark } from '@tiptap/core';
@@ -12,17 +11,23 @@ import { resourceReferenceMark } from './tiptap/resourceReferenceMark';
 import type { AssociatedResource } from '$lib/types/resource';
 
 function generateExtensions(availableAssociatedResources: AssociatedResource[] | undefined) {
+    // some Mark types we don't care about from an end user perspective
+    const ignoredMarks = [
+        Mark.create({ name: 'bibleReference' }),
+        Mark.create({ name: 'link' }),
+        Mark.create({ name: 'comments' }),
+    ];
+
     return [
         StarterKit.configure({}),
         Image.configure({}),
-        Link.configure({}),
         Underline.configure({}),
         Highlight.configure({}),
         Subscript.configure({}),
         Superscript.configure({}),
         TextStyle.configure({}),
-        Mark.create({ name: 'bibleReference' }),
         resourceReferenceMark.configure({ availableAssociatedResources }),
+        ...ignoredMarks,
     ];
 }
 
