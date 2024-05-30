@@ -32,7 +32,7 @@
     });
 </script>
 
-<div class="relative ms-2 flex h-full w-1/2 items-center" bind:this={languageMenuDiv}>
+<div class="relative ms-2 flex h-full flex-1 items-center" bind:this={languageMenuDiv}>
     <button
         class="btn btn-outline btn-primary flex w-full justify-between"
         on:click={toggleMenu}
