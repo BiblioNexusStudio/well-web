@@ -9,6 +9,7 @@ import {
     type ApiParentResource,
     PredeterminedPassageGuides,
     EnabledGuides,
+    SrvResources,
 } from '$lib/types/resource';
 import { resourceContentsForBibleSection, type AvailableChaptersForResource } from './resource';
 import {
@@ -20,6 +21,8 @@ import {
 import { range } from '$lib/utils/array';
 import { isOnline } from '$lib/stores/is-online.store';
 import type { ApiBibleBook, BibleSection, WholeChapterBibleSection } from '$lib/types/bible';
+import { settings } from '$lib/stores/settings.store';
+import { SettingShortNameEnum } from '$lib/types/settings';
 
 // for a given Bible section, return the guides available
 export async function guidesAvailableForBibleSection(
@@ -61,11 +64,16 @@ export async function guidesAvailableInCurrentLanguage() {
 }
 
 export async function parentResourcesForCurrentLanguage() {
+    const showOnlySrvResources = !!get(settings).find(
+        (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
+    )?.value;
     const languageId = get(currentLanguageInfo)?.id;
     const allParentResources = (await fetchFromCacheOrApi(
         ...parentResourcesEndpoint(languageId)
     )) as ApiParentResource[];
-    return allParentResources.filter((pr) => pr.enabled && pr.resourceCountForLanguage > 0);
+    return allParentResources.filter(
+        (pr) => (!showOnlySrvResources || SrvResources.includes(pr.id)) && pr.enabled && pr.resourceCountForLanguage > 0
+    );
 }
 
 async function allGuidesForLanguage() {

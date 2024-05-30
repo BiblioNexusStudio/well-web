@@ -1,14 +1,12 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import { type Setting, SettingShortNameEnum } from '../types/settings';
-import { ParentResourceId } from '$lib/types/resource';
 
 const bibleWellSettingsInLocalStorage = 'BIBLE_WELL_SETTINGS_IN_LOCAL_STORAGE';
 
 const showOnlySrvResources: Setting = {
-    value: true,
+    value: false,
     shortName: SettingShortNameEnum.showOnlySrvResources,
-    parentResources: [ParentResourceId.FIA],
 };
 
 const defaultSettings = [showOnlySrvResources];

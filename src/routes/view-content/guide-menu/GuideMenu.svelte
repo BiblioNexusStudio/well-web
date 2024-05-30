@@ -1,9 +1,9 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import { settings } from '$lib/stores/settings.store';
-    import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
+    import type { Setting } from '$lib/types/settings';
     import { setCurrentGuide, currentGuide } from '$lib/stores/parent-resource.store';
-    import { PredeterminedPassageGuides, type ApiParentResource, type ParentResourceId } from '$lib/types/resource';
+    import { PredeterminedPassageGuides, type ApiParentResource } from '$lib/types/resource';
     import {
         guidesAvailableForBibleSection,
         guidesAvailableInCurrentLanguage,
@@ -23,39 +23,19 @@
 
     async function fetchAvailableGuides(
         bibleSection: BibleSection | null,
-        settings: Setting[],
+        _settings: Setting[],
         _currentLanguageInfo: Language | undefined,
         _online: boolean
     ) {
-        let guides: ApiParentResource[] | undefined;
         if (bibleSection) {
-            guides = await guidesAvailableForBibleSection(bibleSection);
+            return await guidesAvailableForBibleSection(bibleSection);
         } else {
-            guides = await guidesAvailableInCurrentLanguage();
-        }
-        if (guides) {
-            return filterGuidesPerSettings(guides, settings);
-        } else {
-            return null;
+            return await guidesAvailableInCurrentLanguage();
         }
     }
 
     function selectGuideAndHandleMenu(guideResource: ApiParentResource) {
         setCurrentGuide(guideResource);
-    }
-
-    function filterGuidesPerSettings(availableGuides: ApiParentResource[], $settings: Setting[]) {
-        const srvOnlySetting = $settings.find(
-            (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
-        );
-
-        if (srvOnlySetting?.value === true) {
-            return availableGuides.filter((guide) =>
-                srvOnlySetting.parentResources.includes(guide.id as ParentResourceId)
-            );
-        }
-
-        return availableGuides;
     }
 
     function openGuideMenu() {
