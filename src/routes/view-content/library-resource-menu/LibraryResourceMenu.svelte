@@ -11,6 +11,7 @@
     import {
         MediaType,
         ParentResourceType,
+        SrvResources,
         type ResourceContentInfo,
         type ResourceContentInfoWithMetadata,
         type TextResourceContentJustId,
@@ -25,6 +26,8 @@
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import { searchResourcesEndpoint } from '$lib/api-endpoints';
     import { debounce } from '$lib/utils/debounce';
+    import { settings } from '$lib/stores/settings.store';
+    import { SettingShortNameEnum } from '$lib/types/settings';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -50,6 +53,9 @@
     let visibleSwish = isFullLibrary;
 
     $: searchQueryChanged(searchQuery);
+    $: showOnlySrvResources = !!$settings.find(
+        (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
+    )?.value;
 
     function onHandleSearchFocus() {
         if (!hasQuery && isFullLibrary) {
@@ -80,12 +86,16 @@
             resources = undefined;
         } else {
             const currentLanguageId = get(currentLanguageInfo)?.id;
-            resources = (await fetchFromCacheOrApi(
+            const allResources = (await fetchFromCacheOrApi(
                 ...searchResourcesEndpoint(currentLanguageId, query, [
                     ParentResourceType.Images,
                     ParentResourceType.Dictionary,
+                    ParentResourceType.Videos,
                 ])
             )) as ResourceContentInfo[];
+            resources = allResources.filter(
+                (rc) => !showOnlySrvResources || SrvResources.includes(rc.parentResourceId)
+            );
         }
     }, 750);
 

@@ -15,8 +15,6 @@ import {
 } from '$lib/utils/data-handlers/resources/resource';
 import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
-import { settings } from '$lib/stores/settings.store';
-import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
 import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/resource';
 import type { BibleSection } from '$lib/types/bible';
 
@@ -113,21 +111,9 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
 }
 
 async function filterToAdditionalResourceInfo(resourceContents: ResourceContentInfo[]) {
-    let additionalResourceContent: ResourceContentInfo[] = [];
-
-    const showOnlySrvResources = get(settings).find((setting: Setting) => {
-        setting.shortName === SettingShortNameEnum.showOnlySrvResources;
-    });
-
-    if (showOnlySrvResources?.value) {
-        additionalResourceContent = resourceContents.filter((content) =>
-            showOnlySrvResources.parentResources.includes(content.parentResourceId)
-        );
-    } else {
-        additionalResourceContent = resourceContents.filter(
-            ({ resourceType }) => resourceType !== ParentResourceType.Guide
-        );
-    }
+    const additionalResourceContent = resourceContents.filter(
+        ({ resourceType }) => resourceType !== ParentResourceType.Guide
+    );
 
     return await asyncFilter(
         additionalResourceContent,
@@ -136,15 +122,7 @@ async function filterToAdditionalResourceInfo(resourceContents: ResourceContentI
 }
 
 async function filterToGuideResourceInfo(resourceContents: ResourceContentInfoWithFrontendData[]) {
-    const showOnlySrvResources = get(settings).find((setting: Setting) => {
-        setting.shortName === SettingShortNameEnum.showOnlySrvResources;
-    });
-
-    const onlyGuides = resourceContents.filter(
-        (content) =>
-            (content.resourceType === ParentResourceType.Guide && !showOnlySrvResources?.value) ||
-            showOnlySrvResources?.parentResources.includes(content.parentResourceId)
-    );
+    const onlyGuides = resourceContents.filter((content) => content.resourceType === ParentResourceType.Guide);
 
     return await asyncFilter(
         onlyGuides,

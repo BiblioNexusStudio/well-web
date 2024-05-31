@@ -14,11 +14,14 @@ import {
     type ResourceContentMetadata,
     type ResourceContentTiptap,
     type TextResourceContentJustId,
+    SrvResources,
 } from '$lib/types/resource';
 import { range } from '$lib/utils/array';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import { get } from 'svelte/store';
 import { asyncFilter } from '$lib/utils/async-array';
+import { SettingShortNameEnum } from '$lib/types/settings';
+import { settings } from '$lib/stores/settings.store';
 
 export function resourceContentApiPath(
     resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
@@ -71,6 +74,10 @@ export interface AvailableChaptersForResource {
 // for a given Bible section, return all resource contents available
 // when offline, this will return only resource contents that are cached
 export async function resourceContentsForBibleSection(bibleSection: BibleSection | WholeChapterBibleSection) {
+    const showOnlySrvResources = !!get(settings).find(
+        (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
+    )?.value;
+
     const languageId = get(currentLanguageInfo)?.id;
     const online = get(isOnline);
     const resources = [] as ResourceContentInfoWithFrontendData[];
@@ -101,13 +108,19 @@ export async function resourceContentsForBibleSection(bibleSection: BibleSection
                 (chapter > bibleSection.startChapter && chapter < bibleSection.endChapter)
             ) {
                 for (const content of verse.resourceContents) {
-                    if (online || (await isCachedFromCdn(resourceContentApiFullUrl(content)))) {
-                        const existing = resources.find((rc) => rc.id === content.id);
-                        if (existing) {
-                            existing.occurrences += 1;
-                            existing.verses.push({ chapter, verse: verse.number });
-                        } else {
-                            resources.push({ ...content, occurrences: 1, verses: [{ chapter, verse: verse.number }] });
+                    if (!showOnlySrvResources || SrvResources.includes(content.parentResourceId)) {
+                        if (online || (await isCachedFromCdn(resourceContentApiFullUrl(content)))) {
+                            const existing = resources.find((rc) => rc.id === content.id);
+                            if (existing) {
+                                existing.occurrences += 1;
+                                existing.verses.push({ chapter, verse: verse.number });
+                            } else {
+                                resources.push({
+                                    ...content,
+                                    occurrences: 1,
+                                    verses: [{ chapter, verse: verse.number }],
+                                });
+                            }
                         }
                     }
                 }
