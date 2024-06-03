@@ -214,17 +214,15 @@ async function isContentCachedForOffline(bibleSection: BibleSection, bookData: B
     return false;
 }
 
-export async function getBibleBookCodesToName(languageId: number | null = null, retry = true) {
-    const bibleData = (await fetchFromCacheOrApi(
-        ...biblesForLanguageEndpoint(languageId || get(currentLanguageInfo)?.id)
-    )) as ApiBible[];
+export async function getBibleBookCodesToName(languageId: number, retry = true) {
+    const bibleData = (await fetchFromCacheOrApi(...biblesForLanguageEndpoint(languageId))) as ApiBible[];
     if (bibleData[0]) {
         return bibleData[0].books.reduce(
             (output, { displayName, bookCode }) => ({ ...output, [bookCode]: displayName }),
             {} as Record<string, string>
         );
     } else {
-        if (retry && (languageId !== 1 || get(currentLanguageInfo)?.id !== 1)) {
+        if (retry && languageId !== 1) {
             return getBibleBookCodesToName(1, false);
         }
     }

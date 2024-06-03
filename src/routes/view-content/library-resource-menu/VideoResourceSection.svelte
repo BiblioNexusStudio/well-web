@@ -79,7 +79,7 @@
     >
         {#each unfilteredResources as video}
             <button
-                class="carousel-item me-2 w-32 flex-col {showingResources.includes(video) ? 'visible' : 'hidden'}"
+                class="carousel-item me-8 w-32 flex-col {showingResources.includes(video) ? 'visible' : 'hidden'}"
                 on:click={() => resourceSelected(video)}
                 data-app-insights-event-name="video-resource-button-clicked"
             >

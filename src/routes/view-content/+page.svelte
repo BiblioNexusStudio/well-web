@@ -28,10 +28,14 @@
         fetchBibleData,
     } from './data-fetchers';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
-    import type { BibleBookContentDetails, FrontendBibleBook } from '$lib/types/bible';
-    import { cacheBibleMetadata, cacheBiblesForBibleSection } from '$lib/utils/data-handlers/bible';
+    import type { BibleBookContentDetails } from '$lib/types/bible';
+    import {
+        cacheBibleMetadata,
+        cacheBiblesForBibleSection,
+        getBibleBookCodesToName,
+    } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
     import { currentGuide, locallyStoredGuide } from '$lib/stores/parent-resource.store';
     import {
@@ -60,10 +64,10 @@
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { BibleSection } from '$lib/types/bible';
     import BibleUnavailable from './BibleUnavailable.svelte';
-    import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
     import QuickShare from './quick-share/QuickShare.svelte';
     import GuideContent from './guide-content/GuideContent.svelte';
     import FullscreenTextResource from './library-resource-menu/FullscreenTextResource.svelte';
+    import type { Language } from '$lib/types/file-manager';
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
@@ -81,6 +85,7 @@
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
     let preferredBiblesModalOpen = false;
     let audioPlayerKey: string | undefined;
+    let bookCodesToNames: Record<string, string> | undefined;
 
     $: {
         baseFetchPromise = fetchBase($selectedBibleSection); // when the Bible section changes, refetch
@@ -91,6 +96,7 @@
     $: selectedTab === PassagePageTabEnum.Bible && setBibleAudioPlayerForBible(selectedBibleId);
     $: audioPlayerShowing = audioPlayerKey && !!multiClipAudioStates[audioPlayerKey];
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
+    $: fetchBibleBookCodeToName($currentLanguageInfo);
 
     $: setStoredGuide($locallyStoredGuide);
 
@@ -223,20 +229,15 @@
         }
     }
 
-    function calculateBibleSectionTitle(
-        currentBible: FrontendBibleBook | undefined,
-        bibleSection: BibleSection | null
-    ) {
-        if (bibleSection) {
-            return `${currentBible?.bookMetadata?.displayName ?? ''} ${bibleSectionToReference(bibleSection)}`;
-        } else {
-            return '';
-        }
-    }
-
     function closeAllPaneMenus() {
         isShowingBookPassageSelectorPane = false;
         isShowingBookChapterSelectorPane = false;
+    }
+
+    async function fetchBibleBookCodeToName(currentLanguageInfo: Language | undefined) {
+        if (currentLanguageInfo) {
+            bookCodesToNames = await getBibleBookCodesToName(currentLanguageInfo.id);
+        }
     }
 
     function handleSelectedTabMenu(tab: PassagePageTabEnum) {
@@ -259,7 +260,6 @@
         closeAllPaneMenus();
     }
 
-    $: bibleSectionTitle = calculateBibleSectionTitle(currentBible, $selectedBibleSection);
     $: handleSelectedTabMenu(selectedTab);
 
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
@@ -285,11 +285,13 @@
     bind:bookPassageSelectorPane
     bind:isShowing={isShowingBookPassageSelectorPane}
     bind:tab={selectedTab}
+    {bookCodesToNames}
 />
 <BookChapterSelectorPane
     bind:bookChapterSelectorPane
     bind:isShowing={isShowingBookChapterSelectorPane}
     filterByCurrentGuide={selectedTab === PassagePageTabEnum.Guide}
+    {bookCodesToNames}
 />
 
 <FullscreenTextResource bind:fullscreenTextResourceStack />
@@ -343,7 +345,7 @@
         {#if $passagePageShownMenu === null || $passagePageShownMenu === PassagePageMenuEnum.resources}
             <TopNavBar
                 bind:preferredBiblesModalOpen
-                {bibleSectionTitle}
+                {bookCodesToNames}
                 bibleSection={$selectedBibleSection}
                 bibles={bibleData?.availableBibles ?? []}
                 tab={selectedTab}

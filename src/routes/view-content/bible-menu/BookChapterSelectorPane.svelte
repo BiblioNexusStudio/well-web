@@ -20,6 +20,7 @@
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
     export let filterByCurrentGuide: boolean;
+    export let bookCodesToNames: Record<string, string> | undefined;
 
     let currentBook: ApiBibleBook;
     let currentChapter: ApiBibleChapter | null = null;
@@ -217,6 +218,13 @@
         return formattedRange;
     }
 
+    function bookName(book: ApiBibleBook | undefined) {
+        if (book) {
+            return bookCodesToNames?.[book.code] ?? book.localizedName;
+        }
+        return '';
+    }
+
     onMount(async () => {
         bookChapterSelectorPane = new CupertinoPane('#book-chapter-verse-selector-pane', {
             backdrop: true,
@@ -251,7 +259,7 @@
     $: verseGoButtonDisabled = firstSelectedVerse === null;
     $: currentChapterSelected = currentChapter?.number && currentChapter?.number > 0;
     $: verseTitle = formatBibleVerseRange(
-        currentBook?.localizedName,
+        bookName(currentBook),
         firstSelectedVerse?.chapterNumber || '',
         firstSelectedVerse?.number || '',
         lastSelectedVerse?.chapterNumber || '',
@@ -297,13 +305,13 @@
                                         : 'border'}"
                                     data-app-insights-event-name={`book-chapter-selector-pane-${book?.code}-selected`}
                                 >
-                                    {book.localizedName}
+                                    {bookName(book)}
                                 </button>
                             {/each}
                         </div>
                     {/if}
                     {#if currentStep === steps.two}
-                        <h3 class="mb-4 block self-start text-lg font-bold">{currentBook.localizedName}</h3>
+                        <h3 class="mb-4 block self-start text-lg font-bold">{bookName(currentBook)}</h3>
                         <h4 class="mb-4 block self-start">{currentStep.subtitle}</h4>
                         <div class="w-full flex-grow overflow-y-scroll">
                             <div class="grid w-full grid-cols-5 gap-4">
@@ -340,7 +348,7 @@
                                     class="btn me-4 block {isCurrentChapter && 'bg-blue-500 text-white'}"
                                     data-app-insights-event-name={`book-chapter-selector-pane-${currentBook.code}-chapter-carousel-${chapter.number}-selected`}
                                 >
-                                    <span class="me-1">{currentBook.localizedName}</span><span>{chapter.number}</span>
+                                    <span class="me-1">{bookName(currentBook)}</span><span>{chapter.number}</span>
                                 </button>
                             {/each}
                         </div>
