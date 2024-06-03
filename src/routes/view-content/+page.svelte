@@ -440,7 +440,10 @@
         <LibraryResourceMenu bind:fullscreenTextResourceStack resources={undefined} tab={selectedTab} />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
-        <BibleMenu bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane} />
+        <BibleMenu
+            bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
+            bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
+        />
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.settings}
         <SettingsMenu />

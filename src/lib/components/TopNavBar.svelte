@@ -39,15 +39,11 @@
     }
 
     function handlePassageButton() {
-        if (tab === PassagePageTabEnum.Bible) {
+        const currentGuideId = $currentGuide?.id;
+        if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
+            showBookPassageSelectorPane = true;
+        } else {
             showBookChapterVerseMenu = true;
-        } else if (tab === PassagePageTabEnum.Guide || tab === PassagePageTabEnum.Resources) {
-            const currentGuideId = $currentGuide?.id;
-            if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
-                showBookPassageSelectorPane = true;
-            } else {
-                showBookChapterVerseMenu = true;
-            }
         }
     }
 
