@@ -4,9 +4,11 @@
     import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
     import { onMount } from 'svelte';
+    import { setCurrentGuide } from '$lib/stores/parent-resource.store';
 
     onMount(() => {
         selectedBibleSection.set(null);
+        setCurrentGuide(undefined);
     });
 </script>
 

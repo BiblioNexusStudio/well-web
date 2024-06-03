@@ -8,7 +8,6 @@
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible';
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
-    import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import type { Language } from '$lib/types/file-manager';
     import { isOnline } from '$lib/stores/is-online.store';
@@ -16,11 +15,14 @@
     import { bibleChaptersByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
     import { currentGuide } from '$lib/stores/parent-resource.store';
     import type { ApiParentResource } from '$lib/types/resource';
+    import { recalculatePanesAndMenus } from '$lib/stores/passage-page.store';
+    import { PassagePageTabEnum } from '../data-fetchers';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
     export let filterByCurrentGuide: boolean;
     export let bookCodesToNames: Record<string, string> | undefined;
+    export let tab: PassagePageTabEnum;
 
     let currentBook: ApiBibleBook;
     let currentChapter: ApiBibleChapter | null = null;
@@ -111,11 +113,8 @@
             return;
         }
 
-        if (firstSelectedVerse && lastSelectedVerse) {
-            firstSelectedVerse = null;
-            lastSelectedVerse = null;
-            return;
-        }
+        firstSelectedVerse = null;
+        lastSelectedVerse = null;
     }
 
     function isVerseInSelectedRange(
@@ -158,6 +157,7 @@
     }
 
     function handleBack() {
+        scrollBehaviorSmooth = false;
         if (currentStep === steps.two) {
             currentStep = steps.one;
         } else if (currentStep === steps.three) {
@@ -193,7 +193,11 @@
         currentChapter = null;
         firstSelectedVerse = null;
         lastSelectedVerse = null;
-        closeAllPassagePageMenus();
+        if ($currentGuide) {
+            tab = PassagePageTabEnum.Guide;
+        }
+        recalculatePanesAndMenus(tab);
+        scrollBehaviorSmooth = false;
     }
 
     function formatBibleVerseRange(
@@ -238,6 +242,7 @@
         });
 
         bookChapterSelectorPane.on('onDidDismiss', function () {
+            scrollBehaviorSmooth = false;
             currentStep = steps.one;
             currentChapter = null;
             firstSelectedVerse = null;
