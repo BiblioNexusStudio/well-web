@@ -79,7 +79,12 @@ export const calculateUrlsWithMetadataToChange = (
 
     biblesModuleBook.audioUrls?.chapters.forEach((chapter) => {
         if (chapter.selected) {
-            if (bibleSelected && footerInputs.audio && !chapter.isAudioUrlCached) {
+            if (
+                bibleSelected &&
+                footerInputs.audio &&
+                chapter[audioFileTypeForBrowser()].url &&
+                !chapter.isAudioUrlCached
+            ) {
                 urlsAndSizesToDownload.push({
                     mediaType: MediaType.Audio,
                     url: chapter[audioFileTypeForBrowser()].url,
