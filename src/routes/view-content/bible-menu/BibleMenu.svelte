@@ -6,13 +6,21 @@
     import { availableBibles } from '$lib/utils/data-handlers/bible';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import SwishHeader from '$lib/components/SwishHeader.svelte';
+    import { currentGuide } from '$lib/stores/parent-resource.store';
+    import { PredeterminedPassageGuides } from '$lib/types/resource';
 
     export let showBookChapterVerseMenu: boolean;
+    export let showBookPassageSelectorPane: boolean;
 
     $: availableBiblesPromise = availableBibles($isOnline);
 
     function openBookChapterVerseMenu() {
-        showBookChapterVerseMenu = true;
+        const currentGuideId = $currentGuide?.id;
+        if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
+            showBookPassageSelectorPane = true;
+        } else {
+            showBookChapterVerseMenu = true;
+        }
     }
 
     function updatePreferredBibleIds(id: number, isChecked: boolean) {
