@@ -13,8 +13,8 @@
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { PredeterminedPassageGuides } from '$lib/types/resource';
     import { currentGuide } from '$lib/stores/parent-resource.store';
+    import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
 
-    export let bibleSectionTitle = '';
     export let bibleSection: BibleSection | null = null;
     export let bibles: FrontendBibleBook[] = [];
     let recordingModalOpen = false;
@@ -23,6 +23,9 @@
     export let guideShortName = '';
     export let showBookChapterVerseMenu: boolean;
     export let showBookPassageSelectorPane: boolean;
+    export let bookCodesToNames: Record<string, string> | undefined;
+
+    $: bibleSectionTitle = calculateBibleSectionTitle(bookCodesToNames, bibleSection);
 
     function handleWindowClick(event: MouseEvent) {
         const openDetails = document.querySelector('.dropdown[open]');
@@ -45,6 +48,17 @@
             } else {
                 showBookChapterVerseMenu = true;
             }
+        }
+    }
+
+    function calculateBibleSectionTitle(
+        bookCodesToNames: Record<string, string> | undefined,
+        bibleSection: BibleSection | null
+    ) {
+        if (bibleSection && bookCodesToNames) {
+            return `${bookCodesToNames[bibleSection.bookCode] ?? ''} ${bibleSectionToReference(bibleSection)}`;
+        } else {
+            return '';
         }
     }
 </script>

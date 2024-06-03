@@ -8,7 +8,6 @@
     import type { BibleSection } from '$lib/types/bible';
     import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
-    import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
     import { currentGuide } from '$lib/stores/parent-resource.store';
     import { PredeterminedPassageGuides, type ApiParentResource } from '$lib/types/resource';
     import type { BasePassagesByBook } from '$lib/types/passage';
@@ -18,6 +17,7 @@
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
     export let tab: PassagePageTabEnum;
+    export let bookCodesToNames: Record<string, string> | undefined;
 
     let steps = {
         one: { title: $translate('page.BookPassageSelectorMenu.stepOneTitle.value') },
@@ -27,8 +27,6 @@
     let availablePassagesByBook: BasePassagesByBook[] | null = null;
 
     $: selectedBookInfo = $selectedBookIndex === 'default' ? null : availablePassagesByBook?.[$selectedBookIndex];
-
-    let bookCodesToNames: Record<string, string> | undefined;
 
     function setBookAndChangeSteps(index: number) {
         currentStep = steps.two;
@@ -68,7 +66,6 @@
                 onBackdropTap: () => (isShowing = false),
             },
         });
-        bookCodesToNames = await getBibleBookCodesToName();
     });
 </script>
 
