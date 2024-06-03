@@ -256,8 +256,8 @@
             openBibleMenu();
         } else {
             closeAllPassagePageMenus();
-            closeAllPaneMenus();
         }
+        closeAllPaneMenus();
     }
 
     $: handleSelectedTabMenu(selectedTab);
