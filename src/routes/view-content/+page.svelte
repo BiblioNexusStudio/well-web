@@ -255,8 +255,8 @@
             openBibleMenu();
         } else {
             closeAllPassagePageMenus();
-            closeAllPaneMenus();
         }
+        closeAllPaneMenus();
     }
 
     $: bibleSectionTitle = calculateBibleSectionTitle(currentBible, $selectedBibleSection);
