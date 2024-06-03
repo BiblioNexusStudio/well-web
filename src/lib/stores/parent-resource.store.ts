@@ -30,8 +30,6 @@ export const locallyStoredGuide = derived(guideResources, ($guideResources) => {
 export const currentGuide = writable<ApiParentResource | undefined>(undefined);
 
 export function setCurrentGuide(guide: ApiParentResource | undefined) {
-    if (guide) {
-        browser && localStorage.setItem(bibleWellCurrentGuide, guide.id.toString());
-        currentGuide.set(guide);
-    }
+    browser && localStorage.setItem(bibleWellCurrentGuide, guide?.id?.toString() ?? '');
+    currentGuide.set(guide);
 }

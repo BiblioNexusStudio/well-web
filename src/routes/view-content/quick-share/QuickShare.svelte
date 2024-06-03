@@ -28,7 +28,7 @@
 
     <p class="mb-2">{$translate('page.quickShare.orScan.value')}</p>
 
-    <div class="mb-6 px-2">
+    <div class="mb-6 max-h-96 max-w-96 px-2">
         <svg
             use:qr={{
                 data: 'https://app.well.bible',

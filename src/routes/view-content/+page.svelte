@@ -41,12 +41,8 @@
     import {
         PassagePageMenuEnum,
         passagePageShownMenu,
-        openMainMenu,
-        closeAllPassagePageMenus,
-        openLibraryMenu,
         openGuideMenu,
-        openBibleMenu,
-        openResourcesMenu,
+        recalculatePanesAndMenus,
     } from '$lib/stores/passage-page.store';
     import GuideMenu from './guide-menu/GuideMenu.svelte';
     import { onMount } from 'svelte';
@@ -240,27 +236,7 @@
         }
     }
 
-    function handleSelectedTabMenu(tab: PassagePageTabEnum) {
-        if (tab === PassagePageTabEnum.LibraryMenu) {
-            openLibraryMenu();
-        } else if (tab === PassagePageTabEnum.Resources) {
-            openResourcesMenu();
-        } else if (
-            tab === PassagePageTabEnum.Guide &&
-            ($currentGuide === undefined || $selectedBibleSection === null)
-        ) {
-            openGuideMenu();
-        } else if (tab === PassagePageTabEnum.MainMenu) {
-            openMainMenu();
-        } else if (tab === PassagePageTabEnum.Bible && $selectedBibleSection === null) {
-            openBibleMenu();
-        } else {
-            closeAllPassagePageMenus();
-        }
-        closeAllPaneMenus();
-    }
-
-    $: handleSelectedTabMenu(selectedTab);
+    $: recalculatePanesAndMenus(selectedTab, closeAllPaneMenus);
 
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
     $: showOrDismissBookChapterSelectorPane(isShowingBookChapterSelectorPane);
@@ -292,6 +268,7 @@
     bind:isShowing={isShowingBookChapterSelectorPane}
     filterByCurrentGuide={selectedTab === PassagePageTabEnum.Guide}
     {bookCodesToNames}
+    bind:tab={selectedTab}
 />
 
 <FullscreenTextResource bind:fullscreenTextResourceStack />

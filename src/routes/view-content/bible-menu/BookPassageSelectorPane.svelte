@@ -6,13 +6,13 @@
     import { passagesByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
     import type { BibleSection } from '$lib/types/bible';
-    import { closeAllPassagePageMenus } from '$lib/stores/passage-page.store';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { currentGuide } from '$lib/stores/parent-resource.store';
     import { PredeterminedPassageGuides, type ApiParentResource } from '$lib/types/resource';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { isOnline } from '$lib/stores/is-online.store';
     import { PassagePageTabEnum } from '../data-fetchers';
+    import { recalculatePanesAndMenus } from '$lib/stores/passage-page.store';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -37,8 +37,10 @@
         $selectedBibleSection = passage;
         currentStep = steps.one;
         isShowing = false;
-        tab = PassagePageTabEnum.Guide;
-        closeAllPassagePageMenus();
+        if ($currentGuide) {
+            tab = PassagePageTabEnum.Guide;
+        }
+        recalculatePanesAndMenus(tab);
     }
 
     $: availablePassagesPromise = fetchAvailablePassages($currentGuide, $isOnline);

@@ -37,6 +37,9 @@ export function bibleSectionsEqual(passage1: BibleSection, passage2: BibleSectio
 
 export function bibleSectionToReference(bibleSection: BibleSection): string {
     if (bibleSection.startChapter === bibleSection.endChapter) {
+        if (bibleSection.startVerse === bibleSection.endVerse) {
+            return `${bibleSection.startChapter}:${bibleSection.startVerse}`;
+        }
         return `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endVerse}`;
     }
     return `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endChapter}:${bibleSection.endVerse}`;
