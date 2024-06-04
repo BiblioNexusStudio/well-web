@@ -2,13 +2,14 @@
     import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
-    import type { ApiParentResource, ApiLicenseInfo, ApiSingleLicense } from '$lib/types/resource';
+    import type { ApiParentResource, ApiLicenseInfo } from '$lib/types/resource';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { Icon } from 'svelte-awesome';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
     import { goto } from '$app/navigation';
     import type { BaseBible } from '$lib/types/bible';
     import { biblesEndpoint, parentResourcesEndpoint } from '$lib/api-endpoints';
+    import { filterBoolean } from '$lib/utils/array';
 
     let licenseInfosPromise: Promise<ApiLicenseInfo[]> | null = null;
 
@@ -17,7 +18,7 @@
     });
 
     function calculateLicenseDescription(licenseInfo: ApiLicenseInfo) {
-        const licenses = licenseInfo.licenses.map((license) => license['eng']).filter(Boolean) as ApiSingleLicense[];
+        const licenses = filterBoolean(licenseInfo.licenses.map((license) => license['eng']));
         if (licenses.length === 0) {
             return null;
         }
@@ -50,10 +51,9 @@
             fetchFromCacheOrApi(...parentResourcesEndpoint()) as Promise<ApiParentResource[]>,
             fetchFromCacheOrApi(...biblesEndpoint()) as Promise<BaseBible[]>,
         ]);
-        const licenses = resourceLicenses
-            .map((type) => type.licenseInfo)
-            .concat(bibleLicenses.map((bible) => bible.licenseInfo))
-            .filter(Boolean) as ApiLicenseInfo[];
+        const licenses = filterBoolean(
+            resourceLicenses.map((type) => type.licenseInfo).concat(bibleLicenses.map((bible) => bible.licenseInfo))
+        );
         return licenses.sort((a, b) => a.title.localeCompare(b.title));
     }
 </script>

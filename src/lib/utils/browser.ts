@@ -2,6 +2,7 @@
 // @ts-nocheck
 
 import { browser } from '$app/environment';
+import { AudioType } from '$lib/components/AudioPlayer/audio-player-state';
 
 export function isSafariOnMacOrIOS() {
     return (
@@ -11,7 +12,7 @@ export function isSafariOnMacOrIOS() {
 }
 
 export function audioFileTypeForBrowser() {
-    return isSafariOnMacOrIOS() ? 'mp3' : 'webm';
+    return isSafariOnMacOrIOS() ? AudioType.mp3 : AudioType.webm;
 }
 
 export const browserSupported = browser && 'serviceWorker' in navigator;

@@ -57,3 +57,24 @@ export function sortByKey<T>(items: T[], key: keyof T, direction: 'asc' | 'desc'
         }
     });
 }
+
+// Filter out falsey values from an array (e.g. null, undefined, false, 0, "").
+export function filterBoolean<T>(items: (T | undefined | null)[] | undefined | null): T[] {
+    if (items === null || items === undefined) {
+        return [] as T[];
+    }
+    return items.filter(Boolean) as T[];
+}
+
+// Filter out elements in an array where the values at a given key are falsey (e.g. null, undefined, false, 0, "").
+export function filterBooleanByKey<T, K extends keyof T>(
+    items: (T | undefined | null)[] | undefined | null,
+    key: K
+): (T & { [P in K]: NonNullable<T[P]> })[] {
+    if (items === null || items === undefined) {
+        return [] as (T & { [P in K]: NonNullable<T[P]> })[];
+    }
+    return items.filter((item): item is T & { [P in K]: NonNullable<T[P]> } => {
+        return Boolean(item?.[key]);
+    });
+}

@@ -2,12 +2,12 @@ import { get } from 'svelte/store';
 import { fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
 import { currentLanguageInfo } from '$lib/stores/language.store';
 import type { FrontendAudioChapter, AudioTimestamp } from '$lib/types/file-manager';
-import type { BibleBookTextContent, FrontendBibleBook, FrontendChapterContent } from '$lib/types/bible';
+import type { BibleBookTextContent, FrontendBibleBook } from '$lib/types/bible';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
-import { asyncFilter, asyncMap, asyncReduce } from '$lib/utils/async-array';
+import { asyncFilter, asyncMap } from '$lib/utils/async-array';
 import { isOnline } from '$lib/stores/is-online.store';
 import { fetchAllBibles, bookDataForBibleTab } from '$lib/utils/data-handlers/bible';
-import { range } from '$lib/utils/array';
+import { filterBoolean, range } from '$lib/utils/array';
 import { type ResourceContentInfo, ParentResourceType } from '$lib/types/resource';
 import {
     resourceContentApiFullUrl,
@@ -40,9 +40,9 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
         const chapterNumber = parseInt(chapter.number);
         return passage.startChapter <= chapterNumber && passage.endChapter >= chapterNumber;
     });
-    const chapters = await asyncReduce(
+    const chaptersWithEmptyData = await asyncMap(
         range(passage.startChapter, passage.endChapter),
-        async (output, chapterNumber) => {
+        async (chapterNumber) => {
             const audioUrlData = filteredAudio?.find((audioChapter: FrontendAudioChapter) => {
                 const audioChapterNumber = parseInt(audioChapter.number);
                 return audioChapterNumber === chapterNumber;
@@ -84,30 +84,24 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
             }
             const chapterText = fullBookText?.chapters?.find((chapter) => String(chapterNumber) === chapter.number);
             if (chapterText || audioData) {
-                return [
-                    ...output,
-                    {
-                        number: String(chapterNumber),
-                        audioData,
-                        versesText:
-                            chapterText?.verses.filter((verse) => {
-                                const verseNumber = parseInt(verse.number.split('-')[0]!);
-                                return (
-                                    (chapterNumber > passage.startChapter ||
-                                        (chapterNumber === passage.startChapter &&
-                                            verseNumber >= passage.startVerse)) &&
-                                    (chapterNumber < passage.endChapter ||
-                                        (chapterNumber === passage.endChapter && verseNumber <= passage.endVerse))
-                                );
-                            }) ?? [],
-                    },
-                ];
+                return {
+                    number: String(chapterNumber),
+                    audioData,
+                    versesText:
+                        chapterText?.verses.filter((verse) => {
+                            const verseNumber = parseInt(verse.number.split('-')[0]!);
+                            return (
+                                (chapterNumber > passage.startChapter ||
+                                    (chapterNumber === passage.startChapter && verseNumber >= passage.startVerse)) &&
+                                (chapterNumber < passage.endChapter ||
+                                    (chapterNumber === passage.endChapter && verseNumber <= passage.endVerse))
+                            );
+                        }) ?? [],
+                };
             }
-            return output;
-        },
-        [] as FrontendChapterContent[]
+        }
     );
-    return { chapters };
+    return { chapters: filterBoolean(chaptersWithEmptyData) };
 }
 
 async function filterToAdditionalResourceInfo(resourceContents: ResourceContentInfo[]) {

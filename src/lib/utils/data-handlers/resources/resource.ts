@@ -1,6 +1,11 @@
 import { resourceContentForBookAndChapter } from '$lib/api-endpoints';
-import { apiUrl, fetchFromCacheOrApi, fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
-import { log } from '$lib/logger';
+import {
+    apiUrl,
+    fetchBatchAndAlreadyCached,
+    fetchFromCacheOrApi,
+    fetchFromCacheOrCdn,
+    isCachedFromCdn,
+} from '$lib/data-cache';
 import { isOnline } from '$lib/stores/is-online.store';
 import { currentLanguageInfo } from '$lib/stores/language.store';
 import type { FileManagerResourceContentInfo } from '$lib/types/file-manager';
@@ -149,6 +154,35 @@ export async function resourceContentsForBibleSection(bibleSection: BibleSection
     return resources;
 }
 
+export async function fetchTextResourceContentAndMetadataBatched<T extends TextResourceContentJustId>(
+    resourceContents: T[]
+) {
+    const ids = resourceContents.map((rc) => rc.id);
+
+    const [idsToMetadata, idsToContent] = await Promise.all([
+        fetchBatchAndAlreadyCached<ResourceContentMetadata>(
+            apiUrl('/resources/batch/metadata'),
+            ids,
+            (id) => resourceMetadataApiFullUrl({ id, mediaType: MediaType.Text }),
+            (response) => response,
+            100
+        ),
+        fetchBatchAndAlreadyCached<ResourceContentTiptap[]>(
+            apiUrl('/resources/batch/content/text'),
+            ids,
+            (id) => resourceContentApiFullUrl({ id, mediaType: MediaType.Text }),
+            (response) => response.content,
+            10
+        ),
+    ]);
+
+    return resourceContents.map((rc) => ({
+        ...rc,
+        metadata: idsToMetadata.get(rc.id),
+        content: idsToContent.get(rc.id)?.[0] ?? null,
+    }));
+}
+
 export async function fetchTiptapForResourceContent(
     resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
 ): Promise<ResourceContentTiptap | null> {
@@ -158,8 +192,7 @@ export async function fetchTiptapForResourceContent(
             | null;
         return tiptaps?.[0] ?? null;
     } catch (error) {
-        // tiptap data not cached
-        log.exception(error as Error);
+        // not cached, that's fine
         return null;
     }
 }
@@ -172,8 +205,7 @@ export async function fetchMetadataForResourceContent(
             resourceMetadataApiFullUrl(resourceContent)
         )) as ResourceContentMetadata | null;
     } catch (error) {
-        // metadata not cached
-        log.exception(error as Error);
+        // not cached, that's fine
         return null;
     }
 }
@@ -185,7 +217,7 @@ export async function filterToAvailableAssociatedResourceContent(
     if (!associatedResources || online) {
         return associatedResources;
     }
-    return asyncFilter(associatedResources, async (resource) => {
+    return await asyncFilter(associatedResources, async (resource) => {
         const textResourceContentJustId: TextResourceContentJustId = {
             id: resource.contentId,
             mediaType: MediaType.Text,

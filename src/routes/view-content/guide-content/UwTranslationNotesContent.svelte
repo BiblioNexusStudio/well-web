@@ -1,12 +1,11 @@
 <script lang="ts">
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import { log } from '$lib/logger';
     import { isOnline } from '$lib/stores/is-online.store';
     import { ParentResourceId, MediaType } from '$lib/types/resource';
+    import { filterBoolean } from '$lib/utils/array';
     import { asyncMap } from '$lib/utils/async-array';
     import {
-        fetchMetadataForResourceContent,
-        fetchTiptapForResourceContent,
+        fetchTextResourceContentAndMetadataBatched,
         filterToAvailableAssociatedResourceContent,
         type ResourceContentInfoWithFrontendData,
     } from '$lib/utils/data-handlers/resources/resource';
@@ -16,6 +15,10 @@
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
     export let audioPlayerKey: string | undefined;
+
+    type IsText<T> = T & {
+        mediaType: MediaType.Text;
+    };
 
     interface ResourceContentInfoWithFrontendDataAndHtml extends ResourceContentInfoWithFrontendData {
         displayName: string | undefined;
@@ -42,35 +45,29 @@
     }
 
     async function fetchText(resourceContents: ResourceContentInfoWithFrontendData[]) {
-        const allTextResourceContent = resourceContents.filter(
+        const uwTextResourceContent = resourceContents.filter(
             ({ mediaType, parentResourceId }) =>
                 parentResourceId === ParentResourceId.UwTranslationNotes && mediaType === MediaType.Text
-        );
-        const resourcesWithHtml = (
-            await asyncMap(allTextResourceContent, async (resourceContent) => {
-                try {
-                    const [metadata, tiptap] = await Promise.all([
-                        fetchMetadataForResourceContent(resourceContent),
-                        fetchTiptapForResourceContent(resourceContent),
-                    ]);
-                    if (tiptap) {
-                        const availableAssociatedResources = await filterToAvailableAssociatedResourceContent(
-                            $isOnline,
-                            metadata?.associatedResources
-                        );
-                        return {
-                            ...resourceContent,
-                            displayName: metadata?.displayName,
-                            contentHTML: parseTiptapJsonToHtml(tiptap.tiptap, availableAssociatedResources),
-                        };
-                    }
-                } catch (error) {
-                    // stuff not cached
-                    log.exception(error as Error);
-                    return null;
+        ) as IsText<ResourceContentInfoWithFrontendData>[];
+
+        const fetchedContentAndMetadata = await fetchTextResourceContentAndMetadataBatched(uwTextResourceContent);
+
+        const resourcesWithHtml = filterBoolean(
+            await asyncMap(fetchedContentAndMetadata, async (contentAndMetadata) => {
+                const { content, metadata, ...restOfResourceInfo } = contentAndMetadata;
+                if (content) {
+                    const availableAssociatedResources = await filterToAvailableAssociatedResourceContent(
+                        $isOnline,
+                        metadata?.associatedResources
+                    );
+                    return {
+                        ...restOfResourceInfo,
+                        displayName: metadata?.displayName,
+                        contentHTML: parseTiptapJsonToHtml(content.tiptap, availableAssociatedResources),
+                    };
                 }
             })
-        ).filter(Boolean) as ResourceContentInfoWithFrontendDataAndHtml[];
+        );
 
         // sort by verse then by display name
         return resourcesWithHtml.sort((a, b) => {

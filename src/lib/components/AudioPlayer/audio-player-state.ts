@@ -2,9 +2,14 @@ import { isSafariOnMacOrIOS } from '$lib/utils/browser';
 import { formatSecondsToTimeDisplay } from '$lib/utils/time';
 import { writable } from 'svelte/store';
 
+export enum AudioType {
+    mp3 = 'mp3',
+    webm = 'webm',
+}
+
 export interface AudioFileInfo {
     url: string;
-    type: 'webm' | 'mp3';
+    type: AudioType;
     startTime: number;
     endTime?: number | null;
 }
