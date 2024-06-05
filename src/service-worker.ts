@@ -1,7 +1,8 @@
 /// <reference lib="WebWorker" />
 // <reference path="../static/js/workbox-plugins/add-api-key-to-all-request-plugin.js" />
 // <reference path="../static/js/workbox-plugins/cache-first-and-stale-while-revalidate-after-expiration.js" />
-// <reference path="../static/js/workbox-plugins/cacheable-cdn-content-plugin.js" />
+// <reference path="../static/js/workbox-plugins/cacheable-media-or-text-content-plugin.js" />
+// <reference path="../static/js/caching-config.js" />
 
 // In an ideal world we would use a module-based approach for this file, enabling us to do
 // `import ... from 'workbox-...';` and also have import metadata injected like `import.meta.env.DEPLOY_ENV`.
@@ -33,7 +34,8 @@ importScripts(
     // internal plugins. note that they're referenced at the top of the file to import the JSDoc types.
     'js/workbox-plugins/add-api-key-to-all-request-plugin.js',
     'js/workbox-plugins/cache-first-and-stale-while-revalidate-after-expiration.js',
-    'js/workbox-plugins/cacheable-cdn-content-plugin.js'
+    'js/workbox-plugins/cacheable-media-or-text-content-plugin.js',
+    'js/caching-config.js'
 );
 
 import type * as WorkboxCore from 'workbox-core';
@@ -119,38 +121,37 @@ registerRoute(
     'POST'
 );
 
-// content from the CDN or metadata/thumbnails/text/Bible content from the API
-registerRoute(
-    /(https:\/\/cdn\.aquifer\.bible.*|(https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible|http:\/\/localhost:5257)(\/resources\/\d+\/(content|metadata|thumbnail)|\/bibles\/\d+\/texts.*))/,
-    new CacheFirst({
-        cacheName: 'aquifer-cdn',
-        plugins: [new CacheableCdnContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],
-    }),
-    'GET'
-);
+const contentCachingHandler = new CacheFirst({
+    cacheName: CACHING_CONFIG.contentCacheKey,
+    plugins: [new CacheableMediaOrTextContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],
+});
 
-// don't cache the batch responses from the API
+const apiCachingHandler = new CacheFirstAndStaleWhileRevalidateAfterExpiration({
+    cacheName: CACHING_CONFIG.apiCacheKey,
+    staleAfterDuration: 60 * 60 * API_CACHE_DURATION_IN_HOURS,
+    plugins: [addApiKeyToAllRequestPlugin],
+    CacheFirst,
+    NetworkFirst,
+    StaleWhileRevalidate,
+});
+
+// CDN URLs should be cached as content
+registerRoute(CACHING_CONFIG.cdnUrlRegex, contentCachingHandler, 'GET');
+
+// some API paths should be cached as content
+registerRoute(CACHING_CONFIG.apiUrlsToCacheAsContentRegex, contentCachingHandler, 'GET');
+
+// some paths should not be cached
 registerRoute(
-    /(https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible|http:\/\/localhost:5257)\/resources\/batch.*/,
+    CACHING_CONFIG.apiSkipCacheUrlRegex,
     new NetworkOnly({
         plugins: [addApiKeyToAllRequestPlugin],
     }),
     'GET'
 );
 
-// responses from the API
-registerRoute(
-    /(https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible|http:\/\/localhost:5257).*/,
-    new CacheFirstAndStaleWhileRevalidateAfterExpiration({
-        cacheName: 'aquifer-api',
-        staleAfterDuration: 60 * 60 * API_CACHE_DURATION_IN_HOURS,
-        plugins: [addApiKeyToAllRequestPlugin],
-        CacheFirst,
-        NetworkFirst,
-        StaleWhileRevalidate,
-    }),
-    'GET'
-);
+// cache everything else under the API
+registerRoute(CACHING_CONFIG.apiUrlRegex, apiCachingHandler, 'GET');
 
 registerRoute(
     /.*\/__local_recordings\/.*/,

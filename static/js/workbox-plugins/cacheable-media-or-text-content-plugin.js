@@ -1,6 +1,6 @@
 // Caches a response if it's a 200 OR it's a 206 and either the requested Range is not set or it's set to 0- which means all content
 // eslint-disable-next-line
-class CacheableCdnContentPlugin {
+class CacheableMediaOrTextContentPlugin {
     /**
      * Function to determine whether to cache a response.
      * @param {Object} params

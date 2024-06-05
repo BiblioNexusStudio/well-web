@@ -4,7 +4,7 @@ import type { StaticUrlsMap } from './types/static-mapping';
 import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 import { asyncUnorderedForEach } from './utils/async-array';
 import { MediaType } from './types/resource';
-import { chunk, removeFromArray } from './utils/array';
+import { chunk } from './utils/array';
 import { log } from './logger';
 import { objectValues } from './utils/typesafe-standard-lib';
 
@@ -16,7 +16,6 @@ export const METADATA_ONLY_FAKE_FILE_SIZE = 768;
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 1000;
 
-type CheckCacheChangeItem = { url: Url; expectedSize: number };
 type SingleItemProgress = { downloadedSize: number; totalSize: number; done: boolean; metadataOnly?: boolean };
 export type AllItemsProgress = Record<Url, SingleItemProgress>;
 
@@ -26,14 +25,10 @@ interface BatchedUrl {
 }
 
 // The workbox `fetch` caching API will create a cache entry as soon as response headers have been returned, rather than
-// after the full response has been downloaded. Without these arrays and their usages, isCachedFromApi and
-// isCachedFromCdn would return true even when the data isn't fully there yet.
-const partiallyDownloadedCdnUrls: string[] = [];
-const partiallyDownloadedApiUrls: string[] = [];
-const apiContentRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/content/;
-const apiMetadataRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/metadata/;
-const apiThumbnailRegex = /https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible\/resources\/\d+\/thumbnail/;
-const cdnRegex = /https:\/\/cdn\.aquifer\.bible.*/;
+// after the full response has been downloaded. Without this set, isCachedFromApi and isCachedAsContent would return
+// true even when the data isn't fully there yet.
+const partiallyDownloadedUrls = new Set<string>();
+
 export const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 export class WellFetchError extends Error {
@@ -44,7 +39,7 @@ export class WellFetchError extends Error {
 export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number) {
     const url = apiUrl(path);
     if (!(await isCachedFromApi(path))) {
-        partiallyDownloadedApiUrls.push(url);
+        partiallyDownloadedUrls.add(url);
     }
     try {
         const response = await fetch(cachedOrRealUrl(url), {
@@ -65,20 +60,20 @@ export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number
         fetchError.cacheBustVersion = cacheBustVersion;
         throw fetchError;
     } finally {
-        removeFromArray(partiallyDownloadedApiUrls, url);
+        partiallyDownloadedUrls.delete(url);
     }
 }
 
-export async function fetchFromCacheOrCdn<T>(url: Url) {
-    if (!(await isCachedFromCdn(url))) {
-        partiallyDownloadedCdnUrls.push(url);
+export async function fetchContentFromCacheOrNetwork<T>(url: Url) {
+    if (!(await isCachedAsContent(url))) {
+        partiallyDownloadedUrls.add(url);
     }
     try {
         const response = await fetch(cachedOrRealUrl(url));
         if (response.status >= 400) {
             throw new Error('Bad HTTP response');
         }
-        cdnCachedUrls.delete(url);
+        contentCachedUrls.delete(url);
         return (await response.json()) as T;
     } catch (error) {
         const castError = error as Error;
@@ -87,7 +82,7 @@ export async function fetchFromCacheOrCdn<T>(url: Url) {
         fetchError.url = url;
         throw fetchError;
     } finally {
-        removeFromArray(partiallyDownloadedCdnUrls, url);
+        partiallyDownloadedUrls.delete(url);
     }
 }
 
@@ -101,13 +96,13 @@ export async function removeFromApiCache(path: string) {
     apiCachedUrls.delete(url);
 }
 
-export async function removeFromCdnCache(url: Url) {
+export async function removeFromContentCache(url: Url) {
     if (!('serviceWorker' in navigator)) {
         return;
     }
-    const cache = await getCdnCache();
+    const cache = await getContentCache();
     await cache.delete(url);
-    cdnCachedUrls.delete(url);
+    contentCachedUrls.delete(url);
 }
 
 export async function clearEntireCache() {
@@ -119,7 +114,7 @@ export async function clearEntireCache() {
     });
 
     apiCachedUrls.clear();
-    cdnCachedUrls.clear();
+    contentCachedUrls.clear();
 
     if (indexedDB.databases) {
         const dbs = await indexedDB.databases();
@@ -157,7 +152,7 @@ async function retryRequest(fn: () => Promise<void>, remainingRetries = MAX_RETR
 }
 
 // Fetch multiple URLs when online and store them in the cache, tracking progress as the downloads happen.
-export async function cacheManyFromCdnWithProgress(
+export async function cacheManyContentUrlsWithProgress(
     urls: UrlWithMetadata[],
     progressCallback: (progress: AllItemsProgress) => void = () => {
         // no-op by default
@@ -208,17 +203,7 @@ export async function cacheManyFromCdnWithProgress(
     };
 
     const processUrl = async (url: Url, expectedSize: number) => {
-        const cdnUrl =
-            url.match(cdnRegex) ||
-            url.match(apiContentRegex) ||
-            url.match(apiMetadataRegex) ||
-            url.match(apiThumbnailRegex);
-
-        if (cdnUrl) {
-            partiallyDownloadedCdnUrls.push(url);
-        } else {
-            partiallyDownloadedApiUrls.push(url);
-        }
+        partiallyDownloadedUrls.add(url);
 
         try {
             if (url in staticUrlsMap) {
@@ -228,10 +213,10 @@ export async function cacheManyFromCdnWithProgress(
 
             let cachedSize: number | null = null;
 
-            if (cdnUrl) {
-                cachedSize = await cachedCdnContentSize(url);
+            if (window.__CACHING_CONFIG.urlGoesInContentCache(url)) {
+                cachedSize = await contentCacheDataSize(url);
             } else {
-                cachedSize = await cachedApiContentSize(url);
+                cachedSize = await apiCacheDataSize(url);
             }
 
             if (cachedSize) {
@@ -261,11 +246,7 @@ export async function cacheManyFromCdnWithProgress(
                 updateProgress(url, receivedLength, contentLength ? +contentLength : 0, true);
             });
         } finally {
-            if (cdnUrl) {
-                removeFromArray(partiallyDownloadedCdnUrls, url);
-            } else {
-                removeFromArray(partiallyDownloadedApiUrls, url);
-            }
+            partiallyDownloadedUrls.delete(url);
         }
     };
 
@@ -273,24 +254,24 @@ export async function cacheManyFromCdnWithProgress(
         const batchIds: number[] = [];
         await asyncUnorderedForEach(Object.entries(idsToUrls), async ([id, urlWithMetadata]) => {
             try {
-                partiallyDownloadedCdnUrls.push(urlWithMetadata.url);
+                partiallyDownloadedUrls.add(urlWithMetadata.url);
 
                 if (urlWithMetadata.url in staticUrlsMap) {
                     updateProgress(urlWithMetadata.url, urlWithMetadata.size, urlWithMetadata.size, true);
-                    removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+                    partiallyDownloadedUrls.delete(urlWithMetadata.url);
                     return;
                 }
 
-                const cachedSize = await cachedCdnContentSize(urlWithMetadata.url);
+                const cachedSize = await contentCacheDataSize(urlWithMetadata.url);
                 if (cachedSize !== null) {
                     updateProgress(urlWithMetadata.url, cachedSize, cachedSize, true);
-                    removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+                    partiallyDownloadedUrls.delete(urlWithMetadata.url);
                 } else {
                     batchIds.push(parseInt(id));
                 }
             } catch (error) {
                 log.exception(error as Error);
-                removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+                partiallyDownloadedUrls.delete(urlWithMetadata.url);
             }
         });
 
@@ -299,7 +280,7 @@ export async function cacheManyFromCdnWithProgress(
 
             try {
                 await retryRequest(async () => {
-                    await fetchBatchAndPopulateCdnCache(
+                    await fetchContentBatchFromNetwork(
                         baseUrl,
                         batchIds,
                         (id) => idsToUrls[id]?.url,
@@ -308,7 +289,7 @@ export async function cacheManyFromCdnWithProgress(
                             const urlWithMetadata = idsToUrls[id];
                             if (urlWithMetadata) {
                                 updateProgress(urlWithMetadata.url, urlWithMetadata.size, urlWithMetadata.size, true);
-                                removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+                                partiallyDownloadedUrls.delete(urlWithMetadata.url);
                             }
                         }
                     );
@@ -320,7 +301,7 @@ export async function cacheManyFromCdnWithProgress(
         }
 
         Object.values(idsToUrls).forEach((urlWithMetadata) => {
-            removeFromArray(partiallyDownloadedCdnUrls, urlWithMetadata.url);
+            partiallyDownloadedUrls.delete(urlWithMetadata.url);
         });
     };
 
@@ -344,19 +325,19 @@ export async function cacheManyFromCdnWithProgress(
 
     await processQueue();
     apiCachedUrls.clear();
-    cdnCachedUrls.clear();
+    contentCachedUrls.clear();
 }
 
 // Take a batch of ids and apply them to the base URL as `ids` query params, fetch that batch then populate the cache
 // using the key and value functions. Returns a map of id to fetched value.
-export async function fetchBatchAndPopulateCdnCache(
+async function fetchContentBatchFromNetwork(
     batchUrl: string,
     ids: number[],
     calculateNonBatchUrl: (id: number) => string | undefined,
     calculateValueToCache: (response: { id: number; content: object }) => object,
     completedCallback?: (id: number) => void
 ) {
-    const cache = await getCdnCache();
+    const cache = await getContentCache();
     const idsParams = ids.map((id) => `ids=${id}`).join('&');
     const url = `${batchUrl}?${idsParams}`;
     const response = await fetch(url);
@@ -377,14 +358,14 @@ export async function fetchBatchAndPopulateCdnCache(
         completedCallback?.(response.id);
     });
 
-    cdnCachedUrls.clear();
+    contentCachedUrls.clear();
 
     return output;
 }
 
 // Take a list of ids and detect which ones have been cached and which ones have not. For the uncached ones, use the
 // batch function to fetch them quickly. For the cached ones, use the normal fetch functions. Returns a map of id to fetched value.
-export async function fetchBatchAndAlreadyCached<T>(
+export async function fetchContentBatchFromCacheAndNetwork<T>(
     batchUrl: string,
     ids: number[],
     calculateNonBatchUrl: (id: number) => string | undefined,
@@ -396,7 +377,7 @@ export async function fetchBatchAndAlreadyCached<T>(
 
     await asyncUnorderedForEach(ids, async (id) => {
         const url = calculateNonBatchUrl(id);
-        if (url && (await isCachedFromCdn(url))) {
+        if (url && (await isCachedAsContent(url))) {
             cached.push({ id, url });
         } else {
             uncached.push(id);
@@ -408,11 +389,11 @@ export async function fetchBatchAndAlreadyCached<T>(
 
     await Promise.all([
         asyncUnorderedForEach(cached, async ({ id, url }) => {
-            output.set(id, await fetchFromCacheOrCdn(url));
+            output.set(id, await fetchContentFromCacheOrNetwork(url));
         }),
         asyncUnorderedForEach(chunked, async (chunk) => {
             try {
-                const chunkIdsToContent = await fetchBatchAndPopulateCdnCache(
+                const chunkIdsToContent = await fetchContentBatchFromNetwork(
                     batchUrl,
                     chunk,
                     calculateNonBatchUrl,
@@ -430,40 +411,31 @@ export async function fetchBatchAndAlreadyCached<T>(
     return output;
 }
 
-// Given a list of URLs and the expected sizes (which comes from the API), determine if any of the cached data has
-// different sizes and therefore needs to be re-downloaded. This won't always catch cache changes since it's possible
-// for different content to have the same sizes, but it should be good enough for our use cases (data isn't changing
-// that much).
-export async function findStaleDataInCdnCache(items: CheckCacheChangeItem[]) {
-    const cache = await getCdnCache();
-    return items.filter(async ({ url, expectedSize }) => expectedSize !== (await cachedCdnContentSize(url, cache)));
-}
-
 function isTextBatchableUrl(url: UrlWithMetadata) {
-    return url.mediaType === MediaType.Text && url.url.match(apiContentRegex);
+    return url.mediaType === MediaType.Text && window.__CACHING_CONFIG.isContentUrl(url.url);
 }
 
 function isMetadataBatchableUrl(url: UrlWithMetadata) {
-    return url.url.match(apiMetadataRegex);
+    return window.__CACHING_CONFIG.isMetadataUrl(url.url);
 }
 
 export async function getApiCache() {
-    return await caches.open('aquifer-api');
+    return await caches.open(window.__CACHING_CONFIG.apiCacheKey);
 }
 
-export async function getCdnCache() {
-    return await caches.open('aquifer-cdn');
+export async function getContentCache() {
+    return await caches.open(window.__CACHING_CONFIG.contentCacheKey);
 }
 
-const cdnCachedUrls: Map<string, boolean> = new Map();
+const contentCachedUrls: Map<string, boolean> = new Map();
 const apiCachedUrls: Map<string, boolean> = new Map();
 
 // Checks if a fully downloaded cache entry exists for the URL.
-export async function isCachedFromCdn(url: Url) {
-    if (cdnCachedUrls.has(url)) {
-        return cdnCachedUrls.get(url)!;
+export async function isCachedAsContent(url: Url) {
+    if (contentCachedUrls.has(url)) {
+        return contentCachedUrls.get(url)!;
     }
-    if (partiallyDownloadedCdnUrls.includes(url)) {
+    if (partiallyDownloadedUrls.has(url)) {
         return false;
     }
     if (url in staticUrlsMap) {
@@ -472,10 +444,10 @@ export async function isCachedFromCdn(url: Url) {
     if (!('serviceWorker' in navigator)) {
         return false;
     }
-    const cache = await getCdnCache();
+    const cache = await getContentCache();
     const response = await cache.match(url);
     const isCached = response != null;
-    cdnCachedUrls.set(url, isCached);
+    contentCachedUrls.set(url, isCached);
     return isCached;
 }
 
@@ -485,7 +457,7 @@ export async function isCachedFromApi(path: string) {
     if (apiCachedUrls.has(url)) {
         return apiCachedUrls.get(url)!;
     }
-    if (partiallyDownloadedApiUrls.includes(url)) {
+    if (partiallyDownloadedUrls.has(url)) {
         return false;
     }
     if (url in staticUrlsMap) {
@@ -505,11 +477,11 @@ export function apiUrl(path: string) {
     return (config.PUBLIC_AQUIFER_API_URL + (path.startsWith('/') ? path.slice(1) : path)).replace(/\/$/, '');
 }
 
-async function cachedCdnContentSize(url: Url, cache: Cache | null = null) {
+async function contentCacheDataSize(url: Url, cache: Cache | null = null) {
     if (!('serviceWorker' in navigator)) {
         return null;
     }
-    const openedCache = cache || (await getCdnCache());
+    const openedCache = cache || (await getContentCache());
     const response = await openedCache.match(url);
     if (response) {
         const blob = await response.blob();
@@ -518,7 +490,7 @@ async function cachedCdnContentSize(url: Url, cache: Cache | null = null) {
     return null;
 }
 
-async function cachedApiContentSize(url: Url, cache: Cache | null = null) {
+async function apiCacheDataSize(url: Url, cache: Cache | null = null) {
     if (!('serviceWorker' in navigator)) {
         return null;
     }

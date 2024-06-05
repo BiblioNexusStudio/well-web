@@ -15,7 +15,7 @@
     import { convertToReadableSize } from '$lib/utils/file-manager';
     import type { ResourcesApiModule, BiblesModuleBook } from '$lib/types/file-manager';
     import { buildRowData } from '$lib/utils/file-manager';
-    import { METADATA_ONLY_FAKE_FILE_SIZE, apiUrl, cacheManyFromCdnWithProgress } from '$lib/data-cache';
+    import { METADATA_ONLY_FAKE_FILE_SIZE, apiUrl, cacheManyContentUrlsWithProgress } from '$lib/data-cache';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import { MediaType, ParentResourceType, PredeterminedPassageGuides } from '$lib/types/resource';
     import Image from '$lib/icons/Image.svelte';
@@ -84,7 +84,7 @@
                     };
                 }
             });
-        await cacheManyFromCdnWithProgress(urlsToCache);
+        await cacheManyContentUrlsWithProgress(urlsToCache);
     }
 
     function addAllUrlsCachedProperty(biblesModuleBook: BiblesModuleBook) {

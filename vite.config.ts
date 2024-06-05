@@ -12,6 +12,9 @@ export default defineConfig({
         'process.env.DEPLOY_ENV': JSON.stringify(process.env.DEPLOY_ENV),
         'process.env.PUBLIC_AQUIFER_API_KEY': JSON.stringify(process.env.PUBLIC_AQUIFER_API_KEY),
     },
+    resolve: {
+        preserveSymlinks: true,
+    },
     plugins: [sveltekit(), SvelteKitPWA(serviceWorkerPwaConfig)],
     test: {
         globals: true,

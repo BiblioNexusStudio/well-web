@@ -1,6 +1,6 @@
 <script lang="ts">
     import { convertToReadableSize } from '$lib/utils/file-manager';
-    import { removeFromCdnCache, cacheManyFromCdnWithProgress, type AllItemsProgress } from '$lib/data-cache';
+    import { removeFromContentCache, cacheManyContentUrlsWithProgress, type AllItemsProgress } from '$lib/data-cache';
     import { _ as translate } from 'svelte-i18n';
     import { objectKeys, objectValues } from '$lib/utils/typesafe-standard-lib';
     import { downloadData } from '$lib/stores/file-manager.store';
@@ -11,10 +11,10 @@
     let totalSizeDownloaded = 0;
 
     const continueUpdateFiles = () => {
-        $downloadData.urlsToDelete.forEach(removeFromCdnCache);
+        $downloadData.urlsToDelete.forEach(removeFromContentCache);
 
         if ($downloadData.urlsToDownload.length > 0) {
-            cacheManyFromCdnWithProgress($downloadData.urlsToDownload, progressCallback);
+            cacheManyContentUrlsWithProgress($downloadData.urlsToDownload, progressCallback);
             downloadInProgress = true;
         } else {
             const modal = document.getElementById('file-manager-modal') as HTMLDialogElement;

@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { fetchFromCacheOrCdn, isCachedFromCdn } from '$lib/data-cache';
+import { fetchContentFromCacheOrNetwork, isCachedAsContent } from '$lib/data-cache';
 import { currentLanguageInfo } from '$lib/stores/language.store';
 import type { FrontendAudioChapter, AudioTimestamp } from '$lib/types/file-manager';
 import type { BibleBookTextContent, FrontendBibleBook } from '$lib/types/bible';
@@ -31,7 +31,7 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
 
     let fullBookText: BibleBookTextContent | null = null;
     try {
-        fullBookText = await fetchFromCacheOrCdn(bibleBookUrl(bible.id, bible.bookMetadata.bookCode));
+        fullBookText = await fetchContentFromCacheOrNetwork(bibleBookUrl(bible.id, bible.bookMetadata.bookCode));
     } catch (error) {
         // this means the user hasn't downloaded the Bible text, which is fine, they may have audio still
         log.exception(error as Error);
@@ -50,7 +50,7 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
             let audioData: { url: string; startTimestamp: number | null; endTimestamp: number | null } | null = null;
             if (audioUrlData) {
                 const url = audioUrlData[audioFileTypeForBrowser()].url;
-                if (get(isOnline) || (await isCachedFromCdn(url))) {
+                if (get(isOnline) || (await isCachedAsContent(url))) {
                     if (audioUrlData.audioTimestamps) {
                         const startTimestamp =
                             chapterNumber === passage.startChapter
@@ -110,7 +110,8 @@ async function filterToAdditionalResourceInfo(resourceContents: ResourceContentI
 
     return await asyncFilter(
         additionalResourceContent,
-        async (resourceContent) => get(isOnline) || (await isCachedFromCdn(resourceContentApiFullUrl(resourceContent)))
+        async (resourceContent) =>
+            get(isOnline) || (await isCachedAsContent(resourceContentApiFullUrl(resourceContent)))
     );
 }
 
@@ -119,7 +120,8 @@ async function filterToGuideResourceInfo(resourceContents: ResourceContentInfoWi
 
     return await asyncFilter(
         onlyGuides,
-        async (resourceContent) => get(isOnline) || (await isCachedFromCdn(resourceContentApiFullUrl(resourceContent)))
+        async (resourceContent) =>
+            get(isOnline) || (await isCachedAsContent(resourceContentApiFullUrl(resourceContent)))
     );
 }
 

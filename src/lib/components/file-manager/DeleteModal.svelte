@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { removeFromCdnCache } from '$lib/data-cache';
+    import { removeFromContentCache } from '$lib/data-cache';
     import { _ as translate } from 'svelte-i18n';
     import { downloadData, biblesModuleBook } from '$lib/stores/file-manager.store';
 
@@ -12,7 +12,7 @@
 
     const deleteFiles = () => {
         $downloadData.urlsToDelete.forEach((url) => {
-            removeFromCdnCache(url);
+            removeFromContentCache(url);
         });
 
         if ($biblesModuleBook.audioUrls) {

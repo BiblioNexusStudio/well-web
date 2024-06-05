@@ -13,6 +13,7 @@ import { languages } from '$lib/stores/language.store';
 import { parentResources } from '$lib/stores/parent-resource.store';
 import { biblesEndpoint, languagesEndpoint, parentResourcesEndpoint } from '$lib/api-endpoints';
 import { bibles } from '$lib/stores/bibles.store';
+import '$lib/caching-config.js';
 
 export const ssr = false;
 
