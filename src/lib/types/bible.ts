@@ -20,12 +20,12 @@ export interface BibleBookTextContent {
 }
 
 export interface BibleBookTextChapter {
-    number: string;
+    number: number;
     verses: BibleBookTextVerse[];
 }
 
 export interface BibleBookTextVerse {
-    number: string;
+    number: number;
     text: string;
 }
 
@@ -59,7 +59,7 @@ export interface BaseBibleBookContent {
 export type ApiBibleBookContent = BaseBibleBookContent;
 
 export interface BibleBookContentDetails extends BaseBibleBookContent {
-    textUrl: string;
+    bibleId: number;
     audioUrls: { chapters: FrontendAudioChapter[] } | null;
 }
 
@@ -70,9 +70,9 @@ export interface FrontendChapterAudioData {
 }
 
 export interface FrontendChapterContent {
-    number: string;
+    number: number;
     audioData: FrontendChapterAudioData | null;
-    versesText: { number: string; text: string }[];
+    versesText: { number: number; text: string }[];
 }
 
 export type ApiBibleChapter = {

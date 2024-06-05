@@ -19,7 +19,7 @@ import {
 import { MediaType, ParentResourceId } from '$lib/types/resource';
 import { currentLanguageInfo } from '$lib/stores/language.store';
 import { get } from 'svelte/store';
-import { bibleBooksByBibleIdFullUrl } from './data-handlers/bible';
+import { bibleBookUrl, bibleBooksByBibleIdFullUrl } from './data-handlers/bible';
 
 export const convertToReadableSize = (size: number) => {
     const kb = 1024;
@@ -65,7 +65,7 @@ export const calculateUrlsWithMetadataToChange = (
         });
         urlsAndSizesToDownload.push({
             mediaType: MediaType.Text,
-            url: biblesModuleBook.textUrl,
+            url: bibleBookUrl(biblesModuleBook.bibleId!, biblesModuleBook.bookCode),
             size: biblesModuleBook.textSize,
         });
     }
@@ -74,7 +74,7 @@ export const calculateUrlsWithMetadataToChange = (
         (selectedChaptersLength === 1 || selectedChaptersLength == 0) &&
         biblesModuleBook.audioUrls?.chapters.some((chapter) => chapter.deleteResources)
     ) {
-        urlsToDelete.push(biblesModuleBook.textUrl);
+        urlsToDelete.push(bibleBookUrl(biblesModuleBook.bibleId!, biblesModuleBook.bookCode));
     }
 
     biblesModuleBook.audioUrls?.chapters.forEach((chapter) => {
@@ -227,12 +227,16 @@ export const calculateUrlsWithMetadataToChange = (
     };
 };
 
-export const addFrontEndDataToBiblesModuleBook = async (inputBiblesModuleBook: BiblesModuleBook) => {
+export const addFrontEndDataToBiblesModuleBook = async (
+    bibleId: number | null,
+    inputBiblesModuleBook: BiblesModuleBook
+) => {
     if (inputBiblesModuleBook.audioUrls === null) {
         inputBiblesModuleBook = populateNullAudioChapters(inputBiblesModuleBook);
     }
 
-    inputBiblesModuleBook.isTextUrlCached = await isCachedFromCdn(inputBiblesModuleBook.textUrl);
+    inputBiblesModuleBook.isTextUrlCached =
+        !!bibleId && (await isCachedFromCdn(bibleBookUrl(bibleId, inputBiblesModuleBook.bookCode)));
 
     await asyncUnorderedForEach(inputBiblesModuleBook.audioUrls?.chapters ?? [], async (chapter) => {
         chapter.isAudioUrlCached = await isCachedFromCdn(chapter[audioFileTypeForBrowser()].url);

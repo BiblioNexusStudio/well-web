@@ -29,6 +29,7 @@
     const handleBookClick = async (bookCode: string | null) => {
         toggleMenu();
         $biblesModuleBook = await addFrontEndDataToBiblesModuleBook(
+            firstBible.id,
             await fetchFromCacheOrApi(...bookOfBibleEndpoint(firstBible.id, bookCode))
         );
         $biblesModuleBook.bibleId = firstBible.id;

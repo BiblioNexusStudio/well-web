@@ -173,7 +173,7 @@
                 $selectedBibleSection,
                 bibleData?.biblesForTabs
                     .filter(({ id, bookMetadata }) => id !== selectedBibleId && bookMetadata !== null)
-                    .map(({ bookMetadata }) => bookMetadata) as BibleBookContentDetails[]
+                    .map(({ id, bookMetadata }) => ({ ...bookMetadata, bibleId: id })) as BibleBookContentDetails[]
             );
         }
     }
