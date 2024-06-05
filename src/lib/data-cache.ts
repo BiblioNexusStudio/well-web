@@ -6,6 +6,7 @@ import { asyncUnorderedForEach } from './utils/async-array';
 import { MediaType } from './types/resource';
 import { chunk, removeFromArray } from './utils/array';
 import { log } from './logger';
+import { objectValues } from './utils/typesafe-standard-lib';
 
 // Because we need to download metadata alongside content but we don't know ahead of time what the size of the payload
 // will be, we're defaulting it to 768 bytes (3/4 of a KB). Most metadata sizes as of now seem to be between 0-1000
@@ -294,7 +295,7 @@ export async function cacheManyFromCdnWithProgress(
         });
 
         if (batchIds.length > 0) {
-            const isMetadata = idsToUrls[0]?.url.includes('metadata');
+            const isMetadata = objectValues(idsToUrls)[0]?.url.includes('metadata') ?? false;
 
             try {
                 await retryRequest(async () => {

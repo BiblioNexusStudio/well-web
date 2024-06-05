@@ -111,7 +111,6 @@ export interface BiblesModuleBook {
     textSize: number;
     audioSize: number;
     chapterCount: number;
-    textUrl: string;
     isTextUrlCached?: boolean;
     bibleId: number | null;
     audioUrls: {

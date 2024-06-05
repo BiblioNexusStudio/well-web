@@ -39,6 +39,7 @@
                 if ($selectedBookCode) {
                     const firstBible = $biblesModuleData[0] || { id: null };
                     $biblesModuleBook = await addFrontEndDataToBiblesModuleBook(
+                        firstBible.id,
                         await fetchFromCacheOrApi(...bookOfBibleEndpoint(firstBible.id, $selectedBookCode))
                     );
                     $biblesModuleBook.bibleId = firstBible.id;

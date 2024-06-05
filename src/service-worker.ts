@@ -119,9 +119,9 @@ registerRoute(
     'POST'
 );
 
-// content from the CDN or metadata/thumbnails/text content from the API
+// content from the CDN or metadata/thumbnails/text/Bible content from the API
 registerRoute(
-    /(https:\/\/cdn\.aquifer\.bible.*|(https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible|http:\/\/localhost:5257)\/resources\/\d+\/(content|metadata|thumbnail))/,
+    /(https:\/\/cdn\.aquifer\.bible.*|(https:\/\/((qa|dev)\.)?api-bn\.aquifer\.bible|http:\/\/localhost:5257)(\/resources\/\d+\/(content|metadata|thumbnail)|\/bibles\/\d+\/texts.*))/,
     new CacheFirst({
         cacheName: 'aquifer-cdn',
         plugins: [new CacheableCdnContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],

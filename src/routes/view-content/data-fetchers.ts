@@ -6,7 +6,7 @@ import type { BibleBookTextContent, FrontendBibleBook } from '$lib/types/bible';
 import { audioFileTypeForBrowser } from '$lib/utils/browser';
 import { asyncFilter, asyncMap } from '$lib/utils/async-array';
 import { isOnline } from '$lib/stores/is-online.store';
-import { fetchAllBibles, bookDataForBibleTab } from '$lib/utils/data-handlers/bible';
+import { fetchAllBibles, bookDataForBibleTab, bibleBookUrl } from '$lib/utils/data-handlers/bible';
 import { filterBoolean, range } from '$lib/utils/array';
 import { type ResourceContentInfo, ParentResourceType } from '$lib/types/resource';
 import {
@@ -31,7 +31,7 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
 
     let fullBookText: BibleBookTextContent | null = null;
     try {
-        fullBookText = await fetchFromCacheOrCdn(bible.bookMetadata.textUrl);
+        fullBookText = await fetchFromCacheOrCdn(bibleBookUrl(bible.id, bible.bookMetadata.bookCode));
     } catch (error) {
         // this means the user hasn't downloaded the Bible text, which is fine, they may have audio still
         log.exception(error as Error);
@@ -82,19 +82,18 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
                     }
                 }
             }
-            const chapterText = fullBookText?.chapters?.find((chapter) => String(chapterNumber) === chapter.number);
+            const chapterText = fullBookText?.chapters?.find((chapter) => chapterNumber === chapter.number);
             if (chapterText || audioData) {
                 return {
-                    number: String(chapterNumber),
+                    number: chapterNumber,
                     audioData,
                     versesText:
                         chapterText?.verses.filter((verse) => {
-                            const verseNumber = parseInt(verse.number.split('-')[0]!);
                             return (
                                 (chapterNumber > passage.startChapter ||
-                                    (chapterNumber === passage.startChapter && verseNumber >= passage.startVerse)) &&
+                                    (chapterNumber === passage.startChapter && verse.number >= passage.startVerse)) &&
                                 (chapterNumber < passage.endChapter ||
-                                    (chapterNumber === passage.endChapter && verseNumber <= passage.endVerse))
+                                    (chapterNumber === passage.endChapter && verse.number <= passage.endVerse))
                             );
                         }) ?? [],
                 };

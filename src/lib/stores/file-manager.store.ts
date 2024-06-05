@@ -35,7 +35,6 @@ export const biblesModuleBook = writable<BiblesModuleBook>({
     textSize: 0,
     audioSize: 0,
     chapterCount: 0,
-    textUrl: '',
     isTextUrlCached: false,
     bibleId: null,
     audioUrls: {
