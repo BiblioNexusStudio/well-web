@@ -1,10 +1,10 @@
 import { resourceContentForBookAndChapter } from '$lib/api-endpoints';
 import {
     apiUrl,
-    fetchBatchAndAlreadyCached,
+    fetchContentBatchFromCacheAndNetwork,
     fetchFromCacheOrApi,
-    fetchFromCacheOrCdn,
-    isCachedFromCdn,
+    fetchContentFromCacheOrNetwork,
+    isCachedAsContent,
 } from '$lib/data-cache';
 import { isOnline } from '$lib/stores/is-online.store';
 import { currentLanguageInfo } from '$lib/stores/language.store';
@@ -114,7 +114,7 @@ export async function resourceContentsForBibleSection(bibleSection: BibleSection
             ) {
                 for (const content of verse.resourceContents) {
                     if (!showOnlySrvResources || SrvResources.includes(content.parentResourceId)) {
-                        if (online || (await isCachedFromCdn(resourceContentApiFullUrl(content)))) {
+                        if (online || (await isCachedAsContent(resourceContentApiFullUrl(content)))) {
                             const existing = resources.find((rc) => rc.id === content.id);
                             if (existing) {
                                 existing.occurrences += 1;
@@ -160,14 +160,14 @@ export async function fetchTextResourceContentAndMetadataBatched<T extends TextR
     const ids = resourceContents.map((rc) => rc.id);
 
     const [idsToMetadata, idsToContent] = await Promise.all([
-        fetchBatchAndAlreadyCached<ResourceContentMetadata>(
+        fetchContentBatchFromCacheAndNetwork<ResourceContentMetadata>(
             apiUrl('/resources/batch/metadata'),
             ids,
             (id) => resourceMetadataApiFullUrl({ id, mediaType: MediaType.Text }),
             (response) => response,
             100
         ),
-        fetchBatchAndAlreadyCached<ResourceContentTiptap[]>(
+        fetchContentBatchFromCacheAndNetwork<ResourceContentTiptap[]>(
             apiUrl('/resources/batch/content/text'),
             ids,
             (id) => resourceContentApiFullUrl({ id, mediaType: MediaType.Text }),
@@ -187,7 +187,7 @@ export async function fetchTiptapForResourceContent(
     resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
 ): Promise<ResourceContentTiptap | null> {
     try {
-        const tiptaps = (await fetchFromCacheOrCdn(resourceContentApiFullUrl(resourceContent))) as
+        const tiptaps = (await fetchContentFromCacheOrNetwork(resourceContentApiFullUrl(resourceContent))) as
             | ResourceContentTiptap[]
             | null;
         return tiptaps?.[0] ?? null;
@@ -201,7 +201,7 @@ export async function fetchMetadataForResourceContent(
     resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
 ): Promise<ResourceContentMetadata | null> {
     try {
-        return (await fetchFromCacheOrCdn(
+        return (await fetchContentFromCacheOrNetwork(
             resourceMetadataApiFullUrl(resourceContent)
         )) as ResourceContentMetadata | null;
     } catch (error) {
@@ -222,7 +222,7 @@ export async function filterToAvailableAssociatedResourceContent(
             id: resource.contentId,
             mediaType: MediaType.Text,
         };
-        return await isCachedFromCdn(resourceContentApiFullUrl(textResourceContentJustId));
+        return await isCachedAsContent(resourceContentApiFullUrl(textResourceContentJustId));
     });
 }
 

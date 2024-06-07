@@ -5,7 +5,7 @@
     } from '$lib/components/AudioPlayer/audio-player-state';
     import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import { fetchFromCacheOrCdn } from '$lib/data-cache';
+    import { fetchContentFromCacheOrNetwork } from '$lib/data-cache';
     import { log } from '$lib/logger';
     import { openGuideMenu } from '$lib/stores/passage-page.store';
     import {
@@ -173,7 +173,7 @@
         return filterBoolean(
             await asyncMap(allTextResourceContent, async (resourceContent) => {
                 try {
-                    const content = (await fetchFromCacheOrCdn(
+                    const content = (await fetchContentFromCacheOrNetwork(
                         resourceContentApiFullUrl(resourceContent)
                     )) as ResourceContentFiaText[];
                     return {

@@ -23,6 +23,7 @@ const additionalProperties = {
 
 export const log = {
     exception: (error: Error | undefined) => {
+        console.error(error);
         if (
             error &&
             (error.message.includes('Failed to fetch') ||
@@ -30,10 +31,8 @@ export const log = {
                 error.message.includes('NetworkError when attempting to fetch'))
         ) {
             // Don't log network errors to app insights (since they can't be avoided)
-            console.error(error);
         } else if (!browserSupported) {
             // Don't log errors of unsupported browsers to app insights (since they can't be avoided)
-            console.error(error);
         } else if (error) {
             const { url, cacheBustVersion } =
                 'url' in error ? (error as WellFetchError) : { url: null, cacheBustVersion: null };

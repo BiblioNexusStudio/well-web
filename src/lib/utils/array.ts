@@ -41,11 +41,6 @@ export function chunk<T>(array: T[], chunkSize: number): T[][] {
     return result;
 }
 
-export function removeFromArray<T>(array: T[], value: T) {
-    const index = array.indexOf(value);
-    if (index > -1) array.splice(index, 1);
-}
-
 export function sortByKey<T>(items: T[], key: keyof T, direction: 'asc' | 'desc' = 'asc'): T[] {
     return items.sort((a, b) => {
         if (a[key] > b[key]) {

@@ -1,3 +1,5 @@
+// <reference path="lib/caching-config.js" />
+
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
@@ -12,6 +14,7 @@ declare global {
 
     interface Window {
         __CONFIG: Record<string, string | number | boolean>;
+        __CACHING_CONFIG: typeof CACHING_CONFIG;
         webkitAudioContext: AudioContext;
         onResourceReferenceClick: ((contentId: number) => void) | undefined;
     }

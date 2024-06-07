@@ -19,7 +19,7 @@ const config = {
         typescript: {
             config: (config) => ({
                 ...config,
-                include: [...config.include, '../static/js/workbox-plugins/*.js'],
+                include: [...config.include, '../static/js/caching-config.js', '../static/js/workbox-plugins/*.js'],
                 exclude: config.exclude.filter((e) => e !== '../src/service-worker.ts'),
             }),
         },
