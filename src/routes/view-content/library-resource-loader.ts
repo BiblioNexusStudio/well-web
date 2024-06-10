@@ -1,3 +1,4 @@
+import { apiUrl, fetchContentBatchFromCacheAndNetwork } from '$lib/data-cache';
 import { parentResourceIdToInfoMap } from '$lib/stores/parent-resource.store';
 import {
     MediaType,
@@ -5,13 +6,13 @@ import {
     type ResourceContentInfo,
     ParentResourceType,
     type ResourceContentInfoWithMetadata,
+    type ResourceContentMetadata,
 } from '$lib/types/resource';
 import { groupBy, sortByKey } from '$lib/utils/array';
 import { asyncMap } from '$lib/utils/async-array';
 import {
-    fetchDisplayNameForResourceContent,
-    fetchMetadataForResourceContent,
     resourceContentApiFullUrl,
+    resourceMetadataApiFullUrl,
     resourceThumbnailApiFullUrl,
 } from '$lib/utils/data-handlers/resources/resource';
 import { objectEntries } from '$lib/utils/typesafe-standard-lib';
@@ -37,15 +38,22 @@ export async function buildLibraryResourceGroupingsWithMetadata(allResources: Re
         (v) => v
     );
     const groupings = await asyncMap(objectEntries(groupingMap), async ([parentResourceId, resources]) => {
-        const resourcesWithMetadata = await asyncMap(resources, async (resource) => {
+        const metadatasById = await fetchContentBatchFromCacheAndNetwork<ResourceContentMetadata>(
+            apiUrl('/resources/batch/metadata'),
+            resources.map((r) => r.id),
+            (id) => resourceMetadataApiFullUrl({ id, mediaType: MediaType.Text }),
+            (response) => response,
+            100
+        );
+        const resourcesWithMetadata = resources.map((resource) => {
             if (resource.mediaType === MediaType.Image) {
                 return {
                     ...resource,
                     url: resourceContentApiFullUrl(resource),
-                    displayName: await fetchDisplayNameForResourceContent(resource),
+                    displayName: metadatasById.get(resource.id)?.displayName,
                 };
             } else if (resource.mediaType === MediaType.Video) {
-                const metadata = await fetchMetadataForResourceContent(resource);
+                const metadata = metadatasById.get(resource.id);
                 return {
                     ...resource,
                     url: resourceContentApiFullUrl(resource),
@@ -56,7 +64,7 @@ export async function buildLibraryResourceGroupingsWithMetadata(allResources: Re
             } else {
                 return {
                     ...resource,
-                    displayName: await fetchDisplayNameForResourceContent(resource),
+                    displayName: metadatasById.get(resource.id)?.displayName,
                 };
             }
         });
