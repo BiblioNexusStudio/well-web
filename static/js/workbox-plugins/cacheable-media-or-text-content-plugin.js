@@ -6,7 +6,6 @@ class CacheableMediaOrTextContentPlugin {
      * @param {Object} params
      * @param {Request} params.request - The request associated with the response.
      * @param {Response} params.response - The response to potentially cache.
-     * @returns {Promise<Response|null>} A response to cache or null if not caching.
      */
     cacheWillUpdate = async ({ request, response }) => {
         const clonedResponse = response.clone();

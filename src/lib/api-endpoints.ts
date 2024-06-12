@@ -36,7 +36,7 @@ export function resourcesByLanguageAndBookEndpoint(
     bookCode: string,
     queryParams: string[]
 ): ApiStringAndCacheBustVersion {
-    return [`/resources/language/${languageId}/book/${bookCode}?${queryParams.sort().join('&')}`, 2];
+    return [`/resources/language/${languageId}/book/${bookCode}?${queryParams.sort().join('&')}`, 3];
 }
 
 export function searchResourcesEndpoint(
@@ -74,7 +74,7 @@ export function resourceContentForBookAndChapter(
 ): ApiStringAndCacheBustVersion {
     return [
         `/resources/content/grouped-by-verse?languageId=${languageId}&bookCode=${bookCode}&chapter=${chapterNumber}`,
-        1,
+        2,
     ];
 }
 

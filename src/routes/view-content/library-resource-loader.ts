@@ -1,4 +1,4 @@
-import { apiUrl, fetchContentBatchFromCacheAndNetwork } from '$lib/data-cache';
+import { apiUrl, fetchContentOrMetadataBatchFromCacheAndNetwork } from '$lib/data-cache';
 import { parentResourceIdToInfoMap } from '$lib/stores/parent-resource.store';
 import {
     MediaType,
@@ -38,11 +38,15 @@ export async function buildLibraryResourceGroupingsWithMetadata(allResources: Re
         (v) => v
     );
     const groupings = await asyncMap(objectEntries(groupingMap), async ([parentResourceId, resources]) => {
-        const metadatasById = await fetchContentBatchFromCacheAndNetwork<ResourceContentMetadata>(
+        const idsToVersions = new Map<number, number>();
+        resources.forEach((r) => idsToVersions.set(r.id, r.version));
+
+        const metadatasById = await fetchContentOrMetadataBatchFromCacheAndNetwork<ResourceContentMetadata>(
             apiUrl('/resources/batch/metadata'),
             resources.map((r) => r.id),
-            (id) => resourceMetadataApiFullUrl({ id, mediaType: MediaType.Text }),
+            (id) => resourceMetadataApiFullUrl({ id, version: idsToVersions.get(id)!, mediaType: MediaType.Text }),
             (response) => response,
+            true,
             100
         );
         const resourcesWithMetadata = resources.map((resource) => {

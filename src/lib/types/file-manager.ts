@@ -21,6 +21,7 @@ export interface ApiAudioChapter {
 export interface FileManagerResourceContentInfo {
     contentId: number;
     contentSize: number;
+    version: number;
     mediaTypeName: MediaType;
     parentResourceId: ParentResourceId;
     isResourceUrlCached?: boolean;
