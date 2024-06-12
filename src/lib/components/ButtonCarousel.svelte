@@ -79,7 +79,7 @@
                     'bg-primary-50 text-base-500'}"
                 on:click={() => (selectedValue = value)}
                 bind:this={buttonElements[index]}
-                data-app-insights-event-name={`button-carousel-${label}-clicked`}
+                data-app-insights-event-name="button-carousel-clicked"
             >
                 {label}</button
             >

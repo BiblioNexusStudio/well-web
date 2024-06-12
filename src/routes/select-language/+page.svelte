@@ -23,14 +23,14 @@
         >{$translate('page.selectLanguage.chooseYourPreferredLanguage.value')}</span
     >
     <div class="mb-4 flex flex-grow flex-col overflow-y-scroll">
-        {#each $supportedLanguages as { iso6393Code, displayName, englishDisplay }}
+        {#each $supportedLanguages as { iso6393Code, displayName }}
             {@const isCurrentLanguageSelected = $currentLanguageInfo?.iso6393Code === iso6393Code}
             <button
                 on:click={() => setLanguageAndLocalStorage(iso6393Code)}
                 class="text-md mb-2 flex justify-between rounded-xl border p-4 text-center {isCurrentLanguageSelected
                     ? 'border-[2px] border-primary bg-[#F0FAFF] text-primary'
                     : 'text-[#475467]'}"
-                data-app-insights-event-name={`${englishDisplay}-language-selected`}
+                data-app-insights-event-name="language-selected"
             >
                 {displayName}
                 <input

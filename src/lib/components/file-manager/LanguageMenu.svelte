@@ -53,7 +53,7 @@
                     class="flex justify-start text-primary"
                     on:click={() => onLanguageSelected(language.iso6393Code)}
                     aria-label={language.displayName}
-                    data-app-insights-event-name={`file-manager-${language.displayName}-selected`}
+                    data-app-insights-event-name="file-manager-language-selected"
                 >
                     {language.displayName} <span class="ms-2 uppercase"> ({language.iso6393Code})</span>
                 </button>

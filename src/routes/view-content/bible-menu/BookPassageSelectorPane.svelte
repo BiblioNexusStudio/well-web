@@ -99,9 +99,7 @@
                         <button
                             on:click={() => setBookAndChangeSteps(index)}
                             class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4"
-                            data-app-insights-event-name={`book-passage-selector-pane-${
-                                bookCodesToNames?.[book.bookCode] ?? ''
-                            }-selected`}
+                            data-app-insights-event-name="book-passage-selector-pane-book-selected"
                         >
                             <span class="text-sm">{bookCodesToNames?.[book.bookCode] ?? ''}</span>
                         </button>
@@ -115,9 +113,7 @@
                             <button
                                 on:click={() => setPassageAndClosePane(passage)}
                                 class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4 text-sm"
-                                data-app-insights-event-name={`book-passage-selector-pane-${
-                                    bookCodesToNames?.[selectedBookInfo.bookCode]
-                                }-${bibleSectionToReference(passage)}-selected`}
+                                data-app-insights-event-name="book-passage-selector-pane-passage-selected"
                                 >{bookCodesToNames?.[selectedBookInfo.bookCode]}
                                 {bibleSectionToReference(passage)}</button
                             >

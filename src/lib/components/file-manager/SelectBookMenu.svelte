@@ -78,7 +78,7 @@
                     class="flex justify-start text-primary"
                     aria-label={book.displayName}
                     on:click={() => handleBookClick(book.bookCode)}
-                    data-app-insights-event-name={`file-manager-${book.displayName}-selected`}
+                    data-app-insights-event-name="file-manager-book-selected"
                 >
                     {book.displayName} ({book.bookCode})
                 </button>

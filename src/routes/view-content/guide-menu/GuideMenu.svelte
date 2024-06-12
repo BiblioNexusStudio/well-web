@@ -70,7 +70,7 @@
                         class="my-2 flex w-11/12 rounded-xl p-4 {isCurrentGuide
                             ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                             : 'border'}"
-                        data-app-insights-event-name={`guide-menu-${guideResource.displayName}-selected`}
+                        data-app-insights-event-name="guide-menu-resource-selected"
                     >
                         <span class="text-sm">{guideResource.displayName}</span>
                         <span class="mx-1 text-sm">-</span>

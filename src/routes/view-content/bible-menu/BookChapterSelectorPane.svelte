@@ -308,7 +308,7 @@
                                     class="my-2 flex w-full flex-wrap rounded-xl border p-4 {isCurrentBook
                                         ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                                         : 'border'}"
-                                    data-app-insights-event-name={`book-chapter-selector-pane-${book?.code}-selected`}
+                                    data-app-insights-event-name="book-chapter-selector-pane-book-selected"
                                 >
                                     {bookName(book)}
                                 </button>
@@ -325,7 +325,7 @@
                                     <button
                                         on:click={() => handleChapterSelection(chapter)}
                                         class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
-                                        data-app-insights-event-name={`book-chapter-selector-pane-${currentBook.code}-chapter-${chapter.number}-selected`}
+                                        data-app-insights-event-name="book-chapter-selector-pane-book-chapter-selected"
                                     >
                                         {chapter.number}
                                     </button>
@@ -337,7 +337,7 @@
                             on:click={handleGoToVerses}
                             disabled={!currentChapterSelected}
                             class="btn btn-primary w-full"
-                            data-app-insights-event-name={`book-chapter-selector-pane-chapter-go-button-clicked`}
+                            data-app-insights-event-name="book-chapter-selector-pane-chapter-go-button-clicked"
                             >{$translate('page.BookChapterSelectorPane.go.value')}
                             <Icon data={arrowRight} class="ms-2" />
                         </button>
@@ -351,7 +351,7 @@
                                     on:click={() => handleChapterSelection(chapter)}
                                     bind:this={buttons[index]}
                                     class="btn me-4 block {isCurrentChapter && 'bg-blue-500 text-white'}"
-                                    data-app-insights-event-name={`book-chapter-selector-pane-${currentBook.code}-chapter-carousel-${chapter.number}-selected`}
+                                    data-app-insights-event-name="book-chapter-selector-pane-carousel-selected"
                                 >
                                     <span class="me-1">{bookName(currentBook)}</span><span>{chapter.number}</span>
                                 </button>
@@ -370,7 +370,7 @@
                                         <button
                                             on:click={() => handleVerseSelection(verse)}
                                             class="h-14 w-14 rounded-full {isSelected && 'bg-blue-500 text-white'}"
-                                            data-app-insights-event-name={`book-chapter-selector-pane-${currentBook.code}-chapter-${currentChapter.number}-verse-${verse.number}-selected`}
+                                            data-app-insights-event-name="book-chapter-selector-pane-verse-selected"
                                         >
                                             {verse.number}
                                         </button>
@@ -384,7 +384,7 @@
                             on:click={handleVerseGoButton}
                             disabled={verseGoButtonDisabled}
                             class="btn btn-primary w-full"
-                            data-app-insights-event-name={`book-chapter-selector-pane-verse-go-button-clicked`}
+                            data-app-insights-event-name="book-chapter-selector-pane-verse-go-button-clicked"
                             >{$translate('page.BookChapterSelectorPane.go.value')}
                             <Icon data={arrowRight} class="ms-2" /></button
                         >

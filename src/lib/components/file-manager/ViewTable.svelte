@@ -164,7 +164,7 @@
                             class="checkbox-primary checkbox mx-2"
                             bind:checked={audioChapter.selected}
                             disabled={audioChapter.allUrlsCached}
-                            data-app-insights-event-name={`file-manager-${$biblesModuleBook.displayName}-${audioChapter.number}-checkbox-selected`}
+                            data-app-insights-event-name="file-manager-audio-chapter-checkbox-selected"
                         />
                     </td>
 

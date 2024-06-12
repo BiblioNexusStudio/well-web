@@ -79,7 +79,6 @@
         let element = e.target as HTMLElement;
         for (let i = 0; i < 5; i++) {
             if (element?.dataset?.appInsightsEventName) {
-                console.log(element.dataset.appInsightsEventName.replace(/\s/g, ''));
                 log.trackEvent(element.dataset.appInsightsEventName.replace(/\s/g, ''));
                 break;
             }

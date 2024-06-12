@@ -100,7 +100,7 @@
                             type="checkbox"
                             bind:checked={resource.selected}
                             class="checkbox-primary checkbox"
-                            data-app-insights-event-name={`file-manager-resource-menu-${resource.name}-selected`}
+                            data-app-insights-event-name="file-manager-resource-menu-selected"
                         />
                         <span class="label-text ms-4 truncate">{resource.name}</span>
                     </label>
