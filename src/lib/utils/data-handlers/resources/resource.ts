@@ -1,7 +1,7 @@
 import { resourceContentForBookAndChapter } from '$lib/api-endpoints';
 import {
     apiUrl,
-    fetchContentBatchFromCacheAndNetwork,
+    fetchContentOrMetadataBatchFromCacheAndNetwork,
     fetchFromCacheOrApi,
     fetchContentFromCacheOrNetwork,
     isCachedAsContent,
@@ -34,9 +34,9 @@ export function resourceContentApiPath(
     const mediaType = 'mediaType' in resourceContent ? resourceContent.mediaType : resourceContent.mediaTypeName;
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
     if (mediaType === MediaType.Audio) {
-        return `/resources/${id}/content?audioType=${audioFileTypeForBrowser()}`;
+        return `/resources/${id}/content?audioType=${audioFileTypeForBrowser()}&version=${resourceContent.version}`;
     } else {
-        return `/resources/${id}/content`;
+        return `/resources/${id}/content?version=${resourceContent.version}`;
     }
 }
 
@@ -55,7 +55,7 @@ export function resourceMetadataApiFullUrl(
     resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
 ) {
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
-    return apiUrl(`/resources/${id}/metadata`);
+    return apiUrl(`/resources/${id}/metadata?version=${resourceContent.version}`);
 }
 
 export function resourceContentsForBookAndChapterFullUrl(
@@ -158,20 +158,24 @@ export async function fetchTextResourceContentAndMetadataBatched<T extends TextR
     resourceContents: T[]
 ) {
     const ids = resourceContents.map((rc) => rc.id);
+    const idsToVersions = new Map<number, number>();
+    resourceContents.forEach((rc) => idsToVersions.set(rc.id, rc.version));
 
     const [idsToMetadata, idsToContent] = await Promise.all([
-        fetchContentBatchFromCacheAndNetwork<ResourceContentMetadata>(
+        fetchContentOrMetadataBatchFromCacheAndNetwork<ResourceContentMetadata>(
             apiUrl('/resources/batch/metadata'),
             ids,
-            (id) => resourceMetadataApiFullUrl({ id, mediaType: MediaType.Text }),
+            (id) => resourceMetadataApiFullUrl({ id, version: idsToVersions.get(id)!, mediaType: MediaType.Text }),
             (response) => response,
+            true,
             100
         ),
-        fetchContentBatchFromCacheAndNetwork<ResourceContentTiptap[]>(
+        fetchContentOrMetadataBatchFromCacheAndNetwork<ResourceContentTiptap[]>(
             apiUrl('/resources/batch/content/text'),
             ids,
-            (id) => resourceContentApiFullUrl({ id, mediaType: MediaType.Text }),
+            (id) => resourceContentApiFullUrl({ id, version: idsToVersions.get(id)!, mediaType: MediaType.Text }),
             (response) => response.content,
+            false,
             10
         ),
     ]);
@@ -220,6 +224,7 @@ export async function filterToAvailableAssociatedResourceContent(
     return await asyncFilter(associatedResources, async (resource) => {
         const textResourceContentJustId: TextResourceContentJustId = {
             id: resource.contentId,
+            version: -1,
             mediaType: MediaType.Text,
         };
         return await isCachedAsContent(resourceContentApiFullUrl(textResourceContentJustId));

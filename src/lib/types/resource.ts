@@ -47,12 +47,6 @@ export interface AssociatedResource {
     externalId: string;
 }
 
-export interface UrlWithInfo {
-    url: string;
-    mediaType: MediaType;
-    size: number;
-}
-
 export interface ApiParentResource {
     enabled: boolean;
     shortName: string;
@@ -89,6 +83,7 @@ export interface ResourcesForVerse {
 
 export interface ResourceContentInfo {
     id: number;
+    version: number;
     mediaType: MediaType;
     resourceType: ParentResourceType;
     parentResourceId: ParentResourceId;
@@ -97,6 +92,7 @@ export interface ResourceContentInfo {
 
 export interface TextResourceContentJustId {
     mediaType: MediaType.Text;
+    version: number;
     id: number;
 }
 

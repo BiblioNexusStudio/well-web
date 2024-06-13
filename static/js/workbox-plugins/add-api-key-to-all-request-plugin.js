@@ -19,7 +19,6 @@ class AddApiKeyToAllRequestPlugin {
      * Intercepts fetch requests to add the API key.
      * @param {Object} args - The arguments object.
      * @param {Request} args.request - The original request.
-     * @returns {Promise<Request>} A new request with the API key appended.
      */
     requestWillFetch = async (args) => {
         const { request } = args;
