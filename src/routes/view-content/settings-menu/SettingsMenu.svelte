@@ -31,7 +31,7 @@
                 type="checkbox"
                 class="toggle me-4 {setting.value ? 'border-none bg-white [--tglbg:#0094c9] hover:bg-white' : ''}"
                 bind:checked={setting.value}
-                data-app-insights-event-name={`settings-menu-${getSettingsText(setting)}-toggled`}
+                data-app-insights-event-name="settings-menu-setting-toggled"
             />
             <h2>{getSettingsText(setting)}</h2>
         </div>

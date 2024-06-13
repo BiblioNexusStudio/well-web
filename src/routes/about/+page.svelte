@@ -27,7 +27,7 @@
             return $translate('page.about.license.releasedUnderSingle.value', {
                 values: {
                     name: license.url
-                        ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}" data-app-insights-event-name="about-page-${license.name}-link-clicked">${license.name}</a>`
+                        ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}" data-app-insights-event-name="about-page-link-clicked">${license.name}</a>`
                         : license.name,
                 },
             });
@@ -37,7 +37,7 @@
                     names: licenses
                         .map((license) =>
                             license.url
-                                ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}" data-app-insights-event-name="about-page-${license.name}-link-clicked">${license.name}</a>`
+                                ? `<a target="_blank" rel="noopener noreferrer" class="text-sky-500" href="${license.url}" data-app-insights-event-name="about-page-link-clicked">${license.name}</a>`
                                 : license.name
                         )
                         .join(', '),
@@ -63,7 +63,7 @@
         <button
             class="btn btn-link text-base-500"
             on:click={() => goto('/')}
-            data-app-insights-event-name={`about-page-back-button-clicked`}><Icon data={chevronLeft} /></button
+            data-app-insights-event-name="about-page-back-button-clicked"><Icon data={chevronLeft} /></button
         >
         <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">
             {$translate('page.index.about.value')}
@@ -89,7 +89,8 @@
                                         rel="noopener noreferrer"
                                         class="text-sky-500"
                                         href={licenseInfo.copyright.holder.url}
-                                        data-app-insights-event-name={`about-page-${licenseInfo.copyright.holder.name}-link-clicked`}
+                                        data-app-insights-event-name="about-page-copyright-link-clicked"
+                                        data-app-insights-dimensions={`copyrightHolder,${licenseInfo.copyright.holder.name}`}
                                         >{licenseInfo.copyright.holder.name}</a
                                     >
                                 {:else}

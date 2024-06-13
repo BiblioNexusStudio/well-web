@@ -70,7 +70,7 @@
                         type="checkbox"
                         bind:checked={$featureFlags[flag]}
                         class="checkbox"
-                        data-app-insights-event-name={`debug-modal-${flag}-selected`}
+                        data-app-insights-event-name="debug-modal-flag-selected"
                     />
                 </label>
             </div>

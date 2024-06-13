@@ -30,7 +30,8 @@
                 class="text-md mb-2 flex justify-between rounded-xl border p-4 text-center {isCurrentLanguageSelected
                     ? 'border-[2px] border-primary bg-[#F0FAFF] text-primary'
                     : 'text-[#475467]'}"
-                data-app-insights-event-name={`${englishDisplay}-language-selected`}
+                data-app-insights-event-name="language-selected"
+                data-app-insights-dimensions={`languageSelected,${englishDisplay}`}
             >
                 {displayName}
                 <input

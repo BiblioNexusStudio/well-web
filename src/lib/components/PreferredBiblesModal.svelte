@@ -49,7 +49,8 @@
                 checked={$preferredBibleIds.includes(bible.id)}
                 on:change={(event) => updatePreferredBibleIds(bible.id, event)}
                 class="checkbox-primary checkbox"
-                data-app-insights-event-name={`preferred-bible-${bible.abbreviation}-checkbox-clicked`}
+                data-app-insights-event-name="preferred-bible-checkbox-clicked"
+                data-app-insights-dimensions={`bibleSelected,${bible.abbreviation}`}
             />
             <span class="label-text ms-4">{bible.languageCode} - {bible.name} ({bible.abbreviation})</span>
         </label>
