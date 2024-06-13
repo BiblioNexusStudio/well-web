@@ -2,6 +2,7 @@
 // <reference path="../static/js/workbox-plugins/add-api-key-to-all-request-plugin.js" />
 // <reference path="../static/js/workbox-plugins/cache-first-and-stale-while-revalidate-after-expiration.js" />
 // <reference path="../static/js/workbox-plugins/cacheable-media-or-text-content-plugin.js" />
+// <reference path="../static/js/workbox-plugins/newtork-or-cache-used-plugin.js" />
 // <reference path="../static/js/caching-config.js" />
 
 // In an ideal world we would use a module-based approach for this file, enabling us to do
@@ -35,6 +36,8 @@ importScripts(
     'js/workbox-plugins/add-api-key-to-all-request-plugin.js',
     'js/workbox-plugins/cache-first-and-stale-while-revalidate-after-expiration.js',
     'js/workbox-plugins/cacheable-media-or-text-content-plugin.js',
+    'js/workbox-plugins/content-and-metadata-network-first-when-version-outdated.js',
+    'js/workbox-plugins/network-or-cache-used-plugin.js',
     'js/caching-config.js'
 );
 
@@ -121,7 +124,21 @@ registerRoute(
     'POST'
 );
 
-const contentCachingHandler = new CacheFirst({
+const contentAndMetadataCachingHandler = new ContentAndMetadataNetworkFirstWhenVersionOutdated({
+    cacheName: CACHING_CONFIG.contentCacheKey,
+    plugins: [new CacheableMediaOrTextContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],
+    CacheFirst,
+    NetworkFirst,
+    StaleWhileRevalidate,
+    NetworkOrCacheUsedPlugin,
+    metadataIdAndVersionDb,
+    contentIdAndVersionDb,
+    contentIdFromMetadataUrl: CACHING_CONFIG.contentIdFromMetadataUrl,
+    contentIdFromContentUrl: CACHING_CONFIG.contentIdFromContentUrl,
+    splitVersionOutOfUrl: CACHING_CONFIG.splitVersionOutOfUrl,
+});
+
+const otherContentCachingHandler = new CacheFirst({
     cacheName: CACHING_CONFIG.contentCacheKey,
     plugins: [new CacheableMediaOrTextContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],
 });
@@ -130,16 +147,20 @@ const apiCachingHandler = new CacheFirstAndStaleWhileRevalidateAfterExpiration({
     cacheName: CACHING_CONFIG.apiCacheKey,
     staleAfterDuration: 60 * 60 * API_CACHE_DURATION_IN_HOURS,
     plugins: [addApiKeyToAllRequestPlugin],
+    timestampsDb: CACHING_CONFIG.timestampAndEndpointCacheBustVersionDb,
     CacheFirst,
     NetworkFirst,
     StaleWhileRevalidate,
 });
 
-// CDN URLs should be cached as content
-registerRoute(CACHING_CONFIG.cdnUrlRegex, contentCachingHandler, 'GET');
+// content and metadata should be cached as content
+registerRoute(CACHING_CONFIG.apiContentAndMetadataUrlsRegex, contentAndMetadataCachingHandler, 'GET');
 
-// some API paths should be cached as content
-registerRoute(CACHING_CONFIG.apiUrlsToCacheAsContentRegex, contentCachingHandler, 'GET');
+// CDN URLs should be cached as content
+registerRoute(CACHING_CONFIG.cdnUrlRegex, otherContentCachingHandler, 'GET');
+
+// some other API paths should be cached as content
+registerRoute(CACHING_CONFIG.otherApiUrlsToCacheAsContentRegex, otherContentCachingHandler, 'GET');
 
 // some paths should not be cached
 registerRoute(

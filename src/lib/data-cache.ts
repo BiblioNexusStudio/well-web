@@ -280,11 +280,12 @@ export async function cacheManyContentUrlsWithProgress(
 
             try {
                 await retryRequest(async () => {
-                    await fetchContentBatchFromNetwork(
+                    await fetchContentOrMetadataBatchFromNetwork(
                         baseUrl,
                         batchIds,
                         (id) => idsToUrls[id]?.url,
                         (response) => (isMetadata ? response : response.content),
+                        isMetadata,
                         (id) => {
                             const urlWithMetadata = idsToUrls[id];
                             if (urlWithMetadata) {
@@ -330,11 +331,12 @@ export async function cacheManyContentUrlsWithProgress(
 
 // Take a batch of ids and apply them to the base URL as `ids` query params, fetch that batch then populate the cache
 // using the key and value functions. Returns a map of id to fetched value.
-async function fetchContentBatchFromNetwork(
+async function fetchContentOrMetadataBatchFromNetwork(
     batchUrl: string,
     ids: number[],
     calculateNonBatchUrl: (id: number) => string | undefined,
     calculateValueToCache: (response: { id: number; content: object }) => object,
+    isMetadata: boolean,
     completedCallback?: (id: number) => void
 ) {
     const cache = await getContentCache();
@@ -353,7 +355,13 @@ async function fetchContentBatchFromNetwork(
         const value = calculateValueToCache(response);
         output.set(response.id, value);
         if (key && value) {
-            await cache.put(key, new Response(JSON.stringify(value)));
+            const { updatedUrl, version } = window.__CACHING_CONFIG.splitVersionOutOfUrl(key);
+            await cache.put(updatedUrl, new Response(JSON.stringify(value)));
+            if (isMetadata) {
+                await window.__CACHING_CONFIG.metadataIdAndVersionDb.set(response.id, { version });
+            } else {
+                await window.__CACHING_CONFIG.contentIdAndVersionDb.set(response.id, { version });
+            }
         }
         completedCallback?.(response.id);
     });
@@ -365,11 +373,12 @@ async function fetchContentBatchFromNetwork(
 
 // Take a list of ids and detect which ones have been cached and which ones have not. For the uncached ones, use the
 // batch function to fetch them quickly. For the cached ones, use the normal fetch functions. Returns a map of id to fetched value.
-export async function fetchContentBatchFromCacheAndNetwork<T>(
+export async function fetchContentOrMetadataBatchFromCacheAndNetwork<T>(
     batchUrl: string,
     ids: number[],
     calculateNonBatchUrl: (id: number) => string | undefined,
     calculateValueToCache: (response: { id: number; content: object }) => object,
+    isMetadata: boolean,
     chunkSize: number
 ) {
     const cached = [] as { url: string; id: number }[];
@@ -393,11 +402,12 @@ export async function fetchContentBatchFromCacheAndNetwork<T>(
         }),
         asyncUnorderedForEach(chunked, async (chunk) => {
             try {
-                const chunkIdsToContent = await fetchContentBatchFromNetwork(
+                const chunkIdsToContent = await fetchContentOrMetadataBatchFromNetwork(
                     batchUrl,
                     chunk,
                     calculateNonBatchUrl,
-                    calculateValueToCache
+                    calculateValueToCache,
+                    isMetadata
                 );
                 for (const [id, value] of chunkIdsToContent.entries()) {
                     output.set(id, (value as T | undefined | null) ?? null);
@@ -431,7 +441,11 @@ const contentCachedUrls: Map<string, boolean> = new Map();
 const apiCachedUrls: Map<string, boolean> = new Map();
 
 // Checks if a fully downloaded cache entry exists for the URL.
+// Ignores `version` search param since that is used by the Service Worker middleware and isn't included in the cache key.
 export async function isCachedAsContent(url: Url) {
+    const urlObject = new URL(url);
+    urlObject.searchParams.delete('version');
+    url = urlObject.toString();
     if (contentCachedUrls.has(url)) {
         return contentCachedUrls.get(url)!;
     }

@@ -247,7 +247,18 @@
         }
 
         window.onResourceReferenceClick = (contentId: number) => {
-            fullscreenTextResourceStack.push({ id: contentId, mediaType: MediaType.Text });
+            fullscreenTextResourceStack.push({
+                id: contentId,
+                // Because AssociatedResources are stored on metadata, we can't rely on version numbers since it could go stale.
+                // Example: Resource A links to Resource B, so Resource A's metadata will include Resource B info. If Resource B
+                // updates, its version number will change. If we access it from a passage then we'll get the new version number and
+                // know to pull Resource B again. However if we access it from a link on Resource A, we have no way of knowing that its
+                // version number changed. To resolve this, we set the version to -1 which will tell the Service Worker middleware
+                // to do a StaleWhileRevalidate. This means the content loads fast from the cache but updates in the background each
+                // time it's pulled.
+                version: -1,
+                mediaType: MediaType.Text,
+            });
             fullscreenTextResourceStack = fullscreenTextResourceStack;
         };
 
