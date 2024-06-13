@@ -25,6 +25,7 @@
     on:click={handleClick}
     class="group active border-none stroke-black"
     data-app-insights-event-name="footer-nav-tab-clicked"
+    data-app-insights-dimensions={`label,${label}`}
 >
     <div
         class="rounded-2xl px-3 py-1 focus:bg-[#F0FAFF] group-hover:bg-[#F0FAFF] group-hover:stroke-primary {isSelected

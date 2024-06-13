@@ -79,7 +79,10 @@
         let element = e.target as HTMLElement;
         for (let i = 0; i < 5; i++) {
             if (element?.dataset?.appInsightsEventName) {
-                log.trackEvent(element.dataset.appInsightsEventName.replace(/\s/g, ''));
+                log.trackEvent(
+                    element.dataset.appInsightsEventName.replace(/\s/g, ''),
+                    element?.dataset?.appInsightsDimensions?.replace(/\s/g, '')
+                );
                 break;
             }
             element = element?.parentNode as HTMLElement;

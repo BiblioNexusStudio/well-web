@@ -52,13 +52,23 @@ export const log = {
             properties: additionalProperties,
         });
     },
-    trackEvent: (eventName: string) => {
-        browser &&
+    trackEvent: (eventName: string, dimensions: string | undefined) => {
+        if (dimensions && browser) {
             appInsights.trackEvent({
                 name: eventName,
                 properties: {
                     ...additionalProperties,
+                    dimensions,
                 },
             });
+        } else {
+            browser &&
+                appInsights.trackEvent({
+                    name: eventName,
+                    properties: {
+                        ...additionalProperties,
+                    },
+                });
+        }
     },
 };

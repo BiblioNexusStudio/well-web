@@ -71,6 +71,7 @@
                             ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                             : 'border'}"
                         data-app-insights-event-name="guide-menu-resource-selected"
+                        data-app-insights-dimensions={`guideResource,${guideResource.displayName}`}
                     >
                         <span class="text-sm">{guideResource.displayName}</span>
                         <span class="mx-1 text-sm">-</span>

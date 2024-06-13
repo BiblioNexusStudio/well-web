@@ -54,6 +54,7 @@
                     on:click={() => onLanguageSelected(language.iso6393Code)}
                     aria-label={language.displayName}
                     data-app-insights-event-name="file-manager-language-selected"
+                    data-app-insights-dimensions={`languageSelected,${language.displayName}`}
                 >
                     {language.displayName} <span class="ms-2 uppercase"> ({language.iso6393Code})</span>
                 </button>

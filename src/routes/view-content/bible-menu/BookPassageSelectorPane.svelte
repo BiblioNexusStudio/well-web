@@ -100,6 +100,7 @@
                             on:click={() => setBookAndChangeSteps(index)}
                             class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4"
                             data-app-insights-event-name="book-passage-selector-pane-book-selected"
+                            data-app-insights-dimensions={`bookCode,${book.bookCode}`}
                         >
                             <span class="text-sm">{bookCodesToNames?.[book.bookCode] ?? ''}</span>
                         </button>
@@ -114,6 +115,7 @@
                                 on:click={() => setPassageAndClosePane(passage)}
                                 class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4 text-sm"
                                 data-app-insights-event-name="book-passage-selector-pane-passage-selected"
+                                data-app-insights-dimensions={`passage,${bibleSectionToReference(passage)}`}
                                 >{bookCodesToNames?.[selectedBookInfo.bookCode]}
                                 {bibleSectionToReference(passage)}</button
                             >

@@ -23,7 +23,7 @@
         >{$translate('page.selectLanguage.chooseYourPreferredLanguage.value')}</span
     >
     <div class="mb-4 flex flex-grow flex-col overflow-y-scroll">
-        {#each $supportedLanguages as { iso6393Code, displayName }}
+        {#each $supportedLanguages as { iso6393Code, displayName, englishDisplay }}
             {@const isCurrentLanguageSelected = $currentLanguageInfo?.iso6393Code === iso6393Code}
             <button
                 on:click={() => setLanguageAndLocalStorage(iso6393Code)}
@@ -31,6 +31,7 @@
                     ? 'border-[2px] border-primary bg-[#F0FAFF] text-primary'
                     : 'text-[#475467]'}"
                 data-app-insights-event-name="language-selected"
+                data-app-insights-dimensions={`languageSelected,${englishDisplay}`}
             >
                 {displayName}
                 <input

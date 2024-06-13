@@ -53,6 +53,7 @@
                         ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                         : 'border'}"
                     data-app-insights-event-name="bible-menu-bible-selected"
+                    data-app-insights-dimensions={`bibleName,${bible.name}`}
                 >
                     <span class="text-sm">{bible.name} ({bible.abbreviation})</span>
                     <span class="mx-1 text-sm">-</span>

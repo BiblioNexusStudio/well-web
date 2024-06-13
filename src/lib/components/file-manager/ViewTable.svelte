@@ -165,6 +165,7 @@
                             bind:checked={audioChapter.selected}
                             disabled={audioChapter.allUrlsCached}
                             data-app-insights-event-name="file-manager-audio-chapter-checkbox-selected"
+                            data-app-insights-dimensions={`biblesModuleBook,${$biblesModuleBook.displayName},audioChapter,${audioChapter.number}`}
                         />
                     </td>
 

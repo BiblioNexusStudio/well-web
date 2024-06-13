@@ -80,6 +80,7 @@
                 on:click={() => (selectedValue = value)}
                 bind:this={buttonElements[index]}
                 data-app-insights-event-name="button-carousel-clicked"
+                data-app-insights-dimensions={`label,${label}`}
             >
                 {label}</button
             >
