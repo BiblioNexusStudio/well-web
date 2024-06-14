@@ -49,7 +49,7 @@ export function searchResourcesEndpoint(
         `/resources/search?languageId=${languageId}&query=${query}${
             resourceTypesParams ? '&' + resourceTypesParams : ''
         }`,
-        1,
+        2,
     ];
 }
 

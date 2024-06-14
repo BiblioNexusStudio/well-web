@@ -38,6 +38,18 @@ const additionalProperties = {
     environment: config.PUBLIC_ENV,
 };
 
+function getBrowserAndScreenSize() {
+    if (browser) {
+        return {
+            browserWidth: window.innerWidth,
+            browserHeight: window.innerHeight,
+            screenWidth: window.screen.width,
+            screenHeight: window.screen.height,
+        };
+    }
+    return {};
+}
+
 export const log = {
     exception: (error: Error | undefined) => {
         console.error(error);
@@ -58,6 +70,7 @@ export const log = {
                 {
                     ...additionalProperties,
                     ...(url ? { url, cacheBustVersion } : null),
+                    ...getBrowserAndScreenSize(),
                     commitSha: config.PUBLIC_COMMIT_SHA,
                 }
             );
@@ -66,7 +79,7 @@ export const log = {
     pageView: (routeId: string) => {
         appInsights.trackPageView({
             name: routeId,
-            properties: additionalProperties,
+            properties: { ...additionalProperties, ...getBrowserAndScreenSize(), commitSha: config.PUBLIC_COMMIT_SHA },
         });
     },
     trackEvent: (eventName: string, dimensions: string | undefined) => {
@@ -76,6 +89,8 @@ export const log = {
                 properties: {
                     ...additionalProperties,
                     ...(dimensions && stringDimensionsToJsonObject(dimensions)),
+                    ...getBrowserAndScreenSize(),
+                    commitSha: config.PUBLIC_COMMIT_SHA,
                 },
             });
     },
