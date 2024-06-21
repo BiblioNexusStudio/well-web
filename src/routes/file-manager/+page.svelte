@@ -6,7 +6,10 @@
     import FmModal from '$lib/components/file-manager/FmModal.svelte';
     import DeleteModal from '$lib/components/file-manager/DeleteModal.svelte';
     import {
-        fileManagerLoading,
+        isLoadingBibles,
+        isLoadingParentResources,
+        isLoadingLanguageFirstBible,
+        isLoadingResources,
         selectedBookCode,
         biblesModuleData,
         biblesModuleBook,
@@ -28,7 +31,7 @@
     async function fetchAvailableResources(currentLanguageId: number | undefined) {
         fetchAvailableResourcesPromise = (async () => {
             if (currentLanguageId) {
-                $fileManagerLoading = true;
+                $isLoadingBibles = true;
 
                 $biblesModuleData = await fetchFromCacheOrApi(...biblesForLanguageEndpoint(currentLanguageId));
 
@@ -46,7 +49,7 @@
                     limitChaptersIfNecessary($selectedBookCode, biblesModuleBook);
                 }
 
-                $fileManagerLoading = false;
+                $isLoadingBibles = false;
             }
         })();
     }
@@ -66,17 +69,31 @@
     {#await fetchAvailableResourcesPromise}
         <FullPageSpinner />
     {:then}
-        <div class="mx-4 mb-4 mt-6 flex items-center justify-between">
-            <SelectBookMenu />
-        </div>
-        {#if $selectedBookCode}
-            <div class="mx-4 my-4 flex items-center justify-between">
-                <ResourceMenu />
-                <LanguageMenu />
+        {#if $isLoadingBibles}
+            <FullPageSpinner />
+        {:else}
+            <div class="mx-4 mb-4 mt-6 flex items-center justify-between">
+                <SelectBookMenu />
             </div>
-            <div class="overflow-x-auto pb-32">
-                <ViewTable />
-            </div>
+            {#if $selectedBookCode}
+                {#if $isLoadingParentResources || $isLoadingLanguageFirstBible}
+                    <FullPageSpinner height="h-[calc(100vh-20rem)]" />
+                {/if}
+                <div
+                    class="mx-4 my-4 flex items-center justify-between {($isLoadingParentResources ||
+                        $isLoadingLanguageFirstBible) &&
+                        'hidden'}"
+                >
+                    <ResourceMenu />
+                    <LanguageMenu />
+                </div>
+                {#if $isLoadingResources}
+                    <FullPageSpinner height="h-[calc(100vh-20rem)]" />
+                {/if}
+                <div class="overflow-x-auto pb-32 {$isLoadingResources && 'hidden'}">
+                    <ViewTable />
+                </div>
+            {/if}
         {/if}
     {:catch}
         <ErrorMessage />

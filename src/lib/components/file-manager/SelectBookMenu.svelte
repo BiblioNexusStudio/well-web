@@ -11,6 +11,7 @@
         biblesModuleData,
         biblesModuleBook,
         limitChaptersIfNecessary,
+        isLoadingLanguageFirstBible,
         allowedBooks,
     } from '$lib/stores/file-manager.store';
     import { bookOfBibleEndpoint } from '$lib/api-endpoints';
@@ -27,6 +28,7 @@
     };
 
     const handleBookClick = async (bookCode: string | null) => {
+        $isLoadingLanguageFirstBible = true;
         toggleMenu();
         $biblesModuleBook = await addFrontEndDataToBiblesModuleBook(
             firstBible.id,
@@ -35,6 +37,7 @@
         $biblesModuleBook.bibleId = firstBible.id;
         $selectedBookCode = bookCode;
         limitChaptersIfNecessary(bookCode, biblesModuleBook);
+        $isLoadingLanguageFirstBible = false;
     };
 
     const setBookName = (bookCode: string | null) => {
