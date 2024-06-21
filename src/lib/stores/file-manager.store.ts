@@ -11,11 +11,14 @@ import type {
 } from '$lib/types/file-manager';
 import { calculateUrlsWithMetadataToChange } from '$lib/utils/file-manager';
 
-export const fileManagerLoading = writable<boolean>(false);
+export const isLoadingResources = writable<boolean>(false);
+export const isLoadingParentResources = writable<boolean>(false);
+export const isLoadingLanguageFirstBible = writable<boolean>(false);
+export const isLoadingBibles = writable<boolean>(false);
 export const footerInputs = writable<FooterInputs>({
     text: true,
-    audio: false,
-    media: false,
+    audio: true,
+    media: true,
 });
 export const resourcesMenu = writable<ResourcesMenuItem[]>([]);
 export const biblesModuleData = writable<BiblesModule[]>([]);

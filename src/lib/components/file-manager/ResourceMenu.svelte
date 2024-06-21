@@ -7,6 +7,8 @@
         bibleDataForResourcesMenu,
         resourcesApiModule,
         selectedBookCode,
+        isLoadingResources,
+        isLoadingParentResources,
     } from '$lib/stores/file-manager.store';
     import { onMount } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
@@ -29,6 +31,7 @@
 
     async function handleResourceSelected(resourcesMenu: ResourcesMenuItem[], selectedBookCode: string | null) {
         if (resourcesMenu.some((resources) => resources.selected && !resources.isBible) && selectedBookCode) {
+            $isLoadingResources = true;
             const queryParams = resourcesMenu
                 .map((resource) => {
                     if (resource.selected && !resource.isBible) {
@@ -44,22 +47,25 @@
                     ...resourcesByLanguageAndBookEndpoint($currentLanguageInfo?.id, selectedBookCode, queryParams)
                 )
             );
+            $isLoadingResources = false;
         }
     }
 
     $: initializeResourceMenu($currentLanguageInfo);
 
     async function initializeResourceMenu(_currentLanguageInfo: Language | undefined) {
+        $isLoadingParentResources = true;
         $resourcesMenu = [
             ...$bibleDataForResourcesMenu,
             ...(await parentResourcesForCurrentLanguage()).map((pr) => ({
                 name: pr.displayName,
-                selected: false,
+                selected: true,
                 isBible: false,
                 display: true,
                 parentResource: pr,
             })),
         ];
+        $isLoadingParentResources = false;
     }
 
     onMount(() => {
