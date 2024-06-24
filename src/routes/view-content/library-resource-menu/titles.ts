@@ -1,3 +1,5 @@
+import type { LibraryResourceGrouping } from '../library-resource-loader';
+
 export function parseSubtitle(text: string | undefined) {
     if (!text) return '';
     const start = text.indexOf('(');
@@ -16,4 +18,17 @@ export function parseTitle(text: string | undefined) {
         // rtl
         return text.substring(text.indexOf(')') + 1, text.length - 1);
     }
+}
+
+export function titleWithSubtitleFromResourceGrouping(resourceGrouping: LibraryResourceGrouping | null) {
+    return `${parseTitle(resourceGrouping?.parentResource.displayName)} (${parseSubtitle(
+        resourceGrouping?.parentResource.displayName
+    )})`;
+}
+
+export function titleObjectFromResourceGrouping(resourceGrouping: LibraryResourceGrouping | null) {
+    return {
+        title: parseTitle(resourceGrouping?.parentResource.displayName),
+        subtitle: parseSubtitle(resourceGrouping?.parentResource.displayName),
+    };
 }

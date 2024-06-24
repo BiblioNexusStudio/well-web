@@ -11,6 +11,7 @@
     import ResourceFullscreenHeader from './ResourceFullscreenHeader.svelte';
     import ResourceSectionHeader from './ResourceSectionHeader.svelte';
     import { _ as translate } from 'svelte-i18n';
+    import { titleObjectFromResourceGrouping, titleWithSubtitleFromResourceGrouping } from './titles';
 
     const imagesToShowBeforeSeeAll = 3;
 
@@ -48,13 +49,16 @@
 {#if resourceGrouping.resources.length > 0}
     {#if isFullscreen}
         <ResourceFullscreenHeader
-            {resourceGrouping}
+            title={titleWithSubtitleFromResourceGrouping(resourceGrouping)}
             resourcesCount={showingResources.length}
             {dismissFullscreen}
             bind:searchQuery
         />
     {:else}
-        <ResourceSectionHeader isVisible={showingResources.length > 0} {resourceGrouping}>
+        <ResourceSectionHeader
+            isVisible={showingResources.length > 0}
+            {...titleObjectFromResourceGrouping(resourceGrouping)}
+        >
             {#if !filterResultsClientSide && resourceGrouping.resources.length > imagesToShowBeforeSeeAll}
                 <button
                     class="text-sm font-semibold text-base-500"

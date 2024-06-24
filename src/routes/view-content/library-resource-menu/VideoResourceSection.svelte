@@ -14,6 +14,7 @@
     import { _ as translate } from 'svelte-i18n';
     import ResourceFullscreenHeader from './ResourceFullscreenHeader.svelte';
     import NoResourcesFound from './NoResourcesFound.svelte';
+    import { titleObjectFromResourceGrouping, titleWithSubtitleFromResourceGrouping } from './titles';
 
     const videosToShowBeforeSeeAll = 3;
 
@@ -51,13 +52,16 @@
 {#if resourceGrouping.resources.length > 0}
     {#if isFullscreen}
         <ResourceFullscreenHeader
-            {resourceGrouping}
+            title={titleWithSubtitleFromResourceGrouping(resourceGrouping)}
             resourcesCount={showingResources.length}
             {dismissFullscreen}
             bind:searchQuery
         />
     {:else}
-        <ResourceSectionHeader isVisible={showingResources.length > 0} {resourceGrouping}>
+        <ResourceSectionHeader
+            isVisible={showingResources.length > 0}
+            {...titleObjectFromResourceGrouping(resourceGrouping)}
+        >
             {#if !filterResultsClientSide && resourceGrouping.resources.length > videosToShowBeforeSeeAll}
                 <button
                     class="text-sm font-semibold text-base-500"

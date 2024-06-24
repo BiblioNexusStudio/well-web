@@ -241,17 +241,8 @@ export async function fetchDisplayNameForResourceContent(
     );
 }
 
-export function resourceDisplayNameSorter(a: { displayName: string | null }, b: { displayName: string | null }) {
-    const passageRegex = /.*(\d+)(?:\.|:)(\d+)-?(\d+)?.*/;
-    const aMatch = a.displayName?.match(passageRegex);
-    const bMatch = b.displayName?.match(passageRegex);
-    if (aMatch && bMatch) {
-        const aId = parseInt(aMatch[1]!) * 1000000 + parseInt(aMatch[2]!) * 1000 + parseInt(aMatch[3] ?? '0');
-        const bId = parseInt(bMatch[1]!) * 1000000 + parseInt(bMatch[2]!) * 1000 + parseInt(bMatch[3] ?? '0');
-        return aId - bId;
-    } else if (a.displayName && b.displayName) {
-        return a.displayName.localeCompare(b.displayName);
-    } else {
-        return 0;
-    }
+export function sortByDisplayName<T extends { displayName: string | undefined }>(resources: T[]): T[] {
+    return resources.sort((a, b) =>
+        (a.displayName ?? '').localeCompare(b.displayName ?? '', undefined, { numeric: true })
+    );
 }

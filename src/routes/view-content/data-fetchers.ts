@@ -8,7 +8,7 @@ import { asyncFilter, asyncMap } from '$lib/utils/async-array';
 import { isOnline } from '$lib/stores/is-online.store';
 import { fetchAllBibles, bookDataForBibleTab, bibleBookUrl } from '$lib/utils/data-handlers/bible';
 import { filterBoolean, range } from '$lib/utils/array';
-import { type ResourceContentInfo, ParentResourceType } from '$lib/types/resource';
+import { type ResourceContentInfo, ParentResourceType, GuidesAvailableOnResourcesTab } from '$lib/types/resource';
 import {
     resourceContentApiFullUrl,
     type ResourceContentInfoWithFrontendData,
@@ -17,6 +17,7 @@ import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
 import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/resource';
 import type { BibleSection } from '$lib/types/bible';
+import { currentGuide } from '$lib/stores/parent-resource.store';
 
 export enum PassagePageTabEnum {
     Bible = 'Bible',
@@ -105,7 +106,9 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
 
 async function filterToAdditionalResourceInfo(resourceContents: ResourceContentInfo[]) {
     const additionalResourceContent = resourceContents.filter(
-        ({ resourceType }) => resourceType !== ParentResourceType.Guide
+        ({ resourceType, parentResourceId }) =>
+            resourceType !== ParentResourceType.Guide ||
+            (GuidesAvailableOnResourcesTab.includes(parentResourceId) && get(currentGuide)?.id !== parentResourceId)
     );
 
     return await asyncFilter(

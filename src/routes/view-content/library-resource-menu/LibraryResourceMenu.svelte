@@ -19,6 +19,7 @@
     import {
         buildLibraryResourceGroupingsWithMetadata,
         type LibraryResourceGrouping,
+        type LibraryResourceSubgrouping,
     } from '../library-resource-loader';
     import { PassagePageTabEnum } from '../data-fetchers';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
@@ -28,6 +29,7 @@
     import { debounce } from '$lib/utils/debounce';
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum } from '$lib/types/settings';
+    import FullscreenResourceSubgroup from './FullscreenResourceSubgroup.svelte';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -47,7 +49,8 @@
     $: hasQuery = searchQuery != '';
 
     let currentFullscreenMediaResourceIndex: number | null = null;
-    let currentFullscreenResourceGrouping: LibraryResourceGrouping | null;
+    let currentFullscreenResourceGrouping: LibraryResourceGrouping | null = null;
+    let currentFullscreenResourceSubgrouping: LibraryResourceSubgrouping | null = null;
 
     let isFullLibrary = tab === PassagePageTabEnum.LibraryMenu;
     let visibleSwish = isFullLibrary;
@@ -108,6 +111,10 @@
         }
     }
 
+    function subgroupSelected(subgroup: LibraryResourceSubgrouping | null) {
+        currentFullscreenResourceSubgrouping = subgroup;
+    }
+
     function showResourceGroupingFullscreen(resourceGrouping: LibraryResourceGrouping | null) {
         currentFullscreenResourceGrouping = resourceGrouping;
     }
@@ -133,7 +140,17 @@
 />
 
 <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
-<FullscreenResourceSection {currentFullscreenResourceGrouping} {resourceSelected} {showResourceGroupingFullscreen} />
+<FullscreenResourceSection
+    {currentFullscreenResourceGrouping}
+    {subgroupSelected}
+    {resourceSelected}
+    {showResourceGroupingFullscreen}
+/>
+<FullscreenResourceSubgroup
+    {currentFullscreenResourceSubgrouping}
+    {resourceSelected}
+    dismissFullscreen={() => subgroupSelected(null)}
+/>
 
 <div
     class="absolute bottom-20 left-0 right-0 {visibleSwish
@@ -184,6 +201,7 @@
                     {searchQuery}
                     skipClientSideFiltering={isFullLibrary}
                     {resourceSelected}
+                    {subgroupSelected}
                     {showResourceGroupingFullscreen}
                 />
             {/each}
