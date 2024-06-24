@@ -443,6 +443,7 @@ const apiCachedUrls: Map<string, boolean> = new Map();
 // Checks if a fully downloaded cache entry exists for the URL.
 // Ignores `version` search param since that is used by the Service Worker middleware and isn't included in the cache key.
 export async function isCachedAsContent(url: Url) {
+    if (!url) return false;
     const urlObject = new URL(url);
     urlObject.searchParams.delete('version');
     url = urlObject.toString();
