@@ -2,10 +2,11 @@
     import { trapFocus } from '$lib/utils/trap-focus';
     import type { ResourceContentInfoWithMetadata } from '$lib/types/resource';
     import AnyResourceSection from './AnyResourceSection.svelte';
-    import type { LibraryResourceGrouping } from '../library-resource-loader';
+    import type { LibraryResourceGrouping, LibraryResourceSubgrouping } from '../library-resource-loader';
 
     export let currentFullscreenResourceGrouping: LibraryResourceGrouping | null;
     export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
+    export let subgroupSelected: (subgroup: LibraryResourceSubgrouping) => void;
     export let showResourceGroupingFullscreen: (resourceGrouping: LibraryResourceGrouping | null) => void;
 
     let searchQuery = '';
@@ -18,6 +19,7 @@
             isFullscreen={true}
             skipClientSideFiltering={false}
             {searchQuery}
+            {subgroupSelected}
             {resourceSelected}
             {showResourceGroupingFullscreen}
         />

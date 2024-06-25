@@ -22,6 +22,12 @@ export const SrvResources = [ParentResourceId.FIA, ParentResourceId.VideoBibleDi
 
 export const PredeterminedPassageGuides = [ParentResourceId.FIA];
 
+export const SubgroupedTextResourceRegexes: Partial<Record<ParentResourceId, RegExp>> = {
+    [ParentResourceId.UwTranslationNotes]: /(.*)\s*\(.*\)/,
+};
+
+export const GuidesAvailableOnResourcesTab = [ParentResourceId.UwTranslationNotes];
+
 // because guides come with their own custom UIs we need to be able to filter out guides that aren't supported by the
 // client yet
 export const EnabledGuides = [ParentResourceId.FIA, ParentResourceId.UwTranslationNotes];

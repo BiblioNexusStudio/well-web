@@ -8,9 +8,10 @@ import {
     type ResourceContentInfoWithMetadata,
     type ResourceContentMetadata,
 } from '$lib/types/resource';
-import { groupBy, sortByKey } from '$lib/utils/array';
+import { groupBy } from '$lib/utils/array';
 import { asyncMap } from '$lib/utils/async-array';
 import {
+    sortByDisplayName,
     resourceContentApiFullUrl,
     resourceMetadataApiFullUrl,
     resourceThumbnailApiFullUrl,
@@ -23,9 +24,15 @@ export interface LibraryResourceGrouping {
     resources: ResourceContentInfoWithMetadata[];
 }
 
+export interface LibraryResourceSubgrouping {
+    displayName: string;
+    resources: ResourceContentInfoWithMetadata[];
+}
+
 const RESOURCE_TYPE_ORDER: ParentResourceType[] = [
     ParentResourceType.Images,
     ParentResourceType.Videos,
+    ParentResourceType.Guide,
     ParentResourceType.StudyNotes,
     ParentResourceType.Dictionary,
 ];
@@ -74,8 +81,7 @@ export async function buildLibraryResourceGroupingsWithMetadata(allResources: Re
         });
         return {
             parentResource: parentResourceIdMap[parentResourceId]!,
-            resources: sortByKey(resourcesWithMetadata, 'displayName'),
-            loadedResourceContent: {},
+            resources: sortByDisplayName(resourcesWithMetadata),
         };
     });
     groupings.sort((a, b) => {
