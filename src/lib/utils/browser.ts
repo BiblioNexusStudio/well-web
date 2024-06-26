@@ -15,4 +15,4 @@ export function audioFileTypeForBrowser() {
     return isSafariOnMacOrIOS() ? AudioType.mp3 : AudioType.webm;
 }
 
-export const browserSupported = browser && 'serviceWorker' in navigator;
+export const browserSupported = browser && 'serviceWorker' in navigator && 'caches' in window;
