@@ -18,6 +18,7 @@
     import { parentResources } from '$lib/stores/parent-resource.store';
     import { parentResourcesEndpoint } from '$lib/api-endpoints';
     import { get } from 'svelte/store';
+    import { browserSupported } from '$lib/utils/browser';
 
     $: {
         document.dir = $currentLanguageDirection;
@@ -33,9 +34,11 @@
     }
 
     async function setParentResources(language: Language | undefined) {
-        const currentLanguageParentResources = await fetchFromCacheOrApi(...parentResourcesEndpoint(language?.id));
-        if (get(currentLanguageInfo)?.id === language?.id) {
-            parentResources.set(currentLanguageParentResources);
+        if (browserSupported) {
+            const currentLanguageParentResources = await fetchFromCacheOrApi(...parentResourcesEndpoint(language?.id));
+            if (get(currentLanguageInfo)?.id === language?.id) {
+                parentResources.set(currentLanguageParentResources);
+            }
         }
     }
 
