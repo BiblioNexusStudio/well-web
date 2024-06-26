@@ -37,16 +37,16 @@ export const load: LayoutLoad = async () => {
                 // a consistent set of resources.
                 window.location.reload();
             }
-        }
 
-        const [fetchedLanguages, fetchedParentResources, fetchedBibles] = await Promise.all([
-            fetchFromCacheOrApi(...languagesEndpoint()),
-            fetchFromCacheOrApi(...parentResourcesEndpoint()),
-            fetchFromCacheOrApi(...biblesEndpoint()),
-        ]);
-        languages.set(fetchedLanguages);
-        parentResources.set(fetchedParentResources);
-        bibles.set(fetchedBibles);
+            const [fetchedLanguages, fetchedParentResources, fetchedBibles] = await Promise.all([
+                fetchFromCacheOrApi(...languagesEndpoint()),
+                fetchFromCacheOrApi(...parentResourcesEndpoint()),
+                fetchFromCacheOrApi(...biblesEndpoint()),
+            ]);
+            languages.set(fetchedLanguages);
+            parentResources.set(fetchedParentResources);
+            bibles.set(fetchedBibles);
+        }
 
         await init(get(currentLanguageInfo)?.iso6393Code);
         await waitLocale();
