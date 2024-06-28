@@ -378,6 +378,52 @@
             "close": {
                 "value": "Funga"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Maoni"
+            },
+            "submit": {
+                "value": "Wasilisha"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Jina"
+                },
+                "email": {
+                    "value": "Barua pepe"
+                },
+                "phone": {
+                    "value": "Simu"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "Unaitumia mara ngapi Bible Well?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "Unapenda nini zaidi kuhusu Bible Well?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "Nini kinaweza kuboreshwa?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "Unaitumiaje Bible Well?"
+                },
+                "bibleTranslation": {
+                    "value": "Tafsiri ya Biblia"
+                },
+                "sermonPreparation": {
+                    "value": "Maandalizi ya mahubiri"
+                },
+                "bibleStudy": {
+                    "value": "Masomo ya Biblia"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Masomo ya Biblia / Shule ya Biblia / Seminari"
+                },
+                "Evangelism": {
+                    "value": "Uinjilisti"
+                }
+            }
         }
     },
     "navTop": {

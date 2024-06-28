@@ -331,6 +331,52 @@
             "close": {
                 "value": "Klosim"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Givim Tok"
+            },
+            "submit": {
+                "value": "Submit"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Nem"
+                },
+                "email": {
+                    "value": "Email"
+                },
+                "phone": {
+                    "value": "Fon"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "How often do you use the Bible Well?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "What do you like most about the Bible Well?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "What can be improved?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "How are you using the Bible Well?"
+                },
+                "bibleTranslation": {
+                    "value": "Bible Translation"
+                },
+                "sermonPreparation": {
+                    "value": "Sermon Preparation"
+                },
+                "bibleStudy": {
+                    "value": "Bible Study"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Studies (Bible School, Seminary)"
+                },
+                "Evangelism": {
+                    "value": "Evangelism"
+                }
+            }
         }
     },
     "navTop": {

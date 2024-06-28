@@ -422,6 +422,66 @@
                 "value": "Close",
                 "_context": "this is the button to close the quick share view"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Feedback",
+                "_context": "Title for the feedback section"
+            },
+            "submit": {
+                "value": "Submit",
+                "_context": "Label for the submit button"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Name",
+                    "_context": "Label for the name input field"
+                },
+                "email": {
+                    "value": "Email",
+                    "_context": "Label for the email input field"
+                },
+                "phone": {
+                    "value": "Phone",
+                    "_context": "Label for the phone input field"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "How are you using the Bible Well?",
+                    "_context": "Label for the how often input field"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "What do you like most about the Bible Well?",
+                    "_context": "Label for the what do you like most input field"
+                },
+                "WhatCanBeImproved": {
+                    "value": "What can be improved?",
+                    "_context": "Label for the what can be improved input field"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "How are you using the Bible Well?",
+                    "_context": "Label for the how are you using the Bible Well input field"
+                },
+                "bibleTranslation": {
+                    "value": "Bible Translation",
+                    "_context": "Label for the Bible Translation input field"
+                },
+                "sermonPreparation": {
+                    "value": "Sermon Preparation",
+                    "_context": "Label for the Sermon Preparation input field"
+                },
+                "bibleStudy": {
+                    "value": "Bible Study",
+                    "_context": "Label for the Bible Study input field"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Studies (Bible School, Seminary)",
+                    "_context": "Label for the Studies (Bible School, Seminary) input field"
+                },
+                "Evangelism": {
+                    "value": "Evangelism",
+                    "_context": "Label for the Evangelism input field"
+                }
+            }
         }
     },
     "navTop": {

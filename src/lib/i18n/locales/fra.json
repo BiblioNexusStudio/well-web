@@ -331,6 +331,52 @@
             "close": {
                 "value": "Fermer"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Retour d'information"
+            },
+            "submit": {
+                "value": "Soumettre"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Nom"
+                },
+                "email": {
+                    "value": "Email"
+                },
+                "phone": {
+                    "value": "Téléphone"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "À quelle fréquence utilisez-vous Bible Well ?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "Qu'aimez-vous le plus à propos de Bible Well ?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "Que pouvons-nous améliorer ?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "Comment utilisez-vous Bible Well ?"
+                },
+                "bibleTranslation": {
+                    "value": "Quelle traduction de la Bible utilisez-vous ?"
+                },
+                "sermonPreparation": {
+                    "value": "Préparation de sermon"
+                },
+                "bibleStudy": {
+                    "value": "Étude biblique"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Études / École / Séminaire biblique"
+                },
+                "Evangelism": {
+                    "value": "Évangélisation"
+                }
+            }
         }
     },
     "navTop": {

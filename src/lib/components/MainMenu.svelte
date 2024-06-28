@@ -6,7 +6,8 @@
     import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
     import ShareIcon from '$lib/icons/ShareIcon.svelte';
     import CogIcon from '$lib/icons/CogIcon.svelte';
-    import { openSettingsMenu, openShareMenu } from '$lib/stores/passage-page.store';
+    import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
+    import { openSettingsMenu, openShareMenu, openFeedbackMenu } from '$lib/stores/passage-page.store';
 </script>
 
 <div class="z-50 flex h-full w-full flex-col">
@@ -62,6 +63,12 @@
                     class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
                     data-app-insights-event-name="main-menu-share-button-clicked"
                     ><ShareIcon /><span class="mt-2 text-xs">{$translate('page.quickShare.share.value')}</span></button
+                >
+                <button
+                    on:click={openFeedbackMenu}
+                    class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
+                    data-app-insights-event-name="main-menu-feedback-button-clicked"
+                    ><ChatBubbleIcon /><span class="mt-2 text-xs">Feedback</span></button
                 >
             </div>
         </div>

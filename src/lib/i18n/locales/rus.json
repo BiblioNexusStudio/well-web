@@ -378,6 +378,52 @@
             "close": {
                 "value": "Закрыть"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Обратная связь"
+            },
+            "submit": {
+                "value": "Отправить"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Имя"
+                },
+                "email": {
+                    "value": "Электронная почта"
+                },
+                "phone": {
+                    "value": "Телефон"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "Как часто вы используете Bible Well?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "Что вам больше всего нравится в Bible Well?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "Что можно улучшить?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "Как вы используете Bible Well?"
+                },
+                "bibleTranslation": {
+                    "value": "Какой перевод Библии вы предпочитаете?"
+                },
+                "sermonPreparation": {
+                    "value": "Для подготовки проповеди"
+                },
+                "bibleStudy": {
+                    "value": "Для изучения Библии"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Для учебы в Библейской школе/семинарии"
+                },
+                "Evangelism": {
+                    "value": "Для евангелизма"
+                }
+            }
         }
     },
     "navTop": {

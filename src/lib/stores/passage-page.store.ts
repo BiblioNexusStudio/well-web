@@ -12,6 +12,7 @@ export enum PassagePageMenuEnum {
     settings = 'settings',
     share = 'share',
     resources = 'resources',
+    feedback = 'feedback',
 }
 
 export const passagePageShownMenu = writable<PassagePageMenuEnum | null>(null);
@@ -38,6 +39,10 @@ export function openSettingsMenu() {
 
 export function openShareMenu() {
     passagePageShownMenu.set(PassagePageMenuEnum.share);
+}
+
+export function openFeedbackMenu() {
+    passagePageShownMenu.set(PassagePageMenuEnum.feedback);
 }
 
 export function recalculatePanesAndMenus(tab: PassagePageTabEnum, callback?: () => void) {
