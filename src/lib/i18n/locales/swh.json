@@ -386,6 +386,27 @@
             "submit": {
                 "value": "Wasilisha"
             },
+            "feedbackSending": {
+                "value": "Inatuma maoni..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Maoni yamesafirishwa kwa mafanikio!"
+            },
+            "thankYou": {
+                "value": "Asante kwa maoni yako!"
+            },
+            "close": {
+                "value": "Funga"
+            },
+            "feedbackFailedToSend": {
+                "value": "Kushindwa kutuma maoni. Tafadhali jaribu tena."
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Tafadhali angalia muunganisho wako wa intaneti na ujaribu tena."
+            },
+            "retry": {
+                "value": "Jaribu tena"
+            },
             "feedbackForm": {
                 "name": {
                     "value": "Jina"
@@ -422,6 +443,12 @@
                 },
                 "Evangelism": {
                     "value": "Uinjilisti"
+                },
+                "isRequired": {
+                    "value": "inahitajika"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Maoni ya kupenda au kuboresha yanahitajika"
                 }
             }
         }

@@ -386,6 +386,27 @@
             "submit": {
                 "value": "Отправить"
             },
+            "feedbackSending": {
+                "value": "Отправка обратной связи..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Обратная связь успешно отправлена!"
+            },
+            "thankYou": {
+                "value": "Спасибо за вашу обратную связь!"
+            },
+            "close": {
+                "value": "Закрыть"
+            },
+            "feedbackFailedToSend": {
+                "value": "Не удалось отправить обратную связь."
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Пожалуйста, проверьте ваше подключение к Интернету и повторите попытку."
+            },
+            "retry": {
+                "value": "Повторить"
+            },
             "feedbackForm": {
                 "name": {
                     "value": "Имя"
@@ -422,6 +443,12 @@
                 },
                 "Evangelism": {
                     "value": "Для евангелизма"
+                },
+                "isRequired": {
+                    "value": "Обязательно"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Требуется обратная связь о том, что вам нравится или что можно улучшить"
                 }
             }
         }

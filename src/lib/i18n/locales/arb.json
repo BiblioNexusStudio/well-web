@@ -339,6 +339,27 @@
             "submit": {
                 "value": "إرسال"
             },
+            "feedbackSending": {
+                "value": "جاري إرسال التعليق"
+            },
+            "feedbackSuccessfullySent": {
+                "value": "تم إرسال التعليق بنجاح"
+            },
+            "thankYou": {
+                "value": "شكرًا لك!"
+            },
+            "close": {
+                "value": "إغلاق"
+            },
+            "feedbackFailedToSend": {
+                "value": "فشل إرسال التعليق"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة."
+            },
+            "retry": {
+                "value": "إعادة المحاولة"
+            },
             "feedbackForm": {
                 "name": {
                     "value": "الاسم"
@@ -375,6 +396,12 @@
                 },
                 "Evangelism": {
                     "value": "هل تستخدم الكتاب المقدس بشكل جيد في الإنجيل؟"
+                },
+                "isRequired": {
+                    "value": "مطلوب"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "مطلوب تقديم تعليقات حول ما يعجبك أو ما يمكن تحسينه"
                 }
             }
         }

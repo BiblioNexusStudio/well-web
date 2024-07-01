@@ -432,6 +432,34 @@
                 "value": "Submit",
                 "_context": "Label for the submit button"
             },
+            "feedbackSending": {
+                "value": "Feedback sending...",
+                "_context": "Message to display when feedback is being sent"
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Feedback successfully sent.",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "thankYou": {
+                "value": "Thank you!",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "close": {
+                "value": "Close",
+                "_context": "Button to close the feedback form"
+            },
+            "feedbackFailedToSend": {
+                "value": "Feedback failed to send.",
+                "_context": "Message to display when feedback fails to send"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Please check your internet connection and retry.",
+                "_context": "Message to display when feedback fails to send"
+            },
+            "retry": {
+                "value": "Retry",
+                "_context": "Button to retry sending feedback"
+            },
             "feedbackForm": {
                 "name": {
                     "value": "Name",
@@ -480,6 +508,14 @@
                 "Evangelism": {
                     "value": "Evangelism",
                     "_context": "Label for the Evangelism input field"
+                },
+                "isRequired": {
+                    "value": "is required",
+                    "_context": "Message to display when a field is required"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Likes or improvements feedback required",
+                    "_context": "Message to display when the likes or improvements feedback is required"
                 }
             }
         }

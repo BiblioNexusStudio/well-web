@@ -339,6 +339,27 @@
             "submit": {
                 "value": "Submit"
             },
+            "feedbackSending": {
+                "value": "Sending feedback..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Feedback successfully sent!"
+            },
+            "thankYou": {
+                "value": "Thank you!"
+            },
+            "close": {
+                "value": "Close"
+            },
+            "feedbackFailedToSend": {
+                "value": "Feedback failed to send."
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Please check your internet connection and retry."
+            },
+            "retry": {
+                "value": "Retry"
+            },
             "feedbackForm": {
                 "name": {
                     "value": "Nem"
@@ -375,6 +396,12 @@
                 },
                 "Evangelism": {
                     "value": "Evangelism"
+                },
+                "isRequired": {
+                    "value": "Required"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Likes or improvements feedback is required."
                 }
             }
         }

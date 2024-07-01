@@ -339,6 +339,27 @@
             "submit": {
                 "value": "जमा करें"
             },
+            "feedbackSending": {
+                "value": "प्रतिक्रिया भेजी जा रही है"
+            },
+            "feedbackSuccessfullySent": {
+                "value": "प्रतिक्रिया सफलतापूर्वक भेजी गई"
+            },
+            "thankYou": {
+                "value": "धन्यवाद"
+            },
+            "close": {
+                "value": "बंद करें"
+            },
+            "feedbackFailedToSend": {
+                "value": "प्रतिक्रिया भेजने में विफल रहा"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें"
+            },
+            "retry": {
+                "value": "पुनः प्रयास करें"
+            },
             "feedbackForm": {
                 "name": {
                     "value": "नाम"
@@ -375,6 +396,12 @@
                 },
                 "Evangelism": {
                     "value": "प्रेरणा"
+                },
+                "isRequired": {
+                    "value": "आवश्यक है"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "कृपया बाइबिल वेल के बारे में आपकी पसंद या सुधार के बारे में अपनी प्रतिक्रिया दें।"
                 }
             }
         }

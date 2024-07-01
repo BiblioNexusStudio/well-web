@@ -339,6 +339,27 @@
             "submit": {
                 "value": "Soumettre"
             },
+            "feedbackSending": {
+                "value": "Envoi du retour d'information..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Retour d'information envoyé avec succès."
+            },
+            "thankYou": {
+                "value": "  Merci pour votre retour d'information !"
+            },
+            "close": {
+                "value": "Fermer"
+            },
+            "feedbackFailedToSend": {
+                "value": "Échec de l'envoi du retour d'information."
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Veuillez vérifier votre connexion Internet et réessayer."
+            },
+            "retry": {
+                "value": "Réessayer"
+            },
             "feedbackForm": {
                 "name": {
                     "value": "Nom"
@@ -375,6 +396,12 @@
                 },
                 "Evangelism": {
                     "value": "Évangélisation"
+                },
+                "isRequired": {
+                    "value": "Requis"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Veuillez fournir des commentaires sur ce que vous aimez ou ce que nous pouvons améliorer."
                 }
             }
         }
