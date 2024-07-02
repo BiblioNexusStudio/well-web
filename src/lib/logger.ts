@@ -33,12 +33,12 @@ if (config.PUBLIC_APPLICATION_INSIGHTS_CONNECTION_STRING) {
     console.warn('No app insights connection string available.');
 }
 
-const additionalProperties = {
+export const additionalProperties = {
     source: 'well-web',
     environment: config.PUBLIC_ENV,
 };
 
-function getBrowserAndScreenSize() {
+export function getBrowserAndScreenSize() {
     if (browser) {
         return {
             browserWidth: window.innerWidth,

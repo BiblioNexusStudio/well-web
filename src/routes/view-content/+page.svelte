@@ -64,6 +64,7 @@
     import FullscreenTextResource from './library-resource-menu/FullscreenTextResource.svelte';
     import type { Language } from '$lib/types/file-manager';
     import { filterBoolean } from '$lib/utils/array';
+    import Feedback from './feedback/Feedback.svelte';
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
@@ -438,5 +439,8 @@
     {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.share}
         <QuickShare />
+    {/if}
+    {#if $passagePageShownMenu === PassagePageMenuEnum.feedback}
+        <Feedback />
     {/if}
 </div>

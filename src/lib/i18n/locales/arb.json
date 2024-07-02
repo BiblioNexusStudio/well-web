@@ -331,6 +331,79 @@
             "close": {
                 "value": "إغلاق"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "تعليق"
+            },
+            "submit": {
+                "value": "إرسال"
+            },
+            "feedbackSending": {
+                "value": "جاري إرسال التعليق"
+            },
+            "feedbackSuccessfullySent": {
+                "value": "تم إرسال التعليق بنجاح"
+            },
+            "thankYou": {
+                "value": "شكرًا لك!"
+            },
+            "close": {
+                "value": "إغلاق"
+            },
+            "feedbackFailedToSend": {
+                "value": "فشل إرسال التعليق"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة."
+            },
+            "retry": {
+                "value": "إعادة المحاولة"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "الاسم"
+                },
+                "email": {
+                    "value": "البريد الإلكتروني"
+                },
+                "phone": {
+                    "value": "الهاتف"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "كم مرة تستخدم الكتاب المقدس بشكل جيد؟"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "ما الذي يعجبك في الكتاب المقدس بشكل جيد؟"
+                },
+                "WhatCanBeImproved": {
+                    "value": "ما الذي يمكن تحسينه في الكتاب المقدس بشكل جيد؟"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "كيف تستخدم الكتاب المقدس بشكل جيد؟"
+                },
+                "bibleTranslation": {
+                    "value": "ما هي الترجمة التي تستخدمها؟"
+                },
+                "sermonPreparation": {
+                    "value": "هل تستخدم الكتاب المقدس بشكل جيد في تحضير العظة؟"
+                },
+                "bibleStudy": {
+                    "value": "هل تستخدم الكتاب المقدس بشكل جيد في الدراسة الكتابية؟"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "هل تستخدم الكتاب المقدس بشكل جيد في المدرسة الكتابية / الكلية / الكلية الإكليريكية؟"
+                },
+                "Evangelism": {
+                    "value": "هل تستخدم الكتاب المقدس بشكل جيد في الإنجيل؟"
+                },
+                "isRequired": {
+                    "value": "مطلوب"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "مطلوب تقديم تعليقات حول ما يعجبك أو ما يمكن تحسينه"
+                }
+            }
         }
     },
     "navTop": {

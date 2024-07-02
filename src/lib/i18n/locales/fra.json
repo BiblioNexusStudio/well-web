@@ -331,6 +331,79 @@
             "close": {
                 "value": "Fermer"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Retour d'information"
+            },
+            "submit": {
+                "value": "Soumettre"
+            },
+            "feedbackSending": {
+                "value": "Envoi du retour d'information..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Retour d'information envoyé avec succès."
+            },
+            "thankYou": {
+                "value": "  Merci pour votre retour d'information !"
+            },
+            "close": {
+                "value": "Fermer"
+            },
+            "feedbackFailedToSend": {
+                "value": "Échec de l'envoi du retour d'information."
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Veuillez vérifier votre connexion Internet et réessayer."
+            },
+            "retry": {
+                "value": "Réessayer"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Nom"
+                },
+                "email": {
+                    "value": "Email"
+                },
+                "phone": {
+                    "value": "Téléphone"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "À quelle fréquence utilisez-vous Bible Well ?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "Qu'aimez-vous le plus à propos de Bible Well ?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "Que pouvons-nous améliorer ?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "Comment utilisez-vous Bible Well ?"
+                },
+                "bibleTranslation": {
+                    "value": "Quelle traduction de la Bible utilisez-vous ?"
+                },
+                "sermonPreparation": {
+                    "value": "Préparation de sermon"
+                },
+                "bibleStudy": {
+                    "value": "Étude biblique"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Études / École / Séminaire biblique"
+                },
+                "Evangelism": {
+                    "value": "Évangélisation"
+                },
+                "isRequired": {
+                    "value": "Requis"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Veuillez fournir des commentaires sur ce que vous aimez ou ce que nous pouvons améliorer."
+                }
+            }
         }
     },
     "navTop": {

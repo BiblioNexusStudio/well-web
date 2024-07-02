@@ -422,6 +422,102 @@
                 "value": "Close",
                 "_context": "this is the button to close the quick share view"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Feedback",
+                "_context": "Title for the feedback section"
+            },
+            "submit": {
+                "value": "Submit",
+                "_context": "Label for the submit button"
+            },
+            "feedbackSending": {
+                "value": "Feedback sending...",
+                "_context": "Message to display when feedback is being sent"
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Feedback successfully sent.",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "thankYou": {
+                "value": "Thank you!",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "close": {
+                "value": "Close",
+                "_context": "Button to close the feedback form"
+            },
+            "feedbackFailedToSend": {
+                "value": "Feedback failed to send.",
+                "_context": "Message to display when feedback fails to send"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Please check your internet connection and retry.",
+                "_context": "Message to display when feedback fails to send"
+            },
+            "retry": {
+                "value": "Retry",
+                "_context": "Button to retry sending feedback"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Name",
+                    "_context": "Label for the name input field"
+                },
+                "email": {
+                    "value": "Email",
+                    "_context": "Label for the email input field"
+                },
+                "phone": {
+                    "value": "Phone",
+                    "_context": "Label for the phone input field"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "How are you using the Bible Well?",
+                    "_context": "Label for the how often input field"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "What do you like most about the Bible Well?",
+                    "_context": "Label for the what do you like most input field"
+                },
+                "WhatCanBeImproved": {
+                    "value": "What can be improved?",
+                    "_context": "Label for the what can be improved input field"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "How are you using the Bible Well?",
+                    "_context": "Label for the how are you using the Bible Well input field"
+                },
+                "bibleTranslation": {
+                    "value": "Bible Translation",
+                    "_context": "Label for the Bible Translation input field"
+                },
+                "sermonPreparation": {
+                    "value": "Sermon Preparation",
+                    "_context": "Label for the Sermon Preparation input field"
+                },
+                "bibleStudy": {
+                    "value": "Bible Study",
+                    "_context": "Label for the Bible Study input field"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Studies (Bible School, Seminary)",
+                    "_context": "Label for the Studies (Bible School, Seminary) input field"
+                },
+                "Evangelism": {
+                    "value": "Evangelism",
+                    "_context": "Label for the Evangelism input field"
+                },
+                "isRequired": {
+                    "value": "is required",
+                    "_context": "Message to display when a field is required"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Likes or improvements feedback required",
+                    "_context": "Message to display when the likes or improvements feedback is required"
+                }
+            }
         }
     },
     "navTop": {

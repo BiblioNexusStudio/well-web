@@ -378,6 +378,79 @@
             "close": {
                 "value": "Funga"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Maoni"
+            },
+            "submit": {
+                "value": "Wasilisha"
+            },
+            "feedbackSending": {
+                "value": "Inatuma maoni..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Maoni yamesafirishwa kwa mafanikio!"
+            },
+            "thankYou": {
+                "value": "Asante kwa maoni yako!"
+            },
+            "close": {
+                "value": "Funga"
+            },
+            "feedbackFailedToSend": {
+                "value": "Kushindwa kutuma maoni. Tafadhali jaribu tena."
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Tafadhali angalia muunganisho wako wa intaneti na ujaribu tena."
+            },
+            "retry": {
+                "value": "Jaribu tena"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Jina"
+                },
+                "email": {
+                    "value": "Barua pepe"
+                },
+                "phone": {
+                    "value": "Simu"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "Unaitumia mara ngapi Bible Well?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "Unapenda nini zaidi kuhusu Bible Well?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "Nini kinaweza kuboreshwa?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "Unaitumiaje Bible Well?"
+                },
+                "bibleTranslation": {
+                    "value": "Tafsiri ya Biblia"
+                },
+                "sermonPreparation": {
+                    "value": "Maandalizi ya mahubiri"
+                },
+                "bibleStudy": {
+                    "value": "Masomo ya Biblia"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Masomo ya Biblia / Shule ya Biblia / Seminari"
+                },
+                "Evangelism": {
+                    "value": "Uinjilisti"
+                },
+                "isRequired": {
+                    "value": "inahitajika"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Maoni ya kupenda au kuboresha yanahitajika"
+                }
+            }
         }
     },
     "navTop": {

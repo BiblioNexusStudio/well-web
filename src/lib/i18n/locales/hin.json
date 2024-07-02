@@ -331,6 +331,79 @@
             "close": {
                 "value": "बंद करें"
             }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "प्रतिक्रिया"
+            },
+            "submit": {
+                "value": "जमा करें"
+            },
+            "feedbackSending": {
+                "value": "प्रतिक्रिया भेजी जा रही है"
+            },
+            "feedbackSuccessfullySent": {
+                "value": "प्रतिक्रिया सफलतापूर्वक भेजी गई"
+            },
+            "thankYou": {
+                "value": "धन्यवाद"
+            },
+            "close": {
+                "value": "बंद करें"
+            },
+            "feedbackFailedToSend": {
+                "value": "प्रतिक्रिया भेजने में विफल रहा"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें"
+            },
+            "retry": {
+                "value": "पुनः प्रयास करें"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "नाम"
+                },
+                "email": {
+                    "value": "ईमेल"
+                },
+                "phone": {
+                    "value": "फ़ोन"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "आप कितनी बार बाइबिल वेल का उपयोग करते हैं?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "बाइबिल वेल के बारे में आपको सबसे ज्यादा क्या पसंद है?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "क्या सुधारा जा सकता है?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "आप बाइबिल वेल का कैसे उपयोग कर रहे हैं?"
+                },
+                "bibleTranslation": {
+                    "value": "आप किस अनुवाद का उपयोग कर रहे हैं?"
+                },
+                "sermonPreparation": {
+                    "value": "प्रवचन तैयारी"
+                },
+                "bibleStudy": {
+                    "value": "बाइबिल अध्ययन"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "अध्ययन / बाइबिल स्कूल / सेमिनारी"
+                },
+                "Evangelism": {
+                    "value": "प्रेरणा"
+                },
+                "isRequired": {
+                    "value": "आवश्यक है"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "कृपया बाइबिल वेल के बारे में आपकी पसंद या सुधार के बारे में अपनी प्रतिक्रिया दें।"
+                }
+            }
         }
     },
     "navTop": {
