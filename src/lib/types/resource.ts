@@ -54,7 +54,7 @@ export interface AssociatedResource {
 }
 
 export interface ApiParentResource {
-    enabled: boolean;
+    enabled?: boolean;
     shortName: string;
     displayName: string;
     resourceType: ParentResourceType;

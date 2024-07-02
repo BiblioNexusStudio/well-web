@@ -8,7 +8,7 @@ import {
     type ResourceContentInfoWithMetadata,
     type ResourceContentMetadata,
 } from '$lib/types/resource';
-import { groupBy } from '$lib/utils/array';
+import { filterBooleanByKey, groupBy } from '$lib/utils/array';
 import { asyncMap } from '$lib/utils/async-array';
 import {
     sortByDisplayName,
@@ -80,15 +80,14 @@ export async function buildLibraryResourceGroupingsWithMetadata(allResources: Re
             }
         });
         return {
-            parentResource: parentResourceIdMap[parentResourceId]!,
+            parentResource: parentResourceIdMap[parentResourceId],
             resources: sortByDisplayName(resourcesWithMetadata),
         };
     });
-    groupings.sort((a, b) => {
+    return filterBooleanByKey(groupings, 'parentResource').sort((a, b) => {
         return (
             RESOURCE_TYPE_ORDER.indexOf(a.parentResource.resourceType) -
             RESOURCE_TYPE_ORDER.indexOf(b.parentResource.resourceType)
         );
     });
-    return groupings;
 }
