@@ -62,13 +62,21 @@
         if (name && (likes || improvements)) {
             loading = true;
             const metaData = {
-                usageFrequency,
-                bibleWellUses,
-                likes,
-                improvements,
-                ...additionalProperties,
-                ...getBrowserAndScreenSize(),
-                ...$currentLanguageInfo,
+                formData: {
+                    usageFrequency,
+                    bibleWellUses,
+                    likes,
+                    improvements,
+                },
+                additionalProperties: {
+                    ...additionalProperties,
+                },
+                browserAndScreenSize: {
+                    ...getBrowserAndScreenSize(),
+                },
+                currentLanguage: {
+                    ...$currentLanguageInfo,
+                },
             };
 
             const postData = {
