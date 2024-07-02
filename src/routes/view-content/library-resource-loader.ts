@@ -81,7 +81,7 @@ export async function buildLibraryResourceGroupingsWithMetadata(allResources: Re
         });
         return {
             parentResource: parentResourceIdMap[parentResourceId],
-            resources: sortByDisplayName(resourcesWithMetadata),
+            resources: sortByDisplayName(filterBooleanByKey(resourcesWithMetadata, 'displayName')),
         };
     });
     return filterBooleanByKey(groupings, 'parentResource').sort((a, b) => {
