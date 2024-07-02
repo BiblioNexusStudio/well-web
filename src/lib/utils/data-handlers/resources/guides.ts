@@ -72,7 +72,10 @@ export async function parentResourcesForCurrentLanguage() {
         ...parentResourcesEndpoint(languageId)
     )) as ApiParentResource[];
     return allParentResources.filter(
-        (pr) => (!showOnlySrvResources || SrvResources.includes(pr.id)) && pr.enabled && pr.resourceCountForLanguage > 0
+        (pr) =>
+            (!showOnlySrvResources || SrvResources.includes(pr.id)) &&
+            pr.enabled !== false &&
+            pr.resourceCountForLanguage > 0
     );
 }
 
