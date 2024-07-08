@@ -13,7 +13,6 @@
         selectedBookCode,
         biblesModuleData,
         biblesModuleBook,
-        limitChaptersIfNecessary,
     } from '$lib/stores/file-manager.store';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { MetaTags } from 'svelte-meta-tags';
@@ -46,7 +45,6 @@
                         await fetchFromCacheOrApi(...bookOfBibleEndpoint(firstBible.id, $selectedBookCode))
                     );
                     $biblesModuleBook.bibleId = firstBible.id;
-                    limitChaptersIfNecessary($selectedBookCode, biblesModuleBook);
                 }
 
                 $isLoadingBibles = false;

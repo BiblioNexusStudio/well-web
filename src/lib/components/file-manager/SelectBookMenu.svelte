@@ -10,9 +10,7 @@
         selectedBookCode,
         biblesModuleData,
         biblesModuleBook,
-        limitChaptersIfNecessary,
         isLoadingLanguageFirstBible,
-        allowedBooks,
     } from '$lib/stores/file-manager.store';
     import { bookOfBibleEndpoint } from '$lib/api-endpoints';
 
@@ -20,7 +18,7 @@
     let menuOpen = false;
     let firstBible = $biblesModuleData[0] || { id: null, contents: [], books: [] };
 
-    $: books = firstBible.books.filter((book) => allowedBooks.includes(book.bookCode));
+    $: books = firstBible.books;
     $: bookName = setBookName($selectedBookCode);
 
     const toggleMenu = () => {
@@ -36,7 +34,6 @@
         );
         $biblesModuleBook.bibleId = firstBible.id;
         $selectedBookCode = bookCode;
-        limitChaptersIfNecessary(bookCode, biblesModuleBook);
         $isLoadingLanguageFirstBible = false;
     };
 
