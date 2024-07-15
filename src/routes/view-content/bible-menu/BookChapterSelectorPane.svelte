@@ -301,7 +301,7 @@
                 {:else}
                     {#if currentStep === steps.one}
                         <div class="h-full w-full">
-                            {#each books as book}
+                            {#each books.sort((a, b) => a.number - b.number) as book}
                                 {@const isCurrentBook = book === currentBook}
                                 <button
                                     on:click={() => handleBookSelection(book)}
