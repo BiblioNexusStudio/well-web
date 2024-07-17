@@ -418,16 +418,6 @@
             bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
         />
     {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.resources}
-        <LibraryResourceMenu
-            bind:fullscreenTextResourceStack
-            resources={resourceData?.additionalResourceInfo}
-            tab={selectedTab}
-        />
-    {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.library}
-        <LibraryResourceMenu bind:fullscreenTextResourceStack resources={undefined} tab={selectedTab} />
-    {/if}
     {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
         <BibleMenu
             bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
@@ -443,4 +433,16 @@
     {#if $passagePageShownMenu === PassagePageMenuEnum.feedback}
         <Feedback />
     {/if}
+    <LibraryResourceMenu
+        bind:fullscreenTextResourceStack
+        resources={resourceData?.additionalResourceInfo}
+        isFullLibrary={false}
+        isShowing={$passagePageShownMenu === PassagePageMenuEnum.resources}
+    />
+    <LibraryResourceMenu
+        bind:fullscreenTextResourceStack
+        resources={undefined}
+        isFullLibrary={true}
+        isShowing={$passagePageShownMenu === PassagePageMenuEnum.library}
+    />
 </div>
