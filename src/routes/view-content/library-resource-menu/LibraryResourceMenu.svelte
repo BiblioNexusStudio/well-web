@@ -21,7 +21,6 @@
         type LibraryResourceGrouping,
         type LibraryResourceSubgrouping,
     } from '../library-resource-loader';
-    import { PassagePageTabEnum } from '../data-fetchers';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { get } from 'svelte/store';
     import { currentLanguageInfo } from '$lib/stores/language.store';
@@ -33,8 +32,9 @@
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
-    export let tab: PassagePageTabEnum;
     export let fullscreenTextResourceStack: (ResourceContentInfoWithMetadata | TextResourceContentJustId)[];
+    export let isShowing: boolean;
+    export let isFullLibrary: boolean;
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
@@ -52,7 +52,6 @@
     let currentFullscreenResourceGrouping: LibraryResourceGrouping | null = null;
     let currentFullscreenResourceSubgrouping: LibraryResourceSubgrouping | null = null;
 
-    let isFullLibrary = tab === PassagePageTabEnum.LibraryMenu;
     let visibleSwish = isFullLibrary;
 
     $: searchQueryChanged(searchQuery);
@@ -132,79 +131,81 @@
     }
 </script>
 
-<SwishHeader
-    bind:visible={visibleSwish}
-    title={$translate('page.passage.resourcePane.libraryTitle.value')}
-    subtitle={$translate('page.passage.resourcePane.librarySubtitle.value')}
-    bgcolor="bg-[#439184]"
-/>
+{#if isShowing}
+    <SwishHeader
+        bind:visible={visibleSwish}
+        title={$translate('page.passage.resourcePane.libraryTitle.value')}
+        subtitle={$translate('page.passage.resourcePane.librarySubtitle.value')}
+        bgcolor="bg-[#439184]"
+    />
 
-<FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
-<FullscreenResourceSection
-    {currentFullscreenResourceGrouping}
-    {subgroupSelected}
-    {resourceSelected}
-    {showResourceGroupingFullscreen}
-/>
-<FullscreenResourceSubgroup
-    {currentFullscreenResourceSubgrouping}
-    {resourceSelected}
-    dismissFullscreen={() => subgroupSelected(null)}
-/>
+    <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
+    <FullscreenResourceSection
+        {currentFullscreenResourceGrouping}
+        {subgroupSelected}
+        {resourceSelected}
+        {showResourceGroupingFullscreen}
+    />
+    <FullscreenResourceSubgroup
+        {currentFullscreenResourceSubgrouping}
+        {resourceSelected}
+        dismissFullscreen={() => subgroupSelected(null)}
+    />
 
-<div
-    class="absolute bottom-20 left-0 right-0 {visibleSwish
-        ? 'top-40'
-        : isFullLibrary
-        ? 'top-0'
-        : 'top-16'} flex flex-col px-4 transition-[top] duration-500 ease-in-out"
->
-    <div class="my-4 flex flex-row">
-        <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
-        {#if !visibleSwish && isFullLibrary}
-            <div>
-                <button
-                    on:click={(e) => resetPage(e)}
-                    type="button"
-                    class="mt-2 ps-4 font-semibold text-primary"
-                    data-app-insights-event-name="library-menu-reset-page-button-clicked"
-                    >{$translate('page.passage.resourcePane.cancel.value')}</button
-                >
+    <div
+        class="absolute bottom-20 left-0 right-0 {visibleSwish
+            ? 'top-40'
+            : isFullLibrary
+            ? 'top-0'
+            : 'top-16'} flex flex-col px-4 transition-[top] duration-500 ease-in-out"
+    >
+        <div class="my-4 flex flex-row">
+            <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
+            {#if !visibleSwish && isFullLibrary}
+                <div>
+                    <button
+                        on:click={(e) => resetPage(e)}
+                        type="button"
+                        class="mt-2 ps-4 font-semibold text-primary"
+                        data-app-insights-event-name="library-menu-reset-page-button-clicked"
+                        >{$translate('page.passage.resourcePane.cancel.value')}</button
+                    >
+                </div>
+            {/if}
+        </div>
+        {#if isLoading}
+            <FullPageSpinner />
+        {:else if !resources}
+            <div class="flex flex-grow flex-col items-center justify-items-center overflow-y-scroll">
+                <div class="mb-4 flex-shrink-0 text-sm text-neutral">
+                    {$translate('page.passage.resourcePane.typeToSearch.value')}
+                </div>
+            </div>
+        {:else if filteredResourceCount === 0}
+            <NoResourcesFound {searchQuery} />
+        {:else}
+            <div class="flex flex-col items-center justify-items-center">
+                <div class="mb-4 flex-shrink-0 text-sm text-neutral">
+                    {filteredResourceCount == 1
+                        ? $translate('page.passage.resourcePane.resourceCount.singular.value')
+                        : $translate('page.passage.resourcePane.resourceCount.plural.value', {
+                              values: { count: filteredResourceCount },
+                          })}
+                </div>
+            </div>
+            <div class="overflow-y-scroll">
+                {#each resourceGroupings as resourceGrouping}
+                    <AnyResourceSection
+                        {resourceGrouping}
+                        isFullscreen={false}
+                        {searchQuery}
+                        skipClientSideFiltering={isFullLibrary}
+                        {resourceSelected}
+                        {subgroupSelected}
+                        {showResourceGroupingFullscreen}
+                    />
+                {/each}
             </div>
         {/if}
     </div>
-    {#if isLoading}
-        <FullPageSpinner />
-    {:else if !resources}
-        <div class="flex flex-grow flex-col items-center justify-items-center overflow-y-scroll">
-            <div class="mb-4 flex-shrink-0 text-sm text-neutral">
-                {$translate('page.passage.resourcePane.typeToSearch.value')}
-            </div>
-        </div>
-    {:else if filteredResourceCount === 0}
-        <NoResourcesFound {searchQuery} />
-    {:else}
-        <div class="flex flex-col items-center justify-items-center">
-            <div class="mb-4 flex-shrink-0 text-sm text-neutral">
-                {filteredResourceCount == 1
-                    ? $translate('page.passage.resourcePane.resourceCount.singular.value')
-                    : $translate('page.passage.resourcePane.resourceCount.plural.value', {
-                          values: { count: filteredResourceCount },
-                      })}
-            </div>
-        </div>
-        <div class="overflow-y-scroll">
-            {#each resourceGroupings as resourceGrouping}
-                <AnyResourceSection
-                    {resourceGrouping}
-                    isFullscreen={false}
-                    {searchQuery}
-                    skipClientSideFiltering={isFullLibrary}
-                    {resourceSelected}
-                    {subgroupSelected}
-                    {showResourceGroupingFullscreen}
-                />
-            {/each}
-        </div>
-    {/if}
-</div>
+{/if}
