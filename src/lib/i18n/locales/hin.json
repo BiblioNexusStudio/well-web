@@ -402,6 +402,9 @@
                 },
                 "likesOrImprovementsFeedbackRequired": {
                     "value": "कृपया बाइबिल वेल के बारे में आपकी पसंद या सुधार के बारे में अपनी प्रतिक्रिया दें।"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "कृपया आवश्यक फ़ील्ड्स में भरें"
                 }
             }
         }

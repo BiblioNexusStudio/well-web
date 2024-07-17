@@ -402,6 +402,9 @@
                 },
                 "likesOrImprovementsFeedbackRequired": {
                     "value": "مطلوب تقديم تعليقات حول ما يعجبك أو ما يمكن تحسينه"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "يرجى ملء الحقول المطلوبة"
                 }
             }
         }
