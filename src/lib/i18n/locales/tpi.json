@@ -337,28 +337,28 @@
                 "value": "Givim Tok"
             },
             "submit": {
-                "value": "Submit"
+                "value": "Salim"
             },
             "feedbackSending": {
-                "value": "Sending feedback..."
+                "value": "Salim bekim..."
             },
             "feedbackSuccessfullySent": {
-                "value": "Feedback successfully sent!"
+                "value": "Bekim i go gut!"
             },
             "thankYou": {
-                "value": "Thank you!"
+                "value": "Tenkyu!"
             },
             "close": {
-                "value": "Close"
+                "value": "Pasim"
             },
             "feedbackFailedToSend": {
-                "value": "Feedback failed to send."
+                "value": "Bekim i no go."
             },
             "pleaseCheckYourInternetConnectionAndRetry": {
-                "value": "Please check your internet connection and retry."
+                "value": "Plis lukim internet koneksen bilong yu na traim gen."
             },
             "retry": {
-                "value": "Retry"
+                "value": "Traim Gen"
             },
             "feedbackForm": {
                 "name": {
@@ -371,37 +371,40 @@
                     "value": "Fon"
                 },
                 "howOftenDoYouUseTheBibleWell": {
-                    "value": "How often do you use the Bible Well?"
+                    "value": "Olsem wanem yu save yusim Baibel Well?"
                 },
                 "whatDoYouLikeMostAboutTheBibleWell": {
-                    "value": "What do you like most about the Bible Well?"
+                    "value": "Wanem samting yu laikim moa long Baibel Well?"
                 },
                 "WhatCanBeImproved": {
-                    "value": "What can be improved?"
+                    "value": "Wanem samting inap kamap gutpela?"
                 },
                 "howAreYouUsingTheBibleWell": {
-                    "value": "How are you using the Bible Well?"
+                    "value": "Olsem wanem yu yusim Baibel Well?"
                 },
                 "bibleTranslation": {
-                    "value": "Bible Translation"
+                    "value": "Baibel Tok Ples"
                 },
                 "sermonPreparation": {
-                    "value": "Sermon Preparation"
+                    "value": "Redim Tok"
                 },
                 "bibleStudy": {
-                    "value": "Bible Study"
+                    "value": "Stadi Baibel"
                 },
                 "studiesBibleSchoolSeminary": {
-                    "value": "Studies (Bible School, Seminary)"
+                    "value": "Stadi (Baibel Skul, Seminary)"
                 },
                 "Evangelism": {
                     "value": "Evangelism"
                 },
                 "isRequired": {
-                    "value": "Required"
+                    "value": "Em i mas"
                 },
                 "likesOrImprovementsFeedbackRequired": {
-                    "value": "Likes or improvements feedback is required."
+                    "value": "Tok bilong laikim o kamap gutpela i mas."
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "Plis putim tok long ol samting i mas."
                 }
             }
         }

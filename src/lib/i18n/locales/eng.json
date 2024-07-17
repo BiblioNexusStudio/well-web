@@ -516,6 +516,10 @@
                 "likesOrImprovementsFeedbackRequired": {
                     "value": "Likes or improvements feedback required",
                     "_context": "Message to display when the likes or improvements feedback is required"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "Please fill in the required fields",
+                    "_context": "Message to display when the required fields are not filled in"
                 }
             }
         }

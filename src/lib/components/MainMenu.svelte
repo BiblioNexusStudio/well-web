@@ -68,7 +68,8 @@
                     on:click={openFeedbackMenu}
                     class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
                     data-app-insights-event-name="main-menu-feedback-button-clicked"
-                    ><ChatBubbleIcon /><span class="mt-2 text-xs">Feedback</span></button
+                    ><ChatBubbleIcon /><span class="mt-2 text-xs">{$translate('page.feedback.feedback.value')}</span
+                    ></button
                 >
             </div>
         </div>

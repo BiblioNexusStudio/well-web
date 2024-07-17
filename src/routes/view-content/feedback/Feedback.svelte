@@ -111,7 +111,7 @@
             }
         } else {
             showErrors = true;
-            alert('Please fill in the required fields');
+            alert($translate('page.feedback.feedbackForm.pleaseFillInTheRequiredFields.value'));
         }
     }
 </script>
@@ -181,7 +181,7 @@
         </div>
         <h1 class="mb-6 text-2xl font-bold text-slate-600">{$translate('page.feedback.feedback.value')}</h1>
         <form on:submit|preventDefault={handleSubmit} class="flex flex-col px-4">
-            <label for="name" class="ps-1 text-slate-600 {showErrors ? 'text-red-600' : ''}"
+            <label for="name" class="ps-1 {showErrors ? 'text-red-600' : 'text-slate-600'}"
                 >{$translate('page.feedback.feedbackForm.name.value')}{showErrors
                     ? ` ${$translate('page.feedback.feedbackForm.isRequired.value')}`
                     : ''}</label
