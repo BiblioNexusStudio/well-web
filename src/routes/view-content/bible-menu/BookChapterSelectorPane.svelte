@@ -235,6 +235,7 @@
             simulateTouch: false, // prevent weirdness when using mouse
             topperOverflow: false,
             initialBreak: 'top',
+            showDraggable: false,
             events: {
                 onWillDismiss: () => (isShowing = false),
                 onBackdropTap: () => (isShowing = false),
@@ -248,6 +249,8 @@
             firstSelectedVerse = null;
             lastSelectedVerse = null;
         });
+
+        bookChapterSelectorPane.disableDrag();
     });
 
     afterUpdate(() => {
