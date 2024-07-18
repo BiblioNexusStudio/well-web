@@ -63,11 +63,14 @@
             simulateTouch: false, // prevent weirdness when using mouse
             topperOverflow: true,
             initialBreak: 'top',
+            showDraggable: false,
             events: {
                 onWillDismiss: () => (isShowing = false),
                 onBackdropTap: () => (isShowing = false),
             },
         });
+
+        bookPassageSelectorPane.disableDrag();
     });
 </script>
 
