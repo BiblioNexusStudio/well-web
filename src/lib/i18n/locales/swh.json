@@ -104,6 +104,23 @@
                     }
                 }
             },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "Bofya kwenye neno kuona chanzo cha lugha asilia."
+                },
+                "noWordInfoAvailable": {
+                    "value": "Hakuna taarifa za lugha asilia zinazopatikana kwa uteuzi huu."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "Hakuna taarifa za gloss au tafsiri zinazopatikana kwa uteuzi huu."
+                },
+                "gloss": {
+                    "value": "Gloss"
+                },
+                "definition": {
+                    "value": "Tafsiri"
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "Nyenzo Haipatikani",

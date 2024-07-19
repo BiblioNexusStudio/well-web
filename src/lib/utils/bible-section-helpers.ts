@@ -1,5 +1,35 @@
 import type { BibleSection } from '$lib/types/bible';
 
+const newTestamentBooks = [
+    'MAT',
+    'MRK',
+    'LUK',
+    'JHN',
+    'ACT',
+    'ROM',
+    '1CO',
+    '2CO',
+    'GAL',
+    'EPH',
+    'PHP',
+    'COL',
+    '1TH',
+    '2TH',
+    '1TI',
+    '2TI',
+    'TIT',
+    'PHM',
+    'HEB',
+    'JAS',
+    '1PE',
+    '2PE',
+    '1JN',
+    '2JN',
+    '3JN',
+    'JUD',
+    'REV',
+];
+
 export function bibleSectionToString(bibleSection: BibleSection) {
     return `${bibleSection.bookCode}${String(bibleSection.startChapter).padStart(3, '0')}${String(
         bibleSection.startVerse
@@ -25,7 +55,11 @@ export function stringToBibleSection(sectionString: string): BibleSection {
     };
 }
 
-export function bibleSectionsEqual(passage1: BibleSection, passage2: BibleSection): boolean {
+export function isNewTestament(bibleSection: BibleSection | null) {
+    return !!bibleSection && newTestamentBooks.includes(bibleSection.bookCode);
+}
+
+export function bibleSectionsEqual(passage1: BibleSection, passage2: BibleSection) {
     return (
         passage1.bookCode === passage2.bookCode &&
         passage1.startChapter === passage2.startChapter &&
@@ -35,7 +69,7 @@ export function bibleSectionsEqual(passage1: BibleSection, passage2: BibleSectio
     );
 }
 
-export function bibleSectionToReference(bibleSection: BibleSection): string {
+export function bibleSectionToReference(bibleSection: BibleSection) {
     if (bibleSection.startChapter === bibleSection.endChapter) {
         if (bibleSection.startVerse === bibleSection.endVerse) {
             return `${bibleSection.startChapter}:${bibleSection.startVerse}`;

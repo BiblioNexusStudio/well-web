@@ -31,6 +31,14 @@ export function biblesForLanguageEndpoint(languageId: number | undefined): ApiSt
     return [`/bibles/language/${languageId}`, 1];
 }
 
+export function englishWordsWithGreekAlignmentsForBookAndChapter(
+    bibleId: number,
+    bookCode: string,
+    chapter: number
+): ApiStringAndCacheBustVersion {
+    return [`/bibles/${bibleId}/alignments/greek/book/${bookCode}/chapter/${chapter}`, 1];
+}
+
 export function resourcesByLanguageAndBookEndpoint(
     languageId: number | undefined,
     bookCode: string,

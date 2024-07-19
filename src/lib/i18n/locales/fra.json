@@ -88,6 +88,23 @@
                     }
                 }
             },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "Cliquez sur un mot pour voir la source dans la langue d'origine."
+                },
+                "noWordInfoAvailable": {
+                    "value": "Aucune information dans la langue d'origine n'est disponible pour cette sélection."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "Aucune information de gloss ou de définition n'est disponible pour cette sélection."
+                },
+                "gloss": {
+                    "value": "Gloss"
+                },
+                "definition": {
+                    "value": "Définition"
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "Ressource Indisponible"

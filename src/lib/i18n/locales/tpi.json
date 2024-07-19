@@ -88,6 +88,23 @@
                     }
                 }
             },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "Klik long wanpela tok bilong lukim as tok ples."
+                },
+                "noWordInfoAvailable": {
+                    "value": "Igat nogat as tok ples infomasen long dispela mak."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "Igat nogat gloss o mining infomasen long dispela mak."
+                },
+                "gloss": {
+                    "value": "Gloss"
+                },
+                "definition": {
+                    "value": "Mining"
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "Risos Ino Stap"

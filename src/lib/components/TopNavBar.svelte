@@ -13,7 +13,8 @@
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { PredeterminedPassageGuides } from '$lib/types/resource';
     import { currentGuide } from '$lib/stores/parent-resource.store';
-    import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
+    import { bibleSectionToReference, isNewTestament } from '$lib/utils/bible-section-helpers';
+    import AlignmentMode from '$lib/icons/AlignmentMode.svelte';
 
     export let bibleSection: BibleSection | null = null;
     export let bibles: FrontendBibleBook[] = [];
@@ -24,8 +25,17 @@
     export let showBookChapterVerseMenu: boolean;
     export let showBookPassageSelectorPane: boolean;
     export let bookCodesToNames: Record<string, string> | undefined;
+    export let alignmentModeEnabled: boolean;
+    export let selectedBibleId: number | null;
 
     $: bibleSectionTitle = calculateBibleSectionTitle(bookCodesToNames, bibleSection);
+    $: canEnableAlignmentMode = selectedBibleId === 1 && isNewTestament(bibleSection);
+
+    $: {
+        if ((!isNewTestament(bibleSection) || selectedBibleId !== 1) && alignmentModeEnabled) {
+            alignmentModeEnabled = false;
+        }
+    }
 
     function handleWindowClick(event: MouseEvent) {
         const openDetails = document.querySelector('.dropdown[open]');
@@ -92,6 +102,18 @@
                     {guideShortName || $translate('navTop.selectGuide.value')}
                 </button>
             {/if}
+        </div>
+    {/if}
+    <div class="flex-grow"></div>
+    {#if bibleSection && canEnableAlignmentMode && tab === PassagePageTabEnum.Bible && bibles.length}
+        <div class="flex-none">
+            <button
+                on:click={() => (alignmentModeEnabled = !alignmentModeEnabled)}
+                class="btn btn-primary {alignmentModeEnabled ? 'btn-active' : 'btn-link'}"
+                data-app-insights-event-name="top-nav-alignment-mode-button-clicked"
+            >
+                <AlignmentMode />
+            </button>
         </div>
     {/if}
     {#if bibleSection && tab === PassagePageTabEnum.Bible && bibles.length}
