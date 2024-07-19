@@ -250,7 +250,13 @@
             lastSelectedVerse = null;
         });
 
-        bookChapterSelectorPane.disableDrag();
+        try {
+            bookChapterSelectorPane.disableDrag();
+        } catch (error) {
+            // do nothing because disableDrag throws
+            // an error in the console on desktop only.
+            // the pane still works as expected
+        }
     });
 
     afterUpdate(() => {

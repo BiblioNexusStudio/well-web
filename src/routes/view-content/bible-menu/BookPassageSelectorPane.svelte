@@ -70,7 +70,13 @@
             },
         });
 
-        bookPassageSelectorPane.disableDrag();
+        try {
+            bookPassageSelectorPane.disableDrag();
+        } catch (error) {
+            // do nothing because disableDrag throws
+            // an error in the console on desktop only.
+            // the pane still works as expected
+        }
     });
 </script>
 
