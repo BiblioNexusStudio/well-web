@@ -43,7 +43,7 @@
     let flatResources: ResourceContentInfoWithMetadata[] = [];
     let mediaResources: ResourceContentInfoWithMetadata[] = [];
 
-    $: prepareResources(resources || []);
+    $: prepareResources(resources || [], isShowing);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(flatResources, 'displayName', searchQuery).length;
     $: hasQuery = searchQuery != '';
@@ -118,7 +118,8 @@
         currentFullscreenResourceGrouping = resourceGrouping;
     }
 
-    async function prepareResources(resources: ResourceContentInfo[]) {
+    async function prepareResources(resources: ResourceContentInfo[], isShowing: boolean) {
+        if (!isShowing || (!isFullLibrary && resourceGroupings?.length > 0)) return;
         isLoading = true;
 
         resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources);
