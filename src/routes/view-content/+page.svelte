@@ -433,12 +433,14 @@
     {#if $passagePageShownMenu === PassagePageMenuEnum.feedback}
         <Feedback />
     {/if}
-    <LibraryResourceMenu
-        bind:fullscreenTextResourceStack
-        resources={resourceData?.additionalResourceInfo}
-        isFullLibrary={false}
-        isShowing={$passagePageShownMenu === PassagePageMenuEnum.resources}
-    />
+    {#key $selectedBibleSection}
+        <LibraryResourceMenu
+            bind:fullscreenTextResourceStack
+            resources={resourceData?.additionalResourceInfo}
+            isFullLibrary={false}
+            isShowing={$passagePageShownMenu === PassagePageMenuEnum.resources}
+        />
+    {/key}
     <LibraryResourceMenu
         bind:fullscreenTextResourceStack
         resources={undefined}

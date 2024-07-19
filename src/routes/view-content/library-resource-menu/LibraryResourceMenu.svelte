@@ -119,7 +119,7 @@
     }
 
     async function prepareResources(resources: ResourceContentInfo[], isShowing: boolean) {
-        if (!isShowing) return;
+        if (!isShowing || (!isFullLibrary && resourceGroupings?.length > 0)) return;
         isLoading = true;
 
         resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources);
