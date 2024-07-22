@@ -474,7 +474,7 @@
                     "_context": "Label for the phone input field"
                 },
                 "howOftenDoYouUseTheBibleWell": {
-                    "value": "How are you using the Bible Well?",
+                    "value": "How often do you use the Bible Well?",
                     "_context": "Label for the how often input field"
                 },
                 "whatDoYouLikeMostAboutTheBibleWell": {
