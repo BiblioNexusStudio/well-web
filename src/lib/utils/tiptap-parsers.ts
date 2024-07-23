@@ -9,6 +9,7 @@ import Superscript from '@tiptap/extension-superscript';
 import TextStyle from '@tiptap/extension-text-style';
 import { resourceReferenceMark } from './tiptap/resourceReferenceMark';
 import type { AssociatedResource } from '$lib/types/resource';
+import { Video } from './tiptap/video';
 
 function generateExtensions(availableAssociatedResources: AssociatedResource[] | undefined) {
     // some Mark types we don't care about from an end user perspective
@@ -27,6 +28,7 @@ function generateExtensions(availableAssociatedResources: AssociatedResource[] |
         Superscript.configure({}),
         TextStyle.configure({}),
         resourceReferenceMark.configure({ availableAssociatedResources }),
+        Video.configure({}),
         ...ignoredMarks,
     ];
 }
