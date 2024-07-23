@@ -17,6 +17,15 @@ declare global {
         __CACHING_CONFIG: typeof CACHING_CONFIG;
         webkitAudioContext: AudioContext;
         onResourceReferenceClick: ((contentId: number) => void) | undefined;
+        onEnglishBibleWordClicked:
+            | ((
+                  chapterIndex: number,
+                  chapterNumber: number,
+                  verseIndex: number,
+                  verseNumber: number,
+                  wordIndex: number
+              ) => void)
+            | undefined;
     }
 }
 

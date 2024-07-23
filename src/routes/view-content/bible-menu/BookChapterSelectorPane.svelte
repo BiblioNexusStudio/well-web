@@ -21,7 +21,7 @@
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
     export let filterByCurrentGuide: boolean;
-    export let bookCodesToNames: Record<string, string> | undefined;
+    export let bookCodesToNames: Map<string, string> | undefined;
     export let tab: PassagePageTabEnum;
 
     let currentBook: ApiBibleBook;
@@ -224,7 +224,7 @@
 
     function bookName(book: ApiBibleBook | undefined) {
         if (book) {
-            return bookCodesToNames?.[book.code] ?? book.localizedName;
+            return bookCodesToNames?.get(book.code) ?? book.localizedName;
         }
         return '';
     }

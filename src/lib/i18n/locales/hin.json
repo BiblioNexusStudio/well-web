@@ -88,6 +88,23 @@
                     }
                 }
             },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "मूल भाषा स्रोत देखने के लिए किसी शब्द पर क्लिक करें।"
+                },
+                "noWordInfoAvailable": {
+                    "value": "इस चयन के लिए कोई मूल भाषा जानकारी उपलब्ध नहीं है।"
+                },
+                "noSenseInfoAvailable": {
+                    "value": "इस चयन के लिए कोई व्याख्या या परिभाषा जानकारी उपलब्ध नहीं है।"
+                },
+                "gloss": {
+                    "value": "व्याख्या"
+                },
+                "definition": {
+                    "value": "परिभाषा"
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "संसाधन उपलब्ध नहीं है"

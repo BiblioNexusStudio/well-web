@@ -88,6 +88,23 @@
                     }
                 }
             },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "انقر على كلمة لرؤية المصدر الأصلي للغة."
+                },
+                "noWordInfoAvailable": {
+                    "value": "لا توجد معلومات عن اللغة الأصلية لهذا الاختيار."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "لا توجد معلومات عن اللمعان أو التعريف لهذا الاختيار."
+                },
+                "gloss": {
+                    "value": "لمعان"
+                },
+                "definition": {
+                    "value": "تعريف"
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "المورد غير متوفر"

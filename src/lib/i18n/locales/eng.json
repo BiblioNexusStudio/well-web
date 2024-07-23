@@ -109,6 +109,28 @@
                     }
                 }
             },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "Click on a word to see the original language source.",
+                    "_context": "Instructions for when user hasn't selected word yet in alignment mode"
+                },
+                "noWordInfoAvailable": {
+                    "value": "No original language information available for this selection.",
+                    "_context": "Message for when we're missing alignment data for the selected word."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "No gloss or definition information available for this selection.",
+                    "_context": "Message for when we're missing alignment data for the selected word."
+                },
+                "gloss": {
+                    "value": "Gloss",
+                    "_context": "Gloss label for Greek/Hebrew alignment"
+                },
+                "definition": {
+                    "value": "Definition",
+                    "_context": "Definition label for Greek/Hebrew alignment"
+                }
+            },
             "noBibleContent": {
                 "header": {
                     "value": "Resource Unavailable",

@@ -34,7 +34,7 @@
         getBibleBookCodesToName,
     } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
     import MainMenu from '$lib/components/MainMenu.svelte';
     import { currentGuide, locallyStoredGuide } from '$lib/stores/parent-resource.store';
     import {
@@ -58,13 +58,13 @@
     import { selectedBibleSection } from '$lib/stores/passage-form.store';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { BibleSection } from '$lib/types/bible';
-    import BibleUnavailable from './BibleUnavailable.svelte';
     import QuickShare from './quick-share/QuickShare.svelte';
     import GuideContent from './guide-content/GuideContent.svelte';
     import FullscreenTextResource from './library-resource-menu/FullscreenTextResource.svelte';
     import type { Language } from '$lib/types/file-manager';
     import { filterBoolean } from '$lib/utils/array';
     import Feedback from './feedback/Feedback.svelte';
+    import BibleViewer from './BibleViewer.svelte';
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
@@ -74,6 +74,7 @@
     let selectedTab = PassagePageTabEnum.Guide;
     let isShowingBookPassageSelectorPane = false;
     let isShowingBookChapterSelectorPane = false;
+    let alignmentModeEnabled = false;
     let bookPassageSelectorPane: CupertinoPane;
     let bookChapterSelectorPane: CupertinoPane;
     let bibleSelectionScroll: number | undefined;
@@ -82,7 +83,7 @@
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
     let preferredBiblesModalOpen = false;
     let audioPlayerKey: string | undefined;
-    let bookCodesToNames: Record<string, string> | undefined;
+    let bookCodesToNames: Map<string, string> | undefined;
 
     $: {
         baseFetchPromise = fetchBase($selectedBibleSection); // when the Bible section changes, refetch
@@ -91,8 +92,7 @@
     $: fetchContentForBibleId(selectedBibleId);
 
     $: selectedTab === PassagePageTabEnum.Bible && setBibleAudioPlayerForBible(selectedBibleId);
-    $: audioPlayerShowing = audioPlayerKey && !!multiClipAudioStates[audioPlayerKey];
-    $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
+    $: audioPlayerShowing = audioPlayerKey && !!multiClipAudioStates[audioPlayerKey] && !alignmentModeEnabled;
     $: fetchBibleBookCodeToName($currentLanguageInfo);
 
     $: setStoredGuide($locallyStoredGuide);
@@ -334,7 +334,9 @@
         {#if $passagePageShownMenu === null || $passagePageShownMenu === PassagePageMenuEnum.resources}
             <TopNavBar
                 bind:preferredBiblesModalOpen
+                bind:alignmentModeEnabled
                 {bookCodesToNames}
+                {selectedBibleId}
                 bibleSection={$selectedBibleSection}
                 bibles={bibleData?.availableBibles ?? []}
                 tab={selectedTab}
@@ -361,27 +363,17 @@
                     </div>
                 </div>
             {/if}
-            <div class="flex flex-grow overflow-y-hidden px-4 {selectedTab !== PassagePageTabEnum.Bible && 'hidden'}">
-                {#if selectedBibleId === null}
-                    <BibleUnavailable bind:preferredBiblesModalOpen bibles={bibleData?.availableBibles} />
-                {:else if currentBible?.loadingContent}
-                    <FullPageSpinner />
-                {:else if currentBible?.content?.chapters?.length}
-                    <div class="flex-start prose mx-auto w-full overflow-y-scroll">
-                        {#each currentBible?.content.chapters as chapter}
-                            {#each chapter.versesText as { number, text }}
-                                <div
-                                    class="py-1"
-                                    dir={lookupLanguageInfoById(currentBible.languageId)?.scriptDirection}
-                                >
-                                    <span class="sup pe-1">{number}</span><span>{@html text}</span>
-                                </div>
-                            {/each}
-                        {/each}
-                    </div>
-                {:else}
-                    <div></div>
-                {/if}
+            <div
+                class="flex flex-grow flex-col overflow-y-hidden {selectedTab !== PassagePageTabEnum.Bible && 'hidden'}"
+            >
+                {#key $selectedBibleSection}
+                    <BibleViewer
+                        bind:preferredBiblesModalOpen
+                        {selectedBibleId}
+                        {bibleData}
+                        bind:alignmentModeEnabled
+                    />
+                {/key}
             </div>
             {#await resourceFetchPromise}
                 {#if selectedTab === PassagePageTabEnum.Guide}

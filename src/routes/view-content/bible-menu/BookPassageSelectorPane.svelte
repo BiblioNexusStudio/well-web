@@ -17,7 +17,7 @@
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
     export let tab: PassagePageTabEnum;
-    export let bookCodesToNames: Record<string, string> | undefined;
+    export let bookCodesToNames: Map<string, string> | undefined;
 
     let steps = {
         one: { title: $translate('page.BookPassageSelectorMenu.stepOneTitle.value') },
@@ -111,7 +111,7 @@
                             data-app-insights-event-name="book-passage-selector-pane-book-selected"
                             data-app-insights-dimensions={`bookCode,${book.bookCode}`}
                         >
-                            <span class="text-sm">{bookCodesToNames?.[book.bookCode] ?? ''}</span>
+                            <span class="text-sm">{bookCodesToNames?.get(book.bookCode) ?? ''}</span>
                         </button>
                     {:else}
                         <h3 class="my-2 font-bold">{$translate('page.BookPassageSelectorMenu.noBooks.value')}</h3>
@@ -125,7 +125,7 @@
                                 class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4 text-sm"
                                 data-app-insights-event-name="book-passage-selector-pane-passage-selected"
                                 data-app-insights-dimensions={`passage,${bibleSectionToReference(passage)}`}
-                                >{bookCodesToNames?.[selectedBookInfo.bookCode]}
+                                >{bookCodesToNames?.get(selectedBookInfo.bookCode)}
                                 {bibleSectionToReference(passage)}</button
                             >
                         {/each}
