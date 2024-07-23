@@ -215,17 +215,23 @@ async function isContentCachedForOffline(bibleSection: BibleSection, bookData: B
     return false;
 }
 
-export async function getBibleBookCodesToName(languageId: number, retry = true) {
+const memoizedBibleBookCodesToName = new Map<number, Map<string, string>>();
+
+export async function getBibleBookCodesToName(languageId: number, retry = true): Promise<Map<string, string>> {
+    if (memoizedBibleBookCodesToName.has(languageId)) {
+        return memoizedBibleBookCodesToName.get(languageId)!;
+    }
+
     const bibleData = (await fetchFromCacheOrApi(...biblesForLanguageEndpoint(languageId))) as ApiBible[];
     if (bibleData[0]) {
-        return bibleData[0].books.reduce(
-            (output, { displayName, bookCode }) => ({ ...output, [bookCode]: displayName }),
-            {} as Record<string, string>
-        );
+        const result = new Map(bibleData[0].books.map(({ displayName, bookCode }) => [bookCode, displayName]));
+        memoizedBibleBookCodesToName.set(languageId, result);
+        return result;
     } else {
         if (retry && languageId !== 1) {
             return getBibleBookCodesToName(1, false);
         }
+        return new Map();
     }
 }
 

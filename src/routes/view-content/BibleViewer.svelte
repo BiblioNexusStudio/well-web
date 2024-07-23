@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
     import { _ as translate } from 'svelte-i18n';
     import type { BibleData } from './data-fetchers';
     import BibleUnavailable from './BibleUnavailable.svelte';
@@ -10,10 +10,12 @@
     import {
         fetchEnglishWordsWithGreekAlignmentsForSection,
         findSelectedWordIndexesAndGreekWordsForEnglish,
+        formatAlignmentDefinition,
         type GreekWord,
     } from '$lib/utils/data-handlers/alignments';
     import { isNewTestament } from '$lib/utils/bible-section-helpers';
     import type { BibleSection } from '$lib/types/bible';
+    import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
 
     export let bibleData: BibleData | null = null;
     export let preferredBiblesModalOpen: boolean;
@@ -24,6 +26,7 @@
     let selectedVerseIndex: number | null = null;
     let selectedWordIndexes: number[] = [];
     let greekWordsForSelectedEnglish: GreekWord[] = [];
+    let bookCodesToNames: Map<string, string> = new Map();
     let alignmentDataForChapters: Awaited<ReturnType<typeof fetchEnglishWordsWithGreekAlignmentsForSection>> | null =
         null;
     let isLoadingAlignmentData = false;
@@ -56,6 +59,7 @@
         ) {
             isLoadingAlignmentData = true;
             try {
+                bookCodesToNames = await getBibleBookCodesToName($currentLanguageInfo?.id ?? 1);
                 alignmentDataForChapters = await fetchEnglishWordsWithGreekAlignmentsForSection(
                     selectedBibleId,
                     selectedBibleSection
@@ -218,7 +222,7 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
                             <div class="mt-2">
                                 <b>{$translate('page.passage.alignmentMode.definition.value')}</b>
                                 <p class="ms-8">
-                                    {definition}
+                                    {formatAlignmentDefinition(definition, bookCodesToNames)}
                                 </p>
                             </div>
                             {#if index !== firstWord.senses.length - 1}

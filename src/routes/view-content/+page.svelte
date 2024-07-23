@@ -83,7 +83,7 @@
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
     let preferredBiblesModalOpen = false;
     let audioPlayerKey: string | undefined;
-    let bookCodesToNames: Record<string, string> | undefined;
+    let bookCodesToNames: Map<string, string> | undefined;
 
     $: {
         baseFetchPromise = fetchBase($selectedBibleSection); // when the Bible section changes, refetch

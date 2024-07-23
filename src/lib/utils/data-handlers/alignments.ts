@@ -3,6 +3,7 @@ import { fetchFromCacheOrApi } from '$lib/data-cache';
 import { asyncMap } from '$lib/utils/async-array';
 import { range } from '$lib/utils/array';
 import type { BibleSection } from '$lib/types/bible';
+import { alignmentScriptureStringToReference } from '../bible-section-helpers';
 
 export interface EnglishWordWithGreekAlignmentForVerse {
     verse: number;
@@ -72,6 +73,15 @@ export function findSelectedWordIndexesAndGreekWordsForEnglish(
             }
         }
     }
+}
+
+export function formatAlignmentDefinition(definition: string, bookCodesToNames: Map<string, string>) {
+    return definition
+        .replace(/{N:\s?[^}]+}|{A:\s?[^}]+}/g, '')
+        .replace(/{S:\s?(\d{14})}/g, (_, code) => alignmentScriptureStringToReference(code, bookCodesToNames))
+        .replace(/{L:\s?([^}<]+).*}(?:\[.+?\])?\s*(?:[’‘']([^’‘']+?),?[’‘'])?\s*(?:\{D:.*\})/g, '$1 ’$2’')
+        .replace(/,([’‘'])\s*{D:\s?[\d.]+}/g, '$1')
+        .replace(/{D:\s?([\d.]+)}/g, 'entry $1');
 }
 
 async function fetchEnglishWordsWithGreekAlignmentsForBookAndChapter(

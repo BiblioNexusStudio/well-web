@@ -15,6 +15,7 @@
     import { currentGuide } from '$lib/stores/parent-resource.store';
     import { bibleSectionToReference, isNewTestament } from '$lib/utils/bible-section-helpers';
     import AlignmentMode from '$lib/icons/AlignmentMode.svelte';
+    import { isOnline } from '$lib/stores/is-online.store';
 
     export let bibleSection: BibleSection | null = null;
     export let bibles: FrontendBibleBook[] = [];
@@ -24,12 +25,12 @@
     export let guideShortName = '';
     export let showBookChapterVerseMenu: boolean;
     export let showBookPassageSelectorPane: boolean;
-    export let bookCodesToNames: Record<string, string> | undefined;
+    export let bookCodesToNames: Map<string, string> | undefined;
     export let alignmentModeEnabled: boolean;
     export let selectedBibleId: number | null;
 
     $: bibleSectionTitle = calculateBibleSectionTitle(bookCodesToNames, bibleSection);
-    $: canEnableAlignmentMode = selectedBibleId === 1 && isNewTestament(bibleSection);
+    $: canEnableAlignmentMode = selectedBibleId === 1 && isNewTestament(bibleSection) && $isOnline;
 
     $: {
         if ((!isNewTestament(bibleSection) || selectedBibleId !== 1) && alignmentModeEnabled) {
@@ -58,11 +59,11 @@
     }
 
     function calculateBibleSectionTitle(
-        bookCodesToNames: Record<string, string> | undefined,
+        bookCodesToNames: Map<string, string> | undefined,
         bibleSection: BibleSection | null
     ) {
         if (bibleSection && bookCodesToNames) {
-            return `${bookCodesToNames[bibleSection.bookCode] ?? ''} ${bibleSectionToReference(bibleSection)}`;
+            return `${bookCodesToNames.get(bibleSection.bookCode) ?? ''} ${bibleSectionToReference(bibleSection)}`;
         } else {
             return '';
         }
