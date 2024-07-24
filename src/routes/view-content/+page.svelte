@@ -68,7 +68,10 @@
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
-    let fullscreenTextResourceStack: (ResourceContentInfoWithMetadata | TextResourceContentJustId)[] = [];
+    let fullscreenTextResourceStacksByTab: Map<
+        PassagePageTabEnum,
+        (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
+    > = new Map();
 
     let selectedBibleId: number | null = null;
     let selectedTab = PassagePageTabEnum.Guide;
@@ -247,7 +250,8 @@
             openGuideMenu();
         }
 
-        window.onResourceReferenceClick = (contentId: number) => {
+        window.onResourceReferenceClick = (tab: string, contentId: number) => {
+            const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab as PassagePageTabEnum) ?? [];
             fullscreenTextResourceStack.push({
                 id: contentId,
                 // Because AssociatedResources are stored on metadata, we can't rely on version numbers since it could go stale.
@@ -260,7 +264,8 @@
                 version: -1,
                 mediaType: MediaType.Text,
             });
-            fullscreenTextResourceStack = fullscreenTextResourceStack;
+            fullscreenTextResourceStacksByTab.set(tab as PassagePageTabEnum, fullscreenTextResourceStack);
+            fullscreenTextResourceStacksByTab = fullscreenTextResourceStacksByTab;
         };
 
         return () => {
@@ -283,9 +288,11 @@
     bind:tab={selectedTab}
 />
 
-<FullscreenTextResource bind:fullscreenTextResourceStack />
+<div class={selectedTab !== PassagePageTabEnum.Guide ? 'hidden' : ''}>
+    <FullscreenTextResource tab={PassagePageTabEnum.Guide} bind:fullscreenTextResourceStacksByTab />
+</div>
 
-<div class="btm-nav z-40 h-20 border-t">
+<div class="btm-nav z-[60] h-20 border-t">
     <NavMenuTabItem
         bind:selectedTab
         tabName={PassagePageTabEnum.Bible}
@@ -427,14 +434,16 @@
     {/if}
     {#key $selectedBibleSection}
         <LibraryResourceMenu
-            bind:fullscreenTextResourceStack
+            tab={PassagePageTabEnum.Resources}
+            bind:fullscreenTextResourceStacksByTab
             resources={resourceData?.additionalResourceInfo}
             isFullLibrary={false}
             isShowing={$passagePageShownMenu === PassagePageMenuEnum.resources}
         />
     {/key}
     <LibraryResourceMenu
-        bind:fullscreenTextResourceStack
+        tab={PassagePageTabEnum.LibraryMenu}
+        bind:fullscreenTextResourceStacksByTab
         resources={undefined}
         isFullLibrary={true}
         isShowing={$passagePageShownMenu === PassagePageMenuEnum.library}

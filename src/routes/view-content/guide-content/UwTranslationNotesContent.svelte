@@ -11,6 +11,7 @@
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { _ as translate } from 'svelte-i18n';
+    import { PassagePageTabEnum } from '../data-fetchers';
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
@@ -63,7 +64,11 @@
                     return {
                         ...restOfResourceInfo,
                         displayName: metadata?.displayName,
-                        contentHTML: parseTiptapJsonToHtml(content.tiptap, availableAssociatedResources),
+                        contentHTML: parseTiptapJsonToHtml(
+                            content.tiptap,
+                            PassagePageTabEnum.Guide,
+                            availableAssociatedResources
+                        ),
                     };
                 }
             })

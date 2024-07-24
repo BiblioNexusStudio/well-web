@@ -8,6 +8,7 @@
     import NoResourcesFound from './NoResourcesFound.svelte';
     import AnyResourceSection from './AnyResourceSection.svelte';
     import SwishHeader from '$lib/components/SwishHeader.svelte';
+    import FullscreenTextResource from './FullscreenTextResource.svelte';
     import {
         MediaType,
         ParentResourceType,
@@ -29,10 +30,15 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum } from '$lib/types/settings';
     import FullscreenResourceSubgroup from './FullscreenResourceSubgroup.svelte';
+    import type { PassagePageTabEnum } from '../data-fetchers';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
-    export let fullscreenTextResourceStack: (ResourceContentInfoWithMetadata | TextResourceContentJustId)[];
+    export let tab: PassagePageTabEnum;
+    export let fullscreenTextResourceStacksByTab: Map<
+        PassagePageTabEnum,
+        (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
+    >;
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
 
@@ -105,8 +111,10 @@
         if (resource.mediaType === MediaType.Image || resource.mediaType === MediaType.Video) {
             currentFullscreenMediaResourceIndex = mediaResources.indexOf(resource);
         } else {
+            const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
             fullscreenTextResourceStack.push(resource);
-            fullscreenTextResourceStack = fullscreenTextResourceStack;
+            fullscreenTextResourceStacksByTab.set(tab, fullscreenTextResourceStack);
+            fullscreenTextResourceStacksByTab = fullscreenTextResourceStacksByTab;
         }
     }
 
@@ -152,6 +160,7 @@
         {resourceSelected}
         dismissFullscreen={() => subgroupSelected(null)}
     />
+    <FullscreenTextResource {tab} bind:fullscreenTextResourceStacksByTab />
 
     <div
         class="absolute bottom-20 left-0 right-0 {visibleSwish

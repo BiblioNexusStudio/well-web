@@ -13,9 +13,15 @@
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { isOnline } from '$lib/stores/is-online.store';
+    import type { PassagePageTabEnum } from '../data-fetchers';
 
-    export let fullscreenTextResourceStack: (ResourceContentInfoWithMetadata | TextResourceContentJustId)[];
+    export let tab: PassagePageTabEnum;
+    export let fullscreenTextResourceStacksByTab: Map<
+        PassagePageTabEnum,
+        (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
+    >;
 
+    $: fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
     $: currentResource = fullscreenTextResourceStack[fullscreenTextResourceStack.length - 1];
     $: textResourcePromise = currentResource && loadTextContent(currentResource);
 
@@ -40,14 +46,14 @@
                 addThumbnailToVideo(tiptap);
             }
 
-            html = parseTiptapJsonToHtml(tiptap.tiptap, availableAssociatedResources);
+            html = parseTiptapJsonToHtml(tiptap.tiptap, tab, availableAssociatedResources);
         }
         return { html, displayName: metadata?.displayName };
     }
 </script>
 
 {#if currentResource !== undefined}
-    <div use:trapFocus class="fixed inset-0 z-50 flex w-full flex-col bg-primary-content">
+    <div use:trapFocus class="fixed inset-0 bottom-20 z-50 flex w-full flex-col bg-primary-content">
         {#await textResourcePromise}
             <FullPageSpinner />
         {:then resource}
