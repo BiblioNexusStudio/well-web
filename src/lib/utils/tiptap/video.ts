@@ -1,15 +1,6 @@
 // taken from https://github.com/sereneinserenade/tiptap-extension-video
 import { Node } from '@tiptap/core';
 
-declare module '@tiptap/core' {
-    interface Commands<ReturnType> {
-        video: {
-            setVideo: (src: string, poster?: string) => ReturnType;
-            toggleVideo: (src: string, poster?: string) => ReturnType;
-        };
-    }
-}
-
 export const Video = Node.create({
     name: 'video',
 
