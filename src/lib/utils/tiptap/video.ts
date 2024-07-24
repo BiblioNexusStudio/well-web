@@ -4,8 +4,8 @@ import { Node } from '@tiptap/core';
 declare module '@tiptap/core' {
     interface Commands<ReturnType> {
         video: {
-            setVideo: (src: string) => ReturnType;
-            toggleVideo: (src: string) => ReturnType;
+            setVideo: (src: string, poster?: string) => ReturnType;
+            toggleVideo: (src: string, poster?: string) => ReturnType;
         };
     }
 }
@@ -22,6 +22,11 @@ export const Video = Node.create({
                 parseHTML: (el: HTMLSpanElement) => (el as HTMLSpanElement).getAttribute('src'),
                 renderHTML: (attrs) => ({ src: attrs.src }),
             },
+            poster: {
+                default: null,
+                parseHTML: (el: HTMLSpanElement) => el.getAttribute('poster'),
+                renderHTML: (attrs) => ({ poster: attrs.poster }),
+            },
         };
     },
 
@@ -29,7 +34,10 @@ export const Video = Node.create({
         return [
             {
                 tag: 'video',
-                getAttrs: (el) => ({ src: (el as HTMLVideoElement).getAttribute('src') }),
+                getAttrs: (el) => ({
+                    src: (el as HTMLVideoElement).getAttribute('src'),
+                    poster: (el as HTMLVideoElement).getAttribute('poster') ?? '',
+                }),
             },
         ];
     },

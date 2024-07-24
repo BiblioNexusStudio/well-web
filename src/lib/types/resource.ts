@@ -108,7 +108,20 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
     duration?: number;
 }
 
-export type TiptapContent = object;
+export interface TtContent {
+    type: string;
+    attrs: object;
+    content: object[];
+}
+export interface InnerTipTapContent {
+    type: string;
+    content: TtContent[];
+}
+
+export interface TiptapContent {
+    type: string;
+    content: InnerTipTapContent[];
+}
 
 export interface ResourceContentTiptap {
     tiptap: TiptapContent;

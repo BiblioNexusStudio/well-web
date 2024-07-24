@@ -246,3 +246,28 @@ export function sortByDisplayName<T extends { displayName: string | undefined }>
         (a.displayName ?? '').localeCompare(b.displayName ?? '', undefined, { numeric: true })
     );
 }
+
+interface Node {
+    type: string;
+    attrs: {
+        src: string;
+        poster?: string;
+    };
+    content: { type: string; attrs: object; content: object[] }[];
+}
+
+export function addThumbnailToVideo(tiptap: ResourceContentTiptap) {
+    const video = tiptap.tiptap.content.find((node): node is Node => node.type === 'video');
+    const images = tiptap.tiptap.content.filter((node): node is Node => node.type === 'image');
+    if (video && images.length > 0) {
+        let url = '';
+
+        if (images.length >= 3) {
+            url = images[2]?.attrs?.src ?? '';
+        } else {
+            url = images[images.length - 1]?.attrs?.src ?? '';
+        }
+
+        video.attrs.poster = url;
+    }
+}

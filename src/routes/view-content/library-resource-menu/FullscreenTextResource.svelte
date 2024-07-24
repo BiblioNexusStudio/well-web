@@ -9,6 +9,7 @@
         fetchMetadataForResourceContent,
         fetchTiptapForResourceContent,
         filterToAvailableAssociatedResourceContent,
+        addThumbnailToVideo,
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { isOnline } from '$lib/stores/is-online.store';
@@ -34,6 +35,11 @@
                 $isOnline,
                 metadata?.associatedResources
             );
+
+            if (tiptap.tiptap.content.some((node) => node.type === 'video')) {
+                addThumbnailToVideo(tiptap);
+            }
+
             html = parseTiptapJsonToHtml(tiptap.tiptap, availableAssociatedResources);
         }
         return { html, displayName: metadata?.displayName };
