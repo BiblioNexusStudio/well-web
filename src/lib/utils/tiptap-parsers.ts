@@ -24,6 +24,7 @@ import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import TextStyle from '@tiptap/extension-text-style';
 import { Video } from './tiptap/video';
+import type { PassagePageTabEnum } from '../../routes/view-content/data-fetchers';
 
 const nodes = [
     Blockquote,
@@ -69,15 +70,16 @@ function findUnknownMarks(node: Node): string[] {
 }
 
 function generateExtensions(
-    availableAssociatedResources: AssociatedResource[] | undefined,
-    tiptapJson: BasicTiptapJson
+    tiptapJson: BasicTiptapJson,
+    tab: PassagePageTabEnum,
+    availableAssociatedResources: AssociatedResource[] | undefined
 ) {
     const unknownMarkNames = [...new Set(tiptapJson.content.flatMap(findUnknownMarks))];
 
     return [
         ...marks.map((m) => m.configure({})),
         ...nodes.map((n) => n.configure({})),
-        resourceReferenceMark.configure({ availableAssociatedResources }),
+        resourceReferenceMark.configure({ tab, availableAssociatedResources }),
         ...unknownMarkNames.map((name) => Mark.create({ name })),
     ];
 }
@@ -95,13 +97,17 @@ function filterKnownNodes(nodes: Node[]): Node[] {
     return filteredNodes;
 }
 
-export function parseTiptapJsonToHtml(json: object, availableAssociatedResources: AssociatedResource[] | undefined) {
+export function parseTiptapJsonToHtml(
+    json: object,
+    tab: PassagePageTabEnum,
+    availableAssociatedResources: AssociatedResource[] | undefined
+) {
     const tiptapJson = json as BasicTiptapJson;
     return generateHTML(
         {
             ...json,
             content: filterKnownNodes(tiptapJson.content),
         },
-        generateExtensions(availableAssociatedResources, tiptapJson)
+        generateExtensions(tiptapJson, tab, availableAssociatedResources)
     );
 }

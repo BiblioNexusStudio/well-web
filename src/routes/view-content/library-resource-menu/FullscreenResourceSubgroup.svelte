@@ -27,7 +27,7 @@
 </script>
 
 {#if currentFullscreenResourceSubgrouping}
-    <div use:trapFocus class="fixed inset-0 z-[45] flex w-full flex-col bg-primary-content px-4">
+    <div use:trapFocus class="fixed inset-0 bottom-20 z-[45] flex w-full flex-col bg-primary-content px-4">
         <GenericTextResourceSection
             filteredItems={showingResources}
             nameKey="displayName"

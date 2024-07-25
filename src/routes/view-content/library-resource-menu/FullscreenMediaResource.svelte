@@ -117,7 +117,7 @@
 />
 
 {#if currentIndex !== null}
-    <div use:trapFocus class="fixed inset-0 z-50 w-full bg-black">
+    <div use:trapFocus class="fixed inset-0 bottom-20 z-50 w-full bg-black">
         <div bind:this={container} class="absolute inset-0 flex flex-col items-center">
             <div bind:this={topBarDiv} class="flex w-full max-w-[65ch] flex-row items-center px-4 py-3">
                 <button

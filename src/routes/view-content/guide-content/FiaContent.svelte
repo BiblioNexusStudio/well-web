@@ -24,6 +24,7 @@
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
     import { _ as translate } from 'svelte-i18n';
+    import { PassagePageTabEnum } from '../data-fetchers';
 
     interface FiaAudioContent {
         steps: {
@@ -179,7 +180,7 @@
                     return {
                         steps: content.map((step) => ({
                             ...step,
-                            contentHTML: parseTiptapJsonToHtml(step.tiptap, undefined),
+                            contentHTML: parseTiptapJsonToHtml(step.tiptap, PassagePageTabEnum.Guide, undefined),
                         })),
                     };
                 } catch (error) {
