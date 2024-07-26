@@ -117,7 +117,8 @@ export const calculateUrlsWithMetadataToChange = (
                                     mediaType: MediaType.Text,
                                     contentId: resourceMenuItem.contentId,
                                     url: resourceContentApiFullUrl(resourceMenuItem),
-                                    size: resourceMenuItem.contentSize,
+                                    size: resourceMenuItem.contentSize + (resourceMenuItem.inlineMediaSize ?? 0),
+                                    hasInlineMedia: resourceMenuItem.inlineMediaSize !== null,
                                 });
                                 urlsAndSizesToDownload.push({
                                     url: resourceMetadataApiFullUrl(resourceMenuItem),
@@ -283,7 +284,7 @@ export const buildRowData = (
     }
 
     audioChapter.resourceMenuItems?.forEach((resourceMenuItem) => {
-        size = size + resourceMenuItem.contentSize;
+        size = size + resourceMenuItem.contentSize + (resourceMenuItem.inlineMediaSize ?? 0);
         resources++;
 
         if (resourceMenuItem.mediaTypeName === MediaType.Image) {

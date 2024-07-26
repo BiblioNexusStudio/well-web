@@ -8,6 +8,7 @@ export interface UrlWithMetadata {
     contentId?: number;
     size: number;
     metadataOnly?: boolean;
+    hasInlineMedia?: boolean;
 }
 
 export interface ApiAudioChapter {
@@ -25,6 +26,7 @@ export interface FileManagerResourceContentInfo {
     mediaTypeName: MediaType;
     parentResourceId: ParentResourceId;
     isResourceUrlCached?: boolean;
+    inlineMediaSize: number | null;
 }
 
 export interface FrontendAudioChapter extends ApiAudioChapter {

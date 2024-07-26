@@ -110,7 +110,7 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
 
 export interface TtContent {
     type: string;
-    attrs: object;
+    attrs: { src: string };
     content: object[];
 }
 export interface InnerTipTapContent {
