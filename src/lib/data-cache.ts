@@ -3,7 +3,7 @@ import type { Url, UrlWithMetadata } from './types/file-manager';
 import type { StaticUrlsMap } from './types/static-mapping';
 import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 import { asyncUnorderedForEach } from './utils/async-array';
-import { MediaType } from './types/resource';
+import { MediaType, type DownloadTtContent } from './types/resource';
 import { chunk } from './utils/array';
 import { log } from './logger';
 import { objectValues } from './utils/typesafe-standard-lib';
@@ -202,7 +202,7 @@ export async function cacheManyContentUrlsWithProgress(
         progressCallback(progress);
     };
 
-    const processUrl = async (url: Url, expectedSize: number) => {
+    const processUrl = async (url: Url, expectedSize: number, hasInlineMedia: boolean = false) => {
         partiallyDownloadedUrls.add(url);
 
         try {
@@ -226,6 +226,7 @@ export async function cacheManyContentUrlsWithProgress(
 
             await retryRequest(async () => {
                 const response = await fetch(url);
+                const responseClone = response.clone();
                 const reader = response.body?.getReader();
                 const contentLength = response.headers.get('Content-Length');
                 let receivedLength = 0;
@@ -243,6 +244,31 @@ export async function cacheManyContentUrlsWithProgress(
                         }
                     }
                 }
+
+                if (hasInlineMedia) {
+                    const resources = await responseClone.json();
+                    resources.forEach((data: { tiptap: { content: DownloadTtContent[] } }) => {
+                        if (data && data.tiptap && data.tiptap.content) {
+                            data?.tiptap?.content?.forEach((content: DownloadTtContent) => {
+                                if (
+                                    content.type.toUpperCase() === MediaType.Video.toUpperCase() ||
+                                    content.type.toUpperCase() === MediaType.Image.toUpperCase()
+                                ) {
+                                    queue.push({
+                                        mediaType:
+                                            content.type.toUpperCase() === MediaType.Video.toUpperCase()
+                                                ? MediaType.Video
+                                                : MediaType.Image,
+                                        url: content.attrs?.src,
+                                        size: 0,
+                                        hasInlineMedia: false,
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+
                 updateProgress(url, receivedLength, contentLength ? +contentLength : 0, true);
             });
         } finally {
@@ -316,8 +342,8 @@ export async function cacheManyContentUrlsWithProgress(
                         const { baseUrl, idsToUrls } = urlWithMetadataOrBatchUrl as BatchedUrl;
                         await processBatch(baseUrl, idsToUrls);
                     } else {
-                        const { url, size } = urlWithMetadataOrBatchUrl as UrlWithMetadata;
-                        if (url) await processUrl(url, size);
+                        const { url, size, hasInlineMedia } = urlWithMetadataOrBatchUrl as UrlWithMetadata;
+                        if (url) await processUrl(url, size, hasInlineMedia);
                     }
                 }
             });
@@ -422,7 +448,7 @@ export async function fetchContentOrMetadataBatchFromCacheAndNetwork<T>(
 }
 
 function isTextBatchableUrl(url: UrlWithMetadata) {
-    return url.mediaType === MediaType.Text && window.__CACHING_CONFIG.isContentUrl(url.url);
+    return url.mediaType === MediaType.Text && window.__CACHING_CONFIG.isContentUrl(url.url) && !url.hasInlineMedia;
 }
 
 function isMetadataBatchableUrl(url: UrlWithMetadata) {

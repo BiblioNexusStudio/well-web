@@ -148,9 +148,6 @@
             "cancel": {
                 "value": "إلغاء"
             },
-            "files": {
-                "value": "ملفات"
-            },
             "noInternet": {
                 "value": "لا يوجد إنترنت"
             },

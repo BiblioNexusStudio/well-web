@@ -113,6 +113,12 @@ export interface TtContent {
     attrs: object;
     content: object[];
 }
+
+export interface DownloadTtContent {
+    type: string;
+    attrs: { src: string };
+    content: object[];
+}
 export interface InnerTipTapContent {
     type: string;
     content: TtContent[];

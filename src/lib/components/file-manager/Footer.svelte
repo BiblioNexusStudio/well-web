@@ -71,10 +71,7 @@
         <div class="flex w-full justify-between">
             <div class="f-full flex items-center">
                 <span class="text-l font-bold text-primary">
-                    {$downloadData.urlsToDownload.filter(({ metadataOnly }) => !metadataOnly).length}
-                    {$translate('page.fileManager.files.value')}; {convertToReadableSize(
-                        $downloadData.totalSizeToDownload
-                    )}
+                    {convertToReadableSize($downloadData.totalSizeToDownload)}
                 </span>
             </div>
             <button

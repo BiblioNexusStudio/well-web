@@ -148,9 +148,6 @@
             "cancel": {
                 "value": "Annuler"
             },
-            "files": {
-                "value": "fichiers"
-            },
             "noInternet": {
                 "value": "Pas d'Internet"
             },
