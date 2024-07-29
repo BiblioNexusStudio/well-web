@@ -110,6 +110,12 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
 
 export interface TtContent {
     type: string;
+    attrs: object;
+    content: object[];
+}
+
+export interface DownloadTtContent {
+    type: string;
     attrs: { src: string };
     content: object[];
 }

@@ -3,7 +3,7 @@ import type { Url, UrlWithMetadata } from './types/file-manager';
 import type { StaticUrlsMap } from './types/static-mapping';
 import staticUrls from '$lib/static-urls-map.json' assert { type: 'json' };
 import { asyncUnorderedForEach } from './utils/async-array';
-import { MediaType, type TtContent } from './types/resource';
+import { MediaType, type DownloadTtContent } from './types/resource';
 import { chunk } from './utils/array';
 import { log } from './logger';
 import { objectValues } from './utils/typesafe-standard-lib';
@@ -246,13 +246,19 @@ export async function cacheManyContentUrlsWithProgress(
                 }
 
                 if (hasInlineMedia) {
-                    const data = await responseClone.json();
+                    const [data] = await responseClone.json();
                     if (data && data.tiptap && data.tiptap.content) {
-                        data.tiptap.content.forEach((content: TtContent) => {
-                            if (content.type === 'video' || content.type === 'image') {
+                        data?.tiptap?.content?.forEach((content: DownloadTtContent) => {
+                            if (
+                                content.type.toUpperCase() === MediaType.Video.toUpperCase() ||
+                                content.type.toUpperCase() === MediaType.Image.toUpperCase()
+                            ) {
                                 queue.push({
-                                    mediaType: content.type === 'video' ? MediaType.Video : MediaType.Image,
-                                    url: content.attrs.src,
+                                    mediaType:
+                                        content.type.toUpperCase() === MediaType.Video.toUpperCase()
+                                            ? MediaType.Video
+                                            : MediaType.Image,
+                                    url: content.attrs?.src,
                                     size: 0,
                                     hasInlineMedia: false,
                                 });
