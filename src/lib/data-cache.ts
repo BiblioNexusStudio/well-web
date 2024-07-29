@@ -246,25 +246,27 @@ export async function cacheManyContentUrlsWithProgress(
                 }
 
                 if (hasInlineMedia) {
-                    const [data] = await responseClone.json();
-                    if (data && data.tiptap && data.tiptap.content) {
-                        data?.tiptap?.content?.forEach((content: DownloadTtContent) => {
-                            if (
-                                content.type.toUpperCase() === MediaType.Video.toUpperCase() ||
-                                content.type.toUpperCase() === MediaType.Image.toUpperCase()
-                            ) {
-                                queue.push({
-                                    mediaType:
-                                        content.type.toUpperCase() === MediaType.Video.toUpperCase()
-                                            ? MediaType.Video
-                                            : MediaType.Image,
-                                    url: content.attrs?.src,
-                                    size: 0,
-                                    hasInlineMedia: false,
-                                });
-                            }
-                        });
-                    }
+                    const resources = await responseClone.json();
+                    resources.forEach((data: { tiptap: { content: DownloadTtContent[] } }) => {
+                        if (data && data.tiptap && data.tiptap.content) {
+                            data?.tiptap?.content?.forEach((content: DownloadTtContent) => {
+                                if (
+                                    content.type.toUpperCase() === MediaType.Video.toUpperCase() ||
+                                    content.type.toUpperCase() === MediaType.Image.toUpperCase()
+                                ) {
+                                    queue.push({
+                                        mediaType:
+                                            content.type.toUpperCase() === MediaType.Video.toUpperCase()
+                                                ? MediaType.Video
+                                                : MediaType.Image,
+                                        url: content.attrs?.src,
+                                        size: 0,
+                                        hasInlineMedia: false,
+                                    });
+                                }
+                            });
+                        }
+                    });
                 }
 
                 updateProgress(url, receivedLength, contentLength ? +contentLength : 0, true);

@@ -20,7 +20,7 @@ const OTHER_API_PATHS_TO_CACHE_AS_CONTENT = ['/resources/:ID/thumbnail', '/bible
 
 const API_PATHS_TO_SKIP_CACHING = ['/resources/batch/metadata', '/resources/batch/content/text'];
 
-const CDN_URLS = ['https://cdn.aquifer.bible', 'https://aquiferstorage.blob.core.windows.net'];
+const CDN_URLS = ['https://cdn.aquifer.bible'];
 
 const cdnUrlRegex = createRegexFromUrlsAndPaths(CDN_URLS);
 const apiContentAndMetadataUrlsRegex = createRegexFromUrlsAndPaths(API_URLS, API_CONTENT_AND_METADATA_PATHS);

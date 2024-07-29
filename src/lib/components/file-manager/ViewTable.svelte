@@ -172,10 +172,7 @@
                     <td>
                         <div class="font-bold">{`${$biblesModuleBook.displayName} ${audioChapter.number}`}</div>
                         <div>
-                            {rowData.resources}
-                            {$translate('page.fileManager.viewRow.resources.value')} | {convertToReadableSize(
-                                rowData.size
-                            )}
+                            {convertToReadableSize(rowData.size)}
                         </div>
                     </td>
                     <td class="text-center">

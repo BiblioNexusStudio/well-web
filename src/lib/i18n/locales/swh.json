@@ -176,10 +176,6 @@
                 "value": "Ghairi",
                 "_context": "Kitufe cha kughairi kitendo cha sasa hivi"
             },
-            "files": {
-                "value": "mafaili",
-                "_context": "Weka lebo kwa faili"
-            },
             "noInternet": {
                 "value": "Hakuna intaneti",
                 "_context": "Ujumbe wa kuonyesha wakati mtumiaji hana muunganisho wa intaneti"

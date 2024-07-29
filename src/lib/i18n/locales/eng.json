@@ -187,10 +187,6 @@
                 "value": "Cancel",
                 "_context": "Button to cancel current action"
             },
-            "files": {
-                "value": "files",
-                "_context": "Label for the files"
-            },
             "noInternet": {
                 "value": "No Internet",
                 "_context": "Message to display when the user has no internet connection"
