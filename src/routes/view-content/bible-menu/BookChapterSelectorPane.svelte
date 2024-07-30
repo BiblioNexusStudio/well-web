@@ -7,7 +7,7 @@
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible';
-    import { selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { currentBibleSection } from '$lib/stores/passage-form.store';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import type { Language } from '$lib/types/file-manager';
     import { isOnline } from '$lib/stores/is-online.store';
@@ -16,13 +16,13 @@
     import { currentGuide } from '$lib/stores/parent-resource.store';
     import type { ApiParentResource } from '$lib/types/resource';
     import { recalculatePanesAndMenus } from '$lib/stores/passage-page.store';
-    import { PassagePageTabEnum } from '../data-fetchers';
+    import { ContentTabEnum } from '../data-fetchers';
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
     export let filterByCurrentGuide: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
-    export let tab: PassagePageTabEnum;
+    export let tab: ContentTabEnum;
 
     let currentBook: ApiBibleBook;
     let currentChapter: ApiBibleChapter | null = null;
@@ -173,7 +173,7 @@
     }
 
     async function handleVerseGoButton() {
-        $selectedBibleSection = {
+        $currentBibleSection = {
             bookCode: currentBook.code,
             startChapter: firstSelectedVerse ? forceToInt(firstSelectedVerse.chapterNumber) : 0,
             startVerse: firstSelectedVerse ? forceToInt(firstSelectedVerse.number) : 0,
@@ -194,7 +194,7 @@
         firstSelectedVerse = null;
         lastSelectedVerse = null;
         if ($currentGuide) {
-            tab = PassagePageTabEnum.Guide;
+            tab = ContentTabEnum.Guide;
         }
         recalculatePanesAndMenus(tab);
         scrollBehaviorSmooth = false;

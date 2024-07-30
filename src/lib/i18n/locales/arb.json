@@ -424,34 +424,11 @@
         }
     },
     "navTop": {
-        "recording": {
-            "value": "اصنع تسجيلاً"
-        },
         "selectPassage": {
             "value": "اختر مقطعًا"
         },
         "selectGuide": {
             "value": "اختر دليل"
-        },
-        "audioRecordingModal": {
-            "noPermission": {
-                "value": "يرجى تحديث إعداداتك والسماح باستخدام الميكروفون"
-            },
-            "languageLabel": {
-                "value": "ما هي اللغة التي ستقوم بالتسجيل بها؟"
-            },
-            "versionLabel": {
-                "value": "ما اسم الترجمة؟"
-            },
-            "versionAbbreviationLabel": {
-                "value": "ما هي الاختصار المكون من 3 أحرف لهذه الترجمة؟"
-            },
-            "discard": {
-                "value": "تجاهل"
-            },
-            "save": {
-                "value": "حفظ"
-            }
         }
     },
     "resources": {

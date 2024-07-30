@@ -424,34 +424,11 @@
         }
     },
     "navTop": {
-        "recording": {
-            "value": "एक रेकॉर्डिंग बनाएं"
-        },
         "selectPassage": {
             "value": "पाठ चुनें"
         },
         "selectGuide": {
             "value": "मार्गदर्शिका चुनें"
-        },
-        "audioRecordingModal": {
-            "noPermission": {
-                "value": "कृपया अपनी सेटिंग्स अपडेट करें और माइक्रोफोन का उपयोग करने की अनुमति दें"
-            },
-            "languageLabel": {
-                "value": "आप किस भाषा में रिकॉर्डिंग कर रहे हैं?"
-            },
-            "versionLabel": {
-                "value": "अनुवाद का नाम क्या है?"
-            },
-            "versionAbbreviationLabel": {
-                "value": "इस अनुवाद का 3-अक्षरी संक्षेपण क्या है?"
-            },
-            "discard": {
-                "value": "छोड़ें"
-            },
-            "save": {
-                "value": "सहेजें"
-            }
         }
     },
     "resources": {

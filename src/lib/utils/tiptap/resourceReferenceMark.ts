@@ -1,6 +1,6 @@
 import type { AssociatedResource } from '$lib/types/resource';
 import { Mark } from '@tiptap/core';
-import type { PassagePageTabEnum } from '../../../routes/view-content/data-fetchers';
+import type { ContentTabEnum } from '../../../routes/view-content/data-fetchers';
 
 export const resourceReferenceMark = Mark.create<ResourceReferenceOptions>({
     name: 'resourceReference',
@@ -35,5 +35,5 @@ export const resourceReferenceMark = Mark.create<ResourceReferenceOptions>({
 
 interface ResourceReferenceOptions {
     availableAssociatedResources: AssociatedResource[] | undefined;
-    tab: PassagePageTabEnum;
+    tab: ContentTabEnum;
 }

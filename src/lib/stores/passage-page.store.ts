@@ -1,7 +1,7 @@
 import { get, writable } from 'svelte/store';
-import { PassagePageTabEnum } from '../../routes/view-content/data-fetchers';
+import { ContentTabEnum } from '../../routes/view-content/data-fetchers';
 import { currentGuide } from './parent-resource.store';
-import { selectedBibleSection } from './passage-form.store';
+import { currentBibleSection } from './passage-form.store';
 
 export enum PassagePageMenuEnum {
     guide = 'guide',
@@ -45,19 +45,16 @@ export function openFeedbackMenu() {
     passagePageShownMenu.set(PassagePageMenuEnum.feedback);
 }
 
-export function recalculatePanesAndMenus(tab: PassagePageTabEnum, callback?: () => void) {
-    if (tab === PassagePageTabEnum.LibraryMenu) {
+export function recalculatePanesAndMenus(tab: ContentTabEnum, callback?: () => void) {
+    if (tab === ContentTabEnum.LibraryMenu) {
         passagePageShownMenu.set(PassagePageMenuEnum.library);
-    } else if (tab === PassagePageTabEnum.Resources) {
+    } else if (tab === ContentTabEnum.Resources) {
         passagePageShownMenu.set(PassagePageMenuEnum.resources);
-    } else if (
-        tab === PassagePageTabEnum.Guide &&
-        (get(currentGuide) === undefined || get(selectedBibleSection) === null)
-    ) {
+    } else if (tab === ContentTabEnum.Guide && (get(currentGuide) === undefined || get(currentBibleSection) === null)) {
         openGuideMenu();
-    } else if (tab === PassagePageTabEnum.MainMenu) {
+    } else if (tab === ContentTabEnum.MainMenu) {
         openMainMenu();
-    } else if (tab === PassagePageTabEnum.Bible && get(selectedBibleSection) === null) {
+    } else if (tab === ContentTabEnum.Bible && get(currentBibleSection) === null) {
         openBibleMenu();
     } else {
         passagePageShownMenu.set(null);

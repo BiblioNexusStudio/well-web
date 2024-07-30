@@ -1,10 +1,10 @@
 <script lang="ts">
     // This component has two options:
-    // 1) selectedTab and tabName
+    // 1) currentTab and tabName
     //    These are meant to be used for "tab-like" content where only one tab displays at a time
     // 2) isSelected
     //    This is for toggle-able things like drawers that are separate from tab content
-    export let selectedTab: string | null = null;
+    export let currentTab: string | null = null;
     export let tabName: string | null = null;
     export let label: string;
     export let isSelected: boolean | null = null;
@@ -12,13 +12,13 @@
 
     function handleClick() {
         if (tabName !== null) {
-            selectedTab = tabName;
+            currentTab = tabName;
         } else {
             isSelected = !isSelected;
         }
     }
 
-    $: isSelected = selectedTab !== null && tabName !== null ? selectedTab === tabName : false;
+    $: isSelected = currentTab !== null && tabName !== null ? currentTab === tabName : false;
 </script>
 
 <button

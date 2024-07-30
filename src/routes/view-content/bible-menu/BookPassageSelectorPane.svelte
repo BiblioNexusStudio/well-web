@@ -1,6 +1,6 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { selectedBookIndex, selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { selectedBookIndex, currentBibleSection } from '$lib/stores/passage-form.store';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
     import { passagesByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
@@ -11,12 +11,12 @@
     import { PredeterminedPassageGuides, type ApiParentResource } from '$lib/types/resource';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { PassagePageTabEnum } from '../data-fetchers';
+    import { ContentTabEnum } from '../data-fetchers';
     import { recalculatePanesAndMenus } from '$lib/stores/passage-page.store';
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
-    export let tab: PassagePageTabEnum;
+    export let tab: ContentTabEnum;
     export let bookCodesToNames: Map<string, string> | undefined;
 
     let steps = {
@@ -34,11 +34,11 @@
     }
 
     function setPassageAndClosePane(passage: BibleSection) {
-        $selectedBibleSection = passage;
+        $currentBibleSection = passage;
         currentStep = steps.one;
         isShowing = false;
         if ($currentGuide) {
-            tab = PassagePageTabEnum.Guide;
+            tab = ContentTabEnum.Guide;
         }
         recalculatePanesAndMenus(tab);
     }

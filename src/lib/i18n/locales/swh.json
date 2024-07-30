@@ -470,41 +470,11 @@
         }
     },
     "navTop": {
-        "recording": {
-            "value": "Rekodi",
-            "_context": "Kitufe cha kuunda rekodi ya kifungu"
-        },
         "selectPassage": {
             "value": "Chagua Kifungu"
         },
         "selectGuide": {
             "value": "Chagua Mwongozo"
-        },
-        "audioRecordingModal": {
-            "noPermission": {
-                "value": "Tafadhali sasisha mipangilio yako na upatie ruhusa ili kipaza sauti chako kitumike",
-                "_context": "Maandishi ya kuonyesha wakati mtumiaji hajatoa ruhusa ya kipaza sauti"
-            },
-            "languageLabel": {
-                "value": "Unarekodi lugha gani?",
-                "_context": "Lebo kwa uga wa ingizo la lugha"
-            },
-            "versionLabel": {
-                "value": "Jina la hio tafsiri ni nini?",
-                "_context": "Lebo kwa uga wa ingizo la toleo"
-            },
-            "versionAbbreviationLabel": {
-                "value": "Je, ufupisho wa herufi 3 kwa tafsiri hii ni upi?",
-                "_context": "Lebo kwa uga wa uingizaji wa ufupisho wa toleo"
-            },
-            "discard": {
-                "value": "Tupa",
-                "_context": "Kitufe cha kufunga modali na kutupa mabadiliko"
-            },
-            "save": {
-                "value": "Hifadhi",
-                "_context": "Kitufe cha kuhifadhi rekodi"
-            }
         }
     },
     "resources": {

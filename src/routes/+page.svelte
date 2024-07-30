@@ -2,12 +2,12 @@
     import { _ as translate } from 'svelte-i18n';
     import { isOnline } from '$lib/stores/is-online.store';
     import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
-    import { selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { currentBibleSection } from '$lib/stores/passage-form.store';
     import { onMount } from 'svelte';
     import { setCurrentGuide } from '$lib/stores/parent-resource.store';
 
     onMount(() => {
-        selectedBibleSection.set(null);
+        currentBibleSection.set(null);
         setCurrentGuide(undefined);
     });
 </script>

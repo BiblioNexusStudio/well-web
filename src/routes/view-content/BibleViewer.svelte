@@ -6,7 +6,7 @@
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { splitTextIntoWordsAndPunctuation, type WordOrPunctuation } from '$lib/utils/text-splitter';
     import { onMount } from 'svelte';
-    import { selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { currentBibleSection } from '$lib/stores/passage-form.store';
     import {
         fetchEnglishWordsWithGreekAlignmentsForSection,
         findSelectedWordIndexesAndGreekWordsForEnglish,
@@ -19,7 +19,7 @@
 
     export let bibleData: BibleData | null = null;
     export let preferredBiblesModalOpen: boolean;
-    export let selectedBibleId: number | null = null;
+    export let currentBibleId: number | null = null;
     export let alignmentModeEnabled: boolean;
 
     let selectedChapterIndex: number | null = null;
@@ -41,28 +41,28 @@
         return splitTextForAlignment?.[chapterIndex]?.[verseIndex];
     }
 
-    $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === selectedBibleId);
+    $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === currentBibleId);
 
-    $: fetchAlignmentData($selectedBibleSection, alignmentModeEnabled, alignmentDataForChapters);
+    $: fetchAlignmentData($currentBibleSection, alignmentModeEnabled, alignmentDataForChapters);
 
     async function fetchAlignmentData(
-        selectedBibleSection: BibleSection | null,
+        currentBibleSection: BibleSection | null,
         alignmentModeEnabled: boolean,
         currentAlignmentDataForChapters: typeof alignmentDataForChapters
     ) {
         if (
-            selectedBibleSection &&
-            selectedBibleId &&
+            currentBibleSection &&
+            currentBibleId &&
             alignmentModeEnabled &&
             !currentAlignmentDataForChapters &&
-            isNewTestament(selectedBibleSection)
+            isNewTestament(currentBibleSection)
         ) {
             isLoadingAlignmentData = true;
             try {
                 bookCodesToNames = await getBibleBookCodesToName($currentLanguageInfo?.id ?? 1);
                 alignmentDataForChapters = await fetchEnglishWordsWithGreekAlignmentsForSection(
-                    selectedBibleId,
-                    selectedBibleSection
+                    currentBibleId,
+                    currentBibleSection
                 );
             } finally {
                 isLoadingAlignmentData = false;
@@ -150,7 +150,7 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
     }
 </script>
 
-{#if selectedBibleId === null}
+{#if currentBibleId === null}
     <BibleUnavailable bind:preferredBiblesModalOpen bibles={bibleData?.availableBibles} />
 {:else if currentBible?.loadingContent || isLoadingAlignmentData}
     <FullPageSpinner />

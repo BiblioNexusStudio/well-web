@@ -19,7 +19,7 @@ import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resour
 import type { BibleSection } from '$lib/types/bible';
 import { currentGuide } from '$lib/stores/parent-resource.store';
 
-export enum PassagePageTabEnum {
+export enum ContentTabEnum {
     Bible = 'Bible',
     Guide = 'Guide',
     MainMenu = 'MainMenu',

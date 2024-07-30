@@ -424,34 +424,11 @@
         }
     },
     "navTop": {
-        "recording": {
-            "value": "Faire un enregistrement"
-        },
         "selectPassage": {
             "value": "Sélectionner un Passage"
         },
         "selectGuide": {
             "value": "Sélectionner un Guide"
-        },
-        "audioRecordingModal": {
-            "noPermission": {
-                "value": "Veuillez mettre à jour vos paramètres et donner la permission d'utiliser votre microphone"
-            },
-            "languageLabel": {
-                "value": "Dans quelle langue enregistrez-vous ?"
-            },
-            "versionLabel": {
-                "value": "Quel est le nom de la traduction ?"
-            },
-            "versionAbbreviationLabel": {
-                "value": "Quelle est l'abréviation en 3 lettres pour cette traduction ?"
-            },
-            "discard": {
-                "value": "Jeter"
-            },
-            "save": {
-                "value": "Sauvegarder"
-            }
         }
     },
     "resources": {

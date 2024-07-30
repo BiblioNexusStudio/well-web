@@ -8,7 +8,7 @@
         guidesAvailableForBibleSection,
         guidesAvailableInCurrentLanguage,
     } from '$lib/utils/data-handlers/resources/guides';
-    import { selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { currentBibleSection } from '$lib/stores/passage-form.store';
     import type { Language } from '$lib/types/file-manager';
     import type { BibleSection } from '$lib/types/bible';
     import { currentLanguageInfo } from '$lib/stores/language.store';
@@ -19,7 +19,7 @@
     export let showBookPassageSelectorPane: boolean;
     export let showBookChapterVerseMenu: boolean;
 
-    $: availableGuidesPromise = fetchAvailableGuides($selectedBibleSection, $settings, $currentLanguageInfo, $isOnline);
+    $: availableGuidesPromise = fetchAvailableGuides($currentBibleSection, $settings, $currentLanguageInfo, $isOnline);
 
     async function fetchAvailableGuides(
         bibleSection: BibleSection | null,

@@ -13,11 +13,11 @@
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { isOnline } from '$lib/stores/is-online.store';
-    import type { PassagePageTabEnum } from '../data-fetchers';
+    import type { ContentTabEnum } from '../data-fetchers';
 
-    export let tab: PassagePageTabEnum;
+    export let tab: ContentTabEnum;
     export let fullscreenTextResourceStacksByTab: Map<
-        PassagePageTabEnum,
+        ContentTabEnum,
         (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
     >;
 
