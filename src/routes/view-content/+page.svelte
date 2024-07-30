@@ -22,7 +22,7 @@
         type BibleData,
         type ResourceData,
         fetchBibleContent,
-        PassagePageTabEnum,
+        ContentTabEnum,
         fetchResourceData,
         fetchBibleData,
     } from './data-fetchers';
@@ -55,7 +55,7 @@
         type ResourceContentInfoWithMetadata,
         type TextResourceContentJustId,
     } from '$lib/types/resource';
-    import { selectedBibleSection } from '$lib/stores/passage-form.store';
+    import { currentBibleSection } from '$lib/stores/passage-form.store';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { BibleSection } from '$lib/types/bible';
     import QuickShare from './quick-share/QuickShare.svelte';
@@ -69,12 +69,12 @@
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
     let fullscreenTextResourceStacksByTab: Map<
-        PassagePageTabEnum,
+        ContentTabEnum,
         (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
     > = new Map();
 
-    let selectedBibleId: number | null = null;
-    let selectedTab = PassagePageTabEnum.Guide;
+    let currentBibleId: number | null = null;
+    let currentTab = ContentTabEnum.Guide;
     let isShowingBookPassageSelectorPane = false;
     let isShowingBookChapterSelectorPane = false;
     let alignmentModeEnabled = false;
@@ -89,12 +89,12 @@
     let bookCodesToNames: Map<string, string> | undefined;
 
     $: {
-        baseFetchPromise = fetchBase($selectedBibleSection); // when the Bible section changes, refetch
+        baseFetchPromise = fetchBase($currentBibleSection); // when the Bible section changes, refetch
     }
     $: handlePreferredBiblesChange($preferredBibleIds);
-    $: fetchContentForBibleId(selectedBibleId);
+    $: fetchContentForBibleId(currentBibleId);
 
-    $: selectedTab === PassagePageTabEnum.Bible && setBibleAudioPlayerForBible(selectedBibleId);
+    $: currentTab === ContentTabEnum.Bible && setBibleAudioPlayerForBible(currentBibleId);
     $: audioPlayerShowing = audioPlayerKey && !!multiClipAudioStates[audioPlayerKey] && !alignmentModeEnabled;
     $: fetchBibleBookCodeToName($currentLanguageInfo);
 
@@ -123,7 +123,7 @@
     }
 
     async function handlePreferredBiblesChange(preferredBibleIds: number[]) {
-        fetchBibles($selectedBibleSection);
+        fetchBibles($currentBibleSection);
         cacheBibleMetadata(preferredBibleIds);
     }
 
@@ -139,10 +139,10 @@
                 loadingContent: false,
             }));
             bibleData = newBibleData;
-            if (!selectedBibleId || !bibleData?.biblesForTabs.map(({ id }) => id).includes(selectedBibleId)) {
-                selectedBibleId = bibleData?.biblesForTabs?.[0]?.id ?? null;
+            if (!currentBibleId || !bibleData?.biblesForTabs.map(({ id }) => id).includes(currentBibleId)) {
+                currentBibleId = bibleData?.biblesForTabs?.[0]?.id ?? null;
             }
-            await fetchContentForBibleId(selectedBibleId);
+            await fetchContentForBibleId(currentBibleId);
             await cacheNonSelectedBiblesIfOnline();
         }
     }
@@ -152,9 +152,9 @@
         if (bibleData && bibleData.biblesForTabs[index]) {
             bibleData.biblesForTabs[index]!.loadingContent = true;
             const bibleBook = bibleData.biblesForTabs[index];
-            if (bibleBook && $selectedBibleSection) {
+            if (bibleBook && $currentBibleSection) {
                 if (!bibleBook.content) {
-                    const content = await fetchBibleContent($selectedBibleSection, bibleBook);
+                    const content = await fetchBibleContent($currentBibleSection, bibleBook);
                     // make sure the index hasn't changed
                     if (bibleData.biblesForTabs[index]!.id === id) {
                         bibleData.biblesForTabs[index]!.content = content;
@@ -172,11 +172,11 @@
     // in order to make sure content is available when the user goes offline, cache all the Bible data for each
     // non-selected tab
     async function cacheNonSelectedBiblesIfOnline() {
-        if ($isOnline && $selectedBibleSection && bibleData?.biblesForTabs) {
+        if ($isOnline && $currentBibleSection && bibleData?.biblesForTabs) {
             await cacheBiblesForBibleSection(
-                $selectedBibleSection,
+                $currentBibleSection,
                 bibleData?.biblesForTabs
-                    .filter(({ id, bookMetadata }) => id !== selectedBibleId && bookMetadata !== null)
+                    .filter(({ id, bookMetadata }) => id !== currentBibleId && bookMetadata !== null)
                     .map(({ id, bookMetadata }) => ({ ...bookMetadata, bibleId: id })) as BibleBookContentDetails[]
             );
         }
@@ -240,7 +240,7 @@
         }
     }
 
-    $: recalculatePanesAndMenus(selectedTab, closeAllPaneMenus);
+    $: recalculatePanesAndMenus(currentTab, closeAllPaneMenus);
 
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
     $: showOrDismissBookChapterSelectorPane(isShowingBookChapterSelectorPane);
@@ -251,7 +251,7 @@
         }
 
         window.onResourceReferenceClick = (tab: string, contentId: number) => {
-            const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab as PassagePageTabEnum) ?? [];
+            const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab as ContentTabEnum) ?? [];
             fullscreenTextResourceStack.push({
                 id: contentId,
                 // Because AssociatedResources are stored on metadata, we can't rely on version numbers since it could go stale.
@@ -264,7 +264,7 @@
                 version: -1,
                 mediaType: MediaType.Text,
             });
-            fullscreenTextResourceStacksByTab.set(tab as PassagePageTabEnum, fullscreenTextResourceStack);
+            fullscreenTextResourceStacksByTab.set(tab as ContentTabEnum, fullscreenTextResourceStack);
             fullscreenTextResourceStacksByTab = fullscreenTextResourceStacksByTab;
         };
 
@@ -277,40 +277,32 @@
 <BookPassageSelectorPane
     bind:bookPassageSelectorPane
     bind:isShowing={isShowingBookPassageSelectorPane}
-    bind:tab={selectedTab}
+    bind:tab={currentTab}
     {bookCodesToNames}
 />
 <BookChapterSelectorPane
     bind:bookChapterSelectorPane
     bind:isShowing={isShowingBookChapterSelectorPane}
-    filterByCurrentGuide={selectedTab === PassagePageTabEnum.Guide}
+    filterByCurrentGuide={currentTab === ContentTabEnum.Guide}
     {bookCodesToNames}
-    bind:tab={selectedTab}
+    bind:tab={currentTab}
 />
 
-<div class={selectedTab !== PassagePageTabEnum.Guide ? 'hidden' : ''}>
-    <FullscreenTextResource tab={PassagePageTabEnum.Guide} bind:fullscreenTextResourceStacksByTab />
+<div class={currentTab !== ContentTabEnum.Guide ? 'hidden' : ''}>
+    <FullscreenTextResource tab={ContentTabEnum.Guide} bind:fullscreenTextResourceStacksByTab />
 </div>
 
 <div class="btm-nav z-[60] h-20 border-t">
-    <NavMenuTabItem
-        bind:selectedTab
-        tabName={PassagePageTabEnum.Bible}
-        label={$translate('page.passage.nav.bible.value')}
-    >
+    <NavMenuTabItem bind:currentTab tabName={ContentTabEnum.Bible} label={$translate('page.passage.nav.bible.value')}>
         <BookIcon />
     </NavMenuTabItem>
-    <NavMenuTabItem
-        bind:selectedTab
-        tabName={PassagePageTabEnum.Guide}
-        label={$translate('page.passage.nav.guide.value')}
-    >
+    <NavMenuTabItem bind:currentTab tabName={ContentTabEnum.Guide} label={$translate('page.passage.nav.guide.value')}>
         <CompassIcon />
     </NavMenuTabItem>
     {#if resourceData?.additionalResourceInfo?.length}
         <NavMenuTabItem
-            bind:selectedTab
-            tabName={PassagePageTabEnum.Resources}
+            bind:currentTab
+            tabName={ContentTabEnum.Resources}
             label={$translate('page.passage.nav.resources.value')}
         >
             <ClipboardIcon />
@@ -318,18 +310,14 @@
     {/if}
     {#if $isOnline}
         <NavMenuTabItem
-            bind:selectedTab
-            tabName={PassagePageTabEnum.LibraryMenu}
+            bind:currentTab
+            tabName={ContentTabEnum.LibraryMenu}
             label={$translate('page.passage.nav.library.value')}
         >
             <LibraryIcon />
         </NavMenuTabItem>
     {/if}
-    <NavMenuTabItem
-        bind:selectedTab
-        tabName={PassagePageTabEnum.MainMenu}
-        label={$translate('page.passage.nav.menu.value')}
-    >
+    <NavMenuTabItem bind:currentTab tabName={ContentTabEnum.MainMenu} label={$translate('page.passage.nav.menu.value')}>
         <MenuIcon />
     </NavMenuTabItem>
 </div>
@@ -343,10 +331,10 @@
                 bind:preferredBiblesModalOpen
                 bind:alignmentModeEnabled
                 {bookCodesToNames}
-                {selectedBibleId}
-                bibleSection={$selectedBibleSection}
+                {currentBibleId}
+                bibleSection={$currentBibleSection}
                 bibles={bibleData?.availableBibles ?? []}
-                tab={selectedTab}
+                tab={currentTab}
                 guideShortName={$currentGuide?.shortName ?? ''}
                 bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
                 bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
@@ -356,11 +344,11 @@
             class="absolute left-0 right-0 top-16 flex flex-col {$passagePageShownMenu !== null &&
                 'hidden'} {audioPlayerShowing ? 'bottom-[8.5rem]' : 'bottom-20'}"
         >
-            {#if selectedBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
-                <div class="px-4 pb-4 {selectedTab !== PassagePageTabEnum.Bible && 'hidden'}">
+            {#if currentBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
+                <div class="px-4 pb-4 {currentTab !== ContentTabEnum.Bible && 'hidden'}">
                     <div class="m-auto max-w-[65ch]">
                         <ButtonCarousel
-                            bind:selectedValue={selectedBibleId}
+                            bind:selectedValue={currentBibleId}
                             bind:scroll={bibleSelectionScroll}
                             buttons={(bibleData?.biblesForTabs ?? []).map((bible) => ({
                                 value: bible.id,
@@ -370,20 +358,13 @@
                     </div>
                 </div>
             {/if}
-            <div
-                class="flex flex-grow flex-col overflow-y-hidden {selectedTab !== PassagePageTabEnum.Bible && 'hidden'}"
-            >
-                {#key $selectedBibleSection}
-                    <BibleViewer
-                        bind:preferredBiblesModalOpen
-                        {selectedBibleId}
-                        {bibleData}
-                        bind:alignmentModeEnabled
-                    />
+            <div class="flex flex-grow flex-col overflow-y-hidden {currentTab !== ContentTabEnum.Bible && 'hidden'}">
+                {#key $currentBibleSection}
+                    <BibleViewer bind:preferredBiblesModalOpen {currentBibleId} {bibleData} bind:alignmentModeEnabled />
                 {/key}
             </div>
             {#await resourceFetchPromise}
-                {#if selectedTab === PassagePageTabEnum.Guide}
+                {#if currentTab === ContentTabEnum.Guide}
                     <FullPageSpinner />
                 {/if}
             {:then}
@@ -392,7 +373,7 @@
                     bind:audioPlayerKey
                     currentGuide={$currentGuide}
                     guideResourceInfo={resourceData?.guideResourceInfo}
-                    isShowing={selectedTab === PassagePageTabEnum.Guide}
+                    isShowing={currentTab === ContentTabEnum.Guide}
                 />
             {/await}
         </div>
@@ -432,9 +413,9 @@
     {#if $passagePageShownMenu === PassagePageMenuEnum.feedback}
         <Feedback />
     {/if}
-    {#key $selectedBibleSection}
+    {#key $currentBibleSection}
         <LibraryResourceMenu
-            tab={PassagePageTabEnum.Resources}
+            tab={ContentTabEnum.Resources}
             bind:fullscreenTextResourceStacksByTab
             resources={resourceData?.additionalResourceInfo}
             isFullLibrary={false}
@@ -442,7 +423,7 @@
         />
     {/key}
     <LibraryResourceMenu
-        tab={PassagePageTabEnum.LibraryMenu}
+        tab={ContentTabEnum.LibraryMenu}
         bind:fullscreenTextResourceStacksByTab
         resources={undefined}
         isFullLibrary={true}

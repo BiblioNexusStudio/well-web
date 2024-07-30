@@ -424,34 +424,11 @@
         }
     },
     "navTop": {
-        "recording": {
-            "value": "Mekim wanpela rekoding"
-        },
         "selectPassage": {
             "value": "Selektim Hap Riding"
         },
         "selectGuide": {
             "value": "Selektim Gaid"
-        },
-        "audioRecordingModal": {
-            "noPermission": {
-                "value": "Plis apdeitim ol setings bilong yu na givim tokorait lo maikropon blo yu blo yusim"
-            },
-            "languageLabel": {
-                "value": "Wonem kain tokpeles yu rekodim stap?"
-            },
-            "versionLabel": {
-                "value": "Wonem nem bilong dispela toktoksenis?"
-            },
-            "versionAbbreviationLabel": {
-                "value": "Wonem 3-pela leta hap wod bilong dispela toktoksenis?"
-            },
-            "discard": {
-                "value": "Rausim nogat yius blo em"
-            },
-            "save": {
-                "value": "Seiv"
-            }
         }
     },
     "resources": {

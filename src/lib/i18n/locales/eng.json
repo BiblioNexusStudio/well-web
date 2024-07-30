@@ -543,10 +543,6 @@
         }
     },
     "navTop": {
-        "recording": {
-            "value": "Make a recording",
-            "_context": "Button to create a recording for the passage"
-        },
         "selectPassage": {
             "value": "Select Passage",
             "_context": "Button to select a passage"
@@ -554,32 +550,6 @@
         "selectGuide": {
             "value": "Select Guide",
             "_context": "Button to select a guide"
-        },
-        "audioRecordingModal": {
-            "noPermission": {
-                "value": "Please update your settings and give permission for your microphone to be used",
-                "_context": "Text to display when the user has not given permission for the microphone"
-            },
-            "languageLabel": {
-                "value": "What language are you recording?",
-                "_context": "Label for the language input field"
-            },
-            "versionLabel": {
-                "value": "What is the name of the translation?",
-                "_context": "Label for the version input field"
-            },
-            "versionAbbreviationLabel": {
-                "value": "What is a 3-letter abbreviation for this translation?",
-                "_context": "Label for the version abbreviation input field"
-            },
-            "discard": {
-                "value": "Discard",
-                "_context": "Button to close the modal and discard changes"
-            },
-            "save": {
-                "value": "Save",
-                "_context": "Button to save the recording"
-            }
         }
     },
     "resources": {

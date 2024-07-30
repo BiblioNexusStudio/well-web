@@ -30,13 +30,13 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum } from '$lib/types/settings';
     import FullscreenResourceSubgroup from './FullscreenResourceSubgroup.svelte';
-    import type { PassagePageTabEnum } from '../data-fetchers';
+    import type { ContentTabEnum } from '../data-fetchers';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
-    export let tab: PassagePageTabEnum;
+    export let tab: ContentTabEnum;
     export let fullscreenTextResourceStacksByTab: Map<
-        PassagePageTabEnum,
+        ContentTabEnum,
         (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
     >;
     export let isShowing: boolean;

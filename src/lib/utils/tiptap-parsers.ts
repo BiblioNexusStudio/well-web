@@ -24,7 +24,7 @@ import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import TextStyle from '@tiptap/extension-text-style';
 import { Video } from './tiptap/video';
-import type { PassagePageTabEnum } from '../../routes/view-content/data-fetchers';
+import type { ContentTabEnum } from '../../routes/view-content/data-fetchers';
 
 const nodes = [
     Blockquote,
@@ -71,7 +71,7 @@ function findUnknownMarks(node: Node): string[] {
 
 function generateExtensions(
     tiptapJson: BasicTiptapJson,
-    tab: PassagePageTabEnum,
+    tab: ContentTabEnum,
     availableAssociatedResources: AssociatedResource[] | undefined
 ) {
     const unknownMarkNames = [...new Set(tiptapJson.content.flatMap(findUnknownMarks))];
@@ -99,7 +99,7 @@ function filterKnownNodes(nodes: Node[]): Node[] {
 
 export function parseTiptapJsonToHtml(
     json: object,
-    tab: PassagePageTabEnum,
+    tab: ContentTabEnum,
     availableAssociatedResources: AssociatedResource[] | undefined
 ) {
     const tiptapJson = json as BasicTiptapJson;

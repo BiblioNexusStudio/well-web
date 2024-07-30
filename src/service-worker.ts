@@ -60,7 +60,7 @@ declare let workbox: {
 
 const { clientsClaim } = workbox.core;
 const { registerRoute, NavigationRoute } = workbox.routing;
-const { NetworkOnly, CacheFirst, NetworkFirst, CacheOnly, StaleWhileRevalidate } = workbox.strategies;
+const { NetworkOnly, CacheFirst, NetworkFirst, StaleWhileRevalidate } = workbox.strategies;
 const { BackgroundSyncPlugin } = workbox.backgroundSync;
 const { createHandlerBoundToURL, cleanupOutdatedCaches, precacheAndRoute } = workbox.precaching;
 const { RangeRequestsPlugin } = workbox.rangeRequests;
@@ -173,12 +173,3 @@ registerRoute(
 
 // cache everything else under the API
 registerRoute(CACHING_CONFIG.apiUrlRegex, apiCachingHandler, 'GET');
-
-registerRoute(
-    /.*\/__local_recordings\/.*/,
-    new CacheOnly({
-        cacheName: 'local-recordings',
-        plugins: [],
-    }),
-    'GET'
-);

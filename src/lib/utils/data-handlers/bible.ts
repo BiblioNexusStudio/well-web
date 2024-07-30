@@ -11,8 +11,6 @@ import {
 } from '$lib/data-cache';
 import { asyncEvery, asyncFilter, asyncSome } from '../async-array';
 import { range } from '../array';
-import { updateRow } from '../data-storage';
-import { bibleSectionToString } from '../bible-section-helpers';
 import type { ApiBible, ApiBibleBook, BaseBible, BibleBookContentDetails } from '$lib/types/bible';
 import { isOnline } from '$lib/stores/is-online.store';
 import { get } from 'svelte/store';
@@ -25,17 +23,6 @@ import {
     biblesForLanguageEndpoint,
     bookOfBibleEndpoint,
 } from '$lib/api-endpoints';
-
-type BibleRecordingPassage = { url: string };
-type BibleRecordingVersion = {
-    passages: Record<string, BibleRecordingPassage>;
-    language: string;
-    version: string;
-    versionAbbreviation: string;
-};
-type BibleRecordingVersions = { bibleRecordingVersions: BibleRecordingVersion[] };
-
-const bibleRecordingsKey = 'bibleRecordings';
 
 function bibleUrlsWithMetadataForBookAndChapters(
     bookData: BibleBookContentDetails,
@@ -241,26 +228,4 @@ async function getBibleBooksByBibleId(bibleId: number) {
 
 export function bibleBooksByBibleIdFullUrl(bibleId: number) {
     return apiUrl(bibleBooksByBibleId(bibleId)[0]);
-}
-
-export async function saveBibleRecording(
-    language: string,
-    version: string,
-    versionAbbreviation: string,
-    bibleSection: BibleSection,
-    filePath: string
-) {
-    await updateRow(bibleRecordingsKey, (current: object) => {
-        const bibleRecordings = current as BibleRecordingVersions;
-        bibleRecordings.bibleRecordingVersions ||= [];
-        let recordingVersion = bibleRecordings.bibleRecordingVersions.find(
-            (b) => b.language === language && b.version === version && b.versionAbbreviation === versionAbbreviation
-        );
-        if (!recordingVersion) {
-            recordingVersion = { language, version, versionAbbreviation, passages: {} };
-            bibleRecordings.bibleRecordingVersions.push(recordingVersion!);
-        }
-        recordingVersion.passages[bibleSectionToString(bibleSection)] = { url: filePath };
-        return bibleRecordings;
-    });
 }
