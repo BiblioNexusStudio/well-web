@@ -1,22 +1,21 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
-    import { selectedBookIndex, currentBibleSection } from '$lib/stores/passage-form.store';
+    import { selectedBookIndex } from '$lib/stores/passage-form.store';
     import { CupertinoPane } from 'cupertino-pane';
     import { onMount } from 'svelte';
     import { passagesByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
     import type { BibleSection } from '$lib/types/bible';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
-    import { currentGuide } from '$lib/stores/parent-resource.store';
     import { PredeterminedPassageGuides, type ApiParentResource } from '$lib/types/resource';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { ContentTabEnum } from '../data-fetchers';
-    import { recalculatePanesAndMenus } from '$lib/stores/passage-page.store';
+    import { ContentTabEnum, getContentContext } from '../context';
+
+    const { currentGuide, setCurrentTab, setCurrentBibleSection } = getContentContext();
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
-    export let tab: ContentTabEnum;
     export let bookCodesToNames: Map<string, string> | undefined;
 
     let steps = {
@@ -34,18 +33,17 @@
     }
 
     function setPassageAndClosePane(passage: BibleSection) {
-        $currentBibleSection = passage;
+        setCurrentBibleSection(passage);
         currentStep = steps.one;
         isShowing = false;
         if ($currentGuide) {
-            tab = ContentTabEnum.Guide;
+            setCurrentTab(ContentTabEnum.Guide);
         }
-        recalculatePanesAndMenus(tab);
     }
 
     $: availablePassagesPromise = fetchAvailablePassages($currentGuide, $isOnline);
 
-    async function fetchAvailablePassages(guide: ApiParentResource | undefined, _online: boolean) {
+    async function fetchAvailablePassages(guide: ApiParentResource | null, _online: boolean) {
         if (guide && PredeterminedPassageGuides.includes(guide.id)) {
             availablePassagesByBook = await passagesByBookAvailableForGuide(guide.id);
         } else {

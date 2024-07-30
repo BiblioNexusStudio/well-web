@@ -2,14 +2,6 @@
     import { _ as translate } from 'svelte-i18n';
     import { isOnline } from '$lib/stores/is-online.store';
     import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
-    import { currentBibleSection } from '$lib/stores/passage-form.store';
-    import { onMount } from 'svelte';
-    import { setCurrentGuide } from '$lib/stores/parent-resource.store';
-
-    onMount(() => {
-        currentBibleSection.set(null);
-        setCurrentGuide(undefined);
-    });
 </script>
 
 <section class="container mx-auto flex h-screen flex-col px-6">
@@ -33,7 +25,7 @@
         >
         <a
             class="btn btn-primary"
-            href="/view-content"
+            href="/view-content/-/-"
             data-app-insights-event-name="landing-page-get-started-link-clicked"
             >{$translate('page.index.getStarted.value')}</a
         >

@@ -7,22 +7,19 @@
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible';
-    import { currentBibleSection } from '$lib/stores/passage-form.store';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import type { Language } from '$lib/types/file-manager';
     import { isOnline } from '$lib/stores/is-online.store';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
     import { bibleChaptersByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
-    import { currentGuide } from '$lib/stores/parent-resource.store';
     import type { ApiParentResource } from '$lib/types/resource';
-    import { recalculatePanesAndMenus } from '$lib/stores/passage-page.store';
-    import { ContentTabEnum } from '../data-fetchers';
+    import { ContentTabEnum, getContentContext } from '../context';
+
+    const { currentGuide, currentTab, setCurrentTab, setCurrentBibleSection } = getContentContext();
 
     export let bookChapterSelectorPane: CupertinoPane;
     export let isShowing: boolean;
-    export let filterByCurrentGuide: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
-    export let tab: ContentTabEnum;
 
     let currentBook: ApiBibleBook;
     let currentChapter: ApiBibleChapter | null = null;
@@ -31,6 +28,7 @@
     let firstSelectedVerse: FrontEndVerseForSelectionPane | null = null;
     let lastSelectedVerse: FrontEndVerseForSelectionPane | null = null;
 
+    $: filterByCurrentGuide = $currentTab === ContentTabEnum.Guide;
     $: availableBooksPromise = fetchAvailableBooks(
         $currentLanguageInfo,
         $currentGuide,
@@ -41,7 +39,7 @@
 
     async function fetchAvailableBooks(
         _currentLanguageInfo: Language | undefined,
-        currentGuide: ApiParentResource | undefined,
+        currentGuide: ApiParentResource | null,
         online: boolean,
         filterByCurrentGuide: boolean,
         preferredBibleIds: number[]
@@ -173,7 +171,7 @@
     }
 
     async function handleVerseGoButton() {
-        $currentBibleSection = {
+        setCurrentBibleSection({
             bookCode: currentBook.code,
             startChapter: firstSelectedVerse ? forceToInt(firstSelectedVerse.chapterNumber) : 0,
             startVerse: firstSelectedVerse ? forceToInt(firstSelectedVerse.number) : 0,
@@ -187,16 +185,15 @@
                 : firstSelectedVerse
                 ? forceToInt(firstSelectedVerse.number)
                 : 0,
-        };
+        });
         isShowing = false;
         currentStep = steps.one;
         currentChapter = null;
         firstSelectedVerse = null;
         lastSelectedVerse = null;
         if ($currentGuide) {
-            tab = ContentTabEnum.Guide;
+            setCurrentTab(ContentTabEnum.Guide);
         }
-        recalculatePanesAndMenus(tab);
         scrollBehaviorSmooth = false;
     }
 

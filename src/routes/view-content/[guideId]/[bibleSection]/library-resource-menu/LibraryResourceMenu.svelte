@@ -30,7 +30,7 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum } from '$lib/types/settings';
     import FullscreenResourceSubgroup from './FullscreenResourceSubgroup.svelte';
-    import type { ContentTabEnum } from '../data-fetchers';
+    import type { ContentTabEnum } from '../context';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;

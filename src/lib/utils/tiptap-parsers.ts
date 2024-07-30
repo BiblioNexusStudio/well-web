@@ -24,7 +24,7 @@ import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import TextStyle from '@tiptap/extension-text-style';
 import { Video } from './tiptap/video';
-import type { ContentTabEnum } from '../../routes/view-content/data-fetchers';
+import type { ContentTabEnum } from '../../routes/view-content/[guideId]/[bibleSection]/context';
 
 const nodes = [
     Blockquote,
