@@ -231,21 +231,22 @@
         }
     }
 
-    function closeAllPaneMenus() {
-        isShowingBookPassageSelectorPane = false;
-        isShowingBookChapterSelectorPane = false;
-    }
-
     async function fetchBibleBookCodeToName(currentLanguageInfo: Language | undefined) {
         if (currentLanguageInfo) {
             bookCodesToNames = await getBibleBookCodesToName(currentLanguageInfo.id);
         }
     }
 
-    $: recalculatePanesAndMenus($currentTab, $currentGuide, $currentBibleSection, closeAllPaneMenus);
+    $: recalculatePanesAndMenus($currentTab, $currentGuide, $currentBibleSection);
+    $: closePaneOnTabChange($currentTab);
 
     $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
     $: showOrDismissBookChapterSelectorPane(isShowingBookChapterSelectorPane);
+
+    function closePaneOnTabChange(_tab: ContentTabEnum) {
+        isShowingBookChapterSelectorPane = false;
+        isShowingBookPassageSelectorPane = false;
+    }
 
     onMount(() => {
         if (!$currentGuide) {

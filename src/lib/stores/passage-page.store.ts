@@ -48,8 +48,7 @@ export function openFeedbackMenu() {
 export function recalculatePanesAndMenus(
     tab: ContentTabEnum,
     currentGuide: ApiParentResource | null,
-    currentBibleSection: BibleSection | null,
-    callback?: () => void
+    currentBibleSection: BibleSection | null
 ) {
     if (tab === ContentTabEnum.LibraryMenu) {
         passagePageShownMenu.set(PassagePageMenuEnum.library);
@@ -64,5 +63,4 @@ export function recalculatePanesAndMenus(
     } else {
         passagePageShownMenu.set(null);
     }
-    callback?.();
 }
