@@ -265,6 +265,9 @@
             "goToPassage": {
                 "value": "Go long Hap Riding"
             },
+            "goToGuide": {
+                "value": "Go long Gaid"
+            },
             "bible": {
                 "value": "Buk Tambu"
             }

@@ -265,6 +265,9 @@
             "goToPassage": {
                 "value": "पाठ जाएं"
             },
+            "goToGuide": {
+                "value": "मार्गदर्शिका पर जाएं"
+            },
             "bible": {
                 "value": "बाइबिल"
             }

@@ -309,7 +309,10 @@
                 "value": "Chagua Biblia"
             },
             "goToPassage": {
-                "value": "Go to Passage"
+                "value": "Nenda kwa Sehemu"
+            },
+            "goToGuide": {
+                "value": "Nenda kwa Mwongozo"
             },
             "bible": {
                 "value": "Biblia"

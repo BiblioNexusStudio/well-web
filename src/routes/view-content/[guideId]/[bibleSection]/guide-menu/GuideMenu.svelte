@@ -93,7 +93,7 @@
                     class="btn btn-primary w-full"
                     data-app-insights-event-name="guide-menu-select-guide-button-clicked"
                 >
-                    {$translate('page.bibleMenu.goToPassage.value')}</button
+                    {$translate('page.bibleMenu.goToGuide.value')}</button
                 >
             </div>
         {/if}
