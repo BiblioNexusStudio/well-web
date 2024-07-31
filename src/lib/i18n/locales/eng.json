@@ -336,6 +336,10 @@
                 "value": "Go to Passage",
                 "_context": "Label for the button to go to the passage"
             },
+            "goToGuide": {
+                "value": "Go to Guide",
+                "_context": "Label for the button to go to the guide"
+            },
             "bible": {
                 "value": "Bible",
                 "_context": "Label for the dropdown"

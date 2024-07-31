@@ -119,7 +119,10 @@ const bookNumbersToCodes: Record<number, string> = {
     87: 'PSS',
 };
 
-export function bibleSectionToString(bibleSection: BibleSection) {
+export function bibleSectionToString(bibleSection: BibleSection | null) {
+    if (!bibleSection) {
+        return null;
+    }
     return `${bibleSection.bookCode}${String(bibleSection.startChapter).padStart(3, '0')}${String(
         bibleSection.startVerse
     ).padStart(3, '0')}-${String(bibleSection.endChapter).padStart(3, '0')}${String(bibleSection.endVerse).padStart(

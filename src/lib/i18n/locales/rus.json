@@ -311,6 +311,9 @@
             "goToPassage": {
                 "value": "Перейти к отрывку"
             },
+            "goToGuide": {
+                "value": "Перейти к руководству"
+            },
             "bible": {
                 "value": "Библия"
             }

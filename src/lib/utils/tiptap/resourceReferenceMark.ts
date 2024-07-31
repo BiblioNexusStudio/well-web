@@ -1,6 +1,6 @@
 import type { AssociatedResource } from '$lib/types/resource';
 import { Mark } from '@tiptap/core';
-import type { ContentTabEnum } from '../../../routes/view-content/data-fetchers';
+import type { ContentTabEnum } from '../../../routes/view-content/[guideId]/[bibleSection]/context';
 
 export const resourceReferenceMark = Mark.create<ResourceReferenceOptions>({
     name: 'resourceReference',

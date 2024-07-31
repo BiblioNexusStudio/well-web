@@ -6,7 +6,6 @@
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { splitTextIntoWordsAndPunctuation, type WordOrPunctuation } from '$lib/utils/text-splitter';
     import { onMount } from 'svelte';
-    import { currentBibleSection } from '$lib/stores/passage-form.store';
     import {
         fetchEnglishWordsWithGreekAlignmentsForSection,
         findSelectedWordIndexesAndGreekWordsForEnglish,
@@ -16,6 +15,9 @@
     import { isNewTestament } from '$lib/utils/bible-section-helpers';
     import type { BibleSection } from '$lib/types/bible';
     import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
+    import { getContentContext } from './context';
+
+    const { currentBibleSection } = getContentContext();
 
     export let bibleData: BibleData | null = null;
     export let preferredBiblesModalOpen: boolean;

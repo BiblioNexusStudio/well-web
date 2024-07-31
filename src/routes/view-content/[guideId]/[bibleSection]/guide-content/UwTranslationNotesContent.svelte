@@ -11,7 +11,7 @@
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { _ as translate } from 'svelte-i18n';
-    import { ContentTabEnum } from '../data-fetchers';
+    import { ContentTabEnum } from '../context';
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;

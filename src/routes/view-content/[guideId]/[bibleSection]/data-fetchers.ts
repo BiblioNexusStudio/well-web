@@ -8,7 +8,12 @@ import { asyncFilter, asyncMap } from '$lib/utils/async-array';
 import { isOnline } from '$lib/stores/is-online.store';
 import { fetchAllBibles, bookDataForBibleTab, bibleBookUrl } from '$lib/utils/data-handlers/bible';
 import { filterBoolean, range } from '$lib/utils/array';
-import { type ResourceContentInfo, ParentResourceType, GuidesAvailableOnResourcesTab } from '$lib/types/resource';
+import {
+    type ResourceContentInfo,
+    ParentResourceType,
+    GuidesAvailableOnResourcesTab,
+    type ApiParentResource,
+} from '$lib/types/resource';
 import {
     resourceContentApiFullUrl,
     type ResourceContentInfoWithFrontendData,
@@ -17,15 +22,6 @@ import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
 import { log } from '$lib/logger';
 import { resourceContentsForBibleSection } from '$lib/utils/data-handlers/resources/resource';
 import type { BibleSection } from '$lib/types/bible';
-import { currentGuide } from '$lib/stores/parent-resource.store';
-
-export enum ContentTabEnum {
-    Bible = 'Bible',
-    Guide = 'Guide',
-    MainMenu = 'MainMenu',
-    LibraryMenu = 'LibraryMenu',
-    Resources = 'Resources',
-}
 
 export async function fetchBibleContent(passage: BibleSection, bible: FrontendBibleBook) {
     if (!bible.bookMetadata) return null;
@@ -104,11 +100,14 @@ export async function fetchBibleContent(passage: BibleSection, bible: FrontendBi
     return { chapters: filterBoolean(chaptersWithEmptyData) };
 }
 
-async function filterToAdditionalResourceInfo(resourceContents: ResourceContentInfo[]) {
+async function filterToAdditionalResourceInfo(
+    currentGuide: ApiParentResource | null,
+    resourceContents: ResourceContentInfo[]
+) {
     const additionalResourceContent = resourceContents.filter(
         ({ resourceType, parentResourceId }) =>
             resourceType !== ParentResourceType.Guide ||
-            (GuidesAvailableOnResourcesTab.includes(parentResourceId) && get(currentGuide)?.id !== parentResourceId)
+            (GuidesAvailableOnResourcesTab.includes(parentResourceId) && currentGuide?.id !== parentResourceId)
     );
 
     return await asyncFilter(
@@ -171,7 +170,7 @@ export async function fetchBibleData(passage: BibleSection) {
     return { biblesForTabs, availableBibles };
 }
 
-export async function fetchResourceData(passage: BibleSection) {
+export async function fetchResourceData(passage: BibleSection, currentGuide: ApiParentResource | null) {
     let additionalResourceInfo: ResourceContentInfo[] = [];
     let guideResourceInfo: ResourceContentInfoWithFrontendData[] = [];
     let resourceContents: ResourceContentInfoWithFrontendData[] | undefined;
@@ -182,7 +181,7 @@ export async function fetchResourceData(passage: BibleSection) {
         log.exception(error as Error);
     }
     if (resourceContents) {
-        additionalResourceInfo = await filterToAdditionalResourceInfo(resourceContents);
+        additionalResourceInfo = await filterToAdditionalResourceInfo(currentGuide, resourceContents);
         guideResourceInfo = await filterToGuideResourceInfo(resourceContents);
     }
     return {

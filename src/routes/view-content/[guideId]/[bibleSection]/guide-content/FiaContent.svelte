@@ -24,7 +24,7 @@
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
     import { _ as translate } from 'svelte-i18n';
-    import { ContentTabEnum } from '../data-fetchers';
+    import { ContentTabEnum } from '../context';
 
     interface FiaAudioContent {
         steps: {

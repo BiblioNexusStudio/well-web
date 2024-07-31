@@ -265,6 +265,9 @@
             "goToPassage": {
                 "value": "Aller au Passage"
             },
+            "goToGuide": {
+                "value": "Aller au guide"
+            },
             "bible": {
                 "value": "Bible"
             }

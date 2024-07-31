@@ -13,7 +13,7 @@
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { isOnline } from '$lib/stores/is-online.store';
-    import type { ContentTabEnum } from '../data-fetchers';
+    import type { ContentTabEnum } from '../context';
 
     export let tab: ContentTabEnum;
     export let fullscreenTextResourceStacksByTab: Map<

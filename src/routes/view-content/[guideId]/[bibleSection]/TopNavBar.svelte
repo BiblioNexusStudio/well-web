@@ -4,31 +4,29 @@
     import plus from 'svelte-awesome/icons/plus';
     import type { BibleSection } from '$lib/types/bible';
     import type { FrontendBibleBook } from '$lib/types/bible';
-    import PreferredBiblesModal from './PreferredBiblesModal.svelte';
-    import { ContentTabEnum } from '../../routes/view-content/data-fetchers';
+    import PreferredBiblesModal from '$lib/components/PreferredBiblesModal.svelte';
     import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { PredeterminedPassageGuides } from '$lib/types/resource';
-    import { currentGuide } from '$lib/stores/parent-resource.store';
     import { bibleSectionToReference, isNewTestament } from '$lib/utils/bible-section-helpers';
     import AlignmentMode from '$lib/icons/AlignmentMode.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
+    import { ContentTabEnum, getContentContext } from './context';
 
-    export let bibleSection: BibleSection | null = null;
+    const { currentGuide, currentBibleSection, currentTab } = getContentContext();
+
     export let bibles: FrontendBibleBook[] = [];
     export let preferredBiblesModalOpen = false;
-    export let tab: ContentTabEnum | null = null;
-    export let guideShortName = '';
     export let showBookChapterVerseMenu: boolean;
     export let showBookPassageSelectorPane: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
     export let alignmentModeEnabled: boolean;
     export let currentBibleId: number | null;
 
-    $: bibleSectionTitle = calculateBibleSectionTitle(bookCodesToNames, bibleSection);
-    $: canEnableAlignmentMode = currentBibleId === 1 && isNewTestament(bibleSection) && $isOnline;
+    $: bibleSectionTitle = calculateBibleSectionTitle(bookCodesToNames, $currentBibleSection);
+    $: canEnableAlignmentMode = currentBibleId === 1 && isNewTestament($currentBibleSection) && $isOnline;
 
     $: {
-        if ((!isNewTestament(bibleSection) || currentBibleId !== 1) && alignmentModeEnabled) {
+        if ((!isNewTestament($currentBibleSection) || currentBibleId !== 1) && alignmentModeEnabled) {
             alignmentModeEnabled = false;
         }
     }
@@ -68,7 +66,7 @@
 <svelte:window on:click={handleWindowClick} />
 
 <div class="navbar flex w-full justify-between">
-    {#if tab === ContentTabEnum.Guide || tab === ContentTabEnum.Bible || tab === ContentTabEnum.Resources}
+    {#if $currentTab === ContentTabEnum.Guide || $currentTab === ContentTabEnum.Bible || $currentTab === ContentTabEnum.Resources}
         <div class="ms-2 flex-none">
             <button
                 on:click={handlePassageButton}
@@ -77,7 +75,7 @@
             >
                 {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
             </button>
-            {#if tab === ContentTabEnum.Bible}
+            {#if $currentTab === ContentTabEnum.Bible}
                 <button
                     on:click={openBibleMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
@@ -86,19 +84,19 @@
                     {$translate('page.passage.nav.bible.value')}
                 </button>
             {/if}
-            {#if tab === ContentTabEnum.Guide}
+            {#if $currentTab === ContentTabEnum.Guide}
                 <button
                     on:click={openGuideMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
                     data-app-insights-event-name="top-nav-open-guide-menu-button-clicked"
                 >
-                    {guideShortName || $translate('navTop.selectGuide.value')}
+                    {$currentGuide?.shortName || $translate('navTop.selectGuide.value')}
                 </button>
             {/if}
         </div>
     {/if}
     <div class="flex-grow"></div>
-    {#if bibleSection && canEnableAlignmentMode && tab === ContentTabEnum.Bible && bibles.length}
+    {#if $currentBibleSection && canEnableAlignmentMode && $currentTab === ContentTabEnum.Bible && bibles.length}
         <div class="flex-none">
             <button
                 on:click={() => (alignmentModeEnabled = !alignmentModeEnabled)}
@@ -109,7 +107,7 @@
             </button>
         </div>
     {/if}
-    {#if bibleSection && tab === ContentTabEnum.Bible && bibles.length}
+    {#if $currentBibleSection && $currentTab === ContentTabEnum.Bible && bibles.length}
         <div class="flex-none">
             <details
                 bind:open={preferredBiblesModalOpen}

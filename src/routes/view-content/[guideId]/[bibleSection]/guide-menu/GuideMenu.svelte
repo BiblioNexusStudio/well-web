@@ -2,22 +2,26 @@
     import { _ as translate } from 'svelte-i18n';
     import { settings } from '$lib/stores/settings.store';
     import type { Setting } from '$lib/types/settings';
-    import { setCurrentGuide, currentGuide } from '$lib/stores/parent-resource.store';
-    import { PredeterminedPassageGuides, type ApiParentResource } from '$lib/types/resource';
+    import { PredeterminedPassageGuides } from '$lib/types/resource';
     import {
         guidesAvailableForBibleSection,
         guidesAvailableInCurrentLanguage,
     } from '$lib/utils/data-handlers/resources/guides';
-    import { currentBibleSection } from '$lib/stores/passage-form.store';
     import type { Language } from '$lib/types/file-manager';
     import type { BibleSection } from '$lib/types/bible';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
     import SwishHeader from '$lib/components/SwishHeader.svelte';
+    import { getContentContext } from '../context';
+    import { passagePageShownMenu } from '$lib/stores/passage-page.store';
+
+    const { currentGuide, currentBibleSection, setCurrentGuide } = getContentContext();
 
     export let showBookPassageSelectorPane: boolean;
     export let showBookChapterVerseMenu: boolean;
+
+    $: selectedGuide = $currentGuide;
 
     $: availableGuidesPromise = fetchAvailableGuides($currentBibleSection, $settings, $currentLanguageInfo, $isOnline);
 
@@ -34,17 +38,18 @@
         }
     }
 
-    function selectGuideAndHandleMenu(guideResource: ApiParentResource) {
-        setCurrentGuide(guideResource);
-    }
-
     function openGuideMenu() {
-        const currentGuideId = $currentGuide?.id;
-        if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
-            showBookPassageSelectorPane = true;
+        const selectedGuideId = selectedGuide?.id;
+        if (!$currentBibleSection) {
+            if (selectedGuideId && PredeterminedPassageGuides.includes(selectedGuideId)) {
+                showBookPassageSelectorPane = true;
+            } else {
+                showBookChapterVerseMenu = true;
+            }
         } else {
-            showBookChapterVerseMenu = true;
+            passagePageShownMenu.set(null);
         }
+        setCurrentGuide(selectedGuide);
     }
 </script>
 
@@ -64,9 +69,9 @@
                 </h3>
             {:else}
                 {#each availableGuides as guideResource}
-                    {@const isCurrentGuide = guideResource.id === $currentGuide?.id}
+                    {@const isCurrentGuide = guideResource.id === selectedGuide?.id}
                     <button
-                        on:click={() => selectGuideAndHandleMenu(guideResource)}
+                        on:click={() => (selectedGuide = guideResource)}
                         class="my-2 flex w-11/12 rounded-xl p-4 {isCurrentGuide
                             ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                             : 'border'}"
@@ -83,12 +88,12 @@
         {#if !!availableGuides && availableGuides.length > 0}
             <div class="mb-24 flex flex-grow items-end px-4">
                 <button
-                    disabled={!$currentGuide}
+                    disabled={!selectedGuide}
                     on:click={openGuideMenu}
                     class="btn btn-primary w-full"
                     data-app-insights-event-name="guide-menu-select-guide-button-clicked"
                 >
-                    {$translate('page.bibleMenu.goToPassage.value')}</button
+                    {$translate('page.bibleMenu.goToGuide.value')}</button
                 >
             </div>
         {/if}

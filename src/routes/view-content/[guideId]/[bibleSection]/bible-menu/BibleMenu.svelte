@@ -6,8 +6,10 @@
     import { availableBibles } from '$lib/utils/data-handlers/bible';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import SwishHeader from '$lib/components/SwishHeader.svelte';
-    import { currentGuide } from '$lib/stores/parent-resource.store';
     import { PredeterminedPassageGuides } from '$lib/types/resource';
+    import { getContentContext } from '../context';
+
+    const { currentGuide } = getContentContext();
 
     export let showBookChapterVerseMenu: boolean;
     export let showBookPassageSelectorPane: boolean;
