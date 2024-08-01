@@ -251,10 +251,8 @@
     onMount(() => {
         openBibleMenu();
 
-        if ($page.url.searchParams.get('gettingStarted')) {
+        if (!$currentBibleSection && !$currentGuide) {
             isShowingBookChapterSelectorPane = true;
-            $page.url.searchParams.delete('gettingStarted');
-            window.history.replaceState({}, '', $page.url.toString());
         }
 
         window.onResourceReferenceClick = (tab: string, contentId: number) => {

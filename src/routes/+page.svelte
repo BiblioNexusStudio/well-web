@@ -25,7 +25,7 @@
         >
         <a
             class="btn btn-primary"
-            href="/view-content/-/-?gettingStarted=true"
+            href="/view-content/-/-"
             data-app-insights-event-name="landing-page-get-started-link-clicked"
             >{$translate('page.index.getStarted.value')}</a
         >
