@@ -272,10 +272,7 @@
                 "value": "الكتاب المقدس"
             }
         },
-        "BookPassageSelectorMenu": {
-            "loading": {
-                "value": "جار التحميل"
-            },
+        "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
                 "value": "اختر كتابًا"
             },
@@ -315,9 +312,6 @@
             },
             "go": {
                 "value": "اذهب"
-            },
-            "loading": {
-                "value": "جار التحميل"
             }
         },
         "quickShare": {

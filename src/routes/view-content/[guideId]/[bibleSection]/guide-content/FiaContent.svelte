@@ -7,7 +7,6 @@
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { fetchContentFromCacheOrNetwork } from '$lib/data-cache';
     import { log } from '$lib/logger';
-    import { openGuideMenu } from '$lib/stores/passage-page.store';
     import {
         ParentResourceId,
         type ResourceContentInfo,
@@ -24,7 +23,7 @@
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
     import { _ as translate } from 'svelte-i18n';
-    import { ContentTabEnum } from '../context';
+    import { ContentTabEnum, getContentContext } from '../context';
 
     interface FiaAudioContent {
         steps: {
@@ -61,6 +60,8 @@
     export let guideResourceInfo: ResourceContentInfo[] | undefined;
     export let multiClipAudioStates: Record<string, MultiClipAudioState>;
     export let audioPlayerKey: string | undefined;
+
+    const { openContextualMenu } = getContentContext();
 
     let topOfStep: HTMLElement | null = null;
     let selectedStepNumber = 1;
@@ -113,7 +114,7 @@
 
     function openGuideMenuIfNoStepsAvailable(isShowing: boolean, isLoading: boolean) {
         if (isShowing && !isLoading && stepsAvailable.length === 0) {
-            openGuideMenu();
+            openContextualMenu();
         }
     }
 
@@ -194,7 +195,7 @@
 </script>
 
 {#if isLoading}
-    <FullPageSpinner />
+    <FullPageSpinner {isShowing} />
 {:else}
     <div class="px-4 pb-4 {!isShowing && 'hidden'}">
         <div class="relative m-auto max-w-[65ch]">

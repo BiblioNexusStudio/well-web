@@ -6,7 +6,6 @@
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import type { CupertinoPane } from 'cupertino-pane';
     import { _ as translate } from 'svelte-i18n';
     import CompassIcon from '$lib/icons/CompassIcon.svelte';
     import NavMenuTabItem from './NavMenuTabItem.svelte';
@@ -34,41 +33,36 @@
     } from '$lib/utils/data-handlers/bible';
     import { isOnline } from '$lib/stores/is-online.store';
     import { currentLanguageInfo } from '$lib/stores/language.store';
-    import MainMenu from '$lib/components/MainMenu.svelte';
+    import MainMenu from './MainMenu.svelte';
     import { guideResources } from '$lib/stores/parent-resource.store';
-    import {
-        PassagePageMenuEnum,
-        passagePageShownMenu,
-        recalculatePanesAndMenus,
-        openBibleMenu,
-    } from '$lib/stores/passage-page.store';
     import GuideMenu from './guide-menu/GuideMenu.svelte';
     import { onMount } from 'svelte';
     import LibraryResourceMenu from './library-resource-menu/LibraryResourceMenu.svelte';
     import BibleMenu from './bible-menu/BibleMenu.svelte';
-    import BookPassageSelectorPane from './bible-menu/BookPassageSelectorPane.svelte';
+    import PredeterminedPassageSelectorPane from './bible-menu/PredeterminedPassageSelectorPane.svelte';
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
     import {
         MediaType,
         type ResourceContentInfoWithMetadata,
         type TextResourceContentJustId,
     } from '$lib/types/resource';
-    import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import type { BibleSection } from '$lib/types/bible';
-    import QuickShare from './quick-share/QuickShare.svelte';
     import GuideContent from './guide-content/GuideContent.svelte';
     import FullscreenTextResource from './library-resource-menu/FullscreenTextResource.svelte';
     import type { Language } from '$lib/types/file-manager';
     import { filterBoolean } from '$lib/utils/array';
-    import Feedback from './feedback/Feedback.svelte';
     import BibleViewer from './BibleViewer.svelte';
     import { page } from '$app/stores';
     import { ContentTabEnum, createContentContext } from './context';
+    import PredeterminedPassageSelectorForBibleSectionPane from './bible-menu/PredeterminedPassageSelectorForBibleSectionPane.svelte';
 
     const {
         currentGuide,
         currentBibleSection,
         currentTab,
+        isShowingContextualMenu,
+        openBookChapterSelectorPane,
+        openContextualMenu,
         syncSelectedGuideFromUrlParam,
         syncSelectedBibleSectionFromUrlParam,
     } = createContentContext();
@@ -85,11 +79,7 @@
     > = new Map();
 
     let currentBibleId: number | null = null;
-    let isShowingBookPassageSelectorPane = false;
-    let isShowingBookChapterSelectorPane = false;
     let alignmentModeEnabled = false;
-    let bookPassageSelectorPane: CupertinoPane;
-    let bookChapterSelectorPane: CupertinoPane;
     let bibleSelectionScroll: number | undefined;
     let baseFetchPromise: Promise<[void, void]> | undefined;
     let resourceFetchPromise: Promise<void> | undefined;
@@ -215,44 +205,19 @@
         audioPlayerKey = bibleAudioKey(id);
     }
 
-    function showOrDismissBookPassageSelectorPane(show: boolean) {
-        if (show) {
-            bookPassageSelectorPane?.present({ animate: true });
-        } else {
-            bookPassageSelectorPane?.hide();
-        }
-    }
-
-    function showOrDismissBookChapterSelectorPane(show: boolean) {
-        if (show) {
-            bookChapterSelectorPane?.present({ animate: true });
-        } else {
-            bookChapterSelectorPane?.hide();
-        }
-    }
-
     async function fetchBibleBookCodeToName(currentLanguageInfo: Language | undefined) {
         if (currentLanguageInfo) {
             bookCodesToNames = await getBibleBookCodesToName(currentLanguageInfo.id);
         }
     }
 
-    $: recalculatePanesAndMenus($currentTab, $currentGuide, $currentBibleSection);
-    $: closePaneOnTabChange($currentTab);
-
-    $: showOrDismissBookPassageSelectorPane(isShowingBookPassageSelectorPane);
-    $: showOrDismissBookChapterSelectorPane(isShowingBookChapterSelectorPane);
-
-    function closePaneOnTabChange(_tab: ContentTabEnum) {
-        isShowingBookChapterSelectorPane = false;
-        isShowingBookPassageSelectorPane = false;
-    }
+    $: isShowingBibleOrGuide =
+        ($currentTab === ContentTabEnum.Bible || $currentTab === ContentTabEnum.Guide) && !$isShowingContextualMenu;
 
     onMount(() => {
-        openBibleMenu();
-
         if (!$currentBibleSection && !$currentGuide) {
-            isShowingBookChapterSelectorPane = true;
+            openContextualMenu();
+            openBookChapterSelectorPane(null);
         }
 
         window.onResourceReferenceClick = (tab: string, contentId: number) => {
@@ -279,16 +244,9 @@
     });
 </script>
 
-<BookPassageSelectorPane
-    bind:bookPassageSelectorPane
-    bind:isShowing={isShowingBookPassageSelectorPane}
-    {bookCodesToNames}
-/>
-<BookChapterSelectorPane
-    bind:bookChapterSelectorPane
-    bind:isShowing={isShowingBookChapterSelectorPane}
-    {bookCodesToNames}
-/>
+<PredeterminedPassageSelectorForBibleSectionPane {bookCodesToNames} />
+<PredeterminedPassageSelectorPane {bookCodesToNames} />
+<BookChapterSelectorPane {bookCodesToNames} />
 
 <div class={$currentTab !== ContentTabEnum.Guide ? 'hidden' : ''}>
     <FullscreenTextResource tab={ContentTabEnum.Guide} bind:fullscreenTextResourceStacksByTab />
@@ -320,20 +278,19 @@
     {#await baseFetchPromise}
         <FullPageSpinner />
     {:then}
-        {#if $passagePageShownMenu === null || $passagePageShownMenu === PassagePageMenuEnum.resources}
+        {#if [ContentTabEnum.Bible, ContentTabEnum.Guide, ContentTabEnum.Resources].includes($currentTab) && !$isShowingContextualMenu}
             <TopNavBar
                 bind:preferredBiblesModalOpen
                 bind:alignmentModeEnabled
                 {bookCodesToNames}
                 {currentBibleId}
                 bibles={bibleData?.availableBibles ?? []}
-                bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
-                bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
             />
         {/if}
         <div
-            class="absolute left-0 right-0 top-16 flex flex-col {$passagePageShownMenu !== null &&
-                'hidden'} {audioPlayerShowing ? 'bottom-[8.5rem]' : 'bottom-20'}"
+            class="absolute left-0 right-0 top-16 flex flex-col {!isShowingBibleOrGuide && 'hidden'} {audioPlayerShowing
+                ? 'bottom-[8.5rem]'
+                : 'bottom-20'}"
         >
             {#if currentBibleId !== -1 && (bibleData?.biblesForTabs.length ?? 0) > 1}
                 <div class="px-4 pb-4 {$currentTab !== ContentTabEnum.Bible && 'hidden'}">
@@ -370,7 +327,7 @@
         {#if objectKeys(multiClipAudioStates).length}
             <div
                 class="fixed bottom-20 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4 {(!audioPlayerShowing ||
-                    $passagePageShownMenu !== null) &&
+                    !isShowingBibleOrGuide) &&
                     'hidden'}"
             >
                 <AudioPlayer {multiClipAudioStates} currentClipKey={audioPlayerKey} />
@@ -379,29 +336,14 @@
     {:catch}
         <ErrorMessage />
     {/await}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.main}
+    {#if $currentTab === ContentTabEnum.MainMenu}
         <MainMenu />
     {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.guide}
-        <GuideMenu
-            bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
-            bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
-        />
+    {#if $currentTab === ContentTabEnum.Guide && $isShowingContextualMenu}
+        <GuideMenu />
     {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.bible}
-        <BibleMenu
-            bind:showBookChapterVerseMenu={isShowingBookChapterSelectorPane}
-            bind:showBookPassageSelectorPane={isShowingBookPassageSelectorPane}
-        />
-    {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.settings}
-        <SettingsMenu />
-    {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.share}
-        <QuickShare />
-    {/if}
-    {#if $passagePageShownMenu === PassagePageMenuEnum.feedback}
-        <Feedback />
+    {#if $currentTab === ContentTabEnum.Bible && $isShowingContextualMenu}
+        <BibleMenu />
     {/if}
     {#key $currentBibleSection}
         <LibraryResourceMenu
@@ -409,7 +351,7 @@
             bind:fullscreenTextResourceStacksByTab
             resources={resourceData?.additionalResourceInfo}
             isFullLibrary={false}
-            isShowing={$passagePageShownMenu === PassagePageMenuEnum.resources}
+            isShowing={$currentTab === ContentTabEnum.Resources}
         />
     {/key}
     <LibraryResourceMenu
@@ -417,6 +359,6 @@
         bind:fullscreenTextResourceStacksByTab
         resources={undefined}
         isFullLibrary={true}
-        isShowing={$passagePageShownMenu === PassagePageMenuEnum.library}
+        isShowing={$currentTab === ContentTabEnum.LibraryMenu}
     />
 </div>

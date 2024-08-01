@@ -272,10 +272,7 @@
                 "value": "बाइबिल"
             }
         },
-        "BookPassageSelectorMenu": {
-            "loading": {
-                "value": "लोड हो रहा है"
-            },
+        "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
                 "value": "एक पुस्तक चुनें"
             },
@@ -315,9 +312,6 @@
             },
             "go": {
                 "value": "जाओ"
-            },
-            "loading": {
-                "value": "लोड हो रहा है"
             }
         },
         "quickShare": {

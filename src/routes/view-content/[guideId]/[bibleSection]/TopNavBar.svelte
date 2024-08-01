@@ -5,19 +5,24 @@
     import type { BibleSection } from '$lib/types/bible';
     import type { FrontendBibleBook } from '$lib/types/bible';
     import PreferredBiblesModal from '$lib/components/PreferredBiblesModal.svelte';
-    import { openGuideMenu, openBibleMenu } from '$lib/stores/passage-page.store';
     import { PredeterminedPassageGuides } from '$lib/types/resource';
     import { bibleSectionToReference, isNewTestament } from '$lib/utils/bible-section-helpers';
     import AlignmentMode from '$lib/icons/AlignmentMode.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
     import { ContentTabEnum, getContentContext } from './context';
 
-    const { currentGuide, currentBibleSection, currentTab } = getContentContext();
+    const {
+        currentGuide,
+        isLoadingToOpenPane,
+        openPredeterminedPassageSelectorPane,
+        openBookChapterSelectorPane,
+        openContextualMenu,
+        currentBibleSection,
+        currentTab,
+    } = getContentContext();
 
     export let bibles: FrontendBibleBook[] = [];
     export let preferredBiblesModalOpen = false;
-    export let showBookChapterVerseMenu: boolean;
-    export let showBookPassageSelectorPane: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
     export let alignmentModeEnabled: boolean;
     export let currentBibleId: number | null;
@@ -43,11 +48,11 @@
     }
 
     function handlePassageButton() {
-        const currentGuideId = $currentGuide?.id;
-        if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
-            showBookPassageSelectorPane = true;
+        const guide = $currentGuide;
+        if (guide && PredeterminedPassageGuides.includes(guide.id)) {
+            openPredeterminedPassageSelectorPane(guide, true);
         } else {
-            showBookChapterVerseMenu = true;
+            openBookChapterSelectorPane(guide);
         }
     }
 
@@ -71,13 +76,14 @@
             <button
                 on:click={handlePassageButton}
                 class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                disabled={$isLoadingToOpenPane}
                 data-app-insights-event-name="top-nav-passage-button-clicked"
             >
                 {bibleSectionTitle.trim() ? bibleSectionTitle : $translate('navTop.selectPassage.value')}
             </button>
             {#if $currentTab === ContentTabEnum.Bible}
                 <button
-                    on:click={openBibleMenu}
+                    on:click={openContextualMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
                     data-app-insights-event-name="top-nav-open-bible-menu-button-clicked"
                 >
@@ -86,7 +92,7 @@
             {/if}
             {#if $currentTab === ContentTabEnum.Guide}
                 <button
-                    on:click={openGuideMenu}
+                    on:click={openContextualMenu}
                     class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
                     data-app-insights-event-name="top-nav-open-guide-menu-button-clicked"
                 >

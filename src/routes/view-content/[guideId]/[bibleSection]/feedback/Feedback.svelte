@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { openMainMenu } from '$lib/stores/passage-page.store';
     import { _ as translate } from 'svelte-i18n';
     import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
     import { apiUrl } from '$lib/data-cache';
@@ -10,6 +9,8 @@
         name: string;
         value: string;
     }
+
+    export let close: () => void;
 
     let loading = false;
     let showErrors = false;
@@ -126,7 +127,7 @@
         <div class="flex w-full justify-end pe-8">
             <button
                 class="my-4 flex w-1/4 justify-end"
-                on:click={openMainMenu}
+                on:click={close}
                 data-app-insights-event-name="feedback-menu-close-button-click"
             >
                 <XMarkIcon />
@@ -139,7 +140,7 @@
         </div>
         <button
             class="btn btn-primary"
-            on:click={openMainMenu}
+            on:click={close}
             data-app-insights-event-name="feedback-menu-success-button-click"
             >{$translate('page.feedback.close.value')}</button
         >
@@ -149,7 +150,7 @@
         <div class="flex w-full justify-end pe-8">
             <button
                 class="my-4 flex w-1/4 justify-end"
-                on:click={openMainMenu}
+                on:click={close}
                 data-app-insights-event-name="feedback-menu-close-button-click"
             >
                 <XMarkIcon />
@@ -173,7 +174,7 @@
         <div class="flex justify-end">
             <button
                 class="my-4 flex w-1/4 justify-end"
-                on:click={openMainMenu}
+                on:click={close}
                 data-app-insights-event-name="feedback-menu-close-button-click"
             >
                 <XMarkIcon />

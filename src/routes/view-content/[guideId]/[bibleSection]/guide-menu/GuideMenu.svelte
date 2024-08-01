@@ -14,12 +14,17 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import SwishHeader from '$lib/components/SwishHeader.svelte';
     import { getContentContext } from '../context';
-    import { passagePageShownMenu } from '$lib/stores/passage-page.store';
+    import Spinner from '$lib/components/Spinner.svelte';
 
-    const { currentGuide, currentBibleSection, setCurrentGuide } = getContentContext();
-
-    export let showBookPassageSelectorPane: boolean;
-    export let showBookChapterVerseMenu: boolean;
+    const {
+        currentGuide,
+        isLoadingToOpenPane,
+        openPredeterminedPassageSelectorPane,
+        openBookChapterSelectorPane,
+        closeContextualMenu,
+        currentBibleSection,
+        setCurrentGuide,
+    } = getContentContext();
 
     $: selectedGuide = $currentGuide;
 
@@ -38,18 +43,20 @@
         }
     }
 
-    function openGuideMenu() {
-        const selectedGuideId = selectedGuide?.id;
-        if (!$currentBibleSection) {
-            if (selectedGuideId && PredeterminedPassageGuides.includes(selectedGuideId)) {
-                showBookPassageSelectorPane = true;
-            } else {
-                showBookChapterVerseMenu = true;
-            }
+    async function openGuideMenu() {
+        // When using a selector pane we aren't immediately setting the guide, but are instead relying on
+        // the passage selector to set the guide once the user finishes passage selection. This prevents the following:
+        //   - User selects guide, background fetch happens for current Bible section
+        //   - User selects new Bible section, previous fetch data is wasted and now a new fetch happens
+        // In addition to preventing extra network calls it prevents jarring page flashes that come from loading indicators.
+        if (selectedGuide && PredeterminedPassageGuides.includes(selectedGuide.id)) {
+            openPredeterminedPassageSelectorPane(selectedGuide, false);
+        } else if (!$currentBibleSection) {
+            openBookChapterSelectorPane(selectedGuide);
         } else {
-            passagePageShownMenu.set(null);
+            closeContextualMenu();
+            setCurrentGuide(selectedGuide);
         }
-        setCurrentGuide(selectedGuide);
     }
 </script>
 
@@ -88,13 +95,17 @@
         {#if !!availableGuides && availableGuides.length > 0}
             <div class="mb-24 flex flex-grow items-end px-4">
                 <button
-                    disabled={!selectedGuide}
+                    disabled={!selectedGuide || $isLoadingToOpenPane}
                     on:click={openGuideMenu}
                     class="btn btn-primary w-full"
                     data-app-insights-event-name="guide-menu-select-guide-button-clicked"
                 >
-                    {$translate('page.bibleMenu.goToGuide.value')}</button
-                >
+                    {#if $isLoadingToOpenPane}
+                        <Spinner />
+                    {:else}
+                        {$translate('page.bibleMenu.goToGuide.value')}
+                    {/if}
+                </button>
             </div>
         {/if}
     {/await}

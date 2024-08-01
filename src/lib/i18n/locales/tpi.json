@@ -272,10 +272,7 @@
                 "value": "Buk Tambu"
             }
         },
-        "BookPassageSelectorMenu": {
-            "loading": {
-                "value": "Loading..."
-            },
+        "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
                 "value": "Em tasol wanpela buk"
             },
@@ -315,9 +312,6 @@
             },
             "go": {
                 "value": "Go"
-            },
-            "loading": {
-                "value": "Loading..."
             }
         },
         "quickShare": {

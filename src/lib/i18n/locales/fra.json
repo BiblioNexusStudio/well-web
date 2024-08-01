@@ -272,10 +272,7 @@
                 "value": "Bible"
             }
         },
-        "BookPassageSelectorMenu": {
-            "loading": {
-                "value": "Chargement..."
-            },
+        "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
                 "value": "Sélectionner un Livre"
             },
@@ -315,9 +312,6 @@
             },
             "go": {
                 "value": "Aller"
-            },
-            "loading": {
-                "value": "Chargement..."
             }
         },
         "quickShare": {
