@@ -39,8 +39,8 @@
     import {
         PassagePageMenuEnum,
         passagePageShownMenu,
-        openGuideMenu,
         recalculatePanesAndMenus,
+        openBibleMenu,
     } from '$lib/stores/passage-page.store';
     import GuideMenu from './guide-menu/GuideMenu.svelte';
     import { onMount } from 'svelte';
@@ -249,8 +249,10 @@
     }
 
     onMount(() => {
-        if (!$currentGuide) {
-            openGuideMenu();
+        openBibleMenu();
+
+        if (!$currentBibleSection && !$currentGuide) {
+            isShowingBookChapterSelectorPane = true;
         }
 
         window.onResourceReferenceClick = (tab: string, contentId: number) => {

@@ -17,7 +17,7 @@ export enum ContentTabEnum {
 const CONTEXT_KEY = 'contentContext';
 
 export function createContentContext() {
-    const currentTab = writable<ContentTabEnum>(ContentTabEnum.Guide);
+    const currentTab = writable<ContentTabEnum>(ContentTabEnum.Bible);
     const currentBibleSection = writable<BibleSection | null>(null);
     const currentGuide = writable<ApiParentResource | null>(null);
 
