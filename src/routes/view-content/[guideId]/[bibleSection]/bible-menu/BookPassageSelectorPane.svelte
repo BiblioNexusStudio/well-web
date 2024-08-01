@@ -10,9 +10,9 @@
     import { PredeterminedPassageGuides, type ApiParentResource } from '$lib/types/resource';
     import type { BasePassagesByBook } from '$lib/types/passage';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { ContentTabEnum, getContentContext } from '../context';
+    import { getContentContext } from '../context';
 
-    const { currentGuide, setCurrentTab, setCurrentBibleSection } = getContentContext();
+    const { currentGuide, setCurrentBibleSection } = getContentContext();
 
     export let bookPassageSelectorPane: CupertinoPane;
     export let isShowing: boolean;
@@ -36,9 +36,6 @@
         setCurrentBibleSection(passage);
         currentStep = steps.one;
         isShowing = false;
-        if ($currentGuide) {
-            setCurrentTab(ContentTabEnum.Guide);
-        }
     }
 
     $: availablePassagesPromise = fetchAvailablePassages($currentGuide, $isOnline);

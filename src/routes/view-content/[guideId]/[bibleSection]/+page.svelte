@@ -39,8 +39,8 @@
     import {
         PassagePageMenuEnum,
         passagePageShownMenu,
-        openGuideMenu,
         recalculatePanesAndMenus,
+        openBibleMenu,
     } from '$lib/stores/passage-page.store';
     import GuideMenu from './guide-menu/GuideMenu.svelte';
     import { onMount } from 'svelte';
@@ -249,8 +249,12 @@
     }
 
     onMount(() => {
-        if (!$currentGuide) {
-            openGuideMenu();
+        openBibleMenu();
+
+        if ($page.url.searchParams.get('gettingStarted')) {
+            isShowingBookChapterSelectorPane = true;
+            $page.url.searchParams.delete('gettingStarted');
+            window.history.replaceState({}, '', $page.url.toString());
         }
 
         window.onResourceReferenceClick = (tab: string, contentId: number) => {
