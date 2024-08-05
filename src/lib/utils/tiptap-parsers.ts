@@ -25,6 +25,7 @@ import Superscript from '@tiptap/extension-superscript';
 import TextStyle from '@tiptap/extension-text-style';
 import { Video } from './tiptap/video';
 import type { ContentTabEnum } from '../../routes/view-content/[guideId]/[bibleSection]/context';
+import { DirectionCode, handleRtlVerseReferences } from './language-utils';
 
 const nodes = [
     Blockquote,
@@ -99,10 +100,14 @@ function filterKnownNodes(nodes: Node[]): Node[] {
 
 export function parseTiptapJsonToHtml(
     json: object,
+    scriptDirection: DirectionCode | undefined,
     tab: ContentTabEnum,
     availableAssociatedResources: AssociatedResource[] | undefined
 ) {
-    const tiptapJson = json as BasicTiptapJson;
+    const tiptapJson =
+        scriptDirection === DirectionCode.RTL
+            ? JSON.parse(handleRtlVerseReferences(JSON.stringify(json), scriptDirection)!)
+            : (json as BasicTiptapJson);
     return generateHTML(
         {
             ...json,

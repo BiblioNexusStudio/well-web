@@ -24,6 +24,7 @@
     import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
     import { _ as translate } from 'svelte-i18n';
     import { ContentTabEnum, getContentContext } from '../context';
+    import { currentLanguageDirection } from '$lib/stores/language.store';
 
     interface FiaAudioContent {
         steps: {
@@ -181,7 +182,12 @@
                     return {
                         steps: content.map((step) => ({
                             ...step,
-                            contentHTML: parseTiptapJsonToHtml(step.tiptap, ContentTabEnum.Guide, undefined),
+                            contentHTML: parseTiptapJsonToHtml(
+                                step.tiptap,
+                                $currentLanguageDirection,
+                                ContentTabEnum.Guide,
+                                undefined
+                            ),
                         })),
                     };
                 } catch (error) {

@@ -24,7 +24,7 @@
     } from '../library-resource-loader';
     import { fetchFromCacheOrApi } from '$lib/data-cache';
     import { get } from 'svelte/store';
-    import { currentLanguageInfo } from '$lib/stores/language.store';
+    import { currentLanguageDirection, currentLanguageInfo } from '$lib/stores/language.store';
     import { searchResourcesEndpoint } from '$lib/api-endpoints';
     import { debounce } from '$lib/utils/debounce';
     import { settings } from '$lib/stores/settings.store';
@@ -130,7 +130,7 @@
         if (!isShowing || (!isFullLibrary && resourceGroupings?.length > 0)) return;
         isLoading = true;
 
-        resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources);
+        resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources, $currentLanguageDirection);
         flatResources = resourceGroupings.flatMap(({ resources }) => resources);
         mediaResources = flatResources.filter(
             (r) => r.mediaType === MediaType.Image || r.mediaType === MediaType.Video

@@ -10,6 +10,7 @@
     import AlignmentMode from '$lib/icons/AlignmentMode.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
     import { ContentTabEnum, getContentContext } from './context';
+    import { currentLanguageDirection } from '$lib/stores/language.store';
 
     const {
         currentGuide,
@@ -61,7 +62,10 @@
         bibleSection: BibleSection | null
     ) {
         if (bibleSection && bookCodesToNames) {
-            return `${bookCodesToNames.get(bibleSection.bookCode) ?? ''} ${bibleSectionToReference(bibleSection)}`;
+            return `${bookCodesToNames.get(bibleSection.bookCode) ?? ''} ${bibleSectionToReference(
+                bibleSection,
+                $currentLanguageDirection
+            )}`;
         } else {
             return '';
         }

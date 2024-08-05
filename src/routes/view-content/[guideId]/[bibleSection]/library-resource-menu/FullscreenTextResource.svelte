@@ -14,6 +14,8 @@
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { isOnline } from '$lib/stores/is-online.store';
     import type { ContentTabEnum } from '../context';
+    import { currentLanguageDirection } from '$lib/stores/language.store';
+    import { handleRtlVerseReferences } from '$lib/utils/language-utils';
 
     export let tab: ContentTabEnum;
     export let fullscreenTextResourceStacksByTab: Map<
@@ -46,9 +48,9 @@
                 addThumbnailToVideo(tiptap);
             }
 
-            html = parseTiptapJsonToHtml(tiptap.tiptap, tab, availableAssociatedResources);
+            html = parseTiptapJsonToHtml(tiptap.tiptap, $currentLanguageDirection, tab, availableAssociatedResources);
         }
-        return { html, displayName: metadata?.displayName };
+        return { html, displayName: handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection) };
     }
 </script>
 

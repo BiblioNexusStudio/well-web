@@ -16,6 +16,7 @@ import {
     resourceMetadataApiFullUrl,
     resourceThumbnailApiFullUrl,
 } from '$lib/utils/data-handlers/resources/resource';
+import { DirectionCode, handleRtlVerseReferences } from '$lib/utils/language-utils';
 import { objectEntries } from '$lib/utils/typesafe-standard-lib';
 import { get } from 'svelte/store';
 
@@ -37,7 +38,10 @@ const RESOURCE_TYPE_ORDER: ParentResourceType[] = [
     ParentResourceType.Dictionary,
 ];
 
-export async function buildLibraryResourceGroupingsWithMetadata(allResources: ResourceContentInfo[]) {
+export async function buildLibraryResourceGroupingsWithMetadata(
+    allResources: ResourceContentInfo[],
+    scriptDirection: DirectionCode | undefined
+) {
     const parentResourceIdMap = get(parentResourceIdToInfoMap);
     const groupingMap = groupBy(
         allResources,
@@ -75,7 +79,7 @@ export async function buildLibraryResourceGroupingsWithMetadata(allResources: Re
             } else {
                 return {
                     ...resource,
-                    displayName: metadatasById.get(resource.id)?.displayName,
+                    displayName: handleRtlVerseReferences(metadatasById.get(resource.id)?.displayName, scriptDirection),
                 };
             }
         });
