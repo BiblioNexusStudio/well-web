@@ -12,6 +12,8 @@
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { _ as translate } from 'svelte-i18n';
     import { ContentTabEnum } from '../context';
+    import { currentLanguageDirection } from '$lib/stores/language.store';
+    import { handleRtlVerseReferences } from '$lib/utils/language-utils';
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
@@ -63,9 +65,10 @@
                     );
                     return {
                         ...restOfResourceInfo,
-                        displayName: metadata?.displayName,
+                        displayName: handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection),
                         contentHTML: parseTiptapJsonToHtml(
                             content.tiptap,
+                            $currentLanguageDirection,
                             ContentTabEnum.Guide,
                             availableAssociatedResources
                         ),

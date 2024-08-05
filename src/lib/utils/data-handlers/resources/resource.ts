@@ -231,16 +231,6 @@ export async function filterToAvailableAssociatedResourceContent(
     });
 }
 
-export async function fetchDisplayNameForResourceContent(
-    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo
-): Promise<string | undefined> {
-    return (
-        ('displayName' in resourceContent && resourceContent.displayName) ||
-        (await fetchMetadataForResourceContent(resourceContent))?.displayName ||
-        undefined
-    );
-}
-
 export function sortByDisplayName<T extends { displayName: string | undefined }>(resources: T[]): T[] {
     return resources.sort((a, b) =>
         (a.displayName ?? '').localeCompare(b.displayName ?? '', undefined, { numeric: true })

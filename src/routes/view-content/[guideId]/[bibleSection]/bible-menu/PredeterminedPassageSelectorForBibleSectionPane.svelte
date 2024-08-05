@@ -9,6 +9,7 @@
     import type { BibleSection } from '$lib/types/bible';
     import { getContentContext } from '../context';
     import { PredeterminedPassageSelectorForBibleSectionPaneInfo, type ContentPaneInfo } from './pane-handler';
+    import { currentLanguageDirection } from '$lib/stores/language.store';
 
     const { currentPane, setCurrentBibleSectionAndCurrentGuide, closeContextualMenu, closeCurrentPane } =
         getContentContext();
@@ -79,9 +80,9 @@
                     on:click={() => setPassageAndClosePane(passage)}
                     class="my-2 flex w-11/12 flex-wrap rounded-xl border p-4 text-sm"
                     data-app-insights-event-name="book-passage-selector-pane-passage-selected"
-                    data-app-insights-dimensions={`passage,${bibleSectionToReference(passage)}`}
+                    data-app-insights-dimensions={`passage,${bibleSectionToReference(passage, undefined)}`}
                     >{bookCodesToNames?.get(passage.bookCode)}
-                    {bibleSectionToReference(passage)}</button
+                    {bibleSectionToReference(passage, $currentLanguageDirection)}</button
                 >
             {:else}
                 <h3 class="my-2">

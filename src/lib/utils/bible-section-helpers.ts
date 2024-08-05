@@ -1,4 +1,5 @@
 import type { BibleSection } from '$lib/types/bible';
+import { handleRtlVerseReferences, type DirectionCode } from './language-utils';
 
 const newTestamentBooks = [
     'MAT',
@@ -145,7 +146,7 @@ export function alignmentScriptureStringToReference(scriptureString: string, boo
         endVerse: verse,
     };
 
-    const reference = bibleSectionToReference(bibleSection);
+    const reference = bibleSectionToReference(bibleSection, undefined);
     return `${bookName} ${reference}`;
 }
 
@@ -179,12 +180,16 @@ export function bibleSectionsEqual(passage1: BibleSection, passage2: BibleSectio
     );
 }
 
-export function bibleSectionToReference(bibleSection: BibleSection) {
+export function bibleSectionToReference(bibleSection: BibleSection, scriptDirection: DirectionCode | undefined) {
+    let reference: string;
     if (bibleSection.startChapter === bibleSection.endChapter) {
         if (bibleSection.startVerse === bibleSection.endVerse) {
-            return `${bibleSection.startChapter}:${bibleSection.startVerse}`;
+            reference = `${bibleSection.startChapter}:${bibleSection.startVerse}`;
+        } else {
+            reference = `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endVerse}`;
         }
-        return `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endVerse}`;
+    } else {
+        reference = `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endChapter}:${bibleSection.endVerse}`;
     }
-    return `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endChapter}:${bibleSection.endVerse}`;
+    return handleRtlVerseReferences(reference, scriptDirection)!;
 }
