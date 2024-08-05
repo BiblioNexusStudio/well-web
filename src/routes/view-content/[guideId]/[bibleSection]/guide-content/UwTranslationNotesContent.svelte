@@ -93,7 +93,7 @@
 </script>
 
 {#if isLoading}
-    <FullPageSpinner />
+    <FullPageSpinner {isShowing} />
 {:else}
     <div class="flex flex-grow overflow-y-hidden px-4 {!isShowing && 'hidden'}">
         <div class="prose mx-auto flex flex-grow">

@@ -318,10 +318,7 @@
                 "value": "Biblia"
             }
         },
-        "BookPassageSelectorMenu": {
-            "loading": {
-                "value": "Kupakia..."
-            },
+        "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
                 "value": "Chagua Kitabu"
             },
@@ -361,9 +358,6 @@
             },
             "go": {
                 "value": "Enda"
-            },
-            "loading": {
-                "value": "Kupakia..."
             }
         },
         "quickShare": {

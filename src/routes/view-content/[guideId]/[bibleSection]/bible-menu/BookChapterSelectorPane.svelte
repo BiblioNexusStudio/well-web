@@ -1,25 +1,20 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import { CupertinoPane } from 'cupertino-pane';
-    import { afterUpdate, onMount } from 'svelte';
-    import { bibleChaptersByBookAvailable } from '$lib/utils/data-handlers/bible';
+    import { afterUpdate, onDestroy, onMount } from 'svelte';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { Icon } from 'svelte-awesome';
     import arrowRight from 'svelte-awesome/icons/arrowRight';
     import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible';
-    import { currentLanguageInfo } from '$lib/stores/language.store';
-    import type { Language } from '$lib/types/file-manager';
-    import { isOnline } from '$lib/stores/is-online.store';
-    import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
-    import { bibleChaptersByBookAvailableForGuide } from '$lib/utils/data-handlers/resources/guides';
-    import type { ApiParentResource } from '$lib/types/resource';
-    import { ContentTabEnum, getContentContext } from '../context';
+    import { getContentContext } from '../context';
+    import { BookChapterSelectorPaneInfo, type ContentPaneInfo } from './pane-handler';
 
-    const { currentGuide, currentTab, setCurrentTab, setCurrentBibleSection } = getContentContext();
+    const { setCurrentBibleSectionAndCurrentGuide, currentPane, closeContextualMenu, closeCurrentPane } =
+        getContentContext();
 
-    export let bookChapterSelectorPane: CupertinoPane;
-    export let isShowing: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
+
+    let pane: CupertinoPane | undefined;
 
     let currentBook: ApiBibleBook;
     let currentChapter: ApiBibleChapter | null = null;
@@ -28,27 +23,17 @@
     let firstSelectedVerse: FrontEndVerseForSelectionPane | null = null;
     let lastSelectedVerse: FrontEndVerseForSelectionPane | null = null;
 
-    $: filterByCurrentGuide = $currentTab === ContentTabEnum.Guide;
-    $: availableBooksPromise = fetchAvailableBooks(
-        $currentLanguageInfo,
-        $currentGuide,
-        $isOnline,
-        filterByCurrentGuide,
-        $preferredBibleIds
-    );
+    let availableBooks: ApiBibleBook[] = [];
 
-    async function fetchAvailableBooks(
-        _currentLanguageInfo: Language | undefined,
-        currentGuide: ApiParentResource | null,
-        online: boolean,
-        filterByCurrentGuide: boolean,
-        preferredBibleIds: number[]
-    ) {
-        const allAvailable = await bibleChaptersByBookAvailable(online, preferredBibleIds);
-        if (filterByCurrentGuide && currentGuide?.id) {
-            return await bibleChaptersByBookAvailableForGuide(allAvailable, currentGuide.id);
-        } else {
-            return allAvailable;
+    $: showOrDismissPane($currentPane);
+
+    function showOrDismissPane(currentPane: ContentPaneInfo | null) {
+        if (currentPane instanceof BookChapterSelectorPaneInfo) {
+            availableBooks = currentPane.availableBooks;
+            pane?.present({ animate: true });
+        } else if (pane && pane.isPanePresented() && !pane.isHidden()) {
+            availableBooks = [];
+            pane.hide();
         }
     }
 
@@ -171,7 +156,7 @@
     }
 
     async function handleVerseGoButton() {
-        setCurrentBibleSection({
+        const bibleSection = {
             bookCode: currentBook.code,
             startChapter: firstSelectedVerse ? forceToInt(firstSelectedVerse.chapterNumber) : 0,
             startVerse: firstSelectedVerse ? forceToInt(firstSelectedVerse.number) : 0,
@@ -185,15 +170,14 @@
                 : firstSelectedVerse
                 ? forceToInt(firstSelectedVerse.number)
                 : 0,
-        });
-        isShowing = false;
+        };
+        setCurrentBibleSectionAndCurrentGuide(bibleSection, $currentPane?.guide ?? null);
+        closeCurrentPane();
+        closeContextualMenu();
         currentStep = steps.one;
         currentChapter = null;
         firstSelectedVerse = null;
         lastSelectedVerse = null;
-        if ($currentGuide) {
-            setCurrentTab(ContentTabEnum.Guide);
-        }
         scrollBehaviorSmooth = false;
     }
 
@@ -227,19 +211,19 @@
     }
 
     onMount(async () => {
-        bookChapterSelectorPane = new CupertinoPane('#book-chapter-verse-selector-pane', {
+        pane = new CupertinoPane('#book-chapter-verse-selector-pane', {
             backdrop: true,
             simulateTouch: false, // prevent weirdness when using mouse
             topperOverflow: false,
             initialBreak: 'top',
             showDraggable: false,
             events: {
-                onWillDismiss: () => (isShowing = false),
-                onBackdropTap: () => (isShowing = false),
+                onWillDismiss: closeCurrentPane,
+                onBackdropTap: closeCurrentPane,
             },
         });
 
-        bookChapterSelectorPane.on('onDidDismiss', function () {
+        pane.on('onDidDismiss', function () {
             scrollBehaviorSmooth = false;
             currentStep = steps.one;
             currentChapter = null;
@@ -248,12 +232,16 @@
         });
 
         try {
-            bookChapterSelectorPane.disableDrag();
+            pane.disableDrag();
         } catch (error) {
             // do nothing because disableDrag throws
             // an error in the console on desktop only.
             // the pane still works as expected
         }
+    });
+
+    onDestroy(() => {
+        pane?.isPanePresented() && pane?.destroy();
     });
 
     afterUpdate(() => {
@@ -299,111 +287,105 @@
                 ? 'overflow-y-scroll'
                 : ''}"
         >
-            {#await availableBooksPromise}
-                <p>{$translate('page.BookChapterSelectorPane.loading.value')}</p>
-            {:then books}
-                {#if books === null}
-                    <p>{$translate('errorMessage.message.value')}</p>
-                {:else}
-                    {#if currentStep === steps.one}
-                        <div class="h-full w-full">
-                            {#each books.sort((a, b) => a.number - b.number) as book}
-                                {@const isCurrentBook = book === currentBook}
-                                <button
-                                    on:click={() => handleBookSelection(book)}
-                                    class="my-2 flex w-full flex-wrap rounded-xl border p-4 {isCurrentBook
-                                        ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
-                                        : 'border'}"
-                                    data-app-insights-event-name="book-chapter-selector-pane-book-selected"
-                                    data-app-insights-dimensions={`bookName,${bookName(book)}`}
-                                >
-                                    {bookName(book)}
-                                </button>
-                            {/each}
-                        </div>
-                    {/if}
-                    {#if currentStep === steps.two}
-                        <h3 class="mb-4 block self-start text-lg font-bold">{bookName(currentBook)}</h3>
-                        <h4 class="mb-4 block self-start">{currentStep.subtitle}</h4>
-                        <div class="w-full flex-grow overflow-y-scroll">
-                            <div class="grid w-full grid-cols-5 gap-4">
-                                {#each currentBook.chapters as chapter}
-                                    {@const isCurrentChapter = chapter === currentChapter}
-                                    <button
-                                        on:click={() => handleChapterSelection(chapter)}
-                                        class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
-                                        data-app-insights-event-name="book-chapter-selector-pane-book-chapter-selected"
-                                        data-app-insights-dimensions={`bookName,${bookName(
-                                            currentBook
-                                        )},chapterNumber,${chapter.number}`}
-                                    >
-                                        {chapter.number}
-                                    </button>
-                                {/each}
-                            </div>
-                        </div>
-                        <hr class="my-4 w-full" />
+            {#if currentStep === steps.one}
+                <div class="h-full w-full">
+                    {#each availableBooks.sort((a, b) => a.number - b.number) as book}
+                        {@const isCurrentBook = book === currentBook}
                         <button
-                            on:click={handleGoToVerses}
-                            disabled={!currentChapterSelected}
-                            class="btn btn-primary w-full"
-                            data-app-insights-event-name="book-chapter-selector-pane-chapter-go-button-clicked"
-                            >{$translate('page.BookChapterSelectorPane.go.value')}
-                            <Icon data={arrowRight} class="ms-2" />
-                        </button>
-                    {/if}
-                    {#if currentStep === steps.three}
-                        <h3 class="mb-2 block self-start text-lg font-bold">{verseTitle}</h3>
-                        <div class="flex w-full flex-shrink-0 overflow-x-scroll">
-                            {#each currentBook.chapters as chapter, index}
-                                {@const isCurrentChapter = chapter === currentChapter}
-                                <button
-                                    on:click={() => handleChapterSelection(chapter)}
-                                    bind:this={buttons[index]}
-                                    class="btn me-4 block {isCurrentChapter && 'bg-blue-500 text-white'}"
-                                    data-app-insights-event-name="book-chapter-selector-pane-carousel-selected"
-                                >
-                                    <span class="me-1">{bookName(currentBook)}</span><span>{chapter.number}</span>
-                                </button>
-                            {/each}
-                        </div>
-                        <h4 class="mb-4 mt-1 block self-start">{currentStep.subtitle}</h4>
-                        <div class="w-full flex-grow overflow-y-scroll">
-                            <div class="grid w-full grid-cols-5 gap-4">
-                                {#if currentChapter && currentChapter.verseState}
-                                    {#each currentChapter.verseState as verse}
-                                        {@const isSelected = isVerseInSelectedRange(
-                                            verse,
-                                            firstSelectedVerse,
-                                            lastSelectedVerse
-                                        )}
-                                        <button
-                                            on:click={() => handleVerseSelection(verse)}
-                                            class="h-14 w-14 rounded-full {isSelected && 'bg-blue-500 text-white'}"
-                                            data-app-insights-event-name="book-chapter-selector-pane-verse-selected"
-                                            data-app-insights-dimensions={`bookName,${bookName(
-                                                currentBook
-                                            )},chapterNumber,${currentChapter.number},verseNumber,${verse.number}`}
-                                        >
-                                            {verse.number}
-                                        </button>
-                                    {/each}
-                                {/if}
-                            </div>
-                        </div>
-                        <hr class="my-4 w-full" />
-
-                        <button
-                            on:click={handleVerseGoButton}
-                            disabled={verseGoButtonDisabled}
-                            class="btn btn-primary w-full"
-                            data-app-insights-event-name="book-chapter-selector-pane-verse-go-button-clicked"
-                            >{$translate('page.BookChapterSelectorPane.go.value')}
-                            <Icon data={arrowRight} class="ms-2" /></button
+                            on:click={() => handleBookSelection(book)}
+                            class="my-2 flex w-full flex-wrap rounded-xl border p-4 {isCurrentBook
+                                ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
+                                : 'border'}"
+                            data-app-insights-event-name="book-chapter-selector-pane-book-selected"
+                            data-app-insights-dimensions={`bookName,${bookName(book)}`}
                         >
-                    {/if}
-                {/if}
-            {/await}
+                            {bookName(book)}
+                        </button>
+                    {:else}
+                        <p>{$translate('page.PredeterminedPassageSelectorMenu.noBooks.value')}</p>
+                    {/each}
+                </div>
+            {/if}
+            {#if currentStep === steps.two}
+                <h3 class="mb-4 block self-start text-lg font-bold">{bookName(currentBook)}</h3>
+                <h4 class="mb-4 block self-start">{currentStep.subtitle}</h4>
+                <div class="w-full flex-grow overflow-y-scroll">
+                    <div class="grid w-full grid-cols-5 gap-4">
+                        {#each currentBook.chapters as chapter}
+                            {@const isCurrentChapter = chapter === currentChapter}
+                            <button
+                                on:click={() => handleChapterSelection(chapter)}
+                                class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
+                                data-app-insights-event-name="book-chapter-selector-pane-book-chapter-selected"
+                                data-app-insights-dimensions={`bookName,${bookName(currentBook)},chapterNumber,${
+                                    chapter.number
+                                }`}
+                            >
+                                {chapter.number}
+                            </button>
+                        {/each}
+                    </div>
+                </div>
+                <hr class="my-4 w-full" />
+                <button
+                    on:click={handleGoToVerses}
+                    disabled={!currentChapterSelected}
+                    class="btn btn-primary w-full"
+                    data-app-insights-event-name="book-chapter-selector-pane-chapter-go-button-clicked"
+                    >{$translate('page.BookChapterSelectorPane.go.value')}
+                    <Icon data={arrowRight} class="ms-2" />
+                </button>
+            {/if}
+            {#if currentStep === steps.three}
+                <h3 class="mb-2 block self-start text-lg font-bold">{verseTitle}</h3>
+                <div class="flex w-full flex-shrink-0 overflow-x-scroll">
+                    {#each currentBook.chapters as chapter, index}
+                        {@const isCurrentChapter = chapter === currentChapter}
+                        <button
+                            on:click={() => handleChapterSelection(chapter)}
+                            bind:this={buttons[index]}
+                            class="btn me-4 block {isCurrentChapter && 'bg-blue-500 text-white'}"
+                            data-app-insights-event-name="book-chapter-selector-pane-carousel-selected"
+                        >
+                            <span class="me-1">{bookName(currentBook)}</span><span>{chapter.number}</span>
+                        </button>
+                    {/each}
+                </div>
+                <h4 class="mb-4 mt-1 block self-start">{currentStep.subtitle}</h4>
+                <div class="w-full flex-grow overflow-y-scroll">
+                    <div class="grid w-full grid-cols-5 gap-4">
+                        {#if currentChapter && currentChapter.verseState}
+                            {#each currentChapter.verseState as verse}
+                                {@const isSelected = isVerseInSelectedRange(
+                                    verse,
+                                    firstSelectedVerse,
+                                    lastSelectedVerse
+                                )}
+                                <button
+                                    on:click={() => handleVerseSelection(verse)}
+                                    class="h-14 w-14 rounded-full {isSelected && 'bg-blue-500 text-white'}"
+                                    data-app-insights-event-name="book-chapter-selector-pane-verse-selected"
+                                    data-app-insights-dimensions={`bookName,${bookName(currentBook)},chapterNumber,${
+                                        currentChapter.number
+                                    },verseNumber,${verse.number}`}
+                                >
+                                    {verse.number}
+                                </button>
+                            {/each}
+                        {/if}
+                    </div>
+                </div>
+                <hr class="my-4 w-full" />
+
+                <button
+                    on:click={handleVerseGoButton}
+                    disabled={verseGoButtonDisabled}
+                    class="btn btn-primary w-full"
+                    data-app-insights-event-name="book-chapter-selector-pane-verse-go-button-clicked"
+                    >{$translate('page.BookChapterSelectorPane.go.value')}
+                    <Icon data={arrowRight} class="ms-2" /></button
+                >
+            {/if}
         </div>
     </div>
 </div>

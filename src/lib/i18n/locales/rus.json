@@ -318,10 +318,7 @@
                 "value": "Библия"
             }
         },
-        "BookPassageSelectorMenu": {
-            "loading": {
-                "value": "Загрузка..."
-            },
+        "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
                 "value": "Выберите книгу"
             },
@@ -361,9 +358,6 @@
             },
             "go": {
                 "value": "Далее"
-            },
-            "loading": {
-                "value": "Загрузка..."
             }
         },
         "quickShare": {

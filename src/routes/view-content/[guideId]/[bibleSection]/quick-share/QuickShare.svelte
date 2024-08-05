@@ -1,15 +1,16 @@
 <script lang="ts">
     import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
-    import { openMainMenu } from '$lib/stores/passage-page.store';
     import { qr } from '@svelte-put/qr/svg';
     import { _ as translate } from 'svelte-i18n';
+
+    export let close: () => void;
 </script>
 
 <div class="flex flex-col p-4 pb-24">
     <div class="my-4 flex w-full justify-end">
         <button
             class="flex w-1/4 justify-end"
-            on:click={openMainMenu}
+            on:click={close}
             data-app-insights-event-name="quick-share-close-button-clicked"
         >
             <XMarkIcon />
@@ -59,7 +60,7 @@
 
     <button
         class="btn btn-primary mx-auto w-2/4"
-        on:click={openMainMenu}
+        on:click={close}
         data-app-insights-event-name="quick-share-close-button-clicked"
         >{$translate('page.quickShare.close.value')}</button
     >

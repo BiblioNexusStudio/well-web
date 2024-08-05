@@ -8,20 +8,19 @@
     import SwishHeader from '$lib/components/SwishHeader.svelte';
     import { PredeterminedPassageGuides } from '$lib/types/resource';
     import { getContentContext } from '../context';
+    import Spinner from '$lib/components/Spinner.svelte';
 
-    const { currentGuide } = getContentContext();
-
-    export let showBookChapterVerseMenu: boolean;
-    export let showBookPassageSelectorPane: boolean;
+    const { currentGuide, isLoadingToOpenPane, openBookChapterSelectorPane, openPredeterminedPassageSelectorPane } =
+        getContentContext();
 
     $: availableBiblesPromise = availableBibles($isOnline);
 
     function openBookChapterVerseMenu() {
-        const currentGuideId = $currentGuide?.id;
-        if (currentGuideId && PredeterminedPassageGuides.includes(currentGuideId)) {
-            showBookPassageSelectorPane = true;
+        const guide = $currentGuide;
+        if (guide && PredeterminedPassageGuides.includes(guide.id)) {
+            openPredeterminedPassageSelectorPane(guide, false);
         } else {
-            showBookChapterVerseMenu = true;
+            openBookChapterSelectorPane(guide);
         }
     }
 
@@ -68,12 +67,17 @@
 
         <div class="mb-24 flex flex-grow items-end px-4">
             <button
-                disabled={$preferredBibleIds.length === 0}
+                disabled={$preferredBibleIds.length === 0 || $isLoadingToOpenPane}
                 on:click={openBookChapterVerseMenu}
                 class="btn btn-primary w-full"
                 data-app-insights-event-name="bible-menu-go-to-passage-button-clicked"
-                >{$translate('page.bibleMenu.goToPassage.value')}</button
             >
+                {#if $isLoadingToOpenPane}
+                    <Spinner />
+                {:else}
+                    {$translate('page.bibleMenu.goToPassage.value')}
+                {/if}
+            </button>
         </div>
     {/await}
 </div>

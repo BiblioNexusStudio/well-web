@@ -345,11 +345,7 @@
                 "_context": "Label for the dropdown"
             }
         },
-        "BookPassageSelectorMenu": {
-            "loading": {
-                "value": "Loading",
-                "_context": "Message to display when the book and passage selectors are loading"
-            },
+        "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
                 "value": "Select a Book",
                 "_context": "Title for the first step in the book and passage selector"
@@ -401,10 +397,6 @@
             "go": {
                 "value": "Go",
                 "_context": "Label for the go button"
-            },
-            "loading": {
-                "value": "Loading",
-                "_context": "Message to display when the book and chapter selectors are loading"
             }
         },
         "quickShare": {
