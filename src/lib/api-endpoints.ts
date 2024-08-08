@@ -59,11 +59,11 @@ export function searchResourcesEndpoint(
 ): ApiStringAndCacheBustVersion {
     const resourceTypesParams = resourceTypes.map((rt) => `resourceTypes=${rt}`).join('&');
     return [
-        `/resources/search?languageId=${languageId}&query=${query}${
+        `/resources/search?languageId=${languageId}${query ? `&query=${query}` : ''}${
             resourceTypesParams ? '&' + resourceTypesParams : ''
-        }${bookCode ? '&bookCode=' + bookCode : ''}${startChapter ? '&startChapter=' + startChapter : ''}${
-            endChapter ? '&endChapter=' + endChapter : ''
-        }${startVerse ? '&startVerse=' + startVerse : ''}${endVerse ? '&endVerse=' + endVerse : ''}`,
+        }${bookCode ? `&bookCode=${bookCode}` : ''}${startChapter ? `&startChapter=${startChapter}` : ''}${
+            endChapter ? `&endChapter=${endChapter}` : ''
+        }${startVerse ? `&startVerse=${startVerse}` : ''}${endVerse ? `&endVerse=${endVerse}` : ''}`,
         2,
     ];
 }
