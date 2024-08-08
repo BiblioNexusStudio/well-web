@@ -7,7 +7,7 @@ import { currentLanguageInfo } from '$lib/stores/language.store';
 // eslint-disable-next-line
 // @ts-ignore
 import { registerSW } from 'virtual:pwa-register';
-import { log } from '$lib/logger';
+import { appInsightsEnabled, appInsightsUser, log } from '$lib/logger';
 import { browserSupported } from '$lib/utils/browser';
 import { languages } from '$lib/stores/language.store';
 import { parentResources } from '$lib/stores/parent-resource.store';
@@ -16,6 +16,18 @@ import { bibles } from '$lib/stores/bibles.store';
 import '$lib/caching-config.js';
 
 export const ssr = false;
+
+// wait until the service worker is active and the App Insights user id is set
+async function injectAppInsightsUserIdIntoServiceWorker(retries = 0) {
+    if (retries < 20) {
+        const swRegistration = await navigator.serviceWorker.getRegistration();
+        if (swRegistration?.active && appInsightsUser.id) {
+            swRegistration.active.postMessage({ appInsightsUserId: appInsightsUser.id });
+        } else {
+            setTimeout(() => injectAppInsightsUserIdIntoServiceWorker(retries + 1), 250);
+        }
+    }
+}
 
 export const load: LayoutLoad = async () => {
     try {
@@ -36,6 +48,10 @@ export const load: LayoutLoad = async () => {
                 // Perform a soft reload to load everything from the SW and get
                 // a consistent set of resources.
                 window.location.reload();
+            }
+
+            if (appInsightsEnabled) {
+                injectAppInsightsUserIdIntoServiceWorker();
             }
 
             const [fetchedLanguages, fetchedParentResources, fetchedBibles] = await Promise.all([
