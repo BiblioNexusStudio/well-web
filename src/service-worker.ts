@@ -179,3 +179,12 @@ registerRoute(
 
 // cache everything else under the API
 registerRoute(CACHING_CONFIG.apiUrlRegex, apiCachingHandler, 'GET');
+
+// don't cache POSTs
+registerRoute(
+    CACHING_CONFIG.apiUrlRegex,
+    new NetworkOnly({
+        plugins: [addApiKeyToAllRequestPlugin],
+    }),
+    'POST'
+);

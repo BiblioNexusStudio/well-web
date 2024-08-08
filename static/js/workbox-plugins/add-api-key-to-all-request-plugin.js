@@ -42,8 +42,18 @@ class AddApiKeyToAllRequestPlugin {
         }
 
         return new Request(urlObj.toString(), {
-            ...request,
+            method: request.method,
             headers: modifiedHeaders,
+            // note: if we ever want to send non-text blobs we'll need to update this
+            body: request.body ? await request.clone().text() : null,
+            mode: request.mode,
+            credentials: request.credentials,
+            cache: request.cache,
+            redirect: request.redirect,
+            referrer: request.referrer,
+            integrity: request.integrity,
+            keepalive: request.keepalive,
+            signal: request.signal,
         });
     };
 }
