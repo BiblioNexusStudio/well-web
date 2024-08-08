@@ -23,7 +23,7 @@
     </div>
     <input
         class="input input-bordered w-full ps-10"
-        placeholder={$translate('components.search.placeholder.value')}
+        placeholder={$translate('page.passage.resourcePane.typeToSearch.value')}
         bind:value={searchQuery}
         on:focus={onFocus}
     />

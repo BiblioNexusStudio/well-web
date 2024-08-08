@@ -8,9 +8,20 @@
     import type { ApiBibleBook, FrontEndVerseForSelectionPane, ApiBibleChapter } from '$lib/types/bible';
     import { getContentContext } from '../context';
     import { BookChapterSelectorPaneInfo, type ContentPaneInfo } from './pane-handler';
+    import { type ResourceContentInfo, ParentResourceType } from '$lib/types/resource';
+    import { searchResourcesEndpoint } from '$lib/api-endpoints';
+    import { fetchFromCacheOrApi } from '$lib/data-cache';
+    import { get } from 'svelte/store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
 
-    const { setCurrentBibleSectionAndCurrentGuide, currentPane, closeContextualMenu, closeCurrentPane } =
-        getContentContext();
+    const {
+        setCurrentBibleSectionAndCurrentGuide,
+        currentPane,
+        closeContextualMenu,
+        closeCurrentPane,
+        isPassageSearch,
+        setPassageSearchResources,
+    } = getContentContext();
 
     export let bookCodesToNames: Map<string, string> | undefined;
 
@@ -171,7 +182,26 @@
                 ? forceToInt(firstSelectedVerse.number)
                 : 0,
         };
-        setCurrentBibleSectionAndCurrentGuide(bibleSection, $currentPane?.guide ?? null);
+
+        if ($isPassageSearch) {
+            const languageId = get(currentLanguageInfo)?.id;
+            const allResources = (await fetchFromCacheOrApi(
+                ...searchResourcesEndpoint(
+                    languageId,
+                    '',
+                    [ParentResourceType.Images, ParentResourceType.Dictionary, ParentResourceType.Videos],
+                    bibleSection.bookCode,
+                    bibleSection.startChapter,
+                    bibleSection.startVerse,
+                    bibleSection.endChapter,
+                    bibleSection.endVerse
+                )
+            )) as ResourceContentInfo[];
+            setPassageSearchResources(allResources);
+        } else {
+            setCurrentBibleSectionAndCurrentGuide(bibleSection, $currentPane?.guide ?? null);
+        }
+
         closeCurrentPane();
         closeContextualMenu();
         currentStep = steps.one;

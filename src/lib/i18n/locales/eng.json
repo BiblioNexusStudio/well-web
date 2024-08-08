@@ -600,10 +600,6 @@
     },
     "components": {
         "search": {
-            "placeholder": {
-                "value": "Search",
-                "_context": "Placeholder text for the search component"
-            },
             "clear": {
                 "value": "Clear",
                 "_context": "Button in the search component for clearing entered text"

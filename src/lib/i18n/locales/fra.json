@@ -469,9 +469,6 @@
     },
     "components": {
         "search": {
-            "placeholder": {
-                "value": "Rechercher"
-            },
             "clear": {
                 "value": "Effacer"
             }

@@ -1,5 +1,5 @@
 import type { BibleSection } from '$lib/types/bible';
-import type { ApiParentResource } from '$lib/types/resource';
+import type { ApiParentResource, ResourceContentInfo } from '$lib/types/resource';
 import { get, writable } from 'svelte/store';
 import { getContext, setContext } from 'svelte';
 import { bibleSectionToString } from '$lib/utils/bible-section-helpers';
@@ -28,8 +28,12 @@ export function createContentContext() {
     const currentPane = writable<ContentPaneInfo | null>(null);
     const isShowingContextualMenu = writable(false);
     const isLoadingToOpenPane = writable(false);
+    const isPassageSearch = writable(false);
+    const passageSearchResources = writable<ResourceContentInfo[] | undefined>(undefined);
 
     const context = {
+        isPassageSearch: { subscribe: isPassageSearch.subscribe },
+        passageSearchResources: { subscribe: passageSearchResources.subscribe },
         currentTab: { subscribe: currentTab.subscribe },
         currentBibleSection: { subscribe: currentBibleSection.subscribe },
         currentGuide: { subscribe: currentGuide.subscribe },
@@ -104,6 +108,12 @@ export function createContentContext() {
             } else {
                 currentGuide.set(guideResources?.find((guide) => guide.id.toString() === param) ?? null);
             }
+        },
+        setIsPassageSearch: (value: boolean) => {
+            isPassageSearch.set(value);
+        },
+        setPassageSearchResources: (value: ResourceContentInfo[] | undefined) => {
+            passageSearchResources.set(value);
         },
     };
 

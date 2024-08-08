@@ -31,6 +31,8 @@
     import { SettingShortNameEnum } from '$lib/types/settings';
     import FullscreenResourceSubgroup from './FullscreenResourceSubgroup.svelte';
     import type { ContentTabEnum } from '../context';
+    import BookIcon from '$lib/icons/BookIcon.svelte';
+    import { getContentContext } from '../context';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -42,6 +44,9 @@
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
 
+    const { isPassageSearch, setIsPassageSearch, passageSearchResources, openBookChapterSelectorPane } =
+        getContentContext();
+
     let searchQuery: string = '';
     let hasQuery: boolean = false;
 
@@ -49,7 +54,7 @@
     let flatResources: ResourceContentInfoWithMetadata[] = [];
     let mediaResources: ResourceContentInfoWithMetadata[] = [];
 
-    $: prepareResources(resources || [], isShowing);
+    $: prepareResources(resources || [], isShowing, $passageSearchResources || []);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(flatResources, 'displayName', searchQuery).length;
     $: hasQuery = searchQuery != '';
@@ -81,9 +86,10 @@
     async function searchQueryChanged(query: string) {
         if (isFullLibrary) {
             if (query.length < 3) {
-                resources = undefined;
+                resourceGroupings = [];
             } else {
                 isLoading = true;
+                setIsPassageSearch(false);
                 debouncedFetchSearchResultsFromApi(query);
             }
         }
@@ -126,17 +132,33 @@
         currentFullscreenResourceGrouping = resourceGrouping;
     }
 
-    async function prepareResources(resources: ResourceContentInfo[], isShowing: boolean) {
+    async function prepareResources(
+        resources: ResourceContentInfo[],
+        isShowing: boolean,
+        passageSearchResources: ResourceContentInfo[]
+    ) {
         if (!isShowing || (!isFullLibrary && resourceGroupings?.length > 0)) return;
         isLoading = true;
 
-        resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources, $currentLanguageDirection);
+        if ($isPassageSearch) {
+            resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(
+                passageSearchResources,
+                $currentLanguageDirection
+            );
+        } else {
+            resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources, $currentLanguageDirection);
+        }
         flatResources = resourceGroupings.flatMap(({ resources }) => resources);
         mediaResources = flatResources.filter(
             (r) => r.mediaType === MediaType.Image || r.mediaType === MediaType.Video
         );
 
         isLoading = false;
+    }
+
+    function openBookChapterVerseMenu() {
+        setIsPassageSearch(true);
+        openBookChapterSelectorPane(null);
     }
 </script>
 
@@ -185,11 +207,17 @@
         </div>
         {#if isLoading}
             <FullPageSpinner />
-        {:else if !resources}
-            <div class="flex flex-grow flex-col items-center justify-items-center overflow-y-scroll">
-                <div class="mb-4 flex-shrink-0 text-sm text-neutral">
-                    {$translate('page.passage.resourcePane.typeToSearch.value')}
-                </div>
+        {:else if resourceGroupings.length === 0}
+            <div class="flex-coloverflow-y-scroll flex flex-grow">
+                {#if visibleSwish}
+                    <button
+                        on:click={openBookChapterVerseMenu}
+                        class="btn btn-outline border-[#485467] p-2 text-[#485467] hover:bg-white hover:text-[#485467]"
+                        data-app-insights-event-name="library-menu-passage-search-button-clicked"
+                    >
+                        <BookIcon /> Passage Search
+                    </button>
+                {/if}
             </div>
         {:else if filteredResourceCount === 0}
             <NoResourcesFound {searchQuery} />
