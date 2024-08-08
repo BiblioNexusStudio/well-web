@@ -1,5 +1,8 @@
 export enum ParentResourceId {
     FIA = 1,
+    FIAImages = 15,
+    FIAMaps = 16,
+    FIAKeyTerms = 17,
     VideoBibleDictionary = 4,
     UwTranslationNotes = 11,
 }
@@ -18,7 +21,13 @@ export enum ParentResourceComplexityLevel {
     Advanced = 'Advanced',
 }
 
-export const SrvResources = [ParentResourceId.FIA, ParentResourceId.VideoBibleDictionary];
+export const SrvResources = [
+    ParentResourceId.FIA,
+    ParentResourceId.FIAImages,
+    ParentResourceId.FIAMaps,
+    ParentResourceId.FIAKeyTerms,
+    ParentResourceId.VideoBibleDictionary,
+];
 
 export const PredeterminedPassageGuides = [ParentResourceId.FIA];
 
