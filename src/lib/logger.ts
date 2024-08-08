@@ -4,6 +4,10 @@ import { browserSupported } from './utils/browser';
 import { browser } from '$app/environment';
 import type { WellFetchError } from './data-cache';
 
+export const appInsightsUser: { id?: string } = {};
+
+export const appInsightsEnabled = browser && config.PUBLIC_APPLICATION_INSIGHTS_CONNECTION_STRING;
+
 const stringDimensionsToJsonObject = (str: string) => {
     const parts = str.split(',');
 
@@ -27,9 +31,10 @@ const appInsights = new ApplicationInsights({
     },
 });
 
-if (config.PUBLIC_APPLICATION_INSIGHTS_CONNECTION_STRING) {
+if (appInsightsEnabled) {
     appInsights.loadAppInsights();
-} else {
+    appInsightsUser.id = appInsights.context?.user.id;
+} else if (browser) {
     console.warn('No app insights connection string available.');
 }
 

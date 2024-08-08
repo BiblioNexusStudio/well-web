@@ -5,7 +5,13 @@ class AddApiKeyToAllRequestPlugin {
      * The API key to be added to requests.
      * @type {string|undefined}
      */
-    apikey = undefined;
+    apikey;
+
+    /**
+     * The user id from App Insights context.
+     * @type {string|undefined}
+     */
+    appInsightsUserId = undefined;
 
     /**
      * Creates an instance of AddApiKeyToAllRequestPlugin.
@@ -29,6 +35,11 @@ class AddApiKeyToAllRequestPlugin {
 
         const modifiedHeaders = new Headers(request.headers);
         modifiedHeaders.delete('X-Cache-Bust-Version');
+        modifiedHeaders.append('bn-source', 'bible-well');
+
+        if (this.appInsightsUserId) {
+            modifiedHeaders.append('bn-user-id', this.appInsightsUserId);
+        }
 
         return new Request(urlObj.toString(), {
             ...request,
