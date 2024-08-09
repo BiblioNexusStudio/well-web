@@ -469,8 +469,14 @@
     },
     "components": {
         "search": {
+            "placeholder": {
+                "value": "بحث"
+            },
             "clear": {
                 "value": "مسح"
+            },
+            "passageSearch": {
+                "value": "بحث في المقطع"
             }
         }
     }

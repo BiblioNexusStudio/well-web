@@ -469,8 +469,14 @@
     },
     "components": {
         "search": {
+            "placeholder": {
+                "value": "Rechercher"
+            },
             "clear": {
                 "value": "Effacer"
+            },
+            "passageSearch": {
+                "value": "Recherche de Passage"
             }
         }
     }

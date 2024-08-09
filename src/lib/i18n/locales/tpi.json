@@ -469,8 +469,14 @@
     },
     "components": {
         "search": {
+            "placeholder": {
+                "value": "Painim"
+            },
             "clear": {
                 "value": "Kilia"
+            },
+            "passageSearch": {
+                "value": "Painim Hap Riding"
             }
         }
     }

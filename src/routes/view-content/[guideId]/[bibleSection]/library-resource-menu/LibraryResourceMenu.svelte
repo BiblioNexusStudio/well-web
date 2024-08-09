@@ -30,9 +30,10 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum } from '$lib/types/settings';
     import FullscreenResourceSubgroup from './FullscreenResourceSubgroup.svelte';
-    import type { ContentTabEnum } from '../context';
+    import { ContentTabEnum } from '../context';
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import { getContentContext } from '../context';
+    import XMarkSmallIcon from '$lib/icons/XMarkSmallIcon.svelte';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -44,8 +45,15 @@
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
 
-    const { isPassageSearch, setIsPassageSearch, passageSearchResources, openBookChapterSelectorPane } =
-        getContentContext();
+    const {
+        isPassageSearch,
+        setIsPassageSearch,
+        passageSearchResources,
+        openBookChapterSelectorPane,
+        passageSearchBibleSection,
+        setPassageSearchBibleSection,
+        currentTab,
+    } = getContentContext();
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
@@ -64,6 +72,10 @@
     let currentFullscreenResourceSubgrouping: LibraryResourceSubgrouping | null = null;
 
     let visibleSwish = isFullLibrary;
+
+    const placeholderText = isFullLibrary
+        ? $translate('page.passage.resourcePane.typeToSearch.value')
+        : $translate('components.search.placeholder.value');
 
     $: searchQueryChanged(searchQuery);
     $: showOnlySrvResources = !!$settings.find(
@@ -145,6 +157,7 @@
                 passageSearchResources,
                 $currentLanguageDirection
             );
+            visibleSwish = false;
         } else {
             resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources, $currentLanguageDirection);
         }
@@ -160,15 +173,37 @@
         setIsPassageSearch(true);
         openBookChapterSelectorPane(null);
     }
+
+    function handlePassageSearchClose() {
+        setIsPassageSearch(false);
+        setPassageSearchBibleSection(null);
+        visibleSwish = true;
+        isFullLibrary = true;
+        resourceGroupings = [];
+    }
 </script>
 
 {#if isShowing}
-    <SwishHeader
-        bind:visible={visibleSwish}
-        title={$translate('page.passage.resourcePane.libraryTitle.value')}
-        subtitle={$translate('page.passage.resourcePane.librarySubtitle.value')}
-        bgcolor="bg-[#439184]"
-    />
+    {#if $isPassageSearch && resourceGroupings.length > 0 && $currentTab === ContentTabEnum.LibraryMenu}
+        <div class="navbar flex w-full justify-between">
+            <button
+                class="mx-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                on:click={handlePassageSearchClose}
+            >
+                {$passageSearchBibleSection?.bookCode}
+                {$passageSearchBibleSection?.startChapter}:{$passageSearchBibleSection?.startVerse}-{$passageSearchBibleSection?.endChapter}:{$passageSearchBibleSection?.endVerse}
+                <span class="ms-2"><XMarkSmallIcon /></span>
+            </button>
+        </div>
+    {/if}
+    {#if !$isPassageSearch}
+        <SwishHeader
+            bind:visible={visibleSwish}
+            title={$translate('page.passage.resourcePane.libraryTitle.value')}
+            subtitle={$translate('page.passage.resourcePane.librarySubtitle.value')}
+            bgcolor="bg-[#439184]"
+        />
+    {/if}
 
     <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
     <FullscreenResourceSection
@@ -187,13 +222,18 @@
     <div
         class="absolute bottom-20 left-0 right-0 {visibleSwish
             ? 'top-40'
+            : $isPassageSearch
+            ? 'top-8'
             : isFullLibrary
             ? 'top-0'
             : 'top-16'} flex flex-col px-4 transition-[top] duration-500 ease-in-out"
     >
         <div class="my-4 flex flex-row">
-            <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
-            {#if !visibleSwish && isFullLibrary}
+            {#if !$isPassageSearch || $passageSearchBibleSection === null || $currentTab === ContentTabEnum.Resources}
+                <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} placeholder={placeholderText} />
+            {/if}
+
+            {#if !visibleSwish && isFullLibrary && $passageSearchBibleSection === null && $currentTab === ContentTabEnum.LibraryMenu}
                 <div>
                     <button
                         on:click={(e) => resetPage(e)}
@@ -212,10 +252,11 @@
                 {#if visibleSwish}
                     <button
                         on:click={openBookChapterVerseMenu}
-                        class="btn btn-outline border-[#485467] p-2 text-[#485467] hover:bg-white hover:text-[#485467]"
+                        class="mx-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
                         data-app-insights-event-name="library-menu-passage-search-button-clicked"
                     >
-                        <BookIcon /> Passage Search
+                        <span class="me-2"><BookIcon /></span>
+                        {$translate('components.search.passageSearch.value')}
                     </button>
                 {/if}
             </div>

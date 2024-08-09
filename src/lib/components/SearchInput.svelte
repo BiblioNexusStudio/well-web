@@ -6,6 +6,7 @@
 
     export let searchQuery: string;
     export let onFocus: FocusEventHandler<HTMLInputElement> | undefined = undefined;
+    export let placeholder = $translate('components.search.placeholder.value');
 </script>
 
 <div class="relative grow">
@@ -21,10 +22,5 @@
             {$translate('components.search.clear.value')}
         </button>
     </div>
-    <input
-        class="input input-bordered w-full ps-10"
-        placeholder={$translate('page.passage.resourcePane.typeToSearch.value')}
-        bind:value={searchQuery}
-        on:focus={onFocus}
-    />
+    <input class="input input-bordered w-full ps-10" {placeholder} bind:value={searchQuery} on:focus={onFocus} />
 </div>
