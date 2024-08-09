@@ -87,10 +87,8 @@
                 feedback: JSON.stringify(metaData),
             };
 
-            const url = `${apiUrl('feedback/bible-well')}?api-key=${process.env.PUBLIC_AQUIFER_API_KEY}`;
-
             try {
-                const response = await fetch(url, {
+                const response = await fetch(apiUrl('feedback/bible-well'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
