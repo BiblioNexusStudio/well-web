@@ -12,12 +12,14 @@
         type ResourceContentInfo,
         MediaType,
         type ResourceContentTiptap,
+        type ResourceContentMetadata,
     } from '$lib/types/resource';
     import { filterBoolean, filterBooleanByKey } from '$lib/utils/array';
     import { asyncMap } from '$lib/utils/async-array';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import {
         fetchMetadataForResourceContent,
+        filterToAvailableAssociatedResourceContent,
         resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
@@ -25,6 +27,7 @@
     import { _ as translate } from 'svelte-i18n';
     import { ContentTabEnum, getContentContext } from '../context';
     import { currentLanguageDirection } from '$lib/stores/language.store';
+    import { isOnline } from '$lib/stores/is-online.store';
 
     interface FiaAudioContent {
         steps: {
@@ -68,7 +71,7 @@
     let selectedStepNumber = 1;
     let selectedStepScroll: number | undefined;
     let stepsAvailable: number[] = [];
-    let textContent: FiaTextContent | undefined;
+    let textContent: FiaTextContent | null = null;
     let isLoading = false;
 
     $: selectedStepNumber && topOfStep?.scrollIntoView();
@@ -90,7 +93,7 @@
             if (guideResourceInfo) {
                 isLoading = true;
                 let audioContent = (await fetchAudio(guideResourceInfo))[0];
-                textContent = (await fetchText(guideResourceInfo))[0];
+                textContent = await fetchText(guideResourceInfo);
                 stepsAvailable = Array.from(
                     new Set([
                         ...(textContent?.steps?.map((step) => step.stepNumber) ?? []),
@@ -103,7 +106,7 @@
                     populateFiaAudioState(audioContent);
                 }
             } else {
-                textContent = undefined;
+                textContent = null;
                 stepsAvailable = [];
                 selectedStepNumber = 1;
                 selectedStepScroll = undefined;
@@ -169,34 +172,44 @@
     }
 
     async function fetchText(resourceContents: ResourceContentInfo[]) {
-        const allTextResourceContent = resourceContents.filter(
+        const textResourceContent = resourceContents.find(
             ({ mediaType, parentResourceId }) =>
                 parentResourceId === ParentResourceId.FIA && mediaType === MediaType.Text
         );
-        return filterBoolean(
-            await asyncMap(allTextResourceContent, async (resourceContent) => {
-                try {
-                    const content = (await fetchContentFromCacheOrNetwork(
-                        resourceContentApiFullUrl(resourceContent)
-                    )) as ResourceContentFiaText[];
-                    return {
-                        steps: content.map((step) => ({
-                            ...step,
-                            contentHTML: parseTiptapJsonToHtml(
-                                step.tiptap,
-                                $currentLanguageDirection,
-                                ContentTabEnum.Guide,
-                                undefined
-                            ),
-                        })),
-                    };
-                } catch (error) {
-                    // stuff not cached
-                    log.exception(error as Error);
-                    return null;
-                }
-            })
-        );
+        if (textResourceContent) {
+            let textMetadata: ResourceContentMetadata | null = null;
+            try {
+                textMetadata = await fetchMetadataForResourceContent(textResourceContent);
+            } catch (error) {
+                // stuff not cached
+                log.exception(error as Error);
+            }
+            try {
+                const content = (await fetchContentFromCacheOrNetwork(
+                    resourceContentApiFullUrl(textResourceContent)
+                )) as ResourceContentFiaText[];
+                const availableAssociatedResources = await filterToAvailableAssociatedResourceContent(
+                    $isOnline,
+                    textMetadata?.associatedResources
+                );
+                return {
+                    steps: content.map((step) => ({
+                        ...step,
+                        contentHTML: parseTiptapJsonToHtml(
+                            step.tiptap,
+                            $currentLanguageDirection,
+                            ContentTabEnum.Guide,
+                            availableAssociatedResources
+                        ),
+                    })),
+                };
+            } catch (error) {
+                // stuff not cached
+                log.exception(error as Error);
+                return null;
+            }
+        }
+        return null;
     }
 </script>
 
