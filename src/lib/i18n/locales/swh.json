@@ -526,9 +526,16 @@
     },
     "components": {
         "search": {
+            "placeholder": {
+                "value": "Tafuta",
+                "_context": "Maandishi ya kishika nafasi kwa sehemu ya utafutaji"
+            },
             "clear": {
                 "value": "Futa",
                 "_context": "Kitufe katika kipengele cha utafutaji cha kufuta maandishi yaliyoingizwa"
+            },
+            "passageSearch": {
+                "value": "Tafuta Kifungu"
             }
         }
     }

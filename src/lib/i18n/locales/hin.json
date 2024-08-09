@@ -469,8 +469,14 @@
     },
     "components": {
         "search": {
+            "placeholder": {
+                "value": "खोजें"
+            },
             "clear": {
                 "value": "हटाएं"
+            },
+            "passageSearch": {
+                "value": "पाठ खोजें"
             }
         }
     }

@@ -21,6 +21,7 @@
         closeCurrentPane,
         isPassageSearch,
         setPassageSearchResources,
+        setPassageSearchBibleSection,
     } = getContentContext();
 
     export let bookCodesToNames: Map<string, string> | undefined;
@@ -197,6 +198,7 @@
                     bibleSection.endVerse
                 )
             )) as ResourceContentInfo[];
+            setPassageSearchBibleSection(bibleSection);
             setPassageSearchResources(allResources);
         } else {
             setCurrentBibleSectionAndCurrentGuide(bibleSection, $currentPane?.guide ?? null);
