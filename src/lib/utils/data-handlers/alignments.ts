@@ -79,8 +79,11 @@ export function formatAlignmentDefinition(definition: string, bookCodesToNames: 
     return definition
         .replace(/{N:\s?[^}]+}|{A:\s?[^}]+}/g, '')
         .replace(/{S:\s?(\d{14})}/g, (_, code) => alignmentScriptureStringToReference(code, bookCodesToNames))
-        .replace(/{L:\s?([^}<]+).*}(?:\[.+?\])?\s*(?:[’‘']([^’‘']+?),?[’‘'])?\s*(?:\{D:.*\})/g, '$1 ’$2’')
+        .replace(/{L:\s?([^}<]+).*?}(?:\[.+?\])?\s*(?:[’‘']([^’‘']+?),?[’‘'])?\s*(?:\{D:[^}]+\})/g, '$1 ’$2’')
+        .replace(/{L:\s?([^}<]+).*?}(?:\[.+?\])?\s*(.*?),?\s*(?:\{D:[^}]+?\})/g, '$1 ’$2’')
+        .replace(/{L:\s?([^}<]+).*?}(?:\[.+?\])?/g, '$1')
         .replace(/,([’‘'])\s*{D:\s?[\d.]+}/g, '$1')
+        .replace(/\[[a-f]\]/g, '')
         .replace(/{D:\s?([\d.]+)}/g, 'entry $1');
 }
 
