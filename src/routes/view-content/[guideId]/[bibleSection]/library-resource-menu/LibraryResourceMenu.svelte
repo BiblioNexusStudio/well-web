@@ -34,6 +34,8 @@
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import { getContentContext } from '../context';
     import XMarkSmallIcon from '$lib/icons/XMarkSmallIcon.svelte';
+    import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
+    import type { BibleSection } from '$lib/types/bible';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -44,6 +46,7 @@
     >;
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
+    export let bookCodesToNames: Map<string, string> | undefined;
 
     const {
         isPassageSearch,
@@ -181,6 +184,12 @@
         isFullLibrary = true;
         resourceGroupings = [];
     }
+
+    function getBibleVerseText(bibleSection: BibleSection | null) {
+        if (bibleSection === null) return '';
+
+        return `${bookCodesToNames?.get(bibleSection.bookCode ?? '') ?? ''} ${bibleSectionToReference(bibleSection)}`;
+    }
 </script>
 
 {#if isShowing}
@@ -190,8 +199,7 @@
                 class="mx-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
                 on:click={handlePassageSearchClose}
             >
-                {$passageSearchBibleSection?.bookCode}
-                {$passageSearchBibleSection?.startChapter}:{$passageSearchBibleSection?.startVerse}-{$passageSearchBibleSection?.endChapter}:{$passageSearchBibleSection?.endVerse}
+                {getBibleVerseText($passageSearchBibleSection)}
                 <span class="ms-2"><XMarkSmallIcon /></span>
             </button>
         </div>
