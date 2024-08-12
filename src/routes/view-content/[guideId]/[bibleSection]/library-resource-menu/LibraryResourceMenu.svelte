@@ -188,7 +188,10 @@
     function getBibleVerseText(bibleSection: BibleSection | null) {
         if (bibleSection === null) return '';
 
-        return `${bookCodesToNames?.get(bibleSection.bookCode ?? '') ?? ''} ${bibleSectionToReference(bibleSection)}`;
+        return `${bookCodesToNames?.get(bibleSection.bookCode ?? '') ?? ''} ${bibleSectionToReference(
+            bibleSection,
+            $currentLanguageDirection
+        )}`;
     }
 </script>
 
