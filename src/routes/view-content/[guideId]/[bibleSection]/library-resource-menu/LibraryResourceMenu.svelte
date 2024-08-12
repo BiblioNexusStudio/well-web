@@ -234,7 +234,7 @@
         class="absolute bottom-20 left-0 right-0 {visibleSwish
             ? 'top-40'
             : $isPassageSearch
-            ? 'top-8'
+            ? 'top-12'
             : isFullLibrary
             ? 'top-0'
             : 'top-16'} flex flex-col px-4 transition-[top] duration-500 ease-in-out"
@@ -263,7 +263,7 @@
                 {#if visibleSwish}
                     <button
                         on:click={openBookChapterVerseMenu}
-                        class="mx-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                        class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
                         data-app-insights-event-name="library-menu-passage-search-button-clicked"
                     >
                         <span class="me-2"><BookIcon /></span>
