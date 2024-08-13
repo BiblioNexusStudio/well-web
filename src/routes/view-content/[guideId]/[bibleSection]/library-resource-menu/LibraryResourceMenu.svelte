@@ -47,7 +47,6 @@
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
-    export let passageSearchResources: ResourceContentInfo[] | undefined;
 
     const {
         isPassageSearch,
@@ -64,6 +63,7 @@
     let resourceGroupings: LibraryResourceGrouping[];
     let flatResources: ResourceContentInfoWithMetadata[] = [];
     let mediaResources: ResourceContentInfoWithMetadata[] = [];
+    let passageSearchResources: ResourceContentInfo[] | undefined;
 
     $: prepareResources(resources || [], isShowing, passageSearchResources || []);
 
@@ -84,6 +84,8 @@
     $: showOnlySrvResources = !!$settings.find(
         (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
     )?.value;
+
+    $: fetchPassageSearchResources($passageSearchBibleSection);
 
     function onHandleSearchFocus() {
         if (!hasQuery && isFullLibrary) {
@@ -192,6 +194,25 @@
             bibleSection,
             $currentLanguageDirection
         )}`;
+    }
+
+    async function fetchPassageSearchResources(bibleSelection: BibleSection | null) {
+        if (bibleSelection !== null) {
+            isLoading = true;
+            const languageId = $currentLanguageInfo?.id;
+            passageSearchResources = (await fetchFromCacheOrApi(
+                ...searchResourcesEndpoint(
+                    languageId,
+                    '',
+                    [ParentResourceType.Images, ParentResourceType.Dictionary, ParentResourceType.Videos],
+                    bibleSelection?.bookCode,
+                    bibleSelection?.startChapter,
+                    bibleSelection?.endChapter,
+                    bibleSelection?.startVerse,
+                    bibleSelection?.endVerse
+                )
+            )) as ResourceContentInfo[];
+        }
     }
 </script>
 
