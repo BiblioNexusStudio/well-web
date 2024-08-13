@@ -30,7 +30,12 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum } from '$lib/types/settings';
     import FullscreenResourceSubgroup from './FullscreenResourceSubgroup.svelte';
-    import type { ContentTabEnum } from '../context';
+    import { ContentTabEnum } from '../context';
+    import BookIcon from '$lib/icons/BookIcon.svelte';
+    import { getContentContext } from '../context';
+    import XMarkSmallIcon from '$lib/icons/XMarkSmallIcon.svelte';
+    import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
+    import type { BibleSection } from '$lib/types/bible';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -41,6 +46,16 @@
     >;
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
+    export let bookCodesToNames: Map<string, string> | undefined;
+
+    const {
+        isPassageSearch,
+        setIsPassageSearch,
+        openBookChapterSelectorPane,
+        passageSearchBibleSection,
+        setPassageSearchBibleSection,
+        currentTab,
+    } = getContentContext();
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
@@ -48,8 +63,9 @@
     let resourceGroupings: LibraryResourceGrouping[];
     let flatResources: ResourceContentInfoWithMetadata[] = [];
     let mediaResources: ResourceContentInfoWithMetadata[] = [];
+    let passageSearchResources: ResourceContentInfo[] | undefined;
 
-    $: prepareResources(resources || [], isShowing);
+    $: prepareResources(resources || [], isShowing, passageSearchResources || []);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(flatResources, 'displayName', searchQuery).length;
     $: hasQuery = searchQuery != '';
@@ -60,10 +76,16 @@
 
     let visibleSwish = isFullLibrary;
 
+    const placeholderText = isFullLibrary
+        ? $translate('page.passage.resourcePane.typeToSearch.value')
+        : $translate('components.search.placeholder.value');
+
     $: searchQueryChanged(searchQuery);
     $: showOnlySrvResources = !!$settings.find(
         (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
     )?.value;
+
+    $: fetchPassageSearchResources($passageSearchBibleSection);
 
     function onHandleSearchFocus() {
         if (!hasQuery && isFullLibrary) {
@@ -81,9 +103,10 @@
     async function searchQueryChanged(query: string) {
         if (isFullLibrary) {
             if (query.length < 3) {
-                resources = undefined;
+                resourceGroupings = [];
             } else {
                 isLoading = true;
+                setIsPassageSearch(false);
                 debouncedFetchSearchResultsFromApi(query);
             }
         }
@@ -126,11 +149,23 @@
         currentFullscreenResourceGrouping = resourceGrouping;
     }
 
-    async function prepareResources(resources: ResourceContentInfo[], isShowing: boolean) {
+    async function prepareResources(
+        resources: ResourceContentInfo[],
+        isShowing: boolean,
+        passageSearchResources: ResourceContentInfo[]
+    ) {
         if (!isShowing || (!isFullLibrary && resourceGroupings?.length > 0)) return;
         isLoading = true;
 
-        resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources, $currentLanguageDirection);
+        if ($isPassageSearch) {
+            resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(
+                passageSearchResources,
+                $currentLanguageDirection
+            );
+            visibleSwish = false;
+        } else {
+            resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources, $currentLanguageDirection);
+        }
         flatResources = resourceGroupings.flatMap(({ resources }) => resources);
         mediaResources = flatResources.filter(
             (r) => r.mediaType === MediaType.Image || r.mediaType === MediaType.Video
@@ -138,15 +173,69 @@
 
         isLoading = false;
     }
+
+    function openBookChapterVerseMenu() {
+        setIsPassageSearch(true);
+        openBookChapterSelectorPane(null);
+    }
+
+    function handlePassageSearchClose() {
+        setIsPassageSearch(false);
+        setPassageSearchBibleSection(null);
+        visibleSwish = true;
+        isFullLibrary = true;
+        resourceGroupings = [];
+    }
+
+    function getBibleVerseText(bibleSection: BibleSection | null) {
+        if (bibleSection === null) return '';
+
+        return `${bookCodesToNames?.get(bibleSection.bookCode ?? '') ?? ''} ${bibleSectionToReference(
+            bibleSection,
+            $currentLanguageDirection
+        )}`;
+    }
+
+    async function fetchPassageSearchResources(bibleSelection: BibleSection | null) {
+        if (bibleSelection !== null) {
+            isLoading = true;
+            const languageId = $currentLanguageInfo?.id;
+            passageSearchResources = (await fetchFromCacheOrApi(
+                ...searchResourcesEndpoint(
+                    languageId,
+                    '',
+                    [ParentResourceType.Images, ParentResourceType.Dictionary, ParentResourceType.Videos],
+                    bibleSelection?.bookCode,
+                    bibleSelection?.startChapter,
+                    bibleSelection?.endChapter,
+                    bibleSelection?.startVerse,
+                    bibleSelection?.endVerse
+                )
+            )) as ResourceContentInfo[];
+        }
+    }
 </script>
 
 {#if isShowing}
-    <SwishHeader
-        bind:visible={visibleSwish}
-        title={$translate('page.passage.resourcePane.libraryTitle.value')}
-        subtitle={$translate('page.passage.resourcePane.librarySubtitle.value')}
-        bgcolor="bg-[#439184]"
-    />
+    {#if $isPassageSearch && resourceGroupings.length > 0 && $currentTab === ContentTabEnum.LibraryMenu}
+        <div class="navbar flex w-full justify-between">
+            <button
+                class="mx-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                on:click={handlePassageSearchClose}
+            >
+                {getBibleVerseText($passageSearchBibleSection)}
+                <span class="ms-2"><XMarkSmallIcon /></span>
+            </button>
+        </div>
+    {/if}
+    {#if !$isPassageSearch}
+        <SwishHeader
+            bind:visible={visibleSwish}
+            title={$translate('page.passage.resourcePane.libraryTitle.value')}
+            subtitle={$translate('page.passage.resourcePane.librarySubtitle.value')}
+            bgcolor="bg-[#439184]"
+        />
+    {/if}
 
     <FullscreenMediaResource bind:currentIndex={currentFullscreenMediaResourceIndex} resources={mediaResources} />
     <FullscreenResourceSection
@@ -165,13 +254,18 @@
     <div
         class="absolute bottom-20 left-0 right-0 {visibleSwish
             ? 'top-40'
+            : $isPassageSearch
+            ? 'top-12'
             : isFullLibrary
             ? 'top-0'
-            : 'top-16'} flex flex-col px-4 transition-[top] duration-500 ease-in-out"
+            : 'top-16'} flex flex-col px-4 {$isPassageSearch ? '' : 'transition-[top] duration-500 ease-in-out'}"
     >
         <div class="my-4 flex flex-row">
-            <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} />
-            {#if !visibleSwish && isFullLibrary}
+            {#if !$isPassageSearch || $passageSearchBibleSection === null || $currentTab === ContentTabEnum.Resources}
+                <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} placeholder={placeholderText} />
+            {/if}
+
+            {#if !visibleSwish && isFullLibrary && $passageSearchBibleSection === null && $currentTab === ContentTabEnum.LibraryMenu}
                 <div>
                     <button
                         on:click={(e) => resetPage(e)}
@@ -185,11 +279,18 @@
         </div>
         {#if isLoading}
             <FullPageSpinner />
-        {:else if !resources}
-            <div class="flex flex-grow flex-col items-center justify-items-center overflow-y-scroll">
-                <div class="mb-4 flex-shrink-0 text-sm text-neutral">
-                    {$translate('page.passage.resourcePane.typeToSearch.value')}
-                </div>
+        {:else if resourceGroupings.length === 0 && searchQuery.length < 3}
+            <div class="flex-coloverflow-y-scroll flex flex-grow">
+                {#if visibleSwish}
+                    <button
+                        on:click={openBookChapterVerseMenu}
+                        class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                        data-app-insights-event-name="library-menu-passage-search-button-clicked"
+                    >
+                        <span class="me-2"><BookIcon /></span>
+                        {$translate('components.search.passageSearch.value')}
+                    </button>
+                {/if}
             </div>
         {:else if filteredResourceCount === 0}
             <NoResourcesFound {searchQuery} />

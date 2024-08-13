@@ -50,13 +50,20 @@ export function resourcesByLanguageAndBookEndpoint(
 export function searchResourcesEndpoint(
     languageId: number | undefined,
     query: string,
-    resourceTypes: ParentResourceType[]
+    resourceTypes: ParentResourceType[],
+    bookCode?: string,
+    startChapter?: number,
+    endChapter?: number,
+    startVerse?: number,
+    endVerse?: number
 ): ApiStringAndCacheBustVersion {
     const resourceTypesParams = resourceTypes.map((rt) => `resourceTypes=${rt}`).join('&');
     return [
-        `/resources/search?languageId=${languageId}&query=${query}${
+        `/resources/search?languageId=${languageId}${query ? `&query=${query}` : ''}${
             resourceTypesParams ? '&' + resourceTypesParams : ''
-        }`,
+        }${bookCode ? `&bookCode=${bookCode}` : ''}${startChapter ? `&startChapter=${startChapter}` : ''}${
+            endChapter ? `&endChapter=${endChapter}` : ''
+        }${startVerse ? `&startVerse=${startVerse}` : ''}${endVerse ? `&endVerse=${endVerse}` : ''}`,
         2,
     ];
 }

@@ -533,6 +533,9 @@
             "clear": {
                 "value": "Futa",
                 "_context": "Kitufe katika kipengele cha utafutaji cha kufuta maandishi yaliyoingizwa"
+            },
+            "passageSearch": {
+                "value": "Tafuta Kifungu"
             }
         }
     }

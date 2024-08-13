@@ -474,6 +474,9 @@
             },
             "clear": {
                 "value": "مسح"
+            },
+            "passageSearch": {
+                "value": "بحث في المقطع"
             }
         }
     }

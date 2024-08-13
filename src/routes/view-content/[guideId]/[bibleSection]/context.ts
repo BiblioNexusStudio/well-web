@@ -28,8 +28,12 @@ export function createContentContext() {
     const currentPane = writable<ContentPaneInfo | null>(null);
     const isShowingContextualMenu = writable(false);
     const isLoadingToOpenPane = writable(false);
+    const isPassageSearch = writable(false);
+    const passageSearchBibleSection = writable<BibleSection | null>(null);
 
     const context = {
+        isPassageSearch: { subscribe: isPassageSearch.subscribe },
+        passageSearchBibleSection: { subscribe: passageSearchBibleSection.subscribe },
         currentTab: { subscribe: currentTab.subscribe },
         currentBibleSection: { subscribe: currentBibleSection.subscribe },
         currentGuide: { subscribe: currentGuide.subscribe },
@@ -75,9 +79,19 @@ export function createContentContext() {
             } else {
                 isShowingContextualMenu.set(false);
             }
+            if (tab === ContentTabEnum.Resources) {
+                isPassageSearch.set(false);
+            } else if (tab === ContentTabEnum.LibraryMenu && get(passageSearchBibleSection) !== null) {
+                isPassageSearch.set(true);
+            }
         },
 
-        closeCurrentPane: () => currentPane.set(null),
+        closeCurrentPane: () => {
+            currentPane.set(null);
+            if (get(passageSearchBibleSection) === null) {
+                isPassageSearch.set(false);
+            }
+        },
 
         openContextualMenu: () => isShowingContextualMenu.set(true),
         closeContextualMenu: () => isShowingContextualMenu.set(false),
@@ -104,6 +118,12 @@ export function createContentContext() {
             } else {
                 currentGuide.set(guideResources?.find((guide) => guide.id.toString() === param) ?? null);
             }
+        },
+        setIsPassageSearch: (value: boolean) => {
+            isPassageSearch.set(value);
+        },
+        setPassageSearchBibleSection: (value: BibleSection | null) => {
+            passageSearchBibleSection.set(value);
         },
     };
 

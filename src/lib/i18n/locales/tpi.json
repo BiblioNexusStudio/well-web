@@ -474,6 +474,9 @@
             },
             "clear": {
                 "value": "Kilia"
+            },
+            "passageSearch": {
+                "value": "Painim Hap Riding"
             }
         }
     }

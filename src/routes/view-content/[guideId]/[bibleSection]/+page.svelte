@@ -352,6 +352,7 @@
             resources={resourceData?.additionalResourceInfo}
             isFullLibrary={false}
             isShowing={$currentTab === ContentTabEnum.Resources}
+            {bookCodesToNames}
         />
     {/key}
     <LibraryResourceMenu
@@ -360,5 +361,6 @@
         resources={undefined}
         isFullLibrary={true}
         isShowing={$currentTab === ContentTabEnum.LibraryMenu}
+        {bookCodesToNames}
     />
 </div>

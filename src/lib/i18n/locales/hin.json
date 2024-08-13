@@ -474,6 +474,9 @@
             },
             "clear": {
                 "value": "हटाएं"
+            },
+            "passageSearch": {
+                "value": "पाठ खोजें"
             }
         }
     }

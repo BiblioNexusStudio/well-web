@@ -9,8 +9,14 @@
     import { getContentContext } from '../context';
     import { BookChapterSelectorPaneInfo, type ContentPaneInfo } from './pane-handler';
 
-    const { setCurrentBibleSectionAndCurrentGuide, currentPane, closeContextualMenu, closeCurrentPane } =
-        getContentContext();
+    const {
+        setCurrentBibleSectionAndCurrentGuide,
+        currentPane,
+        closeContextualMenu,
+        closeCurrentPane,
+        isPassageSearch,
+        setPassageSearchBibleSection,
+    } = getContentContext();
 
     export let bookCodesToNames: Map<string, string> | undefined;
 
@@ -171,7 +177,13 @@
                 ? forceToInt(firstSelectedVerse.number)
                 : 0,
         };
-        setCurrentBibleSectionAndCurrentGuide(bibleSection, $currentPane?.guide ?? null);
+
+        if ($isPassageSearch) {
+            setPassageSearchBibleSection(bibleSection);
+        } else {
+            setCurrentBibleSectionAndCurrentGuide(bibleSection, $currentPane?.guide ?? null);
+        }
+
         closeCurrentPane();
         closeContextualMenu();
         currentStep = steps.one;
