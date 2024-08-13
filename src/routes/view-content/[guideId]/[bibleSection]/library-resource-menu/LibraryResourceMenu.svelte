@@ -47,11 +47,11 @@
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
+    export let passageSearchResources: ResourceContentInfo[] | undefined;
 
     const {
         isPassageSearch,
         setIsPassageSearch,
-        passageSearchResources,
         openBookChapterSelectorPane,
         passageSearchBibleSection,
         setPassageSearchBibleSection,
@@ -65,7 +65,7 @@
     let flatResources: ResourceContentInfoWithMetadata[] = [];
     let mediaResources: ResourceContentInfoWithMetadata[] = [];
 
-    $: prepareResources(resources || [], isShowing, $passageSearchResources || []);
+    $: prepareResources(resources || [], isShowing, passageSearchResources || []);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(flatResources, 'displayName', searchQuery).length;
     $: hasQuery = searchQuery != '';
@@ -237,7 +237,7 @@
             ? 'top-12'
             : isFullLibrary
             ? 'top-0'
-            : 'top-16'} flex flex-col px-4 transition-[top] duration-500 ease-in-out"
+            : 'top-16'} flex flex-col px-4 {$isPassageSearch ? '' : 'transition-[top] duration-500 ease-in-out'}"
     >
         <div class="my-4 flex flex-row">
             {#if !$isPassageSearch || $passageSearchBibleSection === null || $currentTab === ContentTabEnum.Resources}
@@ -258,7 +258,7 @@
         </div>
         {#if isLoading}
             <FullPageSpinner />
-        {:else if resourceGroupings.length === 0}
+        {:else if resourceGroupings.length === 0 && searchQuery.length < 3}
             <div class="flex-coloverflow-y-scroll flex flex-grow">
                 {#if visibleSwish}
                     <button

@@ -55,12 +55,16 @@
     import { page } from '$app/stores';
     import { ContentTabEnum, createContentContext } from './context';
     import PredeterminedPassageSelectorForBibleSectionPane from './bible-menu/PredeterminedPassageSelectorForBibleSectionPane.svelte';
+    import { type ResourceContentInfo, ParentResourceType } from '$lib/types/resource';
+    import { searchResourcesEndpoint } from '$lib/api-endpoints';
+    import { fetchFromCacheOrApi } from '$lib/data-cache';
 
     const {
         currentGuide,
         currentBibleSection,
         currentTab,
         isShowingContextualMenu,
+        passageSearchBibleSection,
         openBookChapterSelectorPane,
         openContextualMenu,
         syncSelectedGuideFromUrlParam,
@@ -87,6 +91,7 @@
     let preferredBiblesModalOpen = false;
     let audioPlayerKey: string | undefined;
     let bookCodesToNames: Map<string, string> | undefined;
+    let passageSearchResources: ResourceContentInfo[] = [];
 
     $: {
         baseFetchPromise = fetchBase($currentBibleSection); // when the Bible section changes, refetch
@@ -97,6 +102,7 @@
     $: $currentTab === ContentTabEnum.Bible && setBibleAudioPlayerForBible(currentBibleId);
     $: audioPlayerShowing = audioPlayerKey && !!multiClipAudioStates[audioPlayerKey] && !alignmentModeEnabled;
     $: fetchBibleBookCodeToName($currentLanguageInfo);
+    $: fetchPassageSearchResources($passageSearchBibleSection);
 
     function fetchBase(bibleSection: BibleSection | null) {
         resourceData = null;
@@ -208,6 +214,24 @@
     async function fetchBibleBookCodeToName(currentLanguageInfo: Language | undefined) {
         if (currentLanguageInfo) {
             bookCodesToNames = await getBibleBookCodesToName(currentLanguageInfo.id);
+        }
+    }
+
+    async function fetchPassageSearchResources(bibleSelection: BibleSection | null) {
+        if (bibleSelection !== null) {
+            const languageId = $currentLanguageInfo?.id;
+            passageSearchResources = (await fetchFromCacheOrApi(
+                ...searchResourcesEndpoint(
+                    languageId,
+                    '',
+                    [ParentResourceType.Images, ParentResourceType.Dictionary, ParentResourceType.Videos],
+                    bibleSelection?.bookCode,
+                    bibleSelection?.startChapter,
+                    bibleSelection?.endChapter,
+                    bibleSelection?.startVerse,
+                    bibleSelection?.endVerse
+                )
+            )) as ResourceContentInfo[];
         }
     }
 
@@ -350,6 +374,7 @@
             tab={ContentTabEnum.Resources}
             bind:fullscreenTextResourceStacksByTab
             resources={resourceData?.additionalResourceInfo}
+            passageSearchResources={undefined}
             isFullLibrary={false}
             isShowing={$currentTab === ContentTabEnum.Resources}
             {bookCodesToNames}
@@ -359,6 +384,7 @@
         tab={ContentTabEnum.LibraryMenu}
         bind:fullscreenTextResourceStacksByTab
         resources={undefined}
+        {passageSearchResources}
         isFullLibrary={true}
         isShowing={$currentTab === ContentTabEnum.LibraryMenu}
         {bookCodesToNames}

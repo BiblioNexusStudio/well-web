@@ -1,5 +1,5 @@
 export function filterItemsByKeyMatchingSearchQuery<T>(items: T[], key: keyof T, searchQuery: string): T[] {
-    if (!shouldSearch(searchQuery) || (searchQuery.length === 0 && items.length > 0)) {
+    if (!shouldSearch(searchQuery)) {
         return items;
     }
 
