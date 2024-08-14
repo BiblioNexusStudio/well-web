@@ -33,14 +33,10 @@ const appInsights = new ApplicationInsights({
 
 if (appInsightsEnabled) {
     appInsights.loadAppInsights();
+    userInfo.id = appInsights.context?.user.id;
 } else if (browser) {
+    // eslint-disable-next-line
     console.warn('No app insights connection string available.');
-}
-
-if (browser) {
-    setTimeout(() => {
-        userInfo.id = appInsights.context?.user.id || findOrGenerateCustomUserId();
-    }, 2000);
 }
 
 export const additionalProperties = {
@@ -62,6 +58,7 @@ export function getBrowserAndScreenSize() {
 
 export const log = {
     exception: (error: Error | undefined) => {
+        // eslint-disable-next-line
         console.error(error);
         if (
             error &&
@@ -105,22 +102,3 @@ export const log = {
             });
     },
 };
-
-function findOrGenerateCustomUserId() {
-    const cookieId = document.cookie.match(/bnUserId=([^;]+)/);
-    if (cookieId) {
-        return cookieId[1];
-    } else {
-        const generateBase58Id = () => {
-            const base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-            let id = 'bn-';
-            for (let i = 0; i < 20; i++) {
-                id += base58Chars[Math.floor(Math.random() * base58Chars.length)];
-            }
-            return id;
-        };
-        const customUserId = generateBase58Id();
-        document.cookie = `bnUserId=${customUserId}; path=/; max-age=31536000`;
-        return customUserId;
-    }
-}
