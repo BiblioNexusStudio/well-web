@@ -4,7 +4,7 @@ import { browserSupported } from './utils/browser';
 import { browser } from '$app/environment';
 import type { WellFetchError } from './data-cache';
 
-export const appInsightsUser: { id?: string } = {};
+export const userInfo: { id?: string } = {};
 
 export const appInsightsEnabled = browser && config.PUBLIC_APPLICATION_INSIGHTS_CONNECTION_STRING;
 
@@ -33,9 +33,14 @@ const appInsights = new ApplicationInsights({
 
 if (appInsightsEnabled) {
     appInsights.loadAppInsights();
-    appInsightsUser.id = appInsights.context?.user.id;
 } else if (browser) {
     console.warn('No app insights connection string available.');
+}
+
+if (browser) {
+    setTimeout(() => {
+        userInfo.id = appInsights.context?.user.id || findOrGenerateCustomUserId();
+    }, 2000);
 }
 
 export const additionalProperties = {
@@ -100,3 +105,22 @@ export const log = {
             });
     },
 };
+
+function findOrGenerateCustomUserId() {
+    const cookieId = document.cookie.match(/bnUserId=([^;]+)/);
+    if (cookieId) {
+        return cookieId[1];
+    } else {
+        const generateBase58Id = () => {
+            const base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+            let id = 'bn-';
+            for (let i = 0; i < 20; i++) {
+                id += base58Chars[Math.floor(Math.random() * base58Chars.length)];
+            }
+            return id;
+        };
+        const customUserId = generateBase58Id();
+        document.cookie = `bnUserId=${customUserId}; path=/; max-age=31536000`;
+        return customUserId;
+    }
+}
