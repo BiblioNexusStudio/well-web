@@ -353,19 +353,21 @@ class _AudioClip {
     }
 
     destroy() {
-        this.audioElement.remove();
-        this.audioElement.pause();
+        if (this.audioElement) {
+            this.audioElement.remove();
+            this.audioElement.pause();
 
-        this.audioElement.src = '';
-        this.audioElement.load();
+            this.audioElement.src = '';
+            this.audioElement.load();
 
-        this.audioElement.removeEventListener('canplaythrough', this.callbacks.onload);
-        this.audioElement.removeEventListener('play', this.callbacks.onplay);
-        this.audioElement.removeEventListener('pause', this.callbacks.onpause);
-        this.audioElement.removeEventListener('ended', this.callbacks.onended);
+            this.audioElement.removeEventListener('canplaythrough', this.callbacks.onload);
+            this.audioElement.removeEventListener('play', this.callbacks.onplay);
+            this.audioElement.removeEventListener('pause', this.callbacks.onpause);
+            this.audioElement.removeEventListener('ended', this.callbacks.onended);
 
-        if (this.audioElement.parentNode) {
-            this.audioElement.parentNode.removeChild(this.audioElement);
+            if (this.audioElement.parentNode) {
+                this.audioElement.parentNode.removeChild(this.audioElement);
+            }
         }
 
         URL.revokeObjectURL(this.file.url);
