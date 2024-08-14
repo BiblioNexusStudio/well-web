@@ -7,7 +7,7 @@ import { currentLanguageInfo } from '$lib/stores/language.store';
 // eslint-disable-next-line
 // @ts-ignore
 import { registerSW } from 'virtual:pwa-register';
-import { appInsightsEnabled, appInsightsUser, log } from '$lib/logger';
+import { appInsightsEnabled, userInfo, log } from '$lib/logger';
 import { browserSupported } from '$lib/utils/browser';
 import { languages } from '$lib/stores/language.store';
 import { parentResources } from '$lib/stores/parent-resource.store';
@@ -21,8 +21,8 @@ export const ssr = false;
 async function injectAppInsightsUserIdIntoServiceWorker(retries = 0) {
     if (retries < 20) {
         const swRegistration = await navigator.serviceWorker.getRegistration();
-        if (swRegistration?.active && appInsightsUser.id) {
-            swRegistration.active.postMessage({ appInsightsUserId: appInsightsUser.id });
+        if (swRegistration?.active && userInfo.id) {
+            swRegistration.active.postMessage({ userId: userInfo.id });
         } else {
             setTimeout(() => injectAppInsightsUserIdIntoServiceWorker(retries + 1), 250);
         }

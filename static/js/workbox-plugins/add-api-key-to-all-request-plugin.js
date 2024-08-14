@@ -8,10 +8,10 @@ class AddApiKeyToAllRequestPlugin {
     apikey;
 
     /**
-     * The user id from App Insights context.
+     * The user id from App Insights context or custom generated cookie.
      * @type {string|undefined}
      */
-    appInsightsUserId = undefined;
+    userId = undefined;
 
     /**
      * Creates an instance of AddApiKeyToAllRequestPlugin.
@@ -37,8 +37,8 @@ class AddApiKeyToAllRequestPlugin {
         modifiedHeaders.delete('X-Cache-Bust-Version');
         modifiedHeaders.append('bn-source', 'bible-well');
 
-        if (this.appInsightsUserId) {
-            modifiedHeaders.append('bn-user-id', this.appInsightsUserId);
+        if (this.userId) {
+            modifiedHeaders.append('bn-user-id', this.userId);
         }
 
         return new Request(urlObj.toString(), {

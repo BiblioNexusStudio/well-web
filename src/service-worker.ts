@@ -95,8 +95,8 @@ const API_CACHE_DURATION_IN_HOURS = isQa || isDev ? 1 : 24;
 const addApiKeyToAllRequestPlugin = new AddApiKeyToAllRequestPlugin(apiKey);
 
 self.addEventListener('message', (event) => {
-    if (event.data?.appInsightsUserId) {
-        addApiKeyToAllRequestPlugin.appInsightsUserId = event.data.appInsightsUserId;
+    if (event.data?.userId) {
+        addApiKeyToAllRequestPlugin.userId = event.data.userId;
     }
 });
 
