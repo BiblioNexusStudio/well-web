@@ -54,6 +54,12 @@ export const load: LayoutLoad = async () => {
                 injectAppInsightsUserIdIntoServiceWorker();
             }
 
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                if (event.data?.requestUserId) {
+                    injectAppInsightsUserIdIntoServiceWorker();
+                }
+            });
+
             const [fetchedLanguages, fetchedParentResources, fetchedBibles] = await Promise.all([
                 fetchFromCacheOrApi(...languagesEndpoint()),
                 fetchFromCacheOrApi(...parentResourcesEndpoint()),
