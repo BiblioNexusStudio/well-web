@@ -8,7 +8,7 @@ class AddApiKeyToAllRequestPlugin {
     apikey;
 
     /**
-     * The user id from App Insights context or custom generated cookie.
+     * The user id from App Insights context.
      * @type {string|undefined}
      */
     userId = undefined;

@@ -21,9 +21,16 @@ module.exports = {
                 parser: '@typescript-eslint/parser',
             },
         },
+        {
+            files: ['scripts/**/*'],
+            rules: {
+                'no-console': 'off',
+            },
+        },
     ],
     rules: {
         'svelte/no-at-html-tags': 0,
+        'no-console': 'error',
         '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
         'svelte-translate-check/missing-translations': 'error',
         '@typescript-eslint/no-non-null-assertion': 'off',

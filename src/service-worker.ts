@@ -86,6 +86,7 @@ try {
         importScripts('local-development-env.js');
         apiKey = localDevelopmentEnvVars?.PUBLIC_AQUIFER_API_KEY;
     } catch {
+        // eslint-disable-next-line
         console.error("Looks like you're running locally but forgot to run `yarn use-config dev-local` first.");
         throw new Error("Looks like you're running locally but forgot to run `yarn use-config dev-local` first.");
     }
@@ -94,10 +95,18 @@ try {
 const API_CACHE_DURATION_IN_HOURS = isQa || isDev ? 1 : 24;
 const addApiKeyToAllRequestPlugin = new AddApiKeyToAllRequestPlugin(apiKey);
 
+// listen for user id
 self.addEventListener('message', (event) => {
     if (event.data?.userId) {
         addApiKeyToAllRequestPlugin.userId = event.data.userId;
     }
+});
+
+// when the service worker starts up, request the user id
+self.clients.matchAll().then((clients) => {
+    clients.forEach((client) => {
+        client.postMessage({ requestUserId: true });
+    });
 });
 
 if (isLocalDevelopment) {
