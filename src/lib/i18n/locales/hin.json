@@ -142,8 +142,8 @@
             "mediaType": {
                 "value": "मीडिया"
             },
-            "update": {
-                "value": "अपडेट"
+            "ok": {
+                "value": "ठीक है"
             },
             "cancel": {
                 "value": "रद्द करें"
@@ -159,10 +159,10 @@
             },
             "modal": {
                 "title": {
-                    "value": "पुष्टि"
+                    "value": "डाउनलोड की पुष्टि करें"
                 },
                 "description": {
-                    "value": "आप अपने डिवाइस से {downloadSize} को हटाने वाले हैं।"
+                    "value": "बाइबिल वेल आपके डिवाइस से सामग्री का {downloadSize} डाउनलोड करेगा।"
                 },
                 "question": {
                     "value": "आप कैसे आगे बढ़ना चाहेंगे?"

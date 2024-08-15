@@ -123,8 +123,8 @@
                     class="btn btn-primary"
                     disabled={$downloadData.urlsToDelete.length === 0 && $downloadData.urlsToDownload.length === 0}
                     on:click={continueUpdateFiles}
-                    data-app-insights-event-name="file-manager-continue-update-button-clicked"
-                    >{$translate('page.fileManager.update.value')}</button
+                    data-app-insights-event-name="file-manager-continue-ok-button-clicked"
+                    >{$translate('page.fileManager.ok.value')}</button
                 >
             </div>
         </form>
