@@ -142,8 +142,8 @@
             "mediaType": {
                 "value": "Média"
             },
-            "update": {
-                "value": "Mettre à jour"
+            "ok": {
+                "value": "D’accord"
             },
             "cancel": {
                 "value": "Annuler"
@@ -159,10 +159,10 @@
             },
             "modal": {
                 "title": {
-                    "value": "Confirmation"
+                    "value": "Confirmer le téléchargement"
                 },
                 "description": {
-                    "value": "Vous êtes sur le point de télécharger {downloadSize} de contenu depuis votre appareil."
+                    "value": "The Bible Well téléchargera {downloadSize} de contenu depuis votre appareil."
                 },
                 "question": {
                     "value": "Comment souhaitez-vous procéder ?"

@@ -142,8 +142,8 @@
             "mediaType": {
                 "value": "Midia"
             },
-            "update": {
-                "value": "Apdeit"
+            "ok": {
+                "value": "Oke"
             },
             "cancel": {
                 "value": "Kensol"
@@ -159,10 +159,10 @@
             },
             "modal": {
                 "title": {
-                    "value": "Konfemeson"
+                    "value": "Konfirmim Daunlod"
                 },
                 "description": {
-                    "value": "Yu ba nau daunloudim {downloadSize}  blo dispela ol samting insait long devais bilong yu."
+                    "value": "Bible Well bai daunlodim {downloadSize} long yuim devaes."
                 },
                 "question": {
                     "value": "Yu laik go nau osem women?"
