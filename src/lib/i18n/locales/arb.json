@@ -142,8 +142,8 @@
             "mediaType": {
                 "value": "وسائط"
             },
-            "update": {
-                "value": "تحديث"
+            "ok": {
+                "value": "موافق"
             },
             "cancel": {
                 "value": "إلغاء"
@@ -159,10 +159,10 @@
             },
             "modal": {
                 "title": {
-                    "value": "تأكيد"
+                    "value": "تأكيد التنزيل"
                 },
                 "description": {
-                    "value": "أنت على وشك تحميل {downloadSize} من المحتوى على جهازك."
+                    "value": "سيقوم تطبيق Bible Well بتنزيل {downloadSize} من المحتوى من جهازك"
                 },
                 "question": {
                     "value": "كيف ترغب في المتابعة؟"
