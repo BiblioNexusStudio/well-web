@@ -97,28 +97,37 @@ export function createContentContext() {
         closeContextualMenu: () => isShowingContextualMenu.set(false),
 
         setCurrentGuide: (guide: ApiParentResource | null) => {
-            goto(`/view-content/${guide?.id ?? '-'}/${bibleSectionToString(get(context.currentBibleSection)) ?? '-'}`);
+            goto(buildContentViewerPath(guide?.id, get(context.currentBibleSection)));
         },
 
         setCurrentBibleSectionAndCurrentGuide: (bibleSection: BibleSection | null, guide: ApiParentResource | null) => {
-            goto(`/view-content/${guide?.id ?? '-'}/${bibleSectionToString(bibleSection) ?? '-'}`);
+            goto(buildContentViewerPath(guide?.id, bibleSection));
         },
 
-        syncSelectedBibleSectionFromUrlParam: (param: string | undefined) => {
-            if (param === undefined || param === '-') {
+        syncSelectedDataFromParams: (
+            guideResources: ApiParentResource[] | undefined,
+            bibleParam: string | undefined,
+            guideParam: string | undefined,
+            searchParams: URLSearchParams
+        ) => {
+            if (bibleParam === undefined || bibleParam === '-') {
                 currentBibleSection.set(null);
             } else {
-                currentBibleSection.set(stringToBibleSection(param));
+                currentBibleSection.set(stringToBibleSection(bibleParam));
+            }
+
+            if (guideParam === undefined || guideParam === '-') {
+                currentGuide.set(null);
+            } else {
+                currentGuide.set(guideResources?.find((guide) => guide.id.toString() === guideParam) ?? null);
+            }
+
+            const tabParam = searchParams.get('tab');
+            if (get(currentBibleSection) && tabParam) {
+                context.setCurrentTab(tabParam as ContentTabEnum);
             }
         },
 
-        syncSelectedGuideFromUrlParam: (guideResources: ApiParentResource[] | undefined, param: string | undefined) => {
-            if (param === undefined || param === '-') {
-                currentGuide.set(null);
-            } else {
-                currentGuide.set(guideResources?.find((guide) => guide.id.toString() === param) ?? null);
-            }
-        },
         setIsPassageSearch: (value: boolean) => {
             isPassageSearch.set(value);
         },
@@ -130,6 +139,18 @@ export function createContentContext() {
     setContext(CONTEXT_KEY, context);
 
     return context;
+}
+
+export function buildContentViewerPath(
+    guideId: number | string | undefined | null,
+    bibleSection: BibleSection | string | null,
+    tab?: ContentTabEnum | null
+): string {
+    const guidePart = guideId ?? '-';
+    const bibleSectionPart =
+        typeof bibleSection === 'string' ? bibleSection : bibleSectionToString(bibleSection) ?? '-';
+    const tabPart = tab ? `?tab=${tab}` : '';
+    return `/view-content/${guidePart}/${bibleSectionPart}${tabPart}`;
 }
 
 export function getContentContext() {

@@ -10,6 +10,7 @@
     import Feedback from './feedback/Feedback.svelte';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import QuickShare from './quick-share/QuickShare.svelte';
+    import { clearContentViewerContext } from './context-persister';
 
     enum MenuEnum {
         settings = 'settings',
@@ -61,7 +62,10 @@
                 <span class="mb-2 text-xs font-bold text-[#344054]">{$translate('page.menu.shortcuts.value')}</span>
                 <div class="grid grid-cols-2 gap-4">
                     <button
-                        on:click={() => goto('/')}
+                        on:click={() => {
+                            clearContentViewerContext();
+                            goto('/');
+                        }}
                         class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
                         data-app-insights-event-name="main-menu-home-button-clicked"
                         ><HomeIcon /><span class="mt-2 text-xs">{$translate('page.menu.home.value')}</span></button

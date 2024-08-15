@@ -55,6 +55,7 @@
     import { page } from '$app/stores';
     import { ContentTabEnum, createContentContext } from './context';
     import PredeterminedPassageSelectorForBibleSectionPane from './bible-menu/PredeterminedPassageSelectorForBibleSectionPane.svelte';
+    import { saveContentViewerContext, goToSavedContentViewerContext } from './context-persister';
 
     const {
         currentGuide,
@@ -63,13 +64,24 @@
         isShowingContextualMenu,
         openBookChapterSelectorPane,
         openContextualMenu,
-        syncSelectedGuideFromUrlParam,
-        syncSelectedBibleSectionFromUrlParam,
+        syncSelectedDataFromParams,
     } = createContentContext();
 
     // make sure when the URL params change the context stores get updated
-    $: syncSelectedGuideFromUrlParam($guideResources, $page.params.guideId);
-    $: syncSelectedBibleSectionFromUrlParam($page.params.bibleSection);
+    $: syncSelectedDataFromParams(
+        $guideResources,
+        $page.params.bibleSection,
+        $page.params.guideId,
+        $page.url.searchParams
+    );
+
+    let isInitialMount = true;
+
+    $: if (!isInitialMount) {
+        saveContentViewerContext($currentGuide, $currentBibleSection, $currentTab, $page.url.searchParams);
+    } else {
+        isInitialMount = false;
+    }
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
@@ -215,7 +227,9 @@
         ($currentTab === ContentTabEnum.Bible || $currentTab === ContentTabEnum.Guide) && !$isShowingContextualMenu;
 
     onMount(() => {
-        if (!$currentBibleSection && !$currentGuide) {
+        const navigatedToSavedContent = goToSavedContentViewerContext($page.params);
+
+        if (!navigatedToSavedContent && !$currentBibleSection && !$currentGuide) {
             openContextualMenu();
             openBookChapterSelectorPane(null);
         }
