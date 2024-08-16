@@ -143,7 +143,7 @@
                 "value": "Midia"
             },
             "ok": {
-                "value": "Oke"
+                "value": "OKEI"
             },
             "cancel": {
                 "value": "Kensol"
@@ -162,10 +162,7 @@
                     "value": "Konfirmim Daunlod"
                 },
                 "description": {
-                    "value": "Bible Well bai daunlodim {downloadSize} long yuim devaes."
-                },
-                "question": {
-                    "value": "Yu laik go nau osem women?"
+                    "value": "The Bible Well bai daunlodim {downloadSize} bilong ol samting i go long divais bilong yu."
                 },
                 "downloadProgress": {
                     "value": "Daunloud woklo go i stap"
