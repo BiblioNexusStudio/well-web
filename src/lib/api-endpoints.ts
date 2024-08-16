@@ -23,12 +23,22 @@ export function biblesEndpoint(): ApiStringAndCacheBustVersion {
     return ['/bibles', 1];
 }
 
+export function biblesWithRestrictionsEndpoint(): ApiStringAndCacheBustVersion {
+    return ['/bibles?restrictedLicense=true', 1];
+}
+
 export function bookOfBibleEndpoint(bibleId: number | null, bookCode: string | null): ApiStringAndCacheBustVersion {
     return [`/bibles/${bibleId}/book/${bookCode}`, 1];
 }
 
 export function biblesForLanguageEndpoint(languageId: number | undefined): ApiStringAndCacheBustVersion {
     return [`/bibles/language/${languageId}`, 1];
+}
+
+export function biblesForLanguageWithRestrictionsEndpoint(
+    languageId: number | undefined
+): ApiStringAndCacheBustVersion {
+    return [`/bibles/language/${languageId}?restrictedLicense=true`, 1];
 }
 
 export function englishWordsWithGreekAlignmentsForBookAndChapter(

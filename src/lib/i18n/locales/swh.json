@@ -312,6 +312,20 @@
             },
             "bible": {
                 "value": "Biblia"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "Kubali"
+                },
+                "cancel": {
+                    "value": "Ghairi"
+                },
+                "header": {
+                    "value": "Makubaliano ya Maudhui Yasiyo ya Wazi"
+                },
+                "description": {
+                    "value": "Rasilimali unayotaka kuingiza, {resourceName}, imetolewa chini ya {licenseType}. Programu hii inakuwezesha kuingiza na \"kuchanganya\" rasilimali hii na maudhui yaliyotolewa kwa leseni ya wazi ambayo tayari yamo kwenye programu. Ili kuendelea, tafadhali thibitisha kuwa unaelewa masharti ya leseni ya rasilimali hii kwa kubonyeza kitufe cha \"Kubali\"."
+                }
             }
         },
         "PredeterminedPassageSelectorMenu": {

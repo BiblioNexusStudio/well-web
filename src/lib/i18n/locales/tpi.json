@@ -267,6 +267,20 @@
             },
             "bible": {
                 "value": "Buk Tambu"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "Tingim"
+                },
+                "cancel": {
+                    "value": "No tingim"
+                },
+                "header": {
+                    "value": "Tok Gris Bilong Pasin"
+                },
+                "description": {
+                    "value": "Resos yu laik kisim, {resourceName}, i kamap ausait long {licenseType}. Dispela app i wokim yu inap kisim na \"mix\" dispela resos wantaim ol arapela resos we i gat gris bilong pasin insait long app. Sapos yu laik go het, plis tingim ol tok gris bilong dispela resos na klinim \"Tingim\"."
+                }
             }
         },
         "PredeterminedPassageSelectorMenu": {

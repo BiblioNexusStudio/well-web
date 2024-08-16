@@ -9,11 +9,18 @@
     import { PredeterminedPassageGuides } from '$lib/types/resource';
     import { getContentContext } from '../context';
     import Spinner from '$lib/components/Spinner.svelte';
+    import { needsLicenseAccepted } from '$lib/utils/bible-license-handler';
+    import { Icon } from 'svelte-awesome';
+    import { warning } from 'svelte-awesome/icons';
+    import LicenseAcceptanceModal from './LicenseAcceptanceModal.svelte';
+    import type { BaseBible } from '$lib/types/bible';
 
     const { currentGuide, isLoadingToOpenPane, openBookChapterSelectorPane, openPredeterminedPassageSelectorPane } =
         getContentContext();
 
     $: availableBiblesPromise = availableBibles($isOnline);
+
+    let bibleForAcceptanceModal: BaseBible | null = null;
 
     function openBookChapterVerseMenu() {
         const guide = $currentGuide;
@@ -48,17 +55,32 @@
         <div class="flex w-full flex-col items-center overflow-y-scroll">
             {#each bibles as bible}
                 {@const isPreferredBible = $preferredBibleIds.includes(bible.id)}
+                {@const needsLicenseAccept = $needsLicenseAccepted(bible)}
                 <button
                     on:click={() => updatePreferredBibleIds(bible.id, isPreferredBible)}
-                    class="my-2 flex w-11/12 flex-wrap rounded-xl p-4 {isPreferredBible
+                    class="group my-2 flex w-11/12 flex-wrap items-center rounded-xl p-4 disabled:bg-gray-200 {isPreferredBible
                         ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                         : 'border'}"
+                    disabled={needsLicenseAccept}
                     data-app-insights-event-name="bible-menu-bible-selected"
                     data-app-insights-dimensions={`bibleName,${bible.name}`}
                 >
-                    <span class="text-sm">{bible.name} ({bible.abbreviation})</span>
-                    <span class="mx-1 text-sm">-</span>
-                    <span class="text-sm text-[#98A2B3]">{lookupLanguageInfoById(bible.languageId)?.iso6393Code}</span>
+                    <span class="text-sm group-disabled:opacity-75">{bible.name} ({bible.abbreviation})</span>
+                    <span class="mx-1 text-sm group-disabled:opacity-75">-</span>
+                    <span class="text-sm text-[#98A2B3] group-disabled:opacity-75"
+                        >{lookupLanguageInfoById(bible.languageId)?.iso6393Code}</span
+                    >
+                    <span class="flex-grow" />
+                    {#if needsLicenseAccept}
+                        <button
+                            class="btn btn-link btn-xs h-2"
+                            data-app-insights-event-name="bible-license-acceptance-modal-opened"
+                            data-app-insights-dimensions={`bibleName,${bible.name}`}
+                            on:click={() => (bibleForAcceptanceModal = bible)}
+                        >
+                            <Icon data={warning} />
+                        </button>
+                    {/if}
                 </button>
             {:else}
                 <h3 class="my-2">{$translate('page.bibleMenu.noBibles.value')}</h3>
@@ -81,3 +103,5 @@
         </div>
     {/await}
 </div>
+
+<LicenseAcceptanceModal bind:bible={bibleForAcceptanceModal} />

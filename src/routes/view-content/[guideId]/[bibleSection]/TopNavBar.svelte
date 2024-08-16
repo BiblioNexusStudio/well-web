@@ -1,10 +1,8 @@
 <script lang="ts">
-    import { Icon } from 'svelte-awesome';
     import { _ as translate } from 'svelte-i18n';
-    import plus from 'svelte-awesome/icons/plus';
     import type { BibleSection } from '$lib/types/bible';
     import type { FrontendBibleBook } from '$lib/types/bible';
-    import PreferredBiblesModal from '$lib/components/PreferredBiblesModal.svelte';
+    import PreferredBiblesModal from './bible-menu/PreferredBiblesModal.svelte';
     import { PredeterminedPassageGuides } from '$lib/types/resource';
     import { bibleSectionToReference, isNewTestament } from '$lib/utils/bible-section-helpers';
     import AlignmentMode from '$lib/icons/AlignmentMode.svelte';
@@ -119,20 +117,7 @@
     {/if}
     {#if $currentBibleSection && $currentTab === ContentTabEnum.Bible && bibles.length}
         <div class="flex-none">
-            <details
-                bind:open={preferredBiblesModalOpen}
-                class="dropdown md:dropdown-end"
-                data-app-insights-event-name="top-nav-preferred-bibles-modal-button-clicked"
-            >
-                <summary class="btn btn-link btn-active text-primary">
-                    <Icon class="h-6 w-6" data={plus} scale={2} />
-                </summary>
-                <ul
-                    class="dropdown-content z-[1] rounded-box bg-base-100 p-2 shadow max-md:!fixed max-md:!inset-x-4 md:w-96"
-                >
-                    <PreferredBiblesModal {bibles} />
-                </ul>
-            </details>
+            <PreferredBiblesModal bind:open={preferredBiblesModalOpen} {bibles} />
         </div>
     {/if}
 </div>
