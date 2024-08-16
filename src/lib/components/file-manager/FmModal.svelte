@@ -104,14 +104,13 @@
         <form class="modal-box">
             <h3 class="text-lg font-bold">{$translate('page.fileManager.modal.title.value')}</h3>
             <div class="divider" />
-            <p class="py-4">
+            <p class="mb-6 py-4">
                 {$translate('page.fileManager.modal.description.value', {
                     values: {
                         downloadSize: convertToReadableSize($downloadData.totalSizeToDownload),
                     },
                 })}
             </p>
-            <p class="mb-8 py-4">{$translate('page.fileManager.modal.question.value')}</p>
             <div class="flex justify-end">
                 <button
                     class="btn btn-neutral me-4"

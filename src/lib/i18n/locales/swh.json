@@ -169,7 +169,7 @@
                 "_context": "Aina ya midia kwa midia, inapatikana kwa kupakuliwa"
             },
             "ok": {
-                "value": "Sawa",
+                "value": "SAWA",
                 "_context": "Kitufe cha kupakua/kufuta maudhui kulingana na kile ambacho mtumiaji alichagua"
             },
             "cancel": {
@@ -194,12 +194,8 @@
                     "_context": "Kichwa cha modali kinachouliza mtumiaji kuthibitisha mabadiliko kabla ya kusawazisha"
                 },
                 "description": {
-                    "value": "The Bible Well itapakua maudhui ya {downloadSize} kutoka kwa kifaa chako.",
+                    "value": "The Bible Well itapakua maudhui ya {downloadSize} kwenye kifaa chako.",
                     "_context": "Inaonyesha kwenye modali ikimuuliza mtumiaji kuthibitisha mabadiliko kabla ya kusawazisha"
-                },
-                "question": {
-                    "value": "Je, ungependa kuendeleaje?",
-                    "_context": "Swali la kuuliza mtumiaji kabla ya kuthibitisha"
                 },
                 "downloadProgress": {
                     "value": "Maendeleo ya upakuaji",

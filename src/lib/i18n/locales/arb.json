@@ -143,7 +143,7 @@
                 "value": "وسائط"
             },
             "ok": {
-                "value": "موافق"
+                "value": "موافقة"
             },
             "cancel": {
                 "value": "إلغاء"
@@ -162,10 +162,7 @@
                     "value": "تأكيد التنزيل"
                 },
                 "description": {
-                    "value": "سيقوم تطبيق Bible Well بتنزيل {downloadSize} من المحتوى من جهازك"
-                },
-                "question": {
-                    "value": "كيف ترغب في المتابعة؟"
+                    "value": "سيقوم تطبيق Bible Well بتنزيل {downloadSize} من المحتوى على جهازك."
                 },
                 "downloadProgress": {
                     "value": "تقدم التحميل"
