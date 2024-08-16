@@ -180,7 +180,7 @@
                 "_context": "The media type for media, available to be downloaded"
             },
             "ok": {
-                "value": "Ok",
+                "value": "OK",
                 "_context": "Button to download/delete content based on what the user selected"
             },
             "cancel": {
@@ -205,12 +205,8 @@
                     "_context": "Title of the modal asking the user to confirm changes before syncing"
                 },
                 "description": {
-                    "value": "The Bible Well will download {downloadSize} of content from your device.",
+                    "value": "The Bible Well will download {downloadSize} of content to your device.",
                     "_context": "Shows on the modal asking the user to confirm changes before syncing"
-                },
-                "question": {
-                    "value": "How would you like to proceed?",
-                    "_context": "Question to ask the user before confirming"
                 },
                 "downloadProgress": {
                     "value": "Download progress",

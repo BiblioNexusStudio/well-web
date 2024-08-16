@@ -143,7 +143,7 @@
                 "value": "Média"
             },
             "ok": {
-                "value": "D’accord"
+                "value": "D'ACCORD"
             },
             "cancel": {
                 "value": "Annuler"
@@ -162,10 +162,7 @@
                     "value": "Confirmer le téléchargement"
                 },
                 "description": {
-                    "value": "The Bible Well téléchargera {downloadSize} de contenu depuis votre appareil."
-                },
-                "question": {
-                    "value": "Comment souhaitez-vous procéder ?"
+                    "value": "La Bible Well téléchargera {downloadSize} de contenu sur votre appareil."
                 },
                 "downloadProgress": {
                     "value": "Progression du téléchargement"
