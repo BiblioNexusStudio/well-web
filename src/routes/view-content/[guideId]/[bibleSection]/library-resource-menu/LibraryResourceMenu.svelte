@@ -157,7 +157,7 @@
         if (!isShowing || (!isFullLibrary && resourceGroupings?.length > 0)) return;
         isLoading = true;
 
-        if ($isPassageSearch) {
+        if ($isPassageSearch && $currentTab === ContentTabEnum.LibraryMenu) {
             resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(
                 passageSearchResources,
                 $currentLanguageDirection
@@ -197,7 +197,7 @@
     }
 
     async function fetchPassageSearchResources(bibleSelection: BibleSection | null) {
-        if (bibleSelection !== null) {
+        if (bibleSelection !== null && $isPassageSearch && $currentTab === ContentTabEnum.LibraryMenu) {
             isLoading = true;
             const languageId = $currentLanguageInfo?.id;
             passageSearchResources = (await fetchFromCacheOrApi(
@@ -212,12 +212,14 @@
                     bibleSelection?.endVerse
                 )
             )) as ResourceContentInfo[];
+
+            isLoading = false;
         }
     }
 </script>
 
 {#if isShowing}
-    {#if $isPassageSearch && resourceGroupings.length > 0 && $currentTab === ContentTabEnum.LibraryMenu}
+    {#if ($isPassageSearch && resourceGroupings.length > 0 && $currentTab === ContentTabEnum.LibraryMenu) || ($isPassageSearch && passageSearchResources?.length === 0 && $passageSearchBibleSection !== null && $currentTab === ContentTabEnum.LibraryMenu)}
         <div class="navbar flex w-full justify-between">
             <button
                 class="mx-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
@@ -279,6 +281,8 @@
         </div>
         {#if isLoading}
             <FullPageSpinner />
+        {:else if $isPassageSearch && passageSearchResources?.length === 0 && $passageSearchBibleSection !== null}
+            <NoResourcesFound searchQuery={getBibleVerseText($passageSearchBibleSection)} />
         {:else if resourceGroupings.length === 0 && searchQuery.length < 3}
             <div class="flex-coloverflow-y-scroll flex flex-grow">
                 {#if visibleSwish}
