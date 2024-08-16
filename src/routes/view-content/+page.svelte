@@ -1,8 +1,9 @@
 <script lang="ts">
     import { browser } from '$app/environment';
     import { goto } from '$app/navigation';
+    import { buildContentViewerPath } from './[guideId]/[bibleSection]/context';
 
     if (browser) {
-        goto('/view-content/-/-');
+        goto(buildContentViewerPath(null, null));
     }
 </script>
