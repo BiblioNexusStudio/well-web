@@ -267,6 +267,20 @@
             },
             "bible": {
                 "value": "Bible"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "Accepter"
+                },
+                "cancel": {
+                    "value": "Annuler"
+                },
+                "header": {
+                    "value": "Accord de contenu non ouvert"
+                },
+                "description": {
+                    "value": "La ressource que vous souhaitez importer, {resourceName}, est publiée sous {licenseType}. Cette application vous permet d'importer et de \"mélanger\" cette ressource avec le contenu sous licence libre déjà présent dans l'application. Pour continuer, veuillez reconnaître que vous comprenez les termes de la licence de cette ressource en cliquant sur le bouton \"Accepter\"."
+                }
             }
         },
         "PredeterminedPassageSelectorMenu": {

@@ -11,7 +11,12 @@ import { appInsightsEnabled, userInfo, log } from '$lib/logger';
 import { browserSupported } from '$lib/utils/browser';
 import { languages } from '$lib/stores/language.store';
 import { parentResources } from '$lib/stores/parent-resource.store';
-import { biblesEndpoint, languagesEndpoint, parentResourcesEndpoint } from '$lib/api-endpoints';
+import {
+    biblesEndpoint,
+    biblesWithRestrictionsEndpoint,
+    languagesEndpoint,
+    parentResourcesEndpoint,
+} from '$lib/api-endpoints';
 import { bibles } from '$lib/stores/bibles.store';
 import '$lib/caching-config.js';
 
@@ -60,14 +65,16 @@ export const load: LayoutLoad = async () => {
                 }
             });
 
-            const [fetchedLanguages, fetchedParentResources, fetchedBibles] = await Promise.all([
-                fetchFromCacheOrApi(...languagesEndpoint()),
-                fetchFromCacheOrApi(...parentResourcesEndpoint()),
-                fetchFromCacheOrApi(...biblesEndpoint()),
-            ]);
+            const [fetchedLanguages, fetchedParentResources, fetchedBibles, fetchedBiblesWithRestrictions] =
+                await Promise.all([
+                    fetchFromCacheOrApi(...languagesEndpoint()),
+                    fetchFromCacheOrApi(...parentResourcesEndpoint()),
+                    fetchFromCacheOrApi(...biblesEndpoint()),
+                    fetchFromCacheOrApi(...biblesWithRestrictionsEndpoint()),
+                ]);
             languages.set(fetchedLanguages);
             parentResources.set(fetchedParentResources);
-            bibles.set(fetchedBibles);
+            bibles.set(fetchedBibles.concat(fetchedBiblesWithRestrictions));
         }
 
         await init(get(currentLanguageInfo)?.iso6393Code);

@@ -34,6 +34,7 @@ export interface BaseBible {
     id: number;
     name: string;
     languageId: number;
+    restrictedLicense?: boolean;
     licenseInfo: ApiLicenseInfo | null;
 }
 
