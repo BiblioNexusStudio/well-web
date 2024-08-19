@@ -21,6 +21,8 @@ import {
     bibleBooksByBibleId,
     biblesEndpoint,
     biblesForLanguageEndpoint,
+    biblesForLanguageWithRestrictionsEndpoint,
+    biblesWithRestrictionsEndpoint,
     bookOfBibleEndpoint,
 } from '$lib/api-endpoints';
 
@@ -98,7 +100,11 @@ export async function availableBibles(online: boolean) {
 
 export async function fetchAllBibles(): Promise<BaseBible[]> {
     try {
-        return await fetchFromCacheOrApi(...biblesEndpoint());
+        const [bibles, restrictedBibles] = await Promise.all([
+            fetchFromCacheOrApi(...biblesEndpoint()),
+            fetchFromCacheOrApi(...biblesWithRestrictionsEndpoint()),
+        ]);
+        return [...bibles, ...restrictedBibles];
     } catch (error) {
         log.exception(error as Error);
         return [];
@@ -111,7 +117,11 @@ export async function fetchBiblesForLanguageCode(languageCode: string): Promise<
     if (!languageId) return [];
 
     try {
-        return await fetchFromCacheOrApi(...biblesForLanguageEndpoint(languageId));
+        const [bibles, restrictedBibles] = await Promise.all([
+            fetchFromCacheOrApi(...biblesForLanguageEndpoint(languageId)),
+            fetchFromCacheOrApi(...biblesForLanguageWithRestrictionsEndpoint(languageId)),
+        ]);
+        return [...bibles, ...restrictedBibles];
     } catch (error) {
         log.exception(error as Error);
         return [];

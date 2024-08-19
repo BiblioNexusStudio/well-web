@@ -339,6 +339,24 @@
             "bible": {
                 "value": "Bible",
                 "_context": "Label for the dropdown"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "Accept",
+                    "_context": "Button to accept license"
+                },
+                "cancel": {
+                    "value": "Cancel",
+                    "_context": "Button to cancel license accept modal"
+                },
+                "header": {
+                    "value": "Non-Open Content Agreement",
+                    "_context": "Header for license accept modal"
+                },
+                "description": {
+                    "value": "The resource you desire to import, {resourceName}, is released under {licenseType}. This app enables you to import and \"mix\" this resource with the openly licensed content already in the app. In order to proceed, please acknowledge that you understand the license terms of this resource by clicking the \"Accept\" button.",
+                    "_context": "Description for license accept modal"
+                }
             }
         },
         "PredeterminedPassageSelectorMenu": {
