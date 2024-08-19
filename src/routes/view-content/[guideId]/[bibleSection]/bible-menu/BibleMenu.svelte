@@ -57,17 +57,19 @@
                 {@const isPreferredBible = $preferredBibleIds.includes(bible.id)}
                 {@const needsLicenseAccept = $needsLicenseAccepted(bible)}
                 <button
-                    on:click={() => updatePreferredBibleIds(bible.id, isPreferredBible)}
-                    class="group my-2 flex w-11/12 flex-wrap items-center rounded-xl p-4 disabled:bg-gray-200 {isPreferredBible
-                        ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
-                        : 'border'}"
-                    disabled={needsLicenseAccept}
+                    on:click={() =>
+                        needsLicenseAccept
+                            ? (bibleForAcceptanceModal = bible)
+                            : updatePreferredBibleIds(bible.id, isPreferredBible)}
+                    class="group my-2 flex w-11/12 flex-wrap items-center rounded-xl p-4 {needsLicenseAccept &&
+                        'bg-gray-200'} {isPreferredBible ? 'border-2 border-[#3db6e7] bg-[#f0faff]' : 'border'}"
                     data-app-insights-event-name="bible-menu-bible-selected"
                     data-app-insights-dimensions={`bibleName,${bible.name}`}
                 >
-                    <span class="text-sm group-disabled:opacity-75">{bible.name} ({bible.abbreviation})</span>
-                    <span class="mx-1 text-sm group-disabled:opacity-75">-</span>
-                    <span class="text-sm text-[#98A2B3] group-disabled:opacity-75"
+                    <span class="text-sm {needsLicenseAccept && 'opacity-75'}">{bible.name} ({bible.abbreviation})</span
+                    >
+                    <span class="mx-1 text-sm {needsLicenseAccept && 'opacity-75'}">-</span>
+                    <span class="text-sm text-[#98A2B3] {needsLicenseAccept && 'opacity-75'}"
                         >{lookupLanguageInfoById(bible.languageId)?.iso6393Code}</span
                     >
                     <span class="flex-grow" />
@@ -76,7 +78,6 @@
                             class="btn btn-link btn-xs h-2"
                             data-app-insights-event-name="bible-license-acceptance-modal-opened"
                             data-app-insights-dimensions={`bibleName,${bible.name}`}
-                            on:click={() => (bibleForAcceptanceModal = bible)}
                         >
                             <Icon data={warning} />
                         </button>

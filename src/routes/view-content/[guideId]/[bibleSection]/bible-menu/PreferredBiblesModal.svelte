@@ -63,7 +63,13 @@
             </div>
             {#each filteredBibles as bible}
                 {@const needsLicenseAccept = $needsLicenseAccepted(bible)}
-                <label class="label mb-4 {needsLicenseAccept ? 'bg-gray-200' : 'cursor-pointer'} justify-start p-4">
+
+                <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <label
+                    on:click={() => needsLicenseAccept && (bibleForAcceptanceModal = bible)}
+                    class="label mb-4 {needsLicenseAccept ? 'bg-gray-200' : 'cursor-pointer'} justify-start p-4"
+                >
                     <input
                         type="checkbox"
                         disabled={($preferredBibleIds.includes(bible.id) &&
@@ -84,7 +90,6 @@
                             class="btn btn-link btn-xs ml-2 h-2"
                             data-app-insights-event-name="bible-license-acceptance-modal-opened"
                             data-app-insights-dimensions={`bibleName,${bible.name}`}
-                            on:click={() => (bibleForAcceptanceModal = bible)}
                         >
                             <Icon data={warning} />
                         </button>
