@@ -11,6 +11,7 @@
     import FullscreenTextResource from './FullscreenTextResource.svelte';
     import {
         MediaType,
+        ParentResourceId,
         ParentResourceType,
         SrvResources,
         type ResourceContentInfo,
@@ -30,7 +31,7 @@
     import { settings } from '$lib/stores/settings.store';
     import { SettingShortNameEnum } from '$lib/types/settings';
     import FullscreenResourceSubgroup from './FullscreenResourceSubgroup.svelte';
-    import { ContentTabEnum } from '../context';
+    import type { ContentTabEnum } from '../context';
     import BookIcon from '$lib/icons/BookIcon.svelte';
     import { getContentContext } from '../context';
     import XMarkSmallIcon from '$lib/icons/XMarkSmallIcon.svelte';
@@ -54,7 +55,6 @@
         openBookChapterSelectorPane,
         passageSearchBibleSection,
         setPassageSearchBibleSection,
-        currentTab,
     } = getContentContext();
 
     let searchQuery: string = '';
@@ -65,6 +65,7 @@
     let mediaResources: ResourceContentInfoWithMetadata[] = [];
     let passageSearchResources: ResourceContentInfo[] | undefined;
 
+    $: showingPassageSearch = $isPassageSearch && isFullLibrary;
     $: prepareResources(resources || [], isShowing, passageSearchResources || []);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(flatResources, 'displayName', searchQuery).length;
@@ -157,7 +158,7 @@
         if (!isShowing || (!isFullLibrary && resourceGroupings?.length > 0)) return;
         isLoading = true;
 
-        if ($isPassageSearch) {
+        if (showingPassageSearch) {
             resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(
                 passageSearchResources,
                 $currentLanguageDirection
@@ -197,14 +198,20 @@
     }
 
     async function fetchPassageSearchResources(bibleSelection: BibleSection | null) {
-        if (bibleSelection !== null) {
+        if (bibleSelection !== null && showingPassageSearch) {
             isLoading = true;
             const languageId = $currentLanguageInfo?.id;
             passageSearchResources = (await fetchFromCacheOrApi(
                 ...searchResourcesEndpoint(
                     languageId,
                     '',
-                    [ParentResourceType.Images, ParentResourceType.Dictionary, ParentResourceType.Videos],
+                    [
+                        ParentResourceType.Images,
+                        ParentResourceType.Dictionary,
+                        ParentResourceType.Videos,
+                        ParentResourceType.Guide,
+                        ParentResourceType.StudyNotes,
+                    ],
                     bibleSelection?.bookCode,
                     bibleSelection?.startChapter,
                     bibleSelection?.endChapter,
@@ -212,12 +219,18 @@
                     bibleSelection?.endVerse
                 )
             )) as ResourceContentInfo[];
+            passageSearchResources = passageSearchResources.filter(
+                (rc) =>
+                    (!showOnlySrvResources || SrvResources.includes(rc.parentResourceId)) &&
+                    rc.parentResourceId !== ParentResourceId.FIA
+            );
+            isLoading = false;
         }
     }
 </script>
 
 {#if isShowing}
-    {#if $isPassageSearch && resourceGroupings.length > 0 && $currentTab === ContentTabEnum.LibraryMenu}
+    {#if (showingPassageSearch && resourceGroupings.length > 0) || (showingPassageSearch && passageSearchResources?.length === 0 && $passageSearchBibleSection !== null)}
         <div class="navbar flex w-full justify-between">
             <button
                 class="mx-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
@@ -228,7 +241,7 @@
             </button>
         </div>
     {/if}
-    {#if !$isPassageSearch}
+    {#if !showingPassageSearch}
         <SwishHeader
             bind:visible={visibleSwish}
             title={$translate('page.passage.resourcePane.libraryTitle.value')}
@@ -254,18 +267,18 @@
     <div
         class="absolute bottom-20 left-0 right-0 {visibleSwish
             ? 'top-40'
-            : $isPassageSearch
+            : showingPassageSearch
             ? 'top-12'
             : isFullLibrary
             ? 'top-0'
-            : 'top-16'} flex flex-col px-4 {$isPassageSearch ? '' : 'transition-[top] duration-500 ease-in-out'}"
+            : 'top-16'} flex flex-col px-4 {showingPassageSearch ? '' : 'transition-[top] duration-500 ease-in-out'}"
     >
         <div class="my-4 flex flex-row">
-            {#if !$isPassageSearch || $passageSearchBibleSection === null || $currentTab === ContentTabEnum.Resources}
+            {#if !showingPassageSearch || $passageSearchBibleSection === null || !isFullLibrary}
                 <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} placeholder={placeholderText} />
             {/if}
 
-            {#if !visibleSwish && isFullLibrary && $passageSearchBibleSection === null && $currentTab === ContentTabEnum.LibraryMenu}
+            {#if !visibleSwish && isFullLibrary && $passageSearchBibleSection === null}
                 <div>
                     <button
                         on:click={(e) => resetPage(e)}
@@ -279,6 +292,8 @@
         </div>
         {#if isLoading}
             <FullPageSpinner />
+        {:else if showingPassageSearch && passageSearchResources?.length === 0 && $passageSearchBibleSection !== null}
+            <NoResourcesFound searchQuery={getBibleVerseText($passageSearchBibleSection)} />
         {:else if resourceGroupings.length === 0 && searchQuery.length < 3}
             <div class="flex-coloverflow-y-scroll flex flex-grow">
                 {#if visibleSwish}
