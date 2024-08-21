@@ -55,12 +55,10 @@
                     }
                 },
                 "libraryTitle": {
-                    "value": "Bukmakmak",
-                    "_context": "Taitol long Menyu bilong Bukmakmak"
+                    "value": "Bukmakmak"
                 },
                 "librarySubtitle": {
-                    "value": "Lukautim ol resors yu nid",
-                    "_context": "Saposol long Menyu bilong Bukmakmak"
+                    "value": "Lukautim ol resors yu nid"
                 },
                 "typeToSearch": {
                     "value": "Typim wanpela toktok long surukim bibliotek"
@@ -124,6 +122,11 @@
             },
             "noFiaContent": {
                 "value": "Nogat FIA samting insait i stap blo dispela hap riding."
+            },
+            "guide": {
+                "next": {
+                    "value": "Neks"
+                }
             }
         },
         "fileManager": {

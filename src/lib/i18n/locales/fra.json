@@ -50,12 +50,10 @@
                     "value": "Annuler"
                 },
                 "libraryTitle": {
-                    "value": "Bibliothèque",
-                    "_context": "Titre pour le menu de la bibliothèque"
+                    "value": "Bibliothèque"
                 },
                 "librarySubtitle": {
-                    "value": "Trouvez les ressources dont vous avez besoin",
-                    "_context": "Sous-titre pour le menu de la bibliothèque"
+                    "value": "Trouvez les ressources dont vous avez besoin"
                 },
                 "typeToSearch": {
                     "value": "Tapez un terme pour effectuer une recherche dans la bibliothèque"
@@ -124,6 +122,11 @@
             },
             "noFiaContent": {
                 "value": "Aucun contenu FIA trouvé pour ce passage."
+            },
+            "guide": {
+                "next": {
+                    "value": "Suivant"
+                }
             }
         },
         "fileManager": {
