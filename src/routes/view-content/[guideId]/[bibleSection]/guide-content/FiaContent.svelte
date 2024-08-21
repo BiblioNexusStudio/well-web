@@ -211,6 +211,18 @@
         }
         return null;
     }
+
+    function nextStepIsAvailable(currentStep: number): boolean {
+        return stepsAvailable.indexOf(currentStep) < stepsAvailable.length - 1;
+    }
+
+    function goToNextStep() {
+        const currentIndex = stepsAvailable.indexOf(selectedStepNumber);
+        if (currentIndex !== -1 && currentIndex < stepsAvailable.length - 1) {
+            selectedStepNumber = stepsAvailable[currentIndex + 1]!;
+            selectedStepScroll = selectedStepNumber;
+        }
+    }
 </script>
 
 {#if isLoading}
@@ -242,6 +254,16 @@
                             <div class="flex-grow overflow-y-scroll">
                                 {#if contentHTML}
                                     {@html contentHTML}
+                                {/if}
+                                {#if nextStepIsAvailable(stepNumber)}
+                                    <div class="flex w-full flex-col items-center">
+                                        <button
+                                            on:click={goToNextStep}
+                                            class="btn btn-primary my-2"
+                                            data-app-insights-event-name="fia-content-next-button-clicked"
+                                            >{$translate('page.passage.guide.next.value')}<span>→ </span></button
+                                        >
+                                    </div>
                                 {/if}
                             </div>
                         </div>

@@ -156,6 +156,12 @@
             "noFiaContent": {
                 "value": "No FIA content found for this passage.",
                 "_context": "Message to display when the FIA content is not downloaded or available"
+            },
+            "guide": {
+                "next": {
+                    "value": "Next",
+                    "_context": "Go to next item in guide."
+                }
             }
         },
         "fileManager": {
