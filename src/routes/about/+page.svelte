@@ -88,11 +88,11 @@
                         {@const licenseDescription = calculateLicenseDescription(licenseInfo)}
                         <h4>{licenseInfo.title}</h4>
                         <div class="ms-4">
-                            <div class="flex flex-row items-center space-x-1">
+                            <div class="flex flex-row items-start space-x-1">
                                 {#if licenseInfo.copyright.holder.name
                                     .replaceAll(' ', '')
                                     .toLowerCase() === 'publicdomain'}
-                                    <PublicDomainIcon class="me-[-2px] ms-[-4px] scale-[55%]" />
+                                    <PublicDomainIcon class="me-[-2px] ms-[-4px] mt-0.5 scale-[55%]" />
                                     {licenseInfo.copyright.holder.name}
                                 {:else}
                                     <span>©</span>
