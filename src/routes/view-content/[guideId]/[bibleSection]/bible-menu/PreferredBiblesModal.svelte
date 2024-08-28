@@ -25,6 +25,12 @@
                 name.toLowerCase().includes(searchQuery.toLowerCase())
         )
         .sort((first, second) => {
+            if (first.languageId === $currentLanguageInfo?.id && second.languageId !== $currentLanguageInfo?.id) {
+                return -1;
+            }
+            if (first.languageId !== $currentLanguageInfo?.id && second.languageId === $currentLanguageInfo?.id) {
+                return 1;
+            }
             const languageComparison = (first.languageCode ?? '').localeCompare(second.languageCode ?? '');
             return languageComparison !== 0 ? languageComparison : first.name.localeCompare(second.name);
         });
