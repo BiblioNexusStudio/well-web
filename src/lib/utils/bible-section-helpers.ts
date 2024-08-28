@@ -1,5 +1,6 @@
-import type { BibleSection } from '$lib/types/bible';
+import type { BibleSection, FrontendBibleBook, BaseBible } from '$lib/types/bible';
 import { handleRtlVerseReferences, type DirectionCode } from './language-utils';
+import { lookupLanguageInfoById } from '$lib/stores/language.store';
 
 const newTestamentBooks = [
     'MAT',
@@ -192,4 +193,32 @@ export function bibleSectionToReference(bibleSection: BibleSection, scriptDirect
         reference = `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endChapter}:${bibleSection.endVerse}`;
     }
     return handleRtlVerseReferences(reference, scriptDirection)!;
+}
+
+export function sortAndFilterBibles(
+    bibles: FrontendBibleBook[] | BaseBible[],
+    currentLanguageInfoId: number | undefined,
+    searchQuery: string
+) {
+    return bibles
+        .map((bible) => ({ ...bible, languageCode: lookupLanguageInfoById(bible.languageId)?.iso6393Code }))
+        .filter(
+            ({ abbreviation, name, languageCode }) =>
+                languageCode?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                abbreviation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .sort((first, second) => {
+            if (currentLanguageInfoId) {
+                if (first.languageId === currentLanguageInfoId && second.languageId !== currentLanguageInfoId) {
+                    return -1;
+                }
+                if (first.languageId !== currentLanguageInfoId && second.languageId === currentLanguageInfoId) {
+                    return 1;
+                }
+            }
+
+            const languageComparison = (first.languageCode ?? '').localeCompare(second.languageCode ?? '');
+            return languageComparison !== 0 ? languageComparison : first.name.localeCompare(second.name);
+        });
 }

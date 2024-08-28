@@ -49,6 +49,10 @@ export interface FrontendBibleBook extends BaseBible {
     content: { chapters: FrontendChapterContent[] } | null;
 }
 
+export interface FrontendBibleBookWithLanguageCode extends FrontendBibleBook {
+    languageCode: string;
+}
+
 export interface BaseBibleBookContent {
     audioSize: number;
     textSize: number;

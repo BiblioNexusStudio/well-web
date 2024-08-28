@@ -1,13 +1,14 @@
 <script lang="ts">
-    import type { FrontendBibleBook } from '$lib/types/bible';
+    import type { FrontendBibleBook, FrontendBibleBookWithLanguageCode } from '$lib/types/bible';
     import SearchInput from '$lib/components/SearchInput.svelte';
     import { preferredBibleIds } from '$lib/stores/preferred-bibles.store';
-    import { currentLanguageInfo, lookupLanguageInfoById } from '$lib/stores/language.store';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
     import { needsLicenseAccepted } from '$lib/utils/bible-license-handler';
     import LicenseAcceptanceModal from './LicenseAcceptanceModal.svelte';
     import type { BaseBible } from '$lib/types/bible';
     import { Icon } from 'svelte-awesome';
     import { plus, warning } from 'svelte-awesome/icons';
+    import { sortAndFilterBibles } from '$lib/utils/bible-section-helpers';
 
     let bibleForAcceptanceModal: BaseBible | null = null;
 
@@ -16,24 +17,11 @@
 
     let searchQuery = '';
 
-    $: filteredBibles = bibles
-        .map((bible) => ({ ...bible, languageCode: lookupLanguageInfoById(bible.languageId)?.iso6393Code }))
-        .filter(
-            ({ abbreviation, name, languageCode }) =>
-                languageCode?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                abbreviation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-        .sort((first, second) => {
-            if (first.languageId === $currentLanguageInfo?.id && second.languageId !== $currentLanguageInfo?.id) {
-                return -1;
-            }
-            if (first.languageId !== $currentLanguageInfo?.id && second.languageId === $currentLanguageInfo?.id) {
-                return 1;
-            }
-            const languageComparison = (first.languageCode ?? '').localeCompare(second.languageCode ?? '');
-            return languageComparison !== 0 ? languageComparison : first.name.localeCompare(second.name);
-        });
+    $: filteredBibles = sortAndFilterBibles(
+        bibles,
+        $currentLanguageInfo?.id,
+        searchQuery
+    ) as FrontendBibleBookWithLanguageCode[];
     $: currentBibleIdsInCurrentLanguage = bibles
         .filter(({ languageId, id }) => languageId === $currentLanguageInfo?.id && $preferredBibleIds.includes(id))
         .map(({ id }) => id);
