@@ -120,8 +120,8 @@
                     "value": "Vérifier plus de ressources..."
                 }
             },
-            "noFiaContent": {
-                "value": "Aucun contenu FIA trouvé pour ce passage."
+            "noGuideContent": {
+                "value": "Aucun contenu trouvé pour ce passage."
             },
             "guide": {
                 "next": {

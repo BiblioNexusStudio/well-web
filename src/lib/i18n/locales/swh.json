@@ -120,8 +120,8 @@
                     "value": "Angalia nyenzo zaidi..."
                 }
             },
-            "noFiaContent": {
-                "value": "Hakuna maudhui ya FIA yaliyopatikana kwa kifungu hiki."
+            "noGuideContent": {
+                "value": "Hakuna maudhui yaliyopatikana kwa kifungu hiki."
             },
             "guide": {
                 "next": {

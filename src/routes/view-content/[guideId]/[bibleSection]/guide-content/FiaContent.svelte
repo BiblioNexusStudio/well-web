@@ -1,9 +1,5 @@
 <script lang="ts">
-    import {
-        createMultiClipAudioState,
-        type MultiClipAudioState,
-    } from '$lib/components/AudioPlayer/audio-player-state';
-    import ButtonCarousel from '$lib/components/ButtonCarousel.svelte';
+    import type { MultiClipAudioState } from '$lib/components/AudioPlayer/audio-player-state';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { fetchContentFromCacheOrNetwork } from '$lib/data-cache';
     import { log } from '$lib/logger';
@@ -13,6 +9,7 @@
         MediaType,
         type ResourceContentTiptap,
         type ResourceContentMetadata,
+        type StepBasedGuideStep,
     } from '$lib/types/resource';
     import { filterBoolean, filterBooleanByKey } from '$lib/utils/array';
     import { asyncMap } from '$lib/utils/async-array';
@@ -28,24 +25,10 @@
     import { ContentTabEnum, getContentContext } from '../context';
     import { currentLanguageDirection } from '$lib/stores/language.store';
     import { isOnline } from '$lib/stores/is-online.store';
-
-    interface FiaAudioContent {
-        steps: {
-            stepNumber: number;
-            url: string;
-        }[];
-    }
-
-    interface FiaTextContent {
-        steps: FiaTextSingleStepContent[];
-    }
+    import StepBasedContent from './StepBasedContent.svelte';
 
     interface ResourceContentFiaText extends ResourceContentTiptap {
         stepNumber: number;
-    }
-
-    interface FiaTextSingleStepContent extends ResourceContentFiaText {
-        contentHTML: string;
     }
 
     interface FiaAudioMetadata {
@@ -67,19 +50,13 @@
 
     const { openContextualMenu } = getContentContext();
 
-    let topOfStep: HTMLElement | null = null;
-    let selectedStepNumber = 1;
-    let selectedStepScroll: number | undefined;
-    let stepsAvailable: number[] = [];
-    let textContent: FiaTextContent | null = null;
     let isLoading = false;
+    let steps: StepBasedGuideStep[] = [];
 
-    $: selectedStepNumber && topOfStep?.scrollIntoView();
     $: fetchContent(guideResourceInfo);
-    $: isShowing && setFiaAudioPlayerForStep(selectedStepNumber);
     $: openGuideMenuIfNoStepsAvailable(isShowing, isLoading);
 
-    const steps = [
+    const stepLabels = [
         $translate('resources.fia.step1.value'),
         $translate('resources.fia.step2.value'),
         $translate('resources.fia.step3.value'),
@@ -93,23 +70,26 @@
             if (guideResourceInfo) {
                 isLoading = true;
                 let audioContent = (await fetchAudio(guideResourceInfo))[0];
-                textContent = await fetchText(guideResourceInfo);
-                stepsAvailable = Array.from(
-                    new Set([
-                        ...(textContent?.steps?.map((step) => step.stepNumber) ?? []),
-                        ...(audioContent?.steps?.map((step) => step.stepNumber) ?? []),
-                    ])
-                );
-                selectedStepNumber = stepsAvailable[0] ?? 1;
-                selectedStepScroll = stepsAvailable[0] ?? 1;
-                if (audioContent) {
-                    populateFiaAudioState(audioContent);
-                }
+                const textContent = await fetchText(guideResourceInfo);
+                steps = stepLabels.map((label, stepIndex) => {
+                    const stepNumber = stepIndex + 1;
+                    const step: StepBasedGuideStep = { label };
+                    if (audioContent) {
+                        const stepAudio = audioContent.steps.find((s) => s.stepNumber === stepNumber);
+                        if (stepAudio?.url) {
+                            step.audioUrl = stepAudio.url;
+                        }
+                    }
+                    if (textContent) {
+                        const stepText = textContent.steps.find((s) => s.stepNumber === stepNumber);
+                        if (stepText?.contentHTML) {
+                            step.contentHTML = stepText.contentHTML;
+                        }
+                    }
+                    return step;
+                });
             } else {
-                textContent = null;
-                stepsAvailable = [];
-                selectedStepNumber = 1;
-                selectedStepScroll = undefined;
+                steps = [];
             }
         } finally {
             isLoading = false;
@@ -117,28 +97,9 @@
     }
 
     function openGuideMenuIfNoStepsAvailable(isShowing: boolean, isLoading: boolean) {
-        if (isShowing && !isLoading && stepsAvailable.length === 0) {
+        if (isShowing && !isLoading && steps.length === 0) {
             openContextualMenu();
         }
-    }
-
-    // Populate the audio state object with key/values like
-    //   guideStep1 => MultiClipAudioState
-    //   guideStep2 => MultiClipAudioState
-    function populateFiaAudioState(audioContent: FiaAudioContent) {
-        audioContent.steps.forEach((step) => {
-            multiClipAudioStates[fiaAudioKey(step.stepNumber)] = createMultiClipAudioState([
-                { url: step.url, type: audioFileTypeForBrowser(), startTime: 0 },
-            ]);
-        });
-    }
-
-    function fiaAudioKey(step: number) {
-        return `fiaGuideStep${step}`;
-    }
-
-    function setFiaAudioPlayerForStep(step: number) {
-        audioPlayerKey = fiaAudioKey(step);
     }
 
     async function fetchAudio(resourceContents: ResourceContentInfo[]) {
@@ -211,67 +172,10 @@
         }
         return null;
     }
-
-    function nextStepIsAvailable(currentStep: number): boolean {
-        return stepsAvailable.indexOf(currentStep) < stepsAvailable.length - 1;
-    }
-
-    function goToNextStep() {
-        const currentIndex = stepsAvailable.indexOf(selectedStepNumber);
-        if (currentIndex !== -1 && currentIndex < stepsAvailable.length - 1) {
-            selectedStepNumber = stepsAvailable[currentIndex + 1]!;
-            selectedStepScroll = selectedStepNumber;
-        }
-    }
 </script>
 
 {#if isLoading}
     <FullPageSpinner {isShowing} />
 {:else}
-    <div class="px-4 pb-4 {!isShowing && 'hidden'}">
-        <div class="relative m-auto max-w-[65ch]">
-            <ButtonCarousel
-                bind:selectedValue={selectedStepNumber}
-                bind:scroll={selectedStepScroll}
-                buttons={stepsAvailable.map((stepNumber) => ({
-                    value: stepNumber,
-                    label: steps[stepNumber - 1] ?? '',
-                }))}
-                displayIcons={true}
-            />
-        </div>
-    </div>
-    <div class="flex flex-grow overflow-y-hidden px-4 {!isShowing && 'hidden'}">
-        <div class="prose mx-auto flex flex-grow">
-            <span bind:this={topOfStep} />
-            <div class="flex flex-grow">
-                {#if stepsAvailable.length > 0}
-                    {#each stepsAvailable as stepNumber}
-                        {@const contentHTML = textContent?.steps?.find(
-                            (step) => step.stepNumber === stepNumber
-                        )?.contentHTML}
-                        <div class={selectedStepNumber === stepNumber ? 'flex flex-grow flex-col' : 'hidden'}>
-                            <div class="flex-grow overflow-y-scroll">
-                                {#if contentHTML}
-                                    {@html contentHTML}
-                                {/if}
-                                {#if nextStepIsAvailable(stepNumber)}
-                                    <div class="flex w-full flex-col items-center">
-                                        <button
-                                            on:click={goToNextStep}
-                                            class="btn btn-primary my-2"
-                                            data-app-insights-event-name="fia-content-next-button-clicked"
-                                            >{$translate('page.passage.guide.next.value')}<span>→ </span></button
-                                        >
-                                    </div>
-                                {/if}
-                            </div>
-                        </div>
-                    {/each}
-                {:else}
-                    {$translate('page.passage.noFiaContent.value')}
-                {/if}
-            </div>
-        </div>
-    </div>
+    <StepBasedContent {steps} {isShowing} bind:multiClipAudioStates bind:audioPlayerKey />
 {/if}
