@@ -14,6 +14,8 @@
     import { warning } from 'svelte-awesome/icons';
     import LicenseAcceptanceModal from './LicenseAcceptanceModal.svelte';
     import type { BaseBible } from '$lib/types/bible';
+    import { sortAndFilterBibles } from '$lib/utils/bible-section-helpers';
+    import { currentLanguageInfo } from '$lib/stores/language.store';
 
     const { currentGuide, isLoadingToOpenPane, openBookChapterSelectorPane, openPredeterminedPassageSelectorPane } =
         getContentContext();
@@ -53,7 +55,7 @@
         <FullPageSpinner />
     {:then bibles}
         <div class="flex w-full flex-col items-center overflow-y-scroll">
-            {#each bibles as bible}
+            {#each sortAndFilterBibles(bibles, $currentLanguageInfo?.id, '') as bible}
                 {@const isPreferredBible = $preferredBibleIds.includes(bible.id)}
                 {@const needsLicenseAccept = $needsLicenseAccepted(bible)}
                 <button
