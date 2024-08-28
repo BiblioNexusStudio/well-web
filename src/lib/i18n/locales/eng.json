@@ -153,9 +153,9 @@
                     "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
                 }
             },
-            "noFiaContent": {
-                "value": "No FIA content found for this passage.",
-                "_context": "Message to display when the FIA content is not downloaded or available"
+            "noGuideContent": {
+                "value": "No content found for this passage.",
+                "_context": "Message to display when the content is not downloaded or available"
             },
             "guide": {
                 "next": {

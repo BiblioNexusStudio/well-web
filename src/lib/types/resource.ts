@@ -73,6 +73,12 @@ export interface ApiParentResource {
     id: ParentResourceId;
 }
 
+export interface StepBasedGuideStep {
+    label: string;
+    contentHTML?: string;
+    audioUrl?: string;
+}
+
 export interface ApiSingleLicense {
     name: string;
     url?: string | null;

@@ -18,6 +18,7 @@
         openContextualMenu,
         currentBibleSection,
         currentTab,
+        currentStepInfo,
     } = getContentContext();
 
     export let bibles: FrontendBibleBook[] = [];
@@ -118,6 +119,13 @@
     {#if $currentBibleSection && $currentTab === ContentTabEnum.Bible && bibles.length}
         <div class="flex-none">
             <PreferredBiblesModal bind:open={preferredBiblesModalOpen} {bibles} />
+        </div>
+    {/if}
+    {#if $currentStepInfo}
+        <div class="flex-none pe-4 text-sm">
+            {$translate('page.passage.resourcePane.fullscreen.currentOfTotalLabel.value', {
+                values: { current: $currentStepInfo.index + 1, total: $currentStepInfo.length },
+            })}
         </div>
     {/if}
 </div>
