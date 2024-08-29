@@ -317,12 +317,53 @@
                 "value": "Translation Guides",
                 "_context": "Title for the Translation Guides section"
             },
+            "whatWouldYouLikeToDo": {
+                "value": "What would you like to do?",
+                "_context": "Header for the guide selection options"
+            },
             "chooseGuide": {
                 "value": "Choose a guide",
                 "_context": "Placeholder text for the dropdown"
             },
+            "allGuides": {
+                "value": "All Guides",
+                "_context": "Header for the menu showing all guides"
+            },
+            "checkingGuides": {
+                "value": "Checking Guides",
+                "_context": "Header for the menu showing checking guides"
+            },
+            "draftingGuides": {
+                "value": "Drafting Guides",
+                "_context": "Header for the menu showing drafting guides"
+            },
+            "startDraftingTranslation": {
+                "value": "I want to start drafting a translation.",
+                "_context": "Button to show drafting guides"
+            },
+            "checkTranslation": {
+                "value": "I want to check my translation.",
+                "_context": "Button to show checking guides"
+            },
+            "helpMeChoose": {
+                "value": "I'm not sure, help me choose.",
+                "_context": "Button to get help choosing a guide"
+            },
+            "showAllGuides": {
+                "value": "I want to choose a guide.",
+                "_context": "Button to show all guides"
+            },
+            "guideExplanationHeader": {
+                "value": "Guide Explanation",
+                "_context": "Header for the guide explanation section"
+            },
+            "guideExplanationContent": {
+                "value": "<p>Guides in the Bible Well are designed to help you understand the Bible better. This helps you grow in your understanding of who God is and what he is doing. It also helps you translate the Bible better and make sure that your Bible translation has been done well.</p><p>If you want to study the Bible or start translating the Bible, please select \"Drafting Guides\" below. This will walk you through a process for understanding the Bible and starting to draft your translation.</p><p>If you want to check your Bible translation to make sure it was done well, select \"Checking Guides\" below. There are several options that help you understand the Bible, especially the difficult passages.</p>",
+                "_context": "Explanation of each type of guide so users know what to choose."
+            },
             "noGuides": {
-                "value": "No guides available for the selected passage"
+                "value": "No guides available for the selected passage",
+                "_context": "Message for when no guides are available for the passage"
             }
         },
         "bibleMenu": {
@@ -337,10 +378,6 @@
             "goToPassage": {
                 "value": "Go to Passage",
                 "_context": "Label for the button to go to the passage"
-            },
-            "goToGuide": {
-                "value": "Go to Guide",
-                "_context": "Label for the button to go to the guide"
             },
             "bible": {
                 "value": "Bible",

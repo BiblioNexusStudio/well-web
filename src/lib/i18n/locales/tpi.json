@@ -246,13 +246,43 @@
         },
         "guideMenu": {
             "translationGuides": {
-                "value": "Toktok Gaid"
+                "value": "Ol Gaid Bilong Translesen"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "Yu laik mekim wanem?"
             },
             "chooseGuide": {
-                "value": "Chusim wanpela Gaid"
+                "value": "Makim wanpela gaid"
+            },
+            "allGuides": {
+                "value": "Olgeta Gaid"
+            },
+            "checkingGuides": {
+                "value": "Ol Gaid Bilong Sekim"
+            },
+            "draftingGuides": {
+                "value": "Ol Gaid Bilong Raitim Nupela Translesen"
+            },
+            "startDraftingTranslation": {
+                "value": "Mi laik kirap raitim nupela translesen."
+            },
+            "checkTranslation": {
+                "value": "Mi laik sekim translesen bilong mi."
+            },
+            "helpMeChoose": {
+                "value": "Mi no save gut, yu ken helpim mi makim."
+            },
+            "showAllGuides": {
+                "value": "Mi laik makim wanpela gaid."
+            },
+            "guideExplanationHeader": {
+                "value": "Eksplenesen Bilong Gaid"
+            },
+            "guideExplanationContent": {
+                "value": "<p>Ol gaid insait long Baibel Wara i mekim long helpim yu long save gut long Baibel. Dispela bai helpim yu long kisim save gut long husat God na wanem samting em i mekim. Em tu bai helpim yu long mekim gutpela translesen bilong Baibel na lukautim olsem Baibel translesen em i bin wokim orait.</p><p>Sapos yu laik stadi long Baibel o stat long translesen bilong Baibel, plis makim \"Ol Gaid Bilong Raitim Nupela Translesen\" daunbilo. Dispela bai wokim yu long wanpela rot bilong kisim save gut long Baibel na kirapim raitim bilong yu.</p><p>Sapos yu laik sekim translesen bilong Baibel bilong yu long lukim em i wokim orait, makim \"Ol Gaid Bilong Sekim\" daunbilo. I gat sampela rot bilong helpim yu long save gut long Baibel, special long ol hap tok i hatwok long save.</p>"
             },
             "noGuides": {
-                "value": "Nogat Gaid i stap long dispela hap riding"
+                "value": "Nogat gaid bilong dispela hap tok yu bin makim"
             }
         },
         "bibleMenu": {
@@ -264,9 +294,6 @@
             },
             "goToPassage": {
                 "value": "Go long Hap Riding"
-            },
-            "goToGuide": {
-                "value": "Go long Gaid"
             },
             "bible": {
                 "value": "Buk Tambu"

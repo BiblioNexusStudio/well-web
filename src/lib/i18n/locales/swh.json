@@ -246,13 +246,43 @@
         },
         "guideMenu": {
             "translationGuides": {
-                "value": "Mwongozo wa Tafsiri"
+                "value": "Miongozo ya Tafsiri"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "Ungependa kufanya nini?"
             },
             "chooseGuide": {
-                "value": "Chagua Mwongozo"
+                "value": "Chagua mwongozo"
+            },
+            "allGuides": {
+                "value": "Miongozo Yote"
+            },
+            "checkingGuides": {
+                "value": "Miongozo ya Kukagua"
+            },
+            "draftingGuides": {
+                "value": "Miongozo ya Kuandika"
+            },
+            "startDraftingTranslation": {
+                "value": "Nataka kuanza kuandika tafsiri."
+            },
+            "checkTranslation": {
+                "value": "Nataka kukagua tafsiri yangu."
+            },
+            "helpMeChoose": {
+                "value": "Sina uhakika, nisaidie kuchagua."
+            },
+            "showAllGuides": {
+                "value": "Nataka kuchagua mwongozo."
+            },
+            "guideExplanationHeader": {
+                "value": "Maelezo ya Mwongozo"
+            },
+            "guideExplanationContent": {
+                "value": "<p>Miongozo katika Bible Well imeundwa ili kukusaidia kuelewa Biblia vizuri zaidi. Hii inakusaidia kukua katika kuelewa wewe ni nani na Mungu anafanya nini. Pia inakusaidia kutafsiri Biblia vizuri zaidi na kuhakikisha kwamba tafsiri yako ya Biblia imefanywa vizuri.</p><p>Ikiwa unataka kusoma Biblia au kuanza kutafsiri Biblia, tafadhali chagua \"Miongozo ya Kuandika\" hapa chini. Hii itakupitisha katika mchakato wa kuelewa Biblia na kuanza kuandika tafsiri yako.</p><p>Ikiwa unataka kukagua tafsiri yako ya Biblia kuhakikisha imefanywa vizuri, chagua \"Miongozo ya Kukagua\" hapa chini. Kuna chaguo kadhaa ambazo zinakusaidia kuelewa Biblia, hasa vifungu vigumu.</p>"
             },
             "noGuides": {
-                "value": "Hakuna mwongozo wa tafsiri uliopatikana kwa kifungu hiki."
+                "value": "Hakuna miongozo inayopatikana kwa kifungu kilichochaguliwa"
             }
         },
         "bibleMenu": {
@@ -264,9 +294,6 @@
             },
             "goToPassage": {
                 "value": "Nenda kwa Sehemu"
-            },
-            "goToGuide": {
-                "value": "Nenda kwa Mwongozo"
             },
             "bible": {
                 "value": "Biblia"

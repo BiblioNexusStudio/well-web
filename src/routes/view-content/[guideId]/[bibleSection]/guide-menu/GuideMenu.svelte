@@ -1,8 +1,13 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import { settings } from '$lib/stores/settings.store';
-    import type { Setting } from '$lib/types/settings';
-    import { PredeterminedPassageGuides } from '$lib/types/resource';
+    import { SettingShortNameEnum, type Setting } from '$lib/types/settings';
+    import {
+        PredeterminedPassageGuides,
+        DraftingGuides,
+        CheckingGuides,
+        type ApiParentResource,
+    } from '$lib/types/resource';
     import {
         guidesAvailableForBibleSection,
         guidesAvailableInCurrentLanguage,
@@ -14,11 +19,18 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import SwishHeader from '$lib/components/SwishHeader.svelte';
     import { getContentContext } from '../context';
-    import Spinner from '$lib/components/Spinner.svelte';
+    import GuideList from './GuideList.svelte';
+    import MenuButton from '../MenuButton.svelte';
+    import GuideExplanation from './GuideExplanation.svelte';
+
+    enum GuideMenuPage {
+        All = 'All',
+        Drafting = 'Drafting',
+        Checking = 'Checking',
+        Explanation = 'Explanation',
+    }
 
     const {
-        currentGuide,
-        isLoadingToOpenPane,
         openPredeterminedPassageSelectorPane,
         openBookChapterSelectorPane,
         closeContextualMenu,
@@ -26,9 +38,22 @@
         setCurrentGuide,
     } = getContentContext();
 
-    $: selectedGuide = $currentGuide;
+    let currentPage: GuideMenuPage | null = null;
+    let isLockedToSrv = false;
 
     $: availableGuidesPromise = fetchAvailableGuides($currentBibleSection, $settings, $currentLanguageInfo, $isOnline);
+
+    $: {
+        availableGuidesPromise.then((_) => {
+            const showOnlySrvResources = !!$settings.find(
+                (setting) => setting.shortName === SettingShortNameEnum.showOnlySrvResources
+            )?.value;
+            isLockedToSrv = showOnlySrvResources;
+            if (isLockedToSrv) {
+                currentPage = GuideMenuPage.Drafting;
+            }
+        });
+    }
 
     async function fetchAvailableGuides(
         bibleSection: BibleSection | null,
@@ -43,7 +68,7 @@
         }
     }
 
-    async function openGuideMenu() {
+    async function selectGuide(selectedGuide: ApiParentResource) {
         // When using a selector pane we aren't immediately setting the guide, but are instead relying on
         // the passage selector to set the guide once the user finishes passage selection. This prevents the following:
         //   - User selects guide, background fetch happens for current Bible section
@@ -58,9 +83,17 @@
             setCurrentGuide(selectedGuide);
         }
     }
+
+    function filterToCheckingGuides(guides: ApiParentResource[]) {
+        return guides.filter((guide) => CheckingGuides.includes(guide.id));
+    }
+
+    function filterToDraftingGuides(guides: ApiParentResource[]) {
+        return guides.filter((guide) => DraftingGuides.includes(guide.id));
+    }
 </script>
 
-<div class="z-50 flex h-full w-full flex-col">
+<div class="z-50 flex h-full w-full flex-col items-center pb-20">
     <SwishHeader
         bgcolor="bg-[#EAAA08]"
         title={$translate('page.guideMenu.translationGuides.value')}
@@ -69,44 +102,69 @@
     {#await availableGuidesPromise}
         <FullPageSpinner />
     {:then availableGuides}
-        <div class="flex w-full flex-col items-center overflow-y-auto">
-            {#if !availableGuides || availableGuides.length === 0}
-                <h3 class="my-2">
-                    {$translate('page.guideMenu.noGuides.value')}
-                </h3>
-            {:else}
-                {#each availableGuides as guideResource}
-                    {@const isCurrentGuide = guideResource.id === selectedGuide?.id}
-                    <button
-                        on:click={() => (selectedGuide = guideResource)}
-                        class="my-2 flex w-11/12 rounded-xl p-4 {isCurrentGuide
-                            ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
-                            : 'border'}"
-                        data-app-insights-event-name="guide-menu-resource-selected"
-                        data-app-insights-dimensions={`guideResource,${guideResource.displayName}`}
+        {@const draftingGuides = filterToDraftingGuides(availableGuides)}
+        {@const checkingGuides = filterToCheckingGuides(availableGuides)}
+        <div class="flex w-full max-w-[65ch] flex-col items-center overflow-y-auto pb-2">
+            {#if currentPage === null}
+                <div class="text-md py-2 text-center">{$translate('page.guideMenu.whatWouldYouLikeToDo.value')}</div>
+                {#if draftingGuides.length}
+                    <MenuButton
+                        onClick={() => (currentPage = GuideMenuPage.Drafting)}
+                        data-app-insights-event-name="guide-menu-start-drafting"
                     >
-                        <span class="text-sm">{guideResource.displayName}</span>
-                        <span class="mx-1 text-sm">-</span>
-                        <span class="text-sm text-[#98A2B3]">{guideResource.shortName}</span>
-                    </button>
-                {/each}
+                        {$translate('page.guideMenu.startDraftingTranslation.value')}
+                    </MenuButton>
+                {/if}
+                {#if checkingGuides.length}
+                    <MenuButton
+                        onClick={() => (currentPage = GuideMenuPage.Checking)}
+                        data-app-insights-event-name="guide-menu-start-checking"
+                    >
+                        {$translate('page.guideMenu.checkTranslation.value')}
+                    </MenuButton>
+                {/if}
+                {#if checkingGuides.length && draftingGuides.length}
+                    <MenuButton
+                        onClick={() => (currentPage = GuideMenuPage.Explanation)}
+                        data-app-insights-event-name="guide-menu-see-explanation"
+                    >
+                        {$translate('page.guideMenu.helpMeChoose.value')}
+                    </MenuButton>
+                {/if}
+                <MenuButton
+                    onClick={() => (currentPage = GuideMenuPage.All)}
+                    data-app-insights-event-name="guide-menu-all-guides"
+                >
+                    {$translate('page.guideMenu.showAllGuides.value')}
+                </MenuButton>
+            {:else if currentPage === GuideMenuPage.All}
+                <GuideList
+                    back={() => (currentPage = null)}
+                    title={$translate('page.guideMenu.allGuides.value')}
+                    guides={availableGuides}
+                    {selectGuide}
+                />
+            {:else if currentPage === GuideMenuPage.Checking}
+                <GuideList
+                    back={() => (currentPage = null)}
+                    title={$translate('page.guideMenu.checkingGuides.value')}
+                    guides={checkingGuides}
+                    {selectGuide}
+                />
+            {:else if currentPage === GuideMenuPage.Drafting}
+                <GuideList
+                    back={isLockedToSrv ? null : () => (currentPage = null)}
+                    title={$translate('page.guideMenu.draftingGuides.value')}
+                    guides={draftingGuides}
+                    {selectGuide}
+                />
+            {:else if currentPage === GuideMenuPage.Explanation}
+                <GuideExplanation
+                    back={() => (currentPage = null)}
+                    showDrafting={() => (currentPage = GuideMenuPage.Drafting)}
+                    showChecking={() => (currentPage = GuideMenuPage.Checking)}
+                />
             {/if}
         </div>
-        {#if !!availableGuides && availableGuides.length > 0}
-            <div class="mb-24 flex flex-grow items-end px-4">
-                <button
-                    disabled={!selectedGuide || $isLoadingToOpenPane}
-                    on:click={openGuideMenu}
-                    class="btn btn-primary w-full"
-                    data-app-insights-event-name="guide-menu-select-guide-button-clicked"
-                >
-                    {#if $isLoadingToOpenPane}
-                        <Spinner />
-                    {:else}
-                        {$translate('page.bibleMenu.goToGuide.value')}
-                    {/if}
-                </button>
-            </div>
-        {/if}
     {/await}
 </div>

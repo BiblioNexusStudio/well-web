@@ -31,6 +31,9 @@ export const SrvResources = [
 
 export const PredeterminedPassageGuides = [ParentResourceId.FIA];
 
+export const DraftingGuides = [ParentResourceId.FIA];
+export const CheckingGuides = [ParentResourceId.UwTranslationNotes];
+
 export const SubgroupedTextResourceRegexes: Partial<Record<ParentResourceId, RegExp>> = {
     [ParentResourceId.UwTranslationNotes]: /(.*)\s*\(.*\)/,
 };
