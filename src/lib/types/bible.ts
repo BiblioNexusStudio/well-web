@@ -35,6 +35,7 @@ export interface BaseBible {
     name: string;
     languageId: number;
     restrictedLicense?: boolean;
+    greekAlignment?: boolean;
     licenseInfo: ApiLicenseInfo | null;
 }
 

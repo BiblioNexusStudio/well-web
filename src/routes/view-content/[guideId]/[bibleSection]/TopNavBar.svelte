@@ -28,12 +28,16 @@
     export let currentBibleId: number | null;
 
     $: bibleSectionTitle = calculateBibleSectionTitle(bookCodesToNames, $currentBibleSection);
-    $: canEnableAlignmentMode = currentBibleId === 1 && isNewTestament($currentBibleSection) && $isOnline;
+    $: canEnableAlignmentMode = bibleHasAlignment(currentBibleId) && isNewTestament($currentBibleSection) && $isOnline;
 
     $: {
-        if ((!isNewTestament($currentBibleSection) || currentBibleId !== 1) && alignmentModeEnabled) {
+        if ((!isNewTestament($currentBibleSection) || !bibleHasAlignment(currentBibleId)) && alignmentModeEnabled) {
             alignmentModeEnabled = false;
         }
+    }
+
+    function bibleHasAlignment(bibleId: number | null) {
+        return bibleId === 1 || bibles.find((b) => b.id === bibleId)?.greekAlignment;
     }
 
     function handleWindowClick(event: MouseEvent) {
