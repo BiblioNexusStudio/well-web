@@ -11,7 +11,7 @@
 
     onMount(() => {
         if (hasSavedContentViewerContext()) {
-            goto(buildContentViewerPath(null, null));
+            goto(buildContentViewerPath(null, null, null, undefined));
         } else {
             loading = false;
         }

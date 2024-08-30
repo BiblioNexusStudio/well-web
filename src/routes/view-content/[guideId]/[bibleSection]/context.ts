@@ -25,6 +25,7 @@ export function createContentContext() {
     const currentTab = writable<ContentTabEnum>(ContentTabEnum.Bible);
     const currentBibleSection = writable<BibleSection | null>(null);
     const currentGuide = writable<ApiParentResource | null>(null);
+    const currentGuideStepIndex = writable<number | null>(null);
     const currentPane = writable<ContentPaneInfo | null>(null);
     const currentStepInfo = writable<{ index: number; length: number } | null>(null);
     const isShowingContextualMenu = writable(false);
@@ -38,6 +39,7 @@ export function createContentContext() {
         currentTab: { subscribe: currentTab.subscribe },
         currentBibleSection: { subscribe: currentBibleSection.subscribe },
         currentGuide: { subscribe: currentGuide.subscribe },
+        currentGuideStepIndex: { subscribe: currentGuideStepIndex.subscribe },
         currentPane: { subscribe: currentPane.subscribe },
         currentStepInfo: { subscribe: currentStepInfo.subscribe },
 
@@ -86,6 +88,10 @@ export function createContentContext() {
             } else if (tab === ContentTabEnum.LibraryMenu && get(passageSearchBibleSection) !== null) {
                 isPassageSearch.set(true);
             }
+            const searchParams = new URLSearchParams(window.location.search);
+            searchParams.set('tab', tab);
+            const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+            history.replaceState(null, '', newUrl);
         },
 
         closeCurrentPane: () => {
@@ -99,11 +105,23 @@ export function createContentContext() {
         closeContextualMenu: () => isShowingContextualMenu.set(false),
 
         setCurrentGuide: (guide: ApiParentResource | null) => {
-            goto(buildContentViewerPath(guide?.id, get(context.currentBibleSection)));
+            goto(buildContentViewerPath(guide?.id, null, get(context.currentBibleSection), undefined));
+        },
+
+        setCurrentGuideStepIndex: (stepIndex: number | null) => {
+            currentGuideStepIndex.set(stepIndex);
+            const searchParams = new URLSearchParams(window.location.search);
+            if (stepIndex !== null) {
+                searchParams.set('step', stepIndex.toString());
+            } else {
+                searchParams.delete('step');
+            }
+            const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+            history.replaceState(null, '', newUrl);
         },
 
         setCurrentBibleSectionAndCurrentGuide: (bibleSection: BibleSection | null, guide: ApiParentResource | null) => {
-            goto(buildContentViewerPath(guide?.id, bibleSection));
+            goto(buildContentViewerPath(guide?.id, null, bibleSection, undefined));
         },
 
         setCurrentStepInfo: (index: number, length: number) => {
@@ -136,6 +154,16 @@ export function createContentContext() {
             if (get(currentBibleSection) && tabParam) {
                 context.setCurrentTab(tabParam as ContentTabEnum);
             }
+
+            const stepParam = searchParams.get('step');
+            if (stepParam !== null) {
+                const stepIndex = parseInt(stepParam);
+                if (!isNaN(stepIndex)) {
+                    currentGuideStepIndex.set(stepIndex);
+                }
+            } else {
+                currentGuideStepIndex.set(null);
+            }
         },
 
         setIsPassageSearch: (value: boolean) => {
@@ -153,14 +181,24 @@ export function createContentContext() {
 
 export function buildContentViewerPath(
     guideId: number | string | undefined | null,
+    guideStepIndex: number | string | null,
     bibleSection: BibleSection | string | null,
-    tab?: ContentTabEnum | null
+    tab: ContentTabEnum | undefined
 ): string {
     const guidePart = guideId ?? '-';
     const bibleSectionPart =
         typeof bibleSection === 'string' ? bibleSection : bibleSectionToString(bibleSection) ?? '-';
-    const tabPart = tab ? `?tab=${tab}` : '';
-    return `/view-content/${guidePart}/${bibleSectionPart}${tabPart}`;
+    const queryParams = new URLSearchParams(window.location.search);
+    if (tab !== undefined) {
+        queryParams.set('tab', tab);
+    }
+    if (guideStepIndex === null) {
+        queryParams.delete('step');
+    } else {
+        queryParams.set('step', guideStepIndex.toString());
+    }
+    const queryString = queryParams.toString();
+    return `/view-content/${guidePart}/${bibleSectionPart}${queryString ? `?${queryString}` : ''}`;
 }
 
 export function getContentContext() {
