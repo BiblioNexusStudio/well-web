@@ -60,6 +60,7 @@
     const {
         currentGuide,
         currentBibleSection,
+        currentGuideStepIndex,
         currentTab,
         isShowingContextualMenu,
         openBookChapterSelectorPane,
@@ -78,7 +79,7 @@
     let isInitialMount = true;
 
     $: if (!isInitialMount) {
-        saveContentViewerContext($currentGuide, $currentBibleSection, $currentTab, $page.url.searchParams);
+        saveContentViewerContext($currentGuide, $currentGuideStepIndex, $currentBibleSection, $currentTab);
     } else {
         isInitialMount = false;
     }
@@ -92,7 +93,6 @@
 
     let currentBibleId: number | null = null;
     let alignmentModeEnabled = false;
-    let bibleSelectionScroll: number | undefined;
     let baseFetchPromise: Promise<[void, void]> | undefined;
     let resourceFetchPromise: Promise<void> | undefined;
     let multiClipAudioStates: Record<string, MultiClipAudioState> = {};
@@ -310,8 +310,8 @@
                 <div class="px-4 pb-4 {$currentTab !== ContentTabEnum.Bible && 'hidden'}">
                     <div class="m-auto max-w-[65ch]">
                         <ButtonCarousel
-                            bind:selectedValue={currentBibleId}
-                            bind:scroll={bibleSelectionScroll}
+                            selectedValue={currentBibleId}
+                            setSelectedValue={(value) => (currentBibleId = value)}
                             buttons={(bibleData?.biblesForTabs ?? []).map((bible) => ({
                                 value: bible.id,
                                 label: bible.abbreviation,
