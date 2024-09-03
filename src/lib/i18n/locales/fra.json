@@ -246,13 +246,43 @@
         },
         "guideMenu": {
             "translationGuides": {
-                "value": "Guides de Traduction"
+                "value": "Guides de traduction"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "Que voulez-vous faire?"
             },
             "chooseGuide": {
-                "value": "Choisir un Guide"
+                "value": "Choisissez un guide"
+            },
+            "allGuides": {
+                "value": "Tous les guides"
+            },
+            "checkingGuides": {
+                "value": "Guides de vérification"
+            },
+            "draftingGuides": {
+                "value": "Guides de rédaction"
+            },
+            "startDraftingTranslation": {
+                "value": "Je veux commencer à rédiger une traduction."
+            },
+            "checkTranslation": {
+                "value": "Je veux vérifier ma traduction."
+            },
+            "helpMeChoose": {
+                "value": "Je ne suis pas sûr, aidez-moi à choisir."
+            },
+            "showAllGuides": {
+                "value": "Je veux choisir un guide."
+            },
+            "guideExplanationHeader": {
+                "value": "Explication du guide"
+            },
+            "guideExplanationContent": {
+                "value": "<p>Les guides de la Bible Well sont conçus pour vous aider à mieux comprendre la Bible. Cela vous aide à grandir dans votre compréhension de qui est Dieu et de ce qu'il fait. Cela vous aide également à mieux traduire la Bible et à vous assurer que votre traduction biblique a été bien faite.</p><p>Si vous souhaitez étudier la Bible ou commencer à la traduire, veuillez sélectionner « Guides de rédaction » ci-dessous. Cela vous guidera à travers un processus pour comprendre la Bible et commencer à rédiger votre traduction.</p><p>Si vous souhaitez vérifier votre traduction de la Bible pour vous assurer qu'elle a été bien faite, sélectionnez « Guides de vérification » ci-dessous. Il existe plusieurs options qui vous aident à comprendre la Bible, en particulier les passages difficiles.</p>"
             },
             "noGuides": {
-                "value": "Aucun guide de traduction n'est disponible pour ce passage."
+                "value": "Aucun guide disponible pour le passage sélectionné"
             }
         },
         "bibleMenu": {
@@ -264,9 +294,6 @@
             },
             "goToPassage": {
                 "value": "Aller au Passage"
-            },
-            "goToGuide": {
-                "value": "Aller au guide"
             },
             "bible": {
                 "value": "Bible"

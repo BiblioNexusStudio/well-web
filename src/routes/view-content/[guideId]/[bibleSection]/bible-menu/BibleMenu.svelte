@@ -16,6 +16,7 @@
     import type { BaseBible } from '$lib/types/bible';
     import { sortAndFilterBibles } from '$lib/utils/bible-section-helpers';
     import { currentLanguageInfo } from '$lib/stores/language.store';
+    import MenuButton from '../MenuButton.svelte';
 
     const { currentGuide, isLoadingToOpenPane, openBookChapterSelectorPane, openPredeterminedPassageSelectorPane } =
         getContentContext();
@@ -58,20 +59,19 @@
             {#each sortAndFilterBibles(bibles, $currentLanguageInfo?.id, '') as bible}
                 {@const isPreferredBible = $preferredBibleIds.includes(bible.id)}
                 {@const needsLicenseAccept = $needsLicenseAccepted(bible)}
-                <button
-                    on:click={() =>
+                <MenuButton
+                    selected={isPreferredBible}
+                    disabled={needsLicenseAccept}
+                    data-app-insights-event-name="bible-menu-bible-selected"
+                    data-app-insights-dimensions={`bibleName,${bible.name}`}
+                    onClick={() =>
                         needsLicenseAccept
                             ? (bibleForAcceptanceModal = bible)
                             : updatePreferredBibleIds(bible.id, isPreferredBible)}
-                    class="group my-2 flex w-11/12 flex-wrap items-center rounded-xl p-4 {needsLicenseAccept &&
-                        'bg-gray-200'} {isPreferredBible ? 'border-2 border-[#3db6e7] bg-[#f0faff]' : 'border'}"
-                    data-app-insights-event-name="bible-menu-bible-selected"
-                    data-app-insights-dimensions={`bibleName,${bible.name}`}
                 >
-                    <span class="text-sm {needsLicenseAccept && 'opacity-75'}">{bible.name} ({bible.abbreviation})</span
-                    >
-                    <span class="mx-1 text-sm {needsLicenseAccept && 'opacity-75'}">-</span>
-                    <span class="text-sm text-[#98A2B3] {needsLicenseAccept && 'opacity-75'}"
+                    <span class={needsLicenseAccept ? 'opacity-75' : ''}>{bible.name} ({bible.abbreviation})</span>
+                    <span class="mx-1 {needsLicenseAccept && 'opacity-75'}">-</span>
+                    <span class="text-[#98A2B3] {needsLicenseAccept && 'opacity-75'}"
                         >{lookupLanguageInfoById(bible.languageId)?.iso6393Code}</span
                     >
                     <span class="flex-grow" />
@@ -84,7 +84,7 @@
                             <Icon data={warning} />
                         </button>
                     {/if}
-                </button>
+                </MenuButton>
             {:else}
                 <h3 class="my-2">{$translate('page.bibleMenu.noBibles.value')}</h3>
             {/each}
