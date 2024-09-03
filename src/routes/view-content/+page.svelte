@@ -4,6 +4,6 @@
     import { buildContentViewerPath } from './[guideId]/[bibleSection]/context';
 
     if (browser) {
-        goto(buildContentViewerPath(null, null));
+        goto(buildContentViewerPath(null, null, null, undefined));
     }
 </script>

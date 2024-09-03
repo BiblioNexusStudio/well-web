@@ -15,23 +15,24 @@
     export let multiClipAudioStates: Record<string, MultiClipAudioState> | undefined = undefined;
     export let audioPlayerKey: string | undefined;
 
-    const { setCurrentStepInfo, clearCurrentStepInfo } = getContentContext();
+    const { currentGuideStepIndex, setCurrentGuideStepIndex, setCurrentStepInfo, clearCurrentStepInfo } =
+        getContentContext();
 
     let topOfSteps: HTMLElement[] = [];
-    let selectedStepIndex = 0;
-    let selectedStepScroll: number | undefined;
-    let previousStepIndex = 0;
+    $: guideStepIndex = $currentGuideStepIndex ?? 0;
+    let previousStepIndex = guideStepIndex;
 
     afterUpdate(() => {
-        if (selectedStepIndex !== previousStepIndex) {
-            topOfSteps[selectedStepIndex]?.scrollIntoView();
-            previousStepIndex = selectedStepIndex;
+        if (guideStepIndex !== previousStepIndex) {
+            topOfSteps[guideStepIndex]?.scrollIntoView();
+            previousStepIndex = guideStepIndex;
         }
     });
 
-    $: isShowing ? setCurrentStepInfo(selectedStepIndex, steps.length) : clearCurrentStepInfo();
-    $: isShowing && setAudioPlayerForStep(selectedStepIndex);
+    $: isShowing ? setCurrentStepInfo(guideStepIndex, steps.length) : clearCurrentStepInfo();
+    $: isShowing && setAudioPlayerForStep(guideStepIndex);
     $: populateAudioState(steps);
+    $: isShowing && $currentGuideStepIndex === null && setCurrentGuideStepIndex(0);
 
     // Populate the audio state object with key/values like
     //   guideStep1 => MultiClipAudioState
@@ -57,8 +58,7 @@
     }
 
     function goToNextStep() {
-        selectedStepIndex = selectedStepIndex + 1;
-        selectedStepScroll = selectedStepIndex;
+        setCurrentGuideStepIndex(guideStepIndex + 1);
     }
 </script>
 
@@ -66,14 +66,14 @@
     <div class="flex flex-col px-4 pb-4 {!isShowing && 'hidden'}">
         <progress
             class="progress progress-primary mx-auto mb-2 h-1 max-w-[65ch]"
-            value={selectedStepIndex + 1}
+            value={guideStepIndex + 1}
             max={steps.length}
         />
         <div>
             <div class="relative m-auto max-w-[65ch]">
                 <ButtonCarousel
-                    bind:selectedValue={selectedStepIndex}
-                    bind:scroll={selectedStepScroll}
+                    selectedValue={isShowing ? guideStepIndex : -1}
+                    setSelectedValue={setCurrentGuideStepIndex}
                     buttons={steps.map((step, stepIndex) => ({
                         value: stepIndex,
                         label: step.label ?? '',
@@ -89,7 +89,7 @@
         <div class="flex flex-grow">
             {#if steps.length > 0}
                 {#each steps as step, stepIndex}
-                    <div class={selectedStepIndex === stepIndex ? 'flex flex-grow flex-col' : 'hidden'}>
+                    <div class={guideStepIndex === stepIndex ? 'flex flex-grow flex-col' : 'hidden'}>
                         <div class="flex-grow overflow-y-scroll">
                             <div bind:this={topOfSteps[stepIndex]} />
                             {#if step.contentHTML}
