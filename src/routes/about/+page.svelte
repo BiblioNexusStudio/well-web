@@ -97,7 +97,7 @@
                                 {:else}
                                     <span>©</span>
                                     {#if licenseInfo.copyright.dates}
-                                        <span>
+                                        <span class="whitespace-nowrap">
                                             {licenseInfo.copyright.dates}
                                         </span>
                                     {/if}
