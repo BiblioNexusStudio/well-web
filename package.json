@@ -51,7 +51,7 @@
         "async-es": "^3.2.4",
         "cupertino-pane": "^1.4.2",
         "daisyui": "^4.5.0",
-        "svelte": "^4.2.1",
+        "svelte": "^4.2.19",
         "svelte-awesome": "^3.2.1",
         "svelte-i18n": "3.7.3",
         "svelte-meta-tags": "^3.0.4",
