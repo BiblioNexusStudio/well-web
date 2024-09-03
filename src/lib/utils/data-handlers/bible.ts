@@ -1,4 +1,4 @@
-import { currentLanguageInfo, lookupLanguageInfoByCode } from '$lib/stores/language.store';
+import { currentLanguageInfo } from '$lib/stores/language.store';
 import type { UrlWithMetadata } from '$lib/types/file-manager';
 import { audioFileTypeForBrowser } from '../browser';
 import {
@@ -111,11 +111,7 @@ export async function fetchAllBibles(): Promise<BaseBible[]> {
     }
 }
 
-export async function fetchBiblesForLanguageCode(languageCode: string): Promise<ApiBible[]> {
-    const languageId = lookupLanguageInfoByCode(languageCode)?.id;
-
-    if (!languageId) return [];
-
+async function fetchBiblesForLanguage(languageId: number): Promise<ApiBible[]> {
     try {
         const [bibles, restrictedBibles] = await Promise.all([
             fetchFromCacheOrApi(...biblesForLanguageEndpoint(languageId)),
@@ -219,9 +215,9 @@ export async function getBibleBookCodesToName(languageId: number, retry = true):
         return memoizedBibleBookCodesToName.get(languageId)!;
     }
 
-    const bibleData = (await fetchFromCacheOrApi(...biblesForLanguageEndpoint(languageId))) as ApiBible[];
-    if (bibleData[0]) {
-        const result = new Map(bibleData[0].books.map(({ displayName, bookCode }) => [bookCode, displayName]));
+    const bibles = await fetchBiblesForLanguage(languageId);
+    if (bibles[0]) {
+        const result = new Map(bibles[0].books.map(({ displayName, bookCode }) => [bookCode, displayName]));
         memoizedBibleBookCodesToName.set(languageId, result);
         return result;
     } else {
