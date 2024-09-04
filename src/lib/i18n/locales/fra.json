@@ -84,6 +84,9 @@
                     "plural": {
                         "value": "{count} ressources"
                     }
+                },
+                "error": {
+                    "value": "Erreur lors du chargement de la ressource"
                 }
             },
             "alignmentMode": {

@@ -43,8 +43,10 @@ export async function buildLibraryResourceGroupingsWithMetadata(
     scriptDirection: DirectionCode | undefined
 ) {
     const parentResourceIdMap = get(parentResourceIdToInfoMap);
+    // Some audio resources are dependent on their text counterparts and shouldn't be shown standalone in the list
+    const filteredResources = allResources.filter((r) => !r.dependentOnId && r.mediaType !== MediaType.Audio);
     const groupingMap = groupBy(
-        allResources,
+        filteredResources,
         (r) => r.parentResourceId,
         (v) => v
     );

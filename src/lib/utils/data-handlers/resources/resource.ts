@@ -18,7 +18,7 @@ import {
     type ResourceContentInfo,
     type ResourceContentMetadata,
     type ResourceContentTiptap,
-    type TextResourceContentJustId,
+    type BasicTextResourceContent,
     SrvResources,
 } from '$lib/types/resource';
 import { range } from '$lib/utils/array';
@@ -28,21 +28,27 @@ import { asyncFilter } from '$lib/utils/async-array';
 import { SettingShortNameEnum } from '$lib/types/settings';
 import { settings } from '$lib/stores/settings.store';
 
-export function resourceContentApiPath(
-    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
-) {
+interface ResourceContentInfoForPath {
+    mediaType?: MediaType;
+    mediaTypeName?: MediaType;
+    id?: number;
+    contentId?: number;
+    version?: number;
+}
+
+export function resourceContentApiPath(resourceContent: ResourceContentInfoForPath) {
     const mediaType = 'mediaType' in resourceContent ? resourceContent.mediaType : resourceContent.mediaTypeName;
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
     if (mediaType === MediaType.Audio) {
-        return `/resources/${id}/content?audioType=${audioFileTypeForBrowser()}&version=${resourceContent.version}`;
+        return `/resources/${id}/content?audioType=${audioFileTypeForBrowser()}&version=${
+            resourceContent.version ?? -1
+        }`;
     } else {
-        return `/resources/${id}/content?version=${resourceContent.version}`;
+        return `/resources/${id}/content?version=${resourceContent.version ?? -1}`;
     }
 }
 
-export function resourceContentApiFullUrl(
-    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
-) {
+export function resourceContentApiFullUrl(resourceContent: ResourceContentInfoForPath) {
     return apiUrl(resourceContentApiPath(resourceContent));
 }
 
@@ -52,7 +58,7 @@ export function resourceThumbnailApiFullUrl(resourceContent: ResourceContentInfo
 }
 
 export function resourceMetadataApiFullUrl(
-    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | BasicTextResourceContent
 ) {
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
     return apiUrl(`/resources/${id}/metadata?version=${resourceContent.version}`);
@@ -154,7 +160,7 @@ export async function resourceContentsForBibleSection(bibleSection: BibleSection
     return resources;
 }
 
-export async function fetchTextResourceContentAndMetadataBatched<T extends TextResourceContentJustId>(
+export async function fetchTextResourceContentAndMetadataBatched<T extends BasicTextResourceContent>(
     resourceContents: T[]
 ) {
     const ids = resourceContents.map((rc) => rc.id);
@@ -188,7 +194,7 @@ export async function fetchTextResourceContentAndMetadataBatched<T extends TextR
 }
 
 export async function fetchTiptapForResourceContent(
-    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | BasicTextResourceContent
 ): Promise<ResourceContentTiptap | null> {
     try {
         const tiptaps = (await fetchContentFromCacheOrNetwork(resourceContentApiFullUrl(resourceContent))) as
@@ -202,7 +208,7 @@ export async function fetchTiptapForResourceContent(
 }
 
 export async function fetchMetadataForResourceContent(
-    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | TextResourceContentJustId
+    resourceContent: ResourceContentInfo | FileManagerResourceContentInfo | BasicTextResourceContent
 ): Promise<ResourceContentMetadata | null> {
     try {
         return (await fetchContentFromCacheOrNetwork(
@@ -222,7 +228,7 @@ export async function filterToAvailableAssociatedResourceContent(
         return associatedResources;
     }
     return await asyncFilter(associatedResources, async (resource) => {
-        const textResourceContentJustId: TextResourceContentJustId = {
+        const textResourceContentJustId: BasicTextResourceContent = {
             id: resource.contentId,
             version: -1,
             mediaType: MediaType.Text,

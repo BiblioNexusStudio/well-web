@@ -63,6 +63,7 @@ export interface AssociatedResource {
     resourceId: number;
     contentId: number;
     externalId: string;
+    mediaType?: string;
 }
 
 export interface ApiParentResource {
@@ -111,12 +112,15 @@ export interface ResourceContentInfo {
     mediaType: MediaType;
     resourceType: ParentResourceType;
     parentResourceId: ParentResourceId;
+    dependentOnId?: number | null;
     displayName?: string;
 }
 
-export interface TextResourceContentJustId {
+export interface BasicTextResourceContent {
     mediaType: MediaType.Text;
     version: number;
+    audioId?: number;
+    audioVersion?: number;
     id: number;
 }
 
