@@ -36,7 +36,7 @@ interface ResourceContentInfoForPath {
     version?: number;
 }
 
-function resourceContentApiPath(resourceContent: ResourceContentInfoForPath) {
+export function resourceContentApiPath(resourceContent: ResourceContentInfoForPath) {
     const mediaType = 'mediaType' in resourceContent ? resourceContent.mediaType : resourceContent.mediaTypeName;
     const id = 'id' in resourceContent ? resourceContent.id : resourceContent.contentId;
     if (mediaType === MediaType.Audio) {
