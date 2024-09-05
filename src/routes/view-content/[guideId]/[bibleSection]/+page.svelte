@@ -41,11 +41,7 @@
     import BibleMenu from './bible-menu/BibleMenu.svelte';
     import PredeterminedPassageSelectorPane from './bible-menu/PredeterminedPassageSelectorPane.svelte';
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
-    import {
-        MediaType,
-        type ResourceContentInfoWithMetadata,
-        type TextResourceContentJustId,
-    } from '$lib/types/resource';
+    import { MediaType, type BasicTextResourceContent } from '$lib/types/resource';
     import type { BibleSection } from '$lib/types/bible';
     import GuideContent from './guide-content/GuideContent.svelte';
     import FullscreenTextResource from './library-resource-menu/FullscreenTextResource.svelte';
@@ -86,10 +82,7 @@
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
-    let fullscreenTextResourceStacksByTab: Map<
-        ContentTabEnum,
-        (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
-    > = new Map();
+    let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]> = new Map();
 
     let currentBibleId: number | null = null;
     let alignmentModeEnabled = false;
@@ -234,7 +227,7 @@
             openBookChapterSelectorPane(null);
         }
 
-        window.onResourceReferenceClick = (tab: string, contentId: number) => {
+        window.onResourceReferenceClick = (tab: string, contentId: number, audioId: number | undefined) => {
             const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab as ContentTabEnum) ?? [];
             fullscreenTextResourceStack.push({
                 id: contentId,
@@ -246,6 +239,8 @@
                 // to do a StaleWhileRevalidate. This means the content loads fast from the cache but updates in the background each
                 // time it's pulled.
                 version: -1,
+                audioId,
+                audioVersion: -1,
                 mediaType: MediaType.Text,
             });
             fullscreenTextResourceStacksByTab.set(tab as ContentTabEnum, fullscreenTextResourceStack);

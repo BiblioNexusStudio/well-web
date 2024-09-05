@@ -16,7 +16,7 @@
         SrvResources,
         type ResourceContentInfo,
         type ResourceContentInfoWithMetadata,
-        type TextResourceContentJustId,
+        type BasicTextResourceContent,
     } from '$lib/types/resource';
     import {
         buildLibraryResourceGroupingsWithMetadata,
@@ -41,10 +41,7 @@
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
     export let tab: ContentTabEnum;
-    export let fullscreenTextResourceStacksByTab: Map<
-        ContentTabEnum,
-        (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
-    >;
+    export let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]>;
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
@@ -134,9 +131,17 @@
     function resourceSelected(resource: ResourceContentInfoWithMetadata) {
         if (resource.mediaType === MediaType.Image || resource.mediaType === MediaType.Video) {
             currentFullscreenMediaResourceIndex = mediaResources.indexOf(resource);
-        } else {
+        } else if (resource.mediaType === MediaType.Text) {
             const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
-            fullscreenTextResourceStack.push(resource);
+            const audioResource = [...(resources || []), ...(passageSearchResources || [])].find(
+                (r) => r.dependentOnId === resource.id && r.mediaType === MediaType.Audio
+            );
+            fullscreenTextResourceStack.push({
+                ...resource,
+                mediaType: MediaType.Text,
+                audioId: audioResource?.id,
+                audioVersion: audioResource?.version,
+            });
             fullscreenTextResourceStacksByTab.set(tab, fullscreenTextResourceStack);
             fullscreenTextResourceStacksByTab = fullscreenTextResourceStacksByTab;
         }

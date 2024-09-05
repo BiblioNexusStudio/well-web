@@ -84,6 +84,9 @@
                     "plural": {
                         "value": "{count} risoses"
                     }
+                },
+                "error": {
+                    "value": "As tingting bilong putim risos i no wok gut"
                 }
             },
             "alignmentMode": {

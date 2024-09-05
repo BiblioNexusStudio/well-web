@@ -74,7 +74,7 @@ export function searchResourcesEndpoint(
         }${bookCode ? `&bookCode=${bookCode}` : ''}${startChapter ? `&startChapter=${startChapter}` : ''}${
             endChapter ? `&endChapter=${endChapter}` : ''
         }${startVerse ? `&startVerse=${startVerse}` : ''}${endVerse ? `&endVerse=${endVerse}` : ''}`,
-        2,
+        3,
     ];
 }
 
@@ -99,7 +99,7 @@ export function resourceContentForBookAndChapter(
 ): ApiStringAndCacheBustVersion {
     return [
         `/resources/content/grouped-by-verse?languageId=${languageId}&bookCode=${bookCode}&chapter=${chapterNumber}`,
-        2,
+        3,
     ];
 }
 

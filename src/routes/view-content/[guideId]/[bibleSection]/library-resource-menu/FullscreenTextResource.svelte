@@ -2,7 +2,7 @@
     import { trapFocus } from '$lib/utils/trap-focus';
     import { Icon } from 'svelte-awesome';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
-    import type { ResourceContentInfoWithMetadata, TextResourceContentJustId } from '$lib/types/resource';
+    import { MediaType, type BasicTextResourceContent } from '$lib/types/resource';
     import { _ as translate } from 'svelte-i18n';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import {
@@ -10,18 +10,18 @@
         fetchTiptapForResourceContent,
         filterToAvailableAssociatedResourceContent,
         addThumbnailToVideo,
+        resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
     import { isOnline } from '$lib/stores/is-online.store';
     import type { ContentTabEnum } from '../context';
     import { currentLanguageDirection } from '$lib/stores/language.store';
     import { handleRtlVerseReferences } from '$lib/utils/language-utils';
+    import AudioPlayer from '$lib/components/AudioPlayer.svelte';
+    import { audioFileTypeForBrowser } from '$lib/utils/browser';
 
     export let tab: ContentTabEnum;
-    export let fullscreenTextResourceStacksByTab: Map<
-        ContentTabEnum,
-        (ResourceContentInfoWithMetadata | TextResourceContentJustId)[]
-    >;
+    export let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]>;
 
     $: fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
     $: currentResource = fullscreenTextResourceStack[fullscreenTextResourceStack.length - 1];
@@ -32,7 +32,7 @@
         fullscreenTextResourceStack = fullscreenTextResourceStack;
     }
 
-    async function loadTextContent(resource: ResourceContentInfoWithMetadata | TextResourceContentJustId) {
+    async function loadTextContent(resource: BasicTextResourceContent) {
         const [tiptap, metadata] = await Promise.all([
             fetchTiptapForResourceContent(resource),
             fetchMetadataForResourceContent(resource),
@@ -50,7 +50,17 @@
 
             html = parseTiptapJsonToHtml(tiptap.tiptap, $currentLanguageDirection, tab, availableAssociatedResources);
         }
-        return { html, displayName: handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection) };
+        return {
+            html,
+            audioUrl: resource.audioId
+                ? resourceContentApiFullUrl({
+                      mediaType: MediaType.Audio,
+                      id: resource.audioId,
+                      version: resource.audioVersion,
+                  })
+                : null,
+            displayName: handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection),
+        };
     }
 </script>
 
@@ -74,13 +84,20 @@
                     <div class="btn btn-link text-base-500 opacity-0"><Icon data={chevronLeft} /></div>
                 </div>
             </div>
-            <div class="prose mx-auto overflow-y-scroll px-4 pb-4 md:px-0">
+            <div class="prose mx-auto overflow-y-scroll px-4 pb-4 md:px-0 {!!resource?.audioUrl && 'mb-14'}">
                 {#if resource?.html}
                     {@html resource.html}
                 {:else}
-                    {$translate('page.about.error.value')}
+                    {$translate('page.passage.resourcePane.error.value')}
                 {/if}
             </div>
+            {#if resource?.audioUrl}
+                <div
+                    class="fixed bottom-20 left-0 right-0 z-10 m-auto flex h-14 max-w-[65ch] justify-items-center bg-base-100 px-4"
+                >
+                    <AudioPlayer files={[{ url: resource.audioUrl, type: audioFileTypeForBrowser(), startTime: 0 }]} />
+                </div>
+            {/if}
         {/await}
     </div>
 {/if}

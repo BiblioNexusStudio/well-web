@@ -84,6 +84,9 @@
                     "plural": {
                         "value": "{count} ресурсов"
                     }
+                },
+                "error": {
+                    "value": "Ошибка загрузки ресурса"
                 }
             },
             "alignmentMode": {
