@@ -84,6 +84,9 @@
                     "plural": {
                         "value": "{count} nyenzo"
                     }
+                },
+                "error": {
+                    "value": "Hitilafu kupakia rasilimali"
                 }
             },
             "alignmentMode": {

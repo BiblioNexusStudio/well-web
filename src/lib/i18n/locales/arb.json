@@ -84,6 +84,9 @@
                     "plural": {
                         "value": "{count} موارد"
                     }
+                },
+                "error": {
+                    "value": "خطأ في تحميل المورد"
                 }
             },
             "alignmentMode": {

@@ -107,6 +107,10 @@
                         "value": "{count} resources",
                         "_context": "Label for when there is more than one resource"
                     }
+                },
+                "error": {
+                    "value": "Error loading resource",
+                    "_context": "Message for when a resource fails to load"
                 }
             },
             "alignmentMode": {

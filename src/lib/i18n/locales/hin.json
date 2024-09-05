@@ -84,6 +84,9 @@
                     "plural": {
                         "value": "{count} संसाधन"
                     }
+                },
+                "error": {
+                    "value": "संसाधन लोड करने में त्रुटि"
                 }
             },
             "alignmentMode": {

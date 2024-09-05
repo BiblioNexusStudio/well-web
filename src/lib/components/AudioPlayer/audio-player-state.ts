@@ -1,6 +1,9 @@
 import { isSafariOnMacOrIOS } from '$lib/utils/browser';
 import { formatSecondsToTimeDisplay } from '$lib/utils/time';
-import { writable } from 'svelte/store';
+import type { Unsubscriber } from 'svelte/motion';
+import { get, writable } from 'svelte/store';
+
+const playingGlobalId = writable<string | null>(null);
 
 export enum AudioType {
     mp3 = 'mp3',
@@ -21,6 +24,7 @@ export interface AudioFileInfo {
 // Under the hood this will keep track of each of the files to be included in the clip sequence, including their
 // HTMLAudioElement instances.
 class _MultiClipAudioState {
+    globalId: string;
     currentClipIndex: number;
     clipSequence: _AudioClip[];
     syncSeekPositionTimer: ReturnType<typeof setInterval> | null;
@@ -28,8 +32,10 @@ class _MultiClipAudioState {
     _rangeValue: number;
     _timeDisplay: string;
     _totalTimeDisplay: string;
+    unsubscribePlayingGlobalId: Unsubscriber | undefined;
 
     constructor(files: AudioFileInfo[]) {
+        this.globalId = Math.random().toString(36).substring(2, 15);
         this.currentClipIndex = 0;
         this.syncSeekPositionTimer = null;
         this._rangeValue = 0;
@@ -44,10 +50,21 @@ class _MultiClipAudioState {
                     onpause: this.onpauseFactory(index),
                 })
         );
+        this.unsubscribePlayingGlobalId = playingGlobalId.subscribe((id) => {
+            if (id !== null && id !== this.globalId) {
+                this.pauseAllClipsAndNotify();
+            }
+        });
     }
 
     playOrPause() {
-        this.currentClip()?.isPlaying ? this.pauseAllClips() : this.currentClip()?.play();
+        if (this.currentClip()?.isPlaying) {
+            this.pauseAllClips();
+            playingGlobalId.set(null);
+        } else {
+            playingGlobalId.set(this.globalId);
+            this.currentClip()?.play();
+        }
         this.calculateDisplayAndNotifyStateChanged();
     }
 
@@ -107,6 +124,7 @@ class _MultiClipAudioState {
         this.clipSequence.forEach((state) => state.destroy());
         this.stopSyncingSeekPosition();
         this.calculateDisplayAndNotifyStateChanged();
+        this.unsubscribePlayingGlobalId?.();
     }
 
     // Private methods below
@@ -153,6 +171,7 @@ class _MultiClipAudioState {
             if (this.clipSequence[index]) {
                 this.clipSequence[index]!.isPlaying = true;
             }
+            playingGlobalId.set(this.globalId);
             this.startSyncingSeekPosition();
             this.calculateDisplayAndNotifyStateChanged();
         };
@@ -162,6 +181,9 @@ class _MultiClipAudioState {
         return () => {
             if (this.clipSequence[index]) {
                 this.clipSequence[index]!.isPlaying = false;
+            }
+            if (get(playingGlobalId) === this.globalId) {
+                playingGlobalId.set(null);
             }
             this.stopSyncingSeekPosition();
             this.calculateDisplayAndNotifyStateChanged();
