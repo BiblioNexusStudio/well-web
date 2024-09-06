@@ -65,7 +65,9 @@ export function searchResourcesEndpoint(
     startChapter?: number,
     endChapter?: number,
     startVerse?: number,
-    endVerse?: number
+    endVerse?: number,
+    offSet?: number,
+    limit?: number
 ): ApiStringAndCacheBustVersion {
     const resourceTypesParams = resourceTypes.map((rt) => `resourceTypes=${rt}`).join('&');
     return [
@@ -73,7 +75,9 @@ export function searchResourcesEndpoint(
             resourceTypesParams ? '&' + resourceTypesParams : ''
         }${bookCode ? `&bookCode=${bookCode}` : ''}${startChapter ? `&startChapter=${startChapter}` : ''}${
             endChapter ? `&endChapter=${endChapter}` : ''
-        }${startVerse ? `&startVerse=${startVerse}` : ''}${endVerse ? `&endVerse=${endVerse}` : ''}`,
+        }${startVerse ? `&startVerse=${startVerse}` : ''}${endVerse ? `&endVerse=${endVerse}` : ''}${
+            offSet === 0 ? `&offSet=${offSet}` : ''
+        }${limit ? `&limit=${limit}` : ''}`,
         3,
     ];
 }

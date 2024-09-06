@@ -37,6 +37,9 @@
     import XMarkSmallIcon from '$lib/icons/XMarkSmallIcon.svelte';
     import { bibleSectionToReference } from '$lib/utils/bible-section-helpers';
     import type { BibleSection } from '$lib/types/bible';
+    import ClipboardIcon from '$lib/icons/ClipboardIcon.svelte';
+    import type { ApiParentResource } from '$lib/types/resource';
+    import SearchByResource from './SearchByResource.svelte';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -52,6 +55,8 @@
         openBookChapterSelectorPane,
         passageSearchBibleSection,
         setPassageSearchBibleSection,
+        setIsResourceSearch,
+        isResourceSearch,
     } = getContentContext();
 
     let searchQuery: string = '';
@@ -61,9 +66,10 @@
     let flatResources: ResourceContentInfoWithMetadata[] = [];
     let mediaResources: ResourceContentInfoWithMetadata[] = [];
     let passageSearchResources: ResourceContentInfo[] | undefined;
+    let resourceSearchResources: ResourceContentInfo[] = [];
 
     $: showingPassageSearch = $isPassageSearch && isFullLibrary;
-    $: prepareResources(resources || [], isShowing, passageSearchResources || []);
+    $: prepareResources(resources || [], isShowing, passageSearchResources || [], resourceSearchResources);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(flatResources, 'displayName', searchQuery).length;
     $: hasQuery = searchQuery != '';
@@ -131,6 +137,12 @@
     function resourceSelected(resource: ResourceContentInfoWithMetadata) {
         if (resource.mediaType === MediaType.Image || resource.mediaType === MediaType.Video) {
             currentFullscreenMediaResourceIndex = mediaResources.indexOf(resource);
+            if (currentFullscreenMediaResourceIndex === -1 && $isResourceSearch) {
+                let resourceSearchObject = mediaResources.find((mr) => mr.id === resource.id);
+                if (resourceSearchObject) {
+                    currentFullscreenMediaResourceIndex = mediaResources.indexOf(resourceSearchObject);
+                }
+            }
         } else if (resource.mediaType === MediaType.Text) {
             const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
             const audioResource = [...(resources || []), ...(passageSearchResources || [])].find(
@@ -158,7 +170,8 @@
     async function prepareResources(
         resources: ResourceContentInfo[],
         isShowing: boolean,
-        passageSearchResources: ResourceContentInfo[]
+        passageSearchResources: ResourceContentInfo[],
+        resourceSearchResources: ResourceContentInfo[]
     ) {
         if (!isShowing || (!isFullLibrary && resourceGroupings?.length > 0)) return;
         isLoading = true;
@@ -169,6 +182,11 @@
                 $currentLanguageDirection
             );
             visibleSwish = false;
+        } else if ($isResourceSearch) {
+            resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(
+                resourceSearchResources,
+                $currentLanguageDirection
+            );
         } else {
             resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(resources, $currentLanguageDirection);
         }
@@ -232,6 +250,31 @@
             isLoading = false;
         }
     }
+
+    function openResourceSearchMenu() {
+        setIsResourceSearch(true);
+    }
+
+    async function searchByParentResource(parentResource: ApiParentResource, offset: number | null) {
+        isLoading = true;
+        const currentLanguageId = get(currentLanguageInfo)?.id;
+        let response = (await fetchFromCacheOrApi(
+            ...searchResourcesEndpoint(
+                currentLanguageId,
+                '',
+                [parentResource.resourceType],
+                '',
+                0,
+                0,
+                0,
+                0,
+                offset ?? 0,
+                100
+            )
+        )) as ResourceContentInfo[];
+
+        resourceSearchResources = [...resourceSearchResources, ...response];
+    }
 </script>
 
 {#if isShowing}
@@ -245,6 +288,9 @@
                 <span class="ms-2"><XMarkSmallIcon /></span>
             </button>
         </div>
+    {/if}
+    {#if $isResourceSearch}
+        <SearchByResource bind:resourceSearchResources {isLoading} {searchByParentResource} {resourceSelected} />
     {/if}
     {#if !showingPassageSearch}
         <SwishHeader
@@ -308,7 +354,15 @@
                         data-app-insights-event-name="library-menu-passage-search-button-clicked"
                     >
                         <span class="me-2"><BookIcon /></span>
-                        {$translate('components.search.passageSearch.value')}
+                        {$translate('components.search.passage.value')}
+                    </button>
+                    <button
+                        on:click={openResourceSearchMenu}
+                        class="me-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                        data-app-insights-event-name="library-menu-resource-search-button-clicked"
+                    >
+                        <span class="me-2"><ClipboardIcon /></span>
+                        {$translate('components.search.resource.value')}
                     </button>
                 {/if}
             </div>

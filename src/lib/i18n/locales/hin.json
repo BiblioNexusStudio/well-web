@@ -522,8 +522,17 @@
             "clear": {
                 "value": "हटाएं"
             },
-            "passageSearch": {
-                "value": "पाठ खोजें"
+            "passage": {
+                "value": "पाठ"
+            },
+            "resource": {
+                "value": "संसाधन"
+            },
+            "resources": {
+                "value": "संसाधन"
+            },
+            "loadMore": {
+                "value": "और लोड करें"
             }
         }
     }
