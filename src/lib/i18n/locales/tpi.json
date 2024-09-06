@@ -516,8 +516,17 @@
             "clear": {
                 "value": "Kilia"
             },
-            "passageSearch": {
-                "value": "Painim Hap Riding"
+            "passage": {
+                "value": "Hap Riding"
+            },
+            "resource": {
+                "value": "Risos"
+            },
+            "resources": {
+                "value": "Risoses"
+            },
+            "loadMore": {
+                "value": "Lod Moa"
             }
         }
     }

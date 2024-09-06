@@ -516,8 +516,17 @@
             "clear": {
                 "value": "مسح"
             },
-            "passageSearch": {
-                "value": "بحث في المقطع"
+            "passage": {
+                "value": "مقطع"
+            },
+            "resource": {
+                "value": "مورد"
+            },
+            "resources": {
+                "value": "موارد"
+            },
+            "loadMore": {
+                "value": "تحميل المزيد"
             }
         }
     }

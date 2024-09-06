@@ -516,8 +516,17 @@
             "clear": {
                 "value": "Futa"
             },
-            "passageSearch": {
-                "value": "Tafuta Kifungu"
+            "passage": {
+                "value": "Kifungu"
+            },
+            "resource": {
+                "value": "Rasilimali"
+            },
+            "resources": {
+                "value": "Rasilimali"
+            },
+            "loadMore": {
+                "value": "Pakia Zaidi"
             }
         }
     }

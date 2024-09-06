@@ -516,8 +516,17 @@
             "clear": {
                 "value": "Effacer"
             },
-            "passageSearch": {
-                "value": "Recherche de Passage"
+            "passage": {
+                "value": "Passage"
+            },
+            "resource": {
+                "value": "Ressource"
+            },
+            "resources": {
+                "value": "Ressources"
+            },
+            "loadMore": {
+                "value": "Charger Plus"
             }
         }
     }
