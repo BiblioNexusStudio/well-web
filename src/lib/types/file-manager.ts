@@ -39,7 +39,7 @@ export interface FrontendAudioChapter extends ApiAudioChapter {
     deleteResources?: boolean;
 }
 
-export interface AudioResource {
+interface AudioResource {
     url: string;
     size: number;
 }
@@ -57,26 +57,6 @@ export interface Language {
     displayName: string;
     enabled: boolean;
     scriptDirection: DirectionCode;
-}
-
-export interface DownloadData {
-    totalSizeToDownload: number;
-    nonMetadataSizeToDownload: number;
-    urlsToDownload: UrlWithMetadata[];
-    urlsToDelete: string[];
-}
-
-export interface ResourceContentUrl {
-    url: string;
-}
-
-export interface BasePassage {
-    bookId: number;
-    bookName?: string;
-    startChapter: number;
-    endChapter: number;
-    startVerse: number;
-    endVerse: number;
 }
 
 export interface FooterInputs {

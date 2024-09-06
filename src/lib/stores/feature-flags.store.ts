@@ -7,8 +7,7 @@ const defaultConfig = {
     forceRTLMode: false,
 };
 
-export type FeatureFlag = keyof typeof defaultConfig;
-export type FeatureFlagConfig = typeof defaultConfig;
+type FeatureFlagConfig = typeof defaultConfig;
 
 let savedFlags = {};
 
