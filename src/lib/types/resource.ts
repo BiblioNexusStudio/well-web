@@ -15,7 +15,7 @@ export enum MediaType {
     Metadata = 'Metadata',
 }
 
-export enum ParentResourceComplexityLevel {
+enum ParentResourceComplexityLevel {
     None = 'None',
     Basic = 'Basic',
     Advanced = 'Advanced',
@@ -83,7 +83,7 @@ export interface StepBasedGuideStep {
     audioUrl?: string;
 }
 
-export interface ApiSingleLicense {
+interface ApiSingleLicense {
     name: string;
     url?: string | null;
 }
@@ -101,7 +101,7 @@ export interface ResourceContentGroupedByVerses {
     verses: ResourcesForVerse[];
 }
 
-export interface ResourcesForVerse {
+interface ResourcesForVerse {
     number: number;
     resourceContents: ResourceContentInfo[];
 }
@@ -130,7 +130,7 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
     duration?: number;
 }
 
-export interface TtContent {
+interface TtContent {
     type: string;
     attrs: object;
     content: object[];
@@ -141,12 +141,12 @@ export interface DownloadTtContent {
     attrs: { src: string };
     content: object[];
 }
-export interface InnerTipTapContent {
+interface InnerTipTapContent {
     type: string;
     content: TtContent[];
 }
 
-export interface TiptapContent {
+interface TiptapContent {
     type: string;
     content: InnerTipTapContent[];
 }

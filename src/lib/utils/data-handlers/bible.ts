@@ -128,7 +128,7 @@ export function bibleBookUrl(bibleId: number, bookCode: string) {
     return apiUrl(`/bibles/${bibleId}/texts?bookCode=${bookCode}`);
 }
 
-export async function fetchBibleDataForBookCodeAndBibleId(
+async function fetchBibleDataForBookCodeAndBibleId(
     bookCode: string,
     bibleId: number
 ): Promise<BibleBookContentDetails | null> {
