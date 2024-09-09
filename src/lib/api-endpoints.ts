@@ -12,7 +12,7 @@ import type { ParentResourceId, ParentResourceType } from './types/resource';
 type ApiStringAndCacheBustVersion = [string, number];
 
 export function languagesEndpoint(): ApiStringAndCacheBustVersion {
-    return ['/languages', 2];
+    return ['/languages', 3];
 }
 
 export function parentResourcesEndpoint(languageId?: number): ApiStringAndCacheBustVersion {
