@@ -29,7 +29,7 @@ interface BatchedUrl {
 // true even when the data isn't fully there yet.
 const partiallyDownloadedUrls = new Set<string>();
 
-export const staticUrlsMap: StaticUrlsMap = staticUrls;
+const staticUrlsMap: StaticUrlsMap = staticUrls;
 
 export class WellFetchError extends Error {
     url?: string;
@@ -84,16 +84,6 @@ export async function fetchContentFromCacheOrNetwork<T>(url: Url) {
     } finally {
         partiallyDownloadedUrls.delete(url);
     }
-}
-
-export async function removeFromApiCache(path: string) {
-    const url = apiUrl(path);
-    if (!('serviceWorker' in navigator)) {
-        return;
-    }
-    const cache = await getApiCache();
-    await cache.delete(url);
-    apiCachedUrls.delete(url);
 }
 
 export async function removeFromContentCache(url: Url) {
@@ -455,11 +445,11 @@ function isMetadataBatchableUrl(url: UrlWithMetadata) {
     return window.__CACHING_CONFIG.isMetadataUrl(url.url);
 }
 
-export async function getApiCache() {
+async function getApiCache() {
     return await caches.open(window.__CACHING_CONFIG.apiCacheKey);
 }
 
-export async function getContentCache() {
+async function getContentCache() {
     return await caches.open(window.__CACHING_CONFIG.contentCacheKey);
 }
 

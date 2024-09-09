@@ -5,12 +5,12 @@ import { range } from '$lib/utils/array';
 import type { BibleSection } from '$lib/types/bible';
 import { alignmentScriptureStringToReference } from '../bible-section-helpers';
 
-export interface EnglishWordWithGreekAlignmentForVerse {
+interface EnglishWordWithGreekAlignmentForVerse {
     verse: number;
     words: EnglishWordWithGreekAlignment[];
 }
 
-export interface EnglishWordWithGreekAlignment {
+interface EnglishWordWithGreekAlignment {
     word: string;
     nextWordIsInGroup: boolean;
     greekWords: GreekWord[];
@@ -21,7 +21,7 @@ export interface GreekWord {
     senses: GreekSense[];
 }
 
-export interface GreekSense {
+interface GreekSense {
     glosses: string[];
     definition: string;
 }
