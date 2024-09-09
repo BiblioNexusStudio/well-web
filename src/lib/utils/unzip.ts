@@ -1,7 +1,7 @@
 import { unzip } from 'unzipit';
 import { asyncMap } from './async-array';
 
-export interface ObjectUrlMapping {
+interface ObjectUrlMapping {
     url?: string | null;
     file: string;
 }

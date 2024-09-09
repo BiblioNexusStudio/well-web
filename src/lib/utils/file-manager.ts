@@ -299,7 +299,7 @@ export const buildRowData = (
     return { resources, size, hasAudio, hasText, hasImages, hasVideos };
 };
 
-export function removeDuplicates(arr: UrlWithMetadata[]): UrlWithMetadata[] {
+function removeDuplicates(arr: UrlWithMetadata[]): UrlWithMetadata[] {
     const uniqueUrls = new Set<string>();
 
     const uniqueArray = arr.filter((item) => {
@@ -313,7 +313,7 @@ export function removeDuplicates(arr: UrlWithMetadata[]): UrlWithMetadata[] {
     return uniqueArray;
 }
 
-export function populateNullAudioChapters(data: BiblesModuleBook) {
+function populateNullAudioChapters(data: BiblesModuleBook) {
     const emptyAudioUrlsChapters: ApiAudioChapter[] = [];
 
     for (let i = 0; i < data.chapterCount; i++) {

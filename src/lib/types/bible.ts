@@ -19,12 +19,12 @@ export interface BibleBookTextContent {
     chapters: BibleBookTextChapter[];
 }
 
-export interface BibleBookTextChapter {
+interface BibleBookTextChapter {
     number: number;
     verses: BibleBookTextVerse[];
 }
 
-export interface BibleBookTextVerse {
+interface BibleBookTextVerse {
     number: number;
     text: string;
 }
@@ -54,7 +54,7 @@ export interface FrontendBibleBookWithLanguageCode extends FrontendBibleBook {
     languageCode: string;
 }
 
-export interface BaseBibleBookContent {
+interface BaseBibleBookContent {
     audioSize: number;
     textSize: number;
     bookCode: string;
@@ -62,20 +62,20 @@ export interface BaseBibleBookContent {
     displayName: string;
 }
 
-export type ApiBibleBookContent = BaseBibleBookContent;
+type ApiBibleBookContent = BaseBibleBookContent;
 
 export interface BibleBookContentDetails extends BaseBibleBookContent {
     bibleId: number;
     audioUrls: { chapters: FrontendAudioChapter[] } | null;
 }
 
-export interface FrontendChapterAudioData {
+interface FrontendChapterAudioData {
     url: string;
     startTimestamp: number | null;
     endTimestamp: number | null;
 }
 
-export interface FrontendChapterContent {
+interface FrontendChapterContent {
     number: number;
     audioData: FrontendChapterAudioData | null;
     versesText: { number: number; text: string }[];
@@ -99,23 +99,4 @@ export type ApiBibleBook = {
 export type FrontEndVerseForSelectionPane = {
     number: number;
     chapterNumber: number;
-};
-
-export type ApiVerseContents = {
-    number: number;
-    text: string;
-};
-
-export type ApiChapterContents = {
-    number: number;
-    verses: ApiVerseContents[];
-};
-
-export type ApiBibleContents = {
-    bibleName: string;
-    bibleAbbreviation: string;
-    bookName: string;
-    bookCode: string;
-    bookNumber: number;
-    chapters: ApiChapterContents[];
 };

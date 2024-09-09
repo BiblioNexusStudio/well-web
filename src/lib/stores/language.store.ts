@@ -16,11 +16,6 @@ currentLanguageCode.subscribe((value) => {
     browser && localStorage.setItem('currentLanguage', value);
 });
 
-export function lookupLanguageInfoByCode(languageCode: string | null | undefined) {
-    if (!languageCode) return null;
-    return get(languages).find(({ iso6393Code }) => iso6393Code === languageCode);
-}
-
 export function lookupLanguageInfoById(languageId: number) {
     if (!languageId) return null;
     return get(languages).find(({ id }) => id === languageId);
@@ -30,7 +25,7 @@ export const currentLanguageInfo = derived([currentLanguageCode, languages], ([$
     $languages.find(({ iso6393Code }) => iso6393Code === $currentLanguageCode)
 );
 
-export const currentLanguageDirectionDebugMode = derived(featureFlags, ($featureFlags) => $featureFlags.forceRTLMode);
+const currentLanguageDirectionDebugMode = derived(featureFlags, ($featureFlags) => $featureFlags.forceRTLMode);
 
 export const currentLanguageDirection = derived(
     [currentLanguageInfo, currentLanguageDirectionDebugMode],
