@@ -34,6 +34,22 @@ const staticUrlsMap: StaticUrlsMap = staticUrls;
 export class WellFetchError extends Error {
     url?: string;
     cacheBustVersion?: number;
+    status?: number;
+}
+
+export function isFetchErrorWithStatus(error: unknown, status: number) {
+    const castError = error as Error | WellFetchError;
+    return 'status' in castError && castError.status === status;
+}
+
+class StatusError extends Error {
+    constructor(
+        message: string,
+        public status: number
+    ) {
+        super(message);
+        this.name = 'StatusError';
+    }
 }
 
 export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number) {
@@ -48,14 +64,15 @@ export async function fetchFromCacheOrApi(path: string, cacheBustVersion: number
             headers: { 'X-Cache-Bust-Version': cacheBustVersion.toString() },
         });
         if (response.status >= 400) {
-            throw new Error('Bad HTTP response');
+            throw new StatusError(`Bad HTTP response: ${response.status}`, response.status);
         }
         apiCachedUrls.delete(url);
         return await response.json();
     } catch (error) {
-        const castError = error as Error;
+        const castError = error as Error | StatusError;
         const fetchError = new WellFetchError(castError.message, { cause: castError.cause });
         fetchError.stack = castError.stack;
+        fetchError.status = 'status' in castError ? castError.status : undefined;
         fetchError.url = url;
         fetchError.cacheBustVersion = cacheBustVersion;
         throw fetchError;
@@ -71,14 +88,15 @@ export async function fetchContentFromCacheOrNetwork<T>(url: Url) {
     try {
         const response = await fetch(cachedOrRealUrl(url));
         if (response.status >= 400) {
-            throw new Error('Bad HTTP response');
+            throw new StatusError(`Bad HTTP response: ${response.status}`, response.status);
         }
         contentCachedUrls.delete(url);
         return (await response.json()) as T;
     } catch (error) {
-        const castError = error as Error;
+        const castError = error as Error | StatusError;
         const fetchError = new WellFetchError(castError.message, { cause: castError.cause });
         fetchError.stack = castError.stack;
+        fetchError.status = 'status' in castError ? castError.status : undefined;
         fetchError.url = url;
         throw fetchError;
     } finally {
