@@ -250,14 +250,21 @@
         setIsResourceSearch(true);
     }
 
-    async function searchByParentResource(parentResource: ApiParentResource, offset: number | null) {
+    async function searchByParentResource(
+        parentResource: ApiParentResource | null,
+        offset: number | null,
+        query: string = ''
+    ) {
+        if (!parentResource) return;
+        if (query.length === 1 || query.length === 2) return;
+
         isLoading = true;
         const currentLanguageId = get(currentLanguageInfo)?.id;
         let response = (await fetchFromCacheOrApi(
             ...searchResourcesEndpoint(
                 currentLanguageId,
-                '',
-                [parentResource.resourceType],
+                query,
+                [parentResource?.resourceType],
                 '',
                 0,
                 0,
@@ -268,7 +275,11 @@
             )
         )) as ResourceContentInfo[];
 
-        resourceSearchResources = [...resourceSearchResources, ...response];
+        if (query.length === 0) {
+            resourceSearchResources = [...resourceSearchResources, ...response];
+        } else if (query.length >= 3 && response.length > 0) {
+            resourceSearchResources = response;
+        }
     }
 </script>
 
