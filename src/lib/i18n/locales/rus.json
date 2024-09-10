@@ -121,6 +121,9 @@
                 },
                 "checkForMoreResources": {
                     "value": "Найти другие ресурсы..."
+                },
+                "missingFromBible": {
+                    "value": "В этой Библии отсутствует выбранный отрывок."
                 }
             },
             "noGuideContent": {

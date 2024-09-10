@@ -121,6 +121,9 @@
                 },
                 "checkForMoreResources": {
                     "value": "Buscar más recursos..."
+                },
+                "missingFromBible": {
+                    "value": "Esta Biblia no contiene el pasaje seleccionado."
                 }
             },
             "noGuideContent": {

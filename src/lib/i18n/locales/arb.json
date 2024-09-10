@@ -121,6 +121,9 @@
                 },
                 "checkForMoreResources": {
                     "value": "تحقق من المزيد من الموارد..."
+                },
+                "missingFromBible": {
+                    "value": "هذه النسخة من الكتاب المقدس تفتقد المقطع المحدد."
                 }
             },
             "noGuideContent": {

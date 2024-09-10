@@ -121,6 +121,9 @@
                 },
                 "checkForMoreResources": {
                     "value": "अधिक संसाधनों के लिए जाँच करें..."
+                },
+                "missingFromBible": {
+                    "value": "इस बाइबिल में चयनित अध्याय नहीं है।"
                 }
             },
             "noGuideContent": {
