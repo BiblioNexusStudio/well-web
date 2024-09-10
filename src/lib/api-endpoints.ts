@@ -1,4 +1,5 @@
 import type { ParentResourceId, ParentResourceType } from './types/resource';
+import { buildQueryString } from '$lib/utils/sveltekit-search-params';
 
 // In order to cache-bust an API endpoint when the response format is changed, increment the number after the endpoint path.
 // Note: This is a separate problem from breaking changes and only refers to non-breaking additive changes. It's probably
@@ -67,19 +68,29 @@ export function searchResourcesEndpoint(
     startVerse?: number,
     endVerse?: number,
     offSet?: number,
-    limit?: number
+    limit?: number,
+    parentResourceId?: number
 ): ApiStringAndCacheBustVersion {
     const resourceTypesParams = resourceTypes.map((rt) => `resourceTypes=${rt}`).join('&');
-    return [
-        `/resources/search?languageId=${languageId}${query ? `&query=${query}` : ''}${
-            resourceTypesParams ? '&' + resourceTypesParams : ''
-        }${bookCode ? `&bookCode=${bookCode}` : ''}${startChapter ? `&startChapter=${startChapter}` : ''}${
-            endChapter ? `&endChapter=${endChapter}` : ''
-        }${startVerse ? `&startVerse=${startVerse}` : ''}${endVerse ? `&endVerse=${endVerse}` : ''}${
-            offSet ? `&offSet=${offSet}` : ''
-        }${offSet === 0 ? `&offSet=${offSet}` : ''}${limit ? `&limit=${limit}` : ''}`,
-        3,
-    ];
+
+    let params = buildQueryString([
+        { key: 'languageId', value: languageId, ignoreIfEquals: undefined },
+        { key: 'query', value: query, ignoreIfEquals: '' },
+        { key: 'bookCode', value: bookCode, ignoreIfEquals: '' },
+        { key: 'startChapter', value: startChapter, ignoreIfEquals: 0 },
+        { key: 'endChapter', value: endChapter, ignoreIfEquals: 0 },
+        { key: 'startVerse', value: startVerse, ignoreIfEquals: 0 },
+        { key: 'endVerse', value: endVerse, ignoreIfEquals: 0 },
+        { key: 'offSet', value: offSet, ignoreIfEquals: 0 },
+        { key: 'limit', value: limit, ignoreIfEquals: 0 },
+        { key: 'parentResourceId', value: parentResourceId, ignoreIfEquals: undefined },
+    ]);
+
+    if (resourceTypesParams) {
+        params = `${params}&${resourceTypesParams}`;
+    }
+
+    return [`/resources/search?${params}`, 3];
 }
 
 export function passagesByLanguageAndParentResourceEndpoint(
