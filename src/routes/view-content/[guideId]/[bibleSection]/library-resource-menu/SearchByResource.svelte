@@ -10,7 +10,11 @@
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
 
     export let resourceSearchResources: ResourceContentInfo[];
-    export let searchByParentResource: (parentResource: ApiParentResource, offset: number | null) => Promise<void>;
+    export let searchByParentResource: (
+        parentResource: ApiParentResource | null,
+        offset: number | null,
+        query: string
+    ) => Promise<void>;
     export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
     export let isLoading: boolean;
 
@@ -18,10 +22,10 @@
 
     let showParentResourceMenu = true;
     let showResourceMenu = false;
-    let searchQuery = '';
     let currentParentResource: ApiParentResource | null;
+    let searchQuery = '';
 
-    $: filteredResourceSearchResources = filterResourcesOnSearchInput(searchQuery, resourceSearchResources);
+    $: searchByParentResource(currentParentResource, 0, searchQuery);
 
     function closeParentResourceMenu() {
         setIsResourceSearch(false);
@@ -32,9 +36,11 @@
         resourceSearchResources = [];
         showResourceMenu = false;
         setIsResourceSearch(false);
+        searchQuery = '';
     }
 
     function backToParentResourceMenu() {
+        searchQuery = '';
         showResourceMenu = false;
         showParentResourceMenu = true;
     }
@@ -42,59 +48,50 @@
     async function parentResourceSearch(parentResource: ApiParentResource) {
         currentParentResource = parentResource;
         showParentResourceMenu = false;
-        await searchByParentResource(parentResource, 0);
+        await searchByParentResource(parentResource, 0, searchQuery);
         showResourceMenu = true;
-    }
-
-    function filterResourcesOnSearchInput(searchQuery: string, resourceSearchResources: ResourceContentInfo[]) {
-        if (searchQuery.length >= 3) {
-            return resourceSearchResources.filter((resource) => {
-                return resource?.displayName?.toLowerCase().includes(searchQuery.toLowerCase());
-            });
-        } else {
-            return resourceSearchResources.length ? resourceSearchResources : [];
-        }
     }
 
     async function loadMoreResources() {
         if (currentParentResource) {
-            searchQuery = '';
-            await searchByParentResource(currentParentResource, resourceSearchResources.length);
+            await searchByParentResource(currentParentResource, resourceSearchResources.length, searchQuery);
         }
     }
 </script>
 
 {#if $isResourceSearch}
-    {#if isLoading}
-        <div class="relative z-[40] flex flex-col">
-            <div class="fixed flex h-[calc(100vh-143px)] w-full flex-col justify-center bg-white">
-                <FullPageSpinner />
-            </div>
-        </div>
-    {:else if showParentResourceMenu}
-        <div class="relative z-[40] flex flex-col">
-            <div class="fixed top-0 h-16 w-full bg-white">
-                <div class="relative flex w-full justify-center py-4">
-                    <h2>{$translate('components.search.resources.value')}</h2>
-                    <button
-                        on:click={closeParentResourceMenu}
-                        class="absolute right-4 flex w-1/4 justify-end"
-                        data-app-insights-event-name="library-resource-search-close-menu-button-clicked"
-                        ><XMarkIcon /></button
-                    >
+    {#if showParentResourceMenu}
+        {#if isLoading}
+            <div class="relative z-[40] flex flex-col">
+                <div class="fixed flex h-[calc(100vh-143px)] w-full flex-col justify-center bg-white">
+                    <FullPageSpinner />
                 </div>
             </div>
-            <div class="fixed top-16 flex h-[calc(100vh-79px)] w-full flex-col overflow-scroll bg-white">
-                {#each $parentResources as parentResource}
-                    <button
-                        on:click={() => parentResourceSearch(parentResource)}
-                        class="mx-4 mb-4 flex h-12 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
-                        data-app-insights-event-name="library-resource-search-select-parent-resource-button-clicked"
-                        >{parentResource.displayName}</button
-                    >
-                {/each}
+        {:else}
+            <div class="relative z-[40] flex flex-col">
+                <div class="fixed top-0 h-16 w-full bg-white">
+                    <div class="relative flex w-full justify-center py-4">
+                        <h2>{$translate('components.search.resources.value')}</h2>
+                        <button
+                            on:click={closeParentResourceMenu}
+                            class="absolute right-4 flex w-1/4 justify-end"
+                            data-app-insights-event-name="library-resource-search-close-menu-button-clicked"
+                            ><XMarkIcon /></button
+                        >
+                    </div>
+                </div>
+                <div class="fixed top-16 flex h-[calc(100vh-79px)] w-full flex-col overflow-scroll bg-white">
+                    {#each $parentResources as parentResource}
+                        <button
+                            on:click={() => parentResourceSearch(parentResource)}
+                            class="mx-4 mb-4 flex h-12 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                            data-app-insights-event-name="library-resource-search-select-parent-resource-button-clicked"
+                            >{parentResource.displayName}</button
+                        >
+                    {/each}
+                </div>
             </div>
-        </div>
+        {/if}
     {:else if resourceSearchResources.length && showResourceMenu}
         <div class="relative z-[40] flex flex-col">
             <div class="fixed top-0 h-28 w-full bg-white">
@@ -118,20 +115,29 @@
                 </div>
             </div>
             <div class="fixed top-28 flex h-[calc(100vh-193px)] w-full flex-col overflow-scroll bg-white">
-                {#each filteredResourceSearchResources as resourceSearchResource}
-                    <button
-                        on:click={() => resourceSelected(resourceSearchResource)}
-                        data-app-insights-event-name="library-resource-search-select-resource-button-clicked"
-                        class="mx-4 mb-4 flex h-12 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
-                        >{resourceSearchResource.displayName}</button
-                    >
-                {/each}
-                <button
-                    class="btn btn-primary mx-auto mb-4 w-auto px-4"
-                    on:click={loadMoreResources}
-                    data-app-insights-event-name="library-resource-search-load-more-button-clicked"
-                    >{$translate('components.search.loadMore.value')}</button
-                >
+                {#if isLoading}
+                    <FullPageSpinner />
+                {:else}
+                    {#each resourceSearchResources as resourceSearchResource}
+                        <button
+                            on:click={() => resourceSelected(resourceSearchResource)}
+                            data-app-insights-event-name="library-resource-search-select-resource-button-clicked"
+                            class="mx-4 mb-4 flex h-12 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
+                            >{resourceSearchResource.displayName}</button
+                        >
+                    {/each}
+                    {#if resourceSearchResources.length >= 100}
+                        <button
+                            class="btn btn-primary mx-auto mb-4 w-auto px-4"
+                            on:click={() => {
+                                searchQuery = '';
+                                loadMoreResources();
+                            }}
+                            data-app-insights-event-name="library-resource-search-load-more-button-clicked"
+                            >{$translate('components.search.loadMore.value')}</button
+                        >
+                    {/if}
+                {/if}
             </div>
         </div>
     {/if}
