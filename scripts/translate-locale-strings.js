@@ -2,13 +2,14 @@
 // Examples:
 //    Translate single string: `node scripts/translate-locale-strings.js "page.menu.home" spa`
 //    Translate multiple strings: `node scripts/translate-locale-strings.js "page.menu.*" spa`
+//    Translate single string into multiple langs: `node scripts/translate-locale-strings.js "page.menu.home" all`
 
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import childProcess from 'child_process';
 import micromatch from 'micromatch';
 import readlineImport from 'readline';
+import clipboardy from 'clipboardy';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,6 +45,7 @@ const languageCodesToNames = {
     hin: 'Hindi',
     swh: 'Swahili',
     rus: 'Russian',
+    all: 'All Languages',
 };
 
 if (!languageCodesToNames[languageCode]) {
@@ -53,22 +55,32 @@ if (!languageCodesToNames[languageCode]) {
 
 const matchingKeys = findMatchingKeys(localeData, pattern);
 
-console.log('Copy paste the following into ChatGPT:');
-console.log('');
+let forChatGpt = '';
 
-console.log(
-    `Translate the values into ${languageCodesToNames[languageCode]}. Leave the dot notation key and colon. Do not include "_context" translations in the response. Those are there to help you as the translator.`
-);
-console.log('```');
+if (languageCode === 'all') {
+    forChatGpt += `Translate the values into these languages (${Object.values(languageCodesToNames)
+        .filter((lang) => lang !== 'All Languages')
+        .join(
+            ', '
+        )}). Leave the dot notation key and colon on each line and prefix each line with the language in parentheses. Do not include "_context" translations in the response. Those are there to help you as the translator. Return response in a code block.\n\n`;
+} else {
+    forChatGpt += `Translate the values into ${languageCodesToNames[languageCode]}. Leave the dot notation key and colon on each line. Do not include "_context" translations in the response. Those are there to help you as the translator. Return response in a code block.\n\n`;
+}
+
+forChatGpt += '```\n';
 matchingKeys.forEach((key) => {
     const value = getValueByPath(localeData, key);
-    console.log(`${key}.value: ${value.value}`);
-    console.log(`${key}._context: ${value._context}`);
+    forChatGpt += `${key}.value: ${value.value}\n`;
+    forChatGpt += `${key}._context: ${value._context}\n`;
 });
-console.log('```');
+forChatGpt += '```\n';
+
+clipboardy.writeSync(forChatGpt);
 
 console.log('');
-console.log('Hit Enter to open your editor and paste ChatGPT result. Then close the editor.');
+console.log('Some text has been copied to your clipboard. Paste the text to ChatGPT.');
+console.log('');
+console.log("Copy ChatGPT's response to your clipboard and hit Enter.");
 
 const readline = readlineImport.createInterface({
     input: process.stdin,
@@ -78,22 +90,60 @@ const readline = readlineImport.createInterface({
 readline.question('', () => {
     readline.close();
 
-    const tempFile = path.join(__dirname, `../src/lib/i18n/locales/${languageCode}_temp.json`);
-    fs.writeFileSync(tempFile, '');
+    const input = clipboardy.readSync();
 
-    const editor = process.env.EDITOR || 'code';
-    const child = childProcess.spawn(editor, [tempFile], {
-        stdio: 'inherit',
-    });
+    const translations = input.split('\n');
 
-    child.on('exit', function (_, __) {
-        const input = fs.readFileSync(tempFile, 'utf8');
-        fs.unlinkSync(tempFile);
+    if (languageCode === 'all') {
+        const languageOutputs = {};
+        Object.keys(languageCodesToNames).forEach((code) => {
+            if (code !== 'all') {
+                languageOutputs[code] = {};
+            }
+        });
 
-        const translations = input.split('\n');
+        translations.forEach((translation) => {
+            if (translation.trim() !== '') {
+                const validLineMatch = translation.match(/^\(([^)]+)\)\s[A-Za-z0-9.]+:\s(.*)$/);
+                if (!validLineMatch || !Object.values(languageCodesToNames).includes(validLineMatch[1])) {
+                    console.error(`Invalid line or language from ChatGPT: ${translation}`);
+                    console.error('Expected format like: `(Swahili) page.bible: Biblia`');
+                    process.exit(1);
+                }
+
+                const match = translation.match(/^\(([^)]+)\)\s(.+)$/);
+                if (match) {
+                    const lang = match[1];
+                    const restOfLine = match[2];
+                    const [key, value] = restOfLine.split(':', 2).map((s) => s.trim());
+                    const langCode = Object.keys(languageCodesToNames).find((code) =>
+                        languageCodesToNames[code].toLowerCase().startsWith(lang.toLowerCase())
+                    );
+                    if (langCode) {
+                        updateNestedObject(languageOutputs[langCode], key, value);
+                    }
+                }
+            }
+        });
+
+        Object.entries(languageOutputs).forEach(([code, data]) => {
+            const outputFile = path.join(__dirname, `../src/lib/i18n/locales/${code}.json`);
+            let updatedLocaleData = {};
+            try {
+                updatedLocaleData = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
+            } catch (error) {
+                if (error.code !== 'ENOENT') {
+                    console.error(`Error reading existing file: ${error}`);
+                    return;
+                }
+            }
+            deepMerge(updatedLocaleData, data);
+            fs.writeFileSync(outputFile, JSON.stringify(updatedLocaleData, null, 4) + '\n');
+            console.log(`Updated locale file: ${outputFile}`);
+        });
+    } else {
         const outputFile = path.join(__dirname, `../src/lib/i18n/locales/${languageCode}.json`);
         let updatedLocaleData = {};
-
         try {
             updatedLocaleData = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
         } catch (error) {
@@ -103,26 +153,40 @@ readline.question('', () => {
             }
         }
 
-        for (let i = 0; i < translations.length; i++) {
-            if (translations[i].trim() !== '') {
-                const key = translations[i].split(':', 2)[0].trim();
-                const value = translations[i].split(':', 2)[1].trim();
+        translations.forEach((translation) => {
+            if (translation.trim() !== '') {
+                const [key, value] = translation.split(':', 2).map((s) => s.trim());
+                updateNestedObject(updatedLocaleData, key, value);
+            }
+        });
 
-                const parts = key.split('.');
-                let current = updatedLocaleData;
+        fs.writeFileSync(outputFile, JSON.stringify(updatedLocaleData, null, 4) + '\n');
+        console.log(`Updated locale file: ${outputFile}`);
+    }
+});
 
-                for (let j = 0; j < parts.length - 1; j++) {
-                    if (!current[parts[j]]) {
-                        current[parts[j]] = {};
-                    }
-                    current = current[parts[j]];
-                }
-
-                current[parts[parts.length - 1]] = value;
+function deepMerge(target, source) {
+    for (const key in source) {
+        if (key in source) {
+            if (typeof source[key] === 'object' && source[key] !== null) {
+                if (!target[key]) Object.assign(target, { [key]: {} });
+                deepMerge(target[key], source[key]);
+            } else {
+                Object.assign(target, { [key]: source[key] });
             }
         }
+    }
+    return target;
+}
 
-        fs.writeFileSync(outputFile, JSON.stringify(updatedLocaleData, null, 4));
-        console.log(`Updated locale file: ${outputFile}`);
-    });
-});
+function updateNestedObject(obj, path, value) {
+    const parts = path.split('.');
+    let current = obj;
+    for (let i = 0; i < parts.length - 1; i++) {
+        if (!current[parts[i]]) {
+            current[parts[i]] = {};
+        }
+        current = current[parts[i]];
+    }
+    current[parts[parts.length - 1]] = value;
+}

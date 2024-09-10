@@ -69,6 +69,7 @@
         "@typescript-eslint/eslint-plugin": "^6.7.5",
         "@typescript-eslint/parser": "^6.7.5",
         "autoprefixer": "^10.4.17",
+        "clipboardy": "^4.0.0",
         "dotenv": "^16.3.1",
         "eslint": "^8.51.0",
         "eslint-config-prettier": "^9.0.0",
