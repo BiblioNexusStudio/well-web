@@ -19,9 +19,13 @@
     import { handleRtlVerseReferences } from '$lib/utils/language-utils';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
+    import { getResourceFeedbackContext } from '../resource-feedback-context';
+    import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
 
     export let tab: ContentTabEnum;
     export let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]>;
+
+    const { openResourceFeedbackModalForResource } = getResourceFeedbackContext();
 
     $: fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
     $: currentResource = fullscreenTextResourceStack[fullscreenTextResourceStack.length - 1];
@@ -80,8 +84,12 @@
                     <div class="flex-grow px-3 text-center text-lg font-semibold text-base-content">
                         {resource?.displayName}
                     </div>
-                    <!-- hack to make text centered -->
-                    <div class="btn btn-link text-base-500 opacity-0"><Icon data={chevronLeft} /></div>
+                    <button
+                        on:click={() => openResourceFeedbackModalForResource(currentResource?.id)}
+                        class="btn btn-link !btn-info"
+                    >
+                        <ChatBubbleIcon />
+                    </button>
                 </div>
             </div>
             <div class="prose mx-auto overflow-y-scroll px-4 pb-4 md:px-0 {!!resource?.audioUrl && 'mb-14'}">

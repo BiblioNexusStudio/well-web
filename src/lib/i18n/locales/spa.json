@@ -464,6 +464,26 @@
                 "pleaseFillInTheRequiredFields": {
                     "value": "Por favor, completa los campos requeridos"
                 }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Califica este contenido"
+                },
+                "additionalFeedback": {
+                    "value": "Comentarios Adicionales (Opcional)"
+                },
+                "contactInformation": {
+                    "value": "Información de Contacto (Opcional)"
+                },
+                "contactType": {
+                    "value": "Tipo de Contacto"
+                }
+            },
+            "feedbackError": {
+                "value": "Error al enviar comentarios. Por favor, inténtalo de nuevo."
+            },
+            "feedbackQueuedOffline": {
+                "value": "Los comentarios se enviarán cuando vuelvas a estar en línea."
             }
         }
     },

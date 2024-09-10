@@ -464,6 +464,26 @@
                 "pleaseFillInTheRequiredFields": {
                     "value": "Plis putim tok long ol samting i mas."
                 }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Makim dispela samting"
+                },
+                "additionalFeedback": {
+                    "value": "Narapela Tingting (Wankain)"
+                },
+                "contactInformation": {
+                    "value": "Save long Kontak (Wankain)"
+                },
+                "contactType": {
+                    "value": "Dispela kain kontak"
+                }
+            },
+            "feedbackError": {
+                "value": "I gat rong taim salim tingting. Traim gen."
+            },
+            "feedbackQueuedOffline": {
+                "value": "Bai mi salim bekim long taim yu kam bek long lain."
             }
         }
     },

@@ -14,9 +14,13 @@
     import ImageElement from './ImageElement.svelte';
     import { onDestroy } from 'svelte';
     import { MediaType, type ResourceContentInfoWithMetadata } from '$lib/types/resource';
+    import { getResourceFeedbackContext } from '../resource-feedback-context';
+    import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
 
     export let currentIndex: number | null;
     export let resources: ResourceContentInfoWithMetadata[];
+
+    const { openResourceFeedbackModalForResource } = getResourceFeedbackContext();
 
     let container: HTMLDivElement;
     let topBarDiv: HTMLDivElement;
@@ -130,6 +134,12 @@
                         {currentResource?.displayName}
                     </div>
                 </div>
+                <button
+                    on:click={() => openResourceFeedbackModalForResource(currentResource?.id)}
+                    class="btn btn-link !text-gray-50"
+                >
+                    <ChatBubbleIcon />
+                </button>
                 <div class="text-sm text-gray-50">
                     {$translate('page.passage.resourcePane.fullscreen.currentOfTotalLabel.value', {
                         values: { current: (currentIndex ?? -1) + 1, total: resources.length },

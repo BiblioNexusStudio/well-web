@@ -519,6 +519,14 @@
                 "value": "Feedback successfully sent.",
                 "_context": "Message to display when feedback is successfully sent"
             },
+            "feedbackQueuedOffline": {
+                "value": "Feedback will send when you're back online.",
+                "_context": "Message to display when user is offline but feedback will be sent later."
+            },
+            "feedbackError": {
+                "value": "Error while sending feedback. Please try again.",
+                "_context": "Message to display when the feedback failed to send."
+            },
             "thankYou": {
                 "value": "Thank you!",
                 "_context": "Message to display when feedback is successfully sent"
@@ -599,6 +607,24 @@
                 "pleaseFillInTheRequiredFields": {
                     "value": "Please fill in the required fields",
                     "_context": "Message to display when the required fields are not filled in"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Rate this content",
+                    "_context": "Label for the star rating field"
+                },
+                "additionalFeedback": {
+                    "value": "Additional Feedback (Optional)",
+                    "_context": "Label for additional feedback"
+                },
+                "contactInformation": {
+                    "value": "Contact Information (Optional)",
+                    "_context": "Label for contact information section"
+                },
+                "contactType": {
+                    "value": "Contact Type",
+                    "_context": "Label for contact type dropdown"
                 }
             }
         }

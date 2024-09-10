@@ -464,6 +464,26 @@
                 "pleaseFillInTheRequiredFields": {
                     "value": "कृपया आवश्यक फ़ील्ड्स में भरें"
                 }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "इस सामग्री को रेट करें"
+                },
+                "additionalFeedback": {
+                    "value": "अतिरिक्त प्रतिक्रिया (वैकल्पिक)"
+                },
+                "contactInformation": {
+                    "value": "संपर्क जानकारी (वैकल्पिक)"
+                },
+                "contactType": {
+                    "value": "संपर्क प्रकार"
+                }
+            },
+            "feedbackError": {
+                "value": "फीडबैक भेजने में त्रुटि। कृपया पुन"
+            },
+            "feedbackQueuedOffline": {
+                "value": "जब आप फिर से ऑनलाइन होंगे तो प्रतिक्रिया भेज दी जाएगी।"
             }
         }
     },
