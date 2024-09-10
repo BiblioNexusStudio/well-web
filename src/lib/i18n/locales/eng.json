@@ -155,6 +155,10 @@
                 "checkForMoreResources": {
                     "value": "Check for more resources...",
                     "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
+                },
+                "missingFromBible": {
+                    "value": "This Bible is missing the selected passage.",
+                    "_context": "Message for when the Bible does not have the passage for whatever reason."
                 }
             },
             "noGuideContent": {

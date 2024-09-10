@@ -121,6 +121,9 @@
                 },
                 "checkForMoreResources": {
                     "value": "Sekim Moa Risoses..."
+                },
+                "missingFromBible": {
+                    "value": "Dispela Baibel i no gat dispela pasis."
                 }
             },
             "noGuideContent": {

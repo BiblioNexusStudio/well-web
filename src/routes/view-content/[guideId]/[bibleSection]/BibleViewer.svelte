@@ -156,9 +156,9 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
     <BibleUnavailable bind:preferredBiblesModalOpen bibles={bibleData?.availableBibles} />
 {:else if currentBible?.loadingContent || isLoadingAlignmentData}
     <FullPageSpinner />
-{:else if currentBible?.content?.chapters?.length}
+{:else if currentBible}
     <div class="flex-start prose mx-auto w-full flex-1 overflow-y-scroll px-4">
-        {#each currentBible?.content.chapters as chapter, chapterIndex}
+        {#each currentBible?.content?.chapters || [] as chapter, chapterIndex}
             {#each chapter.versesText as { number, text }, verseIndex}
                 {@const splitText = getSplitTextForAlignment(chapterIndex, verseIndex)}
                 <div
@@ -197,6 +197,8 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
                     {/if}
                 </div>
             {/each}
+        {:else}
+            <span>{$translate('page.passage.noBibleContent.missingFromBible.value')}</span>
         {/each}
     </div>
     {#if alignmentModeEnabled}

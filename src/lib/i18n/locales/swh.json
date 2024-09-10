@@ -121,6 +121,9 @@
                 },
                 "checkForMoreResources": {
                     "value": "Angalia nyenzo zaidi..."
+                },
+                "missingFromBible": {
+                    "value": "Biblia hii inakosa kipande kilichochaguliwa."
                 }
             },
             "noGuideContent": {

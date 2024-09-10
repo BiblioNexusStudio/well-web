@@ -42,7 +42,7 @@ const languageCodesToNames = {
     fra: 'French',
     arb: 'Arabic',
     hin: 'Hindi',
-    swa: 'Swahili',
+    swh: 'Swahili',
     rus: 'Russian',
 };
 
@@ -57,7 +57,7 @@ console.log('Copy paste the following into ChatGPT:');
 console.log('');
 
 console.log(
-    `Translate the values into ${languageCodesToNames[languageCode]}. Do not include "_context" translations in the response. Those are there to help you as the translator.`
+    `Translate the values into ${languageCodesToNames[languageCode]}. Leave the dot notation key and colon. Do not include "_context" translations in the response. Those are there to help you as the translator.`
 );
 console.log('```');
 matchingKeys.forEach((key) => {

@@ -8,6 +8,7 @@ import {
     fetchFromCacheOrApi,
     isCachedFromApi,
     isCachedAsContent,
+    isFetchErrorWithStatus,
 } from '$lib/data-cache';
 import { asyncEvery, asyncFilter, asyncSome } from '../async-array';
 import { range } from '../array';
@@ -136,8 +137,9 @@ async function fetchBibleDataForBookCodeAndBibleId(
         const basicDetails = await fetchFromCacheOrApi(...bookOfBibleEndpoint(bibleId, bookCode));
         return { ...basicDetails, bibleId };
     } catch (error) {
-        // this means the user hasn't cached the Bible data or bible id is invalid
-        log.exception(error as Error);
+        if (!isFetchErrorWithStatus(error, 404)) {
+            log.exception(error as Error);
+        }
         return null;
     }
 }
@@ -179,7 +181,6 @@ export async function bookDataForBibleTab(bibleSection: BibleSection, bibleId: n
         }
         return null;
     } catch (error) {
-        // stuff not cached
         log.exception(error as Error);
         return null;
     }
