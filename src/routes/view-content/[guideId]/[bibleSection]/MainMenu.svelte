@@ -6,8 +6,8 @@
     import LanguageIcon from '$lib/icons/LanguageIcon.svelte';
     import ShareIcon from '$lib/icons/ShareIcon.svelte';
     import CogIcon from '$lib/icons/CogIcon.svelte';
-    import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
-    import Feedback from './feedback/Feedback.svelte';
+    import ChatBubbleFilledIcon from '$lib/icons/ChatBubbleFilledIcon.svelte';
+    import BibleWellFeedback from './feedback/BibleWellFeedback.svelte';
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import QuickShare from './quick-share/QuickShare.svelte';
     import { clearContentViewerContext } from './context-persister';
@@ -26,7 +26,7 @@
 {:else if currentMenu === MenuEnum.share}
     <QuickShare close={() => (currentMenu = null)} />
 {:else if currentMenu === MenuEnum.feedback}
-    <Feedback close={() => (currentMenu = null)} />
+    <BibleWellFeedback close={() => (currentMenu = null)} />
 {:else}
     <div class="z-50 flex h-full w-full flex-col">
         <div class="relative mb-6 flex h-[166px] w-full rounded-b-3xl bg-[#00A3E0] px-6 pt-12">
@@ -91,7 +91,8 @@
                         on:click={() => (currentMenu = MenuEnum.feedback)}
                         class="btn btn-outline btn-primary flex h-auto flex-col items-start border-[#EAECF0] p-4 !text-[#344054]"
                         data-app-insights-event-name="main-menu-feedback-button-clicked"
-                        ><ChatBubbleIcon /><span class="mt-2 text-xs">{$translate('page.feedback.feedback.value')}</span
+                        ><ChatBubbleFilledIcon /><span class="mt-2 text-xs"
+                            >{$translate('page.feedback.feedback.value')}</span
                         ></button
                     >
                 </div>

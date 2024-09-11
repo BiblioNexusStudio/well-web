@@ -52,6 +52,8 @@
     import { ContentTabEnum, createContentContext } from './context';
     import PredeterminedPassageSelectorForBibleSectionPane from './bible-menu/PredeterminedPassageSelectorForBibleSectionPane.svelte';
     import { saveContentViewerContext, goToSavedContentViewerContext } from './context-persister';
+    import { createResourceFeedbackContext } from './resource-feedback-context';
+    import ResourceFeedbackModal from './feedback/ResourceFeedbackModal.svelte';
 
     const {
         currentGuide,
@@ -63,6 +65,8 @@
         openContextualMenu,
         syncSelectedDataFromParams,
     } = createContentContext();
+
+    createResourceFeedbackContext();
 
     // make sure when the URL params change the context stores get updated
     $: syncSelectedDataFromParams(
@@ -256,6 +260,7 @@
 <PredeterminedPassageSelectorForBibleSectionPane {bookCodesToNames} />
 <PredeterminedPassageSelectorPane {bookCodesToNames} />
 <BookChapterSelectorPane {bookCodesToNames} />
+<ResourceFeedbackModal />
 
 <div class={$currentTab !== ContentTabEnum.Guide ? 'hidden' : ''}>
     <FullscreenTextResource tab={ContentTabEnum.Guide} bind:fullscreenTextResourceStacksByTab />

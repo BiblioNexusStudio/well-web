@@ -27,7 +27,9 @@ export function createContentContext() {
     const currentGuide = writable<ApiParentResource | null>(null);
     const currentGuideStepIndex = writable<number | null>(null);
     const currentPane = writable<ContentPaneInfo | null>(null);
-    const currentStepInfo = writable<{ index: number; length: number } | null>(null);
+    const currentGuideItemInfo = writable<{ id: number | undefined; stepIndex: number; totalSteps: number } | null>(
+        null
+    );
     const isShowingContextualMenu = writable(false);
     const isLoadingToOpenPane = writable(false);
     const isPassageSearch = writable(false);
@@ -43,7 +45,7 @@ export function createContentContext() {
         currentGuide: { subscribe: currentGuide.subscribe },
         currentGuideStepIndex: { subscribe: currentGuideStepIndex.subscribe },
         currentPane: { subscribe: currentPane.subscribe },
-        currentStepInfo: { subscribe: currentStepInfo.subscribe },
+        currentGuideItemInfo: { subscribe: currentGuideItemInfo.subscribe },
 
         // the contextual menu is the Guide Menu or Bible Menu, depending on the current tab
         isShowingContextualMenu: { subscribe: isShowingContextualMenu.subscribe },
@@ -126,12 +128,12 @@ export function createContentContext() {
             goto(buildContentViewerPath(guide?.id, null, bibleSection, undefined));
         },
 
-        setCurrentStepInfo: (index: number, length: number) => {
-            currentStepInfo.set({ index, length });
+        setCurrentGuideItemInfo: (id: number | undefined, stepIndex: number, totalSteps: number) => {
+            currentGuideItemInfo.set({ id, stepIndex, totalSteps });
         },
 
-        clearCurrentStepInfo: () => {
-            currentStepInfo.set(null);
+        clearCurrentGuideItemInfo: () => {
+            currentGuideItemInfo.set(null);
         },
 
         syncSelectedDataFromParams: (

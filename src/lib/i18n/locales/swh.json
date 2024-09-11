@@ -464,6 +464,26 @@
                 "pleaseFillInTheRequiredFields": {
                     "value": "Tafadhali jaza uga uliohitajika"
                 }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Pima maudhui haya"
+                },
+                "additionalFeedback": {
+                    "value": "Maoni ya Ziada (Hiari)"
+                },
+                "contactInformation": {
+                    "value": "Taarifa za Mawasiliano (Hiari)"
+                },
+                "contactType": {
+                    "value": "Aina ya Mawasiliano"
+                }
+            },
+            "feedbackError": {
+                "value": "Hitilafu ilipotuma maoni. Tafadhali jaribu tena."
+            },
+            "feedbackQueuedOffline": {
+                "value": "Maoni yatatumwa utakapokuwa mtandaoni tena."
             }
         }
     },

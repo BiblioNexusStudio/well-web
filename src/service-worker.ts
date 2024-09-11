@@ -193,7 +193,12 @@ registerRoute(CACHING_CONFIG.apiUrlRegex, apiCachingHandler, 'GET');
 registerRoute(
     CACHING_CONFIG.apiUrlRegex,
     new NetworkOnly({
-        plugins: [addApiKeyToAllRequestPlugin],
+        plugins: [
+            addApiKeyToAllRequestPlugin,
+            new BackgroundSyncPlugin('api-post-syncer', {
+                maxRetentionTime: 60 * 24 * 365, // time in minutes, 1 year
+            }),
+        ],
     }),
     'POST'
 );

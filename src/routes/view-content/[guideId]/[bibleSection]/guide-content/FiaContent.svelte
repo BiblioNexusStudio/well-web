@@ -73,7 +73,7 @@
                 const textContent = await fetchText(guideResourceInfo);
                 steps = stepLabels.map((label, stepIndex) => {
                     const stepNumber = stepIndex + 1;
-                    const step: StepBasedGuideStep = { label };
+                    const step: StepBasedGuideStep = { id: textContent?.id, label };
                     if (audioContent) {
                         const stepAudio = audioContent.steps.find((s) => s.stepNumber === stepNumber);
                         if (stepAudio?.url) {
@@ -154,6 +154,7 @@
                     textMetadata?.associatedResources
                 );
                 return {
+                    id: textResourceContent.id,
                     steps: content.map((step) => ({
                         ...step,
                         contentHTML: parseTiptapJsonToHtml(

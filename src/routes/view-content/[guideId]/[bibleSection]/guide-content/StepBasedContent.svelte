@@ -15,7 +15,7 @@
     export let multiClipAudioStates: Record<string, MultiClipAudioState> | undefined = undefined;
     export let audioPlayerKey: string | undefined;
 
-    const { currentGuideStepIndex, setCurrentGuideStepIndex, setCurrentStepInfo, clearCurrentStepInfo } =
+    const { currentGuideStepIndex, setCurrentGuideStepIndex, setCurrentGuideItemInfo, clearCurrentGuideItemInfo } =
         getContentContext();
 
     let topOfSteps: HTMLElement[] = [];
@@ -29,7 +29,9 @@
         }
     });
 
-    $: isShowing ? setCurrentStepInfo(guideStepIndex, steps.length) : clearCurrentStepInfo();
+    $: isShowing
+        ? setCurrentGuideItemInfo(steps[guideStepIndex]?.id, guideStepIndex, steps.length)
+        : clearCurrentGuideItemInfo();
     $: isShowing && setAudioPlayerForStep(guideStepIndex);
     $: populateAudioState(steps);
     $: isShowing && $currentGuideStepIndex === null && setCurrentGuideStepIndex(0);
