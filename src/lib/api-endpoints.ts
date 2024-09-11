@@ -67,7 +67,7 @@ export function searchResourcesEndpoint(
     endChapter?: number,
     startVerse?: number,
     endVerse?: number,
-    offSet?: number,
+    offset?: number,
     limit?: number,
     parentResourceId?: number
 ): ApiStringAndCacheBustVersion {
@@ -81,7 +81,7 @@ export function searchResourcesEndpoint(
         { key: 'endChapter', value: endChapter, ignoreIfEquals: 0 },
         { key: 'startVerse', value: startVerse, ignoreIfEquals: 0 },
         { key: 'endVerse', value: endVerse, ignoreIfEquals: 0 },
-        { key: 'offSet', value: offSet, ignoreIfEquals: 0 },
+        { key: 'offset', value: offset, ignoreIfEquals: 0 },
         { key: 'limit', value: limit, ignoreIfEquals: 0 },
         { key: 'parentResourceId', value: parentResourceId, ignoreIfEquals: undefined },
     ]);

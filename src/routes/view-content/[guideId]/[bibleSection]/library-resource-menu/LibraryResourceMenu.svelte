@@ -61,6 +61,7 @@
 
     let searchQuery: string = '';
     let hasQuery: boolean = false;
+    let hideLoadMore: boolean = false;
 
     let resourceGroupings: LibraryResourceGrouping[];
     let flatResources: ResourceContentInfoWithMetadata[] = [];
@@ -258,7 +259,8 @@
     async function searchByParentResource(
         parentResource: ApiParentResource | null,
         offset: number | null,
-        query: string = ''
+        query: string = '',
+        loadMore: boolean = false
     ) {
         if (!parentResource) return;
         if (query.length === 1 || query.length === 2) return;
@@ -281,9 +283,13 @@
             )
         )) as ResourceContentInfo[];
 
-        if (query.length === 0) {
+        if (response.length >= 99) {
+            hideLoadMore = true;
+        }
+
+        if (loadMore) {
             resourceSearchResources = [...resourceSearchResources, ...response];
-        } else if (query.length >= 3 && response.length > 0) {
+        } else {
             resourceSearchResources = response;
         }
     }
@@ -302,7 +308,13 @@
         </div>
     {/if}
     {#if $isResourceSearch}
-        <SearchByResource bind:resourceSearchResources {isLoading} {searchByParentResource} {resourceSelected} />
+        <SearchByResource
+            bind:resourceSearchResources
+            bind:hideLoadMore
+            {isLoading}
+            {searchByParentResource}
+            {resourceSelected}
+        />
     {/if}
     {#if !showingPassageSearch}
         <SwishHeader
