@@ -40,16 +40,17 @@
     }
 
     function backToParentResourceMenu() {
+        resourceSearchResources = [];
         searchQuery = '';
         showResourceMenu = false;
         showParentResourceMenu = true;
     }
 
     async function parentResourceSearch(parentResource: ApiParentResource) {
-        currentParentResource = parentResource;
-        showParentResourceMenu = false;
-        await searchByParentResource(parentResource, 0, searchQuery);
         showResourceMenu = true;
+        showParentResourceMenu = false;
+        currentParentResource = parentResource;
+        await searchByParentResource(parentResource, 0, searchQuery);
     }
 
     async function loadMoreResources() {
@@ -92,7 +93,7 @@
                 </div>
             </div>
         {/if}
-    {:else if resourceSearchResources.length && showResourceMenu}
+    {:else if showResourceMenu}
         <div class="relative z-[40] flex flex-col">
             <div class="fixed top-0 h-28 w-full bg-white">
                 <div class="relative flex w-full justify-center pb-2 pt-4">

@@ -269,14 +269,15 @@
             ...searchResourcesEndpoint(
                 currentLanguageId,
                 query,
-                [parentResource?.resourceType],
+                [],
                 '',
                 0,
                 0,
                 0,
                 0,
                 offset ?? 0,
-                100
+                100,
+                parentResource?.id
             )
         )) as ResourceContentInfo[];
 
