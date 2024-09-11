@@ -464,6 +464,26 @@
                 "pleaseFillInTheRequiredFields": {
                     "value": "يرجى ملء الحقول المطلوبة"
                 }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "قيم هذا المحتوى"
+                },
+                "additionalFeedback": {
+                    "value": "ملاحظات إضافية (اختياري)"
+                },
+                "contactInformation": {
+                    "value": "معلومات الاتصال (اختياري)"
+                },
+                "contactType": {
+                    "value": "نوع الاتصال"
+                }
+            },
+            "feedbackError": {
+                "value": "حدث خطأ أثناء إرسال الملاحظات. الرجاء المحاولة مرة أخرى."
+            },
+            "feedbackQueuedOffline": {
+                "value": "سيتم إرسال الملاحظات عندما تكون متصلاً بالإنترنت مرة أخرى."
             }
         }
     },

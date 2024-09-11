@@ -464,6 +464,26 @@
                 "pleaseFillInTheRequiredFields": {
                     "value": "Пожалуйста, заполните обязательные поля"
                 }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Оцените этот контент"
+                },
+                "additionalFeedback": {
+                    "value": "Дополнительные комментарии (необязательно)"
+                },
+                "contactInformation": {
+                    "value": "Контактная информация (необязательно)"
+                },
+                "contactType": {
+                    "value": "Тип контакта"
+                }
+            },
+            "feedbackError": {
+                "value": "Ошибка при отправке отзыва. Пожалуйста, попробуйте снова."
+            },
+            "feedbackQueuedOffline": {
+                "value": "Отзыв будет отправлен, когда вы снова будете в сети."
             }
         }
     },

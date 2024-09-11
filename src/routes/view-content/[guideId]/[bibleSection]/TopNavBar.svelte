@@ -9,6 +9,8 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import { ContentTabEnum, getContentContext } from './context';
     import { currentLanguageDirection } from '$lib/stores/language.store';
+    import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
+    import { getResourceFeedbackContext } from './resource-feedback-context';
 
     const {
         currentGuide,
@@ -18,8 +20,10 @@
         openContextualMenu,
         currentBibleSection,
         currentTab,
-        currentStepInfo,
+        currentGuideItemInfo,
     } = getContentContext();
+
+    const { openResourceFeedbackModalForResource } = getResourceFeedbackContext();
 
     export let bibles: FrontendBibleBook[] = [];
     export let preferredBiblesModalOpen = false;
@@ -125,10 +129,16 @@
             <PreferredBiblesModal bind:open={preferredBiblesModalOpen} {bibles} />
         </div>
     {/if}
-    {#if $currentStepInfo}
+    {#if $currentGuideItemInfo}
+        <button
+            on:click={() => openResourceFeedbackModalForResource($currentGuideItemInfo?.id)}
+            class="btn btn-link !btn-info"
+        >
+            <ChatBubbleIcon />
+        </button>
         <div class="flex-none pe-4 text-sm">
             {$translate('page.passage.resourcePane.fullscreen.currentOfTotalLabel.value', {
-                values: { current: $currentStepInfo.index + 1, total: $currentStepInfo.length },
+                values: { current: $currentGuideItemInfo.stepIndex + 1, total: $currentGuideItemInfo.totalSteps },
             })}
         </div>
     {/if}
