@@ -283,7 +283,7 @@
             )
         )) as ResourceContentInfo[];
 
-        if (response.length >= 99) {
+        if (response.length <= 99) {
             hideLoadMore = true;
         }
 
