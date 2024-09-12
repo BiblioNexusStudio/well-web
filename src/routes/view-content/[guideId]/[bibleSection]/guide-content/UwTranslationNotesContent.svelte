@@ -1,7 +1,7 @@
 <script lang="ts">
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
-    import { ParentResourceId, MediaType, type StepBasedGuideStep } from '$lib/types/resource';
+    import { ParentResourceId, MediaType, type StepBasedGuideStep, ReviewLevel } from '$lib/types/resource';
     import { filterBoolean } from '$lib/utils/array';
     import { asyncMap } from '$lib/utils/async-array';
     import {
@@ -53,6 +53,7 @@
                             return {
                                 ...restOfResourceInfo,
                                 label: stripBookName(label) ?? '',
+                                communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
                                 contentHTML:
                                     `<b>${label}</b>` +
                                     parseTiptapJsonToHtml(

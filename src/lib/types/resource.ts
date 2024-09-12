@@ -53,8 +53,15 @@ export enum ParentResourceType {
     Videos = 'Videos',
 }
 
+export enum ReviewLevel {
+    None = 'None',
+    Community = 'Community',
+    Professional = 'Professional',
+}
+
 export interface ResourceContentMetadata {
     displayName: string;
+    reviewLevel?: ReviewLevel;
     associatedResources: AssociatedResource[];
     metadata: Record<string, unknown>;
 }
@@ -82,6 +89,7 @@ export interface StepBasedGuideStep {
     label: string;
     contentHTML?: string;
     audioUrl?: string;
+    communityEdition: boolean;
 }
 
 interface ApiSingleLicense {

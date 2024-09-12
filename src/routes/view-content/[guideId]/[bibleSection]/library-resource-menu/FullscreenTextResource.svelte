@@ -2,7 +2,7 @@
     import { trapFocus } from '$lib/utils/trap-focus';
     import { Icon } from 'svelte-awesome';
     import chevronLeft from 'svelte-awesome/icons/chevronLeft';
-    import { MediaType, type BasicTextResourceContent } from '$lib/types/resource';
+    import { MediaType, type BasicTextResourceContent, ReviewLevel } from '$lib/types/resource';
     import { _ as translate } from 'svelte-i18n';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import {
@@ -21,6 +21,8 @@
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { getResourceFeedbackContext } from '../resource-feedback-context';
     import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
+    import GlobeIcon from '$lib/icons/GlobeIcon.svelte';
+    import { isShowingCommunityEditionModal } from '$lib/stores/community-edition-modal.store';
 
     export let tab: ContentTabEnum;
     export let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]>;
@@ -64,6 +66,7 @@
                   })
                 : null,
             displayName: handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection),
+            communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
         };
     }
 </script>
@@ -92,12 +95,24 @@
                     </button>
                 </div>
             </div>
-            <div class="prose mx-auto overflow-y-scroll px-4 pb-4 md:px-0 {!!resource?.audioUrl && 'mb-14'}">
-                {#if resource?.html}
-                    {@html resource.html}
-                {:else}
-                    {$translate('page.passage.resourcePane.error.value')}
+            <div class="self-center overflow-y-scroll">
+                {#if resource?.communityEdition}
+                    <div class="float-right p-4 pe-5 text-warning">
+                        <button on:click={() => ($isShowingCommunityEditionModal = true)}>
+                            <GlobeIcon />
+                        </button>
+                    </div>
                 {/if}
+                <div
+                    class="prose mx-2 rounded-md {resource?.communityEdition &&
+                        'bg-warning-content'} px-4 pb-4 pt-2 {resource?.audioUrl ? 'mb-16' : 'mb-2'}"
+                >
+                    {#if resource?.html}
+                        {@html resource.html}
+                    {:else}
+                        {$translate('page.passage.resourcePane.error.value')}
+                    {/if}
+                </div>
             </div>
             {#if resource?.audioUrl}
                 <div

@@ -9,6 +9,8 @@
     import { afterUpdate } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
     import { getContentContext } from '../context';
+    import GlobeIcon from '$lib/icons/GlobeIcon.svelte';
+    import { isShowingCommunityEditionModal } from '$lib/stores/community-edition-modal.store';
 
     export let steps: StepBasedGuideStep[];
     export let isShowing: boolean;
@@ -65,7 +67,7 @@
 </script>
 
 {#if steps.length > 0}
-    <div class="flex flex-col px-4 pb-4 {!isShowing && 'hidden'}">
+    <div class="flex flex-col px-4 pb-2 {!isShowing && 'hidden'}">
         <progress
             class="progress progress-primary mx-auto mb-2 h-1 max-w-[65ch]"
             value={guideStepIndex + 1}
@@ -86,7 +88,7 @@
         </div>
     </div>
 {/if}
-<div class="flex flex-grow overflow-y-hidden px-4 {!isShowing && 'hidden'}">
+<div class="flex flex-grow overflow-y-hidden px-2 {!isShowing && 'hidden'}">
     <div class="prose mx-auto flex flex-grow">
         <div class="flex flex-grow">
             {#if steps.length > 0}
@@ -94,19 +96,30 @@
                     <div class={guideStepIndex === stepIndex ? 'flex flex-grow flex-col' : 'hidden'}>
                         <div class="flex-grow overflow-y-scroll">
                             <div bind:this={topOfSteps[stepIndex]} />
-                            {#if step.contentHTML}
-                                {@html step.contentHTML}
-                            {/if}
-                            {#if stepIndex < steps.length - 1}
-                                <div class="flex w-full flex-col items-center">
-                                    <button
-                                        on:click={goToNextStep}
-                                        class="btn btn-primary my-2"
-                                        data-app-insights-event-name="guide-content-next-button-clicked"
-                                        >{$translate('page.passage.guide.next.value')}<span>→ </span></button
-                                    >
+                            <div class="rounded-md {step.communityEdition && 'bg-warning-content'} mb-2 px-4 pb-2 pt-2">
+                                {#if step.communityEdition}
+                                    <div class="float-right p-4 pe-0 pt-2 text-warning">
+                                        <button on:click={() => ($isShowingCommunityEditionModal = true)}>
+                                            <GlobeIcon />
+                                        </button>
+                                    </div>
+                                {/if}
+                                <div class="[&>*:first-child]:mt-0">
+                                    {#if step.contentHTML}
+                                        {@html step.contentHTML}
+                                    {/if}
                                 </div>
-                            {/if}
+                                {#if stepIndex < steps.length - 1}
+                                    <div class="flex w-full flex-col items-center">
+                                        <button
+                                            on:click={goToNextStep}
+                                            class="btn btn-primary my-2"
+                                            data-app-insights-event-name="guide-content-next-button-clicked"
+                                            >{$translate('page.passage.guide.next.value')}<span>→ </span></button
+                                        >
+                                    </div>
+                                {/if}
+                            </div>
                         </div>
                     </div>
                 {/each}
