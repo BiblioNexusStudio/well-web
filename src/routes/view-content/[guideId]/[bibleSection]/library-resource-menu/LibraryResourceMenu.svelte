@@ -287,6 +287,8 @@
             hideLoadMore = true;
         }
 
+        response = response.filter((rc) => rc.mediaType !== MediaType.Audio);
+
         if (loadMore) {
             resourceSearchResources = [...resourceSearchResources, ...response];
         } else {
