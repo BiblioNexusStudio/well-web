@@ -540,10 +540,19 @@
                 "value": "Buscar"
             },
             "clear": {
-                "value": "Limpiar"
+                "value": "Borrar"
             },
-            "passageSearch": {
-                "value": "Búsqueda de Pasajes"
+            "passage": {
+                "value": "Pasaje"
+            },
+            "resource": {
+                "value": "Recurso"
+            },
+            "resources": {
+                "value": "Recursos"
+            },
+            "loadMore": {
+                "value": "Cargar Más"
             }
         }
     }

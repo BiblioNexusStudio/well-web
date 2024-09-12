@@ -699,9 +699,21 @@
                 "value": "Clear",
                 "_context": "Button in the search component for clearing entered text"
             },
-            "passageSearch": {
-                "value": "Passage Search",
+            "passage": {
+                "value": "Passage",
                 "_context": "Label for the passage search button"
+            },
+            "resource": {
+                "value": "Resource",
+                "_context": "Label for the resource search button"
+            },
+            "resources": {
+                "value": "Resources",
+                "_context": "Title for the resource menu"
+            },
+            "loadMore": {
+                "value": "Load More",
+                "_context": "Button to load more resources"
             }
         }
     }

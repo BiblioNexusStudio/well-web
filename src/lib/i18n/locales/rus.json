@@ -542,8 +542,17 @@
             "clear": {
                 "value": "Очистить"
             },
-            "passageSearch": {
-                "value": "Поиск отрывка"
+            "passage": {
+                "value": "Отрывок"
+            },
+            "resource": {
+                "value": "Ресурс"
+            },
+            "resources": {
+                "value": "Ресурсы"
+            },
+            "loadMore": {
+                "value": "Загрузить больше"
             }
         }
     }

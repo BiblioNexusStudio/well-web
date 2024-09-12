@@ -34,9 +34,11 @@ export function createContentContext() {
     const isLoadingToOpenPane = writable(false);
     const isPassageSearch = writable(false);
     const passageSearchBibleSection = writable<BibleSection | null>(null);
+    const isResourceSearch = writable(false);
 
     const context = {
         isPassageSearch: { subscribe: isPassageSearch.subscribe },
+        isResourceSearch: { subscribe: isResourceSearch.subscribe },
         passageSearchBibleSection: { subscribe: passageSearchBibleSection.subscribe },
         currentTab: { subscribe: currentTab.subscribe },
         currentBibleSection: { subscribe: currentBibleSection.subscribe },
@@ -173,6 +175,9 @@ export function createContentContext() {
         },
         setPassageSearchBibleSection: (value: BibleSection | null) => {
             passageSearchBibleSection.set(value);
+        },
+        setIsResourceSearch: (value: boolean) => {
+            isResourceSearch.set(value);
         },
     };
 
