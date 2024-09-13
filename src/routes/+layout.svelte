@@ -19,6 +19,7 @@
     import { parentResourcesEndpoint } from '$lib/api-endpoints';
     import { get } from 'svelte/store';
     import { browserSupported } from '$lib/utils/browser';
+    import CommunityEditionModal from '$lib/components/CommunityEditionModal.svelte';
 
     $: {
         document.dir = $currentLanguageDirection;
@@ -110,6 +111,7 @@
 />
 
 <DebugModal />
+<CommunityEditionModal />
 
 {#if !data.browserSupported}
     <div class="mx-auto flex h-full w-full max-w-lg flex-col items-center space-y-4 px-4 text-lg">

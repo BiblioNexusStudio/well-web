@@ -10,6 +10,7 @@
         type ResourceContentTiptap,
         type ResourceContentMetadata,
         type StepBasedGuideStep,
+        ReviewLevel,
     } from '$lib/types/resource';
     import { filterBoolean, filterBooleanByKey } from '$lib/utils/array';
     import { asyncMap } from '$lib/utils/async-array';
@@ -73,7 +74,7 @@
                 const textContent = await fetchText(guideResourceInfo);
                 steps = stepLabels.map((label, stepIndex) => {
                     const stepNumber = stepIndex + 1;
-                    const step: StepBasedGuideStep = { id: textContent?.id, label };
+                    const step: StepBasedGuideStep = { id: textContent?.id, label, communityEdition: false };
                     if (audioContent) {
                         const stepAudio = audioContent.steps.find((s) => s.stepNumber === stepNumber);
                         if (stepAudio?.url) {
@@ -85,6 +86,7 @@
                         if (stepText?.contentHTML) {
                             step.contentHTML = stepText.contentHTML;
                         }
+                        step.communityEdition = !!stepText?.communityEdition;
                     }
                     return step;
                 });
@@ -157,6 +159,7 @@
                     id: textResourceContent.id,
                     steps: content.map((step) => ({
                         ...step,
+                        communityEdition: textMetadata?.reviewLevel === ReviewLevel.Community,
                         contentHTML: parseTiptapJsonToHtml(
                             step.tiptap,
                             $currentLanguageDirection,

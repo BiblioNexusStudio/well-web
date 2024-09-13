@@ -554,6 +554,14 @@
             "loadMore": {
                 "value": "Lod Moa"
             }
+        },
+        "communityEditionModal": {
+            "header": {
+                "value": "Komyuniti Edision Kontent"
+            },
+            "description": {
+                "value": "<p>Dispela kontent i no bin olgeta tru long stretpela pasin. Wanpela memba bilong komyuniti i tanim, tasol i no go long wankain wok bung wantaim ol arapela kontent. Plis yu mas yusim wantaim luksave.</p><p>Sapos yu lukim wanpela translation eror o yu gat sampela tingting long mekim senis, yu ken ripotim long yusim ikon bilong feedback long antap, long rait han bilong skrin.</p><p>Sapos yu laik kamap wanpela kontributa bilong Komyuniti Edision, go long Home > Feedback na givim save long mipela.</p>"
+            }
         }
     }
 }

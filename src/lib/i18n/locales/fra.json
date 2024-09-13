@@ -554,6 +554,14 @@
             "loadMore": {
                 "value": "Charger Plus"
             }
+        },
+        "communityEditionModal": {
+            "header": {
+                "value": "Contenu de l'Édition Communautaire"
+            },
+            "description": {
+                "value": "<p>Ce contenu n'a pas été entièrement vérifié pour en garantir l'exactitude. Un membre de la communauté l'a traduit, mais il n'a pas suivi le même processus de révision que les autres contenus. Veuillez l'utiliser avec prudence.</p><p>Veuillez signaler toute erreur de traduction ou suggestion en utilisant l'icône de retour dans le coin supérieur droit de la fenêtre.</p><p>Si vous êtes intéressé par une contribution à l'Édition Communautaire, allez dans Accueil > Commentaires et faites-le nous savoir.</p>"
+            }
         }
     }
 }

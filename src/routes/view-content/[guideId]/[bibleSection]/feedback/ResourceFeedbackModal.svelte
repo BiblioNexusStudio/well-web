@@ -34,8 +34,8 @@
     }
 
     function close() {
-        resetForm();
         closeResourceFeedbackModal();
+        setTimeout(resetForm, 250); // wait for animation to end before resetting the form so it doesn't flash
     }
 
     async function handleSubmit() {
