@@ -97,7 +97,7 @@
             </div>
             <div class="self-center overflow-y-scroll">
                 {#if resource?.communityEdition}
-                    <div class="float-right p-4 pe-5 text-warning">
+                    <div class="float-end p-4 pe-5 text-warning">
                         <button on:click={() => ($isShowingCommunityEditionModal = true)}>
                             <GlobeIcon />
                         </button>

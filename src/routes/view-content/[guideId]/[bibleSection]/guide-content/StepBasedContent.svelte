@@ -98,7 +98,7 @@
                             <div bind:this={topOfSteps[stepIndex]} />
                             <div class="rounded-md {step.communityEdition && 'bg-warning-content'} mb-2 px-4 pb-2 pt-2">
                                 {#if step.communityEdition}
-                                    <div class="float-right p-4 pe-0 pt-2 text-warning">
+                                    <div class="float-end p-4 pe-0 pt-2 text-warning">
                                         <button on:click={() => ($isShowingCommunityEditionModal = true)}>
                                             <GlobeIcon />
                                         </button>
