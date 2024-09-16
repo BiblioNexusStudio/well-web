@@ -122,6 +122,7 @@ export interface ResourceContentInfo {
     resourceType: ParentResourceType;
     parentResourceId: ParentResourceId;
     dependentOnId?: number | null;
+    sortOrder?: number;
     displayName?: string;
 }
 

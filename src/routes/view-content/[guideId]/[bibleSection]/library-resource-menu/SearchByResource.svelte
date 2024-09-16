@@ -9,6 +9,8 @@
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
     import { afterUpdate } from 'svelte';
+    import { debounce } from '$lib/utils/debounce';
+    import NoResourcesFound from './NoResourcesFound.svelte';
 
     export let resourceSearchResources: ResourceContentInfo[];
     export let searchByParentResource: (
@@ -28,7 +30,11 @@
     let currentParentResource: ApiParentResource | null;
     let searchQuery = '';
 
-    $: searchByParentResource(currentParentResource, 0, searchQuery, false);
+    $: debouncedSearchByParentResource(searchQuery);
+
+    const debouncedSearchByParentResource = debounce(async (query: string) => {
+        searchByParentResource(currentParentResource, 0, query, false);
+    }, 750);
 
     function closeParentResourceMenu() {
         setIsResourceSearch(false);
@@ -144,6 +150,8 @@
                         class="mx-4 mb-4 flex h-12 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
                         id={`resource-button-${index + 1}`}>{resourceSearchResource.displayName}</button
                     >
+                {:else}
+                    <NoResourcesFound {searchQuery} />
                 {/each}
                 {#if resourceSearchResources.length >= 100 || !hideLoadMore}
                     <button
