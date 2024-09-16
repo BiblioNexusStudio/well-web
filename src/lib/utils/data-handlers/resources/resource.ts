@@ -237,10 +237,17 @@ export async function filterToAvailableAssociatedResourceContent(
     });
 }
 
-export function sortByDisplayName<T extends { displayName: string | undefined }>(resources: T[]): T[] {
-    return resources.sort((a, b) =>
-        (a.displayName ?? '').localeCompare(b.displayName ?? '', undefined, { numeric: true })
-    );
+export function sortByDisplayName<T extends { displayName: string | undefined; sortOrder?: number }>(
+    resources: T[]
+): T[] {
+    return resources.sort((a, b) => {
+        if (a.sortOrder !== undefined && b.sortOrder !== undefined) {
+            if (a.sortOrder !== b.sortOrder) {
+                return a.sortOrder - b.sortOrder;
+            }
+        }
+        return (a.displayName ?? '').localeCompare(b.displayName ?? '', undefined, { numeric: true });
+    });
 }
 
 interface Node {
