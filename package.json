@@ -3,8 +3,8 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "dev": "vite dev",
-        "build": "vite build",
+        "dev": "yarn prebuild && vite dev",
+        "build": "yarn prebuild && vite build",
         "preview": "vite preview",
         "test": "vitest",
         "lint:unused-translations": "run-script-os",
@@ -17,7 +17,8 @@
         "postinstall": "patch-package",
         "apk:build": "node ./scripts/build-android-apk.js",
         "apk:preload-content": "node ./scripts/preload-files-to-static.js",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "prebuild": "node ./scripts/prebuild-for-service-worker.js"
     },
     "dependencies": {
         "@microsoft/applicationinsights-web": "^3.0.3",

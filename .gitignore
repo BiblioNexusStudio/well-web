@@ -13,3 +13,4 @@ yarn-error.log
 /static/cached-data/
 /static/local-development-env.js
 /src/lib/static-urls-map.json
+/src/lib/caching-config.js
