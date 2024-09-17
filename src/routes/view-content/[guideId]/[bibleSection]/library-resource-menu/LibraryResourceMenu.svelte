@@ -60,7 +60,6 @@
     } = getContentContext();
 
     let searchQuery: string = '';
-    let hasQuery: boolean = false;
     let hideLoadMore: boolean = false;
 
     let resourceGroupings: LibraryResourceGrouping[];
@@ -73,17 +72,19 @@
     $: prepareResources(resources || [], isShowing, passageSearchResources || [], resourceSearchResources);
 
     $: filteredResourceCount = filterItemsByKeyMatchingSearchQuery(flatResources, 'displayName', searchQuery).length;
-    $: hasQuery = searchQuery != '';
 
     let currentFullscreenMediaResourceIndex: number | null = null;
     let currentFullscreenResourceGrouping: LibraryResourceGrouping | null = null;
     let currentFullscreenResourceSubgrouping: LibraryResourceSubgrouping | null = null;
 
-    let visibleSwish = isFullLibrary;
+    let searchFocused = false;
 
-    const placeholderText = isFullLibrary
-        ? $translate('page.passage.resourcePane.typeToSearch.value')
-        : $translate('components.search.placeholder.value');
+    $: visibleSwish = isFullLibrary && !searchFocused && searchQuery === '' && !$isPassageSearch;
+
+    $: placeholderText =
+        isFullLibrary && !$isPassageSearch
+            ? $translate('page.passage.resourcePane.typeToSearch.value')
+            : $translate('components.search.placeholder.value');
 
     $: searchQueryChanged(searchQuery);
     $: showOnlySrvResources = !!$settings.find(
@@ -92,21 +93,14 @@
 
     $: fetchPassageSearchResources($passageSearchBibleSection);
 
-    function onHandleSearchFocus() {
-        if (!hasQuery && isFullLibrary) {
-            visibleSwish = !visibleSwish;
-        }
-    }
-
     function resetPage(e: MouseEvent) {
         e.stopPropagation();
-        visibleSwish = true;
         searchQuery = '';
         return null;
     }
 
     async function searchQueryChanged(query: string) {
-        if (isFullLibrary) {
+        if (isFullLibrary && !$isPassageSearch) {
             if (query.length < 3) {
                 resourceGroupings = [];
             } else {
@@ -182,7 +176,6 @@
                 passageSearchResources,
                 $currentLanguageDirection
             );
-            visibleSwish = false;
         } else if ($isResourceSearch) {
             resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(
                 resourceSearchResources,
@@ -207,7 +200,7 @@
     function handlePassageSearchClose() {
         setIsPassageSearch(false);
         setPassageSearchBibleSection(null);
-        visibleSwish = true;
+        searchQuery = '';
         isFullLibrary = true;
         resourceGroupings = [];
     }
@@ -298,13 +291,17 @@
 </script>
 
 {#if isShowing}
-    {#if (showingPassageSearch && resourceGroupings.length > 0) || (showingPassageSearch && passageSearchResources?.length === 0 && $passageSearchBibleSection !== null)}
+    {#if showingPassageSearch}
         <div class="navbar flex w-full justify-between">
             <button
                 class="mx-2 flex h-9 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"
                 on:click={handlePassageSearchClose}
             >
-                {getBibleVerseText($passageSearchBibleSection)}
+                {#if resourceGroupings.length > 0 || (passageSearchResources?.length === 0 && $passageSearchBibleSection !== null)}
+                    {getBibleVerseText($passageSearchBibleSection)}
+                {:else}
+                    {$translate('components.search.passage.value')}
+                {/if}
                 <span class="ms-2"><XMarkSmallIcon /></span>
             </button>
         </div>
@@ -348,12 +345,15 @@
             ? 'top-12'
             : isFullLibrary
             ? 'top-0'
-            : 'top-16'} flex flex-col px-4 {showingPassageSearch ? '' : 'transition-[top] duration-500 ease-in-out'}"
+            : 'top-16'} flex flex-col px-4 transition-[top] duration-500 ease-in-out"
     >
         <div class="my-4 flex flex-row">
-            {#if !showingPassageSearch || $passageSearchBibleSection === null || !isFullLibrary}
-                <SearchInput bind:searchQuery onFocus={onHandleSearchFocus} placeholder={placeholderText} />
-            {/if}
+            <SearchInput
+                bind:searchQuery
+                onBlur={() => (searchFocused = false)}
+                onFocus={() => (searchFocused = true)}
+                placeholder={placeholderText}
+            />
 
             {#if !visibleSwish && isFullLibrary && $passageSearchBibleSection === null}
                 <div>
@@ -410,7 +410,7 @@
                         {resourceGrouping}
                         isFullscreen={false}
                         {searchQuery}
-                        skipClientSideFiltering={isFullLibrary}
+                        skipClientSideFiltering={isFullLibrary && !$isPassageSearch}
                         {resourceSelected}
                         {subgroupSelected}
                         {showResourceGroupingFullscreen}
