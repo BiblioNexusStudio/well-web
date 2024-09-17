@@ -3,7 +3,7 @@
     import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
     import { apiUrl } from '$lib/data-cache';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import { additionalProperties, getBrowserAndScreenSize } from '$lib/logger';
+    import { getAdditionalProperties } from '$lib/logger';
     import { currentLanguageInfo } from '$lib/stores/language.store';
     interface BibleUseOptions {
         name: string;
@@ -69,12 +69,7 @@
                     likes,
                     improvements,
                 },
-                additionalProperties: {
-                    ...additionalProperties,
-                },
-                browserAndScreenSize: {
-                    ...getBrowserAndScreenSize(),
-                },
+                additionalProperties: getAdditionalProperties(),
                 currentLanguage: {
                     ...$currentLanguageInfo,
                 },

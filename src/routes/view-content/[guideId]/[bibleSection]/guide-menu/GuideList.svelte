@@ -30,7 +30,7 @@
         <MenuButton
             onClick={() => selectGuide(guideResource)}
             data-app-insights-event-name="guide-menu-resource-selected"
-            data-app-insights-dimensions={`guideResource,${guideResource.displayName}`}
+            data-app-insights-dimensions={`guideResource,${guideResource.shortName}`}
         >
             <span>{guideResource.displayName}</span>
             <span class="mx-1">-</span>

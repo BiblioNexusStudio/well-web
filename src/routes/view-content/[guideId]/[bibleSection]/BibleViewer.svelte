@@ -16,6 +16,7 @@
     import type { BibleSection } from '$lib/types/bible';
     import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
     import { getContentContext } from './context';
+    import { log } from '$lib/logger';
 
     const { currentBibleSection } = getContentContext();
 
@@ -85,7 +86,7 @@
                 ({ text, spaceFollowing, isPunctuation }, wordIndex) =>
                     (isPunctuation
                         ? text
-                        : `<span onclick="onEnglishBibleWordClicked(${chapterIndex}, ${chapterNumber}, ${verseIndex},
+                        : `<span onclick="onBibleWordClicked(${chapterIndex}, ${chapterNumber}, ${verseIndex},
 ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
                               selectedWordIndexesForChapterVerse.includes(wordIndex) && 'bg-primary-50'
                           }">${text}</span>`) + (spaceFollowing ? ' ' : '')
@@ -94,7 +95,7 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
     }
 
     onMount(() => {
-        const onEnglishBibleWordClicked = (
+        const onBibleWordClicked = (
             chapterIndex: number,
             chapterNumber: number,
             verseIndex: number,
@@ -111,6 +112,10 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
                 const targetWord = splitTextForAlignment?.[chapterIndex]?.[verseIndex]?.[wordIndex]?.text?.replace(
                     /[’‘]/g,
                     "'"
+                );
+                log.trackEvent(
+                    'bible-alignment-mode-word-clicked',
+                    `word,${targetWord},book,${currentBible?.bookMetadata?.bookCode},chapter,${chapterNumber},verse,${verseNumber}`
                 );
                 const result = findSelectedWordIndexesAndGreekWordsForEnglish(wordIndex, targetWord, verseData);
                 if (result) {
@@ -132,10 +137,10 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
                 window.document.getElementById(spanId)?.scrollIntoView({ behavior: 'smooth', inline: 'start' });
             }, 50);
         };
-        window.onEnglishBibleWordClicked = onEnglishBibleWordClicked;
+        window.onBibleWordClicked = onBibleWordClicked;
         return () => {
-            if (window.onEnglishBibleWordClicked === onEnglishBibleWordClicked) {
-                delete window.onEnglishBibleWordClicked;
+            if (window.onBibleWordClicked === onBibleWordClicked) {
+                delete window.onBibleWordClicked;
             }
         };
     });

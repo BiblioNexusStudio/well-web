@@ -16,6 +16,7 @@
     import { MediaType, type ResourceContentInfoWithMetadata } from '$lib/types/resource';
     import { getResourceFeedbackContext } from '../resource-feedback-context';
     import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
+    import { log } from '$lib/logger';
 
     export let currentIndex: number | null;
     export let resources: ResourceContentInfoWithMetadata[];
@@ -91,12 +92,21 @@
     function previousItem() {
         if (currentIndex !== null && currentIndex > 0) {
             currentIndex -= 1;
+            trackResourceWithEvent('fullscreen-previous-button-clicked');
         }
     }
 
     function nextItem() {
         if (currentIndex !== null && currentIndex < resources.length - 1) {
             currentIndex += 1;
+            trackResourceWithEvent('fullscreen-next-button-clicked');
+        }
+    }
+
+    function trackResourceWithEvent(eventName: string) {
+        const newResource = resources[currentIndex!];
+        if (newResource) {
+            log.trackEvent(eventName, `resourceContentId,${newResource.id},resourceName,${newResource.displayName}`);
         }
     }
 
@@ -184,7 +194,6 @@
                 <button
                     disabled={currentIndex === 0}
                     class="btn btn-link text-gray-50 disabled:bg-opacity-0 disabled:text-transparent disabled:text-opacity-25"
-                    data-app-insights-event-name="fullscreen-previous-button-clicked"
                     on:click={previousItem}><Icon data={chevronLeft} /></button
                 >
                 {#if videoState.active && !videoState.isLoading}
@@ -201,7 +210,6 @@
                     disabled={currentIndex === resources.length - 1}
                     class="btn btn-link text-gray-50 disabled:bg-opacity-0 disabled:text-transparent
                     disabled:text-opacity-25"
-                    data-app-insights-event-name="fullscreen-next-button-clicked"
                     on:click={nextItem}><Icon data={chevronRight} /></button
                 >
                 {#if videoState.active && !videoState.isLoading}

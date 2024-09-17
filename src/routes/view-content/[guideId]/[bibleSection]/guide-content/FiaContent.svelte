@@ -74,7 +74,12 @@
                 const textContent = await fetchText(guideResourceInfo);
                 steps = stepLabels.map((label, stepIndex) => {
                     const stepNumber = stepIndex + 1;
-                    const step: StepBasedGuideStep = { id: textContent?.id, label, communityEdition: false };
+                    const step: StepBasedGuideStep = {
+                        id: textContent?.id,
+                        label,
+                        eventTrackerName: `FIA Step ${stepIndex + 1}`,
+                        communityEdition: false,
+                    };
                     if (audioContent) {
                         const stepAudio = audioContent.steps.find((s) => s.stepNumber === stepNumber);
                         if (stepAudio?.url) {

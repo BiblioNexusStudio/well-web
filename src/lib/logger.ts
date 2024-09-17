@@ -3,6 +3,8 @@ import config from '$lib/config';
 import { browserSupported } from './utils/browser';
 import { browser } from '$app/environment';
 import type { WellFetchError } from './data-cache';
+import { currentLanguageInfo } from './stores/language.store';
+import { get } from 'svelte/store';
 
 export const userInfo: { id?: string } = {};
 
@@ -39,12 +41,17 @@ if (appInsightsEnabled) {
     console.warn('No app insights connection string available.');
 }
 
-export const additionalProperties = {
-    source: 'well-web',
-    environment: config.PUBLIC_ENV,
-};
+export function getAdditionalProperties() {
+    return {
+        ...getBrowserAndScreenSize(),
+        source: 'well-web',
+        environment: config.PUBLIC_ENV,
+        commitSha: config.PUBLIC_COMMIT_SHA,
+        selectedLanguage: get(currentLanguageInfo)?.iso6393Code,
+    };
+}
 
-export function getBrowserAndScreenSize() {
+function getBrowserAndScreenSize() {
     if (browser) {
         return {
             browserWidth: window.innerWidth,
@@ -75,10 +82,8 @@ export const log = {
             appInsights.trackException(
                 { exception: error },
                 {
-                    ...additionalProperties,
                     ...(url ? { url, cacheBustVersion } : null),
-                    ...getBrowserAndScreenSize(),
-                    commitSha: config.PUBLIC_COMMIT_SHA,
+                    ...getAdditionalProperties(),
                 }
             );
         }
@@ -86,7 +91,7 @@ export const log = {
     pageView: (routeId: string) => {
         appInsights.trackPageView({
             name: routeId,
-            properties: { ...additionalProperties, ...getBrowserAndScreenSize(), commitSha: config.PUBLIC_COMMIT_SHA },
+            properties: getAdditionalProperties(),
         });
     },
     trackEvent: (eventName: string, dimensions: string | undefined) => {
@@ -94,10 +99,8 @@ export const log = {
             appInsights.trackEvent({
                 name: eventName,
                 properties: {
-                    ...additionalProperties,
+                    ...getAdditionalProperties(),
                     ...(dimensions && stringDimensionsToJsonObject(dimensions)),
-                    ...getBrowserAndScreenSize(),
-                    commitSha: config.PUBLIC_COMMIT_SHA,
                 },
             });
     },

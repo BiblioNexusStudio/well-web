@@ -17,7 +17,7 @@ declare global {
         __CACHING_CONFIG: typeof CACHING_CONFIG;
         webkitAudioContext: AudioContext;
         onResourceReferenceClick: ((tab: string, contentId: number, audioId: number | undefined) => void) | undefined;
-        onEnglishBibleWordClicked:
+        onBibleWordClicked:
             | ((
                   chapterIndex: number,
                   chapterNumber: number,

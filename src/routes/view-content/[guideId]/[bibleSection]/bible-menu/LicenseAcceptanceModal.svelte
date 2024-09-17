@@ -40,7 +40,7 @@
             <button
                 class="btn btn-primary"
                 on:click|stopPropagation={acceptLicense}
-                data-app-insights-dimensions={`bibleName,${bible?.name}`}
+                data-app-insights-dimensions={`bible,${bible?.abbreviation}`}
                 data-app-insights-event-name="bible-license-acceptance-modal-accept-button-clicked"
                 >{$translate('page.bibleMenu.bibleLicenseAcceptanceModal.accept.value')}</button
             >
