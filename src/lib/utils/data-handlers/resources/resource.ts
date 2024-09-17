@@ -241,10 +241,8 @@ export function sortByDisplayName<T extends { displayName: string | undefined; s
     resources: T[]
 ): T[] {
     return resources.sort((a, b) => {
-        if (a.sortOrder !== undefined && b.sortOrder !== undefined) {
-            if (a.sortOrder !== b.sortOrder) {
-                return a.sortOrder - b.sortOrder;
-            }
+        if (a.sortOrder !== undefined && b.sortOrder !== undefined && a.sortOrder !== b.sortOrder) {
+            return a.sortOrder - b.sortOrder;
         }
         return (a.displayName ?? '').localeCompare(b.displayName ?? '', undefined, { numeric: true });
     });

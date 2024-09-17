@@ -2,10 +2,10 @@
     import { Icon } from 'svelte-awesome';
     import searchIcon from 'svelte-awesome/icons/search';
     import { _ as translate } from 'svelte-i18n';
-    import type { FocusEventHandler } from 'svelte/elements';
 
     export let searchQuery: string;
-    export let onFocus: FocusEventHandler<HTMLInputElement> | undefined = undefined;
+    export let onFocus: (() => void) | undefined = undefined;
+    export let onBlur: (() => void) | undefined = undefined;
     export let placeholder = $translate('components.search.placeholder.value');
 </script>
 
@@ -22,5 +22,11 @@
             {$translate('components.search.clear.value')}
         </button>
     </div>
-    <input class="input input-bordered w-full ps-10" {placeholder} bind:value={searchQuery} on:focus={onFocus} />
+    <input
+        class="input input-bordered w-full ps-10"
+        {placeholder}
+        bind:value={searchQuery}
+        on:blur={onBlur}
+        on:focus={onFocus}
+    />
 </div>
