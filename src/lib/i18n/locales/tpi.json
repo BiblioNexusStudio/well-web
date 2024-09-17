@@ -484,6 +484,23 @@
             },
             "feedbackQueuedOffline": {
                 "value": "Bai mi salim bekim long taim yu kam bek long lain."
+            },
+            "contactType": {
+                "email": {
+                    "value": "E-mail"
+                },
+                "phone": {
+                    "value": "Telefōn"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp"
+                },
+                "signal": {
+                    "value": "Signal"
+                },
+                "other": {
+                    "value": "Narapela"
+                }
             }
         }
     },

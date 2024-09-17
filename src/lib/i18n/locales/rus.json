@@ -484,6 +484,23 @@
             },
             "feedbackQueuedOffline": {
                 "value": "Отзыв будет отправлен, когда вы снова будете в сети."
+            },
+            "contactType": {
+                "email": {
+                    "value": "Электронная почта"
+                },
+                "phone": {
+                    "value": "Телефон"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp"
+                },
+                "signal": {
+                    "value": "Signal"
+                },
+                "other": {
+                    "value": "Другой"
+                }
             }
         }
     },

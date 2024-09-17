@@ -484,6 +484,23 @@
             },
             "feedbackQueuedOffline": {
                 "value": "Les commentaires seront envoyés lorsque vous serez de nouveau en ligne."
+            },
+            "contactType": {
+                "email": {
+                    "value": "Courriel"
+                },
+                "phone": {
+                    "value": "Téléphone"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp"
+                },
+                "signal": {
+                    "value": "Signal"
+                },
+                "other": {
+                    "value": "Autre"
+                }
             }
         }
     },

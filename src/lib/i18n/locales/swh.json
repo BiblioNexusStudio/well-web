@@ -484,6 +484,23 @@
             },
             "feedbackQueuedOffline": {
                 "value": "Maoni yatatumwa utakapokuwa mtandaoni tena."
+            },
+            "contactType": {
+                "email": {
+                    "value": "Barua pepe"
+                },
+                "phone": {
+                    "value": "Simu"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp"
+                },
+                "signal": {
+                    "value": "Signal"
+                },
+                "other": {
+                    "value": "Nyingine"
+                }
             }
         }
     },

@@ -484,6 +484,23 @@
             },
             "feedbackQueuedOffline": {
                 "value": "जब आप फिर से ऑनलाइन होंगे तो प्रतिक्रिया भेज दी जाएगी।"
+            },
+            "contactType": {
+                "email": {
+                    "value": "ईमेल"
+                },
+                "phone": {
+                    "value": "फोन"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp"
+                },
+                "signal": {
+                    "value": "Signal"
+                },
+                "other": {
+                    "value": "अन्य"
+                }
             }
         }
     },

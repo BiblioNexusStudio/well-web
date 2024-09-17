@@ -484,6 +484,23 @@
             },
             "feedbackQueuedOffline": {
                 "value": "سيتم إرسال الملاحظات عندما تكون متصلاً بالإنترنت مرة أخرى."
+            },
+            "contactType": {
+                "email": {
+                    "value": "البريد الإلكتروني"
+                },
+                "phone": {
+                    "value": "هاتف"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp"
+                },
+                "signal": {
+                    "value": "Signal"
+                },
+                "other": {
+                    "value": "آخر"
+                }
             }
         }
     },
