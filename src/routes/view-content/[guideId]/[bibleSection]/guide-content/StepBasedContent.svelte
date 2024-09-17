@@ -81,6 +81,7 @@
                     buttons={steps.map((step, stepIndex) => ({
                         value: stepIndex,
                         label: step.label ?? '',
+                        eventTrackerName: step.eventTrackerName,
                     }))}
                     displayIcons={true}
                 />

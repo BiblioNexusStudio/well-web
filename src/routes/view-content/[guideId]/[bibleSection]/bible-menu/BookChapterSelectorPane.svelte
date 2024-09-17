@@ -309,7 +309,7 @@
                                 ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                                 : 'border'}"
                             data-app-insights-event-name="book-chapter-selector-pane-book-selected"
-                            data-app-insights-dimensions={`bookName,${bookName(book)}`}
+                            data-app-insights-dimensions={`bookCode,${currentBook.code}`}
                         >
                             {bookName(book)}
                         </button>
@@ -329,9 +329,7 @@
                                 on:click={() => handleChapterSelection(chapter)}
                                 class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
                                 data-app-insights-event-name="book-chapter-selector-pane-book-chapter-selected"
-                                data-app-insights-dimensions={`bookName,${bookName(currentBook)},chapterNumber,${
-                                    chapter.number
-                                }`}
+                                data-app-insights-dimensions={`bookCode,${currentBook.code},chapterNumber,${chapter.number}`}
                             >
                                 {chapter.number}
                             </button>
@@ -377,9 +375,7 @@
                                     on:click={() => handleVerseSelection(verse)}
                                     class="h-14 w-14 rounded-full {isSelected && 'bg-blue-500 text-white'}"
                                     data-app-insights-event-name="book-chapter-selector-pane-verse-selected"
-                                    data-app-insights-dimensions={`bookName,${bookName(currentBook)},chapterNumber,${
-                                        currentChapter.number
-                                    },verseNumber,${verse.number}`}
+                                    data-app-insights-dimensions={`bookCode,${currentBook.code},chapterNumber,${currentChapter.number},verseNumber,${verse.number}`}
                                 >
                                     {verse.number}
                                 </button>

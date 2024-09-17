@@ -85,7 +85,7 @@
             if (element?.dataset?.appInsightsEventName) {
                 log.trackEvent(
                     element.dataset.appInsightsEventName.replace(/\s/g, ''),
-                    element?.dataset?.appInsightsDimensions?.replace(/\s/g, '')
+                    element?.dataset?.appInsightsDimensions?.trim()
                 );
                 break;
             }

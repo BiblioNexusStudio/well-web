@@ -315,6 +315,7 @@
                             buttons={(bibleData?.biblesForTabs ?? []).map((bible) => ({
                                 value: bible.id,
                                 label: bible.abbreviation,
+                                eventTrackerName: bible.abbreviation,
                             }))}
                         />
                     </div>

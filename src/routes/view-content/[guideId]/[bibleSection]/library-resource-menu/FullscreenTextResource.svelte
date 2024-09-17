@@ -23,13 +23,22 @@
     import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
     import GlobeIcon from '$lib/icons/GlobeIcon.svelte';
     import { isShowingCommunityEditionModal } from '$lib/stores/community-edition-modal.store';
+    import { log } from '$lib/logger';
 
     export let tab: ContentTabEnum;
     export let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]>;
 
     const { openResourceFeedbackModalForResource } = getResourceFeedbackContext();
 
+    let previousStackLength = 0;
+    let stackSizeJustExpanded = false;
     $: fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
+
+    $: if (fullscreenTextResourceStack.length !== previousStackLength) {
+        stackSizeJustExpanded = fullscreenTextResourceStack.length > previousStackLength;
+        previousStackLength = fullscreenTextResourceStack.length;
+    }
+
     $: currentResource = fullscreenTextResourceStack[fullscreenTextResourceStack.length - 1];
     $: textResourcePromise = currentResource && loadTextContent(currentResource);
 
@@ -43,6 +52,12 @@
             fetchTiptapForResourceContent(resource),
             fetchMetadataForResourceContent(resource),
         ]);
+        if (stackSizeJustExpanded && resource.version === -1) {
+            log.trackEvent(
+                'resource-link-clicked',
+                `resourceContentId,${resource.id},resourceName,${metadata?.displayName}`
+            );
+        }
         let html: string | null = null;
         if (tiptap) {
             const availableAssociatedResources = await filterToAvailableAssociatedResourceContent(

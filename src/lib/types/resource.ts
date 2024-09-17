@@ -87,6 +87,7 @@ export interface ApiParentResource {
 export interface StepBasedGuideStep {
     id: number | undefined;
     label: string;
+    eventTrackerName: string;
     contentHTML?: string;
     audioUrl?: string;
     communityEdition: boolean;

@@ -107,7 +107,9 @@
                             bind:checked={resource.selected}
                             class="checkbox-primary checkbox"
                             data-app-insights-event-name="file-manager-resource-menu-selected"
-                            data-app-insights-dimensions={`resourceSelected,${resource.name}`}
+                            data-app-insights-dimensions={`resourceSelected,${
+                                resource.parentResource ? resource.parentResource.shortName : resource.name
+                            }`}
                         />
                         <span class="label-text ms-4 truncate">{resource.name}</span>
                     </label>

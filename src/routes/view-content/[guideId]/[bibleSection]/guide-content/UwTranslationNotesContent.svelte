@@ -53,6 +53,7 @@
                             return {
                                 ...restOfResourceInfo,
                                 label: stripBookName(label) ?? '',
+                                eventTrackerName: stripBookName(label) ?? '',
                                 communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
                                 contentHTML:
                                     `<b>${label}</b>` +
@@ -67,7 +68,7 @@
                     })
                 );
 
-                // sort by verse then by display name
+                // sort by verse then by label
                 steps = unsortedSteps.sort((a, b) => {
                     if (a.verses[0]!.chapter !== b.verses[0]!.chapter) {
                         return a.verses[0]!.chapter - b.verses[0]!.chapter;
@@ -77,10 +78,10 @@
                         return a.verses[0]!.verse - b.verses[0]!.verse;
                     }
 
-                    const aDisplayName = a.displayName ?? '';
-                    const bDisplayName = b.displayName ?? '';
+                    const aLabel = a.label ?? '';
+                    const bLabel = b.label ?? '';
 
-                    return aDisplayName.localeCompare(bDisplayName, undefined, { numeric: true });
+                    return aLabel.localeCompare(bLabel, undefined, { numeric: true });
                 });
             } else {
                 steps = [];

@@ -3,7 +3,7 @@
     import ChevronRightIcon from '$lib/icons/ChevronRightIcon.svelte';
     import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
 
-    export let buttons: { value: number; label: string }[];
+    export let buttons: { value: number; label: string; eventTrackerName: string }[];
     export let buttonElements: (HTMLElement | null)[] = buttons.map(() => null);
     export let selectedValue: number | null;
     export let setSelectedValue: (value: number) => void;
@@ -67,7 +67,7 @@
             }}><ChevronLeftIcon /></button
         >
     {/if}
-    {#each buttons as { value, label }, index}
+    {#each buttons as { value, label, eventTrackerName }, index}
         <div class="carousel-item">
             <button
                 class="rounded-md px-3 py-2 text-sm font-semibold {selectedValue === value &&
@@ -75,7 +75,7 @@
                 on:click={() => setSelectedValue(value)}
                 bind:this={buttonElements[index]}
                 data-app-insights-event-name="button-carousel-clicked"
-                data-app-insights-dimensions={`label,${label}`}
+                data-app-insights-dimensions={`name,${eventTrackerName}`}
             >
                 {label}</button
             >

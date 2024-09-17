@@ -40,8 +40,12 @@
         }
     }
 
+    function currentBible(bibleId: number | null) {
+        return bibles.find((b) => b.id === bibleId);
+    }
+
     function bibleHasAlignment(bibleId: number | null) {
-        return bibleId === 1 || bibles.find((b) => b.id === bibleId)?.greekAlignment;
+        return bibleId === 1 || currentBible(bibleId)?.greekAlignment === true;
     }
 
     function handleWindowClick(event: MouseEvent) {
@@ -119,6 +123,7 @@
                 on:click={() => (alignmentModeEnabled = !alignmentModeEnabled)}
                 class="btn btn-primary {alignmentModeEnabled ? 'btn-active' : 'btn-link'}"
                 data-app-insights-event-name="top-nav-alignment-mode-button-clicked"
+                data-app-insights-dimensions="bible,{currentBible(currentBibleId)?.abbreviation}"
             >
                 <AlignmentMode />
             </button>
