@@ -626,6 +626,28 @@
                     "value": "Contact Type",
                     "_context": "Label for contact type dropdown"
                 }
+            },
+            "contactType": {
+                "email": {
+                    "value": "Email",
+                    "_context": "Email contact method"
+                },
+                "phone": {
+                    "value": "Phone",
+                    "_context": "Phone contact method"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp",
+                    "_context": "WhatsApp contact method"
+                },
+                "signal": {
+                    "value": "Signal",
+                    "_context": "Signal contact method"
+                },
+                "other": {
+                    "value": "Other",
+                    "_context": "Other contact method"
+                }
             }
         }
     },

@@ -20,7 +20,18 @@
     let contactValue = '';
     let rating = 0;
 
-    const contactTypeOptions = Object.values(ContactType).map((v) => v.toString());
+    const contactTypeLabels = {
+        [ContactType.Email]: $translate('page.feedback.contactType.email.value'),
+        [ContactType.Phone]: $translate('page.feedback.contactType.phone.value'),
+        [ContactType.WhatsApp]: $translate('page.feedback.contactType.whatsapp.value'),
+        [ContactType.Signal]: $translate('page.feedback.contactType.signal.value'),
+        [ContactType.Other]: $translate('page.feedback.contactType.other.value'),
+    };
+
+    const contactTypeOptions = Object.values(ContactType).map((v) => ({
+        value: v.toString(),
+        label: contactTypeLabels[v],
+    }));
 
     function resetForm() {
         loading = false;
@@ -144,8 +155,8 @@
                             <option value=""
                                 >{$translate('page.feedback.resourceFeedbackForm.contactType.value')}</option
                             >
-                            {#each contactTypeOptions as option (option)}
-                                <option value={option}>{option}</option>
+                            {#each contactTypeOptions as option (option.value)}
+                                <option value={option.value}>{option.label}</option>
                             {/each}
                         </select>
                         <input bind:value={contactValue} class="input input-bordered mb-4" />
