@@ -744,7 +744,7 @@
                 "_context": "Header for the community edition content modal"
             },
             "description": {
-                "value": "<p>This content has not been fully checked for accuracy. A community member translated it, but it hasn't gone through the same review process as other content. Please use it with caution.</p><p>Please report any translation errors or suggestions by using the feedback icon in the upper right corner of the window.</p><p>If you are interested in becoming a Community Edition contributor, go to Home > Feedback and let us know.</p>",
+                "value": "<p>This content has not been fully checked for accuracy. A community member translated it, but it hasn't gone through the same review process as other content. Please use it with caution.</p><p>Please report any translation errors or suggestions by using the feedback icon in the upper right corner of the window.</p><p>If you are interested in becoming a Community Edition contributor, go to Menu > Feedback and let us know.</p>",
                 "_context": "Description for the community edition content modal"
             }
         }
