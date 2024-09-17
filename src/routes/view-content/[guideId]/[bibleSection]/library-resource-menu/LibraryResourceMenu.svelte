@@ -176,7 +176,7 @@
                 passageSearchResources,
                 $currentLanguageDirection
             );
-        } else if ($isResourceSearch) {
+        } else if ($isResourceSearch && isFullLibrary) {
             resourceGroupings = await buildLibraryResourceGroupingsWithMetadata(
                 resourceSearchResources,
                 $currentLanguageDirection
@@ -306,7 +306,7 @@
             </button>
         </div>
     {/if}
-    {#if $isResourceSearch}
+    {#if $isResourceSearch && isFullLibrary}
         <SearchByResource
             bind:resourceSearchResources
             bind:hideLoadMore
