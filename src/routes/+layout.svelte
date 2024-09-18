@@ -8,7 +8,6 @@
     import { log } from '$lib/logger';
     import { isOnline, updateOnlineStatus } from '$lib/stores/is-online.store';
     import { featureFlags } from '$lib/stores/feature-flags.store';
-    import DebugModal from '$lib/components/DebugModal.svelte';
     import { clearEntireCache, fetchFromCacheOrApi } from '$lib/data-cache';
     import type { LayoutData } from './$types';
     import { _ as translate } from 'svelte-i18n';
@@ -110,7 +109,6 @@
     on:click={onInteraction}
 />
 
-<DebugModal />
 <CommunityEditionModal />
 
 {#if !data.browserSupported}

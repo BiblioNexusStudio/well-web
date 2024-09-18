@@ -11,6 +11,7 @@
     import SettingsMenu from './settings-menu/SettingsMenu.svelte';
     import QuickShare from './quick-share/QuickShare.svelte';
     import { clearContentViewerContext } from './context-persister';
+    import DebugModal from '$lib/components/DebugModal.svelte';
 
     enum MenuEnum {
         settings = 'settings',
@@ -20,6 +21,8 @@
 
     let currentMenu: MenuEnum | null = null;
 </script>
+
+<DebugModal />
 
 {#if currentMenu === MenuEnum.settings}
     <SettingsMenu close={() => (currentMenu = null)} />
