@@ -1,7 +1,6 @@
 <script lang="ts">
     import { _ as translate } from 'svelte-i18n';
     import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
-    import { parentResources } from '$lib/stores/parent-resource.store';
     import type { ApiParentResource } from '$lib/types/resource';
     import SearchInput from '$lib/components/SearchInput.svelte';
     import { getContentContext } from '../context';
@@ -22,6 +21,7 @@
     export let resourceSelected: (resource: ResourceContentInfoWithMetadata) => void;
     export let isLoading: boolean;
     export let hideLoadMore: boolean;
+    export let parentResourceByLanguage: ApiParentResource[] = [];
 
     const { setIsResourceSearch } = getContentContext();
 
@@ -106,7 +106,7 @@
                 </div>
             </div>
             <div class="fixed top-16 flex h-[calc(100vh-79px)] w-full flex-col overflow-scroll bg-white">
-                {#each $parentResources as parentResource}
+                {#each parentResourceByLanguage as parentResource}
                     <button
                         on:click={() => parentResourceSearch(parentResource)}
                         class="mx-4 mb-4 flex h-12 items-center justify-center rounded-lg border border-[#EAECF0] p-2 text-sm"

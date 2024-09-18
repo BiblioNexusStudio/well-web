@@ -40,6 +40,7 @@
     import ClipboardIcon from '$lib/icons/ClipboardIcon.svelte';
     import type { ApiParentResource } from '$lib/types/resource';
     import SearchByResource from './SearchByResource.svelte';
+    import { parentResourcesForCurrentLanguage } from '$lib/utils/data-handlers/resources/guides';
 
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
@@ -61,6 +62,7 @@
 
     let searchQuery: string = '';
     let hideLoadMore: boolean = false;
+    let parentResourceByLanguage: ApiParentResource[] = [];
 
     let resourceGroupings: LibraryResourceGrouping[];
     let flatResources: ResourceContentInfoWithMetadata[] = [];
@@ -245,8 +247,11 @@
         }
     }
 
-    function openResourceSearchMenu() {
+    async function openResourceSearchMenu() {
         setIsResourceSearch(true);
+        isLoading = true;
+        parentResourceByLanguage = await parentResourcesForCurrentLanguage();
+        isLoading = false;
     }
 
     async function searchByParentResource(
@@ -313,6 +318,7 @@
             {isLoading}
             {searchByParentResource}
             {resourceSelected}
+            {parentResourceByLanguage}
         />
     {/if}
     {#if !showingPassageSearch}
