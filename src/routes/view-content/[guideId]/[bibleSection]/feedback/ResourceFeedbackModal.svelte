@@ -20,6 +20,8 @@
     let contactValue = '';
     let rating = 0;
 
+    $: !contactType && (contactValue = '');
+
     const contactTypeLabels = {
         [ContactType.Email]: $translate('page.feedback.contactType.email.value'),
         [ContactType.Phone]: $translate('page.feedback.contactType.phone.value'),
@@ -159,7 +161,7 @@
                                 <option value={option.value}>{option.label}</option>
                             {/each}
                         </select>
-                        <input bind:value={contactValue} class="input input-bordered mb-4" />
+                        <input disabled={!contactType} bind:value={contactValue} class="input input-bordered mb-4" />
                     {/if}
 
                     <div class="flex w-full justify-end">
