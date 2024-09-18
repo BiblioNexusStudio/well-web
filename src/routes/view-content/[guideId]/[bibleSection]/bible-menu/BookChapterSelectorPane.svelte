@@ -22,7 +22,7 @@
 
     let pane: CupertinoPane | undefined;
 
-    let currentBook: ApiBibleBook;
+    let currentBook: ApiBibleBook | undefined;
     let currentChapter: ApiBibleChapter | null = null;
     let buttons: HTMLButtonElement[] = [];
     let scrollBehaviorSmooth = false;
@@ -163,7 +163,7 @@
 
     async function handleVerseGoButton() {
         const bibleSection = {
-            bookCode: currentBook.code,
+            bookCode: currentBook!.code,
             startChapter: firstSelectedVerse ? forceToInt(firstSelectedVerse.chapterNumber) : 0,
             startVerse: firstSelectedVerse ? forceToInt(firstSelectedVerse.number) : 0,
             endChapter: lastSelectedVerse
@@ -309,7 +309,7 @@
                                 ? 'border-2 border-[#3db6e7] bg-[#f0faff]'
                                 : 'border'}"
                             data-app-insights-event-name="book-chapter-selector-pane-book-selected"
-                            data-app-insights-dimensions={`bookCode,${currentBook.code}`}
+                            data-app-insights-dimensions={`bookCode,${book.code}`}
                         >
                             {bookName(book)}
                         </button>
@@ -323,13 +323,13 @@
                 <h4 class="mb-4 block self-start">{currentStep.subtitle}</h4>
                 <div class="w-full flex-grow overflow-y-scroll">
                     <div class="grid w-full grid-cols-5 gap-4">
-                        {#each currentBook.chapters as chapter}
+                        {#each currentBook?.chapters || [] as chapter}
                             {@const isCurrentChapter = chapter === currentChapter}
                             <button
                                 on:click={() => handleChapterSelection(chapter)}
                                 class="h-14 w-14 rounded-full {isCurrentChapter && 'bg-blue-500 text-white'}"
                                 data-app-insights-event-name="book-chapter-selector-pane-book-chapter-selected"
-                                data-app-insights-dimensions={`bookCode,${currentBook.code},chapterNumber,${chapter.number}`}
+                                data-app-insights-dimensions={`bookCode,${currentBook?.code},chapterNumber,${chapter.number}`}
                             >
                                 {chapter.number}
                             </button>
@@ -349,7 +349,7 @@
             {#if currentStep === steps.three}
                 <h3 class="mb-2 block self-start text-lg font-bold">{verseTitle}</h3>
                 <div class="flex w-full flex-shrink-0 overflow-x-scroll">
-                    {#each currentBook.chapters as chapter, index}
+                    {#each currentBook?.chapters || [] as chapter, index}
                         {@const isCurrentChapter = chapter === currentChapter}
                         <button
                             on:click={() => handleChapterSelection(chapter)}
@@ -375,7 +375,7 @@
                                     on:click={() => handleVerseSelection(verse)}
                                     class="h-14 w-14 rounded-full {isSelected && 'bg-blue-500 text-white'}"
                                     data-app-insights-event-name="book-chapter-selector-pane-verse-selected"
-                                    data-app-insights-dimensions={`bookCode,${currentBook.code},chapterNumber,${currentChapter.number},verseNumber,${verse.number}`}
+                                    data-app-insights-dimensions={`bookCode,${currentBook?.code},chapterNumber,${currentChapter.number},verseNumber,${verse.number}`}
                                 >
                                     {verse.number}
                                 </button>
