@@ -105,7 +105,7 @@
                     >
                 </div>
             </div>
-            <div class="fixed top-16 flex h-[calc(100vh-79px)] w-full flex-col overflow-scroll bg-white">
+            <div class="fixed bottom-20 top-16 flex w-full grow flex-col overflow-y-scroll bg-white">
                 {#each parentResourceByLanguage as parentResource}
                     <button
                         on:click={() => parentResourceSearch(parentResource)}
@@ -139,7 +139,7 @@
                 <SearchInput bind:searchQuery placeholder={'Search'} />
             </div>
         </div>
-        <div class="fixed top-28 flex h-[calc(100vh-193px)] w-full flex-col overflow-scroll bg-white">
+        <div class="fixed bottom-20 top-28 flex w-full grow flex-col overflow-y-scroll bg-white">
             {#if isLoading}
                 <FullPageSpinner />
             {:else}
