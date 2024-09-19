@@ -72,29 +72,34 @@
                 isLoading = true;
                 let audioContent = (await fetchAudio(guideResourceInfo))[0];
                 const textContent = await fetchText(guideResourceInfo);
-                steps = stepLabels.map((label, stepIndex) => {
-                    const stepNumber = stepIndex + 1;
-                    const step: StepBasedGuideStep = {
-                        id: textContent?.id,
-                        label,
-                        eventTrackerName: `FIA Step ${stepIndex + 1}`,
-                        communityEdition: false,
-                    };
-                    if (audioContent) {
-                        const stepAudio = audioContent.steps.find((s) => s.stepNumber === stepNumber);
-                        if (stepAudio?.url) {
-                            step.audioUrl = stepAudio.url;
+                steps = filterBoolean(
+                    stepLabels.map((label, stepIndex) => {
+                        let hasContent = false;
+                        const stepNumber = stepIndex + 1;
+                        const step: StepBasedGuideStep = {
+                            id: textContent?.id,
+                            label,
+                            eventTrackerName: `FIA Step ${stepIndex + 1}`,
+                            communityEdition: false,
+                        };
+                        if (audioContent) {
+                            const stepAudio = audioContent.steps.find((s) => s.stepNumber === stepNumber);
+                            if (stepAudio?.url) {
+                                step.audioUrl = stepAudio.url;
+                                hasContent = true;
+                            }
                         }
-                    }
-                    if (textContent) {
-                        const stepText = textContent.steps.find((s) => s.stepNumber === stepNumber);
-                        if (stepText?.contentHTML) {
-                            step.contentHTML = stepText.contentHTML;
+                        if (textContent) {
+                            const stepText = textContent.steps.find((s) => s.stepNumber === stepNumber);
+                            if (stepText?.contentHTML) {
+                                step.contentHTML = stepText.contentHTML;
+                                hasContent = true;
+                            }
+                            step.communityEdition = !!stepText?.communityEdition;
                         }
-                        step.communityEdition = !!stepText?.communityEdition;
-                    }
-                    return step;
-                });
+                        return hasContent ? step : null;
+                    })
+                );
             } else {
                 steps = [];
             }
