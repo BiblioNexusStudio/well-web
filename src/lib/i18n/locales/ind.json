@@ -1,0 +1,584 @@
+{
+    "page": {
+        "index": {
+            "downloadResourcesForOfflineUse": {
+                "value": "Pergi Offline? Dapatkan Lebih Banyak Konten"
+            },
+            "about": {
+                "value": "Tentang"
+            },
+            "downloadManager": {
+                "value": "Manajer Unduhan"
+            },
+            "getStarted": {
+                "value": "Mulai"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "Kesalahan memuat info lisensi konten"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "Dirilis di bawah {name}"
+                },
+                "releasedUnderMultiple": {
+                    "value": "Dirilis di bawah berbagai"
+                }
+            }
+        },
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "Alkitab"
+                },
+                "guide": {
+                    "value": "Panduan"
+                },
+                "library": {
+                    "value": "Perpustakaan"
+                },
+                "menu": {
+                    "value": "Menu"
+                },
+                "resources": {
+                    "value": "Sumber Daya"
+                }
+            },
+            "resourcePane": {
+                "cancel": {
+                    "value": "Batal"
+                },
+                "libraryTitle": {
+                    "value": "Perpustakaan"
+                },
+                "librarySubtitle": {
+                    "value": "Temukan sumber daya yang Anda butuhkan"
+                },
+                "typeToSearch": {
+                    "value": "Ketik istilah untuk mencari di perpustakaan"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} dari {total}"
+                    }
+                },
+                "seeAll": {
+                    "value": "Lihat Semua ({count})"
+                },
+                "noThumbnail": {
+                    "value": "Tidak ada thumbnail"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "Tidak Ada Sumber Daya Ditemukan"
+                    },
+                    "description": {
+                        "value": "Pencarian Anda \"{searchQuery}\" tidak cocok dengan sumber daya apa pun."
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 sumber daya"
+                    },
+                    "plural": {
+                        "value": "{count} sumber daya"
+                    }
+                },
+                "error": {
+                    "value": "Kesalahan memuat sumber daya"
+                }
+            },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "Klik pada sebuah kata untuk melihat sumber bahasa aslinya."
+                },
+                "noWordInfoAvailable": {
+                    "value": "Tidak ada informasi bahasa asli yang tersedia untuk pilihan ini."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "Tidak ada informasi gloss atau definisi yang tersedia untuk pilihan ini."
+                },
+                "gloss": {
+                    "value": "Gloss"
+                },
+                "definition": {
+                    "value": "Definisi"
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "Sumber Daya Tidak Tersedia"
+                },
+                "description": {
+                    "value": "Tidak ada Alkitab yang tersedia di perangkat ini untuk {language}.<br />Apakah Anda ingin menggunakan Alkitab dalam bahasa lain?"
+                },
+                "noneAvailableDescription": {
+                    "value": "Tidak ada Alkitab yang tersedia di perangkat ini untuk {language} atau bahasa lain.<br />Silakan unduh konten saat Anda online."
+                },
+                "show": {
+                    "value": "Pilih Alkitab"
+                },
+                "checkForMoreResources": {
+                    "value": "Periksa sumber daya lainnya..."
+                },
+                "missingFromBible": {
+                    "value": "Alkitab ini tidak memiliki ayat yang dipilih."
+                }
+            },
+            "noGuideContent": {
+                "value": "Tidak ditemukan konten untuk ayat ini."
+            },
+            "guide": {
+                "next": {
+                    "value": "Berikutnya"
+                }
+            }
+        },
+        "fileManager": {
+            "downloadManager": {
+                "value": "Manajer Unduhan"
+            },
+            "download": {
+                "value": "Unduh"
+            },
+            "textType": {
+                "value": "Teks"
+            },
+            "audioType": {
+                "value": "Audio"
+            },
+            "mediaType": {
+                "value": "Media"
+            },
+            "ok": {
+                "value": "OK"
+            },
+            "cancel": {
+                "value": "Batal"
+            },
+            "noInternet": {
+                "value": "Tidak Ada Internet"
+            },
+            "selectABook": {
+                "value": "Pilih Buku"
+            },
+            "delete": {
+                "value": "Hapus"
+            },
+            "modal": {
+                "title": {
+                    "value": "Konfirmasi Unduhan"
+                },
+                "description": {
+                    "value": "Sumur Alkitab akan mengunduh {downloadSize} konten ke perangkat Anda."
+                },
+                "downloadProgress": {
+                    "value": "Progres unduhan"
+                },
+                "success": {
+                    "value": "Berhasil Diunduh"
+                },
+                "close": {
+                    "value": "Tutup"
+                },
+                "downloadingDescription": {
+                    "value": "Mengunduh {totalSizeDownloaded} dari {totalSizeToDownload}."
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "Peringatan!"
+                },
+                "description": {
+                    "value": "Apakah Anda yakin ingin menghapus file ini secara permanen dari perangkat Anda?"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "Di sini Anda dapat mengunduh dan menghapus konten Aquifer dari perangkat Anda."
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "Nama"
+                },
+                "text": {
+                    "value": "Teks"
+                },
+                "audio": {
+                    "value": "Audio"
+                },
+                "media": {
+                    "value": "Media"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "Sumber Daya"
+                }
+            }
+        },
+        "menu": {
+            "home": {
+                "value": "Beranda"
+            },
+            "menu": {
+                "value": "Menu"
+            },
+            "downloadManager": {
+                "value": "Pengelola Unduhan"
+            },
+            "language": {
+                "value": "Bahasa"
+            },
+            "shortcuts": {
+                "value": "Pintasan"
+            },
+            "changeLanguage": {
+                "value": "Ubah Bahasa"
+            }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "Selamat Datang"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "Pilih bahasa yang Anda sukai"
+            },
+            "next": {
+                "value": "Berikutnya"
+            }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Panduan Terjemahan"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "Apa yang ingin Anda lakukan?"
+            },
+            "chooseGuide": {
+                "value": "Pilih panduan"
+            },
+            "allGuides": {
+                "value": "Semua Panduan"
+            },
+            "checkingGuides": {
+                "value": "Panduan Pemeriksaan"
+            },
+            "draftingGuides": {
+                "value": "Panduan Penyusunan"
+            },
+            "startDraftingTranslation": {
+                "value": "Saya ingin mulai menyusun terjemahan."
+            },
+            "checkTranslation": {
+                "value": "Saya ingin memeriksa terjemahan saya."
+            },
+            "helpMeChoose": {
+                "value": "Saya tidak yakin, bantu saya memilih."
+            },
+            "showAllGuides": {
+                "value": "Saya ingin memilih panduan."
+            },
+            "guideExplanationHeader": {
+                "value": "Penjelasan Panduan"
+            },
+            "guideExplanationContent": {
+                "value": "<p>Panduan di Sumur Alkitab dirancang untuk membantu Anda memahami Alkitab dengan lebih baik. Ini membantu Anda bertumbuh dalam pemahaman tentang siapa Tuhan dan apa yang Dia lakukan. Ini juga membantu Anda menerjemahkan Alkitab dengan lebih baik dan memastikan bahwa terjemahan Alkitab Anda telah dilakukan dengan baik.</p><p>Jika Anda ingin mempelajari Alkitab atau mulai menerjemahkan Alkitab, silakan pilih \"Panduan Penyusunan\" di bawah ini. Ini akan memandu Anda melalui proses untuk memahami Alkitab dan mulai menyusun terjemahan Anda.</p><p>Jika Anda ingin memeriksa terjemahan Alkitab Anda untuk memastikan bahwa itu dilakukan dengan baik, pilih \"Panduan Pemeriksaan\" di bawah ini. Ada beberapa opsi yang membantu Anda memahami Alkitab, terutama bagian-bagian yang sulit.</p>"
+            },
+            "noGuides": {
+                "value": "Tidak ada panduan yang tersedia untuk ayat yang dipilih"
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "Tidak ada Alkitab yang tersedia"
+            },
+            "selectBible": {
+                "value": "Pilih Alkitab"
+            },
+            "goToPassage": {
+                "value": "Pergi ke Ayat"
+            },
+            "bible": {
+                "value": "Alkitab"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "Terima"
+                },
+                "cancel": {
+                    "value": "Batalkan"
+                },
+                "header": {
+                    "value": "Perjanjian Konten Non-Terbuka"
+                },
+                "description": {
+                    "value": "Sumber daya yang ingin Anda impor, {resourceName}, dirilis di bawah {licenseType}. Aplikasi ini memungkinkan Anda untuk mengimpor dan \"menggabungkan\" sumber daya ini dengan konten berlisensi terbuka yang sudah ada di dalam aplikasi. Untuk melanjutkan, harap akui bahwa Anda memahami ketentuan lisensi sumber daya ini dengan mengklik tombol \"Terima\"."
+                }
+            }
+        },
+        "PredeterminedPassageSelectorMenu": {
+            "stepOneTitle": {
+                "value": "Pilih Buku"
+            },
+            "stepTwoTitle": {
+                "value": "Pilih Pasal"
+            },
+            "noBooks": {
+                "value": "Tidak ada Buku tersedia"
+            },
+            "noPassages": {
+                "value": "Tidak ada Pasal tersedia"
+            }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Pengaturan"
+            },
+            "showOnlySrvResources": {
+                "value": "Tampilkan hanya sumber daya SRV"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Buku Tersedia"
+            },
+            "book": {
+                "value": "Buku"
+            },
+            "selectChapter": {
+                "value": "Pilih Pasal"
+            },
+            "chapter": {
+                "value": "Pasal"
+            },
+            "selectVerse": {
+                "value": "Pilih Ayat"
+            },
+            "go": {
+                "value": "Mulai"
+            }
+        },
+        "quickShare": {
+            "share": {
+                "value": "Bagikan"
+            },
+            "inAWebBrowser": {
+                "value": "Di peramban web (seperti Chrome), navigasikan ke"
+            },
+            "orScan": {
+                "value": "Atau pindai"
+            },
+            "toInstallBibleWell": {
+                "value": "Untuk menginstal Bible Well"
+            },
+            "stepOne": {
+                "value": "1. Buka peramban web (seperti Chrome)"
+            },
+            "stepTwo": {
+                "value": "2. Navigasikan ke"
+            },
+            "stepThree": {
+                "value": "3. Pergi ke Pengaturan"
+            },
+            "stepFour": {
+                "value": "4. Klik \"Instal\" (lihat di bawah)"
+            },
+            "close": {
+                "value": "Tutup"
+            }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Umpan Balik"
+            },
+            "submit": {
+                "value": "Kirim"
+            },
+            "feedbackSending": {
+                "value": "Mengirim umpan balik..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Umpan balik berhasil dikirim."
+            },
+            "feedbackQueuedOffline": {
+                "value": "Umpan balik akan dikirim saat Anda kembali online."
+            },
+            "feedbackError": {
+                "value": "Terjadi kesalahan saat mengirim umpan balik. Silakan coba lagi."
+            },
+            "thankYou": {
+                "value": "Terima kasih!"
+            },
+            "close": {
+                "value": "Tutup"
+            },
+            "feedbackFailedToSend": {
+                "value": "Umpan balik gagal dikirim."
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Silakan periksa koneksi internet Anda dan coba lagi."
+            },
+            "retry": {
+                "value": "Coba Lagi"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Nama"
+                },
+                "email": {
+                    "value": "Email"
+                },
+                "phone": {
+                    "value": "Telepon"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "Seberapa sering Anda menggunakan Bible Well?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "Apa yang paling Anda sukai dari Bible Well?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "Apa yang dapat ditingkatkan?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "Bagaimana Anda menggunakan Bible Well?"
+                },
+                "bibleTranslation": {
+                    "value": "Terjemahan Alkitab"
+                },
+                "sermonPreparation": {
+                    "value": "Persiapan Khotbah"
+                },
+                "bibleStudy": {
+                    "value": "Studi Alkitab"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Studi (Sekolah Alkitab, Seminari)"
+                },
+                "Evangelism": {
+                    "value": "Penginjilan"
+                },
+                "isRequired": {
+                    "value": "wajib diisi"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Umpan balik suka atau perbaikan wajib diisi"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "Harap isi bidang yang diperlukan"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Beri peringkat konten ini"
+                },
+                "additionalFeedback": {
+                    "value": "Umpan Balik Tambahan (Opsional)"
+                },
+                "contactInformation": {
+                    "value": "Informasi Kontak (Opsional)"
+                },
+                "contactType": {
+                    "value": "Jenis Kontak"
+                }
+            },
+            "contactType": {
+                "email": {
+                    "value": "Email"
+                },
+                "phone": {
+                    "value": "Telepon"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp"
+                },
+                "signal": {
+                    "value": "Signal"
+                },
+                "other": {
+                    "value": "Lainnya"
+                }
+            }
+        }
+    },
+    "navTop": {
+        "selectPassage": {
+            "value": "Pilih Bagian"
+        },
+        "selectGuide": {
+            "value": "Pilih Panduan"
+        }
+    },
+    "resources": {
+        "fia": {
+            "step1": {
+                "value": "Dengar dan Hati"
+            },
+            "step2": {
+                "value": "Menyiapkan Panggung"
+            },
+            "step3": {
+                "value": "Mendefinisikan Adegan"
+            },
+            "step4": {
+                "value": "Mewujudkan Teks"
+            },
+            "step5": {
+                "value": "Mengisi Kekosongan"
+            },
+            "step6": {
+                "value": "Mengucapkan Kata"
+            }
+        }
+    },
+    "errorMessage": {
+        "error": {
+            "value": "Kesalahan"
+        },
+        "title": {
+            "value": "Tidak Dapat Memuat Konten"
+        },
+        "message": {
+            "value": "Jika masalah berlanjut, silakan periksa koneksi internet Anda."
+        },
+        "home": {
+            "value": "Beranda"
+        },
+        "browserUnsupported": {
+            "value": "Peramban Anda tidak didukung. Silakan gunakan peramban lain. Jika Anda sedang menggunakan mode pribadi/incognito, cobalah menggunakan mode reguler."
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "Cari"
+            },
+            "clear": {
+                "value": "Hapus"
+            },
+            "passage": {
+                "value": "Ayat"
+            },
+            "resource": {
+                "value": "Sumber"
+            },
+            "resources": {
+                "value": "Sumber Daya"
+            },
+            "loadMore": {
+                "value": "Muat Lebih Banyak"
+            }
+        },
+        "communityEditionModal": {
+            "header": {
+                "value": "Konten Edisi Komunitas"
+            },
+            "description": {
+                "value": "<p>Konten ini belum sepenuhnya diperiksa untuk akurasi. Anggota komunitas menerjemahkannya, tetapi belum melalui proses tinjauan yang sama seperti konten lainnya. Harap gunakan dengan hati-hati.</p><p>Silakan laporkan kesalahan terjemahan atau saran apa pun dengan menggunakan ikon umpan balik di sudut kanan atas jendela.</p><p>Jika Anda tertarik menjadi kontributor Edisi Komunitas, buka Menu > Umpan Balik dan beri tahu kami.</p>"
+            }
+        }
+    }
+}
