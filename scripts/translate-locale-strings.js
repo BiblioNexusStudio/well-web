@@ -45,7 +45,7 @@ const languageCodesToNames = {
     hin: 'Hindi',
     swh: 'Swahili',
     rus: 'Russian',
-    por: 'Portuguese',
+    por: 'Brazilian Portuguese',
     ind: 'Indonesian',
     all: 'All Languages',
 };
