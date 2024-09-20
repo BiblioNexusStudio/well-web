@@ -63,7 +63,7 @@
                     selected={isPreferredBible}
                     disabled={needsLicenseAccept}
                     data-app-insights-event-name="bible-menu-bible-selected"
-                    data-app-insights-dimensions={`bible,${bible.abbreviation}`}
+                    data-app-insights-dimensions={`bible,${bible.abbreviation},bibleName,${bible.name}`}
                     onClick={() =>
                         needsLicenseAccept
                             ? (bibleForAcceptanceModal = bible)
@@ -79,7 +79,7 @@
                         <button
                             class="btn btn-link btn-xs h-2"
                             data-app-insights-event-name="bible-license-acceptance-modal-opened"
-                            data-app-insights-dimensions={`bible,${bible.abbreviation}`}
+                            data-app-insights-dimensions={`bible,${bible.abbreviation},bibleName,${bible.name}`}
                         >
                             <Icon data={warning} />
                         </button>
