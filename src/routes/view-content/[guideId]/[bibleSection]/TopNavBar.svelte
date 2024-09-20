@@ -123,7 +123,8 @@
                 on:click={() => (alignmentModeEnabled = !alignmentModeEnabled)}
                 class="btn btn-primary {alignmentModeEnabled ? 'btn-active' : 'btn-link'}"
                 data-app-insights-event-name="top-nav-alignment-mode-button-clicked"
-                data-app-insights-dimensions="bible,{currentBible(currentBibleId)?.abbreviation}"
+                data-app-insights-dimensions="bible,{currentBible(currentBibleId)
+                    ?.abbreviation},bibleName,{currentBible(currentBibleId)?.name}"
             >
                 <AlignmentMode />
             </button>

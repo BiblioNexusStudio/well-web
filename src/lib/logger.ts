@@ -47,7 +47,7 @@ export function getAdditionalProperties() {
         source: 'well-web',
         environment: config.PUBLIC_ENV,
         commitSha: config.PUBLIC_COMMIT_SHA,
-        selectedLanguage: get(currentLanguageInfo)?.iso6393Code,
+        currentLanguage: get(currentLanguageInfo)?.iso6393Code,
     };
 }
 

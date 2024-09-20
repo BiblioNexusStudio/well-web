@@ -74,7 +74,7 @@
                         on:change={(event) => updatePreferredBibleIds(bible.id, event)}
                         class="checkbox-primary checkbox"
                         data-app-insights-event-name="preferred-bible-checkbox-clicked"
-                        data-app-insights-dimensions={`bible,${bible.abbreviation}`}
+                        data-app-insights-dimensions={`bible,${bible.abbreviation},bibleName,${bible.name}`}
                     />
                     <span class="label-text ms-4 {needsLicenseAccept && 'text-opacity-75'}"
                         >{bible.languageCode} - {bible.name} ({bible.abbreviation})</span
@@ -83,7 +83,7 @@
                         <button
                             class="btn btn-link btn-xs ml-2 h-2"
                             data-app-insights-event-name="bible-license-acceptance-modal-opened"
-                            data-app-insights-dimensions={`bible,${bible.abbreviation}`}
+                            data-app-insights-dimensions={`bible,${bible.abbreviation},bibleName,${bible.name}`}
                         >
                             <Icon data={warning} />
                         </button>
