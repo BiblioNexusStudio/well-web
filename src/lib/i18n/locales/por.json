@@ -1,0 +1,584 @@
+{
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "Buscar"
+            },
+            "clear": {
+                "value": "Limpar"
+            },
+            "passage": {
+                "value": "Passagem"
+            },
+            "resource": {
+                "value": "Recurso"
+            },
+            "resources": {
+                "value": "Recursos"
+            },
+            "loadMore": {
+                "value": "Carregar Mais"
+            }
+        },
+        "communityEditionModal": {
+            "header": {
+                "value": "Conteúdo da Edição Comunitária"
+            },
+            "description": {
+                "value": "<p>Este conteúdo não foi totalmente verificado quanto à precisão. Um membro da comunidade o traduziu, mas não passou pelo mesmo processo de revisão de outros conteúdos. Use-o com cautela.</p><p>Relate qualquer erro de tradução ou sugestões usando o ícone de feedback no canto superior direito da janela.</p><p>Se você estiver interessado em se tornar um colaborador da Edição Comunitária, vá para Menu > Feedback e nos avise.</p>"
+            }
+        }
+    },
+    "page": {
+        "index": {
+            "downloadResourcesForOfflineUse": {
+                "value": "Indo offline? Obtenha mais conteúdo"
+            },
+            "about": {
+                "value": "Sobre"
+            },
+            "downloadManager": {
+                "value": "Gerenciador de Downloads"
+            },
+            "getStarted": {
+                "value": "Começar"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "Erro ao carregar informações de licença de conteúdo"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "Lançado sob {name}"
+                },
+                "releasedUnderMultiple": {
+                    "value": "Lançado sob várias"
+                }
+            }
+        },
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "Bíblia"
+                },
+                "guide": {
+                    "value": "Guia"
+                },
+                "library": {
+                    "value": "Biblioteca"
+                },
+                "menu": {
+                    "value": "Menu"
+                },
+                "resources": {
+                    "value": "Recursos"
+                }
+            },
+            "resourcePane": {
+                "cancel": {
+                    "value": "Cancelar"
+                },
+                "libraryTitle": {
+                    "value": "Biblioteca"
+                },
+                "librarySubtitle": {
+                    "value": "Encontre os recursos que você precisa"
+                },
+                "typeToSearch": {
+                    "value": "Digite um termo para pesquisar na biblioteca"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} de {total}"
+                    }
+                },
+                "seeAll": {
+                    "value": "Ver Todos ({count})"
+                },
+                "noThumbnail": {
+                    "value": "Sem miniatura"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "Nenhum recurso encontrado"
+                    },
+                    "description": {
+                        "value": "Sua pesquisa \"{searchQuery}\" não encontrou nenhum recurso."
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 recurso"
+                    },
+                    "plural": {
+                        "value": "{count} recursos"
+                    }
+                },
+                "error": {
+                    "value": "Erro ao carregar recurso"
+                }
+            },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "Clique em uma palavra para ver a fonte no idioma original."
+                },
+                "noWordInfoAvailable": {
+                    "value": "Não há informações no idioma original disponíveis para esta seleção."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "Não há informações de glossário ou definição disponíveis para esta seleção."
+                },
+                "gloss": {
+                    "value": "Glossário"
+                },
+                "definition": {
+                    "value": "Definição"
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "Recurso Indisponível"
+                },
+                "description": {
+                    "value": "Nenhuma Bíblia está disponível neste dispositivo para {language}.<br />Você quer usar uma Bíblia em outro idioma?"
+                },
+                "noneAvailableDescription": {
+                    "value": "Nenhuma Bíblia está disponível neste dispositivo para {language} ou qualquer outro idioma.<br />Por favor, baixe o conteúdo quando estiver online."
+                },
+                "show": {
+                    "value": "Selecionar Bíblia"
+                },
+                "checkForMoreResources": {
+                    "value": "Verificar mais recursos..."
+                },
+                "missingFromBible": {
+                    "value": "Esta Bíblia não contém a passagem selecionada."
+                }
+            },
+            "noGuideContent": {
+                "value": "Nenhum conteúdo encontrado para esta passagem."
+            },
+            "guide": {
+                "next": {
+                    "value": "Próximo"
+                }
+            }
+        },
+        "fileManager": {
+            "downloadManager": {
+                "value": "Gerenciador de Downloads"
+            },
+            "download": {
+                "value": "Baixar"
+            },
+            "textType": {
+                "value": "Texto"
+            },
+            "audioType": {
+                "value": "Áudio"
+            },
+            "mediaType": {
+                "value": "Mídia"
+            },
+            "ok": {
+                "value": "OK"
+            },
+            "cancel": {
+                "value": "Cancelar"
+            },
+            "noInternet": {
+                "value": "Sem Internet"
+            },
+            "selectABook": {
+                "value": "Selecionar um Livro"
+            },
+            "delete": {
+                "value": "Excluir"
+            },
+            "modal": {
+                "title": {
+                    "value": "Confirmar Download"
+                },
+                "description": {
+                    "value": "O Bible Well irá baixar {downloadSize} de conteúdo para seu dispositivo."
+                },
+                "downloadProgress": {
+                    "value": "Progresso do download"
+                },
+                "success": {
+                    "value": "Baixado com Sucesso"
+                },
+                "close": {
+                    "value": "Fechar"
+                },
+                "downloadingDescription": {
+                    "value": "Baixando {totalSizeDownloaded} de {totalSizeToDownload}."
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "Atenção!"
+                },
+                "description": {
+                    "value": "Tem certeza de que deseja excluir permanentemente esses arquivos do seu dispositivo?"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "Aqui você pode baixar e excluir conteúdo do Aquifer do seu dispositivo."
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "Nome"
+                },
+                "text": {
+                    "value": "Texto"
+                },
+                "audio": {
+                    "value": "Áudio"
+                },
+                "media": {
+                    "value": "Mídia"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "Recursos"
+                }
+            }
+        },
+        "menu": {
+            "home": {
+                "value": "Início"
+            },
+            "menu": {
+                "value": "Menu"
+            },
+            "downloadManager": {
+                "value": "Gerenciador de Downloads"
+            },
+            "language": {
+                "value": "Idioma"
+            },
+            "shortcuts": {
+                "value": "Atalhos"
+            },
+            "changeLanguage": {
+                "value": "Alterar Idioma"
+            }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "Bem-vindo"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "Escolha o idioma preferido"
+            },
+            "next": {
+                "value": "Avançar"
+            }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Guias de Tradução"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "O que você gostaria de fazer?"
+            },
+            "chooseGuide": {
+                "value": "Escolha um guia"
+            },
+            "allGuides": {
+                "value": "Todos os Guias"
+            },
+            "checkingGuides": {
+                "value": "Guias de Verificação"
+            },
+            "draftingGuides": {
+                "value": "Guias de Redação"
+            },
+            "startDraftingTranslation": {
+                "value": "Quero começar a redigir uma tradução."
+            },
+            "checkTranslation": {
+                "value": "Quero verificar minha tradução."
+            },
+            "helpMeChoose": {
+                "value": "Não tenho certeza, ajude-me a escolher."
+            },
+            "showAllGuides": {
+                "value": "Quero escolher um guia."
+            },
+            "guideExplanationHeader": {
+                "value": "Explicação do Guia"
+            },
+            "guideExplanationContent": {
+                "value": "<p>Os guias da Bíblia Bem são projetados para ajudá-lo a entender melhor a Bíblia. Isso ajuda você a crescer no entendimento de quem Deus é e do que Ele está fazendo. Também ajuda a traduzir a Bíblia melhor e garantir que sua tradução da Bíblia foi bem feita.</p><p>Se você deseja estudar a Bíblia ou começar a traduzi-la, selecione \"Guias de Redação\" abaixo. Isso o guiará por um processo de entendimento da Bíblia e início da redação de sua tradução.</p><p>Se você deseja verificar sua tradução da Bíblia para garantir que foi bem feita, selecione \"Guias de Verificação\" abaixo. Existem várias opções que o ajudarão a entender a Bíblia, especialmente as passagens difíceis.</p>"
+            },
+            "noGuides": {
+                "value": "Nenhum guia disponível para a passagem selecionada"
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "Nenhuma Bíblia disponível"
+            },
+            "selectBible": {
+                "value": "Selecionar uma Bíblia"
+            },
+            "goToPassage": {
+                "value": "Ir para a Passagem"
+            },
+            "bible": {
+                "value": "Bíblia"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "Aceitar"
+                },
+                "cancel": {
+                    "value": "Cancelar"
+                },
+                "header": {
+                    "value": "Acordo de Conteúdo Não Aberto"
+                },
+                "description": {
+                    "value": "O recurso que você deseja importar, {resourceName}, é lançado sob {licenseType}. Este aplicativo permite que você importe e \"misture\" esse recurso com o conteúdo licenciado abertamente já presente no aplicativo. Para continuar, por favor, confirme que você entende os termos da licença deste recurso clicando no botão \"Aceitar\"."
+                }
+            }
+        },
+        "PredeterminedPassageSelectorMenu": {
+            "stepOneTitle": {
+                "value": "Selecione um Livro"
+            },
+            "stepTwoTitle": {
+                "value": "Selecione uma Passagem"
+            },
+            "noBooks": {
+                "value": "Nenhum Livro disponível"
+            },
+            "noPassages": {
+                "value": "Nenhuma Passagem disponível"
+            }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Configurações"
+            },
+            "showOnlySrvResources": {
+                "value": "Mostrar apenas recursos SRV"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Livros Disponíveis"
+            },
+            "book": {
+                "value": "Livro"
+            },
+            "selectChapter": {
+                "value": "Selecione o Capítulo"
+            },
+            "chapter": {
+                "value": "Capítulo"
+            },
+            "selectVerse": {
+                "value": "Selecione o Verso"
+            },
+            "go": {
+                "value": "Ir"
+            }
+        },
+        "quickShare": {
+            "share": {
+                "value": "Compartilhar"
+            },
+            "inAWebBrowser": {
+                "value": "Em um navegador web (como Chrome), navegue para"
+            },
+            "orScan": {
+                "value": "Ou escaneie"
+            },
+            "toInstallBibleWell": {
+                "value": "Para instalar o Bible Well"
+            },
+            "stepOne": {
+                "value": "1. Abra um navegador web (como o Chrome)"
+            },
+            "stepTwo": {
+                "value": "2. Navegue para"
+            },
+            "stepThree": {
+                "value": "3. Vá para Configurações"
+            },
+            "stepFour": {
+                "value": "4. Clique em \"Instalar\" (veja abaixo)"
+            },
+            "close": {
+                "value": "Fechar"
+            }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Feedback"
+            },
+            "submit": {
+                "value": "Enviar"
+            },
+            "feedbackSending": {
+                "value": "Enviando feedback..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Feedback enviado com sucesso."
+            },
+            "feedbackQueuedOffline": {
+                "value": "O feedback será enviado quando você estiver online novamente."
+            },
+            "feedbackError": {
+                "value": "Erro ao enviar feedback. Por favor, tente novamente."
+            },
+            "thankYou": {
+                "value": "Obrigado!"
+            },
+            "close": {
+                "value": "Fechar"
+            },
+            "feedbackFailedToSend": {
+                "value": "Falha ao enviar feedback."
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Verifique sua conexão com a internet e tente novamente."
+            },
+            "retry": {
+                "value": "Tentar novamente"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Nome"
+                },
+                "email": {
+                    "value": "Email"
+                },
+                "phone": {
+                    "value": "Telefone"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "Com que frequência você usa o Bible Well?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "O que você mais gosta no Bible Well?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "O que pode ser melhorado?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "Como você está usando o Bible Well?"
+                },
+                "bibleTranslation": {
+                    "value": "Tradução da Bíblia"
+                },
+                "sermonPreparation": {
+                    "value": "Preparação de Sermão"
+                },
+                "bibleStudy": {
+                    "value": "Estudo Bíblico"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Estudos (Escola Bíblica, Seminário)"
+                },
+                "Evangelism": {
+                    "value": "Evangelismo"
+                },
+                "isRequired": {
+                    "value": "é obrigatório"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Feedback de gostos ou melhorias obrigatório"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "Preencha os campos obrigatórios"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Avalie este conteúdo"
+                },
+                "additionalFeedback": {
+                    "value": "Feedback adicional (Opcional)"
+                },
+                "contactInformation": {
+                    "value": "Informações de contato (Opcional)"
+                },
+                "contactType": {
+                    "value": "Tipo de contato"
+                }
+            },
+            "contactType": {
+                "email": {
+                    "value": "Email"
+                },
+                "phone": {
+                    "value": "Telefone"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp"
+                },
+                "signal": {
+                    "value": "Signal"
+                },
+                "other": {
+                    "value": "Outro"
+                }
+            }
+        }
+    },
+    "navTop": {
+        "selectPassage": {
+            "value": "Selecionar Passagem"
+        },
+        "selectGuide": {
+            "value": "Selecionar Guia"
+        }
+    },
+    "resources": {
+        "fia": {
+            "step1": {
+                "value": "Ouvir e Coração"
+            },
+            "step2": {
+                "value": "Estabelecendo o Cenário"
+            },
+            "step3": {
+                "value": "Definindo as Cenas"
+            },
+            "step4": {
+                "value": "Incorporando o Texto"
+            },
+            "step5": {
+                "value": "Preenchendo as Lacunas"
+            },
+            "step6": {
+                "value": "Falando a Palavra"
+            }
+        }
+    },
+    "errorMessage": {
+        "error": {
+            "value": "Erro"
+        },
+        "title": {
+            "value": "Incapaz de Carregar Conteúdo"
+        },
+        "message": {
+            "value": "Se o problema persistir, verifique sua conexão com a internet."
+        },
+        "home": {
+            "value": "Início"
+        },
+        "browserUnsupported": {
+            "value": "Seu navegador não é compatível. Por favor, use outro navegador. Se estiver no modo privado/incógnito, tente o modo regular."
+        }
+    }
+}

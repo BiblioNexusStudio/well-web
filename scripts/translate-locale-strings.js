@@ -45,6 +45,8 @@ const languageCodesToNames = {
     hin: 'Hindi',
     swh: 'Swahili',
     rus: 'Russian',
+    por: 'Brazilian Portuguese',
+    ind: 'Indonesian',
     all: 'All Languages',
 };
 
@@ -55,41 +57,46 @@ if (!languageCodesToNames[languageCode]) {
 
 const matchingKeys = findMatchingKeys(localeData, pattern);
 
-let forChatGpt = '';
+const batchSize = 30;
 
-if (languageCode === 'all') {
-    forChatGpt += `Translate the values into these languages (${Object.values(languageCodesToNames)
-        .filter((lang) => lang !== 'All Languages')
-        .join(
-            ', '
-        )}). Leave the dot notation key and colon on each line and prefix each line with the language in parentheses. Do not include "_context" translations in the response. Those are there to help you as the translator. Return response in a code block.\n\n`;
-} else {
-    forChatGpt += `Translate the values into ${languageCodesToNames[languageCode]}. Leave the dot notation key and colon on each line. Do not include "_context" translations in the response. Those are there to help you as the translator. Return response in a code block.\n\n`;
+for (let i = 0; i < matchingKeys.length; i += batchSize) {
+    console.log(`Processing batch ${Math.floor(i / batchSize) + 1} of ${Math.ceil(matchingKeys.length / batchSize)}`);
+
+    let forChatGpt = '';
+
+    if (languageCode === 'all') {
+        forChatGpt += `Translate the values into these languages (${Object.values(languageCodesToNames)
+            .filter((lang) => lang !== 'All Languages')
+            .join(
+                ', '
+            )}). Leave the dot notation key and colon on each line and prefix each line with the language in parentheses. Do not include "_context" in the response. That is only there to help you as the translator. Return response in a code block. Please do not include "_context".\n\n`;
+    } else {
+        forChatGpt += `Translate the values into ${languageCodesToNames[languageCode]}. Leave the dot notation key and colon on each line. Do not include "_context" in the response. That is only there to help you as the translator. Return response in a code block. Please do not include "_context".\n\n`;
+    }
+    const batch = matchingKeys.slice(i, i + batchSize);
+
+    let batchText = '```\n';
+    batch.forEach((key) => {
+        const value = getValueByPath(localeData, key);
+        batchText += `${key}.value: ${value.value}\n`;
+        batchText += `${key}._context: ${value._context}\n`;
+    });
+    batchText += '```\n';
+
+    forChatGpt += batchText;
+    clipboardy.writeSync(forChatGpt);
+
+    console.log('');
+    console.log('Some text has been copied to your clipboard. Paste the text to ChatGPT.');
+    console.log('');
+    console.log("Copy ChatGPT's response to your clipboard and hit Enter.");
+
+    await waitForEnter();
+
+    handleTranslationsOnClipboard();
 }
 
-forChatGpt += '```\n';
-matchingKeys.forEach((key) => {
-    const value = getValueByPath(localeData, key);
-    forChatGpt += `${key}.value: ${value.value}\n`;
-    forChatGpt += `${key}._context: ${value._context}\n`;
-});
-forChatGpt += '```\n';
-
-clipboardy.writeSync(forChatGpt);
-
-console.log('');
-console.log('Some text has been copied to your clipboard. Paste the text to ChatGPT.');
-console.log('');
-console.log("Copy ChatGPT's response to your clipboard and hit Enter.");
-
-const readline = readlineImport.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
-
-readline.question('', () => {
-    readline.close();
-
+function handleTranslationsOnClipboard() {
     const input = clipboardy.readSync();
 
     const translations = input.split('\n');
@@ -163,7 +170,7 @@ readline.question('', () => {
         fs.writeFileSync(outputFile, JSON.stringify(updatedLocaleData, null, 4) + '\n');
         console.log(`Updated locale file: ${outputFile}`);
     }
-});
+}
 
 function deepMerge(target, source) {
     for (const key in source) {
@@ -189,4 +196,18 @@ function updateNestedObject(obj, path, value) {
         current = current[parts[i]];
     }
     current[parts[parts.length - 1]] = value;
+}
+
+async function waitForEnter() {
+    const readline = readlineImport.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+    return new Promise((resolve) => {
+        readline.question('', () => {
+            readline.close();
+            resolve();
+        });
+    });
 }
