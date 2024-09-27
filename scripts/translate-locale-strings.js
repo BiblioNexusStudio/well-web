@@ -47,6 +47,7 @@ const languageCodesToNames = {
     rus: 'Russian',
     por: 'Brazilian Portuguese',
     ind: 'Indonesian',
+    zhs: 'Simplified Chinese',
     all: 'All Languages',
 };
 
