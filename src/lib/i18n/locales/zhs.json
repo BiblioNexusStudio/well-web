@@ -1,0 +1,589 @@
+{
+    "page": {
+        "index": {
+            "downloadResourcesForOfflineUse": {
+                "value": "离线吗？获取更多内容"
+            },
+            "about": {
+                "value": "关于"
+            },
+            "downloadManager": {
+                "value": "下载管理器"
+            },
+            "getStarted": {
+                "value": "开始使用"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "加载内容许可证信息时出错"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "根据{name}发布"
+                },
+                "releasedUnderMultiple": {
+                    "value": "根据多个许可证发布"
+                }
+            }
+        },
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "圣经"
+                },
+                "guide": {
+                    "value": "指南"
+                },
+                "library": {
+                    "value": "图书馆"
+                },
+                "menu": {
+                    "value": "菜单"
+                },
+                "resources": {
+                    "value": "资源"
+                }
+            },
+            "resourcePane": {
+                "cancel": {
+                    "value": "取消"
+                },
+                "libraryTitle": {
+                    "value": "图书馆"
+                },
+                "librarySubtitle": {
+                    "value": "找到你需要的资源"
+                },
+                "typeToSearch": {
+                    "value": "输入一个词以搜索图书馆"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} / {total}"
+                    }
+                },
+                "seeAll": {
+                    "value": "查看全部 ({count})"
+                },
+                "noThumbnail": {
+                    "value": "没有缩略图"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "没有找到资源"
+                    },
+                    "description": {
+                        "value": "您的搜索“{searchQuery}”没有匹配任何资源。"
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 个资源"
+                    },
+                    "plural": {
+                        "value": "{count} 个资源"
+                    }
+                },
+                "error": {
+                    "value": "加载资源时出错"
+                }
+            },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "点击一个词以查看原文来源。"
+                },
+                "noWordInfoAvailable": {
+                    "value": "此选择没有原语言信息可用。"
+                },
+                "noSenseInfoAvailable": {
+                    "value": "此选择没有注释或定义信息可用。"
+                },
+                "gloss": {
+                    "value": "注释"
+                },
+                "definition": {
+                    "value": "定义"
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "资源不可用"
+                },
+                "description": {
+                    "value": "此设备上没有适用于 {language} 的圣经。<br />您想使用其他语言的圣经吗？"
+                },
+                "noneAvailableDescription": {
+                    "value": "此设备上没有适用于 {language} 或任何其他语言的圣经。<br />请在在线时下载内容。"
+                },
+                "show": {
+                    "value": "选择圣经"
+                },
+                "checkForMoreResources": {
+                    "value": "检查更多资源..."
+                },
+                "missingFromBible": {
+                    "value": "此圣经缺少所选段落。"
+                }
+            },
+            "noGuideContent": {
+                "value": "此段落未找到内容。"
+            },
+            "guide": {
+                "next": {
+                    "value": "下一步"
+                }
+            }
+        },
+        "fileManager": {
+            "downloadManager": {
+                "value": "下载管理器"
+            },
+            "download": {
+                "value": "下载"
+            },
+            "textType": {
+                "value": "文本"
+            },
+            "audioType": {
+                "value": "音频"
+            },
+            "mediaType": {
+                "value": "媒体"
+            },
+            "ok": {
+                "value": "确定"
+            },
+            "cancel": {
+                "value": "取消"
+            },
+            "noInternet": {
+                "value": "无网络"
+            },
+            "selectABook": {
+                "value": "选择一本书"
+            },
+            "delete": {
+                "value": "删除"
+            },
+            "modal": {
+                "title": {
+                    "value": "确认下载"
+                },
+                "description": {
+                    "value": "圣经井将下载 {downloadSize} 的内容到您的设备。"
+                },
+                "downloadProgress": {
+                    "value": "下载进度"
+                },
+                "success": {
+                    "value": "下载成功"
+                },
+                "close": {
+                    "value": "关闭"
+                },
+                "downloadingDescription": {
+                    "value": "正在下载 {totalSizeDownloaded} / {totalSizeToDownload}。"
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "警告！"
+                },
+                "description": {
+                    "value": "您确定要从设备中永久删除这些文件吗？"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "在这里您可以下载和删除设备上的 Aquifer 内容。"
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "名称"
+                },
+                "text": {
+                    "value": "文本"
+                },
+                "audio": {
+                    "value": "音频"
+                },
+                "media": {
+                    "value": "媒体"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "资源"
+                }
+            }
+        },
+        "menu": {
+            "home": {
+                "value": "首页"
+            },
+            "menu": {
+                "value": "菜单"
+            },
+            "downloadManager": {
+                "value": "下载管理器"
+            },
+            "language": {
+                "value": "语言"
+            },
+            "shortcuts": {
+                "value": "快捷方式"
+            },
+            "changeLanguage": {
+                "value": "更改语言"
+            }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "欢迎"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "选择您的首选语言"
+            },
+            "next": {
+                "value": "下一步"
+            }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "翻译指南"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "您想做什么？"
+            },
+            "chooseGuide": {
+                "value": "选择一个指南"
+            },
+            "allGuides": {
+                "value": "所有指南"
+            },
+            "checkingGuides": {
+                "value": "检查指南"
+            },
+            "draftingGuides": {
+                "value": "起草指南"
+            },
+            "startDraftingTranslation": {
+                "value": "我想开始起草翻译。"
+            },
+            "checkTranslation": {
+                "value": "我想检查我的翻译。"
+            },
+            "helpMeChoose": {
+                "value": "我不确定，帮我选择。"
+            },
+            "showAllGuides": {
+                "value": "我想选择一个指南。"
+            },
+            "guideExplanationHeader": {
+                "value": "指南说明"
+            },
+            "guideExplanationContent": {
+                "value": "<p>圣经井中的指南旨在帮助您更好地理解圣经。这有助于您在理解上帝是谁以及他正在做什么方面成长。它还帮助您更好地翻译圣经，并确保您的圣经翻译完成得很好。</p><p>如果您想研究圣经或开始翻译圣经，请在下面选择“起草指南”。这将引导您了解圣经并开始起草您的翻译。</p><p>如果您想检查您的圣经翻译，以确保它完成得很好，请在下面选择“检查指南”。有几个选项可以帮助您理解圣经，特别是困难的段落。</p>"
+            },
+            "noGuides": {
+                "value": "该段落没有可用的指南"
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "没有可用的圣经"
+            },
+            "selectBible": {
+                "value": "选择一本圣经"
+            },
+            "goToPassage": {
+                "value": "转到段落"
+            },
+            "bible": {
+                "value": "圣经"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "接受"
+                },
+                "cancel": {
+                    "value": "取消"
+                },
+                "header": {
+                    "value": "非开放内容协议"
+                },
+                "description": {
+                    "value": "您希望导入的资源 {resourceName} 是根据 {licenseType} 发布的。此应用程序使您能够导入并将该资源与应用程序中已经存在的开放许可内容“混合”。为了继续，请通过点击“接受”按钮确认您理解该资源的许可条款。"
+                }
+            }
+        },
+        "PredeterminedPassageSelectorMenu": {
+            "stepOneTitle": {
+                "value": "选择一本书"
+            },
+            "stepTwoTitle": {
+                "value": "选择一个段落"
+            },
+            "noBooks": {
+                "value": "没有可用的书籍"
+            },
+            "noPassages": {
+                "value": "没有可用的段落"
+            }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "设置"
+            },
+            "showOnlySrvResources": {
+                "value": "仅显示 SRV 资源"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "可用书籍"
+            },
+            "book": {
+                "value": "书籍"
+            },
+            "selectChapter": {
+                "value": "选择章节"
+            },
+            "chapter": {
+                "value": "章节"
+            },
+            "selectVerse": {
+                "value": "选择所需范围的首尾经文"
+            },
+            "go": {
+                "value": "前往"
+            }
+        },
+        "quickShare": {
+            "share": {
+                "value": "分享"
+            },
+            "inAWebBrowser": {
+                "value": "在网页浏览器（如 Chrome）中，导航到："
+            },
+            "orScan": {
+                "value": "或扫描："
+            },
+            "toInstallBibleWell": {
+                "value": "安装 Bible Well："
+            },
+            "stepOne": {
+                "value": "1. 打开网页浏览器（如 Chrome）"
+            },
+            "stepTwo": {
+                "value": "2. 导航到"
+            },
+            "stepThree": {
+                "value": "3. 转到设置"
+            },
+            "stepFour": {
+                "value": "4. 点击“安装”（见下文）"
+            },
+            "close": {
+                "value": "关闭"
+            }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "反馈"
+            },
+            "submit": {
+                "value": "提交"
+            },
+            "feedbackSending": {
+                "value": "正在发送反馈..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "反馈成功发送。"
+            },
+            "feedbackQueuedOffline": {
+                "value": "反馈将在您重新在线时发送。"
+            },
+            "feedbackError": {
+                "value": "发送反馈时出错。请再试一次。"
+            },
+            "thankYou": {
+                "value": "谢谢您！"
+            },
+            "close": {
+                "value": "关闭"
+            },
+            "feedbackFailedToSend": {
+                "value": "反馈发送失败。"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "请检查您的互联网连接并重试。"
+            },
+            "retry": {
+                "value": "重试"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "姓名"
+                },
+                "email": {
+                    "value": "电子邮件"
+                },
+                "phone": {
+                    "value": "电话"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "您多久使用一次 Bible Well？"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "您最喜欢 Bible Well 的哪些功能？"
+                },
+                "WhatCanBeImproved": {
+                    "value": "有哪些可以改进的地方？"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "您是如何使用 Bible Well 的？"
+                },
+                "bibleTranslation": {
+                    "value": "圣经翻译"
+                },
+                "sermonPreparation": {
+                    "value": "讲道准备"
+                },
+                "bibleStudy": {
+                    "value": "圣经学习"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "学习（神学院）"
+                },
+                "Evangelism": {
+                    "value": "传播福音"
+                },
+                "isRequired": {
+                    "value": "是必填项"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "需要喜欢或改进的反馈"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "请填写必填字段"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "评分此内容"
+                },
+                "additionalFeedback": {
+                    "value": "额外反馈（可选）"
+                },
+                "contactInformation": {
+                    "value": "联系信息（可选）"
+                },
+                "contactType": {
+                    "value": "联系方式"
+                }
+            },
+            "contactType": {
+                "email": {
+                    "value": "Email",
+                    "_context": "Email contact method"
+                },
+                "phone": {
+                    "value": "Phone",
+                    "_context": "Phone contact method"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp",
+                    "_context": "WhatsApp contact method"
+                },
+                "signal": {
+                    "value": "Signal",
+                    "_context": "Signal contact method"
+                },
+                "other": {
+                    "value": "Other",
+                    "_context": "Other contact method"
+                }
+            }
+        }
+    },
+    "navTop": {
+        "selectPassage": {
+            "value": "选择段落"
+        },
+        "selectGuide": {
+            "value": "选择指南"
+        }
+    },
+    "resources": {
+        "fia": {
+            "step1": {
+                "value": "听与心"
+            },
+            "step2": {
+                "value": "设置舞台"
+            },
+            "step3": {
+                "value": "定义场景"
+            },
+            "step4": {
+                "value": "体现文本"
+            },
+            "step5": {
+                "value": "填补空白"
+            },
+            "step6": {
+                "value": "传递话语"
+            }
+        }
+    },
+    "errorMessage": {
+        "error": {
+            "value": "错误"
+        },
+        "title": {
+            "value": "无法加载内容"
+        },
+        "message": {
+            "value": "如果问题持续，请检查您的互联网连接。"
+        },
+        "home": {
+            "value": "首页"
+        },
+        "browserUnsupported": {
+            "value": "您的浏览器不受支持。请使用其他浏览器。如果您在隐私/无痕模式下，请尝试常规模式。"
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "搜索"
+            },
+            "clear": {
+                "value": "清除"
+            },
+            "passage": {
+                "value": "章节"
+            },
+            "resource": {
+                "value": "资源"
+            },
+            "resources": {
+                "value": "资源"
+            },
+            "loadMore": {
+                "value": "加载更多"
+            }
+        },
+        "communityEditionModal": {
+            "header": {
+                "value": "社区版内容"
+            },
+            "description": {
+                "value": "<p>此内容尚未完全检查准确性。由社区成员翻译，但未经过与其他内容相同的审查流程。请谨慎使用。</p><p>请通过窗口右上角的反馈图标报告任何翻译错误或建议。</p><p>如果您有兴趣成为社区版贡献者，请前往菜单 > 反馈，告诉我们。</p>"
+            }
+        }
+    }
+}

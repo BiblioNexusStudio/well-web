@@ -355,7 +355,7 @@
                 "value": "Capítulo"
             },
             "selectVerse": {
-                "value": "Seleccionar Versículo"
+                "value": "Selecciona el primer y luego el último verso en el rango deseado"
             },
             "go": {
                 "value": "Ir"
