@@ -210,7 +210,9 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
         {#if greekWordsForSelectedEnglish.length}
             {@const firstWord = greekWordsForSelectedEnglish[0]}
             {#if firstWord}
-                <div class="relative flex flex-[3] flex-col items-center border-t border-black px-4 py-2">
+                <div
+                    class="relative flex h-1/3 flex-none flex-col items-center overflow-y-auto border-t border-black px-4 py-2"
+                >
                     <button
                         class="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
                         on:click={deselectWordOrDisableAlignmentMode}>✕</button
