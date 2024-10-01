@@ -47,6 +47,29 @@
         }
     }
 
+    function getOtherLicenses() {
+        return [
+            {
+                title: 'UBS Dictionary of the Greek New Testament',
+                copyright: {
+                    dates: '2023',
+                    holder: {
+                        name: 'United Bible Societies',
+                        url: 'https://unitedbiblesocieties.org/',
+                    },
+                },
+                licenses: [
+                    {
+                        eng: {
+                            name: 'CC BY-SA 4.0 license',
+                            url: 'https://creativecommons.org/licenses/by-sa/4.0/legalcode.en',
+                        },
+                    },
+                ],
+            },
+        ];
+    }
+
     async function fetchLicenses() {
         const [resources, bibles, biblesWithRestrictions] = await Promise.all([
             fetchFromCacheOrApi(...parentResourcesEndpoint()) as Promise<ApiParentResource[]>,
@@ -58,6 +81,7 @@
                 .map((type) => type.licenseInfo)
                 .concat(bibles.map((bible) => bible.licenseInfo))
                 .concat(biblesWithRestrictions.map((bible) => bible.licenseInfo))
+                .concat(getOtherLicenses())
         );
         return licenses
             .filter((license, index, self) => index === self.findIndex((t) => t.title === license.title)) // get rid of duplicates
