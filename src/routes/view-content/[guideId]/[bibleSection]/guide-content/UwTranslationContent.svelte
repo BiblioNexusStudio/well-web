@@ -18,6 +18,7 @@
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
     export let audioPlayerKey: string | undefined;
+    export let UwTranslationType: ParentResourceId.UwTranslationNotes | ParentResourceId.UwTranslationQuestions;
 
     type IsText<T> = T & {
         mediaType: MediaType.Text;
@@ -35,7 +36,7 @@
                 isLoading = true;
                 const uwTextResourceContent = guideResourceInfo.filter(
                     ({ mediaType, parentResourceId }) =>
-                        parentResourceId === ParentResourceId.UwTranslationNotes && mediaType === MediaType.Text
+                        parentResourceId === UwTranslationType && mediaType === MediaType.Text
                 ) as IsText<ResourceContentInfoWithFrontendData>[];
 
                 const fetchedContentAndMetadata =

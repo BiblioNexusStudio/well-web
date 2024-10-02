@@ -5,6 +5,7 @@ export enum ParentResourceId {
     FIAKeyTerms = 17,
     VideoBibleDictionary = 4,
     UwTranslationNotes = 11,
+    UwTranslationQuestions = 13,
 }
 
 export enum MediaType {
@@ -32,7 +33,7 @@ export const SrvResources = [
 export const PredeterminedPassageGuides = [ParentResourceId.FIA];
 
 export const DraftingGuides = [ParentResourceId.FIA];
-export const CheckingGuides = [ParentResourceId.UwTranslationNotes];
+export const CheckingGuides = [ParentResourceId.UwTranslationNotes, ParentResourceId.UwTranslationQuestions];
 
 export const SubgroupedTextResourceRegexes: Partial<Record<ParentResourceId, RegExp>> = {
     [ParentResourceId.UwTranslationNotes]: /(.*)\s*\(.*\)/,
@@ -42,7 +43,11 @@ export const GuidesAvailableOnResourcesTab = [ParentResourceId.UwTranslationNote
 
 // because guides come with their own custom UIs we need to be able to filter out guides that aren't supported by the
 // client yet
-export const EnabledGuides = [ParentResourceId.FIA, ParentResourceId.UwTranslationNotes];
+export const EnabledGuides = [
+    ParentResourceId.FIA,
+    ParentResourceId.UwTranslationNotes,
+    ParentResourceId.UwTranslationQuestions,
+];
 
 export enum ParentResourceType {
     None = 'None',
