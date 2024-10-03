@@ -16,6 +16,6 @@
 
 {#if $currentGuide?.id === ParentResourceId.FIA}
     <FiaContent bind:multiClipAudioStates bind:audioPlayerKey {isShowing} {guideResourceInfo} />
-{:else if $currentGuide?.id === ParentResourceId.UwTranslationNotes || $currentGuide?.id === ParentResourceId.UwTranslationQuestions}
+{:else if $currentGuide?.id === ParentResourceId.UwTranslationNotes || $currentGuide?.id === ParentResourceId.UwTranslationQuestions || $currentGuide?.id === ParentResourceId.UwTranslationWords}
     <UwTranslationContent bind:audioPlayerKey {isShowing} {guideResourceInfo} UwTranslationType={$currentGuide?.id} />
 {/if}

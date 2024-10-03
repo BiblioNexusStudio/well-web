@@ -14,11 +14,15 @@
     import { currentLanguageDirection } from '$lib/stores/language.store';
     import { handleRtlVerseReferences } from '$lib/utils/language-utils';
     import StepBasedContent from './StepBasedContent.svelte';
+    import { currentBibleBook } from '$lib/stores/current-bible-book.store';
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
     export let audioPlayerKey: string | undefined;
-    export let UwTranslationType: ParentResourceId.UwTranslationNotes | ParentResourceId.UwTranslationQuestions;
+    export let UwTranslationType:
+        | ParentResourceId.UwTranslationNotes
+        | ParentResourceId.UwTranslationQuestions
+        | ParentResourceId.UwTranslationWords;
 
     type IsText<T> = T & {
         mediaType: MediaType.Text;
@@ -50,14 +54,21 @@
                                 $isOnline,
                                 metadata?.associatedResources
                             );
+
                             const label = handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection);
+
+                            const prefixedContent =
+                                UwTranslationType == ParentResourceId.UwTranslationWords
+                                    ? getUsedInVerses(restOfResourceInfo.verses)
+                                    : `<b>${label}</b>`;
+
                             return {
                                 ...restOfResourceInfo,
                                 label: stripBookName(label) ?? '',
                                 eventTrackerName: stripBookName(label) ?? '',
                                 communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
                                 contentHTML:
-                                    `<b>${label}</b>` +
+                                    prefixedContent +
                                     parseTiptapJsonToHtml(
                                         content.tiptap,
                                         $currentLanguageDirection,
@@ -71,12 +82,14 @@
 
                 // sort by verse then by label
                 steps = unsortedSteps.sort((a, b) => {
-                    if (a.verses[0]!.chapter !== b.verses[0]!.chapter) {
-                        return a.verses[0]!.chapter - b.verses[0]!.chapter;
-                    }
+                    if (UwTranslationType !== ParentResourceId.UwTranslationWords) {
+                        if (a.verses[0]!.chapter !== b.verses[0]!.chapter) {
+                            return a.verses[0]!.chapter - b.verses[0]!.chapter;
+                        }
 
-                    if (a.verses[0]!.verse !== b.verses[0]!.verse) {
-                        return a.verses[0]!.verse - b.verses[0]!.verse;
+                        if (a.verses[0]!.verse !== b.verses[0]!.verse) {
+                            return a.verses[0]!.verse - b.verses[0]!.verse;
+                        }
                     }
 
                     const aLabel = a.label ?? '';
@@ -90,6 +103,21 @@
         } finally {
             isLoading = false;
         }
+    }
+
+    function getUsedInVerses(verseInfo: ResourceContentInfoWithFrontendData['verses']) {
+        var usedInVerses = '<b>Used in These Verses</b><div class="ml-4 mt-2 mb-4">';
+        verseInfo.forEach((ref, i) => {
+            if (i === 0) {
+                usedInVerses += $currentBibleBook + ' ';
+            }
+            usedInVerses += ref.chapter + ':' + ref.verse;
+            if (i < verseInfo.length - 1) {
+                usedInVerses += ', ';
+            }
+        });
+        usedInVerses += '</div>';
+        return usedInVerses;
     }
 
     function stripBookName(input: string | undefined) {
