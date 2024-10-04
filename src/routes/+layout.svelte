@@ -19,6 +19,7 @@
     import { get } from 'svelte/store';
     import { browserSupported } from '$lib/utils/browser';
     import CommunityEditionModal from '$lib/components/CommunityEditionModal.svelte';
+    import DebugModal from '$lib/components/DebugModal.svelte';
 
     $: {
         document.dir = $currentLanguageDirection;
@@ -108,6 +109,10 @@
     on:unhandledrejection={onRejection}
     on:click={onInteraction}
 />
+
+{#if $page.url.hash === '#ff'}
+    <DebugModal />
+{/if}
 
 <CommunityEditionModal />
 

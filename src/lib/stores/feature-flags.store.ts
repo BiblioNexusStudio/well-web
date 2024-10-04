@@ -5,6 +5,7 @@ import { browser } from '$app/environment';
 const defaultConfig = {
     darkMode: false,
     forceRTLMode: false,
+    forceFiaMode: false,
 };
 
 type FeatureFlagConfig = typeof defaultConfig;
