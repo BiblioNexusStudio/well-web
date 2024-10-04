@@ -23,8 +23,8 @@
 
     <a
         class="mb-6 ms-4 underline underline-offset-2"
-        href="https://app.well.bible"
-        data-app-insights-event-name="quick-share-link-clicked">app.well.bible</a
+        href={window.location.origin}
+        data-app-insights-event-name="quick-share-link-clicked">{window.location.hostname}</a
     >
 
     <p class="mb-2">{$translate('page.quickShare.orScan.value')}</p>
@@ -32,7 +32,7 @@
     <div class="mb-6 max-h-96 max-w-96 px-2">
         <svg
             use:qr={{
-                data: 'https://app.well.bible',
+                data: window.location.origin,
                 logo: '/bibleWellLogoWithText-568.png',
                 shape: 'square',
             }}
@@ -47,8 +47,8 @@
             {$translate('page.quickShare.stepTwo.value')}
             <a
                 class="underline underline-offset-2"
-                href="https://app.well.bible"
-                data-app-insights-event-name="quick-share-link-clicked">app.well.bible</a
+                href={window.location.origin}
+                data-app-insights-event-name="quick-share-link-clicked">{window.location.hostname}</a
             >
         </li>
         <li class="ms-4">{$translate('page.quickShare.stepThree.value')}</li>
