@@ -132,6 +132,9 @@
             "guide": {
                 "next": {
                     "value": "Berikutnya"
+                },
+                "usedInVerses": {
+                    "value": "Digunakan dalam ayat-ayat ini"
                 }
             }
         },

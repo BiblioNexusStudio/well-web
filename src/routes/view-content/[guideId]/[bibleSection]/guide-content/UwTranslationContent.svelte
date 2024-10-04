@@ -10,11 +10,12 @@
         type ResourceContentInfoWithFrontendData,
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
-    import { ContentTabEnum } from '../context';
+    import { ContentTabEnum, getContentContext } from '../context';
     import { currentLanguageDirection } from '$lib/stores/language.store';
     import { handleRtlVerseReferences } from '$lib/utils/language-utils';
     import StepBasedContent from './StepBasedContent.svelte';
-    import { currentBibleBook } from '$lib/stores/current-bible-book.store';
+    import { _ as translate } from 'svelte-i18n';
+    import type { BibleSection } from '$lib/types/bible';
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
@@ -23,6 +24,8 @@
         | ParentResourceId.UwTranslationNotes
         | ParentResourceId.UwTranslationQuestions
         | ParentResourceId.UwTranslationWords;
+    export let bookCodesToNames: Map<string, string> | undefined;
+    const { currentBibleSection } = getContentContext();
 
     type IsText<T> = T & {
         mediaType: MediaType.Text;
@@ -31,10 +34,13 @@
     let isLoading = false;
     let steps: StepBasedGuideStep[] = [];
 
-    $: fetchContent(guideResourceInfo);
+    $: fetchContent(guideResourceInfo, bookCodesToNames);
     $: isShowing && (audioPlayerKey = undefined);
 
-    async function fetchContent(guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined) {
+    async function fetchContent(
+        guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined,
+        bookCodesToNames: Map<string, string> | undefined
+    ) {
         try {
             if (guideResourceInfo) {
                 isLoading = true;
@@ -58,8 +64,8 @@
                             const label = handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection);
 
                             const prefixedContent =
-                                UwTranslationType == ParentResourceId.UwTranslationWords
-                                    ? getUsedInVerses(restOfResourceInfo.verses)
+                                UwTranslationType === ParentResourceId.UwTranslationWords
+                                    ? getUsedInVerses(restOfResourceInfo.verses, $currentBibleSection, bookCodesToNames)
                                     : `<b>${label}</b>`;
 
                             return {
@@ -105,18 +111,26 @@
         }
     }
 
-    function getUsedInVerses(verseInfo: ResourceContentInfoWithFrontendData['verses']) {
-        var usedInVerses = '<b>Used in These Verses</b><div class="ml-4 mt-2 mb-4">';
-        verseInfo.forEach((ref, i) => {
-            if (i === 0) {
-                usedInVerses += $currentBibleBook + ' ';
-            }
-            usedInVerses += ref.chapter + ':' + ref.verse;
-            if (i < verseInfo.length - 1) {
-                usedInVerses += ', ';
-            }
-        });
-        usedInVerses += '</div>';
+    function getUsedInVerses(
+        verseInfo: ResourceContentInfoWithFrontendData['verses'],
+        currentBibleSection: BibleSection | null,
+        bookCodesToNames: Map<string, string> | undefined
+    ) {
+        var usedInVerses = `<b>${$translate('page.passage.guide.usedInVerses.value')}</b><div class="ml-4 mt-2 mb-4">`;
+        if (currentBibleSection?.bookCode) {
+            var bibleBook = bookCodesToNames?.get(currentBibleSection?.bookCode);
+            verseInfo.forEach((ref, i) => {
+                if (i === 0) {
+                    usedInVerses += bibleBook + ' ';
+                }
+                usedInVerses += ref.chapter + ':' + ref.verse;
+                if (i < verseInfo.length - 1) {
+                    usedInVerses += ', ';
+                }
+            });
+            usedInVerses += '</div>';
+        }
+
         return usedInVerses;
     }
 

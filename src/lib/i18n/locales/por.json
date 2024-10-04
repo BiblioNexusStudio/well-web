@@ -162,6 +162,9 @@
             "guide": {
                 "next": {
                     "value": "Próximo"
+                },
+                "usedInVerses": {
+                    "value": "Usado nestes versículos"
                 }
             }
         },

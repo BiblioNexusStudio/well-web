@@ -336,6 +336,7 @@
                     bind:audioPlayerKey
                     guideResourceInfo={resourceData?.guideResourceInfo}
                     isShowing={$currentTab === ContentTabEnum.Guide}
+                    {bookCodesToNames}
                 />
             {/await}
         </div>

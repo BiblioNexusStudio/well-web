@@ -11,7 +11,6 @@
     import { currentLanguageDirection } from '$lib/stores/language.store';
     import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
     import { getResourceFeedbackContext } from './resource-feedback-context';
-    import { currentBibleBook } from '$lib/stores/current-bible-book.store';
 
     const {
         currentGuide,
@@ -39,15 +38,10 @@
         if ((!isNewTestament($currentBibleSection) || !bibleHasAlignment(currentBibleId)) && alignmentModeEnabled) {
             alignmentModeEnabled = false;
         }
-        setCurrentBibleBook(bibleSectionTitle);
     }
 
     function currentBible(bibleId: number | null) {
         return bibles.find((b) => b.id === bibleId);
-    }
-
-    function setCurrentBibleBook(bibleSectionTitle: string) {
-        $currentBibleBook = bibleSectionTitle.substring(0, bibleSectionTitle.indexOf(' '));
     }
 
     function bibleHasAlignment(bibleId: number | null) {
