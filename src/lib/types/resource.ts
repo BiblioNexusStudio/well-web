@@ -6,6 +6,7 @@ export enum ParentResourceId {
     VideoBibleDictionary = 4,
     UwTranslationNotes = 11,
     UwTranslationQuestions = 13,
+    UwTranslationWords = 7,
 }
 
 export enum MediaType {
@@ -33,7 +34,11 @@ export const SrvResources = [
 export const PredeterminedPassageGuides = [ParentResourceId.FIA];
 
 export const DraftingGuides = [ParentResourceId.FIA];
-export const CheckingGuides = [ParentResourceId.UwTranslationNotes, ParentResourceId.UwTranslationQuestions];
+export const CheckingGuides = [
+    ParentResourceId.UwTranslationNotes,
+    ParentResourceId.UwTranslationQuestions,
+    ParentResourceId.UwTranslationWords,
+];
 
 export const SubgroupedTextResourceRegexes: Partial<Record<ParentResourceId, RegExp>> = {
     [ParentResourceId.UwTranslationNotes]: /(.*)\s*\(.*\)/,
@@ -47,6 +52,7 @@ export const EnabledGuides = [
     ParentResourceId.FIA,
     ParentResourceId.UwTranslationNotes,
     ParentResourceId.UwTranslationQuestions,
+    ParentResourceId.UwTranslationWords,
 ];
 
 export enum ParentResourceType {

@@ -132,6 +132,9 @@
             "guide": {
                 "next": {
                     "value": "التالي"
+                },
+                "usedInVerses": {
+                    "value": "مستخدم في هذه الآيات"
                 }
             }
         },

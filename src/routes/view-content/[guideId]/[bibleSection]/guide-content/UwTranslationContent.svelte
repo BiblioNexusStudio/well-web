@@ -10,15 +10,22 @@
         type ResourceContentInfoWithFrontendData,
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
-    import { ContentTabEnum } from '../context';
+    import { ContentTabEnum, getContentContext } from '../context';
     import { currentLanguageDirection } from '$lib/stores/language.store';
     import { handleRtlVerseReferences } from '$lib/utils/language-utils';
     import StepBasedContent from './StepBasedContent.svelte';
+    import { _ as translate } from 'svelte-i18n';
+    import type { BibleSection } from '$lib/types/bible';
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
     export let audioPlayerKey: string | undefined;
-    export let UwTranslationType: ParentResourceId.UwTranslationNotes | ParentResourceId.UwTranslationQuestions;
+    export let UwTranslationType:
+        | ParentResourceId.UwTranslationNotes
+        | ParentResourceId.UwTranslationQuestions
+        | ParentResourceId.UwTranslationWords;
+    export let bookCodesToNames: Map<string, string> | undefined;
+    const { currentBibleSection } = getContentContext();
 
     type IsText<T> = T & {
         mediaType: MediaType.Text;
@@ -27,10 +34,13 @@
     let isLoading = false;
     let steps: StepBasedGuideStep[] = [];
 
-    $: fetchContent(guideResourceInfo);
+    $: fetchContent(guideResourceInfo, bookCodesToNames);
     $: isShowing && (audioPlayerKey = undefined);
 
-    async function fetchContent(guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined) {
+    async function fetchContent(
+        guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined,
+        bookCodesToNames: Map<string, string> | undefined
+    ) {
         try {
             if (guideResourceInfo) {
                 isLoading = true;
@@ -50,14 +60,21 @@
                                 $isOnline,
                                 metadata?.associatedResources
                             );
+
                             const label = handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection);
+
+                            const prefixedContent =
+                                UwTranslationType === ParentResourceId.UwTranslationWords
+                                    ? getUsedInVerses(restOfResourceInfo.verses, $currentBibleSection, bookCodesToNames)
+                                    : `<b>${label}</b>`;
+
                             return {
                                 ...restOfResourceInfo,
                                 label: stripBookName(label) ?? '',
                                 eventTrackerName: stripBookName(label) ?? '',
                                 communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
                                 contentHTML:
-                                    `<b>${label}</b>` +
+                                    prefixedContent +
                                     parseTiptapJsonToHtml(
                                         content.tiptap,
                                         $currentLanguageDirection,
@@ -71,12 +88,14 @@
 
                 // sort by verse then by label
                 steps = unsortedSteps.sort((a, b) => {
-                    if (a.verses[0]!.chapter !== b.verses[0]!.chapter) {
-                        return a.verses[0]!.chapter - b.verses[0]!.chapter;
-                    }
+                    if (UwTranslationType !== ParentResourceId.UwTranslationWords) {
+                        if (a.verses[0]!.chapter !== b.verses[0]!.chapter) {
+                            return a.verses[0]!.chapter - b.verses[0]!.chapter;
+                        }
 
-                    if (a.verses[0]!.verse !== b.verses[0]!.verse) {
-                        return a.verses[0]!.verse - b.verses[0]!.verse;
+                        if (a.verses[0]!.verse !== b.verses[0]!.verse) {
+                            return a.verses[0]!.verse - b.verses[0]!.verse;
+                        }
                     }
 
                     const aLabel = a.label ?? '';
@@ -90,6 +109,30 @@
         } finally {
             isLoading = false;
         }
+    }
+
+    function getUsedInVerses(
+        verseInfo: ResourceContentInfoWithFrontendData['verses'],
+        currentBibleSection: BibleSection | null,
+        bookCodesToNames: Map<string, string> | undefined
+    ) {
+        var usedInVerses = `<b>${$translate('page.passage.guide.usedInVerses.value')}</b><div class="ml-4 mt-2 mb-4">`;
+        if (currentBibleSection?.bookCode) {
+            var bibleBook = bookCodesToNames?.get(currentBibleSection?.bookCode);
+            var bibleReferences = '';
+            verseInfo.forEach((ref, i) => {
+                if (i === 0) {
+                    bibleReferences += bibleBook + ' ';
+                }
+                bibleReferences += ref.chapter + ':' + ref.verse;
+                if (i < verseInfo.length - 1) {
+                    bibleReferences += ', ';
+                }
+            });
+            usedInVerses += handleRtlVerseReferences(bibleReferences, $currentLanguageDirection) + '</div>';
+        }
+
+        return usedInVerses;
     }
 
     function stripBookName(input: string | undefined) {

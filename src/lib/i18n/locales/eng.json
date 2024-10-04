@@ -169,6 +169,10 @@
                 "next": {
                     "value": "Next",
                     "_context": "Go to next item in guide."
+                },
+                "usedInVerses": {
+                    "value": "Used in These verses",
+                    "_context": "Prefixed to content in Translation Words Guides for displaying references of the word in the selected passage"
                 }
             }
         },
