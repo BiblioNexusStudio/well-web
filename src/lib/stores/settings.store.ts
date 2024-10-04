@@ -1,11 +1,18 @@
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import { type Setting, SettingShortNameEnum } from '../types/settings';
+import { featureFlags } from './feature-flags.store';
 
 const bibleWellSettingsInLocalStorage = 'BIBLE_WELL_SETTINGS_IN_LOCAL_STORAGE';
 
+let isFiaSite = false;
+
+if (browser) {
+    isFiaSite = window.location.origin.toLowerCase().includes('fia') || get(featureFlags).forceFiaMode;
+}
+
 const showOnlySrvResources: Setting = {
-    value: false,
+    value: isFiaSite,
     shortName: SettingShortNameEnum.showOnlySrvResources,
 };
 
@@ -19,13 +26,23 @@ if (browser) {
 
 const initialSettings = defaultSettings.map((setting) => {
     const savedSetting = savedSettings.find((savedSetting: Setting) => savedSetting.shortName === setting.shortName);
-    return savedSetting || setting;
+    return { ...setting, value: savedSetting?.value ?? setting.value };
 });
 
 export const settings = writable<Setting[]>(initialSettings);
 
-settings.subscribe((value) => {
+featureFlags.subscribe(($flags) => {
+    if ($flags.forceFiaMode) {
+        settings.update(($settings) =>
+            $settings.map((s) =>
+                s.shortName === SettingShortNameEnum.showOnlySrvResources ? { ...s, value: true } : s
+            )
+        );
+    }
+});
+
+settings.subscribe(($settings) => {
     if (browser) {
-        localStorage.setItem(bibleWellSettingsInLocalStorage, JSON.stringify(value));
+        localStorage.setItem(bibleWellSettingsInLocalStorage, JSON.stringify($settings));
     }
 });
