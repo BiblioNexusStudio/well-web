@@ -119,16 +119,17 @@
         var usedInVerses = `<b>${$translate('page.passage.guide.usedInVerses.value')}</b><div class="ml-4 mt-2 mb-4">`;
         if (currentBibleSection?.bookCode) {
             var bibleBook = bookCodesToNames?.get(currentBibleSection?.bookCode);
+            var bibleReferences = '';
             verseInfo.forEach((ref, i) => {
                 if (i === 0) {
-                    usedInVerses += bibleBook + ' ';
+                    bibleReferences += bibleBook + ' ';
                 }
-                usedInVerses += ref.chapter + ':' + ref.verse;
+                bibleReferences += ref.chapter + ':' + ref.verse;
                 if (i < verseInfo.length - 1) {
-                    usedInVerses += ', ';
+                    bibleReferences += ', ';
                 }
             });
-            usedInVerses += '</div>';
+            usedInVerses += handleRtlVerseReferences(bibleReferences, $currentLanguageDirection) + '</div>';
         }
 
         return usedInVerses;
