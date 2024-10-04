@@ -355,7 +355,7 @@
                 "value": "章节"
             },
             "selectVerse": {
-                "value": "选择所需范围的首尾经文"
+                "value": "选择第一和最后一节"
             },
             "go": {
                 "value": "前往"
