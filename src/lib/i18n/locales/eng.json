@@ -460,7 +460,7 @@
                 "_context": "Label for the chapter dropdown"
             },
             "selectVerse": {
-                "value": "Select the first, then last verse in the desired range",
+                "value": "Select first and last verse",
                 "_context": "Label for the verse dropdown"
             },
             "go": {
