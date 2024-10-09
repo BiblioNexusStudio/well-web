@@ -17,7 +17,7 @@ function trapFocus(wrap: HTMLElement, active = true) {
     const shiftTabListener = listen(
         document,
         'keydown',
-        (e: KeyboardEvent) => (shiftTab = e.shiftKey && e.key == 'Tab')
+        (e: KeyboardEvent) => (shiftTab = e.shiftKey && e.key === 'Tab')
     );
 
     // return  the first and last focusable children
@@ -37,7 +37,7 @@ function trapFocus(wrap: HTMLElement, active = true) {
     }
     /** deactivates trap (removes from stack) and restores focus to lastActiveElement */
     function removeFromStack() {
-        stack = stack.filter((el) => el != wrap);
+        stack = stack.filter((el) => el !== wrap);
         lastActiveElement && lastActiveElement.focus();
     }
 
@@ -53,9 +53,9 @@ function trapFocus(wrap: HTMLElement, active = true) {
     const focusOutListener = listen(wrap, 'focusout', (e: FocusEvent) => {
         if (inCurrentTrap(wrap)) {
             const [firstFocusableEl, lastFocusableEl] = getFirstAndLastFocusable();
-            if (e.target == firstFocusableEl && shiftTab) {
+            if (e.target === firstFocusableEl && shiftTab) {
                 setTimeout(() => lastFocusableEl?.focus());
-            } else if (e.target == lastFocusableEl && !shiftTab) {
+            } else if (e.target === lastFocusableEl && !shiftTab) {
                 setTimeout(() => firstFocusableEl?.focus());
             }
         }
