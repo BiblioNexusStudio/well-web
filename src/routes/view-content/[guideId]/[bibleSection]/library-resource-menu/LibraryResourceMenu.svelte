@@ -403,7 +403,7 @@
         {:else}
             <div class="flex flex-col items-center justify-items-center">
                 <div class="mb-4 flex-shrink-0 text-sm text-neutral">
-                    {filteredResourceCount == 1
+                    {filteredResourceCount === 1
                         ? $translate('page.passage.resourcePane.resourceCount.singular.value')
                         : $translate('page.passage.resourcePane.resourceCount.plural.value', {
                               values: { count: filteredResourceCount },

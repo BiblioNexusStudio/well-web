@@ -71,7 +71,7 @@ export const calculateUrlsWithMetadataToChange = (
     }
 
     if (
-        (selectedChaptersLength === 1 || selectedChaptersLength == 0) &&
+        (selectedChaptersLength === 1 || selectedChaptersLength === 0) &&
         biblesModuleBook.audioUrls?.chapters.some((chapter) => chapter.deleteResources)
     ) {
         urlsToDelete.push(bibleBookUrl(biblesModuleBook.bibleId!, biblesModuleBook.bookCode));

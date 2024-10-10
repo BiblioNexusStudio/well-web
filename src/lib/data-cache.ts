@@ -495,7 +495,7 @@ export async function isCachedAsContent(url: Url) {
     }
     const cache = await getContentCache();
     const response = await cache.match(url);
-    const isCached = response != null;
+    const isCached = response !== undefined;
     contentCachedUrls.set(url, isCached);
     return isCached;
 }
@@ -517,7 +517,7 @@ export async function isCachedFromApi(path: string) {
     }
     const cache = await getApiCache();
     const response = await cache.match(url);
-    const isCached = response != null;
+    const isCached = response !== undefined;
     apiCachedUrls.set(url, isCached);
     return isCached;
 }

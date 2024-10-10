@@ -34,6 +34,7 @@ module.exports = {
     rules: {
         'svelte/no-at-html-tags': 0,
         'no-console': 'error',
+        eqeqeq: ['error', 'always'],
         '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
         'svelte-translate-check/missing-translations': 'error',
         '@typescript-eslint/no-non-null-assertion': 'off',
