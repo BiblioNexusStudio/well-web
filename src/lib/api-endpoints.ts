@@ -114,7 +114,7 @@ export function resourceContentForBookAndChapter(
 ): ApiStringAndCacheBustVersion {
     return [
         `/resources/content/grouped-by-verse?languageId=${languageId}&bookCode=${bookCode}&chapter=${chapterNumber}`,
-        3,
+        4,
     ];
 }
 
