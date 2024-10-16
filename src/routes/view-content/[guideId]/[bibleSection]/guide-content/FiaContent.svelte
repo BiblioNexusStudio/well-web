@@ -29,7 +29,7 @@
     import StepBasedContent from './StepBasedContent.svelte';
 
     interface ResourceContentFiaText extends ResourceContentTiptap {
-        stepNumber: number;
+        stepNumber?: number;
     }
 
     interface FiaAudioMetadata {
@@ -90,7 +90,11 @@
                             }
                         }
                         if (textContent) {
-                            const stepText = textContent.steps.find((s) => s.stepNumber === stepNumber);
+                            // check for matching stepNumber but fall back to index if stepNumber is missing
+                            const stepText = textContent.steps.find(
+                                (s, i) =>
+                                    s.stepNumber === stepNumber || (s.stepNumber === undefined && i + 1 === stepNumber)
+                            );
                             if (stepText?.contentHTML) {
                                 step.contentHTML = stepText.contentHTML;
                                 hasContent = true;
