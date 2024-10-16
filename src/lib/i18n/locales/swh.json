@@ -504,6 +504,20 @@
                 "other": {
                     "value": "Nyingine"
                 }
+            },
+            "infoPromptForm": {
+                "share": {
+                    "value": "Shiriki Taarifa Zako"
+                },
+                "shareSubtitle": {
+                    "value": "Tusaidie kuboresha Bible Well na kuifanya iwe rahisi kutumia! Maoni yako yanafanya tofauti!"
+                },
+                "contactInformation": {
+                    "value": "Aina ya Mawasiliano"
+                },
+                "contactType": {
+                    "value": "Aina ya Mawasiliano"
+                }
             }
         }
     },

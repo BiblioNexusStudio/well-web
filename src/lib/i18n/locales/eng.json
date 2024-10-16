@@ -613,6 +613,24 @@
                     "_context": "Message to display when the required fields are not filled in"
                 }
             },
+            "infoPromptForm": {
+                "share": {
+                    "value": "Share Your Information",
+                    "_context": "Title for contact form popup"
+                },
+                "shareSubtitle": {
+                    "value": "Help us improve the Bible Well and make it easier to use! Your input makes a difference!",
+                    "_context": "Subtitle for the contact form popup"
+                },
+                "contactInformation": {
+                    "value": "Contact Information",
+                    "_context": "Label for contact information dropdown"
+                },
+                "contactType": {
+                    "value": "Contact Type",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
             "resourceFeedbackForm": {
                 "rateContent": {
                     "value": "Rate this content",

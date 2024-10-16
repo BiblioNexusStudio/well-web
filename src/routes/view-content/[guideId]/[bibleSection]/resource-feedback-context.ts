@@ -1,20 +1,8 @@
+import type { ContactInfo } from '$lib/types/contact-info';
 import { getContext, setContext } from 'svelte';
 import { writable } from 'svelte/store';
 
 const CONTEXT_KEY = 'resourceFeedbackContext';
-
-export enum ContactType {
-    Email = 'Email',
-    Phone = 'Phone',
-    WhatsApp = 'WhatsApp',
-    Signal = 'Signal',
-    Other = 'Other',
-}
-
-interface ContactInfo {
-    contactValue: string;
-    contactType: ContactType;
-}
 
 function createLocalStorageStore<T>(key: string, initialValue: T | null) {
     const storedValue = localStorage.getItem(key);

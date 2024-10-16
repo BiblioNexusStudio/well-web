@@ -504,6 +504,20 @@
                 "other": {
                     "value": "Другой"
                 }
+            },
+            "infoPromptForm": {
+                "share": {
+                    "value": "Поделитесь вашей информацией"
+                },
+                "shareSubtitle": {
+                    "value": "Помогите нам улучшить Bible Well и сделать его более удобным в использовании! Ваше мнение имеет значение!"
+                },
+                "contactInformation": {
+                    "value": "Тип контакта"
+                },
+                "contactType": {
+                    "value": "Тип контакта"
+                }
             }
         }
     },

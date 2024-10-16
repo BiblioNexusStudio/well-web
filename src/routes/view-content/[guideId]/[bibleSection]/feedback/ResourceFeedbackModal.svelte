@@ -3,10 +3,12 @@
     import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
     import { apiUrl } from '$lib/data-cache';
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
-    import { ContactType, getResourceFeedbackContext } from '../resource-feedback-context';
+    import { getResourceFeedbackContext } from '../resource-feedback-context';
     import StarRating from '$lib/components/StarRating.svelte';
     import { isOnline } from '$lib/stores/is-online.store';
     import { trapFocus } from '$lib/utils/trap-focus';
+    import ContactOptions from './ContactOptions.svelte';
+    import { ContactType } from '$lib/types/contact-info';
 
     const { modalIsOpenForResourceContentId, contactInfo, saveContactInfo, closeResourceFeedbackModal } =
         getResourceFeedbackContext();
@@ -30,7 +32,7 @@
         [ContactType.Other]: $translate('page.feedback.contactType.other.value'),
     };
 
-    const contactTypeOptions = Object.values(ContactType).map((v) => ({
+    export const ContactTypeOptions = Object.values(ContactType).map((v) => ({
         value: v.toString(),
         label: contactTypeLabels[v],
     }));
@@ -150,18 +152,7 @@
                     ></textarea>
 
                     {#if !$contactInfo}
-                        <label for="contact-type" class="pb-1 ps-1 text-slate-600"
-                            >{$translate('page.feedback.resourceFeedbackForm.contactInformation.value')}</label
-                        >
-                        <select class="select select-bordered mb-2" bind:value={contactType}>
-                            <option value=""
-                                >{$translate('page.feedback.resourceFeedbackForm.contactType.value')}</option
-                            >
-                            {#each contactTypeOptions as option (option.value)}
-                                <option value={option.value}>{option.label}</option>
-                            {/each}
-                        </select>
-                        <input disabled={!contactType} bind:value={contactValue} class="input input-bordered mb-4" />
+                        <ContactOptions bind:contactType bind:contactValue />
                     {/if}
 
                     <div class="flex w-full justify-end">

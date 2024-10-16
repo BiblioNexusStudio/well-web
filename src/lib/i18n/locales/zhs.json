@@ -509,6 +509,20 @@
                     "value": "Other",
                     "_context": "Other contact method"
                 }
+            },
+            "infoPromptForm": {
+                "share": {
+                    "value": "分享您的信息"
+                },
+                "shareSubtitle": {
+                    "value": "帮助我们改善 Bible Well，使其更易于使用！您的意见很重要！"
+                },
+                "contactInformation": {
+                    "value": "联系类型"
+                },
+                "contactType": {
+                    "value": "联系类型"
+                }
             }
         }
     },
