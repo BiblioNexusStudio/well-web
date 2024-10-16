@@ -8,7 +8,7 @@
     import { isOnline } from '$lib/stores/is-online.store';
     import { trapFocus } from '$lib/utils/trap-focus';
     import ContactOptions from './ContactOptions.svelte';
-    import { ContactType } from '$lib/types/contact-info';
+    import type { ContactType } from '$lib/types/contact-info';
 
     const { modalIsOpenForResourceContentId, contactInfo, saveContactInfo, closeResourceFeedbackModal } =
         getResourceFeedbackContext();
@@ -23,19 +23,6 @@
     let rating = 0;
 
     $: !contactType && (contactValue = '');
-
-    const contactTypeLabels = {
-        [ContactType.Email]: $translate('page.feedback.contactType.email.value'),
-        [ContactType.Phone]: $translate('page.feedback.contactType.phone.value'),
-        [ContactType.WhatsApp]: $translate('page.feedback.contactType.whatsapp.value'),
-        [ContactType.Signal]: $translate('page.feedback.contactType.signal.value'),
-        [ContactType.Other]: $translate('page.feedback.contactType.other.value'),
-    };
-
-    export const ContactTypeOptions = Object.values(ContactType).map((v) => ({
-        value: v.toString(),
-        label: contactTypeLabels[v],
-    }));
 
     function resetForm() {
         loading = false;
