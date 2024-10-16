@@ -97,8 +97,8 @@
     }
 
     function trackActivityAndGetFeedback() {
-        const HOURS_INACTIVE_THRESHOLD = 4;
-        const DAYS_SINCE_PROMPTED_THRESHOLD = 7;
+        const HOURS_INACTIVE_THRESHOLD = 0.08;
+        const DAYS_SINCE_PROMPTED_THRESHOLD = 0.01;
         const AMOUNT_PROMPTED_THRESHOLD = 3;
 
         if (localStorage.getItem('amount-prompted') == null) {
