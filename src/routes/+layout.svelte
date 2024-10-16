@@ -101,7 +101,7 @@
         const DAYS_SINCE_PROMPTED_THRESHOLD = 0.01;
         const AMOUNT_PROMPTED_THRESHOLD = 3;
 
-        if (localStorage.getItem('amount-prompted') == null) {
+        if (localStorage.getItem('amount-prompted') === null) {
             localStorage.setItem('amount-prompted', '0');
             localStorage.setItem('user-info-collected', 'false');
         }
