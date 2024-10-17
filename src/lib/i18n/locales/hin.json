@@ -24,6 +24,9 @@
                 },
                 "releasedUnderMultiple": {
                     "value": "विभिन्न: {names} के तहत जारी किया गया"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} को निम्नलिखित भाषाओं में अनुकूलित किया गया है<br /> {languages}<br /> से {title} {copyright} {date} {publisher}<br /> {bnLicense} लाइसेंस के तहत Biblionexus द्वारा जारी किया गया"
                 }
             }
         },

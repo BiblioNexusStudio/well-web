@@ -24,6 +24,9 @@
                 },
                 "releasedUnderMultiple": {
                     "value": "Imetolewa chini ya anuwai: {names}"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} imebadilishwa katika lugha zifuatazo<br /> {languages}<br /> kutoka {title} {copyright} {date} {publisher}<br /> Imetolewa chini ya leseni {bnLicense} na Biblionexus"
                 }
             }
         },

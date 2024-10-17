@@ -24,6 +24,9 @@
                 },
                 "releasedUnderMultiple": {
                     "value": "根据多个许可证发布"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} 已被改编为以下语言<br /> {languages}<br /> 来自 {title} {copyright} {date} {publisher}<br /> 依据 {bnLicense} 许可证由 Biblionexus 发布"
                 }
             }
         },

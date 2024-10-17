@@ -24,6 +24,9 @@
                 },
                 "releasedUnderMultiple": {
                     "value": "Dirilis di bawah berbagai"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} telah diadaptasi dalam bahasa-bahasa berikut<br /> {languages}<br /> dari {title} {copyright} {date} {publisher}<br /> Dirilis di bawah lisensi {bnLicense} oleh Biblionexus"
                 }
             }
         },
