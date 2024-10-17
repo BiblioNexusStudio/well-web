@@ -8,6 +8,7 @@
     import ContactOptions from './ContactOptions.svelte';
     import { trapFocus } from '$lib/utils/trap-focus';
     import { FeedbackType, FormType } from '$lib/types/contact-info';
+    import { isOnline } from '$lib/stores/is-online.store';
 
     export let close: () => void;
     export let isOpen: boolean;
@@ -17,10 +18,22 @@
     let name = '';
     let contactType = '';
     let contactValue = '';
+    let showError = false;
+    let showOfflineSuccess = false;
+    let showSuccess = false;
 
     $: !contactType && (contactValue = '');
 
     $: name && contactValue && contactType ? (submitDisabled = false) : (submitDisabled = true);
+
+    function resetForm() {
+        loading = false;
+        showSuccess = false;
+        showOfflineSuccess = false;
+        showError = false;
+        contactType = '';
+        contactValue = '';
+    }
 
     async function handleSubmit() {
         loading = true;
@@ -39,8 +52,9 @@
             feedbackType: FeedbackType.PromptFeedbackForm,
         };
 
+        let response;
         try {
-            const response = await fetch(apiUrl('feedback/bible-well'), {
+            response = await fetch(apiUrl('feedback/bible-well'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,9 +69,21 @@
 
             loading = false;
             localStorage.setItem('user-info-collected', 'true');
-            close();
         } catch (error) {
+            if (!$isOnline) {
+                // if the user is offline, the BackgroundSync will handle sending when they come back online
+                showOfflineSuccess = true;
+                localStorage.setItem('user-info-collected', 'true');
+            }
             loading = false;
+        } finally {
+            loading = false;
+        }
+        if (response && response.ok) {
+            resetForm();
+            showSuccess = true;
+        } else {
+            showError = true;
         }
     }
 </script>
@@ -67,6 +93,18 @@
         {#if loading}
             <h2 class="mb-8 text-center text-lg font-bold">{$translate('page.feedback.feedbackSending.value')}</h2>
             <FullPageSpinner height={'h-26'} />
+        {:else if showSuccess || showOfflineSuccess}
+            <div class="flex flex-col items-center">
+                <h2 class="mb-8 text-center text-lg font-bold">
+                    {#if showSuccess}
+                        {$translate('page.feedback.feedbackSuccessfullySent.value')}
+                    {:else}
+                        {$translate('page.feedback.feedbackQueuedOffline.value')}
+                    {/if}
+                </h2>
+                <h2 class="mb-8 text-lg font-bold">{$translate('page.feedback.thankYou.value')}</h2>
+            </div>
+            <button class="btn btn-primary" on:click={close}>{$translate('page.feedback.close.value')}</button>
         {:else}
             <div class="flex h-full flex-col">
                 <div class="flex w-full items-center justify-end">
@@ -99,6 +137,11 @@
                             >{$translate('page.feedback.submit.value')}</button
                         >
                     </div>
+                    {#if showError}
+                        <h2 class="text-md pt-3 text-center font-bold text-error">
+                            {$translate('page.feedback.feedbackError.value')}
+                        </h2>
+                    {/if}
                 </form>
             </div>
         {/if}
