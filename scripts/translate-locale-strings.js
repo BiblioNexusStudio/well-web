@@ -112,7 +112,7 @@ function handleTranslationsOnClipboard() {
 
         translations.forEach((translation) => {
             if (translation.trim() !== '') {
-                const validLineMatch = translation.match(/^\(([^)]+)\)\s[A-Za-z0-9.]+:\s(.*)$/);
+                const validLineMatch = translation.match(/^\(([^)_]+)\)\s[A-Za-z0-9.]+:\s(.*)$/);
                 if (!validLineMatch || !Object.values(languageCodesToNames).includes(validLineMatch[1])) {
                     console.error(`Invalid line or language from ChatGPT: ${translation}`);
                     console.error('Expected format like: `(Swahili) page.bible: Biblia`');
