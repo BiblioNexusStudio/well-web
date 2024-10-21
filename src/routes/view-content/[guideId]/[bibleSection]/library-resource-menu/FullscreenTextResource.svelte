@@ -12,7 +12,7 @@
         addThumbnailToVideo,
         resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
-    import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
+    import { parseTiptapJsonToHtml } from '$lib/utils/tiptap';
     import { isOnline } from '$lib/stores/is-online.store';
     import type { ContentTabEnum } from '../context';
     import { currentLanguageDirection } from '$lib/stores/language.store';

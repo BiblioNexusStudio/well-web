@@ -6,6 +6,15 @@ export default {
     },
     theme: {
         extend: {
+            typography: {
+                DEFAULT: {
+                    css: {
+                        blockquote: {
+                            quotes: 'none',
+                        },
+                    },
+                },
+            },
             colors: {
                 'primary-50': 'var(--primary-50)',
                 'primary-300': 'var(--primary-300)',

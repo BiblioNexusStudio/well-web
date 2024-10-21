@@ -1,51 +1,29 @@
-import { generateHTML } from '@tiptap/html';
-import { Mark } from '@tiptap/core';
-import { resourceReferenceMark } from './tiptap/resourceReferenceMark';
 import type { AssociatedResource } from '$lib/types/resource';
-import Blockquote from '@tiptap/extension-blockquote';
-import BulletList from '@tiptap/extension-bullet-list';
-import CodeBlock from '@tiptap/extension-code-block';
-import Document from '@tiptap/extension-document';
-import HardBreak from '@tiptap/extension-hard-break';
-import Heading from '@tiptap/extension-heading';
-import HorizontalRule from '@tiptap/extension-horizontal-rule';
-import ListItem from '@tiptap/extension-list-item';
-import OrderedList from '@tiptap/extension-ordered-list';
-import Paragraph from '@tiptap/extension-paragraph';
-import Text from '@tiptap/extension-text';
-import Image from '@tiptap/extension-image';
-import Bold from '@tiptap/extension-bold';
-import Code from '@tiptap/extension-code';
-import Italic from '@tiptap/extension-italic';
-import Strike from '@tiptap/extension-strike';
-import Underline from '@tiptap/extension-underline';
-import Highlight from '@tiptap/extension-highlight';
-import Subscript from '@tiptap/extension-subscript';
-import Superscript from '@tiptap/extension-superscript';
-import TextStyle from '@tiptap/extension-text-style';
-import { Video } from './tiptap/video';
+import {
+    Link,
+    Mark,
+    Node as TiptapNode,
+    configureAndOverrideExtensions,
+    customExtensions,
+    generateHTML,
+    officialMarks,
+    officialNodes,
+} from 'aquifer-tiptap';
 import type { ContentTabEnum } from '../../routes/view-content/[guideId]/[bibleSection]/context';
 import { DirectionCode, handleRtlVerseReferences } from './language-utils';
+import ResourceReference from './tiptap-extensions/resource-reference';
 
-const nodes = [
-    Blockquote,
-    Document,
-    BulletList,
-    CodeBlock,
-    HardBreak,
-    Heading,
-    HorizontalRule,
-    ListItem,
-    OrderedList,
-    Paragraph,
-    Text,
-    Image,
-    Video,
-];
+const NODE_TYPE = new TiptapNode().type;
+const MARK_TYPE = new Mark().type;
+
+const nodes = [...officialNodes, ...customExtensions.filter((e) => e.type === NODE_TYPE)];
 const knownNodeNames = nodes.map((n) => n.name);
 
-const marks = [Bold, Code, Italic, Strike, Underline, Highlight, Subscript, Superscript, TextStyle];
-const knownMarkNames = marks.map((m) => m.name).concat([resourceReferenceMark.name]);
+const marks = [
+    ...officialMarks.filter((m) => m.name !== Link.name),
+    ...customExtensions.filter((e) => e.type === MARK_TYPE),
+];
+const knownMarkNames = marks.map((m) => m.name);
 
 interface BasicTiptapJson {
     content: Node[];
@@ -78,9 +56,8 @@ function generateExtensions(
     const unknownMarkNames = [...new Set(tiptapJson.content.flatMap(findUnknownMarks))];
 
     return [
-        ...marks.map((m) => m.configure({})),
-        ...nodes.map((n) => n.configure({})),
-        resourceReferenceMark.configure({ tab, availableAssociatedResources }),
+        ...configureAndOverrideExtensions(nodes, []),
+        ...configureAndOverrideExtensions(marks, [ResourceReference.configure({ tab, availableAssociatedResources })]),
         ...unknownMarkNames.map((name) => Mark.create({ name })),
     ];
 }

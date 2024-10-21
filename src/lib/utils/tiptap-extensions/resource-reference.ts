@@ -1,19 +1,17 @@
 import { MediaType, type AssociatedResource } from '$lib/types/resource';
-import { Mark } from '@tiptap/core';
 import type { ContentTabEnum } from '../../../routes/view-content/[guideId]/[bibleSection]/context';
+import { ResourceReference } from 'aquifer-tiptap';
 
-export const resourceReferenceMark = Mark.create<ResourceReferenceOptions>({
-    name: 'resourceReference',
-    priority: 1001,
-    keepOnSplit: false,
-    addAttributes() {
+export default ResourceReference.extend<ResourceReferenceOptions>({
+    addOptions() {
         return {
-            resourceId: {
-                default: null,
-            },
+            ...this.parent?.(),
+            availableAssociatedResources: undefined,
+            tab: undefined,
         };
     },
-    renderHTML({ HTMLAttributes }) {
+    renderHTML(args) {
+        const { HTMLAttributes } = args;
         const associatedResourceInfo = this.options.availableAssociatedResources?.find(
             (ar) =>
                 (ar.mediaType === MediaType.Text || !ar.mediaType) &&
@@ -34,12 +32,12 @@ export const resourceReferenceMark = Mark.create<ResourceReferenceOptions>({
                 0,
             ];
         } else {
-            return ['span', 0];
+            return this.parent?.(args) ?? ['span', 0];
         }
     },
 });
 
 interface ResourceReferenceOptions {
     availableAssociatedResources: AssociatedResource[] | undefined;
-    tab: ContentTabEnum;
+    tab: ContentTabEnum | undefined;
 }

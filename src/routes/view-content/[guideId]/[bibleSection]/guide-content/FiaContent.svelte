@@ -20,7 +20,7 @@
         filterToAvailableAssociatedResourceContent,
         resourceContentApiFullUrl,
     } from '$lib/utils/data-handlers/resources/resource';
-    import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
+    import { parseTiptapJsonToHtml } from '$lib/utils/tiptap';
     import { readFilesIntoObjectUrlsMapping } from '$lib/utils/unzip';
     import { _ as translate } from 'svelte-i18n';
     import { ContentTabEnum, getContentContext } from '../context';
