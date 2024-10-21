@@ -9,7 +9,7 @@
         filterToAvailableAssociatedResourceContent,
         type ResourceContentInfoWithFrontendData,
     } from '$lib/utils/data-handlers/resources/resource';
-    import { parseTiptapJsonToHtml } from '$lib/utils/tiptap-parsers';
+    import { parseTiptapJsonToHtml } from '$lib/utils/tiptap';
     import { ContentTabEnum, getContentContext } from '../context';
     import { currentLanguageDirection } from '$lib/stores/language.store';
     import { handleRtlVerseReferences } from '$lib/utils/language-utils';
