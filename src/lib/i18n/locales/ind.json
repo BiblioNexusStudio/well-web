@@ -507,6 +507,20 @@
                 "other": {
                     "value": "Lainnya"
                 }
+            },
+            "infoPromptForm": {
+                "share": {
+                    "value": "Bagikan Informasi Anda"
+                },
+                "shareSubtitle": {
+                    "value": "Bantu kami meningkatkan Bible Well dan membuatnya lebih mudah digunakan! Masukan Anda sangat berarti!"
+                },
+                "contactInformation": {
+                    "value": "Jenis Kontak"
+                },
+                "contactType": {
+                    "value": "Jenis Kontak"
+                }
             }
         }
     },

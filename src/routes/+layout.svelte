@@ -20,6 +20,7 @@
     import { browserSupported } from '$lib/utils/browser';
     import CommunityEditionModal from '$lib/components/CommunityEditionModal.svelte';
     import DebugModal from '$lib/components/DebugModal.svelte';
+    import UserInfoModal from './view-content/[guideId]/[bibleSection]/feedback/UserInfoModal.svelte';
 
     $: {
         document.dir = $currentLanguageDirection;
@@ -29,6 +30,7 @@
     $: setParentResources($currentLanguageInfo);
 
     export let data: LayoutData;
+    let showFeedbackModal = false;
 
     async function initialize() {
         window.dispatchEvent(new Event('svelte-app-loaded')); // tell the app.html to show the page
@@ -91,6 +93,55 @@
             }
             element = element?.parentNode as HTMLElement;
         }
+        trackActivityAndGetFeedback();
+    }
+
+    function trackActivityAndGetFeedback() {
+        const HOURS_INACTIVE_THRESHOLD = 4;
+        const DAYS_SINCE_PROMPTED_THRESHOLD = 7;
+        const AMOUNT_PROMPTED_THRESHOLD = 3;
+
+        if (localStorage.getItem('amount-prompted') === null) {
+            localStorage.setItem('amount-prompted', '0');
+            localStorage.setItem('user-info-collected', 'false');
+        }
+
+        if (
+            localStorage.getItem('user-info-collected') === 'false' &&
+            localStorage.getItem('last-clicked-timestamp') !== null
+        ) {
+            const lastTimeClicked = parseInt(localStorage.getItem('last-clicked-timestamp')!);
+            const amountPrompted = parseInt(localStorage.getItem('amount-prompted')!);
+            const now = new Date().getTime();
+            const isAtLeastSecondAppOpen = (now - lastTimeClicked) / (1000 * 60 * 60) >= HOURS_INACTIVE_THRESHOLD;
+
+            if (isAtLeastSecondAppOpen) {
+                if (amountPrompted === 0) {
+                    showUserInfoPrompt(amountPrompted);
+                } else {
+                    const timeLastPromptedItem = localStorage.getItem('time-last-prompted');
+                    if (timeLastPromptedItem) {
+                        const lastPromptedDate = parseInt(timeLastPromptedItem);
+                        const daysSinceLastPrompted = (now - lastPromptedDate) / (1000 * 60 * 60 * 24);
+                        if (
+                            daysSinceLastPrompted >= DAYS_SINCE_PROMPTED_THRESHOLD &&
+                            amountPrompted <= AMOUNT_PROMPTED_THRESHOLD
+                        ) {
+                            showUserInfoPrompt(amountPrompted);
+                        }
+                    }
+                }
+            }
+        }
+
+        localStorage.setItem('last-clicked-timestamp', new Date().getTime().toString());
+    }
+
+    function showUserInfoPrompt(amountPrompted: number) {
+        showFeedbackModal = true;
+        localStorage.setItem('time-last-prompted', new Date().getTime().toString());
+        amountPrompted++;
+        localStorage.setItem('amount-prompted', amountPrompted + '');
     }
 
     // get the manifest info to include in the head
@@ -138,5 +189,6 @@
         <div class="flex-grow"></div>
     </div>
 {:else}
+    <UserInfoModal bind:isOpen={showFeedbackModal} close={() => (showFeedbackModal = false)} />
     <slot />
 {/if}

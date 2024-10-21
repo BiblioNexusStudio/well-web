@@ -507,6 +507,20 @@
                 "other": {
                     "value": "Narapela"
                 }
+            },
+            "infoPromptForm": {
+                "share": {
+                    "value": "Saretim Yumi"
+                },
+                "shareSubtitle": {
+                    "value": "Helpim mipela long improvim Bible Well na mekim em isi long yusim! Yu givim dispela samting i save mekim chan!"
+                },
+                "contactInformation": {
+                    "value": "Sait bilong Kontak"
+                },
+                "contactType": {
+                    "value": "Sait bilong Kontak"
+                }
             }
         }
     },

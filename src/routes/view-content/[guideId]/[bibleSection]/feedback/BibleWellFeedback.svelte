@@ -5,6 +5,7 @@
     import FullPageSpinner from '$lib/components/FullPageSpinner.svelte';
     import { getAdditionalProperties } from '$lib/logger';
     import { currentLanguageInfo } from '$lib/stores/language.store';
+    import { FeedbackType } from '$lib/types/contact-info';
     interface BibleUseOptions {
         name: string;
         value: string;
@@ -80,6 +81,7 @@
                 email,
                 phone,
                 feedback: JSON.stringify(metaData),
+                feedbackType: FeedbackType.SettingsFeedbackForm,
             };
 
             try {
