@@ -24,6 +24,9 @@
                 },
                 "releasedUnderMultiple": {
                     "value": "Publié sous diverses : {names}"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} a été adapté dans les langues suivantes<br /> {languages}<br /> de {title} {copyright} {date} {publisher}<br /> Publié sous la licence {bnLicense} par Biblionexus"
                 }
             }
         },

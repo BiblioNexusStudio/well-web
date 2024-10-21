@@ -31,6 +31,10 @@
                 "releasedUnderMultiple": {
                     "value": "Released under various: {names}",
                     "_context": "Description explaining the content is released under multiple licenses"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} has been adapted in the following languages<br /> {languages}<br /> from {title} {copyright} {date} {publisher}<br /> Released under {bnLicense} license by Biblionexus",
+                    "_context": "Description for license adapted in languages"
                 }
             }
         },

@@ -24,6 +24,9 @@
                 },
                 "releasedUnderMultiple": {
                     "value": "Rilis long ol: {names}"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} i bin adaptim long ol lain bilong tok<br /> {languages}<br /> long {title} {copyright} {date} {publisher}<br /> I kisim {bnLicense} license long Biblionexus"
                 }
             }
         },

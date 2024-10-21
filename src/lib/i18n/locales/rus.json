@@ -24,6 +24,9 @@
                 },
                 "releasedUnderMultiple": {
                     "value": "Выпущено под: {names}"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} был адаптирован на следующие языки<br /> {languages}<br /> из {title} {copyright} {date} {publisher}<br /> Выпущен под лицензией {bnLicense} компанией Biblionexus"
                 }
             }
         },
