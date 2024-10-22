@@ -10,7 +10,10 @@ export default {
                 DEFAULT: {
                     css: {
                         blockquote: {
+                            fontWeight: 'regular',
+                            fontStyle: 'none',
                             quotes: 'none',
+                            color: 'var(--tw-prose-body)',
                         },
                     },
                 },
