@@ -557,6 +557,20 @@
             "step6": {
                 "value": "传递话语"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "段落"
+            },
+            "sectionButton": {
+                "value": "部分"
+            },
+            "suggestionsButton": {
+                "value": "建议"
+            },
+            "suggestionsDescription": {
+                "value": "人们翻译以下内容的其他方式有："
+            }
         }
     },
     "errorMessage": {

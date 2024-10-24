@@ -552,6 +552,20 @@
             "step6": {
                 "value": "Провозглашая Слово"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "Параграф"
+            },
+            "sectionButton": {
+                "value": "Раздел"
+            },
+            "suggestionsButton": {
+                "value": "Предложения"
+            },
+            "suggestionsDescription": {
+                "value": "Есть и другие способы, которыми люди перевели следующее"
+            }
         }
     },
     "errorMessage": {

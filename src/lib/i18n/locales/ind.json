@@ -552,6 +552,20 @@
             "step6": {
                 "value": "Mengucapkan Kata"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "Paragraf"
+            },
+            "sectionButton": {
+                "value": "Bagian"
+            },
+            "suggestionsButton": {
+                "value": "Saran"
+            },
+            "suggestionsDescription": {
+                "value": "Ada cara lain orang-orang menerjemahkan yang berikut"
+            }
         }
     },
     "errorMessage": {

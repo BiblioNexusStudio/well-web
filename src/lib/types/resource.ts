@@ -7,6 +7,7 @@ export enum ParentResourceId {
     UwTranslationNotes = 11,
     UwTranslationQuestions = 13,
     UwTranslationWords = 7,
+    SilOpenTranslatorsNotes = 18,
 }
 
 export enum MediaType {
@@ -38,6 +39,7 @@ export const CheckingGuides = [
     ParentResourceId.UwTranslationNotes,
     ParentResourceId.UwTranslationQuestions,
     ParentResourceId.UwTranslationWords,
+    ParentResourceId.SilOpenTranslatorsNotes,
 ];
 
 export const SubgroupedTextResourceRegexes: Partial<Record<ParentResourceId, RegExp>> = {
@@ -53,6 +55,7 @@ export const EnabledGuides = [
     ParentResourceId.UwTranslationNotes,
     ParentResourceId.UwTranslationQuestions,
     ParentResourceId.UwTranslationWords,
+    ParentResourceId.SilOpenTranslatorsNotes,
 ];
 
 export enum ParentResourceType {
@@ -144,6 +147,9 @@ export interface BasicTextResourceContent {
     audioId?: number;
     audioVersion?: number;
     id: number;
+
+    /** In some cases, like displaying Open Translator's Notes sections/paragraphs, we will already know the html and don't need to fetch anything */
+    html?: string;
 }
 
 export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
@@ -155,7 +161,8 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
 interface TtContent {
     type: string;
     attrs: object;
-    content: object[];
+    content?: object[];
+    text?: string;
 }
 
 export interface DownloadTtContent {
@@ -163,12 +170,14 @@ export interface DownloadTtContent {
     attrs: { src: string };
     content: object[];
 }
-interface InnerTipTapContent {
+
+export interface InnerTipTapContent {
     type: string;
+    attrs: object;
     content: TtContent[];
 }
 
-interface TiptapContent {
+export interface TiptapContent {
     type: string;
     content: InnerTipTapContent[];
 }

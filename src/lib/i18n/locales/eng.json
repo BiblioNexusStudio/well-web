@@ -713,6 +713,24 @@
                 "value": "Speaking the Word",
                 "_context": "See FIA for translations of each step name"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "Paragraph",
+                "_context": "Button to see OTN paragraph info"
+            },
+            "sectionButton": {
+                "value": "Section",
+                "_context": "Button to see OTN section info"
+            },
+            "suggestionsButton": {
+                "value": "Suggestions",
+                "_context": "Button to see OTN text translation suggestions info"
+            },
+            "suggestionsDescription": {
+                "value": "There are other ways people have translated the following:",
+                "_context": "Description explaining OTN text translation suggestions"
+            }
         }
     },
     "errorMessage": {

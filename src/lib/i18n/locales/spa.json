@@ -552,6 +552,20 @@
             "step6": {
                 "value": "Pronunciando la Palabra"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "Párrafo"
+            },
+            "sectionButton": {
+                "value": "Sección"
+            },
+            "suggestionsButton": {
+                "value": "Sugerencias"
+            },
+            "suggestionsDescription": {
+                "value": "Existen otras formas en las que la gente ha traducido lo siguiente"
+            }
         }
     },
     "errorMessage": {

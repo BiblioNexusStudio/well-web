@@ -582,6 +582,20 @@
             "step6": {
                 "value": "Falando a Palavra"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "Parágrafo"
+            },
+            "sectionButton": {
+                "value": "Seção"
+            },
+            "suggestionsButton": {
+                "value": "Sugestões"
+            },
+            "suggestionsDescription": {
+                "value": "Existem outras formas pelas quais as pessoas traduziram o seguinte"
+            }
         }
     },
     "errorMessage": {
