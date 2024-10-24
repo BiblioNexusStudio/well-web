@@ -552,6 +552,20 @@
             "step6": {
                 "value": "शब्द बोलना"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "पैराग्राफ़"
+            },
+            "sectionButton": {
+                "value": "अनुभाग"
+            },
+            "suggestionsButton": {
+                "value": "सुझाव"
+            },
+            "suggestionsDescription": {
+                "value": "लोगों ने निम्नलिखित का अनुवाद करने के अन्य तरीके भी अपनाए हैं"
+            }
         }
     },
     "errorMessage": {

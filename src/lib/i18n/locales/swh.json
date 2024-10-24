@@ -552,6 +552,20 @@
             "step6": {
                 "value": "Akizungumza Neno"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "Aya"
+            },
+            "sectionButton": {
+                "value": "Sehemu"
+            },
+            "suggestionsButton": {
+                "value": "Mapendekezo"
+            },
+            "suggestionsDescription": {
+                "value": "Kuna njia nyingine ambazo watu wametafsiri yafuatayo"
+            }
         }
     },
     "errorMessage": {

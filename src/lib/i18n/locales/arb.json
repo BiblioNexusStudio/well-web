@@ -552,6 +552,20 @@
             "step6": {
                 "value": "تلفظ الكلمة"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "فقرة"
+            },
+            "sectionButton": {
+                "value": "قسم"
+            },
+            "suggestionsButton": {
+                "value": "اقتراحات"
+            },
+            "suggestionsDescription": {
+                "value": "توجد طرق أخرى ترجم بها الناس ما يلي"
+            }
         }
     },
     "errorMessage": {

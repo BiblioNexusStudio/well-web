@@ -16,7 +16,6 @@
         SrvResources,
         type ResourceContentInfo,
         type ResourceContentInfoWithMetadata,
-        type BasicTextResourceContent,
     } from '$lib/types/resource';
     import {
         buildLibraryResourceGroupingsWithMetadata,
@@ -45,7 +44,6 @@
     export let resources: ResourceContentInfo[] | undefined;
     export let isLoading = true;
     export let tab: ContentTabEnum;
-    export let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]>;
     export let isShowing: boolean;
     export let isFullLibrary: boolean;
     export let bookCodesToNames: Map<string, string> | undefined;
@@ -58,6 +56,7 @@
         setPassageSearchBibleSection,
         setIsResourceSearch,
         isResourceSearch,
+        pushToFullscreenTextResourceStack,
     } = getContentContext();
 
     let searchQuery: string = '';
@@ -141,18 +140,15 @@
                 }
             }
         } else if (resource.mediaType === MediaType.Text) {
-            const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
             const audioResource = [...(resources || []), ...(passageSearchResources || [])].find(
                 (r) => r.dependentOnId === resource.id && r.mediaType === MediaType.Audio
             );
-            fullscreenTextResourceStack.push({
+            pushToFullscreenTextResourceStack(tab, {
                 ...resource,
                 mediaType: MediaType.Text,
                 audioId: audioResource?.id,
                 audioVersion: audioResource?.version,
             });
-            fullscreenTextResourceStacksByTab.set(tab, fullscreenTextResourceStack);
-            fullscreenTextResourceStacksByTab = fullscreenTextResourceStacksByTab;
         }
     }
 
@@ -342,7 +338,7 @@
         {resourceSelected}
         dismissFullscreen={() => subgroupSelected(null)}
     />
-    <FullscreenTextResource {tab} bind:fullscreenTextResourceStacksByTab />
+    <FullscreenTextResource {tab} />
 
     <div
         class="absolute bottom-20 left-0 right-0 {visibleSwish

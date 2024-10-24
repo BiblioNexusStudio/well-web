@@ -1,6 +1,6 @@
 import type { BibleSection } from '$lib/types/bible';
-import type { ApiParentResource } from '$lib/types/resource';
-import { get, writable } from 'svelte/store';
+import type { ApiParentResource, BasicTextResourceContent } from '$lib/types/resource';
+import { get, writable, type Subscriber, type Invalidator } from 'svelte/store';
 import { getContext, setContext } from 'svelte';
 import { bibleSectionToString } from '$lib/utils/bible-section-helpers';
 import { goto } from '$app/navigation';
@@ -34,6 +34,7 @@ export function createContentContext() {
     const isLoadingToOpenPane = writable(false);
     const isPassageSearch = writable(false);
     const passageSearchBibleSection = writable<BibleSection | null>(null);
+    const fullscreenTextResourceStacksByTab = writable<Map<ContentTabEnum, BasicTextResourceContent[]>>(new Map());
     const isResourceSearch = writable(false);
 
     const context = {
@@ -173,11 +174,43 @@ export function createContentContext() {
         setIsPassageSearch: (value: boolean) => {
             isPassageSearch.set(value);
         },
+
         setPassageSearchBibleSection: (value: BibleSection | null) => {
             passageSearchBibleSection.set(value);
         },
+
         setIsResourceSearch: (value: boolean) => {
             isResourceSearch.set(value);
+        },
+
+        fullscreenTextResourceStackForTab: (tab: ContentTabEnum) => {
+            return {
+                subscribe: (
+                    run: Subscriber<BasicTextResourceContent[]>,
+                    invalidate: Invalidator<Map<ContentTabEnum, BasicTextResourceContent[]>>
+                ) =>
+                    fullscreenTextResourceStacksByTab.subscribe((data) => {
+                        run(data.get(tab) ?? []);
+                    }, invalidate),
+            };
+        },
+
+        pushToFullscreenTextResourceStack: (tab: ContentTabEnum, resource: BasicTextResourceContent) => {
+            fullscreenTextResourceStacksByTab.update((stacks) => {
+                const currentStack = stacks.get(tab) || [];
+                currentStack.push(resource);
+                stacks.set(tab, currentStack);
+                return stacks;
+            });
+        },
+
+        popFromFullscreenTextResourceStack: (tab: ContentTabEnum) => {
+            fullscreenTextResourceStacksByTab.update((stacks) => {
+                const currentStack = stacks.get(tab) || [];
+                currentStack.pop();
+                stacks.set(tab, currentStack);
+                return stacks;
+            });
         },
     };
 

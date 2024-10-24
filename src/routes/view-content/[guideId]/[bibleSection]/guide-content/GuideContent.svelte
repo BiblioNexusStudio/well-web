@@ -4,6 +4,7 @@
     import type { ResourceContentInfoWithFrontendData } from '$lib/utils/data-handlers/resources/resource';
     import { getContentContext } from '../context';
     import FiaContent from './FiaContent.svelte';
+    import SilOpenTranslatorsNotesContent from './SilOpenTranslatorsNotesContent.svelte';
     import UwTranslationContent from './UwTranslationContent.svelte';
 
     const { currentGuide } = getContentContext();
@@ -17,6 +18,8 @@
 
 {#if $currentGuide?.id === ParentResourceId.FIA}
     <FiaContent bind:multiClipAudioStates bind:audioPlayerKey {isShowing} {guideResourceInfo} />
+{:else if $currentGuide?.id === ParentResourceId.SilOpenTranslatorsNotes}
+    <SilOpenTranslatorsNotesContent bind:audioPlayerKey {isShowing} {guideResourceInfo} />
 {:else if $currentGuide?.id === ParentResourceId.UwTranslationNotes || $currentGuide?.id === ParentResourceId.UwTranslationQuestions || $currentGuide?.id === ParentResourceId.UwTranslationWords}
     <UwTranslationContent
         bind:audioPlayerKey

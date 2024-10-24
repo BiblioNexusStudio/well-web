@@ -14,7 +14,7 @@
     } from '$lib/utils/data-handlers/resources/resource';
     import { parseTiptapJsonToHtml } from '$lib/utils/tiptap';
     import { isOnline } from '$lib/stores/is-online.store';
-    import type { ContentTabEnum } from '../context';
+    import { getContentContext, type ContentTabEnum } from '../context';
     import { currentLanguageDirection } from '$lib/stores/language.store';
     import { handleRtlVerseReferences } from '$lib/utils/language-utils';
     import AudioPlayer from '$lib/components/AudioPlayer.svelte';
@@ -26,13 +26,14 @@
     import { log } from '$lib/logger';
 
     export let tab: ContentTabEnum;
-    export let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]>;
 
     const { openResourceFeedbackModalForResource } = getResourceFeedbackContext();
+    const { fullscreenTextResourceStackForTab, popFromFullscreenTextResourceStack } = getContentContext();
 
     let previousStackLength = 0;
     let stackSizeJustExpanded = false;
-    $: fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab) ?? [];
+    $: fullscreenTextResourceStackForTabStore = fullscreenTextResourceStackForTab(tab);
+    $: fullscreenTextResourceStack = $fullscreenTextResourceStackForTabStore;
 
     $: if (fullscreenTextResourceStack.length !== previousStackLength) {
         stackSizeJustExpanded = fullscreenTextResourceStack.length > previousStackLength;
@@ -40,14 +41,34 @@
     }
 
     $: currentResource = fullscreenTextResourceStack[fullscreenTextResourceStack.length - 1];
-    $: textResourcePromise = currentResource && loadTextContent(currentResource);
+    $: textResourcePromise = currentResource && prepareTextContent(currentResource);
 
     function goBack() {
-        fullscreenTextResourceStack.pop();
-        fullscreenTextResourceStack = fullscreenTextResourceStack;
+        popFromFullscreenTextResourceStack(tab);
     }
 
-    async function loadTextContent(resource: BasicTextResourceContent) {
+    async function prepareTextContent(resource: BasicTextResourceContent) {
+        let html = resource.html;
+        let displayName: string | undefined;
+        let communityEdition = false;
+        if (!html) {
+            ({ html, displayName, communityEdition } = await fetchTiptapAndMetadata(resource));
+        }
+        return {
+            html,
+            audioUrl: resource.audioId
+                ? resourceContentApiFullUrl({
+                      mediaType: MediaType.Audio,
+                      id: resource.audioId,
+                      version: resource.audioVersion,
+                  })
+                : null,
+            displayName: handleRtlVerseReferences(displayName, $currentLanguageDirection) ?? '',
+            communityEdition,
+        };
+    }
+
+    async function fetchTiptapAndMetadata(resource: BasicTextResourceContent) {
         const [tiptap, metadata] = await Promise.all([
             fetchTiptapForResourceContent(resource),
             fetchMetadataForResourceContent(resource),
@@ -58,7 +79,7 @@
                 `resourceContentId,${resource.id},resourceName,${metadata?.displayName}`
             );
         }
-        let html: string | null = null;
+        let html: string | undefined;
         if (tiptap) {
             const availableAssociatedResources = await filterToAvailableAssociatedResourceContent(
                 $isOnline,
@@ -73,14 +94,7 @@
         }
         return {
             html,
-            audioUrl: resource.audioId
-                ? resourceContentApiFullUrl({
-                      mediaType: MediaType.Audio,
-                      id: resource.audioId,
-                      version: resource.audioVersion,
-                  })
-                : null,
-            displayName: handleRtlVerseReferences(metadata?.displayName, $currentLanguageDirection),
+            displayName: metadata?.displayName,
             communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
         };
     }
@@ -110,7 +124,7 @@
                     </button>
                 </div>
             </div>
-            <div class="self-center overflow-y-scroll">
+            <div class="overflow-y-scroll">
                 {#if resource?.communityEdition}
                     <div class="float-end p-4 pe-5 text-warning">
                         <button on:click={() => ($isShowingCommunityEditionModal = true)}>
@@ -119,7 +133,7 @@
                     </div>
                 {/if}
                 <div
-                    class="prose mx-2 rounded-md {resource?.communityEdition &&
+                    class="prose mx-auto w-full rounded-md {resource?.communityEdition &&
                         'bg-warning-content'} px-4 pb-4 pt-2 {resource?.audioUrl ? 'mb-16' : 'mb-2'}"
                 >
                     {#if resource?.html}

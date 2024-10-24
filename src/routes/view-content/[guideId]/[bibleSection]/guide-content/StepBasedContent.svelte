@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="T extends StepBasedGuideStep">
     import {
         createMultiClipAudioState,
         type MultiClipAudioState,
@@ -12,7 +12,7 @@
     import GlobeIcon from '$lib/icons/GlobeIcon.svelte';
     import { isShowingCommunityEditionModal } from '$lib/stores/community-edition-modal.store';
 
-    export let steps: StepBasedGuideStep[];
+    export let steps: T[];
     export let isShowing: boolean;
     export let multiClipAudioStates: Record<string, MultiClipAudioState> | undefined = undefined;
     export let audioPlayerKey: string | undefined;
@@ -41,7 +41,7 @@
     // Populate the audio state object with key/values like
     //   guideStep1 => MultiClipAudioState
     //   guideStep2 => MultiClipAudioState
-    function populateAudioState(steps: StepBasedGuideStep[]) {
+    function populateAudioState(steps: T[]) {
         steps.forEach((step, stepIndex) => {
             if (step.audioUrl) {
                 if (multiClipAudioStates) {
@@ -87,6 +87,7 @@
                 />
             </div>
         </div>
+        <slot name="top-buttons" step={steps[guideStepIndex]} />
     </div>
 {/if}
 <div class="flex flex-grow overflow-y-hidden px-2 {!isShowing && 'hidden'}">

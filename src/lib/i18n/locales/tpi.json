@@ -552,6 +552,20 @@
             "step6": {
                 "value": "Toktok long dispela wod"
             }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "Paragraf"
+            },
+            "sectionButton": {
+                "value": "Seksen"
+            },
+            "suggestionsButton": {
+                "value": "Sagesen"
+            },
+            "suggestionsDescription": {
+                "value": "I gat narapela rot ol narapela manmeri i bin tanim dispela toktok olsem"
+            }
         }
     },
     "errorMessage": {

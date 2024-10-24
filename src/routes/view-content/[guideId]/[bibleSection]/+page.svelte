@@ -41,7 +41,7 @@
     import BibleMenu from './bible-menu/BibleMenu.svelte';
     import PredeterminedPassageSelectorPane from './bible-menu/PredeterminedPassageSelectorPane.svelte';
     import BookChapterSelectorPane from './bible-menu/BookChapterSelectorPane.svelte';
-    import { MediaType, type BasicTextResourceContent } from '$lib/types/resource';
+    import { MediaType } from '$lib/types/resource';
     import type { BibleSection } from '$lib/types/bible';
     import GuideContent from './guide-content/GuideContent.svelte';
     import FullscreenTextResource from './library-resource-menu/FullscreenTextResource.svelte';
@@ -64,6 +64,7 @@
         openBookChapterSelectorPane,
         openContextualMenu,
         syncSelectedDataFromParams,
+        pushToFullscreenTextResourceStack,
     } = createContentContext();
 
     createResourceFeedbackContext();
@@ -86,7 +87,6 @@
 
     let bibleData: BibleData | null = null;
     let resourceData: ResourceData | null = null;
-    let fullscreenTextResourceStacksByTab: Map<ContentTabEnum, BasicTextResourceContent[]> = new Map();
 
     let currentBibleId: number | null = null;
     let alignmentModeEnabled = false;
@@ -232,8 +232,7 @@
         }
 
         window.onResourceReferenceClick = (tab: string, contentId: number, audioId: number | undefined) => {
-            const fullscreenTextResourceStack = fullscreenTextResourceStacksByTab.get(tab as ContentTabEnum) ?? [];
-            fullscreenTextResourceStack.push({
+            pushToFullscreenTextResourceStack(tab as ContentTabEnum, {
                 id: contentId,
                 // Because AssociatedResources are stored on metadata, we can't rely on version numbers since it could go stale.
                 // Example: Resource A links to Resource B, so Resource A's metadata will include Resource B info. If Resource B
@@ -247,8 +246,6 @@
                 audioVersion: -1,
                 mediaType: MediaType.Text,
             });
-            fullscreenTextResourceStacksByTab.set(tab as ContentTabEnum, fullscreenTextResourceStack);
-            fullscreenTextResourceStacksByTab = fullscreenTextResourceStacksByTab;
         };
 
         return () => {
@@ -263,7 +260,7 @@
 <ResourceFeedbackModal />
 
 <div class={$currentTab !== ContentTabEnum.Guide ? 'hidden' : ''}>
-    <FullscreenTextResource tab={ContentTabEnum.Guide} bind:fullscreenTextResourceStacksByTab />
+    <FullscreenTextResource tab={ContentTabEnum.Guide} />
 </div>
 
 <div class="btm-nav z-[60] h-20 border-t">
@@ -364,7 +361,6 @@
     {#key $currentBibleSection}
         <LibraryResourceMenu
             tab={ContentTabEnum.Resources}
-            bind:fullscreenTextResourceStacksByTab
             resources={resourceData?.additionalResourceInfo}
             isFullLibrary={false}
             isShowing={$currentTab === ContentTabEnum.Resources}
@@ -373,7 +369,6 @@
     {/key}
     <LibraryResourceMenu
         tab={ContentTabEnum.LibraryMenu}
-        bind:fullscreenTextResourceStacksByTab
         resources={undefined}
         isFullLibrary={true}
         isShowing={$currentTab === ContentTabEnum.LibraryMenu}
