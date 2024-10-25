@@ -153,6 +153,20 @@
                     paragraphNotes.content.push(node);
                     break;
                 case OpenTranslatorsNotesTranslationOptions.name: {
+                    if ('verse' in node.attrs && node.attrs.verse)
+                        alternateTranslations.content.push({
+                            type: 'heading',
+                            attrs: {
+                                level: 4,
+                            },
+                            content: [
+                                {
+                                    type: 'text',
+                                    attrs: {},
+                                    text: node.attrs.verse.toString(),
+                                },
+                            ],
+                        });
                     alternateTranslations.content.push(node);
                     const singleTranslation = JSON.parse(JSON.stringify(node)) as InnerTipTapContent;
                     singleTranslation.content = singleTranslation.content.filter(
