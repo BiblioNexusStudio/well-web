@@ -728,7 +728,7 @@
                 "_context": "Button to see OTN text translation suggestions info"
             },
             "suggestionsDescription": {
-                "value": "There are other ways people have translated the following:",
+                "value": "These are other ways people have translated the following:",
                 "_context": "Description explaining OTN text translation suggestions"
             }
         }
