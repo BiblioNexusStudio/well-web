@@ -13,7 +13,7 @@
         type GreekWord,
     } from '$lib/utils/data-handlers/alignments';
     import { isNewTestament } from '$lib/utils/bible-section-helpers';
-    import type { BibleSection } from '$lib/types/bible';
+    import type { BibleSection, FrontendBibleBook } from '$lib/types/bible';
     import { getBibleBookCodesToName } from '$lib/utils/data-handlers/bible';
     import { getContentContext } from './context';
     import { log } from '$lib/logger';
@@ -46,16 +46,17 @@
 
     $: currentBible = bibleData?.biblesForTabs.find((bible) => bible.id === currentBibleId);
 
-    $: fetchAlignmentData($currentBibleSection, alignmentModeEnabled, alignmentDataForChapters);
+    $: fetchAlignmentData($currentBibleSection, alignmentModeEnabled, alignmentDataForChapters, currentBible);
 
     async function fetchAlignmentData(
         currentBibleSection: BibleSection | null,
         alignmentModeEnabled: boolean,
-        currentAlignmentDataForChapters: typeof alignmentDataForChapters
+        currentAlignmentDataForChapters: typeof alignmentDataForChapters,
+        bibleCurrentlyUsing: FrontendBibleBook | undefined
     ) {
         if (
             currentBibleSection &&
-            currentBibleId &&
+            bibleCurrentlyUsing &&
             alignmentModeEnabled &&
             !currentAlignmentDataForChapters &&
             isNewTestament(currentBibleSection)
@@ -64,7 +65,7 @@
             try {
                 bookCodesToNames = await getBibleBookCodesToName($currentLanguageInfo?.id ?? 1);
                 alignmentDataForChapters = await fetchEnglishWordsWithGreekAlignmentsForSection(
-                    currentBibleId,
+                    bibleCurrentlyUsing.id,
                     currentBibleSection
                 );
             } finally {

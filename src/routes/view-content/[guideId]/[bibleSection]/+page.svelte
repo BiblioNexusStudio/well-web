@@ -319,7 +319,7 @@
                 </div>
             {/if}
             <div class="flex flex-grow flex-col overflow-y-hidden {$currentTab !== ContentTabEnum.Bible && 'hidden'}">
-                {#key $currentBibleSection}
+                {#key [$currentBibleSection, currentBibleId]}
                     <BibleViewer bind:preferredBiblesModalOpen {currentBibleId} {bibleData} bind:alignmentModeEnabled />
                 {/key}
             </div>
