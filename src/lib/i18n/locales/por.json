@@ -375,6 +375,18 @@
             },
             "showOnlySrvResources": {
                 "value": "Mostrar apenas recursos SRV"
+            },
+            "communityEditionResources": {
+                "value": "Recursos da Edição Comunitária"
+            },
+            "aiTranslatedResources": {
+                "value": "Recursos Traduzidos por IA"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Mostrar recursos por método de verificação"
+            },
+            "showResourcesByTitle": {
+                "value": "Mostrar recursos por título"
             }
         },
         "BookChapterSelectorPane": {

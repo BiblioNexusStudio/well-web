@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "Soim tasol SRV Risoses"
+            },
+            "communityEditionResources": {
+                "value": "Komyuniti Edision Risoses"
+            },
+            "aiTranslatedResources": {
+                "value": "AI Translesen Risoses"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Soim Risoses long Chekim Metod"
+            },
+            "showResourcesByTitle": {
+                "value": "Soim Risoses long Nem"
             }
         },
         "BookChapterSelectorPane": {

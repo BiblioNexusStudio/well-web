@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "仅显示 SRV 资源"
+            },
+            "communityEditionResources": {
+                "value": "社区版资源"
+            },
+            "aiTranslatedResources": {
+                "value": "AI 翻译资源"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "通过检查方法显示资源"
+            },
+            "showResourcesByTitle": {
+                "value": "按标题显示资源"
             }
         },
         "BookChapterSelectorPane": {

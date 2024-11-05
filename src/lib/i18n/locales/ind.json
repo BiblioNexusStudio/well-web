@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "Tampilkan hanya sumber daya SRV"
+            },
+            "communityEditionResources": {
+                "value": "Sumber Daya Edisi Komunitas"
+            },
+            "aiTranslatedResources": {
+                "value": "Sumber Daya Diterjemahkan AI"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Tampilkan sumber daya dengan metode pemeriksaan"
+            },
+            "showResourcesByTitle": {
+                "value": "Tampilkan sumber daya berdasarkan judul"
             }
         },
         "BookChapterSelectorPane": {

@@ -444,6 +444,22 @@
             "showOnlySrvResources": {
                 "value": "Show only SRV resources",
                 "_context": "Label for the toggle to show only SRV resources"
+            },
+            "communityEditionResources": {
+                "value": "Community Edition Resources",
+                "_context": "Label for the toggle to show Community Edition resources"
+            },
+            "aiTranslatedResources": {
+                "value": "AI Translated Resources",
+                "_context": "Label for the toggle to show AI Translated resources"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Show Resources by Checking Method",
+                "_context": "Label for the toggle to show resources by checking method"
+            },
+            "showResourcesByTitle": {
+                "value": "Show Resources by Title",
+                "_context": "Label for the toggle to show resources by title"
             }
         },
         "BookChapterSelectorPane": {

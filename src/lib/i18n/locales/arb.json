@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "عرض الموارد المتاحة فقط"
+            },
+            "communityEditionResources": {
+                "value": "موارد الإصدار المجتمعي"
+            },
+            "aiTranslatedResources": {
+                "value": "موارد الترجمة الآلية"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "عرض الموارد حسب طريقة التحقق"
+            },
+            "showResourcesByTitle": {
+                "value": "عرض الموارد حسب العنوان"
             }
         },
         "BookChapterSelectorPane": {

@@ -16,7 +16,17 @@ const showOnlySrvResources: Setting = {
     shortName: SettingShortNameEnum.showOnlySrvResources,
 };
 
-const defaultSettings = [showOnlySrvResources];
+const showCommunityResources: Setting = {
+    value: true,
+    shortName: SettingShortNameEnum.showCommunityResources,
+};
+
+const showAiResources: Setting = {
+    value: true,
+    shortName: SettingShortNameEnum.showAiResources,
+};
+
+const defaultSettings = [showCommunityResources, showAiResources, showOnlySrvResources];
 
 let savedSettings: Setting[] = [];
 

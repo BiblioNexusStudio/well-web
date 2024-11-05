@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "Показать только ресурсы SRV"
+            },
+            "communityEditionResources": {
+                "value": "Ресурсы сообщественной версии"
+            },
+            "aiTranslatedResources": {
+                "value": "Ресурсы, переведенные с помощью ИИ"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Показать ресурсы по методу проверки"
+            },
+            "showResourcesByTitle": {
+                "value": "Показать ресурсы по названию"
             }
         },
         "BookChapterSelectorPane": {

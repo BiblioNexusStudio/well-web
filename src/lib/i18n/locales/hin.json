@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "केवल SRV संसाधन दिखाएं"
+            },
+            "communityEditionResources": {
+                "value": "समुदाय संस्करण संसाधन"
+            },
+            "aiTranslatedResources": {
+                "value": "AI अनुवादित संसाधन"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "जाँच की विधि के द्वारा संसाधन दिखाएं"
+            },
+            "showResourcesByTitle": {
+                "value": "शीर्षक के अनुसार संसाधन दिखाएं"
             }
         },
         "BookChapterSelectorPane": {

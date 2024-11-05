@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "Onyesha rasilimali za SRV pekee"
+            },
+            "communityEditionResources": {
+                "value": "Rasilimali za Toleo la Jamii"
+            },
+            "aiTranslatedResources": {
+                "value": "Rasilimali zilizotafsiriwa na AI"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Onyesha rasilimali kwa njia ya ukaguzi"
+            },
+            "showResourcesByTitle": {
+                "value": "Onyesha rasilimali kwa jina"
             }
         },
         "BookChapterSelectorPane": {

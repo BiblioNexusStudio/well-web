@@ -71,6 +71,7 @@ export enum ReviewLevel {
     None = 'None',
     Community = 'Community',
     Professional = 'Professional',
+    Ai = 'Ai',
 }
 
 export interface ResourceContentMetadata {
