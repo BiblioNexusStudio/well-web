@@ -88,7 +88,6 @@ export type ApiBibleChapter = {
 };
 
 export type ApiBibleBook = {
-    id: number;
     number: number;
     code: string;
     localizedName: string;
