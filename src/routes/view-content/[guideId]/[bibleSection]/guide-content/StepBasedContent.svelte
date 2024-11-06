@@ -99,13 +99,14 @@
                         <div class="flex-grow overflow-y-scroll">
                             <div bind:this={topOfSteps[stepIndex]} />
                             <div class="rounded-md {step.communityEdition && 'bg-warning-content'} mb-2 px-4 pb-2 pt-2">
-                                {#if step.communityEdition}
-                                    <div class="float-end p-4 pe-0 pt-2 text-warning">
+                                <div class="float-end p-4 pe-0 pt-2 text-warning">
+                                    <slot name="inline-top-right" step={steps[guideStepIndex]} />
+                                    {#if step.communityEdition}
                                         <button on:click={() => ($isShowingCommunityEditionModal = true)}>
                                             <GlobeIcon />
                                         </button>
-                                    </div>
-                                {/if}
+                                    {/if}
+                                </div>
                                 <div class="[&>*:first-child]:mt-0">
                                     {#if step.contentHTML}
                                         {@html step.contentHTML}
