@@ -281,7 +281,12 @@
             hideLoadMore = true;
         }
 
-        response = response.filter((rc) => rc.mediaType !== MediaType.Audio);
+        response = response.filter(
+            (rc) =>
+                rc.mediaType !== MediaType.Audio &&
+                // Fia ASL videos don't work from the parent resource search view
+                (rc.mediaType !== MediaType.Video || rc.parentResourceId !== ParentResourceId.FIA)
+        );
 
         if (loadMore) {
             resourceSearchResources = [...resourceSearchResources, ...response];
