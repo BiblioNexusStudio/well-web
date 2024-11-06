@@ -140,8 +140,8 @@
                 {/if}
                 <div
                     class="prose mx-auto w-full rounded-md {resource?.communityEdition &&
-                        'bg-[url("/Community_10_percent.png")] bg-contain bg-repeat'} {resource?.aiEdition &&
-                        'bg-[url("/Ai_10_percent.png")] bg-contain bg-repeat'} px-4 pb-4 pt-2 {resource?.audioUrl
+                        'bg-[url("/Community.svg")] bg-contain bg-repeat'} {resource?.aiEdition &&
+                        'bg-[url("/Ai.svg")] bg-contain bg-repeat'} px-4 pb-4 pt-2 {resource?.audioUrl
                         ? 'mb-16'
                         : 'mb-2'}"
                 >

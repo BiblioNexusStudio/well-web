@@ -1,5 +1,6 @@
 <script lang="ts">
     import { isShowingCommunityEditionModal } from '$lib/stores/community-edition-modal.store';
+    import BlueCommunityIcon from '$lib/icons/BlueCommunityIcon.svelte';
 
     const openCommunityModal = (event: Event) => {
         event.stopPropagation();
@@ -7,6 +8,6 @@
     };
 </script>
 
-<button class="flex h-full w-auto justify-end" on:click={openCommunityModal}>
-    <img class="ms-2 h-6 w-auto object-contain" src="/Community_150x150.png" alt="Community Reviewer Icon" />
+<button class="flex h-auto w-6 justify-end" on:click={openCommunityModal}>
+    <BlueCommunityIcon />
 </button>
