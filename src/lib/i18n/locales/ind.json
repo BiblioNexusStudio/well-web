@@ -625,6 +625,14 @@
             "description": {
                 "value": "<p>Konten ini belum sepenuhnya diperiksa untuk akurasi. Anggota komunitas menerjemahkannya, tetapi belum melalui proses tinjauan yang sama seperti konten lainnya. Harap gunakan dengan hati-hati.</p><p>Silakan laporkan kesalahan terjemahan atau saran apa pun dengan menggunakan ikon umpan balik di sudut kanan atas jendela.</p><p>Jika Anda tertarik menjadi kontributor Edisi Komunitas, buka Menu > Umpan Balik dan beri tahu kami.</p>"
             }
+        },
+        "aiEditionModal": {
+            "header": {
+                "value": "Konten Diterjemahkan AI"
+            },
+            "description": {
+                "value": "<p>Konten ini diterjemahkan oleh mesin dan belum diperiksa oleh manusia. Harap gunakan dengan hati-hati.</p><p>Silakan laporkan kesalahan terjemahan atau saran apa pun dengan menggunakan ikon umpan balik di sudut kanan atas jendela.</p>"
+            }
         }
     }
 }

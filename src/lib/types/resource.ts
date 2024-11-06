@@ -157,6 +157,7 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
     url?: string;
     thumbnailUrl?: string;
     duration?: number;
+    reviewLevel?: ReviewLevel;
 }
 
 interface TtContent {

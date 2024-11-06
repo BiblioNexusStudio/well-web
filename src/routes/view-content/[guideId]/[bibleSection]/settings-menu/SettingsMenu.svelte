@@ -3,6 +3,8 @@
     import { _ as translate } from 'svelte-i18n';
     import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
     import { type Setting, SettingShortNameEnum } from '$lib/types/settings';
+    import AiReviewerLevelButton from '$lib/components/AiReviewerLevelButton.svelte';
+    import CommunityReviewerLevelButton from '$lib/components/CommunityReviewerLevelButton.svelte';
 
     export let close: () => void;
 
@@ -37,15 +39,11 @@
                 <div class="mb-4 flex">
                     <input type="checkbox" bind:checked={setting.value} class="checkbox-primary checkbox me-4" />
                     <h3 class="me-4 grow">{getSettingsText(setting)}</h3>
-                    <img
-                        class="h-[26px] w-auto object-contain"
-                        src={setting.shortName === SettingShortNameEnum.showAiResources
-                            ? '/Ai_150x150.png'
-                            : '/Community_150x150.png'}
-                        alt={setting.shortName === SettingShortNameEnum.showAiResources
-                            ? 'Ai Reviewer Icon'
-                            : 'Community Reviewer Icon'}
-                    />
+                    {#if setting.shortName === SettingShortNameEnum.showAiResources}
+                        <AiReviewerLevelButton />
+                    {:else if setting.shortName === SettingShortNameEnum.showCommunityResources}
+                        <CommunityReviewerLevelButton />
+                    {/if}
                 </div>
             {/if}
         {/each}
@@ -67,4 +65,3 @@
         {/each}
     </div>
 </div>
-s

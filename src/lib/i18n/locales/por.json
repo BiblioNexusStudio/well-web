@@ -27,6 +27,14 @@
             "description": {
                 "value": "<p>Este conteúdo não foi totalmente verificado quanto à precisão. Um membro da comunidade o traduziu, mas não passou pelo mesmo processo de revisão de outros conteúdos. Use-o com cautela.</p><p>Relate qualquer erro de tradução ou sugestões usando o ícone de feedback no canto superior direito da janela.</p><p>Se você estiver interessado em se tornar um colaborador da Edição Comunitária, vá para Menu > Feedback e nos avise.</p>"
             }
+        },
+        "aiEditionModal": {
+            "header": {
+                "value": "Conteúdo Traduzido por IA"
+            },
+            "description": {
+                "value": "<p>Este conteúdo foi traduzido automaticamente por um programa de computador. Embora tenhamos feito o nosso melhor para garantir a precisão, pode haver erros. Use-o com cautela.</p><p>Relate qualquer erro de tradução ou sugestões usando o ícone de feedback no canto superior direito da janela.</p>"
+            }
         }
     },
     "page": {

@@ -19,6 +19,7 @@
     import { get } from 'svelte/store';
     import { browserSupported } from '$lib/utils/browser';
     import CommunityEditionModal from '$lib/components/CommunityEditionModal.svelte';
+    import AiEditionModal from '$lib/components/AiEditionModal.svelte';
     import DebugModal from '$lib/components/DebugModal.svelte';
     import UserInfoModal from './view-content/[guideId]/[bibleSection]/feedback/UserInfoModal.svelte';
 
@@ -166,6 +167,7 @@
 {/if}
 
 <CommunityEditionModal />
+<AiEditionModal />
 
 {#if !data.browserSupported}
     <div class="mx-auto flex h-full w-full max-w-lg flex-col items-center space-y-4 px-4 text-lg">

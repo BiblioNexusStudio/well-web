@@ -21,9 +21,9 @@
     import { audioFileTypeForBrowser } from '$lib/utils/browser';
     import { getResourceFeedbackContext } from '../resource-feedback-context';
     import ChatBubbleIcon from '$lib/icons/ChatBubbleIcon.svelte';
-    import GlobeIcon from '$lib/icons/GlobeIcon.svelte';
-    import { isShowingCommunityEditionModal } from '$lib/stores/community-edition-modal.store';
     import { log } from '$lib/logger';
+    import CommunityReviewerLevelButton from '$lib/components/CommunityReviewerLevelButton.svelte';
+    import AiReviewerLevelButton from '$lib/components/AiReviewerLevelButton.svelte';
 
     export let tab: ContentTabEnum;
 
@@ -51,8 +51,9 @@
         let html = resource.html;
         let displayName: string | undefined;
         let communityEdition = false;
+        let aiEdition = false;
         if (!html) {
-            ({ html, displayName, communityEdition } = await fetchTiptapAndMetadata(resource));
+            ({ html, displayName, communityEdition, aiEdition } = await fetchTiptapAndMetadata(resource));
         }
         return {
             html,
@@ -65,6 +66,7 @@
                 : null,
             displayName: handleRtlVerseReferences(displayName, $currentLanguageDirection) ?? '',
             communityEdition,
+            aiEdition,
         };
     }
 
@@ -96,6 +98,7 @@
             html,
             displayName: metadata?.displayName,
             communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
+            aiEdition: metadata?.reviewLevel === ReviewLevel.Ai,
         };
     }
 </script>
@@ -127,14 +130,20 @@
             <div class="overflow-y-scroll">
                 {#if resource?.communityEdition}
                     <div class="float-end p-4 pe-5 text-warning">
-                        <button on:click={() => ($isShowingCommunityEditionModal = true)}>
-                            <GlobeIcon />
-                        </button>
+                        <CommunityReviewerLevelButton />
+                    </div>
+                {/if}
+                {#if resource?.aiEdition}
+                    <div class="float-end p-4 pe-5 text-warning">
+                        <AiReviewerLevelButton />
                     </div>
                 {/if}
                 <div
                     class="prose mx-auto w-full rounded-md {resource?.communityEdition &&
-                        'bg-warning-content'} px-4 pb-4 pt-2 {resource?.audioUrl ? 'mb-16' : 'mb-2'}"
+                        'bg-[url("/Community_10_percent.png")] bg-contain bg-repeat'} {resource?.aiEdition &&
+                        'bg-[url("/Ai_10_percent.png")] bg-contain bg-repeat'} px-4 pb-4 pt-2 {resource?.audioUrl
+                        ? 'mb-16'
+                        : 'mb-2'}"
                 >
                     {#if resource?.html}
                         {@html resource.html}

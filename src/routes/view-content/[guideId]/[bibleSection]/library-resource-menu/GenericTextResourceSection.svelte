@@ -1,9 +1,12 @@
-<script lang="ts" generics="T">
+<script lang="ts" generics="T extends object">
     import { htmlWithHighlightedSearchString } from '$lib/utils/search';
     import { _ as translate } from 'svelte-i18n';
     import NoResourcesFound from './NoResourcesFound.svelte';
     import ResourceSectionHeader from './ResourceSectionHeader.svelte';
     import ResourceFullscreenHeader from './ResourceFullscreenHeader.svelte';
+    import AiReviewerLevelButton from '$lib/components/AiReviewerLevelButton.svelte';
+    import CommunityReviewerLevelButton from '$lib/components/CommunityReviewerLevelButton.svelte';
+    import { ReviewLevel } from '$lib/types/resource';
 
     export let filteredItems: T[];
     export let nameKey: keyof T;
@@ -63,7 +66,7 @@
     <div class={isFullscreen ? 'mx-auto w-full max-w-[65ch] overflow-y-scroll pb-4' : 'pb-6'}>
         {#each filteredItems as item}
             <button
-                class="mb-4 flex w-full flex-row items-center rounded-full border py-3 ps-4"
+                class="mb-4 flex w-full flex-row items-center justify-between rounded-full border px-4 py-3"
                 on:click={() => itemSelected(item)}
                 data-app-insights-event-name="text-resource-clicked"
                 data-app-insights-dimensions={calculateEventTrackingDimensions(item)}
@@ -73,6 +76,12 @@
                         {@html htmlWithHighlightedSearchString(nameOfItem(item), searchQuery)}
                     </div>
                 </div>
+                {#if 'reviewLevel' in item && item?.reviewLevel === ReviewLevel.Ai}
+                    <AiReviewerLevelButton />
+                {/if}
+                {#if 'reviewLevel' in item && item?.reviewLevel === ReviewLevel.Community}
+                    <CommunityReviewerLevelButton />
+                {/if}
             </button>
         {/each}
     </div>
