@@ -71,6 +71,7 @@ export enum ReviewLevel {
     None = 'None',
     Community = 'Community',
     Professional = 'Professional',
+    Ai = 'Ai',
 }
 
 export interface ResourceContentMetadata {
@@ -156,6 +157,7 @@ export interface ResourceContentInfoWithMetadata extends ResourceContentInfo {
     url?: string;
     thumbnailUrl?: string;
     duration?: number;
+    reviewLevel?: ReviewLevel;
 }
 
 interface TtContent {

@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "Soim tasol SRV Risoses"
+            },
+            "communityEditionResources": {
+                "value": "Komyuniti Edision Risoses"
+            },
+            "aiTranslatedResources": {
+                "value": "AI Translesen Risoses"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Soim Risoses long Chekim Metod"
+            },
+            "showResourcesByTitle": {
+                "value": "Soim Risoses long Nem"
             }
         },
         "BookChapterSelectorPane": {
@@ -612,6 +624,14 @@
             },
             "description": {
                 "value": "<p>Dispela toksave em i no bin stretim gut olgeta. Wanpela memba bilong komyuniti i trensletim, tasol em i no bin go long wankain luksave olsem arapela samting. Plis yusim wantaim lukaut.</p><p>Plis ripotim ol rong long trenslesen o sapos yu gat sampela tingting, yusim ikon bilong givim tingting long antap raithan kona bilong windo.</p><p>Sapos yu gat laik long kamap wanpela Community Edition kontriputa, go long Menu > Feedback na tokim mipela.</p>"
+            }
+        },
+        "aiEditionModal": {
+            "header": {
+                "value": "AI Translesen Kontent"
+            },
+            "description": {
+                "value": "<p>Dispela toksave em i no bin stretim gut olgeta. Wanpela komputa i trensletim, tasol em i no bin go long wankain luksave olsem arapela samting. Plis yusim wantaim lukaut.</p><p>Plis ripotim ol rong long trenslesen o sapos yu gat sampela tingting, yusim ikon bilong givim tingting long antap raithan kona bilong windo.</p><p>Sapos yu gat laik long kamap wanpela AI Edition kontriputa, go long Menu > Feedback na tokim mipela.</p>"
             }
         }
     }

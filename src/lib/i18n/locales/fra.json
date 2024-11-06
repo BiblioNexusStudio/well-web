@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "Afficher uniquement les ressources SRV"
+            },
+            "communityEditionResources": {
+                "value": "Ressources de l'Édition Communautaire"
+            },
+            "aiTranslatedResources": {
+                "value": "Ressources traduites par IA"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Afficher les ressources par méthode de vérification"
+            },
+            "showResourcesByTitle": {
+                "value": "Afficher les ressources par titre"
             }
         },
         "BookChapterSelectorPane": {
@@ -612,6 +624,14 @@
             },
             "description": {
                 "value": "<p>Ce contenu n'a pas été entièrement vérifié pour son exactitude. Un membre de la communauté l'a traduit, mais il n'a pas suivi le même processus de révision que les autres contenus. Veuillez l'utiliser avec précaution.</p><p>Veuillez signaler toute erreur de traduction ou suggestion en utilisant l'icône de rétroaction dans le coin supérieur droit de la fenêtre.</p><p>Si vous êtes intéressé à devenir contributeur de l'Édition Communautaire, allez dans Menu > Commentaires et faites-le nous savoir.</p>"
+            }
+        },
+        "aiEditionModal": {
+            "header": {
+                "value": "Contenu Traduit par IA"
+            },
+            "description": {
+                "value": "<p>Ce contenu a été traduit par une intelligence artificielle (IA). Il n'a pas été vérifié pour son exactitude par un traducteur humain. Veuillez l'utiliser avec précaution.</p><p>Veuillez signaler toute erreur de traduction ou suggestion en utilisant l'icône de rétroaction dans le coin supérieur droit de la fenêtre.</p>"
             }
         }
     }

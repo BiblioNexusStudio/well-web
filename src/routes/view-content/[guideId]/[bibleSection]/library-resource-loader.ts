@@ -7,6 +7,7 @@ import {
     ParentResourceType,
     type ResourceContentInfoWithMetadata,
     type ResourceContentMetadata,
+    ReviewLevel,
 } from '$lib/types/resource';
 import { filterBooleanByKey, groupBy } from '$lib/utils/array';
 import { asyncMap } from '$lib/utils/async-array';
@@ -19,7 +20,8 @@ import {
 import { DirectionCode, handleRtlVerseReferences } from '$lib/utils/language-utils';
 import { objectEntries } from '$lib/utils/typesafe-standard-lib';
 import { get } from 'svelte/store';
-
+import { settings } from '$lib/stores/settings.store';
+import { SettingShortNameEnum } from '$lib/types/settings';
 export interface LibraryResourceGrouping {
     parentResource: ApiParentResource;
     resources: ResourceContentInfoWithMetadata[];
@@ -62,7 +64,7 @@ export async function buildLibraryResourceGroupingsWithMetadata(
             true,
             100
         );
-        const resourcesWithMetadata = resources.map((resource) => {
+        let resourcesWithMetadata = resources.map((resource) => {
             if (resource.mediaType === MediaType.Image) {
                 return {
                     ...resource,
@@ -79,12 +81,34 @@ export async function buildLibraryResourceGroupingsWithMetadata(
                     duration: metadata?.metadata?.['duration'] as number | undefined,
                 };
             } else {
+                const metadata = metadatasById.get(resource.id);
                 return {
                     ...resource,
-                    displayName: handleRtlVerseReferences(metadatasById.get(resource.id)?.displayName, scriptDirection),
+                    displayName: handleRtlVerseReferences(metadata?.displayName, scriptDirection),
+                    reviewLevel: metadata?.reviewLevel,
                 };
             }
         });
+
+        const showAiResourcesSetting = get(settings).find((s) => s.shortName === SettingShortNameEnum.showAiResources);
+        const showCommunityResourcesSetting = get(settings).find(
+            (s) => s.shortName === SettingShortNameEnum.showCommunityResources
+        );
+
+        resourcesWithMetadata = resourcesWithMetadata.filter((rwmd) => {
+            if (rwmd.mediaType === MediaType.Text && 'reviewLevel' in rwmd) {
+                if (rwmd.reviewLevel === ReviewLevel.Ai) {
+                    return showAiResourcesSetting?.value;
+                }
+
+                if (rwmd.reviewLevel === ReviewLevel.Community) {
+                    return showCommunityResourcesSetting?.value;
+                }
+            }
+
+            return true;
+        });
+
         return {
             parentResource: parentResourceIdMap[parentResourceId],
             resources: sortByDisplayName(filterBooleanByKey(resourcesWithMetadata, 'displayName')),

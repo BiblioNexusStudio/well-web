@@ -345,6 +345,18 @@
             },
             "showOnlySrvResources": {
                 "value": "Onyesha rasilimali za SRV pekee"
+            },
+            "communityEditionResources": {
+                "value": "Rasilimali za Toleo la Jamii"
+            },
+            "aiTranslatedResources": {
+                "value": "Rasilimali zilizotafsiriwa na AI"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Onyesha rasilimali kwa njia ya ukaguzi"
+            },
+            "showResourcesByTitle": {
+                "value": "Onyesha rasilimali kwa jina"
             }
         },
         "BookChapterSelectorPane": {
@@ -612,6 +624,14 @@
             },
             "description": {
                 "value": "<p>Yaliyomo haya hayajachunguzwa kikamilifu kwa usahihi. Mwanajamii alitafsiri, lakini hayajapitia mchakato wa uhakiki kama yaliyomo mengine. Tafadhali tumia kwa uangalifu.</p><p>Tafadhali ripoti makosa yoyote ya tafsiri au mapendekezo kwa kutumia ikoni ya maoni katika kona ya juu ya kulia ya dirisha.</p><p>Kama una nia ya kuwa mchangiaji wa Toleo la Jamii, nenda kwenye Menyu > Maoni na utujulishe.</p>"
+            }
+        },
+        "aiEditionModal": {
+            "header": {
+                "value": "Yaliyomo Yaliyotafsiriwa na AI"
+            },
+            "description": {
+                "value": "<p>Yaliyomo haya yametafsiriwa kwa kutumia teknolojia ya ujifunzaji wa mashine. Ingawa imefanywa kwa uangalifu, inaweza kuwa na makosa. Tafadhali tumia kwa uangalifu.</p><p>Tafadhali ripoti makosa yoyote ya tafsiri au mapendekezo kwa kutumia ikoni ya maoni katika kona ya juu ya kulia ya dirisha.</p>"
             }
         }
     }

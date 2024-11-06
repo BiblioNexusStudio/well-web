@@ -3,12 +3,18 @@
     import { _ as translate } from 'svelte-i18n';
     import XMarkIcon from '$lib/icons/XMarkIcon.svelte';
     import { type Setting, SettingShortNameEnum } from '$lib/types/settings';
+    import AiReviewerLevelButton from '$lib/components/AiReviewerLevelButton.svelte';
+    import CommunityReviewerLevelButton from '$lib/components/CommunityReviewerLevelButton.svelte';
 
     export let close: () => void;
 
     function getSettingsText(setting: Setting) {
         const translateTextMap = {
             [SettingShortNameEnum.showOnlySrvResources]: $translate('page.settingsMenu.showOnlySrvResources.value'),
+            [SettingShortNameEnum.showCommunityResources]: $translate(
+                'page.settingsMenu.communityEditionResources.value'
+            ),
+            [SettingShortNameEnum.showAiResources]: $translate('page.settingsMenu.aiTranslatedResources.value'),
         };
 
         return translateTextMap[setting.shortName];
@@ -26,15 +32,36 @@
         </button>
     </div>
     <h1 class="mb-6 text-2xl font-bold">{$translate('page.settingsMenu.settings.value')}</h1>
-    {#each $settings as setting}
-        <div class="flex">
-            <input
-                type="checkbox"
-                class="toggle me-4 {setting.value ? 'border-none bg-white [--tglbg:#0094c9] hover:bg-white' : ''}"
-                bind:checked={setting.value}
-                data-app-insights-event-name="settings-menu-setting-toggled"
-            />
-            <h2>{getSettingsText(setting)}</h2>
-        </div>
-    {/each}
+    <div class="ps-4">
+        <h2 class="mb-6 text-xl font-bold">{$translate('page.settingsMenu.showResourceByCheckingMethod.value')}</h2>
+        {#each $settings as setting}
+            {#if setting.shortName !== SettingShortNameEnum.showOnlySrvResources}
+                <div class="mb-4 flex">
+                    <input type="checkbox" bind:checked={setting.value} class="checkbox-primary checkbox me-4" />
+                    <h3 class="me-4 grow">{getSettingsText(setting)}</h3>
+                    {#if setting.shortName === SettingShortNameEnum.showAiResources}
+                        <AiReviewerLevelButton />
+                    {:else if setting.shortName === SettingShortNameEnum.showCommunityResources}
+                        <CommunityReviewerLevelButton />
+                    {/if}
+                </div>
+            {/if}
+        {/each}
+        <h2 class="my-6 text-xl font-bold">{$translate('page.settingsMenu.showResourcesByTitle.value')}</h2>
+        {#each $settings as setting}
+            {#if setting.shortName === SettingShortNameEnum.showOnlySrvResources}
+                <div class="mb-2 flex">
+                    <input
+                        type="checkbox"
+                        class="toggle me-4 {setting.value
+                            ? 'border-none bg-white [--tglbg:#0094c9] hover:bg-white'
+                            : ''}"
+                        bind:checked={setting.value}
+                        data-app-insights-event-name="settings-menu-setting-toggled"
+                    />
+                    <h3>{getSettingsText(setting)}</h3>
+                </div>
+            {/if}
+        {/each}
+    </div>
 </div>

@@ -444,6 +444,22 @@
             "showOnlySrvResources": {
                 "value": "Show only SRV resources",
                 "_context": "Label for the toggle to show only SRV resources"
+            },
+            "communityEditionResources": {
+                "value": "Community Edition Resources",
+                "_context": "Label for the toggle to show Community Edition resources"
+            },
+            "aiTranslatedResources": {
+                "value": "AI Translated Resources",
+                "_context": "Label for the toggle to show AI Translated resources"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Show Resources by Checking Method",
+                "_context": "Label for the toggle to show resources by checking method"
+            },
+            "showResourcesByTitle": {
+                "value": "Show Resources by Title",
+                "_context": "Label for the toggle to show resources by title"
             }
         },
         "BookChapterSelectorPane": {
@@ -789,6 +805,16 @@
             },
             "description": {
                 "value": "<p>This content has not been fully checked for accuracy. A community member translated it, but it hasn't gone through the same review process as other content. Please use it with caution.</p><p>Please report any translation errors or suggestions by using the feedback icon in the upper right corner of the window.</p><p>If you are interested in becoming a Community Edition contributor, go to Menu > Feedback and let us know.</p>",
+                "_context": "Description for the community edition content modal"
+            }
+        },
+        "aiEditionModal": {
+            "header": {
+                "value": "AI Translated Content",
+                "_context": "Header for the community edition content modal"
+            },
+            "description": {
+                "value": "<p>This content was AI translated and has not been checked by a person for accuracy. Please use it with caution.</p><p>Please report any translation errors or suggestions by using the feedback icon in the upper right corner of the window.</p><p>If you are interested in reviewing this content, become a Community Edition contributor by going to Home > Feedback.</p>",
                 "_context": "Description for the community edition content modal"
             }
         }
