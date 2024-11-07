@@ -127,7 +127,11 @@
                     </button>
                 </div>
             </div>
-            <div class="overflow-y-scroll">
+            <div
+                class="overflow-y-scroll {resource?.communityEdition &&
+                    'bg-[url("/Community.svg")] bg-contain bg-center bg-no-repeat'} {resource?.aiEdition &&
+                    'bg-[url("/Ai.svg")] bg-contain bg-center bg-no-repeat'}"
+            >
                 {#if resource?.communityEdition}
                     <div class="float-end p-4 pe-5 text-warning">
                         <CommunityReviewerLevelButton />
@@ -138,13 +142,7 @@
                         <AiReviewerLevelButton />
                     </div>
                 {/if}
-                <div
-                    class="prose mx-auto w-full rounded-md {resource?.communityEdition &&
-                        'bg-[url("/Community.svg")] bg-contain bg-repeat'} {resource?.aiEdition &&
-                        'bg-[url("/Ai.svg")] bg-contain bg-repeat'} px-4 pb-4 pt-2 {resource?.audioUrl
-                        ? 'mb-16'
-                        : 'mb-2'}"
-                >
+                <div class="prose mx-auto w-full rounded-md px-4 pb-4 pt-2 {resource?.audioUrl ? 'mb-16' : 'mb-2'}">
                     {#if resource?.html}
                         {@html resource.html}
                     {:else}
