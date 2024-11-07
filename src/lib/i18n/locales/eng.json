@@ -740,11 +740,11 @@
                 "_context": "Button to see OTN section info"
             },
             "suggestionsButton": {
-                "value": "Suggestions",
+                "value": "Meanings",
                 "_context": "Button to see OTN text translation suggestions info"
             },
             "suggestionsDescription": {
-                "value": "These are other ways people have translated the following:",
+                "value": "Use these as a tool to understand the original text's meaning, then express it naturally in your language.",
                 "_context": "Description explaining OTN text translation suggestions"
             }
         }
