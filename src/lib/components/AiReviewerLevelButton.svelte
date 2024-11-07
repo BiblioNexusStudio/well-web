@@ -8,6 +8,6 @@
     };
 </script>
 
-<button class="flex h-auto w-6 justify-end" on:click={openAiModal}>
+<button class="h-6 w-6" on:click={openAiModal}>
     <BlueAiIcon />
 </button>
