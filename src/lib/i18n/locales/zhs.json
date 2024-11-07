@@ -578,10 +578,10 @@
                 "value": "部分"
             },
             "suggestionsButton": {
-                "value": "建议"
+                "value": "含义"
             },
             "suggestionsDescription": {
-                "value": "以下是人们翻译该内容的其他方式："
+                "value": "使用这些工具来理解原文的含义，然后用您的语言自然地表达出来。"
             }
         }
     },
