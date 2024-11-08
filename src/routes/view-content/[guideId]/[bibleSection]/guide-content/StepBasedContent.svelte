@@ -9,8 +9,8 @@
     import { afterUpdate } from 'svelte';
     import { _ as translate } from 'svelte-i18n';
     import { getContentContext } from '../context';
-    import GlobeIcon from '$lib/icons/GlobeIcon.svelte';
-    import { isShowingCommunityEditionModal } from '$lib/stores/community-edition-modal.store';
+    import AiReviewerLevelButton from '$lib/components/AiReviewerLevelButton.svelte';
+    import CommunityReviewerLevelButton from '$lib/components/CommunityReviewerLevelButton.svelte';
 
     export let steps: T[];
     export let isShowing: boolean;
@@ -98,13 +98,18 @@
                     <div class={guideStepIndex === stepIndex ? 'flex flex-grow flex-col' : 'hidden'}>
                         <div class="flex-grow overflow-y-scroll">
                             <div bind:this={topOfSteps[stepIndex]} />
-                            <div class="rounded-md {step.communityEdition && 'bg-warning-content'} mb-2 px-4 pb-2 pt-2">
+                            <div
+                                class="rounded-md {step.communityEdition &&
+                                    'bg-[url("/Community.svg")] bg-contain bg-center bg-no-repeat'} {step.aiEdition &&
+                                    'bg-[url("/Ai.svg")] bg-contain bg-center bg-no-repeat'} mb-2 px-4 pb-2 pt-2"
+                            >
                                 <div class="float-end p-4 pe-0 pt-2 text-warning">
                                     <slot name="inline-top-right" step={steps[guideStepIndex]} />
                                     {#if step.communityEdition}
-                                        <button on:click={() => ($isShowingCommunityEditionModal = true)}>
-                                            <GlobeIcon />
-                                        </button>
+                                        <CommunityReviewerLevelButton />
+                                    {/if}
+                                    {#if step.aiEdition}
+                                        <AiReviewerLevelButton />
                                     {/if}
                                 </div>
                                 <div class="[&>*:first-child]:mt-0">

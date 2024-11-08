@@ -29,6 +29,9 @@
     import StepBasedContent from './StepBasedContent.svelte';
     import FullscreenMediaResource from '../library-resource-menu/FullscreenMediaResource.svelte';
     import AmericanSignLanguageIcon from '$lib/icons/AmericanSignLanguageIcon.svelte';
+    import { settings } from '$lib/stores/settings.store';
+    import { SettingShortNameEnum } from '$lib/types/settings';
+    import { filterStepsOnSettingChanges } from '$lib/utils/guide-content-helpers';
 
     interface ResourceContentFiaText extends ResourceContentTiptap {
         stepNumber?: number;
@@ -68,9 +71,15 @@
     let steps: FiaStep[] = [];
     let aslVideos: Awaited<ReturnType<typeof fetchAslVideoInfos>>;
     let aslVideoIndex: number | null = null;
+    let filteredSteps: FiaStep[] = [];
 
     $: fetchContent(guideResourceInfo);
     $: openGuideMenuIfNoStepsAvailable(isShowing, isLoading);
+    $: showAiResourcesSetting = !!$settings.find((s) => s.shortName === SettingShortNameEnum.showAiResources)?.value;
+    $: showCommunityResourcesSetting = !!$settings.find(
+        (s) => s.shortName === SettingShortNameEnum.showCommunityResources
+    )?.value;
+    $: filteredSteps = filterStepsOnSettingChanges(steps, showAiResourcesSetting, showCommunityResourcesSetting);
 
     const stepLabels = [
         $translate('resources.fia.step1.value'),
@@ -101,6 +110,7 @@
                             label,
                             eventTrackerName: `FIA Step ${stepNumber}`,
                             communityEdition: false,
+                            aiEdition: false,
                             stepNumber,
                         };
                         if (audioContent) {
@@ -121,6 +131,7 @@
                                 hasContent = true;
                             }
                             step.communityEdition = !!stepText?.communityEdition;
+                            step.aiEdition = !!stepText?.aiEdition;
                         }
                         return hasContent ? step : null;
                     })
@@ -223,6 +234,7 @@
                     steps: content.map((step) => ({
                         ...step,
                         communityEdition: textMetadata?.reviewLevel === ReviewLevel.Community,
+                        aiEdition: textMetadata?.reviewLevel === ReviewLevel.Ai,
                         contentHTML: parseTiptapJsonToHtml(
                             step.tiptap,
                             $currentLanguageDirection,
@@ -257,7 +269,7 @@
 {#if isLoading}
     <FullPageSpinner {isShowing} />
 {:else}
-    <StepBasedContent {steps} {isShowing} bind:multiClipAudioStates bind:audioPlayerKey>
+    <StepBasedContent steps={filteredSteps} {isShowing} bind:multiClipAudioStates bind:audioPlayerKey>
         <button
             slot="inline-top-right"
             let:step

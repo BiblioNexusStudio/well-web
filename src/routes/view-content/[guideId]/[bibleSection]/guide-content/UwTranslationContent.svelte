@@ -16,6 +16,9 @@
     import StepBasedContent from './StepBasedContent.svelte';
     import { _ as translate } from 'svelte-i18n';
     import type { BibleSection } from '$lib/types/bible';
+    import { settings } from '$lib/stores/settings.store';
+    import { SettingShortNameEnum } from '$lib/types/settings';
+    import { filterStepsOnSettingChanges } from '$lib/utils/guide-content-helpers';
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
@@ -36,6 +39,11 @@
 
     $: fetchContent(guideResourceInfo, bookCodesToNames);
     $: isShowing && (audioPlayerKey = undefined);
+    $: showAiResourcesSetting = !!$settings.find((s) => s.shortName === SettingShortNameEnum.showAiResources)?.value;
+    $: showCommunityResourcesSetting = !!$settings.find(
+        (s) => s.shortName === SettingShortNameEnum.showCommunityResources
+    )?.value;
+    $: filteredSteps = filterStepsOnSettingChanges(steps, showAiResourcesSetting, showCommunityResourcesSetting);
 
     async function fetchContent(
         guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined,
@@ -73,6 +81,7 @@
                                 label: stripBookName(label) ?? '',
                                 eventTrackerName: stripBookName(label) ?? '',
                                 communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
+                                aiEdition: metadata?.reviewLevel === ReviewLevel.Ai,
                                 contentHTML:
                                     prefixedContent +
                                     parseTiptapJsonToHtml(
@@ -149,5 +158,5 @@
 {#if isLoading}
     <FullPageSpinner {isShowing} />
 {:else}
-    <StepBasedContent {steps} {isShowing} bind:audioPlayerKey />
+    <StepBasedContent steps={filteredSteps} {isShowing} bind:audioPlayerKey />
 {/if}

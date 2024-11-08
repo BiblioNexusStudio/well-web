@@ -28,6 +28,9 @@
         OpenTranslatorsNotesTranslationOptions,
         OpenTranslatorsNotesTranslationOptionsDefaultOption,
     } from 'aquifer-tiptap';
+    import { settings } from '$lib/stores/settings.store';
+    import { SettingShortNameEnum } from '$lib/types/settings';
+    import { filterStepsOnSettingChanges } from '$lib/utils/guide-content-helpers';
 
     export let isShowing: boolean;
     export let guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined;
@@ -50,6 +53,11 @@
 
     $: fetchContent(guideResourceInfo);
     $: isShowing && (audioPlayerKey = undefined);
+    $: showAiResourcesSetting = !!$settings.find((s) => s.shortName === SettingShortNameEnum.showAiResources)?.value;
+    $: showCommunityResourcesSetting = !!$settings.find(
+        (s) => s.shortName === SettingShortNameEnum.showCommunityResources
+    )?.value;
+    $: filteredSteps = filterStepsOnSettingChanges(steps, showAiResourcesSetting, showCommunityResourcesSetting);
 
     async function fetchContent(guideResourceInfo: ResourceContentInfoWithFrontendData[] | undefined) {
         try {
@@ -81,6 +89,7 @@
                                 label: stripBookName(label) ?? '',
                                 eventTrackerName: stripBookName(label) ?? '',
                                 communityEdition: metadata?.reviewLevel === ReviewLevel.Community,
+                                aiEdition: metadata?.reviewLevel === ReviewLevel.Ai,
                                 sectionNotes,
                                 paragraphNotes,
                                 alternateTranslations,
@@ -214,7 +223,7 @@
 {#if isLoading}
     <FullPageSpinner {isShowing} />
 {:else}
-    <StepBasedContent {steps} {isShowing} bind:audioPlayerKey>
+    <StepBasedContent steps={filteredSteps} {isShowing} bind:audioPlayerKey>
         <div class="mx-auto mt-2 flex w-full max-w-[65ch] flex-row justify-evenly" slot="top-buttons" let:step>
             {#if step?.sectionNotes}
                 <button
