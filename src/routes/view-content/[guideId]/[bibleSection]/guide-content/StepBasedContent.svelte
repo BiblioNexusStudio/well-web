@@ -96,13 +96,13 @@
             {#if steps.length > 0}
                 {#each steps as step, stepIndex}
                     <div class={guideStepIndex === stepIndex ? 'flex flex-grow flex-col' : 'hidden'}>
-                        <div class="flex-grow overflow-y-scroll">
+                        <div
+                            class="flex-grow overflow-y-scroll {step.communityEdition &&
+                                'bg-[url("/Community.svg")] bg-contain bg-center bg-no-repeat'} {step.aiEdition &&
+                                'bg-[url("/Ai.svg")] bg-contain bg-center bg-no-repeat'}"
+                        >
                             <div bind:this={topOfSteps[stepIndex]} />
-                            <div
-                                class="rounded-md {step.communityEdition &&
-                                    'bg-[url("/Community.svg")] bg-contain bg-center bg-no-repeat'} {step.aiEdition &&
-                                    'bg-[url("/Ai.svg")] bg-contain bg-center bg-no-repeat'} mb-2 px-4 pb-2 pt-2"
-                            >
+                            <div class="mb-2 rounded-md px-4 pb-2 pt-2">
                                 <div class="float-end p-4 pe-0 pt-2 text-warning">
                                     <slot name="inline-top-right" step={steps[guideStepIndex]} />
                                     {#if step.communityEdition}
