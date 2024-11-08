@@ -24,7 +24,7 @@
         "@microsoft/applicationinsights-web": "^3.0.3",
         "@sveltejs/kit": "^1.25.2",
         "@vite-pwa/sveltekit": "^0.2.7",
-        "aquifer-tiptap": "https://github.com/BiblioNexusStudio/aquifer-tiptap#1.0.8",
+        "aquifer-tiptap": "https://github.com/BiblioNexusStudio/aquifer-tiptap#1.0.11",
         "async-es": "^3.2.4",
         "cupertino-pane": "^1.4.2",
         "daisyui": "^4.5.0",
