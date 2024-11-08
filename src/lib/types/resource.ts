@@ -106,6 +106,7 @@ export interface StepBasedGuideStep {
     contentHTML?: string;
     audioUrl?: string;
     communityEdition: boolean;
+    aiEdition: boolean;
 }
 
 interface ApiSingleLicense {
