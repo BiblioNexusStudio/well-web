@@ -71,7 +71,8 @@ export const log = {
             error &&
             (error.message.includes('Failed to fetch') ||
                 error.message.includes('Load failed') ||
-                error.message.includes('NetworkError when attempting to fetch'))
+                error.message.includes('NetworkError when attempting to fetch') ||
+                error.message.includes('Unexpected end of JSON input'))
         ) {
             // Don't log network errors to app insights (since they can't be avoided)
         } else if (!browserSupported) {
