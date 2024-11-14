@@ -1,11 +1,16 @@
-// This plugin is used to add an API key to all outgoing requests.
+/**
+ * Plugin that adds BiblioNexus-specific headers to requests.
+ * This plugin intercepts fetch requests and adds an API key as a query parameter,
+ * sets the 'bn-source' header, and optionally adds a user ID header.
+ * Used with Workbox for service worker request handling.
+ */
 // eslint-disable-next-line
-class AddApiKeyToAllRequestPlugin {
+class AddBnHeadersToRequestsPlugin {
     /**
      * The API key to be added to requests.
      * @type {string|undefined}
      */
-    apikey;
+    apiKey;
 
     /**
      * The user id from App Insights context.
@@ -14,11 +19,11 @@ class AddApiKeyToAllRequestPlugin {
     userId = undefined;
 
     /**
-     * Creates an instance of AddApiKeyToAllRequestPlugin.
-     * @param {string|undefined} apikey - The API key to be added to requests.
+     * Creates an instance of AddBnHeadersToRequestsPlugin.
+     * @param {string|undefined} apiKey - The API key to be added to requests.
      */
-    constructor(apikey) {
-        this.apikey = apikey;
+    constructor(apiKey) {
+        this.apiKey = apiKey;
     }
 
     /**
@@ -29,8 +34,8 @@ class AddApiKeyToAllRequestPlugin {
     requestWillFetch = async (args) => {
         const { request } = args;
         const urlObj = new URL(request.url);
-        if (this.apikey) {
-            urlObj.searchParams.append('api-key', this.apikey);
+        if (this.apiKey) {
+            urlObj.searchParams.append('api-key', this.apiKey);
         }
 
         const modifiedHeaders = new Headers(request.headers);

@@ -1,8 +1,6 @@
-/* eslint-disable */
-// @ts-nocheck
-
 // copied from https://github.com/henrygd/trap-focus-svelte with slight modification
 
+// @ts-expect-error Missing type here
 import { listen } from 'svelte/internal';
 import { at } from './array';
 
@@ -22,7 +20,9 @@ function trapFocus(wrap: HTMLElement, active = true) {
 
     // return  the first and last focusable children
     function getFirstAndLastFocusable() {
-        const els = [...wrap.querySelectorAll('*')].filter((element: HTMLElement) => element.tabIndex >= 0);
+        const els = [...wrap.querySelectorAll('*')].filter(
+            (element: Element) => 'tabIndex' in element && (element as HTMLElement).tabIndex >= 0
+        );
         return [at(els, 0) ?? wrap, at(els, -1) ?? wrap] as HTMLElement[];
     }
 

@@ -20,6 +20,9 @@
 // approach works well, but requires some extra thought in order for types to keep working. The workbox types
 // need to be pulled in and applied for each workbox library (see below) and our workbox plugin code must be
 // typed with JSDoc.
+//
+// `static/js/caching-config.js` contains shared configuration used mainly here in the service worker but also in
+// application code. All of the URL regexes used by the service worker strategies are defined in that caching config.
 
 importScripts(
     // workbox core
@@ -45,7 +48,7 @@ import type * as WorkboxCore from 'workbox-core';
 import type * as WorkboxRouting from 'workbox-routing';
 import type * as WorkboxStrategies from 'workbox-strategies';
 import type * as WorkboxBackgroundSync from 'workbox-background-sync';
-import type * as WorkboxPrecahing from 'workbox-precaching';
+import type * as WorkboxPrecaching from 'workbox-precaching';
 import type * as WorkboxRangeRequests from 'workbox-range-requests';
 
 declare let self: ServiceWorkerGlobalScope;
@@ -54,7 +57,7 @@ declare let workbox: {
     routing: typeof WorkboxRouting;
     strategies: typeof WorkboxStrategies;
     backgroundSync: typeof WorkboxBackgroundSync;
-    precaching: typeof WorkboxPrecahing;
+    precaching: typeof WorkboxPrecaching;
     rangeRequests: typeof WorkboxRangeRequests;
 };
 
@@ -93,12 +96,15 @@ try {
 }
 
 const API_CACHE_DURATION_IN_HOURS = isQa || isDev ? 1 : 24;
-const addApiKeyToAllRequestPlugin = new AddApiKeyToAllRequestPlugin(apiKey);
+const addBnHeadersToRequestsPlugin = new AddBnHeadersToRequestsPlugin(apiKey);
+
+// Because the service worker is running on its own thread that can't access the main thread or the window/DOM, it must
+// request and then listen for the user ID via message-passing.
 
 // listen for user id
 self.addEventListener('message', (event) => {
     if (event.data?.userId) {
-        addApiKeyToAllRequestPlugin.userId = event.data.userId;
+        addBnHeadersToRequestsPlugin.userId = event.data.userId;
     }
 });
 
@@ -127,6 +133,7 @@ if (!isLocalDevelopment) {
     registerRoute(new NavigationRoute(createHandlerBoundToURL('/')));
 }
 
+// when offline, cache requests going to App Insights so they can be retried when back online
 registerRoute(
     /https:\/\/.*\.applicationinsights\.azure\.com.*/,
     new NetworkOnly({
@@ -141,13 +148,13 @@ registerRoute(
 
 const contentAndMetadataCachingHandler = new ContentAndMetadataNetworkFirstWhenVersionOutdated({
     cacheName: CACHING_CONFIG.contentCacheKey,
-    plugins: [new CacheableMediaOrTextContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],
+    plugins: [new CacheableMediaOrTextContentPlugin(), new RangeRequestsPlugin(), addBnHeadersToRequestsPlugin],
     CacheFirst,
     NetworkFirst,
     StaleWhileRevalidate,
     NetworkOrCacheUsedPlugin,
-    metadataIdAndVersionDb,
-    contentIdAndVersionDb,
+    metadataIdAndVersionDb: CACHING_CONFIG.metadataIdAndVersionDb,
+    contentIdAndVersionDb: CACHING_CONFIG.contentIdAndVersionDb,
     contentIdFromMetadataUrl: CACHING_CONFIG.contentIdFromMetadataUrl,
     contentIdFromContentUrl: CACHING_CONFIG.contentIdFromContentUrl,
     splitVersionOutOfUrl: CACHING_CONFIG.splitVersionOutOfUrl,
@@ -155,13 +162,13 @@ const contentAndMetadataCachingHandler = new ContentAndMetadataNetworkFirstWhenV
 
 const otherContentCachingHandler = new CacheFirst({
     cacheName: CACHING_CONFIG.contentCacheKey,
-    plugins: [new CacheableMediaOrTextContentPlugin(), new RangeRequestsPlugin(), addApiKeyToAllRequestPlugin],
+    plugins: [new CacheableMediaOrTextContentPlugin(), new RangeRequestsPlugin(), addBnHeadersToRequestsPlugin],
 });
 
 const apiCachingHandler = new CacheFirstAndStaleWhileRevalidateAfterExpiration({
     cacheName: CACHING_CONFIG.apiCacheKey,
     staleAfterDuration: 60 * 60 * API_CACHE_DURATION_IN_HOURS,
-    plugins: [addApiKeyToAllRequestPlugin],
+    plugins: [addBnHeadersToRequestsPlugin],
     timestampsDb: CACHING_CONFIG.timestampAndEndpointCacheBustVersionDb,
     CacheFirst,
     NetworkFirst,
@@ -181,7 +188,7 @@ registerRoute(CACHING_CONFIG.otherApiUrlsToCacheAsContentRegex, otherContentCach
 registerRoute(
     CACHING_CONFIG.apiSkipCacheUrlRegex,
     new NetworkOnly({
-        plugins: [addApiKeyToAllRequestPlugin],
+        plugins: [addBnHeadersToRequestsPlugin],
     }),
     'GET'
 );
@@ -194,7 +201,7 @@ registerRoute(
     CACHING_CONFIG.apiUrlRegex,
     new NetworkOnly({
         plugins: [
-            addApiKeyToAllRequestPlugin,
+            addBnHeadersToRequestsPlugin,
             new BackgroundSyncPlugin('api-post-syncer', {
                 maxRetentionTime: 60 * 24 * 365, // time in minutes, 1 year
             }),

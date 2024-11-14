@@ -1,12 +1,11 @@
+// @ts-expect-error virtual:pwa-register doesn't play nicely with TS
+import { registerSW } from 'virtual:pwa-register';
 import { init } from '$lib/i18n';
 import { waitLocale } from 'svelte-i18n';
 import type { LayoutLoad } from './$types';
 import { fetchFromCacheOrApi } from '$lib/data-cache';
 import { get } from 'svelte/store';
 import { currentLanguageInfo } from '$lib/stores/language.store';
-// eslint-disable-next-line
-// @ts-ignore
-import { registerSW } from 'virtual:pwa-register';
 import { appInsightsEnabled, userInfo, log } from '$lib/logger';
 import { browserSupported } from '$lib/utils/browser';
 import { languages } from '$lib/stores/language.store';

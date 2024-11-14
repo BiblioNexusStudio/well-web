@@ -1,3 +1,10 @@
+# By default in SvelteKit the JS bundles are set as preloads so they're fetched at page-load. In a PWA this isn't
+# optimal because the service worker hasn't started yet the first time the page loads. This means the JS bundles aren't
+# cached the first time they're requested, and the service worker must refetch them all to cache them.
+#
+# This patch modifies SvelteKit's initialization strategy to ensure the fetches don't happen until the service worker is
+# running.
+
 diff --git a/node_modules/@sveltejs/kit/src/core/config/options.js b/node_modules/@sveltejs/kit/src/core/config/options.js
 index 7d73510..c3c598e 100644
 --- a/node_modules/@sveltejs/kit/src/core/config/options.js

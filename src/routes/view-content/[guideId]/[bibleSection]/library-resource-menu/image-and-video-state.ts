@@ -77,12 +77,8 @@ export class VideoState {
         if (this.element) {
             const element = this.element;
             setTimeout(() => {
-                // eslint-disable-next-line
-                // @ts-ignore
-                if (element.webkitEnterFullScreen) {
-                    // eslint-disable-next-line
-                    // @ts-ignore
-                    element.webkitEnterFullScreen();
+                if ('webkitEnterFullScreen' in element) {
+                    (element.webkitEnterFullScreen as () => void)();
                 } else {
                     element.requestFullscreen();
                 }

@@ -1,23 +1,25 @@
-// This strategy uses IndexedDB to store resource content ids and the current version that is cached by the app. Then
-// when metadata or content is requested with a version that differs from the stored version, it can use NetworkFirst
-// to try to get the fresh content/metadata.
-//
-// It expects that when content and metadata is requested, a `version` search param is on the URL. This version number
-// should come from whatever initial API request returned the content id.
-//
-// When handling a request, it does the following:
-// - Check that the URL is either a content URL or metadata URL. If not, do a normal CacheFirst.
-// - Extract the resource content id and version from the URL. Use the id to lookup the current version from IndexedDB.
-//   If no stored version exists, default to 1.
-// - If the version on the URL was -1, then use StaleWhileRevalidate. This lets us ensure fresh data in situations
-//   where we don't have access to the current version number.
-// - If the version on the URL did not match the current version from IndexedDB, use NetworkFirst. Save the version
-//   number in IndexedDB.
-// - Otherwise use CacheFirst.
-//
-// Note: When the `version` search param is found on the URL it's stripped off before making actual requests. It's only
-//       meant for client-side usage and would mess up the ability to fallback to cached data if the version number
-//       changed and the client requests the content offline.
+/**
+ * This caching strategy uses IndexedDB to store resource content ids and the current version that is cached by the app.
+ * Then when metadata or content is requested with a version that differs from the stored version, it can use
+ * NetworkFirst to try to get the fresh content/metadata.
+ *
+ * It expects that when content and metadata is requested, a `version` search param is on the URL. This version number
+ * should come from whatever initial API request returned the content id.
+ *
+ * When handling a request, it does the following:
+ * - Check that the URL is either a content URL or metadata URL. If not, do a normal CacheFirst.
+ * - Extract the resource content id and version from the URL. Use the id to lookup the current version from IndexedDB.
+ *   If no stored version exists, default to 1.
+ * - If the version on the URL was -1, then use StaleWhileRevalidate. This lets us ensure fresh data in situations
+ *   where we don't have access to the current version number.
+ * - If the version on the URL did not match the current version from IndexedDB, use NetworkFirst. Save the version
+ *   number in IndexedDB.
+ * - Otherwise use CacheFirst.
+ *
+ * Note: When the `version` search param is found on the URL it's stripped off before making actual requests. It's only
+ *       meant for client-side usage and would mess up the ability to fallback to cached data if the version number
+ *       changed and the client requests the content offline.
+ */
 
 // eslint-disable-next-line
 class ContentAndMetadataNetworkFirstWhenVersionOutdated {
@@ -84,9 +86,9 @@ class ContentAndMetadataNetworkFirstWhenVersionOutdated {
      */
     async _setVersionForId(id, version, type) {
         if (type === 'metadata') {
-            return await this.metadataIdAndVersionDb.set(id, { version });
+            await this.metadataIdAndVersionDb.set(id, { version });
         } else {
-            return await this.contentIdAndVersionDb.set(id, { version });
+            await this.contentIdAndVersionDb.set(id, { version });
         }
     }
 
@@ -108,7 +110,7 @@ class ContentAndMetadataNetworkFirstWhenVersionOutdated {
                 ...(typeof request === 'string' ? null : request),
             });
 
-            // By using `version=-1`, we can indicate that certain requests don't have acccess to the current version
+            // By using `version=-1`, we can indicate that certain requests don't have access to the current version
             // and therefore we should use StaleWhileRevalidate to immediately use the cached version but pull from the
             // network in the background.
             if (requestedVersion === -1) {
@@ -116,8 +118,7 @@ class ContentAndMetadataNetworkFirstWhenVersionOutdated {
                     cacheName: this.cacheName,
                     plugins: this.plugins,
                 }).handle({
-                    // eslint-disable-next-line
-                    // @ts-ignore: its fine to pass event here
+                    // @ts-expect-error It's fine to pass event here
                     event,
                     request: requestWithoutVersionSearchParam,
                 });
@@ -140,8 +141,7 @@ class ContentAndMetadataNetworkFirstWhenVersionOutdated {
                         }),
                     ],
                 }).handle({
-                    // eslint-disable-next-line
-                    // @ts-ignore: it's fine to pass event here
+                    // @ts-expect-error It's fine to pass event here
                     event,
                     request: requestWithoutVersionSearchParam,
                 });
@@ -153,8 +153,7 @@ class ContentAndMetadataNetworkFirstWhenVersionOutdated {
                 return networkFirstResponse;
             } else {
                 return new this.CacheFirst({ cacheName: this.cacheName, plugins: this.plugins }).handle({
-                    // eslint-disable-next-line
-                    // @ts-ignore: it's fine to pass event here
+                    // @ts-expect-error It's fine to pass event here
                     event,
                     request: requestWithoutVersionSearchParam,
                 });
@@ -162,8 +161,7 @@ class ContentAndMetadataNetworkFirstWhenVersionOutdated {
         }
 
         return new this.CacheFirst({ cacheName: this.cacheName, plugins: this.plugins }).handle({
-            // eslint-disable-next-line
-            // @ts-ignore: it's fine to pass event here
+            // @ts-expect-error It's fine to pass event here
             event,
             request,
         });
