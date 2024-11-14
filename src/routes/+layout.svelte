@@ -1,7 +1,6 @@
 <script lang="ts">
     import '../app.css';
-    // eslint-disable-next-line
-    // @ts-ignore
+    // @ts-expect-error virtual:pwa-info doesn't play nicely with TS
     import { pwaInfo } from 'virtual:pwa-info';
     import { onMount } from 'svelte';
     import { page } from '$app/stores';

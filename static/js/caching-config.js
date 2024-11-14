@@ -1,10 +1,8 @@
-// eslint-disable-next-line
-// @ts-nocheck
-
 // This file contains caching-related config used by the service worker and the app itself
-// For this reason and due to some issues with using one file in both places, the file is symlinked
-// into src/lib.
+// For this reason and due to some issues with using one file in both places, the file gets copied
+// into src/lib during build.
 
+// @ts-expect-error Some stuff is being redeclared
 const API_PATH_FOR_METADATA = '/resources/:ID/metadata';
 const API_PATH_FOR_CONTENT = '/resources/:ID/content';
 const API_URLS = [
@@ -15,19 +13,18 @@ const API_URLS = [
 ];
 
 const API_CONTENT_AND_METADATA_PATHS = [API_PATH_FOR_CONTENT, API_PATH_FOR_METADATA];
-
 const OTHER_API_PATHS_TO_CACHE_AS_CONTENT = ['/resources/:ID/thumbnail', '/bibles/:ID/texts'];
-
 const API_PATHS_TO_SKIP_CACHING = ['/resources/batch/metadata', '/resources/batch/content/text'];
-
 const CDN_URLS = ['https://cdn.aquifer.bible'];
 
-const cdnUrlRegex = createRegexFromUrlsAndPaths(CDN_URLS);
+// regexes that service worker strategies use to determine which requests to run on
+const cdnUrlRegex = createRegexFromUrlsAndPaths(CDN_URLS, []);
 const apiContentAndMetadataUrlsRegex = createRegexFromUrlsAndPaths(API_URLS, API_CONTENT_AND_METADATA_PATHS);
 const otherApiUrlsToCacheAsContentRegex = createRegexFromUrlsAndPaths(API_URLS, OTHER_API_PATHS_TO_CACHE_AS_CONTENT);
-
 const apiContentUrlRegex = createRegexFromUrlsAndPaths(API_URLS, [API_PATH_FOR_CONTENT]);
 const apiMetadataUrlRegex = createRegexFromUrlsAndPaths(API_URLS, [API_PATH_FOR_METADATA]);
+const apiSkipCacheUrlRegex = createRegexFromUrlsAndPaths(API_URLS, API_PATHS_TO_SKIP_CACHING);
+const apiUrlRegex = createRegexFromUrlsAndPaths(API_URLS, []);
 
 /**
  * IndexedDBWrapper class for handling IndexedDB operations
@@ -87,7 +84,7 @@ class IndexedDBWrapper {
      * Method to set a value in the database
      * @param {IDBValidKey} key - Key to store the value
      * @param {T} value - Value to be stored
-     * @returns {Promise<void>}
+     * @returns {Promise<IDBValidKey>}
      */
     async set(key, value) {
         const db = await this._getDb();
@@ -119,19 +116,25 @@ const metadataIdAndVersionDb = new IndexedDBWrapper('service-worker-metadata-ids
 const CACHING_CONFIG = {
     contentCacheKey: 'aquifer-cdn',
     apiCacheKey: 'aquifer-api',
+
+    // regexes that service worker strategies use to determine which requests to run on
     cdnUrlRegex,
     apiContentAndMetadataUrlsRegex,
     otherApiUrlsToCacheAsContentRegex,
-    timestampAndEndpointCacheBustVersionDb,
-    contentIdAndVersionDb,
-    metadataIdAndVersionDb,
     apiContentUrlRegex,
     apiMetadataUrlRegex,
-    apiSkipCacheUrlRegex: createRegexFromUrlsAndPaths(API_URLS, API_PATHS_TO_SKIP_CACHING),
-    apiUrlRegex: createRegexFromUrlsAndPaths(API_URLS),
+    apiSkipCacheUrlRegex,
+    apiUrlRegex,
+
+    // helper functions for getting metadata from an API url
     contentIdFromMetadataUrl,
     contentIdFromContentUrl,
     splitVersionOutOfUrl,
+
+    // IndexedDBWrapper instances used elsewhere
+    contentIdAndVersionDb,
+    metadataIdAndVersionDb,
+    timestampAndEndpointCacheBustVersionDb,
 
     // these are meant for usage in the app to determine what a given URL is
     urlGoesInContentCache,
@@ -190,9 +193,9 @@ function contentIdFromMetadataUrl(url) {
 
 /**
  * @param {string[]} urls - Array of URLs.
- * @param {string[]} [paths=[]] - Array of paths.
+ * @param {string[]} paths - Array of paths.
  */
-function createRegexFromUrlsAndPaths(urls, paths = []) {
+function createRegexFromUrlsAndPaths(urls, paths) {
     const combined = urls
         .map((url) => {
             if (paths.length === 0) {
@@ -218,7 +221,5 @@ function splitVersionOutOfUrl(url) {
 }
 
 if (typeof window !== 'undefined') {
-    // eslint-disable-next-line
-    // @ts-ignore
     window.__CACHING_CONFIG = CACHING_CONFIG;
 }

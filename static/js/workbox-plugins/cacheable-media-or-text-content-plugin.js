@@ -1,4 +1,7 @@
-// Caches a response if it's a 200 OR it's a 206 and either the requested Range is not set or it's set to 0- which means all content
+/**
+ * A plugin to handle caching media or text content in workbox caches.
+ * Handles partial (206) and full (200) responses appropriately.
+ */
 // eslint-disable-next-line
 class CacheableMediaOrTextContentPlugin {
     /**

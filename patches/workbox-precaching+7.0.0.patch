@@ -1,3 +1,6 @@
+# This patch updates workbox to allow concurrent prefetching of 10 application files at one time.
+# Without this change, when first loading the app only one file gets requested at a time and it takes quite a while.
+
 diff --git a/node_modules/workbox-precaching/PrecacheController.js b/node_modules/workbox-precaching/PrecacheController.js
 index e00975e..05ce6ee 100644
 --- a/node_modules/workbox-precaching/PrecacheController.js

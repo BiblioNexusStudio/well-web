@@ -1,5 +1,7 @@
-// Plugin to detect whether the network or cache was used for a response.
-
+/**
+ * A Workbox plugin that tracks whether a network request or cache was used to fulfill a request.
+ * Provides callback functionality that other plugins can hook into to know how a requst was fulfilled.
+ */
 // eslint-disable-next-line
 class NetworkOrCacheUsedPlugin {
     /**

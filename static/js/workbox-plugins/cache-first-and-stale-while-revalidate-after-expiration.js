@@ -1,14 +1,25 @@
 // <reference path="../static/js/caching-config.js" />
 
-// This strategy uses IndexedDB to store cache timestamps and cache-busting versions for each request it caches.
-//
-// When handling a request, it does the following:
-// - Check if entry exists that is more recent than the staleAfterDuration value and matches the version specified by
-//   the X-Cache-Bust-Version header, if so use a CacheFirst strategy to return it.
-// - If there is not a version matching the X-Cache-Bust-Version header, use a NetworkFirst strategy.
-// - If no entry exists or the entry is stale, use a StaleWhileRevalidate strategy to immediately return the cached
-//   value but in the background fetch the data from the network to update the cache.
-//
+/**
+ * This caching strategy is meant for API calls that pull unversioned data. For instance:
+ *   - /languages
+ *   - /resources/content/grouped-by-verse
+ *
+ * It handles a cache-bust header (see `src/lib/api-endpoints.ts`) so that the frontend code has a way to force new data
+ * to be requested. It also supports a `staleAfterDuration` setting to have new data requested after a given duration.
+ *
+ * When handling a request, it does the following:
+ * - Check if entry exists that is more recent than the staleAfterDuration value and matches the version specified by
+ *   the X-Cache-Bust-Version header, if so use a CacheFirst strategy to return it.
+ * - If there is not a version matching the X-Cache-Bust-Version header, use a NetworkFirst strategy.
+ * - If no entry exists or the entry is stale, use a StaleWhileRevalidate strategy to immediately return the cached
+ *   value but in the background fetch the data from the network to update the cache.
+ *
+ * IndexedDB is used to store cache timestamps and cache-busting versions for each request it caches.
+ *
+ * Note: X-Cache-Bust-Version is set in the Bible Well code, it is unrelated to resource content version numbers.
+ */
+
 // eslint-disable-next-line
 class CacheFirstAndStaleWhileRevalidateAfterExpiration {
     /**
@@ -61,8 +72,7 @@ class CacheFirstAndStaleWhileRevalidateAfterExpiration {
             // If it's not stale and the cache-bust version matches, use the cached version.
 
             return new this.CacheFirst({ cacheName: this.cacheName, plugins: this.plugins }).handle({
-                // eslint-disable-next-line
-                // @ts-ignore: it's fine to pass event here
+                // @ts-expect-error It's fine to pass event here
                 event,
                 request,
             });
@@ -71,8 +81,7 @@ class CacheFirstAndStaleWhileRevalidateAfterExpiration {
             // better than no data)
 
             const response = await new this.NetworkFirst({ cacheName: this.cacheName, plugins: this.plugins }).handle({
-                // eslint-disable-next-line
-                // @ts-ignore: it's fine to pass event here
+                // @ts-expect-error It's fine to pass event here
                 event,
                 request,
             });
@@ -91,8 +100,7 @@ class CacheFirstAndStaleWhileRevalidateAfterExpiration {
                 cacheName: this.cacheName,
                 plugins: this.plugins,
             }).handle({
-                // eslint-disable-next-line
-                // @ts-ignore: its fine to pass event here
+                // @ts-expect-error It's fine to pass event here
                 event,
                 request,
             });

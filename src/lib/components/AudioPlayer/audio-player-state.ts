@@ -17,12 +17,6 @@ export interface AudioFileInfo {
     endTime?: number | null;
 }
 
-// This class encapsulates a single "instance" of an audio player that can play one or more audio clip in sequence,
-// seamlessly. One or more of these states can be passed into the AudioPlayer. Instead of instantiating directly, use
-// the createMultiClipAudioState function below to return a Svelte-store-ized version that's easy to use in the UI.
-//
-// Under the hood this will keep track of each of the files to be included in the clip sequence, including their
-// HTMLAudioElement instances.
 class _MultiClipAudioState {
     globalId: string;
     currentClipIndex: number;
@@ -245,9 +239,22 @@ class _MultiClipAudioState {
 
 export type MultiClipAudioState = ReturnType<typeof createMultiClipAudioState>;
 
-// Create a new MultiClipAudioState given the list of files.
-// Gives access to a subscribe method for components to see updates.
-// Also injects a notifyStateChanged method that will cause the subscribers to be called.
+/**
+ * Creates a new MultiClipAudioState that manages sequential audio playback.
+ *
+ * The "multi-clip" term means that what appears in the UI like a single audio
+ * file can actually be multiple audio files with start/end ranges specified, playing
+ * seamlessly in order.
+ *
+ * @param files - Array of audio files with their respective configuration.
+ * @returns An audio player instance with the following capabilities:
+ *  - Seamless playback of multiple audio clips in sequence
+ *  - Subscription mechanism for state updates via subscribe()
+ *  - Automatic state change notifications via notifyStateChanged()
+ *  - HTMLAudioElement management for each clip
+ *  - Compatible with AudioPlayer component
+ *  - Multiple instances can coexist and be swapped
+ */
 export function createMultiClipAudioState(files: AudioFileInfo[]) {
     const state = new _MultiClipAudioState(files);
     const { subscribe, update } = writable(state);
