@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "yarn prebuild && vite dev",
         "build": "yarn prebuild && vite build",
+        "build-with-source-maps": "yarn prebuild && INCLUDE_SOURCE_MAPS=true vite build",
         "preview": "vite preview",
         "test": "vitest",
         "lint:unused-translations": "run-script-os",
