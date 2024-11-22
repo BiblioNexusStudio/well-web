@@ -15,6 +15,9 @@ export default defineConfig({
     resolve: {
         preserveSymlinks: true,
     },
+    build: {
+        sourcemap: process.env.INCLUDE_SOURCE_MAPS === 'true',
+    },
     plugins: [sveltekit(), SvelteKitPWA(serviceWorkerPwaConfig)],
     test: {
         globals: true,
