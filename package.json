@@ -19,9 +19,15 @@
         "apk:build": "node ./scripts/build-android-apk.js",
         "apk:preload-content": "node ./scripts/preload-files-to-static.js",
         "prepare": "husky install",
-        "prebuild": "node ./scripts/prebuild-for-service-worker.js"
+        "prebuild": "node ./scripts/prebuild-for-service-worker.js",
+        "ionic:build": "npm run build",
+        "ionic:serve": "npm run dev"
     },
     "dependencies": {
+        "@capacitor/app": "6.0.2",
+        "@capacitor/haptics": "6.0.2",
+        "@capacitor/keyboard": "6.0.3",
+        "@capacitor/status-bar": "6.0.2",
         "@microsoft/applicationinsights-web": "^3.0.3",
         "@sveltejs/kit": "^1.25.2",
         "@vite-pwa/sveltekit": "^0.2.7",
@@ -36,10 +42,10 @@
         "unzipit": "^1.4.3"
     },
     "devDependencies": {
-        "@capacitor/android": "^5.5.0",
+        "@capacitor/android": "^6.2.0",
         "@capacitor/assets": "^3.0.1",
-        "@capacitor/cli": "^5.5.0",
-        "@capacitor/core": "^5.5.0",
+        "@capacitor/cli": "6.2.0",
+        "@capacitor/core": "6.2.0",
         "@svelte-put/qr": "^1.2.1",
         "@sveltejs/adapter-static": "^2.0.3",
         "@tailwindcss/typography": "^0.5.10",

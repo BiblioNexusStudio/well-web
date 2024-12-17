@@ -1,0 +1,7 @@
+{
+    "name": "well-web",
+    "integrations": {
+        "capacitor": {}
+    },
+    "type": "custom"
+}

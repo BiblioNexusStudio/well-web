@@ -4,6 +4,7 @@ node_modules
 /.svelte-kit/
 /package/
 /.idea/
+/android/.idea/
 .env
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
