@@ -1,0 +1,638 @@
+{
+    "page": {
+        "index": {
+            "downloadResourcesForOfflineUse": {
+                "value": "अफलाइन जानुहोस्? थप सामग्री प्राप्त गर्नुहोस्"
+            },
+            "about": {
+                "value": "बारेमा"
+            },
+            "downloadManager": {
+                "value": "डाउनलोड प्रबन्धक"
+            },
+            "getStarted": {
+                "value": "सुरू गर्नुहोस्"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "सामग्री लाइसेन्स जानकारी लोड गर्न त्रुटि"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "{name} अन्तर्गत जारी गरिएको"
+                },
+                "releasedUnderMultiple": {
+                    "value": "विभिन्न"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} निम्न भाषामा अनुकूलित गरिएको छ<br /> {languages}<br /> {title} {copyright} {date} {publisher} बाट<br /> {bnLicense} लाइसेन्स अन्तर्गत Biblionexus द्वारा जारी गरिएको"
+                }
+            }
+        },
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "बाइबल"
+                },
+                "guide": {
+                    "value": "गाइड"
+                },
+                "library": {
+                    "value": "पुस्तकालय"
+                },
+                "menu": {
+                    "value": "मेनु"
+                },
+                "resources": {
+                    "value": "स्रोतहरू"
+                }
+            },
+            "resourcePane": {
+                "cancel": {
+                    "value": "रद्ध गर्नुहोस्"
+                },
+                "libraryTitle": {
+                    "value": "पुस्तकालय"
+                },
+                "librarySubtitle": {
+                    "value": "तपाईंलाई आवश्यक स्रोतहरू खोज्नुहोस्"
+                },
+                "typeToSearch": {
+                    "value": "पुस्तकालयमा खोज्नको लागि शब्द टाइप गर्नुहोस्"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} मध्ये {total}"
+                    }
+                },
+                "seeAll": {
+                    "value": "सबै हेर्नुहोस् ({count})"
+                },
+                "noThumbnail": {
+                    "value": "कुनै थम्बनेल छैन"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "कुनै स्रोतहरू फेला परेनन्"
+                    },
+                    "description": {
+                        "value": "तपाईंको खोज \"{searchQuery}\" ले कुनै स्रोतसँग मेल खायो छैन।"
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "१ स्रोत"
+                    },
+                    "plural": {
+                        "value": "{count} स्रोतहरू"
+                    }
+                },
+                "error": {
+                    "value": "स्रोत लोड गर्न त्रुटि"
+                }
+            },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "मूल भाषा स्रोत हेर्नका लागि कुनै शब्दमा क्लिक गर्नुहोस्।"
+                },
+                "noWordInfoAvailable": {
+                    "value": "यस चयनका लागि मूल भाषा जानकारी उपलब्ध छैन।"
+                },
+                "noSenseInfoAvailable": {
+                    "value": "यस चयनका लागि ग्लोस वा परिभाषा जानकारी उपलब्ध छैन।"
+                },
+                "gloss": {
+                    "value": "ग्लोस"
+                },
+                "definition": {
+                    "value": "परिभाषा"
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "स्रोत उपलब्ध छैन"
+                },
+                "description": {
+                    "value": "यस उपकरणमा {language} को लागि कुनै बाइबल उपलब्ध छैन।<br />के तपाईं अर्को भाषामा बाइबल प्रयोग गर्न चाहनुहुन्छ?"
+                },
+                "noneAvailableDescription": {
+                    "value": "यस उपकरणमा {language} वा अन्य कुनै भाषामा बाइबल उपलब्ध छैन।<br />कृपया अनलाइन हुँदा सामग्री डाउनलोड गर्नुहोस्।"
+                },
+                "show": {
+                    "value": "बाइबल चयन गर्नुहोस्"
+                },
+                "checkForMoreResources": {
+                    "value": "थप स्रोतहरूको लागि जाँच गर्नुहोस्..."
+                },
+                "missingFromBible": {
+                    "value": "यस बाइबलमा चयनित अंश गुमेको छ।"
+                }
+            },
+            "noGuideContent": {
+                "value": "यस अंशको लागि कुनै सामग्री फेला परेन।"
+            },
+            "guide": {
+                "next": {
+                    "value": "अर्को"
+                },
+                "usedInVerses": {
+                    "value": "यी श्लोकहरूमा प्रयोग गरिएको"
+                }
+            }
+        },
+        "fileManager": {
+            "downloadManager": {
+                "value": "डाउनलोड प्रबन्धक"
+            },
+            "download": {
+                "value": "डाउनलोड गर्नुहोस्"
+            },
+            "textType": {
+                "value": "पाठ"
+            },
+            "audioType": {
+                "value": "अडियो"
+            },
+            "mediaType": {
+                "value": "मिडिया"
+            },
+            "ok": {
+                "value": "ठिक छ"
+            },
+            "cancel": {
+                "value": "रद्ध गर्नुहोस्"
+            },
+            "noInternet": {
+                "value": "इन्टरनेट छैन"
+            },
+            "selectABook": {
+                "value": "पुस्तक चयन गर्नुहोस्"
+            },
+            "delete": {
+                "value": "मेटाउनुहोस्"
+            },
+            "modal": {
+                "title": {
+                    "value": "डाउनलोड पुष्टि गर्नुहोस्"
+                },
+                "description": {
+                    "value": "बाइबल वेल {downloadSize} सामग्री तपाईंको उपकरणमा डाउनलोड गर्नेछ।"
+                },
+                "downloadProgress": {
+                    "value": "डाउनलोड प्रगति"
+                },
+                "success": {
+                    "value": "सफलतापूर्वक डाउनलोड गरियो"
+                },
+                "close": {
+                    "value": "बन्द गर्नुहोस्"
+                },
+                "downloadingDescription": {
+                    "value": "{totalSizeDownloaded} को {totalSizeToDownload} डाउनलोड गर्दैछ।"
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "चेतावनी!"
+                },
+                "description": {
+                    "value": "के तपाईं निश्चित हुनुहुन्छ कि तपाईं यी फाइलहरूलाई स्थायी रूपमा तपाईंको उपकरणबाट मेटाउन चाहनुहुन्छ?"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "यहाँ तपाईं आफ्नो उपकरणबाट एक्विफर सामग्री डाउनलोड र मेटाउन सक्नुहुन्छ।"
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "नाम"
+                },
+                "text": {
+                    "value": "पाठ"
+                },
+                "audio": {
+                    "value": "अडियो"
+                },
+                "media": {
+                    "value": "मिडिया"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "स्रोतहरू"
+                }
+            }
+        },
+        "menu": {
+            "home": {
+                "value": "गृहपृष्ठ"
+            },
+            "menu": {
+                "value": "मेनु"
+            },
+            "downloadManager": {
+                "value": "डाउनलोड प्रबन्धक"
+            },
+            "language": {
+                "value": "भाषा"
+            },
+            "shortcuts": {
+                "value": "सर्टकटहरू"
+            },
+            "changeLanguage": {
+                "value": "भाषा परिवर्तन गर्नुहोस्"
+            }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "स्वागत छ"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "तपाईंको मनपर्ने भाषा चयन गर्नुहोस्"
+            },
+            "next": {
+                "value": "अर्को"
+            }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "अनुवाद मार्गदर्शिकाहरू"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "तपाईं के गर्न चाहनुहुन्छ?"
+            },
+            "chooseGuide": {
+                "value": "एक मार्गदर्शिका चयन गर्नुहोस्"
+            },
+            "allGuides": {
+                "value": "सबै मार्गदर्शिकाहरू"
+            },
+            "checkingGuides": {
+                "value": "मार्गदर्शिकाहरू जाँच्दै"
+            },
+            "draftingGuides": {
+                "value": "मार्गदर्शिकाहरू मस्यौदा गर्दै"
+            },
+            "startDraftingTranslation": {
+                "value": "म अनुवाद मस्यौदा गर्न सुरू गर्न चाहन्छु।"
+            },
+            "checkTranslation": {
+                "value": "म मेरो अनुवाद जाँच्न चाहन्छु।"
+            },
+            "helpMeChoose": {
+                "value": "म निश्चित छैन, मलाई मार्गदर्शिका चयन गर्न मद्दत गर्नुहोस्।"
+            },
+            "showAllGuides": {
+                "value": "म एक मार्गदर्शिका चयन गर्न चाहन्छु।"
+            },
+            "guideExplanationHeader": {
+                "value": "मार्गदर्शिका व्याख्या"
+            },
+            "guideExplanationContent": {
+                "value": "<p>बाइबल वेलका मार्गदर्शिकाहरूले तपाईंलाई बाइबल राम्रोसँग बुझ्न मद्दत पुर्याउँछन्। यसले तपाईंलाई भगवान को हो र उनले के गरिरहेका छन् भन्ने बुझ्न मद्दत पुर्याउँछ। यसले तपाईंलाई बाइबलको अनुवाद राम्रोसँग गर्न मद्दत गर्दछ र तपाईंको बाइबल अनुवाद ठीकसँग गरिएको छ भन्ने सुनिश्चित गर्न मद्दत पुर्याउँछ।</p><p>यदि तपाईं बाइबल अध्ययन गर्न चाहनुहुन्छ वा बाइबलको अनुवाद गर्न सुरू गर्न चाहनुहुन्छ भने, तल \"मस्यौदा मार्गदर्शिकाहरू\" चयन गर्नुहोस्। यसले तपाईंलाई बाइबल बुझ्न र तपाईंको अनुवाद मस्यौदा गर्न सुरू गर्नका लागि प्रक्रिया देखाउँछ।</p><p>यदि तपाईं आफ्नो बाइबल अनुवाद जाँच्न चाहनुहुन्छ र सुनिश्चित गर्न चाहनुहुन्छ कि यसले राम्रोसँग काम गरेको छ भने, तल \"जाँच मार्गदर्शिकाहरू\" चयन गर्नुहोस्। यी मार्गदर्शिकाहरूले तपाईंलाई बाइबल बुझ्नमा मद्दत गर्दछ, विशेष गरी कठिन श्लोकहरूमा।</p>"
+            },
+            "noGuides": {
+                "value": "चयनित अंशको लागि कुनै मार्गदर्शिका उपलब्ध छैन"
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "कुनै बाइबल उपलब्ध छैन"
+            },
+            "selectBible": {
+                "value": "बाइबल चयन गर्नुहोस्"
+            },
+            "goToPassage": {
+                "value": "अंशमा जानुहोस्"
+            },
+            "bible": {
+                "value": "बाइबल"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "स्वीकृत गर्नुहोस्"
+                },
+                "cancel": {
+                    "value": "रद्ध गर्नुहोस्"
+                },
+                "header": {
+                    "value": "गैर-खुला सामग्री सम्झौता"
+                },
+                "description": {
+                    "value": "तपाईंले आयात गर्न चाहेको स्रोत, {resourceName}, {licenseType} अन्तर्गत प्रकाशित गरिएको छ। यो अनुप्रयोगले तपाईंलाई यस स्रोतलाई आयात गर्न र यसलाई अनुप्रयोगमा पहिले नै रहेका खुला लाइसेन्स सामग्रीसँग \"मिलाउन\" सक्षम बनाउँछ। अगाडि बढ्नको लागि, कृपया \"स्वीकृत गर्नुहोस्\" बटनमा क्लिक गरेर यस स्रोतको लाइसेन्स सर्तहरू तपाईंले बुझ्नुभएको स्वीकार गर्नुहोस्।"
+                }
+            }
+        },
+        "PredeterminedPassageSelectorMenu": {
+            "stepOneTitle": {
+                "value": "पुस्तक चयन गर्नुहोस्"
+            },
+            "stepTwoTitle": {
+                "value": "अंश चयन गर्नुहोस्"
+            },
+            "noBooks": {
+                "value": "कुनै पुस्तक उपलब्ध छैन"
+            },
+            "noPassages": {
+                "value": "कुनै अंश उपलब्ध छैन"
+            }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "सेटिङहरू"
+            },
+            "showOnlySrvResources": {
+                "value": "केवल SRV स्रोतहरू मात्र देखाउनुहोस्"
+            },
+            "communityEditionResources": {
+                "value": "समुदाय संस्करण स्रोतहरू"
+            },
+            "aiTranslatedResources": {
+                "value": "AI अनुवादित स्रोतहरू"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "जाँच विधिबाट स्रोतहरू देखाउनुहोस्"
+            },
+            "showResourcesByTitle": {
+                "value": "शीर्षक अनुसार स्रोतहरू देखाउनुहोस्"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "उपलब्ध पुस्तकहरू"
+            },
+            "book": {
+                "value": "पुस्तक"
+            },
+            "selectChapter": {
+                "value": "अध्याय चयन गर्नुहोस्"
+            },
+            "chapter": {
+                "value": "अध्याय"
+            },
+            "selectVerse": {
+                "value": "पहिलो र अन्तिम श्लोक चयन गर्नुहोस्"
+            },
+            "go": {
+                "value": "जानुहोस्"
+            }
+        },
+        "quickShare": {
+            "share": {
+                "value": "साझा गर्नुहोस्"
+            },
+            "inAWebBrowser": {
+                "value": "वेब ब्राउजरमा (जस्तै क्रोम), जानुहोस्"
+            },
+            "orScan": {
+                "value": "वा स्क्यान गर्नुहोस्"
+            },
+            "toInstallBibleWell": {
+                "value": "Bible Well स्थापना गर्न"
+            },
+            "stepOne": {
+                "value": "1. एक वेब ब्राउजर खोल्नुहोस् (जस्तै क्रोम)"
+            },
+            "stepTwo": {
+                "value": "2. जानुहोस्"
+            },
+            "stepThree": {
+                "value": "3. सेटिङ्समा जानुहोस्"
+            },
+            "stepFour": {
+                "value": "4. \"स्थापना गर्नुहोस्\" मा क्लिक गर्नुहोस् (नीचे हेर्नुहोस्)"
+            },
+            "close": {
+                "value": "बन्द गर्नुहोस्"
+            }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "प्रतिक्रिया"
+            },
+            "submit": {
+                "value": "पेश गर्नुहोस्"
+            },
+            "feedbackSending": {
+                "value": "प्रतिक्रिया पठाइँदै छ..."
+            },
+            "feedbackSuccessfullySent": {
+                "value": "प्रतिक्रिया सफलतापूर्वक पठाइयो।"
+            },
+            "feedbackQueuedOffline": {
+                "value": "तपाईं अनलाइन हुँदा प्रतिक्रिया पठाइनेछ।"
+            },
+            "feedbackError": {
+                "value": "प्रतिक्रिया पठाउँदा त्रुटि भयो। कृपया पुन"
+            },
+            "thankYou": {
+                "value": "धन्यवाद!"
+            },
+            "close": {
+                "value": "बन्द गर्नुहोस्"
+            },
+            "feedbackFailedToSend": {
+                "value": "प्रतिक्रिया पठाउन असफल भयो।"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "कृपया आफ्नो इन्टरनेट जडान जाँच गर्नुहोस् र पुन"
+            },
+            "retry": {
+                "value": "पुनः प्रयास गर्नुहोस्"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "नाम"
+                },
+                "email": {
+                    "value": "इमेल"
+                },
+                "phone": {
+                    "value": "फोन"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "तपाईं Bible Well कति पटक प्रयोग गर्नुहुन्छ?"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "Bible Well बारे तपाईंलाई सबैभन्दा के मन पर्छ?"
+                },
+                "WhatCanBeImproved": {
+                    "value": "के सुधार गर्न सकिन्छ?"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "तपाईं Bible Well कसरी प्रयोग गर्दै हुनुहुन्छ?"
+                },
+                "bibleTranslation": {
+                    "value": "बाइबल अनुवाद"
+                },
+                "sermonPreparation": {
+                    "value": "उपदेश तयारी"
+                },
+                "bibleStudy": {
+                    "value": "बाइबल अध्ययन"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "अध्ययन (बाइबल स्कूल, सेमिनरी)"
+                },
+                "Evangelism": {
+                    "value": "सुसमाचार प्रचार"
+                },
+                "isRequired": {
+                    "value": "आवश्यक छ"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "मनपर्ने वा सुधारको प्रतिक्रिया आवश्यक छ"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "कृपया आवश्यक फिल्डहरू भर्नुहोस्"
+                }
+            },
+            "infoPromptForm": {
+                "share": {
+                    "value": "आफ्नो जानकारी साझा गर्नुहोस्"
+                },
+                "shareSubtitle": {
+                    "value": "Bible Well लाई सुधार गर्न र प्रयोग गर्न सजिलो बनाउन मद्दत गर्नुहोस्! तपाईंको प्रतिक्रिया महत्त्वपूर्ण छ!"
+                },
+                "contactInformation": {
+                    "value": "सम्पर्क जानकारी"
+                },
+                "contactType": {
+                    "value": "सम्पर्क प्रकार"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "यस सामग्रीलाई दर दिनुहोस्"
+                },
+                "additionalFeedback": {
+                    "value": "थप प्रतिक्रिया (वैकल्पिक)"
+                },
+                "contactInformation": {
+                    "value": "सम्पर्क जानकारी (वैकल्पिक)"
+                },
+                "contactType": {
+                    "value": "सम्पर्क प्रकार"
+                }
+            },
+            "contactType": {
+                "email": {
+                    "value": "इमेल"
+                },
+                "phone": {
+                    "value": "फोन"
+                },
+                "whatsapp": {
+                    "value": "व्हाट्सएप"
+                },
+                "signal": {
+                    "value": "सिग्नल"
+                },
+                "other": {
+                    "value": "अन्य"
+                }
+            }
+        }
+    },
+    "navTop": {
+        "selectPassage": {
+            "value": "पाठ चयन गर्नुहोस्"
+        },
+        "selectGuide": {
+            "value": "गाइड चयन गर्नुहोस्"
+        }
+    },
+    "resources": {
+        "fia": {
+            "step1": {
+                "value": "सुन्न र मन"
+            },
+            "step2": {
+                "value": "चरण सेट गर्नुहोस्"
+            },
+            "step3": {
+                "value": "दृश्यहरूको परिभाषा"
+            },
+            "step4": {
+                "value": "पाठलाई अवतार गर्नुहोस्"
+            },
+            "step5": {
+                "value": "अन्तराल भर्नुहोस्"
+            },
+            "step6": {
+                "value": "शब्द बोल्नुहोस्"
+            }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "अनुच्छेद"
+            },
+            "sectionButton": {
+                "value": "खण्ड"
+            },
+            "suggestionsButton": {
+                "value": "अर्थहरू"
+            },
+            "suggestionsDescription": {
+                "value": "यीलाई मूल पाठको अर्थ बुझ्नको लागि उपकरणको रूपमा प्रयोग गर्नुहोस्, त्यसपछि यसलाई तपाईंको भाषामा स्वाभाविक रूपमा व्यक्त गर्नुहोस्।"
+            }
+        }
+    },
+    "errorMessage": {
+        "error": {
+            "value": "त्रुटि"
+        },
+        "title": {
+            "value": "सामग्री लोड गर्न असमर्थ"
+        },
+        "message": {
+            "value": "यदि समस्या निरन्तर छ भने, कृपया आफ्नो इन्टरनेट जडान जाँच गर्नुहोस्।"
+        },
+        "home": {
+            "value": "गृहपृष्ठ"
+        },
+        "browserUnsupported": {
+            "value": "तपाईंको ब्राउजर समर्थित छैन। कृपया अर्को ब्राउजर प्रयोग गर्नुहोस्। यदि तपाईं निजी/incognito मोडमा हुनुहुन्छ भने, कृपया नियमित मोड प्रयास गर्नुहोस्।"
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "खोजी"
+            },
+            "clear": {
+                "value": "मेटाउनुहोस्"
+            },
+            "passage": {
+                "value": "अंश"
+            },
+            "resource": {
+                "value": "स्रोत"
+            },
+            "resources": {
+                "value": "स्रोतहरू"
+            },
+            "loadMore": {
+                "value": "थप लोड गर्नुहोस्"
+            }
+        },
+        "communityEditionModal": {
+            "header": {
+                "value": "समुदाय संस्करण सामग्री"
+            },
+            "description": {
+                "value": "<p>यस सामग्रीलाई पूर्ण रूपमा शुद्धता जाँच गरिएको छैन। एक समुदाय सदस्यले यसलाई अनुवादित गरेका छन्, तर यसले अन्य सामग्रीजस्तै समीक्षा प्रक्रिया पार गरेको छैन। कृपया यसलाई सावधानीपूर्वक प्रयोग गर्नुहोस्।</p><p>कृपया कुनै पनि अनुवाद त्रुटिहरू वा सुझावहरू रिपोर्ट गर्न विन्डोको माथिल्लो दाहिने कुनामा रहेको प्रतिक्रिया आइकन प्रयोग गर्नुहोस्।</p><p>यदि तपाईं समुदाय संस्करण योगदानकर्ता बन्न चाहनुहुन्छ भने, मेनु > प्रतिक्रिया मा जानुहोस् र हामीलाई जानकारी दिनुहोस्।</p>"
+            }
+        },
+        "aiEditionModal": {
+            "header": {
+                "value": "एआई अनुवादित सामग्री"
+            },
+            "description": {
+                "value": "<p>यस सामग्रीलाई एआईले अनुवाद गरेको हो र यसलाई शुद्धताको लागि व्यक्तिले जाँच गरेको छैन। कृपया यसलाई सावधानीपूर्वक प्रयोग गर्नुहोस्।</p><p>कृपया कुनै पनि अनुवाद त्रुटिहरू वा सुझावहरू रिपोर्ट गर्न विन्डोको माथिल्लो दाहिने कुनामा रहेको प्रतिक्रिया आइकन प्रयोग गर्नुहोस्।</p><p>यदि तपाईं यस सामग्रीलाई समीक्षा गर्न इच्छुक हुनुहुन्छ भने, समुदाय संस्करण योगदानकर्ता बन्नका लागि गृहपृष्ठ > प्रतिक्रिया मा जानुहोस्।</p>"
+            }
+        }
+    }
+}
