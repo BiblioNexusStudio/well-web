@@ -48,6 +48,7 @@ const languageCodesToNames = {
     por: 'Brazilian Portuguese',
     ind: 'Indonesian',
     zhs: 'Simplified Chinese',
+    nep: 'Nepali',
     all: 'All Languages',
 };
 
