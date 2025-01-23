@@ -1,0 +1,822 @@
+{
+    "page": {
+        "index": {
+            "downloadResourcesForOfflineUse": {
+                "value": "離線嗎？下載以獲取更多離線內容",
+                "_context": "Button text telling the user to download resources for offline use"
+            },
+            "about": {
+                "value": "關於",
+                "_context": "Link to the about page"
+            },
+            "downloadManager": {
+                "value": "下載管理員",
+                "_context": "The label for the download manager button"
+            },
+            "getStarted": {
+                "value": "開始使用",
+                "_context": "Button to get started with the application"
+            }
+        },
+        "about": {
+            "error": {
+                "value": "載入內容許可證信息時出錯",
+                "_context": "Message to show when there's an error loading the page for some reason"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "以{name}發佈",
+                    "_context": "Description explaining the content is released under a single license"
+                },
+                "releasedUnderMultiple": {
+                    "value": "根據多種{names}發佈",
+                    "_context": "Description explaining the content is released under multiple licenses"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title}已被翻譯為以下的語言<br /> {languages}<br /> 來自{title} {copyright} {date} {publisher}<br /> 根據{bnLicense}許可由Biblionexus發布",
+                    "_context": "Description for license adapted in languages"
+                }
+            }
+        },
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "聖經",
+                    "_context": "Label for Bible button on navbar"
+                },
+                "guide": {
+                    "value": "指南",
+                    "_context": "Label for Guide button on navbar"
+                },
+                "library": {
+                    "value": "圖書資料庫",
+                    "_context": "Label for Library button on navbar"
+                },
+                "menu": {
+                    "value": "選單",
+                    "_context": "Label for Menu button on navbar"
+                },
+                "resources": {
+                    "value": "資源",
+                    "_context": "Label for Resources button on navbar"
+                }
+            },
+            "resourcePane": {
+                "cancel": {
+                    "value": "取消",
+                    "_context": "Button to cancel search"
+                },
+                "libraryTitle": {
+                    "value": "圖書資料庫",
+                    "_context": "Title for the Library Menu"
+                },
+                "librarySubtitle": {
+                    "value": "尋找您所需要的資源",
+                    "_context": "Subtitle for the Library Menu"
+                },
+                "typeToSearch": {
+                    "value": "在圖書資料庫裡面搜尋",
+                    "_context": "Label for searching the library"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} / {total}",
+                        "_context": "Displays the current position out of the total fullscreen elements"
+                    }
+                },
+                "seeAll": {
+                    "value": "查看所有 ({count})",
+                    "_context": "Button for the user to see all resources of a given resource type"
+                },
+                "noThumbnail": {
+                    "value": "無縮圖",
+                    "_context": "Label for videos that have no thumbnail"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "無匹配資源",
+                        "_context": "Header to show when no resources are found with the search string"
+                    },
+                    "description": {
+                        "value": "您的搜尋 \"{searchQuery}\" 沒有任何匹配資源。",
+                        "_context": "Description to show no resources are found with the search string"
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 個資源",
+                        "_context": "Label for when there is one resource"
+                    },
+                    "plural": {
+                        "value": "{count} 個資源",
+                        "_context": "Label for when there is more than one resource"
+                    }
+                },
+                "error": {
+                    "value": "加載資源時出錯",
+                    "_context": "Message for when a resource fails to load"
+                }
+            },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "請點選一個單字以查看原始語言來源。",
+                    "_context": "Instructions for when user hasn't selected word yet in alignment mode"
+                },
+                "noWordInfoAvailable": {
+                    "value": "此選擇無原始語言信息。",
+                    "_context": "Message for when we're missing alignment data for the selected word."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "此選擇無詞彙或定義信息。",
+                    "_context": "Message for when we're missing alignment data for the selected word."
+                },
+                "gloss": {
+                    "value": "詞彙",
+                    "_context": "Gloss label for Greek/Hebrew alignment"
+                },
+                "definition": {
+                    "value": "定義",
+                    "_context": "Definition label for Greek/Hebrew alignment"
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "無可用資源",
+                    "_context": "Header for when a Bible is not available in the current language"
+                },
+                "description": {
+                    "value": "此設備上沒有適用於{language}的聖經。<br />是否使用其他語言的聖經？",
+                    "_context": "Description for when a Bible is not available in the current language"
+                },
+                "noneAvailableDescription": {
+                    "value": "此設備上沒有適用於{language}或任何其他語言的聖經。<br />請在有網路連線時下載此內容。",
+                    "_context": "Description for when a Bible is not available in the current language or any other language"
+                },
+                "show": {
+                    "value": "選擇聖經",
+                    "_context": "Button to pop up modal that allows selecting a Bible."
+                },
+                "checkForMoreResources": {
+                    "value": "檢查更多資源......",
+                    "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
+                },
+                "missingFromBible": {
+                    "value": "此聖經沒有您選定的段落。",
+                    "_context": "Message for when the Bible does not have the passage for whatever reason."
+                }
+            },
+            "noGuideContent": {
+                "value": "未找到此段落的內容。",
+                "_context": "Message to display when the content is not downloaded or available"
+            },
+            "guide": {
+                "next": {
+                    "value": "下一步",
+                    "_context": "Go to next item in guide."
+                },
+                "usedInVerses": {
+                    "value": "用於以下經文",
+                    "_context": "Prefixed to content in Translation Words Guides for displaying references of the word in the selected passage"
+                }
+            }
+        },
+        "fileManager": {
+            "downloadManager": {
+                "value": "下載管理員",
+                "_context": "Title displayed on the download manager page"
+            },
+            "download": {
+                "value": "下載",
+                "_context": "Table column heading for the column with checkboxes allowing the user to select content to download"
+            },
+            "textType": {
+                "value": "文本",
+                "_context": "The media type for text, available to be downloaded"
+            },
+            "audioType": {
+                "value": "語音檔",
+                "_context": "The media type for audio, available to be downloaded"
+            },
+            "mediaType": {
+                "value": "媒體",
+                "_context": "The media type for media, available to be downloaded"
+            },
+            "ok": {
+                "value": "確認",
+                "_context": "Button to download/delete content based on what the user selected"
+            },
+            "cancel": {
+                "value": "取消",
+                "_context": "Button to cancel current action"
+            },
+            "noInternet": {
+                "value": "無網路",
+                "_context": "Message to display when the user has no internet connection"
+            },
+            "selectABook": {
+                "value": "選擇一本書",
+                "_context": "Label for a dropdown allowing the user to select a book to view"
+            },
+            "delete": {
+                "value": "刪除",
+                "_context": "Button to delete content"
+            },
+            "modal": {
+                "title": {
+                    "value": "確認下載",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
+                },
+                "description": {
+                    "value": "Bible Well 將下載{downloadSize}的內容到您的設備。",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
+                },
+                "downloadProgress": {
+                    "value": "下載進度",
+                    "_context": "Title of the modal showing the user how the download is progressing"
+                },
+                "success": {
+                    "value": "下載成功",
+                    "_context": "Title of the modal showing the download was successful"
+                },
+                "close": {
+                    "value": "關閉",
+                    "_context": "Button to close the modal"
+                },
+                "downloadingDescription": {
+                    "value": "正在下載 {totalSizeDownloaded} / {totalSizeToDownload}。",
+                    "_context": "Shows on the modal showing the user how the download is progressing"
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "警告！",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
+                },
+                "description": {
+                    "value": "您確定要永久刪除這些文件嗎？",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "這是您可以從設備下載和刪除 Aquifer 內容的地方。",
+                    "_context": "Meta tag description"
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "名稱",
+                    "_context": "Label for the name column"
+                },
+                "text": {
+                    "value": "文本",
+                    "_context": "Label for the text column"
+                },
+                "audio": {
+                    "value": "語音檔",
+                    "_context": "Label for the audio column"
+                },
+                "media": {
+                    "value": "媒體",
+                    "_context": "Label for the media column"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "資源",
+                    "_context": "Label for the resources row"
+                }
+            }
+        },
+        "menu": {
+            "home": {
+                "value": "主頁",
+                "_context": "Label for the home button"
+            },
+            "menu": {
+                "value": "選單",
+                "_context": "Label for the menu button"
+            },
+            "downloadManager": {
+                "value": "下載管理員",
+                "_context": "Label for the download manager button"
+            },
+            "language": {
+                "value": "語言",
+                "_context": "Label for the language button"
+            },
+            "shortcuts": {
+                "value": "快捷鍵",
+                "_context": "Label for the shortcuts button"
+            },
+            "changeLanguage": {
+                "value": "更改語言",
+                "_context": "Label for the change language button"
+            }
+        },
+        "selectLanguage": {
+            "welcome": {
+                "value": "歡迎",
+                "_context": "Title for the select language page"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "選擇您偏好的語言",
+                "_context": "Placeholder text for the sub title"
+            },
+            "next": {
+                "value": "下一步",
+                "_context": "Label for next button"
+            }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "翻譯指南",
+                "_context": "Title for the Translation Guides section"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "您想做什麼？",
+                "_context": "Header for the guide selection options"
+            },
+            "chooseGuide": {
+                "value": "選擇一個指南",
+                "_context": "Placeholder text for the dropdown"
+            },
+            "allGuides": {
+                "value": "所有指南",
+                "_context": "Header for the menu showing all guides"
+            },
+            "checkingGuides": {
+                "value": "查對指南",
+                "_context": "Header for the menu showing checking guides"
+            },
+            "draftingGuides": {
+                "value": "草擬指南",
+                "_context": "Header for the menu showing drafting guides"
+            },
+            "startDraftingTranslation": {
+                "value": "我想起草翻譯。",
+                "_context": "Button to show drafting guides"
+            },
+            "checkTranslation": {
+                "value": "我想檢查我的翻譯。",
+                "_context": "Button to show checking guides"
+            },
+            "helpMeChoose": {
+                "value": "我不確定，請幫助我選擇。",
+                "_context": "Button to get help choosing a guide"
+            },
+            "showAllGuides": {
+                "value": "我想選擇一個指南。",
+                "_context": "Button to show all guides"
+            },
+            "guideExplanationHeader": {
+                "value": "指南說明",
+                "_context": "Header for the guide explanation section"
+            },
+            "guideExplanationContent": {
+                "value": "<p>Bible Well 中的指南旨在幫助您更好地理解聖經。這有助於您增進理解神是誰以及祂的作為。同時也幫助您更好地翻譯聖經，並確保您的聖經翻譯品質良好。</p><p>如果您想學習聖經或開始翻譯聖經，請選擇下面的 \"草擬指南 \"。這將引導您理解聖經並開始草擬翻譯。</p><p>如果您想檢查您的聖經翻譯以確保其質量良好，請選擇 \"查對指南 \"。有多種選項可幫助您理解聖經，特別是一些難懂的段落。</p>",
+                "_context": "Explanation of each type of guide so users know what to choose."
+            },
+            "noGuides": {
+                "value": "所選段落無可用指南",
+                "_context": "Message for when no guides are available for the passage"
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "無可用聖經",
+                "_context": "Message to display when no Bibles are available"
+            },
+            "selectBible": {
+                "value": "選擇一本聖經",
+                "_context": "Placeholder text for the dropdown"
+            },
+            "goToPassage": {
+                "value": "前往段落",
+                "_context": "Label for the button to go to the passage"
+            },
+            "bible": {
+                "value": "聖經",
+                "_context": "Label for the dropdown"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "接受",
+                    "_context": "Button to accept license"
+                },
+                "cancel": {
+                    "value": "取消",
+                    "_context": "Button to cancel license accept modal"
+                },
+                "header": {
+                    "value": "非開放內容協議",
+                    "_context": "Header for license accept modal"
+                },
+                "description": {
+                    "value": "您想要導入的資源 {resourceName} 是根據 {licenseType} 發佈的。此應用程式允許您將此資源與應用程式中已開放授權的內容進行導入與\"混合\"。若要繼續，請點擊\"接受\"按鈕確認您了解此資源的許可條款。",
+                    "_context": "Description for license accept modal"
+                }
+            }
+        },
+        "PredeterminedPassageSelectorMenu": {
+            "stepOneTitle": {
+                "value": "選擇一本書",
+                "_context": "Title for the first step in the book and passage selector"
+            },
+            "stepTwoTitle": {
+                "value": "選擇一個段落",
+                "_context": "Title for the second step in the book and passage selector"
+            },
+            "noBooks": {
+                "value": "無可用書籍",
+                "_context": "Message to display when no Books are available"
+            },
+            "noPassages": {
+                "value": "無可用段落",
+                "_context": "Message to display when no Passages are available"
+            }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "設置",
+                "_context": "Title for the settings section"
+            },
+            "showOnlySrvResources": {
+                "value": "僅顯示 SRV 資源",
+                "_context": "Label for the toggle to show only SRV resources"
+            },
+            "communityEditionResources": {
+                "value": "社群版資源",
+                "_context": "Label for the toggle to show Community Edition resources"
+            },
+            "aiTranslatedResources": {
+                "value": "AI 翻譯資源",
+                "_context": "Label for the toggle to show AI Translated resources"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "依查對方法顯示資源",
+                "_context": "Label for the toggle to show resources by checking method"
+            },
+            "showResourcesByTitle": {
+                "value": "依標題顯示資源",
+                "_context": "Label for the toggle to show resources by title"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "可用書籍",
+                "_context": "Label for the available books section"
+            },
+            "book": {
+                "value": "書籍",
+                "_context": "Label for the book dropdown"
+            },
+            "selectChapter": {
+                "value": "選擇章節",
+                "_context": "Label for the chapter dropdown"
+            },
+            "chapter": {
+                "value": "章節",
+                "_context": "Label for the chapter dropdown"
+            },
+            "selectVerse": {
+                "value": "選擇第一節和最後一節",
+                "_context": "Label for the verse dropdown"
+            },
+            "go": {
+                "value": "開始",
+                "_context": "Label for the go button"
+            }
+        },
+        "quickShare": {
+            "share": {
+                "value": "分享",
+                "_context": "over all title"
+            },
+            "inAWebBrowser": {
+                "value": "在網頁瀏覽器（如 Chrome）中，導覽至：",
+                "_context": "this tells the user to go to a web browser and navigate to a specific URL"
+            },
+            "orScan": {
+                "value": "或掃描：",
+                "_context": "this tells the user to scan a QR code instead of going to a URL"
+            },
+            "toInstallBibleWell": {
+                "value": "安裝 Bible Well：",
+                "_context": "this is the title of the installation instructions"
+            },
+            "stepOne": {
+                "value": "1. 開啟網頁瀏覽器 (如 Chrome)",
+                "_context": "this is the first step in the installation instructions"
+            },
+            "stepTwo": {
+                "value": "2. 導覽到",
+                "_context": "this is the second step in the installation instructions"
+            },
+            "stepThree": {
+                "value": "3. 移至設定",
+                "_context": "this is the third step in the installation instructions"
+            },
+            "stepFour": {
+                "value": "4. 點擊 \"安裝\"（如下）",
+                "_context": "this is the fourth step in the installation instructions"
+            },
+            "close": {
+                "value": "關閉",
+                "_context": "this is the button to close the quick share view"
+            }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "意見回饋",
+                "_context": "Title for the feedback section"
+            },
+            "submit": {
+                "value": "提交",
+                "_context": "Label for the submit button"
+            },
+            "feedbackSending": {
+                "value": "發送意見回饋...",
+                "_context": "Message to display when feedback is being sent"
+            },
+            "feedbackSuccessfullySent": {
+                "value": "意見回饋已成功發送。",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "feedbackQueuedOffline": {
+                "value": "意見回饋將在您重新上線時發送。",
+                "_context": "Message to display when user is offline but feedback will be sent later."
+            },
+            "feedbackError": {
+                "value": "傳送意見回饋時發生錯誤。請重試。",
+                "_context": "Message to display when the feedback failed to send."
+            },
+            "thankYou": {
+                "value": "謝謝！",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "close": {
+                "value": "關閉",
+                "_context": "Button to close the feedback form"
+            },
+            "feedbackFailedToSend": {
+                "value": "意見回饋發送失敗。",
+                "_context": "Message to display when feedback fails to send"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "請檢查您的網路連線，然後重試。",
+                "_context": "Message to display when feedback fails to send"
+            },
+            "retry": {
+                "value": "重試",
+                "_context": "Button to retry sending feedback"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "姓名",
+                    "_context": "Label for the name input field"
+                },
+                "email": {
+                    "value": "電子郵件",
+                    "_context": "Label for the email input field"
+                },
+                "phone": {
+                    "value": "電話",
+                    "_context": "Label for the phone input field"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "您多久使用一次 Bible Well？",
+                    "_context": "Label for the how often input field"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "您最喜歡Bible Well的是？",
+                    "_context": "Label for the what do you like most input field"
+                },
+                "WhatCanBeImproved": {
+                    "value": "有哪些地方可以改進？",
+                    "_context": "Label for the what can be improved input field"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "您是如何使用 Bible Well 的？",
+                    "_context": "Label for the how are you using the Bible Well input field"
+                },
+                "bibleTranslation": {
+                    "value": "聖經翻譯",
+                    "_context": "Label for the Bible Translation input field"
+                },
+                "sermonPreparation": {
+                    "value": "講章預備",
+                    "_context": "Label for the Sermon Preparation input field"
+                },
+                "bibleStudy": {
+                    "value": "研讀聖經",
+                    "_context": "Label for the Bible Study input field"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "學術研究（聖經學院、神學院）",
+                    "_context": "Label for the Studies (Bible School, Seminary) input field"
+                },
+                "Evangelism": {
+                    "value": "傳福音",
+                    "_context": "Label for the Evangelism input field"
+                },
+                "isRequired": {
+                    "value": "必填",
+                    "_context": "Message to display when a field is required"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "必填--請填寫你覺得喜歡或需改進之處兩欄的意見回饋",
+                    "_context": "Message to display when the likes or improvements feedback is required"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "請填寫必填欄位",
+                    "_context": "Message to display when the required fields are not filled in"
+                }
+            },
+            "infoPromptForm": {
+                "share": {
+                    "value": "分享您的聯絡資訊",
+                    "_context": "Title for contact form popup"
+                },
+                "shareSubtitle": {
+                    "value": "幫助我們改善 Bible Well，使它更容易使用！您寶貴意見將會使我們變得更好！",
+                    "_context": "Subtitle for the contact form popup"
+                },
+                "contactInformation": {
+                    "value": "聯絡資訊",
+                    "_context": "Label for contact information dropdown"
+                },
+                "contactType": {
+                    "value": "聯絡類型",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "評分此內容",
+                    "_context": "Label for the star rating field"
+                },
+                "additionalFeedback": {
+                    "value": "其他回應 (非必填)",
+                    "_context": "Label for additional feedback"
+                },
+                "contactInformation": {
+                    "value": "聯絡資訊（非必填）",
+                    "_context": "Label for contact information section"
+                },
+                "contactType": {
+                    "value": "聯絡類型",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
+            "contactType": {
+                "email": {
+                    "value": "電子郵件",
+                    "_context": "Email contact method"
+                },
+                "phone": {
+                    "value": "電話",
+                    "_context": "Phone contact method"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp",
+                    "_context": "WhatsApp contact method"
+                },
+                "signal": {
+                    "value": "Signal",
+                    "_context": "Signal contact method"
+                },
+                "other": {
+                    "value": "其他",
+                    "_context": "Other contact method"
+                }
+            }
+        }
+    },
+    "navTop": {
+        "selectPassage": {
+            "value": "選擇章節",
+            "_context": "Button to select a passage"
+        },
+        "selectGuide": {
+            "value": "選擇指南",
+            "_context": "Button to select a guide"
+        }
+    },
+    "resources": {
+        "fia": {
+            "step1": {
+                "value": "聽話與心話",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step2": {
+                "value": "設定經文舞台背景",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step3": {
+                "value": "界定場景",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step4": {
+                "value": "體現經文內容",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step5": {
+                "value": "填補差距",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step6": {
+                "value": "說道",
+                "_context": "See FIA for translations of each step name"
+            }
+        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "段落",
+                "_context": "Button to see OTN paragraph info"
+            },
+            "sectionButton": {
+                "value": "選段",
+                "_context": "Button to see OTN section info"
+            },
+            "suggestionsButton": {
+                "value": "意義",
+                "_context": "Button to see OTN text translation suggestions info"
+            },
+            "suggestionsDescription": {
+                "value": "使用這些工具來理解原文的意思，然後用您的語言自然地表達出來。",
+                "_context": "Description explaining OTN text translation suggestions"
+            }
+        }
+    },
+    "errorMessage": {
+        "error": {
+            "value": "錯誤",
+            "_context": "The label for the error message"
+        },
+        "title": {
+            "value": "無法載入內容",
+            "_context": "The title for the error message"
+        },
+        "message": {
+            "value": "如果問題仍然存在，請檢查您的網路連線。",
+            "_context": "The message for the error message"
+        },
+        "home": {
+            "value": "首頁",
+            "_context": "The label for the home button"
+        },
+        "browserUnsupported": {
+            "value": "不支援您的瀏覽器。請使用其他瀏覽器。如果您使用的是無痕瀏覽模式（incognito mode），請嘗試轉換回正常模式。",
+            "_context": "Message for when the browser is missing features"
+        }
+    },
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "搜尋",
+                "_context": "Placeholder text for the search component"
+            },
+            "clear": {
+                "value": "清除",
+                "_context": "Button in the search component for clearing entered text"
+            },
+            "passage": {
+                "value": "段落",
+                "_context": "Label for the passage search button"
+            },
+            "resource": {
+                "value": "資源",
+                "_context": "Label for the resource search button"
+            },
+            "resources": {
+                "value": "資源",
+                "_context": "Title for the resource menu"
+            },
+            "loadMore": {
+                "value": "載入更多",
+                "_context": "Button to load more resources"
+            }
+        },
+        "communityEditionModal": {
+            "header": {
+                "value": "社群版內容",
+                "_context": "Header for the community edition content modal"
+            },
+            "description": {
+                "value": "<p> 此內容尚未經過完整的檢查與校對。其內容由一位社群成員翻譯，但尚未經過與其他資源相同的審核與校對程序。</p><p>請使用視窗右上角的意見回饋圖示來回報任何翻譯上的錯誤或建議。</p><p>如果您有興趣成為這個社群版本的貢獻者，請前往「選單」 > 「意見回饋」來知會我們。",
+                "_context": "Description for the community edition content modal"
+            }
+        },
+        "aiEditionModal": {
+            "header": {
+                "value": "AI 翻譯內容",
+                "_context": "Header for the community edition content modal"
+            },
+            "description": {
+                "value": "<p>本內容為 AI 翻譯，未經專人查對其準確性。</p><p>請使用視窗右上角的意見回饋圖示來回報任何翻譯錯誤或建議。</p><p>如果您有興趣校對此內容，請前往「首頁」 > 「意見回饋」，成為這個社群版貢獻者。</p>",
+                "_context": "Description for the community edition content modal"
+            }
+        }
+    }
+}

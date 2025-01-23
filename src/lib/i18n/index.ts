@@ -12,6 +12,7 @@ register('spa', () => import('./locales/spa.json'));
 register('swh', () => import('./locales/swh.json'));
 register('tpi', () => import('./locales/tpi.json'));
 register('zhs', () => import('./locales/zhs.json'));
+register('zht', () => import('./locales/zht.json'));
 
 export async function init(currentLanguageCode: string | undefined) {
     locale.set(currentLanguageCode);
