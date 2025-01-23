@@ -98,7 +98,7 @@
                         "_context": "Header to show when no resources are found with the search string"
                     },
                     "description": {
-                        "value": "您的搜尋 \"{searchQuery}\" 沒有任何匹配資源。",
+                        "value": "您的搜尋 「{searchQuery}」 沒有任何匹配資源。",
                         "_context": "Description to show no resources are found with the search string"
                     }
                 },
@@ -374,7 +374,7 @@
                 "_context": "Header for the guide explanation section"
             },
             "guideExplanationContent": {
-                "value": "<p>Bible Well 中的指南旨在幫助您更好地理解聖經。這有助於您增進理解神是誰以及祂的作為。同時也幫助您更好地翻譯聖經，並確保您的聖經翻譯品質良好。</p><p>如果您想學習聖經或開始翻譯聖經，請選擇下面的 \"草擬指南 \"。這將引導您理解聖經並開始草擬翻譯。</p><p>如果您想檢查您的聖經翻譯以確保其質量良好，請選擇 \"查對指南 \"。有多種選項可幫助您理解聖經，特別是一些難懂的段落。</p>",
+                "value": "<p>Bible Well 中的指南旨在幫助您更好地理解聖經。這有助於您增進理解神是誰以及祂的作為。同時也幫助您更好地翻譯聖經，並確保您的聖經翻譯品質良好。</p><p>如果您想學習聖經或開始翻譯聖經，請選擇下面的 「草擬指南 」。這將引導您理解聖經並開始草擬翻譯。</p><p>如果您想檢查您的聖經翻譯以確保其質量良好，請選擇 「查對指南 」。有多種選項可幫助您理解聖經，特別是一些難懂的段落。</p>",
                 "_context": "Explanation of each type of guide so users know what to choose."
             },
             "noGuides": {
@@ -413,7 +413,7 @@
                     "_context": "Header for license accept modal"
                 },
                 "description": {
-                    "value": "您想要導入的資源 {resourceName} 是根據 {licenseType} 發佈的。此應用程式允許您將此資源與應用程式中已開放授權的內容進行導入與\"混合\"。若要繼續，請點擊\"接受\"按鈕確認您了解此資源的許可條款。",
+                    "value": "您想要導入的資源 {resourceName} 是根據 {licenseType} 發佈的。此應用程式允許您將此資源與應用程式中已開放授權的內容進行導入與「混合」。若要繼續，請點擊「接受」按鈕確認您了解此資源的許可條款。",
                     "_context": "Description for license accept modal"
                 }
             }
@@ -518,7 +518,7 @@
                 "_context": "this is the third step in the installation instructions"
             },
             "stepFour": {
-                "value": "4. 點擊 \"安裝\"（如下）",
+                "value": "4. 點擊 「安裝」（如下）",
                 "_context": "this is the fourth step in the installation instructions"
             },
             "close": {
