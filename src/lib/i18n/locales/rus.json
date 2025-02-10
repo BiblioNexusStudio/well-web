@@ -2,636 +2,820 @@
     "page": {
         "index": {
             "downloadResourcesForOfflineUse": {
-                "value": "Выход в офлайн режим? Получить больше контента"
+                "value": "Выходите в оффлайн? Получите больше полезного контента",
+                "_context": "Button text telling the user to download resources for offline use"
             },
             "about": {
-                "value": "О нас/программе/приложении"
+                "value": "О приложении",
+                "_context": "Link to the about page"
             },
             "downloadManager": {
-                "value": "Менеджер загрузок"
+                "value": "Менеджер загрузок",
+                "_context": "The label for the download manager button"
             },
             "getStarted": {
-                "value": "Начать"
+                "value": "Начать",
+                "_context": "Button to get started with the application"
             }
         },
         "about": {
             "error": {
-                "value": "Ошибка загрузки информации о лицензии"
+                "value": "Ошибка при загрузке информации о лицензии",
+                "_context": "Message to show when there's an error loading the page for some reason"
             },
             "license": {
                 "releasedUnderSingle": {
-                    "value": "Выпущено под {name}"
+                    "value": "Выпущено по {name}",
+                    "_context": "Description explaining the content is released under a single license"
                 },
                 "releasedUnderMultiple": {
-                    "value": "Выпущено под: {names}"
+                    "value": "Выпущено по {name}",
+                    "_context": "Description explaining the content is released under multiple licenses"
                 },
                 "adaptedInLanguages": {
-                    "value": "{title} был адаптирован на следующие языки<br /> {languages}<br /> из {title} {copyright} {date} {publisher}<br /> Выпущен под лицензией {bnLicense} компанией Biblionexus"
+                    "value": "{title} был адаптирован на следующие языки<br /> {languages}<br /> от {title} {copyright} {date} {publisher}<br /> Выпущено по лицензии {bnLicense} компанией Biblionexus",
+                    "_context": "Description for license adapted in languages"
                 }
             }
         },
         "passage": {
             "nav": {
                 "bible": {
-                    "value": "Библия"
+                    "value": "Библия",
+                    "_context": "Label for Bible button on navbar"
                 },
                 "guide": {
-                    "value": "Руководство"
+                    "value": "Руководство",
+                    "_context": "Label for Guide button on navbar"
                 },
                 "library": {
-                    "value": "Библиотека"
+                    "value": "Библиотека",
+                    "_context": "Label for Library button on navbar"
                 },
                 "menu": {
-                    "value": "Меню"
+                    "value": "Меню",
+                    "_context": "Label for Menu button on navbar"
                 },
                 "resources": {
-                    "value": "Ресурсы"
+                    "value": "Ресурсы",
+                    "_context": "Label for Resources button on navbar"
                 }
             },
             "resourcePane": {
                 "cancel": {
-                    "value": "Отмена"
+                    "value": "Отменить",
+                    "_context": "Button to cancel search"
                 },
                 "libraryTitle": {
-                    "value": "Библиотека"
+                    "value": "Библиотека",
+                    "_context": "Title for the Library Menu"
                 },
                 "librarySubtitle": {
-                    "value": "Найдите необходимые ресурсы"
+                    "value": "Найти необходимые ресурсы",
+                    "_context": "Subtitle for the Library Menu"
                 },
                 "typeToSearch": {
-                    "value": "Введите термин для поиска в библиотеке"
+                    "value": "Введите термин для поиска в библиотеке",
+                    "_context": "Label for searching the library"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {
-                        "value": "{current} от {total}"
+                        "value": "{current} из {total}",
+                        "_context": "Displays the current position out of the total fullscreen elements"
                     }
                 },
                 "seeAll": {
-                    "value": "Показать все  ({count})"
+                    "value": "Все ресурсы ({count})",
+                    "_context": "Button for the user to see all resources of a given resource type"
                 },
                 "noThumbnail": {
-                    "value": "Нет уменьшенного изображения"
+                    "value": "Нет превью",
+                    "_context": "Label for videos that have no thumbnail"
                 },
                 "noResourcesFound": {
                     "header": {
-                        "value": "Ресурсы не найдены"
+                        "value": "Ресурсы не найдены",
+                        "_context": "Header to show when no resources are found with the search string"
                     },
                     "description": {
-                        "value": "По вашему запросу \"{searchQuery}\" не было найдено ни одного ресурса."
+                        "value": "По вашему запросу \"{searchQuery}\" ничего не найдено",
+                        "_context": "Description to show no resources are found with the search string"
                     }
                 },
                 "resourceCount": {
                     "singular": {
-                        "value": "1 ресурс"
+                        "value": "1 ресурс",
+                        "_context": "Label for when there is one resource"
                     },
                     "plural": {
-                        "value": "{count} ресурсов"
+                        "value": "{count} ресурсов",
+                        "_context": "Label for when there is more than one resource"
                     }
                 },
                 "error": {
-                    "value": "Ошибка загрузки ресурса"
+                    "value": "Произошла ошибка при загрузке",
+                    "_context": "Message for when a resource fails to load"
                 }
             },
             "alignmentMode": {
                 "selectWord": {
-                    "value": "Щелкните на слово, чтобы увидеть источник на оригинальном языке."
+                    "value": "Нажмите на слово, чтобы увидеть исходный язык.",
+                    "_context": "Instructions for when user hasn't selected word yet in alignment mode"
                 },
                 "noWordInfoAvailable": {
-                    "value": "Информация на оригинальном языке для этого выбора недоступна."
+                    "value": "Информация об исходном языке отсутствует.",
+                    "_context": "Message for when we're missing alignment data for the selected word."
                 },
                 "noSenseInfoAvailable": {
-                    "value": "Глосса или определения для этого выбора недоступны."
+                    "value": "Толкование или определении для этого слова отсутствует.",
+                    "_context": "Message for when we're missing alignment data for the selected word."
                 },
                 "gloss": {
-                    "value": "Глосса"
+                    "value": "Глоссарий",
+                    "_context": "Gloss label for Greek/Hebrew alignment"
                 },
                 "definition": {
-                    "value": "Определение"
+                    "value": "Определение",
+                    "_context": "Definition label for Greek/Hebrew alignment"
                 }
             },
             "noBibleContent": {
                 "header": {
-                    "value": "Ресурс недоступен"
+                    "value": "Ресурс недоступен",
+                    "_context": "Header for when a Bible is not available in the current language"
                 },
                 "description": {
-                    "value": "Библия недоступна на данном устройстве для {language}.<br /> Вы хотите использовать Библию на другом языке?"
+                    "value": "Библия на данном языке {language}.<br /> отсутствует. Хотите выбрать Библию на другом языке? ",
+                    "_context": "Description for when a Bible is not available in the current language"
                 },
                 "noneAvailableDescription": {
-                    "value": "Библия недоступна на данном устройстве для {language} или любого другого языка. <br />Пожалуйста, загрузите содержимое, когда вы будете онлайн."
+                    "value": "На этом устройстве нет Библии на {language} или каком-либо другом языке.<br />Попробуйте загрузить контент, когда вы подключены к интернету.",
+                    "_context": "Description for when a Bible is not available in the current language or any other language"
                 },
                 "show": {
-                    "value": "Выберите Библию"
+                    "value": "Выбрать Библию",
+                    "_context": "Button to pop up modal that allows selecting a Bible."
                 },
                 "checkForMoreResources": {
-                    "value": "Найти другие ресурсы..."
+                    "value": "Выбрать другие ресурсы...",
+                    "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
                 },
                 "missingFromBible": {
-                    "value": "В этой Библии отсутствует выбранный отрывок."
+                    "value": "В этой Библии отсутствует выбранный отрывок.",
+                    "_context": "Message for when the Bible does not have the passage for whatever reason."
                 }
             },
             "noGuideContent": {
-                "value": "Контент для этого отрывка не найден."
+                "value": "Для этого отрывка содержание не найдено.",
+                "_context": "Message to display when the content is not downloaded or available"
             },
             "guide": {
                 "next": {
-                    "value": "Далее"
+                    "value": "Далее",
+                    "_context": "Go to next item in guide."
                 },
                 "usedInVerses": {
-                    "value": "Используется в этих стихах"
+                    "value": "Используется в этих стихах",
+                    "_context": "Prefixed to content in Translation Words Guides for displaying references of the word in the selected passage"
                 }
             }
         },
         "fileManager": {
             "downloadManager": {
-                "value": "Менеджер загрузок"
+                "value": "Менеджер загрузки",
+                "_context": "Title displayed on the download manager page"
             },
             "download": {
-                "value": "Скачать"
+                "value": "Скачать",
+                "_context": "Table column heading for the column with checkboxes allowing the user to select content to download"
             },
             "textType": {
-                "value": "Текст"
+                "value": "Текст",
+                "_context": "The media type for text, available to be downloaded"
             },
             "audioType": {
-                "value": "Аудио"
+                "value": "Аудио",
+                "_context": "The media type for audio, available to be downloaded"
             },
             "mediaType": {
-                "value": "Медиа"
+                "value": "Медиа",
+                "_context": "The media type for media, available to be downloaded"
             },
             "ok": {
-                "value": "ОДОБРЕНИЕ"
+                "value": "OK",
+                "_context": "Button to download/delete content based on what the user selected"
             },
             "cancel": {
-                "value": "Отмена"
+                "value": "Отменить",
+                "_context": "Button to cancel current action"
             },
             "noInternet": {
-                "value": "Нет Интернета"
+                "value": "Нет Интернета",
+                "_context": "Message to display when the user has no internet connection"
             },
             "selectABook": {
-                "value": "Выберите книгу"
+                "value": "Выберите книгу",
+                "_context": "Label for a dropdown allowing the user to select a book to view"
             },
             "delete": {
-                "value": "Удалить"
+                "value": "Удалить",
+                "_context": "Button to delete content"
             },
             "modal": {
                 "title": {
-                    "value": "Подтвердить загрузку"
+                    "value": "Подтвердить загрузку",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
                 },
                 "description": {
-                    "value": "Bible Well загрузит {downloadSize} контента на ваше устройство."
+                    "value": "Bible Well загрузит {downloadSize} содержимого на ваше устройство.",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
                 },
                 "downloadProgress": {
-                    "value": "Прогресс загрузки"
+                    "value": "Прогресс загрузки",
+                    "_context": "Title of the modal showing the user how the download is progressing"
                 },
                 "success": {
-                    "value": "Загрузка завершена успешно"
+                    "value": "Загрузка прошла успешно",
+                    "_context": "Title of the modal showing the download was successful"
                 },
                 "close": {
-                    "value": "Закрыть"
+                    "value": "Закрыть",
+                    "_context": "Button to close the modal"
                 },
                 "downloadingDescription": {
-                    "value": "Загружено {totalSizeDownloaded} от  {totalSizeToDownload}."
+                    "value": "Загружено {totalSizeDownloaded} из {totalSizeToDownload}.",
+                    "_context": "Shows on the modal showing the user how the download is progressing"
                 }
             },
             "deleteModal": {
                 "warning": {
-                    "value": "Внимание!"
+                    "value": "Внимание!",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
                 },
                 "description": {
-                    "value": "Вы уверены, что хотите навсегда удалить эти файлы с вашего устройства?"
+                    "value": "Вы уверены, что хотите навсегда удалить эти файлы со своего устройства?",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
                 }
             },
             "metaData": {
                 "description": {
-                    "value": "Здесь вы можете скачать и удалить содержимое Aquifer с вашего устройства."
+                    "value": "Здесь вы можете загрузить и удалить содержимое Aquifer со своего устройства.",
+                    "_context": "Meta tag description"
                 }
             },
             "viewHeader": {
                 "name": {
-                    "value": "Имя"
+                    "value": "Название",
+                    "_context": "Label for the name column"
                 },
                 "text": {
-                    "value": "Текст"
+                    "value": "Текст",
+                    "_context": "Label for the text column"
                 },
                 "audio": {
-                    "value": "Аудио"
+                    "value": "Аудио",
+                    "_context": "Label for the audio column"
                 },
                 "media": {
-                    "value": "Медиа"
+                    "value": "Медиа",
+                    "_context": "Label for the media column"
                 }
             },
             "viewRow": {
                 "resources": {
-                    "value": "Ресурсы"
+                    "value": "Ресурсы",
+                    "_context": "Label for the resources row"
                 }
             }
         },
         "menu": {
             "home": {
-                "value": "Домой"
+                "value": "Главная",
+                "_context": "Label for the home button"
             },
             "menu": {
-                "value": "Меню"
+                "value": "Меню",
+                "_context": "Label for the menu button"
             },
             "downloadManager": {
-                "value": "Менеджер загрузок"
+                "value": "Менеджер загрузок",
+                "_context": "Label for the download manager button"
             },
             "language": {
-                "value": "Язык"
+                "value": "Язык",
+                "_context": "Label for the language button"
             },
             "shortcuts": {
-                "value": "Ярлыки"
+                "value": "Ярлыки",
+                "_context": "Label for the shortcuts button"
             },
             "changeLanguage": {
-                "value": "Изменить язык"
+                "value": "Изменить язык",
+                "_context": "Label for the change language button"
             }
         },
         "selectLanguage": {
             "welcome": {
-                "value": "Добро пожаловать"
+                "value": "Добро пожаловать",
+                "_context": "Title for the select language page"
             },
             "chooseYourPreferredLanguage": {
-                "value": "Выберите ваш предпочтительный язык"
+                "value": "Выберите необходимый язык",
+                "_context": "Placeholder text for the sub title"
             },
             "next": {
-                "value": "Далее"
+                "value": "Далее",
+                "_context": "Label for next button"
             }
         },
         "guideMenu": {
             "translationGuides": {
-                "value": "Руководства по переводу"
+                "value": "Руководства по переводу",
+                "_context": "Title for the Translation Guides section"
             },
             "whatWouldYouLikeToDo": {
-                "value": "Что бы вы хотели сделать?"
+                "value": "Что бы вы хотели сделать?",
+                "_context": "Header for the guide selection options"
             },
             "chooseGuide": {
-                "value": "Выберите руководство"
+                "value": "Выберите руководство",
+                "_context": "Placeholder text for the dropdown"
             },
             "allGuides": {
-                "value": "Все руководства"
+                "value": "Все руководства",
+                "_context": "Header for the menu showing all guides"
             },
             "checkingGuides": {
-                "value": "Руководства по проверке"
+                "value": "Руководства по проверке",
+                "_context": "Header for the menu showing checking guides"
             },
             "draftingGuides": {
-                "value": "Руководства по созданию черновиков"
+                "value": "Руководства по написанию перевода",
+                "_context": "Header for the menu showing drafting guides"
             },
             "startDraftingTranslation": {
-                "value": "Я хочу начать создание чернового перевода."
+                "value": "Начать перевод",
+                "_context": "Button to show drafting guides"
             },
             "checkTranslation": {
-                "value": "Я хочу проверить свой перевод."
+                "value": "Проверить свой перевод",
+                "_context": "Button to show checking guides"
             },
             "helpMeChoose": {
-                "value": "Я не уверен, помогите мне выбрать."
+                "value": "Я не уверен, помогите мне выбрать",
+                "_context": "Button to get help choosing a guide"
             },
             "showAllGuides": {
-                "value": "Я хочу выбрать руководство."
+                "value": "Выбрать руководство",
+                "_context": "Button to show all guides"
             },
             "guideExplanationHeader": {
-                "value": "Объяснение руководства"
+                "value": "Объяснение руководства",
+                "_context": "Header for the guide explanation section"
             },
             "guideExplanationContent": {
-                "value": "<p>Руководства в разделе 'Библейский колодец' предназначены для того, чтобы помочь вам лучше понять Библию. Это помогает вам расти в понимании того, кто есть Бог и что Он делает. Это также помогает вам лучше переводить Библию и убедиться, что ваш перевод выполнен качественно.</p><p>Если вы хотите изучать Библию или начать переводить её, выберите ниже 'Руководства по созданию черновиков'. Это поможет вам в процессе понимания Библии и начальной стадии создания перевода.</p><p>Если вы хотите проверить свой перевод Библии, чтобы убедиться в его качестве, выберите ниже 'Руководства по проверке'. В них содержатся различные варианты, помогающие понять Библию, особенно сложные отрывки.</p>"
+                "value": "<p>Руководства в Bible Well призваны помочь вам лучше понять Библию. Они помогут вам укрепиться в понимании того, кто такой Бог и что Он делает. Также эти руководства помогут вам лучше переводить Библию и быть уверенными в том, что ваш перевод Библии выполнен хорошо.</p><p>Если вы хотите изучать Библию или начать ее переводить, выберите «Руководства по переводу» ниже. Здесь вы узнаете, как научиться понимать Библию и начать свой перевод.</p><p>Если вы хотите проверить свой перевод, чтобы убедиться в его качестве, выберите «Руководства по проверке» ниже. Есть несколько доступных функций, которые помогут вам понять Библию, особенно трудные отрывки.</p>",
+                "_context": "Explanation of each type of guide so users know what to choose."
             },
             "noGuides": {
-                "value": "Нет доступных руководств для выбранного отрывка"
+                "value": "Нет доступных руководств для выбранного отрывка",
+                "_context": "Message for when no guides are available for the passage"
             }
         },
         "bibleMenu": {
             "noBibles": {
-                "value": "Нет доступных Библий"
+                "value": "Нет доступных Библий",
+                "_context": "Message to display when no Bibles are available"
             },
             "selectBible": {
-                "value": "Выберите Библию"
+                "value": "Выберите Библию",
+                "_context": "Placeholder text for the dropdown"
             },
             "goToPassage": {
-                "value": "Перейти к отрывку"
+                "value": "Перейти к отрывку",
+                "_context": "Label for the button to go to the passage"
             },
             "bible": {
-                "value": "Библия"
+                "value": "Библия",
+                "_context": "Label for the dropdown"
             },
             "bibleLicenseAcceptanceModal": {
                 "accept": {
-                    "value": "Принять"
+                    "value": "Принять",
+                    "_context": "Button to accept license"
                 },
                 "cancel": {
-                    "value": "Отменить"
+                    "value": "Отменить",
+                    "_context": "Button to cancel license accept modal"
                 },
                 "header": {
-                    "value": "Соглашение о неконентенте"
+                    "value": "Договор о содержании с закрытой лицензией",
+                    "_context": "Header for license accept modal"
                 },
                 "description": {
-                    "value": "Ресурс, который вы хотите импортировать, {resourceName}, выпущен под лицензией {licenseType}. Это приложение позволяет вам импортировать и \"смешивать\" этот ресурс с уже имеющимся в приложении контентом с открытой лицензией. Для продолжения подтвердите, что вы понимаете условия лицензии на этот ресурс, нажав кнопку \"Принять\"."
+                    "value": "Ресурс, который вы хотите импортировать, {resourceName}, выпущен по лицензии {licenseType}. Это приложение позволяет вам импортировать и \"mix\" этот ресурс с открытым лицензионным контентом, уже имеющимся в приложении. Чтобы продолжить, пожалуйста, подтвердите, что вы понимаете условия лицензии этого ресурса, нажав кнопку  \"Принять\".",
+                    "_context": "Description for license accept modal"
                 }
             }
         },
         "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
-                "value": "Выберите книгу"
+                "value": "Выберите книгу",
+                "_context": "Title for the first step in the book and passage selector"
             },
             "stepTwoTitle": {
-                "value": "Выберите отрывок"
+                "value": "Выберите отрывок",
+                "_context": "Title for the second step in the book and passage selector"
             },
             "noBooks": {
-                "value": "Нет доступных книг"
+                "value": "Нет доступных книг",
+                "_context": "Message to display when no Books are available"
             },
             "noPassages": {
-                "value": "Нет доступных отрывков"
+                "value": "Нет доступных отрывков",
+                "_context": "Message to display when no Passages are available"
             }
         },
         "settingsMenu": {
             "settings": {
-                "value": "Настройки"
+                "value": "Настройки",
+                "_context": "Title for the settings section"
             },
             "showOnlySrvResources": {
-                "value": "Показать только ресурсы SRV"
+                "value": "Показать только ресурсы SRV",
+                "_context": "Label for the toggle to show only SRV resources"
             },
             "communityEditionResources": {
-                "value": "Ресурсы сообщественной версии"
+                "value": "Ресурсы общественного издания",
+                "_context": "Label for the toggle to show Community Edition resources"
             },
             "aiTranslatedResources": {
-                "value": "Ресурсы, переведенные с помощью ИИ"
+                "value": "Ресурсы, переведенные ИИ",
+                "_context": "Label for the toggle to show AI Translated resources"
             },
             "showResourceByCheckingMethod": {
-                "value": "Показать ресурсы по методу проверки"
+                "value": "Показать ресурсы по методу проверки",
+                "_context": "Label for the toggle to show resources by checking method"
             },
             "showResourcesByTitle": {
-                "value": "Показать ресурсы по названию"
+                "value": "Показать ресурсы по названию",
+                "_context": "Label for the toggle to show resources by title"
             }
         },
         "BookChapterSelectorPane": {
             "availableBooks": {
-                "value": "Доступные книги"
+                "value": "Доступные книги",
+                "_context": "Label for the available books section"
             },
             "book": {
-                "value": "Книга"
+                "value": "Книга",
+                "_context": "Label for the book dropdown"
             },
             "selectChapter": {
-                "value": "Выберите главу"
+                "value": "Выбрать главу",
+                "_context": "Label for the chapter dropdown"
             },
             "chapter": {
-                "value": "Глава"
+                "value": "Глава",
+                "_context": "Label for the chapter dropdown"
             },
             "selectVerse": {
-                "value": "Выбрать первый и последний стих"
+                "value": "Выбрать первый и последний стих",
+                "_context": "Label for the verse dropdown"
             },
             "go": {
-                "value": "Далее"
+                "value": "Перейти",
+                "_context": "Label for the go button"
             }
         },
         "quickShare": {
             "share": {
-                "value": "Поделиться"
+                "value": "Поделиться",
+                "_context": "over all title"
             },
             "inAWebBrowser": {
-                "value": "В веб-браузере (например, Chrome) перейдите по адресу:"
+                "value": "В веб-браузере (например, Chrome) перейдите по ссылке:",
+                "_context": "this tells the user to go to a web browser and navigate to a specific URL"
             },
             "orScan": {
-                "value": "Или сканируйте:"
+                "value": "Или отсканируйте:",
+                "_context": "this tells the user to scan a QR code instead of going to a URL"
             },
             "toInstallBibleWell": {
-                "value": "Для установки Bible Well:"
+                "value": "Чтобы установить Bible Well:",
+                "_context": "this is the title of the installation instructions"
             },
             "stepOne": {
-                "value": "1. Откройте веб-браузер (например, Chrome)"
+                "value": "1. Откройте веб-браузер (например, Chrome).",
+                "_context": "this is the first step in the installation instructions"
             },
             "stepTwo": {
-                "value": "2. Перейдите по адресу"
+                "value": "2. Перейдите по",
+                "_context": "this is the second step in the installation instructions"
             },
             "stepThree": {
-                "value": "3. Зайдите в Настройки"
+                "value": "3. Перейдите в раздел Настройки",
+                "_context": "this is the third step in the installation instructions"
             },
             "stepFour": {
-                "value": "4. Нажмите \"Установить\" (см. ниже)"
+                "value": "4. Нажмите  \"Install\" (см. ниже)",
+                "_context": "this is the fourth step in the installation instructions"
             },
             "close": {
-                "value": "Закрыть"
+                "value": "Закрыть",
+                "_context": "this is the button to close the quick share view"
             }
         },
         "feedback": {
             "feedback": {
-                "value": "Обратная связь"
+                "value": "Обратная связь",
+                "_context": "Title for the feedback section"
             },
             "submit": {
-                "value": "Отправить"
+                "value": "Отправить",
+                "_context": "Label for the submit button"
             },
             "feedbackSending": {
-                "value": "Отправка обратной связи..."
+                "value": "Отправка отзыва ...",
+                "_context": "Message to display when feedback is being sent"
             },
             "feedbackSuccessfullySent": {
-                "value": "Обратная связь успешно отправлена!"
+                "value": "Отзыв успешно отправлен.",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "feedbackQueuedOffline": {
+                "value": "Отзыв будет отправлен, когда вы снова будете в сети.",
+                "_context": "Message to display when user is offline but feedback will be sent later."
+            },
+            "feedbackError": {
+                "value": "Ошибка при отправке отзыва. Пожалуйста, попробуйте еще раз.",
+                "_context": "Message to display when the feedback failed to send."
             },
             "thankYou": {
-                "value": "Спасибо за вашу обратную связь!"
+                "value": "Спасибо!",
+                "_context": "Message to display when feedback is successfully sent"
             },
             "close": {
-                "value": "Закрыть"
+                "value": "Закрыть",
+                "_context": "Button to close the feedback form"
             },
             "feedbackFailedToSend": {
-                "value": "Не удалось отправить обратную связь."
+                "value": "Не удалось отправить отзыв.",
+                "_context": "Message to display when feedback fails to send"
             },
             "pleaseCheckYourInternetConnectionAndRetry": {
-                "value": "Пожалуйста, проверьте ваше подключение к Интернету и повторите попытку."
+                "value": "Пожалуйста, проверьте подключение к Интернету и повторите попытку.",
+                "_context": "Message to display when feedback fails to send"
             },
             "retry": {
-                "value": "Повторить"
+                "value": "Повторить",
+                "_context": "Button to retry sending feedback"
             },
             "feedbackForm": {
                 "name": {
-                    "value": "Имя"
+                    "value": "Имя",
+                    "_context": "Label for the name input field"
                 },
                 "email": {
-                    "value": "Электронная почта"
+                    "value": "Электронная почта",
+                    "_context": "Label for the email input field"
                 },
                 "phone": {
-                    "value": "Телефон"
+                    "value": "Телефон",
+                    "_context": "Label for the phone input field"
                 },
                 "howOftenDoYouUseTheBibleWell": {
-                    "value": "Как часто вы используете Bible Well?"
+                    "value": "Как часто вы используете Bible Well?",
+                    "_context": "Label for the how often input field"
                 },
                 "whatDoYouLikeMostAboutTheBibleWell": {
-                    "value": "Что вам больше всего нравится в Bible Well?"
+                    "value": "Что вам больше всего нравится в Bible Well?",
+                    "_context": "Label for the what do you like most input field"
                 },
                 "WhatCanBeImproved": {
-                    "value": "Что можно улучшить?"
+                    "value": "Что можно улучшить?",
+                    "_context": "Label for the what can be improved input field"
                 },
                 "howAreYouUsingTheBibleWell": {
-                    "value": "Как вы используете Bible Well?"
+                    "value": "Как вы используете Bible Well?",
+                    "_context": "Label for the how are you using the Bible Well input field"
                 },
                 "bibleTranslation": {
-                    "value": "Какой перевод Библии вы предпочитаете?"
+                    "value": "Перевод Библии",
+                    "_context": "Label for the Bible Translation input field"
                 },
                 "sermonPreparation": {
-                    "value": "Для подготовки проповеди"
+                    "value": "Подготовка проповеди",
+                    "_context": "Label for the Sermon Preparation input field"
                 },
                 "bibleStudy": {
-                    "value": "Для изучения Библии"
+                    "value": "Изучение Библии",
+                    "_context": "Label for the Bible Study input field"
                 },
                 "studiesBibleSchoolSeminary": {
-                    "value": "Для учебы в Библейской школе/семинарии"
+                    "value": "Учеба (Библейская школа, семинария)",
+                    "_context": "Label for the Studies (Bible School, Seminary) input field"
                 },
                 "Evangelism": {
-                    "value": "Для евангелизма"
+                    "value": "Евангелизм",
+                    "_context": "Label for the Evangelism input field"
                 },
                 "isRequired": {
-                    "value": "Обязательно"
+                    "value": "требуется",
+                    "_context": "Message to display when a field is required"
                 },
                 "likesOrImprovementsFeedbackRequired": {
-                    "value": "Требуется обратная связь о том, что вам нравится или что можно улучшить"
+                    "value": "Необходимо оставить отзыв о понравившемся или улучшенном материале",
+                    "_context": "Message to display when the likes or improvements feedback is required"
                 },
                 "pleaseFillInTheRequiredFields": {
-                    "value": "Пожалуйста, заполните обязательные поля"
-                }
-            },
-            "resourceFeedbackForm": {
-                "rateContent": {
-                    "value": "Оцените этот контент"
-                },
-                "additionalFeedback": {
-                    "value": "Дополнительные комментарии (необязательно)"
-                },
-                "contactInformation": {
-                    "value": "Контактная информация (необязательно)"
-                },
-                "contactType": {
-                    "value": "Тип контакта"
-                }
-            },
-            "feedbackError": {
-                "value": "Ошибка при отправке отзыва. Пожалуйста, попробуйте снова."
-            },
-            "feedbackQueuedOffline": {
-                "value": "Отзыв будет отправлен, когда вы снова будете в сети."
-            },
-            "contactType": {
-                "email": {
-                    "value": "Электронная почта"
-                },
-                "phone": {
-                    "value": "Телефон"
-                },
-                "whatsapp": {
-                    "value": "WhatsApp"
-                },
-                "signal": {
-                    "value": "Signal"
-                },
-                "other": {
-                    "value": "Другой"
+                    "value": "Пожалуйста, заполните обязательные поля",
+                    "_context": "Message to display when the required fields are not filled in"
                 }
             },
             "infoPromptForm": {
                 "share": {
-                    "value": "Поделитесь вашей информацией"
+                    "value": "Поделитесь своей информацией",
+                    "_context": "Title for contact form popup"
                 },
                 "shareSubtitle": {
-                    "value": "Помогите нам улучшить Bible Well и сделать его более удобным в использовании! Ваше мнение имеет значение!"
+                    "value": "Помогите нам улучшить Bible Well и сделать его более удобным в использовании! Ваш вклад имеет значение!",
+                    "_context": "Subtitle for the contact form popup"
                 },
                 "contactInformation": {
-                    "value": "Тип контакта"
+                    "value": "Контактная информация",
+                    "_context": "Label for contact information dropdown"
                 },
                 "contactType": {
-                    "value": "Тип контакта"
+                    "value": "Тип контакта",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Оцените этот контент",
+                    "_context": "Label for the star rating field"
+                },
+                "additionalFeedback": {
+                    "value": "Дополнительный отзыв (необязательно)",
+                    "_context": "Label for additional feedback"
+                },
+                "contactInformation": {
+                    "value": "Контактная информация (необязательно)",
+                    "_context": "Label for contact information section"
+                },
+                "contactType": {
+                    "value": "Тип контакта",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
+            "contactType": {
+                "email": {
+                    "value": "Электронная почта",
+                    "_context": "Email contact method"
+                },
+                "phone": {
+                    "value": "Телефон",
+                    "_context": "Phone contact method"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp",
+                    "_context": "WhatsApp contact method"
+                },
+                "signal": {
+                    "value": "Signal",
+                    "_context": "Signal contact method"
+                },
+                "other": {
+                    "value": "Другое",
+                    "_context": "Other contact method"
                 }
             }
         }
     },
     "navTop": {
         "selectPassage": {
-            "value": "Выберите отрывок"
+            "value": "Выбрать отрывок",
+            "_context": "Button to select a passage"
         },
         "selectGuide": {
-            "value": "Выберите руководство"
+            "value": "Выбрать руководство",
+            "_context": "Button to select a guide"
         }
     },
     "resources": {
         "fia": {
             "step1": {
-                "value": "Слушание и сердце"
+                "value": "Слышание сердцем",
+                "_context": "See FIA for translations of each step name"
             },
             "step2": {
-                "value": "Постановка сюжета"
+                "value": "Определение контекста",
+                "_context": "See FIA for translations of each step name"
             },
             "step3": {
-                "value": "Определение сюжета"
+                "value": "Определение сюжета",
+                "_context": "See FIA for translations of each step name"
             },
             "step4": {
-                "value": "Исполнение текста"
+                "value": "Инсценировка текста",
+                "_context": "See FIA for translations of each step name"
             },
             "step5": {
-                "value": "Заполнение пробелов"
+                "value": "Заполнение пробелов",
+                "_context": "See FIA for translations of each step name"
             },
             "step6": {
-                "value": "Провозглашая Слово"
+                "value": "Проговаривание слова",
+                "_context": "See FIA for translations of each step name"
             }
         },
         "silOpenTranslatorsNotes": {
             "paragraphButton": {
-                "value": "Параграф"
+                "value": "Абзац",
+                "_context": "Button to see OTN paragraph info"
             },
             "sectionButton": {
-                "value": "Раздел"
+                "value": "Раздел",
+                "_context": "Button to see OTN section info"
             },
             "suggestionsButton": {
-                "value": "Значения"
+                "value": "Значения",
+                "_context": "Button to see OTN text translation suggestions info"
             },
             "suggestionsDescription": {
-                "value": "Используйте их как инструмент для понимания смысла исходного текста, а затем выразите его естественно на вашем языке."
+                "value": "Используйте их как инструмент, чтобы понять смысл оригинального текста, а затем естественным образом передайте его на своем языке.",
+                "_context": "Description explaining OTN text translation suggestions"
             }
         }
     },
     "errorMessage": {
         "error": {
-            "value": "Ошибка"
+            "value": "Ошибка",
+            "_context": "The label for the error message"
         },
         "title": {
-            "value": "Невозможно загрузить содержимое"
+            "value": "Невозможно загрузить содержимое",
+            "_context": "The title for the error message"
         },
         "message": {
-            "value": "Если проблема сохраняется, пожалуйста, проверьте ваше подключение к Интернету."
+            "value": "Если проблема не устранена, проверьте подключение к Интернету.",
+            "_context": "The message for the error message"
         },
         "home": {
-            "value": "Домой"
+            "value": "Главная",
+            "_context": "The label for the home button"
         },
         "browserUnsupported": {
-            "value": "Ваш браузер не поддерживается. Пожалуйста, попробуйте другой  браузер. Если вы находитесь в режиме приватности/инкогнито, пожалуйста, переключитесь на обычный режим."
+            "value": "Ваш браузер не поддерживается. Попробуйте другой браузер. Если вы находитесь в режиме приватности/инкогнито, попробуйте обычный режим.",
+            "_context": "Message for when the browser is missing features"
         }
     },
     "components": {
         "search": {
             "placeholder": {
-                "value": "Поиск"
+                "value": "Поиск",
+                "_context": "Placeholder text for the search component"
             },
             "clear": {
-                "value": "Очистить"
+                "value": "Очистить",
+                "_context": "Button in the search component for clearing entered text"
             },
             "passage": {
-                "value": "Отрывок"
+                "value": "Отрывок",
+                "_context": "Label for the passage search button"
             },
             "resource": {
-                "value": "Ресурс"
+                "value": "Ресурс",
+                "_context": "Label for the resource search button"
             },
             "resources": {
-                "value": "Ресурсы"
+                "value": "Ресурсы",
+                "_context": "Title for the resource menu"
             },
             "loadMore": {
-                "value": "Загрузить больше"
+                "value": "Загрузить больше",
+                "_context": "Button to load more resources"
             }
         },
         "communityEditionModal": {
             "header": {
-                "value": "Контент Сообщественной Версии"
+                "value": "Контент общественного издания",
+                "_context": "Header for the community edition content modal"
             },
             "description": {
-                "value": "<p>Этот контент не был полностью проверен на точность. Перевод выполнен членом сообщества, но не прошел такой же процесс проверки, как другой контент. Пожалуйста, используйте его с осторожностью.</p><p>Сообщайте о любых ошибках перевода или предложениях, используя значок обратной связи в правом верхнем углу окна.</p><p>Если вы заинтересованы стать участником Community Edition, перейдите в Меню > Отзывы и дайте нам знать.</p>"
+                "value": "<p>Это содержание не было полностью проверено на точность. Его перевел один из участников сообщества, но перевод не прошел ту же проверку, что и другие материалы. Пожалуйста, используйте его с осторожностью.</p><p>Вы можете сообщить о любых ошибках перевода или ваших вариантах перевода, используя значок обратной связи в правом верхнем углу окна.</p><p>Если вы хотите стать участником общественной редакции, перейдите в Меню > Обратная связь и сообщите нам об этом.</p>",
+                "_context": "Description for the community edition content modal"
             }
         },
         "aiEditionModal": {
             "header": {
-                "value": "Контент, переведенный с помощью ИИ"
+                "value": "Ресурсы, переведенные ИИ",
+                "_context": "Header for the community edition content modal"
             },
             "description": {
-                "value": "<p>Этот контент был переведен с помощью искусственного интеллекта и не был полностью проверен на точность. Пожалуйста, используйте его с осторожностью.</p><p>Сообщайте о любых ошибках перевода или предложениях, используя значок обратной связи в правом верхнем углу окна.</p>"
+                "value": "<p>Данный материал был переведен ИИ и не проверялся человеком на точность. Вы можете сообщить о любых ошибках перевода или ваших вариантах перевода, используя значок обратной связи в правом верхнем углу окна.</p><p>Если вы заинтересованы в проверке этого материала, станьте участником общественной редакции, перейдя на страницу Главная > Обратная связь.</p>",
+                "_context": "Description for the community edition content modal"
             }
         }
     }

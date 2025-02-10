@@ -1,638 +1,822 @@
 {
-    "page": {
-        "index": {
-            "downloadResourcesForOfflineUse": {
-                "value": "هل تريد العمل بدون إنترنت؟ احصل على مزيد من المحتوى"
-            },
-            "about": {
-                "value": "حول"
-            },
-            "downloadManager": {
-                "value": "مدير التحميل"
-            },
-            "getStarted": {
-                "value": "ابدأ"
-            }
+  "page": {
+    "index": {
+      "downloadResourcesForOfflineUse": {
+        "value": "للحصول على المزيد من الموارد دون الاتصال بالانترنت، اضغط هنا",
+        "_context": "Button text telling the user to download resources for offline use"
+      },
+      "about": {
+        "value": "من نحن",
+        "_context": "Link to the about page"
+      },
+      "downloadManager": {
+        "value": "إدارة التنزيلات",
+        "_context": "The label for the download manager button"
+      },
+      "getStarted": {
+        "value": "ابدأ الآن",
+        "_context": "Button to get started with the application"
+      }
+    },
+    "about": {
+      "error": {
+        "value": "حدث خطأ أثناء تحميل معلومات الصفحة",
+        "_context": "Message to show when there's an error loading the page for some reason"
+      },
+      "license": {
+        "releasedUnderSingle": {
+          "value": "تم الإصدار بموجب {name}",
+          "_context": "Description explaining the content is released under a single license"
         },
-        "about": {
-            "error": {
-                "value": "خطأ في تحميل معلومات ترخيص المحتوى"
-            },
-            "license": {
-                "releasedUnderSingle": {
-                    "value": "صدر تحت {name}"
-                },
-                "releasedUnderMultiple": {
-                    "value": "صدر تحت عدة: {names}"
-                },
-                "adaptedInLanguages": {
-                    "value": "تم تعديل {title} في اللغات التالية<br /> {languages}<br /> من {title} {copyright} {date} {publisher}<br /> صدر بموجب ترخيص {bnLicense} من Biblionexus"
-                }
-            }
+        "releasedUnderMultiple": {
+          "value": "تم الإصدار بموجب عدة تراخيص: {names}",
+          "_context": "Description explaining the content is released under multiple licenses"
         },
-        "passage": {
-            "nav": {
-                "bible": {
-                    "value": "الكتاب المقدس"
-                },
-                "guide": {
-                    "value": "دليل"
-                },
-                "library": {
-                    "value": "المكتبة"
-                },
-                "menu": {
-                    "value": "القائمة"
-                },
-                "resources": {
-                    "value": "الموارد"
-                }
-            },
-            "resourcePane": {
-                "cancel": {
-                    "value": "إلغاء"
-                },
-                "libraryTitle": {
-                    "value": "مكتبة"
-                },
-                "librarySubtitle": {
-                    "value": "العثور على الموارد التي تحتاجها"
-                },
-                "typeToSearch": {
-                    "value": "اكتب مصطلحًا للبحث في المكتبة"
-                },
-                "fullscreen": {
-                    "currentOfTotalLabel": {
-                        "value": "{current} من {total}"
-                    }
-                },
-                "seeAll": {
-                    "value": "عرض الكل ({count})"
-                },
-                "noThumbnail": {
-                    "value": "لا يوجد صورة مصغرة"
-                },
-                "noResourcesFound": {
-                    "header": {
-                        "value": "لم يتم العثور على موارد"
-                    },
-                    "description": {
-                        "value": "لم تتطابق عملية البحث \"{searchQuery}\" مع أي موارد."
-                    }
-                },
-                "resourceCount": {
-                    "singular": {
-                        "value": "مورد واحد"
-                    },
-                    "plural": {
-                        "value": "{count} موارد"
-                    }
-                },
-                "error": {
-                    "value": "خطأ في تحميل المورد"
-                }
-            },
-            "alignmentMode": {
-                "selectWord": {
-                    "value": "انقر على كلمة لرؤية المصدر الأصلي للغة."
-                },
-                "noWordInfoAvailable": {
-                    "value": "لا توجد معلومات عن اللغة الأصلية لهذا الاختيار."
-                },
-                "noSenseInfoAvailable": {
-                    "value": "لا توجد معلومات عن اللمعان أو التعريف لهذا الاختيار."
-                },
-                "gloss": {
-                    "value": "لمعان"
-                },
-                "definition": {
-                    "value": "تعريف"
-                }
-            },
-            "noBibleContent": {
-                "header": {
-                    "value": "المورد غير متوفر"
-                },
-                "description": {
-                    "value": "لا يتوفر الكتاب المقدس على هذا الجهاز بلغة {language}.<br />هل تريد استخدام الكتاب المقدس بلغة أخرى؟"
-                },
-                "noneAvailableDescription": {
-                    "value": "لا يتوفر الكتاب المقدس على هذا الجهاز بلغة {language} أو أي لغة أخرى.<br />يرجى تنزيل المحتوى عندما تكون متصلاً بالإنترنت."
-                },
-                "show": {
-                    "value": "اختر الكتاب المقدس"
-                },
-                "checkForMoreResources": {
-                    "value": "تحقق من المزيد من الموارد..."
-                },
-                "missingFromBible": {
-                    "value": "هذه النسخة من الكتاب المقدس تفتقد المقطع المحدد."
-                }
-            },
-            "noGuideContent": {
-                "value": "لم يتم العثور على محتوى لهذا المقطع."
-            },
-            "guide": {
-                "next": {
-                    "value": "التالي"
-                },
-                "usedInVerses": {
-                    "value": "مستخدم في هذه الآيات"
-                }
-            }
+        "adaptedInLanguages": {
+          "value": "{title} تمت ترجمته إلى اللغات التالية:<br /> {languages}<br /> استنادًا إلى {title} {copyright} {date} {publisher}<br /> ونُشر بموجب ترخيص {bnLicense} من خلال Biblionexus",
+          "_context": "Description for license adapted in languages"
+        }
+      }
+    },
+    "passage": {
+      "nav": {
+        "bible": {
+          "value": "الكتاب المقدّس",
+          "_context": "Label for Bible button on navbar"
         },
-        "fileManager": {
-            "downloadManager": {
-                "value": "مدير التحميل"
-            },
-            "download": {
-                "value": "تحميل"
-            },
-            "textType": {
-                "value": "نص"
-            },
-            "audioType": {
-                "value": "صوتي"
-            },
-            "mediaType": {
-                "value": "وسائط"
-            },
-            "ok": {
-                "value": "موافقة"
-            },
-            "cancel": {
-                "value": "إلغاء"
-            },
-            "noInternet": {
-                "value": "لا يوجد إنترنت"
-            },
-            "selectABook": {
-                "value": "اختر كتابًا"
-            },
-            "delete": {
-                "value": "حذف"
-            },
-            "modal": {
-                "title": {
-                    "value": "تأكيد التنزيل"
-                },
-                "description": {
-                    "value": "سيقوم تطبيق Bible Well بتنزيل {downloadSize} من المحتوى على جهازك."
-                },
-                "downloadProgress": {
-                    "value": "تقدم التحميل"
-                },
-                "success": {
-                    "value": "تم التحميل بنجاح"
-                },
-                "close": {
-                    "value": "إغلاق"
-                },
-                "downloadingDescription": {
-                    "value": "جاري التحميل {totalSizeDownloaded} من {totalSizeToDownload}."
-                }
-            },
-            "deleteModal": {
-                "warning": {
-                    "value": "تحذير!"
-                },
-                "description": {
-                    "value": "هل أنت متأكد أنك تريد حذف هذه الملفات نهائيًا من جهازك؟"
-                }
-            },
-            "metaData": {
-                "description": {
-                    "value": "هنا يمكنك تحميل وحذف محتوى Aquifer من جهازك."
-                }
-            },
-            "viewHeader": {
-                "name": {
-                    "value": "الاسم"
-                },
-                "text": {
-                    "value": "نص"
-                },
-                "audio": {
-                    "value": "صوتي"
-                },
-                "media": {
-                    "value": "وسائط"
-                }
-            },
-            "viewRow": {
-                "resources": {
-                    "value": "الموارد"
-                }
-            }
+        "guide": {
+          "value": "الدليل",
+          "_context": "Label for Guide button on navbar"
+        },
+        "library": {
+          "value": "المكتبة",
+          "_context": "Label for Library button on navbar"
         },
         "menu": {
-            "home": {
-                "value": "الرئيسية"
-            },
-            "menu": {
-                "value": "القائمة"
-            },
-            "downloadManager": {
-                "value": "مدير التحميل"
-            },
-            "language": {
-                "value": "اللغة"
-            },
-            "shortcuts": {
-                "value": "اختصارات"
-            },
-            "changeLanguage": {
-                "value": "تغيير اللغة"
-            }
+          "value": "القائمة الرئيسية",
+          "_context": "Label for Menu button on navbar"
         },
-        "selectLanguage": {
-            "welcome": {
-                "value": "مرحباً"
-            },
-            "chooseYourPreferredLanguage": {
-                "value": "اختر لغتك المفضلة"
-            },
-            "next": {
-                "value": "التالي"
-            }
-        },
-        "guideMenu": {
-            "translationGuides": {
-                "value": "أدلة الترجمة"
-            },
-            "whatWouldYouLikeToDo": {
-                "value": "ماذا تريد أن تفعل؟"
-            },
-            "chooseGuide": {
-                "value": "اختر دليلًا"
-            },
-            "allGuides": {
-                "value": "جميع الأدلة"
-            },
-            "checkingGuides": {
-                "value": "أدلة التحقق"
-            },
-            "draftingGuides": {
-                "value": "أدلة المسودة"
-            },
-            "startDraftingTranslation": {
-                "value": "أريد أن أبدأ في صياغة الترجمة."
-            },
-            "checkTranslation": {
-                "value": "أريد التحقق من ترجمتي."
-            },
-            "helpMeChoose": {
-                "value": "لست متأكدًا، ساعدني في الاختيار."
-            },
-            "showAllGuides": {
-                "value": "أريد اختيار دليل."
-            },
-            "guideExplanationHeader": {
-                "value": "شرح الدليل"
-            },
-            "guideExplanationContent": {
-                "value": "<p>تم تصميم الأدلة في بئر الكتاب المقدس لمساعدتك على فهم الكتاب المقدس بشكل أفضل. هذا يساعدك على النمو في فهمك لمن هو الله وما يفعله. كما أنه يساعدك على ترجمة الكتاب المقدس بشكل أفضل والتأكد من أن ترجمتك للكتاب المقدس قد تمت بشكل جيد.</p><p>إذا كنت ترغب في دراسة الكتاب المقدس أو بدء ترجمة الكتاب المقدس، يرجى اختيار \"أدلة المسودة\" أدناه. سيساعدك هذا في فهم الكتاب المقدس وبدء صياغة ترجمتك.</p><p>إذا كنت تريد التحقق من ترجمتك للكتاب المقدس للتأكد من أنها تمت بشكل جيد، اختر \"أدلة التحقق\" أدناه. هناك عدة خيارات تساعدك على فهم الكتاب المقدس، خاصة الفقرات الصعبة.</p>"
-            },
-            "noGuides": {
-                "value": "لا توجد أدلة متاحة للمقطع المختار"
-            }
-        },
-        "bibleMenu": {
-            "noBibles": {
-                "value": "لا توجد ترجمات متاحة"
-            },
-            "selectBible": {
-                "value": "اختر ترجمة"
-            },
-            "goToPassage": {
-                "value": "اذهب إلى المقطع"
-            },
-            "bible": {
-                "value": "الكتاب المقدس"
-            },
-            "bibleLicenseAcceptanceModal": {
-                "accept": {
-                    "value": "قبول"
-                },
-                "cancel": {
-                    "value": "إلغاء"
-                },
-                "header": {
-                    "value": "اتفاقية المحتوى غير المفتوح"
-                },
-                "description": {
-                    "value": "المصدر الذي ترغب في استيراده، {resourceName}، يصدر بموجب {licenseType}. يتيح لك هذا التطبيق استيراد و\"مزج\" هذا المصدر مع المحتوى المرخص بشكل مفتوح المتاح بالفعل في التطبيق. للمضي قدمًا، يرجى الإقرار بأنك تفهم شروط ترخيص هذا المصدر من خلال النقر على زر \"قبول\"."
-                }
-            }
-        },
-        "PredeterminedPassageSelectorMenu": {
-            "stepOneTitle": {
-                "value": "اختر كتابًا"
-            },
-            "stepTwoTitle": {
-                "value": "اختر مقطعًا"
-            },
-            "noBooks": {
-                "value": "لا توجد كتب"
-            },
-            "noPassages": {
-                "value": "لا توجد مقاطع"
-            }
-        },
-        "settingsMenu": {
-            "settings": {
-                "value": "الإعدادات"
-            },
-            "showOnlySrvResources": {
-                "value": "عرض الموارد المتاحة فقط"
-            },
-            "communityEditionResources": {
-                "value": "موارد الإصدار المجتمعي"
-            },
-            "aiTranslatedResources": {
-                "value": "موارد الترجمة الآلية"
-            },
-            "showResourceByCheckingMethod": {
-                "value": "عرض الموارد حسب طريقة التحقق"
-            },
-            "showResourcesByTitle": {
-                "value": "عرض الموارد حسب العنوان"
-            }
-        },
-        "BookChapterSelectorPane": {
-            "availableBooks": {
-                "value": "الكتب المتاحة"
-            },
-            "book": {
-                "value": "كتاب"
-            },
-            "selectChapter": {
-                "value": "اختر الفصل"
-            },
-            "chapter": {
-                "value": "الفصل"
-            },
-            "selectVerse": {
-                "value": "اختر الآية الأولى والأخيرة"
-            },
-            "go": {
-                "value": "اذهب"
-            }
-        },
-        "quickShare": {
-            "share": {
-                "value": "مشاركة"
-            },
-            "inAWebBrowser": {
-                "value": "في متصفح الويب (مثل Chrome)، انتقل إلى:"
-            },
-            "orScan": {
-                "value": "أو مسح:"
-            },
-            "toInstallBibleWell": {
-                "value": "لتثبيت برنامج الكتاب المقدس بشكل جيد:"
-            },
-            "stepOne": {
-                "value": "1. افتح متصفح ويب (مثل Chrome)"
-            },
-            "stepTwo": {
-                "value": "2. انتقل إلى"
-            },
-            "stepThree": {
-                "value": "3. اذهب إلى الإعدادات"
-            },
-            "stepFour": {
-                "value": "4. انقر على \"تثبيت\" (انظر أدناه)"
-            },
-            "close": {
-                "value": "إغلاق"
-            }
-        },
-        "feedback": {
-            "feedback": {
-                "value": "تعليق"
-            },
-            "submit": {
-                "value": "إرسال"
-            },
-            "feedbackSending": {
-                "value": "جاري إرسال التعليق"
-            },
-            "feedbackSuccessfullySent": {
-                "value": "تم إرسال التعليق بنجاح"
-            },
-            "thankYou": {
-                "value": "شكرًا لك!"
-            },
-            "close": {
-                "value": "إغلاق"
-            },
-            "feedbackFailedToSend": {
-                "value": "فشل إرسال التعليق"
-            },
-            "pleaseCheckYourInternetConnectionAndRetry": {
-                "value": "يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة."
-            },
-            "retry": {
-                "value": "إعادة المحاولة"
-            },
-            "feedbackForm": {
-                "name": {
-                    "value": "الاسم"
-                },
-                "email": {
-                    "value": "البريد الإلكتروني"
-                },
-                "phone": {
-                    "value": "الهاتف"
-                },
-                "howOftenDoYouUseTheBibleWell": {
-                    "value": "كم مرة تستخدم الكتاب المقدس بشكل جيد؟"
-                },
-                "whatDoYouLikeMostAboutTheBibleWell": {
-                    "value": "ما الذي يعجبك في الكتاب المقدس بشكل جيد؟"
-                },
-                "WhatCanBeImproved": {
-                    "value": "ما الذي يمكن تحسينه في الكتاب المقدس بشكل جيد؟"
-                },
-                "howAreYouUsingTheBibleWell": {
-                    "value": "كيف تستخدم الكتاب المقدس بشكل جيد؟"
-                },
-                "bibleTranslation": {
-                    "value": "ما هي الترجمة التي تستخدمها؟"
-                },
-                "sermonPreparation": {
-                    "value": "هل تستخدم الكتاب المقدس بشكل جيد في تحضير العظة؟"
-                },
-                "bibleStudy": {
-                    "value": "هل تستخدم الكتاب المقدس بشكل جيد في الدراسة الكتابية؟"
-                },
-                "studiesBibleSchoolSeminary": {
-                    "value": "هل تستخدم الكتاب المقدس بشكل جيد في المدرسة الكتابية / الكلية / الكلية الإكليريكية؟"
-                },
-                "Evangelism": {
-                    "value": "هل تستخدم الكتاب المقدس بشكل جيد في الإنجيل؟"
-                },
-                "isRequired": {
-                    "value": "مطلوب"
-                },
-                "likesOrImprovementsFeedbackRequired": {
-                    "value": "مطلوب تقديم تعليقات حول ما يعجبك أو ما يمكن تحسينه"
-                },
-                "pleaseFillInTheRequiredFields": {
-                    "value": "يرجى ملء الحقول المطلوبة"
-                }
-            },
-            "resourceFeedbackForm": {
-                "rateContent": {
-                    "value": "قيم هذا المحتوى"
-                },
-                "additionalFeedback": {
-                    "value": "ملاحظات إضافية (اختياري)"
-                },
-                "contactInformation": {
-                    "value": "معلومات الاتصال (اختياري)"
-                },
-                "contactType": {
-                    "value": "نوع الاتصال"
-                }
-            },
-            "feedbackError": {
-                "value": "حدث خطأ أثناء إرسال الملاحظات. الرجاء المحاولة مرة أخرى."
-            },
-            "feedbackQueuedOffline": {
-                "value": "سيتم إرسال الملاحظات عندما تكون متصلاً بالإنترنت مرة أخرى."
-            },
-            "contactType": {
-                "email": {
-                    "value": "البريد الإلكتروني"
-                },
-                "phone": {
-                    "value": "هاتف"
-                },
-                "whatsapp": {
-                    "value": "WhatsApp"
-                },
-                "signal": {
-                    "value": "Signal"
-                },
-                "other": {
-                    "value": "آخر"
-                }
-            },
-            "infoPromptForm": {
-                "share": {
-                    "value": "شارك معلوماتك"
-                },
-                "shareSubtitle": {
-                    "value": "ساعدنا في تحسين Bible Well وجعل استخدامه أسهل! مدخلاتك تحدث فرقًا!"
-                },
-                "contactInformation": {
-                    "value": "نوع الاتصال"
-                },
-                "contactType": {
-                    "value": "نوع الاتصال"
-                }
-            }
+        "resources": {
+          "value": "الموارد",
+          "_context": "Label for Resources button on navbar"
         }
-    },
-    "navTop": {
-        "selectPassage": {
-            "value": "اختر مقطعًا"
+      },
+      "resourcePane": {
+        "cancel": {
+          "value": "إلغاء",
+          "_context": "Button to cancel search"
         },
-        "selectGuide": {
-            "value": "اختر دليل"
-        }
-    },
-    "resources": {
-        "fia": {
-            "step1": {
-                "value": "السمع والقلب"
-            },
-            "step2": {
-                "value": "تهيئة المسرح"
-            },
-            "step3": {
-                "value": "تعريف المشاهد"
-            },
-            "step4": {
-                "value": "تجسيد النص"
-            },
-            "step5": {
-                "value": "سد الفجوات"
-            },
-            "step6": {
-                "value": "تلفظ الكلمة"
-            }
+        "libraryTitle": {
+          "value": "المكتبة",
+          "_context": "Title for the Library Menu"
         },
-        "silOpenTranslatorsNotes": {
-            "paragraphButton": {
-                "value": "فقرة"
-            },
-            "sectionButton": {
-                "value": "قسم"
-            },
-            "suggestionsButton": {
-                "value": "المعاني"
-            },
-            "suggestionsDescription": {
-                "value": "استخدم هذه كأداة لفهم معنى النص الأصلي، ثم عبّر عنه بطبيعتك بلغتك."
-            }
-        }
-    },
-    "errorMessage": {
+        "librarySubtitle": {
+          "value": "ابحث عن الموارد التي تحتاجها",
+          "_context": "Subtitle for the Library Menu"
+        },
+        "typeToSearch": {
+          "value": "اكتب كلمة للبحث في المكتبة",
+          "_context": "Label for searching the library"
+        },
+        "fullscreen": {
+          "currentOfTotalLabel": {
+            "value": "{total} من {current}",
+            "_context": "Displays the current position out of the total fullscreen elements"
+          }
+        },
+        "seeAll": {
+          "value": "({count})عرض الكل",
+          "_context": "Button for the user to see all resources of a given resource type"
+        },
+        "noThumbnail": {
+          "value": "الصورة غير متوفرة",
+          "_context": "Label for videos that have no thumbnail"
+        },
+        "noResourcesFound": {
+          "header": {
+            "value": "لا توجد موارد متاحة",
+            "_context": "Header to show when no resources are found with the search string"
+          },
+          "description": {
+            "value": "لم يتم العثور على أي موارد تطابق البحث عن \"{searchQuery}\".",
+            "_context": "Description to show no resources are found with the search string"
+          }
+        },
+        "resourceCount": {
+          "singular": {
+            "value": "مورد واحد فقط",
+            "_context": "Label for when there is one resource"
+          },
+          "plural": {
+            "value": "{count} موارد",
+            "_context": "Label for when there is more than one resource"
+          }
+        },
         "error": {
-            "value": "خطأ"
-        },
-        "title": {
-            "value": "تعذر تحميل المحتوى"
-        },
-        "message": {
-            "value": "إذا استمرت المشكلة، يرجى التحقق من اتصالك بالإنترنت."
-        },
-        "home": {
-            "value": "الرئيسية"
-        },
-        "browserUnsupported": {
-            "value": "متصفحك غير مدعوم. يرجى استخدام متصفح آخر. إذا كنت في وضع التصفح الخاص/المتخفي، يرجى المحاولة في الوضع العادي."
+          "value": "تعذر تحميل المورد",
+          "_context": "Message for when a resource fails to load"
         }
+      },
+      "alignmentMode": {
+        "selectWord": {
+          "value": "انقر على أي كلمة لعرض المصدر باللغة الأصلية.",
+          "_context": "Instructions for when user hasn't selected word yet in alignment mode"
+        },
+        "noWordInfoAvailable": {
+          "value": "المعلومات عن اللغة الأصلية غير متوفرة لهذا الاختيار.",
+          "_context": "Message for when we're missing alignment data for the selected word."
+        },
+        "noSenseInfoAvailable": {
+          "value": "الشرح أو التعريف غير متوفر لهذا الاختيار.",
+          "_context": "Message for when we're missing alignment data for the selected word."
+        },
+        "gloss": {
+          "value": "الشرح",
+          "_context": "Gloss label for Greek/Hebrew alignment"
+        },
+        "definition": {
+          "value": "التعريف",
+          "_context": "Definition label for Greek/Hebrew alignment"
+        }
+      },
+      "noBibleContent": {
+        "header": {
+          "value": "المورد غير متوفر حاليًا",
+          "_context": "Header for when a Bible is not available in the current language"
+        },
+        "description": {
+          "value": "لا توجد أي نسخة من الكتاب المقدس متوفرة على هذا الجهاز للغة {language}.<br />هل تريد استخدام نسخة من الكتاب المقدس بلغة أخرى؟",
+          "_context": "Description for when a Bible is not available in the current language"
+        },
+        "noneAvailableDescription": {
+          "value": "لا توجد أي نسخة من الكتاب المقدس متوفرة على هذا الجهاز للغة {language} أو أي لغة أخرى.<br />يرجى تنزيل المحتوى عندما تكون متصلاً بالإنترنت.",
+          "_context": "Description for when a Bible is not available in the current language or any other language"
+        },
+        "show": {
+          "value": "اختر ترجمة الكتاب لمقدس",
+          "_context": "Button to pop up modal that allows selecting a Bible."
+        },
+        "checkForMoreResources": {
+          "value": "ابحث عن موارد إضافية...",
+          "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
+        },
+        "missingFromBible": {
+          "value": "لا يحتوي هذه النسخة من الكتاب المقدس على المقطع الذي اخترته",
+          "_context": "Message for when the Bible does not have the passage for whatever reason."
+        }
+      },
+      "noGuideContent": {
+        "value": "لا يوجد محتوى لهذا المقطع.",
+        "_context": "Message to display when the content is not downloaded or available"
+      },
+      "guide": {
+        "next": {
+          "value": "التالي",
+          "_context": "Go to next item in guide."
+        },
+        "usedInVerses": {
+          "value": "مُستخدّم في هذه الآيات",
+          "_context": "Prefixed to content in Translation Words Guides for displaying references of the word in the selected passage"
+        }
+      }
     },
-    "components": {
-        "search": {
-            "placeholder": {
-                "value": "بحث"
-            },
-            "clear": {
-                "value": "مسح"
-            },
-            "passage": {
-                "value": "مقطع"
-            },
-            "resource": {
-                "value": "مورد"
-            },
-            "resources": {
-                "value": "موارد"
-            },
-            "loadMore": {
-                "value": "تحميل المزيد"
-            }
+    "fileManager": {
+      "downloadManager": {
+        "value": "إدارة التنزيلات",
+        "_context": "Title displayed on the download manager page"
+      },
+      "download": {
+        "value": "تنزيل",
+        "_context": "Table column heading for the column with checkboxes allowing the user to select content to download"
+      },
+      "textType": {
+        "value": "النص",
+        "_context": "The media type for text, available to be downloaded"
+      },
+      "audioType": {
+        "value": "ملف الصوت",
+        "_context": "The media type for audio, available to be downloaded"
+      },
+      "mediaType": {
+        "value": "الوسائط",
+        "_context": "The media type for media, available to be downloaded"
+      },
+      "ok": {
+        "value": "موافق",
+        "_context": "Button to download/delete content based on what the user selected"
+      },
+      "cancel": {
+        "value": "إلغاء",
+        "_context": "Button to cancel current action"
+      },
+      "noInternet": {
+        "value": "غير مُتصل بالإنترنت",
+        "_context": "Message to display when the user has no internet connection"
+      },
+      "selectABook": {
+        "value": "اختر سفرًا",
+        "_context": "Label for a dropdown allowing the user to select a book to view"
+      },
+      "delete": {
+        "value": "مسح",
+        "_context": "Button to delete content"
+      },
+      "modal": {
+        "title": {
+          "value": "تأكيد التنزيل",
+          "_context": "Title of the modal asking the user to confirm changes before syncing"
         },
-        "communityEditionModal": {
-            "header": {
-                "value": "محتوى الإصدار المجتمعي"
-            },
-            "description": {
-                "value": "<p>لم يتم التحقق من هذا المحتوى بالكامل من حيث الدقة. قام أحد أعضاء المجتمع بترجمته، لكنه لم يخضع لنفس عملية المراجعة مثل المحتوى الآخر. يرجى استخدامه بحذر.</p><p>يرجى الإبلاغ عن أي أخطاء في الترجمة أو اقتراحات باستخدام أيقونة التعليقات في الزاوية العلوية اليمنى من النافذة.</p><p>إذا كنت مهتمًا بأن تصبح مساهمًا في الإصدار المجتمعي، انتقل إلى القائمة > التعليقات وأخبرنا.</p>"
-            }
+        "description": {
+          "value": "سيقوم تطبيق \"بايبل وّل\" بتنزيل {downloadSize} على جهازك.",
+          "_context": "Shows on the modal asking the user to confirm changes before syncing"
         },
-        "aiEditionModal": {
-            "header": {
-                "value": "محتوى الترجمة الآلية"
-            },
-            "description": {
-                "value": "<p>تمت ترجمة هذا المحتوى بواسطة الذكاء الاصطناعي. لم يتم التحقق من دقة الترجمة بشكل كامل. يرجى استخدامه بحذر.</p><p>يرجى الإبلاغ عن أي أخطاء في الترجمة أو اقتراحات باستخدام أيقونة التعليقات في الزاوية العلوية اليمنى من النافذة.</p>"
-            }
+        "downloadProgress": {
+          "value": "جاري التنزيل",
+          "_context": "Title of the modal showing the user how the download is progressing"
+        },
+        "success": {
+          "value": "تم التنزيل بنجاح",
+          "_context": "Title of the modal showing the download was successful"
+        },
+        "close": {
+          "value": "إغلاق",
+          "_context": "Button to close the modal"
+        },
+        "downloadingDescription": {
+          "value": "جاري تنزيل {totalSizeDownloaded} من أصل {totalSizeToDownload}.",
+          "_context": "Shows on the modal showing the user how the download is progressing"
         }
+      },
+      "deleteModal": {
+        "warning": {
+          "value": "تحذير!",
+          "_context": "Title of the modal asking the user to confirm changes before syncing"
+        },
+        "description": {
+          "value": "هل أنت متأكد من أنك تريد حذف هذه الملفات نهائيًا من على جهازك؟",
+          "_context": "Shows on the modal asking the user to confirm changes before syncing"
+        }
+      },
+      "metaData": {
+        "description": {
+          "value": "من هنا يمكنك تنزيل محتوى أكويفر وحذفه من جهازك.",
+          "_context": "Meta tag description"
+        }
+      },
+      "viewHeader": {
+        "name": {
+          "value": "الاسم",
+          "_context": "Label for the name column"
+        },
+        "text": {
+          "value": "النص",
+          "_context": "Label for the text column"
+        },
+        "audio": {
+          "value": "ملف الصوت",
+          "_context": "Label for the audio column"
+        },
+        "media": {
+          "value": "الوسائط",
+          "_context": "Label for the media column"
+        }
+      },
+      "viewRow": {
+        "resources": {
+          "value": "الموارد",
+          "_context": "Label for the resources row"
+        }
+      }
+    },
+    "menu": {
+      "home": {
+        "value": "الصفحة الرئيسية",
+        "_context": "Label for the home button"
+      },
+      "menu": {
+        "value": "القائمة الرئيسية",
+        "_context": "Label for the menu button"
+      },
+      "downloadManager": {
+        "value": "إدارة التنزيلات",
+        "_context": "Label for the download manager button"
+      },
+      "language": {
+        "value": "اللغة",
+        "_context": "Label for the language button"
+      },
+      "shortcuts": {
+        "value": "روابط سريعة",
+        "_context": "Label for the shortcuts button"
+      },
+      "changeLanguage": {
+        "value": "تغيير اللغة",
+        "_context": "Label for the change language button"
+      }
+    },
+    "selectLanguage": {
+      "welcome": {
+        "value": "مرحبًا",
+        "_context": "Title for the select language page"
+      },
+      "chooseYourPreferredLanguage": {
+        "value": "اختر لغتك المفضلة",
+        "_context": "Placeholder text for the sub title"
+      },
+      "next": {
+        "value": "التالي",
+        "_context": "Label for next button"
+      }
+    },
+    "guideMenu": {
+      "translationGuides": {
+        "value": "إرشادات الترجمة",
+        "_context": "Title for the Translation Guides section"
+      },
+      "whatWouldYouLikeToDo": {
+        "value": "ماذا تريد أن تفعل؟",
+        "_context": "Header for the guide selection options"
+      },
+      "chooseGuide": {
+        "value": "اختر دليلًا",
+        "_context": "Placeholder text for the dropdown"
+      },
+      "allGuides": {
+        "value": "كل الإرشادات",
+        "_context": "Header for the menu showing all guides"
+      },
+      "checkingGuides": {
+        "value": "أدلة الفحص",
+        "_context": "Header for the menu showing checking guides"
+      },
+      "draftingGuides": {
+        "value": "إرشادات الصياغة",
+        "_context": "Header for the menu showing drafting guides"
+      },
+      "startDraftingTranslation": {
+        "value": "أريد أن أبدأ في إعداد ترجمةٍ.",
+        "_context": "Button to show drafting guides"
+      },
+      "checkTranslation": {
+        "value": "أريد التحقق من ترجمتي.",
+        "_context": "Button to show checking guides"
+      },
+      "helpMeChoose": {
+        "value": "لست متأكدًا، ساعدني في الاختيار.",
+        "_context": "Button to get help choosing a guide"
+      },
+      "showAllGuides": {
+        "value": "أريد اختار دليل.",
+        "_context": "Button to show all guides"
+      },
+      "guideExplanationHeader": {
+        "value": "شرح الدليل.",
+        "_context": "Header for the guide explanation section"
+      },
+      "guideExplanationContent": {
+        "value": "<p>تم تصميم الإرشادات في تطبيق \"بايبل وّل\" لمساعدتك على فَهم الكتاب المقدس بشكلٍ أفضل، مما يُساعدك على النمو في فهم طبيعة الله وعمله. كما أنها تساعدك على ترجمة الكتاب المقدس بشكلٍ أفضل والتأكد من أن ترجمتك قد أُنجزت بشكل جيد. </p> <p>إذا كنت ترغب في دراسة الكتاب المقدس أو ترجمته، يُرجى اختيار \"إرشادات الصياغة\" أدناه. ستأخذك هذه الإرشادات في جولةٍ لفهم الكتاب المقدس وترجمته. </p> <p>إذا كنت ترغب في مراجعة ترجمتك للكتاب المقدس التي قمت بها للتأكد من أنها أُنجزت بشكل جيد، اختر \"أدلة الفحص\" أدناه. هناك عدة خيارات تساعدك على فهم الكتاب المقدس، خاصة المقاطع الصعبة. </p>",
+        "_context": "Explanation of each type of guide so users know what to choose."
+      },
+      "noGuides": {
+        "value": "لا توجد إرشادات للمقطع الذي اخترته",
+        "_context": "Message for when no guides are available for the passage"
+      }
+    },
+    "bibleMenu": {
+      "noBibles": {
+        "value": "لا يوجد ترجمات متاحة للكتاب المقدس",
+        "_context": "Message to display when no Bibles are available"
+      },
+      "selectBible": {
+        "value": "اختر سفرًًا",
+        "_context": "Placeholder text for the dropdown"
+      },
+      "goToPassage": {
+        "value": "عرض المقطع",
+        "_context": "Label for the button to go to the passage"
+      },
+      "bible": {
+        "value": "الكتاب المقدس",
+        "_context": "Label for the dropdown"
+      },
+      "bibleLicenseAcceptanceModal": {
+        "accept": {
+          "value": "موافق",
+          "_context": "Button to accept license"
+        },
+        "cancel": {
+          "value": "إلغاء",
+          "_context": "Button to cancel license accept modal"
+        },
+        "header": {
+          "value": "اتفاقية استخدام المحتوى المُقيّد",
+          "_context": "Header for license accept modal"
+        },
+        "description": {
+          "value": "تم إصدار هذا المورد {resourceName} بموجب ترخيص {licenseType}. يُتيح لك هذا التطبيق الحصول على هذا المورد و\"دمجه\" مع المحتوى المرخص المفتوح المتاح بالفعل على التطبيق. للمضي قدمًا، يرجى تأكيد أنك تفهم شروط ترخيص هذا المورد من خلال النقر على زر \"موافق\".",
+          "_context": "Description for license accept modal"
+        }
+      }
+    },
+    "PredeterminedPassageSelectorMenu": {
+      "stepOneTitle": {
+        "value": "اختر سفرًا",
+        "_context": "Title for the first step in the book and passage selector"
+      },
+      "stepTwoTitle": {
+        "value": "اختر نصًا",
+        "_context": "Title for the second step in the book and passage selector"
+      },
+      "noBooks": {
+        "value": "لا توجد أسفار متاحة",
+        "_context": "Message to display when no Books are available"
+      },
+      "noPassages": {
+        "value": "لا توجد نصوص كتابية متاحة",
+        "_context": "Message to display when no Passages are available"
+      }
+    },
+    "settingsMenu": {
+      "settings": {
+        "value": "الإعدادات",
+        "_context": "Title for the settings section"
+      },
+      "showOnlySrvResources": {
+        "value": "عرض موارد SRV فقط",
+        "_context": "Label for the toggle to show only SRV resources"
+      },
+      "communityEditionResources": {
+        "value": "موارد هيئة التحرير",
+        "_context": "Label for the toggle to show Community Edition resources"
+      },
+      "aiTranslatedResources": {
+        "value": "موارد مُترجمة بواسطة الذكاء الإصطناعيّ",
+        "_context": "Label for the toggle to show AI Translated resources"
+      },
+      "showResourceByCheckingMethod": {
+        "value": "عرض الموارد حسب طريقة التحقيق",
+        "_context": "Label for the toggle to show resources by checking method"
+      },
+      "showResourcesByTitle": {
+        "value": "عرض الموارد حسب العنوان",
+        "_context": "Label for the toggle to show resources by title"
+      }
+    },
+    "BookChapterSelectorPane": {
+      "availableBooks": {
+        "value": "الأسفار المتاحة",
+        "_context": "Label for the available books section"
+      },
+      "book": {
+        "value": "السفر",
+        "_context": "Label for the book dropdown"
+      },
+      "selectChapter": {
+        "value": "اختر الأصحاح",
+        "_context": "Label for the chapter dropdown"
+      },
+      "chapter": {
+        "value": "الأصحاح",
+        "_context": "Label for the chapter dropdown"
+      },
+      "selectVerse": {
+        "value": "اختر الآية الأولى والأخيرة",
+        "_context": "Label for the verse dropdown"
+      },
+      "go": {
+        "value": "اذهب",
+        "_context": "Label for the go button"
+      }
+    },
+    "quickShare": {
+      "share": {
+        "value": "شارك",
+        "_context": "over all title"
+      },
+      "inAWebBrowser": {
+        "value": "افتح متصفح الإنترنت (مثل Chrome) واذهب إلى:",
+        "_context": "this tells the user to go to a web browser and navigate to a specific URL"
+      },
+      "orScan": {
+        "value": "أو استخدم:",
+        "_context": "this tells the user to scan a QR code instead of going to a URL"
+      },
+      "toInstallBibleWell": {
+        "value": "لتثبيت تطبيق بايبل وّل:",
+        "_context": "this is the title of the installation instructions"
+      },
+      "stepOne": {
+        "value": "1. افتح متصفح الإنترنت (مثل Chrome)",
+        "_context": "this is the first step in the installation instructions"
+      },
+      "stepTwo": {
+        "value": "2. اذهب إلى",
+        "_context": "this is the second step in the installation instructions"
+      },
+      "stepThree": {
+        "value": "3. قم بالذهاب إلى الإعدادات",
+        "_context": "this is the third step in the installation instructions"
+      },
+      "stepFour": {
+        "value": "4. انقر على \"تثبيت\" (انظر أدناه)",
+        "_context": "this is the fourth step in the installation instructions"
+      },
+      "close": {
+        "value": "إغلاق",
+        "_context": "this is the button to close the quick share view"
+      }
+    },
+    "feedback": {
+      "feedback": {
+        "value": "التعليقات",
+        "_context": "Title for the feedback section"
+      },
+      "submit": {
+        "value": "إرسال",
+        "_context": "Label for the submit button"
+      },
+      "feedbackSending": {
+        "value": "جارٍ إرسال التعليق...",
+        "_context": "Message to display when feedback is being sent"
+      },
+      "feedbackSuccessfullySent": {
+        "value": "تم إرسال التعليق بنجاح",
+        "_context": "Message to display when feedback is successfully sent"
+      },
+      "feedbackQueuedOffline": {
+        "value": "سيُرسل التعليق عند استعادة الاتصال بالإنترنت.",
+        "_context": "Message to display when user is offline but feedback will be sent later."
+      },
+      "feedbackError": {
+        "value": "حدث خطأ أثناء إرسال التعليق. يرجى المحاولة مرة أخرى.",
+        "_context": "Message to display when the feedback failed to send."
+      },
+      "thankYou": {
+        "value": "شكرًا!",
+        "_context": "Message to display when feedback is successfully sent"
+      },
+      "close": {
+        "value": "إغلاق",
+        "_context": "Button to close the feedback form"
+      },
+      "feedbackFailedToSend": {
+        "value": "تعذر إرسال التعليق.",
+        "_context": "Message to display when feedback fails to send"
+      },
+      "pleaseCheckYourInternetConnectionAndRetry": {
+        "value": "يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة.",
+        "_context": "Message to display when feedback fails to send"
+      },
+      "retry": {
+        "value": "إعادة المحاولة",
+        "_context": "Button to retry sending feedback"
+      },
+      "feedbackForm": {
+        "name": {
+          "value": "الاسم",
+          "_context": "Label for the name input field"
+        },
+        "email": {
+          "value": "البريد الإلكتروني",
+          "_context": "Label for the email input field"
+        },
+        "phone": {
+          "value": "الهاتف",
+          "_context": "Label for the phone input field"
+        },
+        "howOftenDoYouUseTheBibleWell": {
+          "value": "إلى أي مدى تعتمد على برنامج بايبل وّل وتستخدمه؟",
+          "_context": "Label for the how often input field"
+        },
+        "whatDoYouLikeMostAboutTheBibleWell": {
+          "value": "ما هو أكثر شيء يعجبك في برنامج بايبل وّل؟",
+          "_context": "Label for the what do you like most input field"
+        },
+        "WhatCanBeImproved": {
+          "value": "ما الذي يمكن تحسينه؟",
+          "_context": "Label for the what can be improved input field"
+        },
+        "howAreYouUsingTheBibleWell": {
+          "value": "كيف تستخدم برنامج بايبل وّل؟",
+          "_context": "Label for the how are you using the Bible Well input field"
+        },
+        "bibleTranslation": {
+          "value": "ترجمة الكتاب المقدس",
+          "_context": "Label for the Bible Translation input field"
+        },
+        "sermonPreparation": {
+          "value": "تحضير العظات",
+          "_context": "Label for the Sermon Preparation input field"
+        },
+        "bibleStudy": {
+          "value": "دراسة الكتاب المقدس",
+          "_context": "Label for the Bible Study input field"
+        },
+        "studiesBibleSchoolSeminary": {
+          "value": "دراسات (معاهد الكتاب المقدس وكليات اللاهوت)",
+          "_context": "Label for the Studies (Bible School, Seminary) input field"
+        },
+        "Evangelism": {
+          "value": "الكرازة",
+          "_context": "Label for the Evangelism input field"
+        },
+        "isRequired": {
+          "value": "إجباري",
+          "_context": "Message to display when a field is required"
+        },
+        "likesOrImprovementsFeedbackRequired": {
+          "value": "يُرجى إبداء الإعجاب أو كتابة مقترحات",
+          "_context": "Message to display when the likes or improvements feedback is required"
+        },
+        "pleaseFillInTheRequiredFields": {
+          "value": "يرجى ملء الفراغات المطلوبة.",
+          "_context": "Message to display when the required fields are not filled in"
+        }
+      },
+      "infoPromptForm": {
+        "share": {
+          "value": "شارك معلوماتك",
+          "_context": "Title for contact form popup"
+        },
+        "shareSubtitle": {
+          "value": "ساعدنا في تحسين تطبيق بايبل وّل وجعله أسهل في الاستخدام! مساهمتك تحدث فرقًا!",
+          "_context": "Subtitle for the contact form popup"
+        },
+        "contactInformation": {
+          "value": "بياناتك",
+          "_context": "Label for contact information dropdown"
+        },
+        "contactType": {
+          "value": "طريقة التواصل",
+          "_context": "Label for contact type dropdown"
+        }
+      },
+      "resourceFeedbackForm": {
+        "rateContent": {
+          "value": "قم بتقييم هذا المحتوى",
+          "_context": "Label for the star rating field"
+        },
+        "additionalFeedback": {
+          "value": "ملاحظات إضافية (اختياري)",
+          "_context": "Label for additional feedback"
+        },
+        "contactInformation": {
+          "value": "معلومات المُتصِل (اختياري).",
+          "_context": "Label for contact information section"
+        },
+        "contactType": {
+          "value": "طريقة التواصل",
+          "_context": "Label for contact type dropdown"
+        }
+      },
+      "contactType": {
+        "email": {
+          "value": "البريد الإلكتروني",
+          "_context": "Email contact method"
+        },
+        "phone": {
+          "value": "الهاتف",
+          "_context": "Phone contact method"
+        },
+        "whatsapp": {
+          "value": "واتس آب",
+          "_context": "WhatsApp contact method"
+        },
+        "signal": {
+          "value": "سيجنال",
+          "_context": "Signal contact method"
+        },
+        "other": {
+          "value": "آخر",
+          "_context": "Other contact method"
+        }
+      }
     }
+  },
+  "navTop": {
+    "selectPassage": {
+      "value": "اختر نصُا",
+      "_context": "Button to select a passage"
+    },
+    "selectGuide": {
+      "value": "اختر دليلًا",
+      "_context": "Button to select a guide"
+    }
+  },
+  "resources": {
+    "fia": {
+      "step1": {
+        "value": "الاستماع والفهم",
+        "_context": "See FIA for translations of each step name"
+      },
+      "step2": {
+        "value": "تعريف السياق",
+        "_context": "See FIA for translations of each step name"
+      },
+      "step3": {
+        "value": "تحديد المشهد",
+        "_context": "See FIA for translations of each step name"
+      },
+      "step4": {
+        "value": "تجسيد المقطع",
+        "_context": "See FIA for translations of each step name"
+      },
+      "step5": {
+        "value": "الإلمام بالمصطلحات",
+        "_context": "See FIA for translations of each step name"
+      },
+      "step6": {
+        "value": "صياغة الكلمات",
+        "_context": "See FIA for translations of each step name"
+      }
+    },
+    "silOpenTranslatorsNotes": {
+      "paragraphButton": {
+        "value": "الفقرة",
+        "_context": "Button to see OTN paragraph info"
+      },
+      "sectionButton": {
+        "value": "القسم",
+        "_context": "Button to see OTN section info"
+      },
+      "suggestionsButton": {
+        "value": "المعاني",
+        "_context": "Button to see OTN text translation suggestions info"
+      },
+      "suggestionsDescription": {
+        "value": "استخدم هذه كأداة لفهم معنى النص الأصلي، ثم عبّر عنه بشكل تلقائيّ بلغتك.",
+        "_context": "Description explaining OTN text translation suggestions"
+      }
+    }
+  },
+  "errorMessage": {
+    "error": {
+      "value": "خطأ",
+      "_context": "The label for the error message"
+    },
+    "title": {
+      "value": "تعذر تحميل المحتوى",
+      "_context": "The title for the error message"
+    },
+    "message": {
+      "value": "في حال استمرار المشكلة، يرجى التأكد من اتصالك بالإنترنت.",
+      "_context": "The message for the error message"
+    },
+    "home": {
+      "value": "الصفحة الرئيسية",
+      "_context": "The label for the home button"
+    },
+    "browserUnsupported": {
+      "value": "برجاء استخدام متصفح آخر. أو إذا كنت تستخدم متصفح متخفيّ، برجاء استخدام الوضع العادي.",
+      "_context": "Message for when the browser is missing features"
+    }
+  },
+  "components": {
+    "search": {
+      "placeholder": {
+        "value": "بحث",
+        "_context": "Placeholder text for the search component"
+      },
+      "clear": {
+        "value": "مسح",
+        "_context": "Button in the search component for clearing entered text"
+      },
+      "passage": {
+        "value": "النص",
+        "_context": "Label for the passage search button"
+      },
+      "resource": {
+        "value": "مورد",
+        "_context": "Label for the resource search button"
+      },
+      "resources": {
+        "value": "الموارد",
+        "_context": "Title for the resource menu"
+      },
+      "loadMore": {
+        "value": "عرض المزيد",
+        "_context": "Button to load more resources"
+      }
+    },
+    "communityEditionModal": {
+      "header": {
+        "value": "المحتوى الخاص بهيئة التحرير",
+        "_context": "Header for the community edition content modal"
+      },
+      "description": {
+        "value": "<p>لم يتم التحقق بالكامل من دقة هذا المحتوى. قام أحد أعضاء هيئة التحرير بترجمته، لكنه لم يمر بنفس عملية المراجعة التي تمر بها المحتويات الأخرى. يرجى استخدامه بحذر. </p> <p>يُرجى الإبلاغ عن أي أخطاء في الترجمة، أو تقديم اقتراحات عبر أيقونة التعليقات الموجودة في الزاوية العلوية اليمنى من النافذة. </p> <p>إذا كنت مهتمًا بأن تصبح مساهمًا في هيئة التحرير، اذهب إلى القائمة الرئيسية > التعليقات، وأخبرنا بذلك. </p>",
+        "_context": "Description for the community edition content modal"
+      }
+    },
+    "aiEditionModal": {
+      "header": {
+        "value": "محتوى مُترجمة بواسطة الذكاء الإصطناعيّ",
+        "_context": "Header for the community edition content modal"
+      },
+      "description": {
+        "value": "<p>تمت ترجمة هذا المحتوى باستخدام الذكاء الاصطناعي ولم يتم مراجعته من قِبَل هيئة التحرير للتأكد من دقته. يرجى استخدامه بحذر. </p> <p>يُرجى الإبلاغ عن أي أخطاء في الترجمة، أو تقديم اقتراحات عبر أيقونة التعليقات الموجودة في الزاوية العلوية اليمنى من النافذة. </p> <p>إذا كنت مهتمًا بأن تصبح مساهمًا في هيئة التحرير، اذهب إلى القائمة الرئيسية > التعليقات، وأخبرنا بذلك. </p>",
+        "_context": "Description for the community edition content modal"
+      }
+    }
+  }
 }
