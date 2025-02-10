@@ -1,822 +1,822 @@
 {
-  "page": {
-    "index": {
-      "downloadResourcesForOfflineUse": {
-        "value": "Serez-vous hors ligne ? Téléchargez plus de contenu.",
-        "_context": "Button text telling the user to download resources for offline use"
-      },
-      "about": {
-        "value": "Informations",
-        "_context": "Link to the about page"
-      },
-      "downloadManager": {
-        "value": "Gestion des téléchargements",
-        "_context": "The label for the download manager button"
-      },
-      "getStarted": {
-        "value": "Démarrer",
-        "_context": "Button to get started with the application"
-      }
-    },
-    "about": {
-      "error": {
-        "value": "Erreur lors du chargement des infos de licences",
-        "_context": "Message to show when there's an error loading the page for some reason"
-      },
-      "license": {
-        "releasedUnderSingle": {
-          "value": "Disponible sous {name}",
-          "_context": "Description explaining the content is released under a single license"
+    "page": {
+        "index": {
+            "downloadResourcesForOfflineUse": {
+                "value": "Serez-vous hors ligne ? Téléchargez plus de contenu.",
+                "_context": "Button text telling the user to download resources for offline use"
+            },
+            "about": {
+                "value": "Informations",
+                "_context": "Link to the about page"
+            },
+            "downloadManager": {
+                "value": "Gestion des téléchargements",
+                "_context": "The label for the download manager button"
+            },
+            "getStarted": {
+                "value": "Démarrer",
+                "_context": "Button to get started with the application"
+            }
         },
-        "releasedUnderMultiple": {
-          "value": "Disponible sous : {names}",
-          "_context": "Description explaining the content is released under multiple licenses"
+        "about": {
+            "error": {
+                "value": "Erreur lors du chargement des infos de licences",
+                "_context": "Message to show when there's an error loading the page for some reason"
+            },
+            "license": {
+                "releasedUnderSingle": {
+                    "value": "Disponible sous {name}",
+                    "_context": "Description explaining the content is released under a single license"
+                },
+                "releasedUnderMultiple": {
+                    "value": "Disponible sous : {names}",
+                    "_context": "Description explaining the content is released under multiple licenses"
+                },
+                "adaptedInLanguages": {
+                    "value": "{title} est une adaptation dans les langues suivantes <br /> {languages}<br /> de {title} {copyright} {date} {publisher}<br /> disponible sous la licence {bnLicense} à travers Biblionexus",
+                    "_context": "Description for license adapted in languages"
+                }
+            }
         },
-        "adaptedInLanguages": {
-          "value": "{title} est une adaptation dans les langues suivantes <br /> {languages}<br /> de {title} {copyright} {date} {publisher}<br /> disponible sous la licence {bnLicense} à travers Biblionexus",
-          "_context": "Description for license adapted in languages"
-        }
-      }
-    },
-    "passage": {
-      "nav": {
-        "bible": {
-          "value": "Bible",
-          "_context": "Label for Bible button on navbar"
+        "passage": {
+            "nav": {
+                "bible": {
+                    "value": "Bible",
+                    "_context": "Label for Bible button on navbar"
+                },
+                "guide": {
+                    "value": "Guide",
+                    "_context": "Label for Guide button on navbar"
+                },
+                "library": {
+                    "value": "Bibliothèque",
+                    "_context": "Label for Library button on navbar"
+                },
+                "menu": {
+                    "value": "Menu",
+                    "_context": "Label for Menu button on navbar"
+                },
+                "resources": {
+                    "value": "Ressources",
+                    "_context": "Label for Resources button on navbar"
+                }
+            },
+            "resourcePane": {
+                "cancel": {
+                    "value": "Annuler",
+                    "_context": "Button to cancel search"
+                },
+                "libraryTitle": {
+                    "value": "Bibliothèque",
+                    "_context": "Title for the Library Menu"
+                },
+                "librarySubtitle": {
+                    "value": "Trouver des ressources",
+                    "_context": "Subtitle for the Library Menu"
+                },
+                "typeToSearch": {
+                    "value": "Taper un terme de recherche",
+                    "_context": "Label for searching the library"
+                },
+                "fullscreen": {
+                    "currentOfTotalLabel": {
+                        "value": "{current} sur {total}",
+                        "_context": "Displays the current position out of the total fullscreen elements"
+                    }
+                },
+                "seeAll": {
+                    "value": "Voir tout ({count})",
+                    "_context": "Button for the user to see all resources of a given resource type"
+                },
+                "noThumbnail": {
+                    "value": "Miniature non disponible",
+                    "_context": "Label for videos that have no thumbnail"
+                },
+                "noResourcesFound": {
+                    "header": {
+                        "value": "Aucune ressource trouvée",
+                        "_context": "Header to show when no resources are found with the search string"
+                    },
+                    "description": {
+                        "value": "La recherche de \"{searchQuery}\" ne trouve aucun résultat.",
+                        "_context": "Description to show no resources are found with the search string"
+                    }
+                },
+                "resourceCount": {
+                    "singular": {
+                        "value": "1 ressource",
+                        "_context": "Label for when there is one resource"
+                    },
+                    "plural": {
+                        "value": "{count} ressources",
+                        "_context": "Label for when there is more than one resource"
+                    }
+                },
+                "error": {
+                    "value": "Erreur de chargement de la ressource",
+                    "_context": "Message for when a resource fails to load"
+                }
+            },
+            "alignmentMode": {
+                "selectWord": {
+                    "value": "Cliquer sur un mot pour voir la source en langue originale",
+                    "_context": "Instructions for when user hasn't selected word yet in alignment mode"
+                },
+                "noWordInfoAvailable": {
+                    "value": "Pas d'information de langue originale disponible pour cette sélection.",
+                    "_context": "Message for when we're missing alignment data for the selected word."
+                },
+                "noSenseInfoAvailable": {
+                    "value": "Pas de glose ou de définition disponibles pour cette sélection.",
+                    "_context": "Message for when we're missing alignment data for the selected word."
+                },
+                "gloss": {
+                    "value": "Glose",
+                    "_context": "Gloss label for Greek/Hebrew alignment"
+                },
+                "definition": {
+                    "value": "Définition",
+                    "_context": "Definition label for Greek/Hebrew alignment"
+                }
+            },
+            "noBibleContent": {
+                "header": {
+                    "value": "Ressource non disponible",
+                    "_context": "Header for when a Bible is not available in the current language"
+                },
+                "description": {
+                    "value": "Il n'y a pas de Bible disponible en {language} sur cet appareil.<br /> Voulez-vous utiliser une Bible dans une autre langue ?",
+                    "_context": "Description for when a Bible is not available in the current language"
+                },
+                "noneAvailableDescription": {
+                    "value": "Il n'y a pas de Bible disponible en {language} ou toute autre langue sur cet appareil.<br /> Téléchargez-en une lorsque vous serez en ligne.",
+                    "_context": "Description for when a Bible is not available in the current language or any other language"
+                },
+                "show": {
+                    "value": "Choisisr une Bible",
+                    "_context": "Button to pop up modal that allows selecting a Bible."
+                },
+                "checkForMoreResources": {
+                    "value": "Voir les ressources disponibles...",
+                    "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
+                },
+                "missingFromBible": {
+                    "value": "Cette Bible ne contient pas le passage sélectionné.",
+                    "_context": "Message for when the Bible does not have the passage for whatever reason."
+                }
+            },
+            "noGuideContent": {
+                "value": "Pas de contenu trouvé sur ce passage.",
+                "_context": "Message to display when the content is not downloaded or available"
+            },
+            "guide": {
+                "next": {
+                    "value": "Suivant",
+                    "_context": "Go to next item in guide."
+                },
+                "usedInVerses": {
+                    "value": "Utilisé dans les versets suivants",
+                    "_context": "Prefixed to content in Translation Words Guides for displaying references of the word in the selected passage"
+                }
+            }
         },
-        "guide": {
-          "value": "Guide",
-          "_context": "Label for Guide button on navbar"
-        },
-        "library": {
-          "value": "Bibliothèque",
-          "_context": "Label for Library button on navbar"
+        "fileManager": {
+            "downloadManager": {
+                "value": "Gestion des téléchargements",
+                "_context": "Title displayed on the download manager page"
+            },
+            "download": {
+                "value": "Téléchargement",
+                "_context": "Table column heading for the column with checkboxes allowing the user to select content to download"
+            },
+            "textType": {
+                "value": "Texte",
+                "_context": "The media type for text, available to be downloaded"
+            },
+            "audioType": {
+                "value": "Audio",
+                "_context": "The media type for audio, available to be downloaded"
+            },
+            "mediaType": {
+                "value": "Multimédia",
+                "_context": "The media type for media, available to be downloaded"
+            },
+            "ok": {
+                "value": "OK",
+                "_context": "Button to download/delete content based on what the user selected"
+            },
+            "cancel": {
+                "value": "Annuler",
+                "_context": "Button to cancel current action"
+            },
+            "noInternet": {
+                "value": "Pas de connexion Internet",
+                "_context": "Message to display when the user has no internet connection"
+            },
+            "selectABook": {
+                "value": "Choisir un livre",
+                "_context": "Label for a dropdown allowing the user to select a book to view"
+            },
+            "delete": {
+                "value": "Supprimer",
+                "_context": "Button to delete content"
+            },
+            "modal": {
+                "title": {
+                    "value": "Confirmer le téléchargement",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
+                },
+                "description": {
+                    "value": "Bible Well va télécharger {downloadSize} de contenu sur cet appareil.",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
+                },
+                "downloadProgress": {
+                    "value": "Progression du téléchargement",
+                    "_context": "Title of the modal showing the user how the download is progressing"
+                },
+                "success": {
+                    "value": "Téléchargement terminé",
+                    "_context": "Title of the modal showing the download was successful"
+                },
+                "close": {
+                    "value": "Fermer",
+                    "_context": "Button to close the modal"
+                },
+                "downloadingDescription": {
+                    "value": "Téléchargement de {totalSizeDownloaded} sur {totalSizeToDownload}.",
+                    "_context": "Shows on the modal showing the user how the download is progressing"
+                }
+            },
+            "deleteModal": {
+                "warning": {
+                    "value": "Attention !",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
+                },
+                "description": {
+                    "value": "Êtes-vous sûr(e) de vouloir supprimer définitivement ces fichiers de votre appareil ?",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
+                }
+            },
+            "metaData": {
+                "description": {
+                    "value": "C'est ici que vous pouvez télécharger et supprimer du contenu d'Aquifer sur votre appareil.",
+                    "_context": "Meta tag description"
+                }
+            },
+            "viewHeader": {
+                "name": {
+                    "value": "Nom",
+                    "_context": "Label for the name column"
+                },
+                "text": {
+                    "value": "Texte",
+                    "_context": "Label for the text column"
+                },
+                "audio": {
+                    "value": "Audio",
+                    "_context": "Label for the audio column"
+                },
+                "media": {
+                    "value": "Multimédia",
+                    "_context": "Label for the media column"
+                }
+            },
+            "viewRow": {
+                "resources": {
+                    "value": "Ressources",
+                    "_context": "Label for the resources row"
+                }
+            }
         },
         "menu": {
-          "value": "Menu",
-          "_context": "Label for Menu button on navbar"
+            "home": {
+                "value": "Accueil",
+                "_context": "Label for the home button"
+            },
+            "menu": {
+                "value": "Menu",
+                "_context": "Label for the menu button"
+            },
+            "downloadManager": {
+                "value": "Gestion des téléchargements",
+                "_context": "Label for the download manager button"
+            },
+            "language": {
+                "value": "Langue",
+                "_context": "Label for the language button"
+            },
+            "shortcuts": {
+                "value": "Raccourcis",
+                "_context": "Label for the shortcuts button"
+            },
+            "changeLanguage": {
+                "value": "Changer de langue",
+                "_context": "Label for the change language button"
+            }
         },
-        "resources": {
-          "value": "Ressources",
-          "_context": "Label for Resources button on navbar"
+        "selectLanguage": {
+            "welcome": {
+                "value": "Bienvenue",
+                "_context": "Title for the select language page"
+            },
+            "chooseYourPreferredLanguage": {
+                "value": "Choisir une langue",
+                "_context": "Placeholder text for the sub title"
+            },
+            "next": {
+                "value": "Suivant",
+                "_context": "Label for next button"
+            }
+        },
+        "guideMenu": {
+            "translationGuides": {
+                "value": "Guides de traduction",
+                "_context": "Title for the Translation Guides section"
+            },
+            "whatWouldYouLikeToDo": {
+                "value": "Que voulez-vous faire ?",
+                "_context": "Header for the guide selection options"
+            },
+            "chooseGuide": {
+                "value": "Choisir un guide",
+                "_context": "Placeholder text for the dropdown"
+            },
+            "allGuides": {
+                "value": "Tous les guides",
+                "_context": "Header for the menu showing all guides"
+            },
+            "checkingGuides": {
+                "value": "Guides de vérification",
+                "_context": "Header for the menu showing checking guides"
+            },
+            "draftingGuides": {
+                "value": "Guides de rédaction",
+                "_context": "Header for the menu showing drafting guides"
+            },
+            "startDraftingTranslation": {
+                "value": "Je veux commencer à rédiger une traduction.",
+                "_context": "Button to show drafting guides"
+            },
+            "checkTranslation": {
+                "value": "Je veux vérifier que j'ai bien traduit.",
+                "_context": "Button to show checking guides"
+            },
+            "helpMeChoose": {
+                "value": "Je ne pas sûr(e), aidez-moi à choisir.",
+                "_context": "Button to get help choosing a guide"
+            },
+            "showAllGuides": {
+                "value": "Je veux choisir un guide.",
+                "_context": "Button to show all guides"
+            },
+            "guideExplanationHeader": {
+                "value": "Détails sur le guide",
+                "_context": "Header for the guide explanation section"
+            },
+            "guideExplanationContent": {
+                "value": "<p>Les guides de Bible Well sont conçus pour vous aider à mieux comprendre la Bible. Ils vous aident à mieux comprendre qui est Dieu et ce qu'il fait. Ils vous aident également à mieux traduire la Bible et à vous assurer que votre traduction a été bien faite.</p><p>Si vous voulez étudier la Bible ou commencer à traduire la Bible, choisissez « Guides de rédaction » ci-dessous. Ils vous aideront à comprendre la Bible et à commencer à rédiger votre traduction.</p><p>Si vous voulez vérifier que vous avez bien traduit la Bible, choisissez « Guides de vérification » ci-dessous. Plusieurs options vous aideront à comprendre la Bible, y compris les passages difficiles.</p>",
+                "_context": "Explanation of each type of guide so users know what to choose."
+            },
+            "noGuides": {
+                "value": "Pas de guide disponible sur le passage sélectionné",
+                "_context": "Message for when no guides are available for the passage"
+            }
+        },
+        "bibleMenu": {
+            "noBibles": {
+                "value": "Pas de Bibles disponibles",
+                "_context": "Message to display when no Bibles are available"
+            },
+            "selectBible": {
+                "value": "Choisir une Bible",
+                "_context": "Placeholder text for the dropdown"
+            },
+            "goToPassage": {
+                "value": "Aller au passage",
+                "_context": "Label for the button to go to the passage"
+            },
+            "bible": {
+                "value": "Bible",
+                "_context": "Label for the dropdown"
+            },
+            "bibleLicenseAcceptanceModal": {
+                "accept": {
+                    "value": "Accepter",
+                    "_context": "Button to accept license"
+                },
+                "cancel": {
+                    "value": "Annuler",
+                    "_context": "Button to cancel license accept modal"
+                },
+                "header": {
+                    "value": "Accord d'accès non-libre",
+                    "_context": "Header for license accept modal"
+                },
+                "description": {
+                    "value": "La ressource que vous souhaitez importer, {resourceName}, est publiée sous une licence de type {licenseType}. Cette application vous permet d'importer et de « combiner » cette ressource avec du contenu sous licence d'accès libre déjà disponible dans l'application. Pour continuer, veuillez confirmer que vous comprenez les termes de la licence de cette ressource en cliquant sur le bouton « Accepter ».",
+                    "_context": "Description for license accept modal"
+                }
+            }
+        },
+        "PredeterminedPassageSelectorMenu": {
+            "stepOneTitle": {
+                "value": "Choisir un livre",
+                "_context": "Title for the first step in the book and passage selector"
+            },
+            "stepTwoTitle": {
+                "value": "Choisir un passage",
+                "_context": "Title for the second step in the book and passage selector"
+            },
+            "noBooks": {
+                "value": "Pas de livre disponible",
+                "_context": "Message to display when no Books are available"
+            },
+            "noPassages": {
+                "value": "Pas de passage disponible",
+                "_context": "Message to display when no Passages are available"
+            }
+        },
+        "settingsMenu": {
+            "settings": {
+                "value": "Paramètres",
+                "_context": "Title for the settings section"
+            },
+            "showOnlySrvResources": {
+                "value": "Afficher seulement les ressources de SRV",
+                "_context": "Label for the toggle to show only SRV resources"
+            },
+            "communityEditionResources": {
+                "value": "Ressources d'édition communautaire",
+                "_context": "Label for the toggle to show Community Edition resources"
+            },
+            "aiTranslatedResources": {
+                "value": "Ressources traduites par IA",
+                "_context": "Label for the toggle to show AI Translated resources"
+            },
+            "showResourceByCheckingMethod": {
+                "value": "Afficher les ressources par méthode de vérification",
+                "_context": "Label for the toggle to show resources by checking method"
+            },
+            "showResourcesByTitle": {
+                "value": "Afficher les ressources par titre",
+                "_context": "Label for the toggle to show resources by title"
+            }
+        },
+        "BookChapterSelectorPane": {
+            "availableBooks": {
+                "value": "Livres disponibles",
+                "_context": "Label for the available books section"
+            },
+            "book": {
+                "value": "Livre",
+                "_context": "Label for the book dropdown"
+            },
+            "selectChapter": {
+                "value": "Choisir un chapitre",
+                "_context": "Label for the chapter dropdown"
+            },
+            "chapter": {
+                "value": "Chapitre",
+                "_context": "Label for the chapter dropdown"
+            },
+            "selectVerse": {
+                "value": "Choisir un premier et dernier verset",
+                "_context": "Label for the verse dropdown"
+            },
+            "go": {
+                "value": "Aller",
+                "_context": "Label for the go button"
+            }
+        },
+        "quickShare": {
+            "share": {
+                "value": "Partager",
+                "_context": "over all title"
+            },
+            "inAWebBrowser": {
+                "value": "Dans un navigateur Internet (comme Chrome), aller sur :",
+                "_context": "this tells the user to go to a web browser and navigate to a specific URL"
+            },
+            "orScan": {
+                "value": "Ou scanner :",
+                "_context": "this tells the user to scan a QR code instead of going to a URL"
+            },
+            "toInstallBibleWell": {
+                "value": "Pour installer Bible Well :",
+                "_context": "this is the title of the installation instructions"
+            },
+            "stepOne": {
+                "value": "1. Ouvrir un navigateur Internet (comme Chrome)",
+                "_context": "this is the first step in the installation instructions"
+            },
+            "stepTwo": {
+                "value": "2. Aller sur",
+                "_context": "this is the second step in the installation instructions"
+            },
+            "stepThree": {
+                "value": "3. Aller dans paramètres",
+                "_context": "this is the third step in the installation instructions"
+            },
+            "stepFour": {
+                "value": "4. Cliquer sur « Install » (voir ci-dessous) ",
+                "_context": "this is the fourth step in the installation instructions"
+            },
+            "close": {
+                "value": "Fermer",
+                "_context": "this is the button to close the quick share view"
+            }
+        },
+        "feedback": {
+            "feedback": {
+                "value": "Retours et suggestions",
+                "_context": "Title for the feedback section"
+            },
+            "submit": {
+                "value": "Envoyer",
+                "_context": "Label for the submit button"
+            },
+            "feedbackSending": {
+                "value": "Envoi de vos retours et suggestions",
+                "_context": "Message to display when feedback is being sent"
+            },
+            "feedbackSuccessfullySent": {
+                "value": "Retours et suggestions envoyés.",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "feedbackQueuedOffline": {
+                "value": "Vos retours et suggestions seront envoyés quand vous serez à nouveau en ligne.",
+                "_context": "Message to display when user is offline but feedback will be sent later."
+            },
+            "feedbackError": {
+                "value": "Erreur lors de l'envoi de vos retours et suggestions. Veuillez essayer à nouveau.",
+                "_context": "Message to display when the feedback failed to send."
+            },
+            "thankYou": {
+                "value": "Merci !",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "close": {
+                "value": "Fermer",
+                "_context": "Button to close the feedback form"
+            },
+            "feedbackFailedToSend": {
+                "value": "L'envoi de vos retours et suggestions n'a pas fonctionné.",
+                "_context": "Message to display when feedback fails to send"
+            },
+            "pleaseCheckYourInternetConnectionAndRetry": {
+                "value": "Veuillez vérifier que vous êtes en ligne et essayer de nouveau.",
+                "_context": "Message to display when feedback fails to send"
+            },
+            "retry": {
+                "value": "Essayer de nouveau",
+                "_context": "Button to retry sending feedback"
+            },
+            "feedbackForm": {
+                "name": {
+                    "value": "Nom",
+                    "_context": "Label for the name input field"
+                },
+                "email": {
+                    "value": "Email",
+                    "_context": "Label for the email input field"
+                },
+                "phone": {
+                    "value": "Téléphone",
+                    "_context": "Label for the phone input field"
+                },
+                "howOftenDoYouUseTheBibleWell": {
+                    "value": "À quelle fréquence utilisez-vous Bible Well ?",
+                    "_context": "Label for the how often input field"
+                },
+                "whatDoYouLikeMostAboutTheBibleWell": {
+                    "value": "Qu'est ce que vous aimez le plus dans Bible Well ?",
+                    "_context": "Label for the what do you like most input field"
+                },
+                "WhatCanBeImproved": {
+                    "value": "Qu'est-ce qui pourrait être amélioré ?",
+                    "_context": "Label for the what can be improved input field"
+                },
+                "howAreYouUsingTheBibleWell": {
+                    "value": "Quel usage faites-vous de Bible Well ?",
+                    "_context": "Label for the how are you using the Bible Well input field"
+                },
+                "bibleTranslation": {
+                    "value": "Traduction de la Bible",
+                    "_context": "Label for the Bible Translation input field"
+                },
+                "sermonPreparation": {
+                    "value": "Préparation de sermons",
+                    "_context": "Label for the Sermon Preparation input field"
+                },
+                "bibleStudy": {
+                    "value": "Étude de la Bible",
+                    "_context": "Label for the Bible Study input field"
+                },
+                "studiesBibleSchoolSeminary": {
+                    "value": "Études (école biblique, séminaire)",
+                    "_context": "Label for the Studies (Bible School, Seminary) input field"
+                },
+                "Evangelism": {
+                    "value": "Évangélisation",
+                    "_context": "Label for the Evangelism input field"
+                },
+                "isRequired": {
+                    "value": "champ obligatoire",
+                    "_context": "Message to display when a field is required"
+                },
+                "likesOrImprovementsFeedbackRequired": {
+                    "value": "Rétroaction obligatoire",
+                    "_context": "Message to display when the likes or improvements feedback is required"
+                },
+                "pleaseFillInTheRequiredFields": {
+                    "value": "Veuillez remplir les champs obligatoires",
+                    "_context": "Message to display when the required fields are not filled in"
+                }
+            },
+            "infoPromptForm": {
+                "share": {
+                    "value": "Partager vos informations",
+                    "_context": "Title for contact form popup"
+                },
+                "shareSubtitle": {
+                    "value": "Aidez-nous à améliorer Bible Well et le rendre plus facile à utililser ! Vos retours et suggestions sont importants !",
+                    "_context": "Subtitle for the contact form popup"
+                },
+                "contactInformation": {
+                    "value": "Coordonnées pour vous contacter",
+                    "_context": "Label for contact information dropdown"
+                },
+                "contactType": {
+                    "value": "Comment vous contacter",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Évaluation de ce contenu",
+                    "_context": "Label for the star rating field"
+                },
+                "additionalFeedback": {
+                    "value": "Retours et suggestions supplémentaires (optionnel)",
+                    "_context": "Label for additional feedback"
+                },
+                "contactInformation": {
+                    "value": "Coordonnées pour vous contacter (optionnel)",
+                    "_context": "Label for contact information section"
+                },
+                "contactType": {
+                    "value": "Comment vous contacter",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
+            "contactType": {
+                "email": {
+                    "value": "Email",
+                    "_context": "Email contact method"
+                },
+                "phone": {
+                    "value": "Téléphone",
+                    "_context": "Phone contact method"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp",
+                    "_context": "WhatsApp contact method"
+                },
+                "signal": {
+                    "value": "Signal",
+                    "_context": "Signal contact method"
+                },
+                "other": {
+                    "value": "Autre",
+                    "_context": "Other contact method"
+                }
+            }
         }
-      },
-      "resourcePane": {
-        "cancel": {
-          "value": "Annuler",
-          "_context": "Button to cancel search"
+    },
+    "navTop": {
+        "selectPassage": {
+            "value": "Choisir un passage",
+            "_context": "Button to select a passage"
         },
-        "libraryTitle": {
-          "value": "Bibliothèque",
-          "_context": "Title for the Library Menu"
+        "selectGuide": {
+            "value": "Choisir un guide",
+            "_context": "Button to select a guide"
+        }
+    },
+    "resources": {
+        "fia": {
+            "step1": {
+                "value": "Écouter avec son coeur",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step2": {
+                "value": "Établir le contexte",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step3": {
+                "value": "Cadrer la scène",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step4": {
+                "value": "Représenter le passage",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step5": {
+                "value": "Combler les lacuness",
+                "_context": "See FIA for translations of each step name"
+            },
+            "step6": {
+                "value": "Façonner le texte",
+                "_context": "See FIA for translations of each step name"
+            }
         },
-        "librarySubtitle": {
-          "value": "Trouver des ressources",
-          "_context": "Subtitle for the Library Menu"
-        },
-        "typeToSearch": {
-          "value": "Taper un terme de recherche",
-          "_context": "Label for searching the library"
-        },
-        "fullscreen": {
-          "currentOfTotalLabel": {
-            "value": "{current} sur {total}",
-            "_context": "Displays the current position out of the total fullscreen elements"
-          }
-        },
-        "seeAll": {
-          "value": "Voir tout ({count})",
-          "_context": "Button for the user to see all resources of a given resource type"
-        },
-        "noThumbnail": {
-          "value": "Miniature non disponible",
-          "_context": "Label for videos that have no thumbnail"
-        },
-        "noResourcesFound": {
-          "header": {
-            "value": "Aucune ressource trouvée",
-            "_context": "Header to show when no resources are found with the search string"
-          },
-          "description": {
-            "value": "La recherche de \"{searchQuery}\" ne trouve aucun résultat.",
-            "_context": "Description to show no resources are found with the search string"
-          }
-        },
-        "resourceCount": {
-          "singular": {
-            "value": "1 ressource",
-            "_context": "Label for when there is one resource"
-          },
-          "plural": {
-            "value": "{count} ressources",
-            "_context": "Label for when there is more than one resource"
-          }
-        },
+        "silOpenTranslatorsNotes": {
+            "paragraphButton": {
+                "value": "Paragraphe",
+                "_context": "Button to see OTN paragraph info"
+            },
+            "sectionButton": {
+                "value": "Section",
+                "_context": "Button to see OTN section info"
+            },
+            "suggestionsButton": {
+                "value": "Significations",
+                "_context": "Button to see OTN text translation suggestions info"
+            },
+            "suggestionsDescription": {
+                "value": "Utiliser ceci comme moyen de comprendre la signification du text original, puis traduire de façon naturelle dans votre langue.",
+                "_context": "Description explaining OTN text translation suggestions"
+            }
+        }
+    },
+    "errorMessage": {
         "error": {
-          "value": "Erreur de chargement de la ressource",
-          "_context": "Message for when a resource fails to load"
-        }
-      },
-      "alignmentMode": {
-        "selectWord": {
-          "value": "Cliquer sur un mot pour voir la source en langue originale",
-          "_context": "Instructions for when user hasn't selected word yet in alignment mode"
+            "value": "Erreur",
+            "_context": "The label for the error message"
         },
-        "noWordInfoAvailable": {
-          "value": "Pas d'information de langue originale disponible pour cette sélection.",
-          "_context": "Message for when we're missing alignment data for the selected word."
-        },
-        "noSenseInfoAvailable": {
-          "value": "Pas de glose ou de définition disponibles pour cette sélection.",
-          "_context": "Message for when we're missing alignment data for the selected word."
-        },
-        "gloss": {
-          "value": "Glose",
-          "_context": "Gloss label for Greek/Hebrew alignment"
-        },
-        "definition": {
-          "value": "Définition",
-          "_context": "Definition label for Greek/Hebrew alignment"
-        }
-      },
-      "noBibleContent": {
-        "header": {
-          "value": "Ressource non disponible",
-          "_context": "Header for when a Bible is not available in the current language"
-        },
-        "description": {
-          "value": "Il n'y a pas de Bible disponible en {language} sur cet appareil.<br /> Voulez-vous utiliser une Bible dans une autre langue ?",
-          "_context": "Description for when a Bible is not available in the current language"
-        },
-        "noneAvailableDescription": {
-          "value": "Il n'y a pas de Bible disponible en {language} ou toute autre langue sur cet appareil.<br /> Téléchargez-en une lorsque vous serez en ligne.",
-          "_context": "Description for when a Bible is not available in the current language or any other language"
-        },
-        "show": {
-          "value": "Choisisr une Bible",
-          "_context": "Button to pop up modal that allows selecting a Bible."
-        },
-        "checkForMoreResources": {
-          "value": "Voir les ressources disponibles...",
-          "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
-        },
-        "missingFromBible": {
-          "value": "Cette Bible ne contient pas le passage sélectionné.",
-          "_context": "Message for when the Bible does not have the passage for whatever reason."
-        }
-      },
-      "noGuideContent": {
-        "value": "Pas de contenu trouvé sur ce passage.",
-        "_context": "Message to display when the content is not downloaded or available"
-      },
-      "guide": {
-        "next": {
-          "value": "Suivant",
-          "_context": "Go to next item in guide."
-        },
-        "usedInVerses": {
-          "value": "Utilisé dans les versets suivants",
-          "_context": "Prefixed to content in Translation Words Guides for displaying references of the word in the selected passage"
-        }
-      }
-    },
-    "fileManager": {
-      "downloadManager": {
-        "value": "Gestion des téléchargements",
-        "_context": "Title displayed on the download manager page"
-      },
-      "download": {
-        "value": "Téléchargement",
-        "_context": "Table column heading for the column with checkboxes allowing the user to select content to download"
-      },
-      "textType": {
-        "value": "Texte",
-        "_context": "The media type for text, available to be downloaded"
-      },
-      "audioType": {
-        "value": "Audio",
-        "_context": "The media type for audio, available to be downloaded"
-      },
-      "mediaType": {
-        "value": "Multimédia",
-        "_context": "The media type for media, available to be downloaded"
-      },
-      "ok": {
-        "value": "OK",
-        "_context": "Button to download/delete content based on what the user selected"
-      },
-      "cancel": {
-        "value": "Annuler",
-        "_context": "Button to cancel current action"
-      },
-      "noInternet": {
-        "value": "Pas de connexion Internet",
-        "_context": "Message to display when the user has no internet connection"
-      },
-      "selectABook": {
-        "value": "Choisir un livre",
-        "_context": "Label for a dropdown allowing the user to select a book to view"
-      },
-      "delete": {
-        "value": "Supprimer",
-        "_context": "Button to delete content"
-      },
-      "modal": {
         "title": {
-          "value": "Confirmer le téléchargement",
-          "_context": "Title of the modal asking the user to confirm changes before syncing"
+            "value": "Échec du chargement du contenu",
+            "_context": "The title for the error message"
         },
-        "description": {
-          "value": "Bible Well va télécharger {downloadSize} de contenu sur cet appareil.",
-          "_context": "Shows on the modal asking the user to confirm changes before syncing"
+        "message": {
+            "value": "Si ce problème continue, veuillez vérifier que vous êtes en ligne.",
+            "_context": "The message for the error message"
         },
-        "downloadProgress": {
-          "value": "Progression du téléchargement",
-          "_context": "Title of the modal showing the user how the download is progressing"
+        "home": {
+            "value": "Accueil",
+            "_context": "The label for the home button"
         },
-        "success": {
-          "value": "Téléchargement terminé",
-          "_context": "Title of the modal showing the download was successful"
-        },
-        "close": {
-          "value": "Fermer",
-          "_context": "Button to close the modal"
-        },
-        "downloadingDescription": {
-          "value": "Téléchargement de {totalSizeDownloaded} sur {totalSizeToDownload}.",
-          "_context": "Shows on the modal showing the user how the download is progressing"
+        "browserUnsupported": {
+            "value": "Votre navigateur Internet n'est pas pris en charge. Veuillez utiliser un autre navigateur. Si vous êtes en mode incognito ou privé, veuillez utiliser un autre mode.",
+            "_context": "Message for when the browser is missing features"
         }
-      },
-      "deleteModal": {
-        "warning": {
-          "value": "Attention !",
-          "_context": "Title of the modal asking the user to confirm changes before syncing"
-        },
-        "description": {
-          "value": "Êtes-vous sûr(e) de vouloir supprimer définitivement ces fichiers de votre appareil ?",
-          "_context": "Shows on the modal asking the user to confirm changes before syncing"
-        }
-      },
-      "metaData": {
-        "description": {
-          "value": "C'est ici que vous pouvez télécharger et supprimer du contenu d'Aquifer sur votre appareil.",
-          "_context": "Meta tag description"
-        }
-      },
-      "viewHeader": {
-        "name": {
-          "value": "Nom",
-          "_context": "Label for the name column"
-        },
-        "text": {
-          "value": "Texte",
-          "_context": "Label for the text column"
-        },
-        "audio": {
-          "value": "Audio",
-          "_context": "Label for the audio column"
-        },
-        "media": {
-          "value": "Multimédia",
-          "_context": "Label for the media column"
-        }
-      },
-      "viewRow": {
-        "resources": {
-          "value": "Ressources",
-          "_context": "Label for the resources row"
-        }
-      }
     },
-    "menu": {
-      "home": {
-        "value": "Accueil",
-        "_context": "Label for the home button"
-      },
-      "menu": {
-        "value": "Menu",
-        "_context": "Label for the menu button"
-      },
-      "downloadManager": {
-        "value": "Gestion des téléchargements",
-        "_context": "Label for the download manager button"
-      },
-      "language": {
-        "value": "Langue",
-        "_context": "Label for the language button"
-      },
-      "shortcuts": {
-        "value": "Raccourcis",
-        "_context": "Label for the shortcuts button"
-      },
-      "changeLanguage": {
-        "value": "Changer de langue",
-        "_context": "Label for the change language button"
-      }
-    },
-    "selectLanguage": {
-      "welcome": {
-        "value": "Bienvenue",
-        "_context": "Title for the select language page"
-      },
-      "chooseYourPreferredLanguage": {
-        "value": "Choisir une langue",
-        "_context": "Placeholder text for the sub title"
-      },
-      "next": {
-        "value": "Suivant",
-        "_context": "Label for next button"
-      }
-    },
-    "guideMenu": {
-      "translationGuides": {
-        "value": "Guides de traduction",
-        "_context": "Title for the Translation Guides section"
-      },
-      "whatWouldYouLikeToDo": {
-        "value": "Que voulez-vous faire ?",
-        "_context": "Header for the guide selection options"
-      },
-      "chooseGuide": {
-        "value": "Choisir un guide",
-        "_context": "Placeholder text for the dropdown"
-      },
-      "allGuides": {
-        "value": "Tous les guides",
-        "_context": "Header for the menu showing all guides"
-      },
-      "checkingGuides": {
-        "value": "Guides de vérification",
-        "_context": "Header for the menu showing checking guides"
-      },
-      "draftingGuides": {
-        "value": "Guides de rédaction",
-        "_context": "Header for the menu showing drafting guides"
-      },
-      "startDraftingTranslation": {
-        "value": "Je veux commencer à rédiger une traduction.",
-        "_context": "Button to show drafting guides"
-      },
-      "checkTranslation": {
-        "value": "Je veux vérifier que j'ai bien traduit.",
-        "_context": "Button to show checking guides"
-      },
-      "helpMeChoose": {
-        "value": "Je ne pas sûr(e), aidez-moi à choisir.",
-        "_context": "Button to get help choosing a guide"
-      },
-      "showAllGuides": {
-        "value": "Je veux choisir un guide.",
-        "_context": "Button to show all guides"
-      },
-      "guideExplanationHeader": {
-        "value": "Détails sur le guide",
-        "_context": "Header for the guide explanation section"
-      },
-      "guideExplanationContent": {
-        "value": "<p>Les guides de Bible Well sont conçus pour vous aider à mieux comprendre la Bible. Ils vous aident à mieux comprendre qui est Dieu et ce qu'il fait. Ils vous aident également à mieux traduire la Bible et à vous assurer que votre traduction a été bien faite.</p><p>Si vous voulez étudier la Bible ou commencer à traduire la Bible, choisissez « Guides de rédaction » ci-dessous. Ils vous aideront à comprendre la Bible et à commencer à rédiger votre traduction.</p><p>Si vous voulez vérifier que vous avez bien traduit la Bible, choisissez « Guides de vérification » ci-dessous. Plusieurs options vous aideront à comprendre la Bible, y compris les passages difficiles.</p>",
-        "_context": "Explanation of each type of guide so users know what to choose."
-      },
-      "noGuides": {
-        "value": "Pas de guide disponible sur le passage sélectionné",
-        "_context": "Message for when no guides are available for the passage"
-      }
-    },
-    "bibleMenu": {
-      "noBibles": {
-        "value": "Pas de Bibles disponibles",
-        "_context": "Message to display when no Bibles are available"
-      },
-      "selectBible": {
-        "value": "Choisir une Bible",
-        "_context": "Placeholder text for the dropdown"
-      },
-      "goToPassage": {
-        "value": "Aller au passage",
-        "_context": "Label for the button to go to the passage"
-      },
-      "bible": {
-        "value": "Bible",
-        "_context": "Label for the dropdown"
-      },
-      "bibleLicenseAcceptanceModal": {
-        "accept": {
-          "value": "Accepter",
-          "_context": "Button to accept license"
+    "components": {
+        "search": {
+            "placeholder": {
+                "value": "Chercher",
+                "_context": "Placeholder text for the search component"
+            },
+            "clear": {
+                "value": "Effacer",
+                "_context": "Button in the search component for clearing entered text"
+            },
+            "passage": {
+                "value": "Passage",
+                "_context": "Label for the passage search button"
+            },
+            "resource": {
+                "value": "Ressource",
+                "_context": "Label for the resource search button"
+            },
+            "resources": {
+                "value": "Ressources",
+                "_context": "Title for the resource menu"
+            },
+            "loadMore": {
+                "value": "Afficher plus",
+                "_context": "Button to load more resources"
+            }
         },
-        "cancel": {
-          "value": "Annuler",
-          "_context": "Button to cancel license accept modal"
+        "communityEditionModal": {
+            "header": {
+                "value": "Contenu d'édition communautaire",
+                "_context": "Header for the community edition content modal"
+            },
+            "description": {
+                "value": "<p>L'exactitude de ce contenu n'a pas été entièrement vérifiée. Un membre de la communauté l'a traduit, mais il n'a pas été soumis au même processus de révision que les autres contenus. Ne l'utiliser qu'avec précaution.</p><p>Veuillez nous signaler toute erreur de traduction ou suggestion en utilisant l'icône de rétroaction dans le coin supérieur droit de la fenêtre.</p><p>Si vous souhaitez devenir un contributeur de l'édition communautaire, allez dans Menu > Retours et suggestions pour en faire la demande.</p>",
+                "_context": "Description for the community edition content modal"
+            }
         },
-        "header": {
-          "value": "Accord d'accès non-libre",
-          "_context": "Header for license accept modal"
-        },
-        "description": {
-          "value": "La ressource que vous souhaitez importer, {resourceName}, est publiée sous une licence de type {licenseType}. Cette application vous permet d'importer et de « combiner » cette ressource avec du contenu sous licence d'accès libre déjà disponible dans l'application. Pour continuer, veuillez confirmer que vous comprenez les termes de la licence de cette ressource en cliquant sur le bouton « Accepter ».",
-          "_context": "Description for license accept modal"
+        "aiEditionModal": {
+            "header": {
+                "value": "Contenu traduit par IA",
+                "_context": "Header for the community edition content modal"
+            },
+            "description": {
+                "value": "<p>Ce contenu a été traduit par IA et son exactitude n'a été vérifiée par personne. Ne l'utiliser qu'avec précaution.</p><p>Veuillez nous signaler toute erreur de traduction ou suggestion en utilisant l'icône de rétroaction dans le coin supérieur droit de la fenêtre.</p><p>Si vous souhaitez réviser ce contenu, devenez un contributeur en allant dans Menu > Retours et suggestions pour en faire la demande.</p>",
+                "_context": "Description for the community edition content modal"
+            }
         }
-      }
-    },
-    "PredeterminedPassageSelectorMenu": {
-      "stepOneTitle": {
-        "value": "Choisir un livre",
-        "_context": "Title for the first step in the book and passage selector"
-      },
-      "stepTwoTitle": {
-        "value": "Choisir un passage",
-        "_context": "Title for the second step in the book and passage selector"
-      },
-      "noBooks": {
-        "value": "Pas de livre disponible",
-        "_context": "Message to display when no Books are available"
-      },
-      "noPassages": {
-        "value": "Pas de passage disponible",
-        "_context": "Message to display when no Passages are available"
-      }
-    },
-    "settingsMenu": {
-      "settings": {
-        "value": "Paramètres",
-        "_context": "Title for the settings section"
-      },
-      "showOnlySrvResources": {
-        "value": "Afficher seulement les ressources de SRV",
-        "_context": "Label for the toggle to show only SRV resources"
-      },
-      "communityEditionResources": {
-        "value": "Ressources d'édition communautaire",
-        "_context": "Label for the toggle to show Community Edition resources"
-      },
-      "aiTranslatedResources": {
-        "value": "Ressources traduites par IA",
-        "_context": "Label for the toggle to show AI Translated resources"
-      },
-      "showResourceByCheckingMethod": {
-        "value": "Afficher les ressources par méthode de vérification",
-        "_context": "Label for the toggle to show resources by checking method"
-      },
-      "showResourcesByTitle": {
-        "value": "Afficher les ressources par titre",
-        "_context": "Label for the toggle to show resources by title"
-      }
-    },
-    "BookChapterSelectorPane": {
-      "availableBooks": {
-        "value": "Livres disponibles",
-        "_context": "Label for the available books section"
-      },
-      "book": {
-        "value": "Livre",
-        "_context": "Label for the book dropdown"
-      },
-      "selectChapter": {
-        "value": "Choisir un chapitre",
-        "_context": "Label for the chapter dropdown"
-      },
-      "chapter": {
-        "value": "Chapitre",
-        "_context": "Label for the chapter dropdown"
-      },
-      "selectVerse": {
-        "value": "Choisir un premier et dernier verset",
-        "_context": "Label for the verse dropdown"
-      },
-      "go": {
-        "value": "Aller",
-        "_context": "Label for the go button"
-      }
-    },
-    "quickShare": {
-      "share": {
-        "value": "Partager",
-        "_context": "over all title"
-      },
-      "inAWebBrowser": {
-        "value": "Dans un navigateur Internet (comme Chrome), aller sur :",
-        "_context": "this tells the user to go to a web browser and navigate to a specific URL"
-      },
-      "orScan": {
-        "value": "Ou scanner :",
-        "_context": "this tells the user to scan a QR code instead of going to a URL"
-      },
-      "toInstallBibleWell": {
-        "value": "Pour installer Bible Well :",
-        "_context": "this is the title of the installation instructions"
-      },
-      "stepOne": {
-        "value": "1. Ouvrir un navigateur Internet (comme Chrome)",
-        "_context": "this is the first step in the installation instructions"
-      },
-      "stepTwo": {
-        "value": "2. Aller sur",
-        "_context": "this is the second step in the installation instructions"
-      },
-      "stepThree": {
-        "value": "3. Aller dans paramètres",
-        "_context": "this is the third step in the installation instructions"
-      },
-      "stepFour": {
-        "value": "4. Cliquer sur « Install » (voir ci-dessous) ",
-        "_context": "this is the fourth step in the installation instructions"
-      },
-      "close": {
-        "value": "Fermer",
-        "_context": "this is the button to close the quick share view"
-      }
-    },
-    "feedback": {
-      "feedback": {
-        "value": "Retours et suggestions",
-        "_context": "Title for the feedback section"
-      },
-      "submit": {
-        "value": "Envoyer",
-        "_context": "Label for the submit button"
-      },
-      "feedbackSending": {
-        "value": "Envoi de vos retours et suggestions",
-        "_context": "Message to display when feedback is being sent"
-      },
-      "feedbackSuccessfullySent": {
-        "value": "Retours et suggestions envoyés.",
-        "_context": "Message to display when feedback is successfully sent"
-      },
-      "feedbackQueuedOffline": {
-        "value": "Vos retours et suggestions seront envoyés quand vous serez à nouveau en ligne.",
-        "_context": "Message to display when user is offline but feedback will be sent later."
-      },
-      "feedbackError": {
-        "value": "Erreur lors de l'envoi de vos retours et suggestions. Veuillez essayer à nouveau.",
-        "_context": "Message to display when the feedback failed to send."
-      },
-      "thankYou": {
-        "value": "Merci !",
-        "_context": "Message to display when feedback is successfully sent"
-      },
-      "close": {
-        "value": "Fermer",
-        "_context": "Button to close the feedback form"
-      },
-      "feedbackFailedToSend": {
-        "value": "L'envoi de vos retours et suggestions n'a pas fonctionné.",
-        "_context": "Message to display when feedback fails to send"
-      },
-      "pleaseCheckYourInternetConnectionAndRetry": {
-        "value": "Veuillez vérifier que vous êtes en ligne et essayer de nouveau.",
-        "_context": "Message to display when feedback fails to send"
-      },
-      "retry": {
-        "value": "Essayer de nouveau",
-        "_context": "Button to retry sending feedback"
-      },
-      "feedbackForm": {
-        "name": {
-          "value": "Nom",
-          "_context": "Label for the name input field"
-        },
-        "email": {
-          "value": "Email",
-          "_context": "Label for the email input field"
-        },
-        "phone": {
-          "value": "Téléphone",
-          "_context": "Label for the phone input field"
-        },
-        "howOftenDoYouUseTheBibleWell": {
-          "value": "À quelle fréquence utilisez-vous Bible Well ?",
-          "_context": "Label for the how often input field"
-        },
-        "whatDoYouLikeMostAboutTheBibleWell": {
-          "value": "Qu'est ce que vous aimez le plus dans Bible Well ?",
-          "_context": "Label for the what do you like most input field"
-        },
-        "WhatCanBeImproved": {
-          "value": "Qu'est-ce qui pourrait être amélioré ?",
-          "_context": "Label for the what can be improved input field"
-        },
-        "howAreYouUsingTheBibleWell": {
-          "value": "Quel usage faites-vous de Bible Well ?",
-          "_context": "Label for the how are you using the Bible Well input field"
-        },
-        "bibleTranslation": {
-          "value": "Traduction de la Bible",
-          "_context": "Label for the Bible Translation input field"
-        },
-        "sermonPreparation": {
-          "value": "Préparation de sermons",
-          "_context": "Label for the Sermon Preparation input field"
-        },
-        "bibleStudy": {
-          "value": "Étude de la Bible",
-          "_context": "Label for the Bible Study input field"
-        },
-        "studiesBibleSchoolSeminary": {
-          "value": "Études (école biblique, séminaire)",
-          "_context": "Label for the Studies (Bible School, Seminary) input field"
-        },
-        "Evangelism": {
-          "value": "Évangélisation",
-          "_context": "Label for the Evangelism input field"
-        },
-        "isRequired": {
-          "value": "champ obligatoire",
-          "_context": "Message to display when a field is required"
-        },
-        "likesOrImprovementsFeedbackRequired": {
-          "value": "Rétroaction obligatoire",
-          "_context": "Message to display when the likes or improvements feedback is required"
-        },
-        "pleaseFillInTheRequiredFields": {
-          "value": "Veuillez remplir les champs obligatoires",
-          "_context": "Message to display when the required fields are not filled in"
-        }
-      },
-      "infoPromptForm": {
-        "share": {
-          "value": "Partager vos informations",
-          "_context": "Title for contact form popup"
-        },
-        "shareSubtitle": {
-          "value": "Aidez-nous à améliorer Bible Well et le rendre plus facile à utililser ! Vos retours et suggestions sont importants !",
-          "_context": "Subtitle for the contact form popup"
-        },
-        "contactInformation": {
-          "value": "Coordonnées pour vous contacter",
-          "_context": "Label for contact information dropdown"
-        },
-        "contactType": {
-          "value": "Comment vous contacter",
-          "_context": "Label for contact type dropdown"
-        }
-      },
-      "resourceFeedbackForm": {
-        "rateContent": {
-          "value": "Évaluation de ce contenu",
-          "_context": "Label for the star rating field"
-        },
-        "additionalFeedback": {
-          "value": "Retours et suggestions supplémentaires (optionnel)",
-          "_context": "Label for additional feedback"
-        },
-        "contactInformation": {
-          "value": "Coordonnées pour vous contacter (optionnel)",
-          "_context": "Label for contact information section"
-        },
-        "contactType": {
-          "value": "Comment vous contacter",
-          "_context": "Label for contact type dropdown"
-        }
-      },
-      "contactType": {
-        "email": {
-          "value": "Email",
-          "_context": "Email contact method"
-        },
-        "phone": {
-          "value": "Téléphone",
-          "_context": "Phone contact method"
-        },
-        "whatsapp": {
-          "value": "WhatsApp",
-          "_context": "WhatsApp contact method"
-        },
-        "signal": {
-          "value": "Signal",
-          "_context": "Signal contact method"
-        },
-        "other": {
-          "value": "Autre",
-          "_context": "Other contact method"
-        }
-      }
     }
-  },
-  "navTop": {
-    "selectPassage": {
-      "value": "Choisir un passage",
-      "_context": "Button to select a passage"
-    },
-    "selectGuide": {
-      "value": "Choisir un guide",
-      "_context": "Button to select a guide"
-    }
-  },
-  "resources": {
-    "fia": {
-      "step1": {
-        "value": "Écouter avec son coeur",
-        "_context": "See FIA for translations of each step name"
-      },
-      "step2": {
-        "value": "Établir le contexte",
-        "_context": "See FIA for translations of each step name"
-      },
-      "step3": {
-        "value": "Cadrer la scène",
-        "_context": "See FIA for translations of each step name"
-      },
-      "step4": {
-        "value": "Représenter le passage",
-        "_context": "See FIA for translations of each step name"
-      },
-      "step5": {
-        "value": "Combler les lacuness",
-        "_context": "See FIA for translations of each step name"
-      },
-      "step6": {
-        "value": "Façonner le texte",
-        "_context": "See FIA for translations of each step name"
-      }
-    },
-    "silOpenTranslatorsNotes": {
-      "paragraphButton": {
-        "value": "Paragraphe",
-        "_context": "Button to see OTN paragraph info"
-      },
-      "sectionButton": {
-        "value": "Section",
-        "_context": "Button to see OTN section info"
-      },
-      "suggestionsButton": {
-        "value": "Significations",
-        "_context": "Button to see OTN text translation suggestions info"
-      },
-      "suggestionsDescription": {
-        "value": "Utiliser ceci comme moyen de comprendre la signification du text original, puis traduire de façon naturelle dans votre langue.",
-        "_context": "Description explaining OTN text translation suggestions"
-      }
-    }
-  },
-  "errorMessage": {
-    "error": {
-      "value": "Erreur",
-      "_context": "The label for the error message"
-    },
-    "title": {
-      "value": "Échec du chargement du contenu",
-      "_context": "The title for the error message"
-    },
-    "message": {
-      "value": "Si ce problème continue, veuillez vérifier que vous êtes en ligne.",
-      "_context": "The message for the error message"
-    },
-    "home": {
-      "value": "Accueil",
-      "_context": "The label for the home button"
-    },
-    "browserUnsupported": {
-      "value": "Votre navigateur Internet n'est pas pris en charge. Veuillez utiliser un autre navigateur. Si vous êtes en mode incognito ou privé, veuillez utiliser un autre mode.",
-      "_context": "Message for when the browser is missing features"
-    }
-  },
-  "components": {
-    "search": {
-      "placeholder": {
-        "value": "Chercher",
-        "_context": "Placeholder text for the search component"
-      },
-      "clear": {
-        "value": "Effacer",
-        "_context": "Button in the search component for clearing entered text"
-      },
-      "passage": {
-        "value": "Passage",
-        "_context": "Label for the passage search button"
-      },
-      "resource": {
-        "value": "Ressource",
-        "_context": "Label for the resource search button"
-      },
-      "resources": {
-        "value": "Ressources",
-        "_context": "Title for the resource menu"
-      },
-      "loadMore": {
-        "value": "Afficher plus",
-        "_context": "Button to load more resources"
-      }
-    },
-    "communityEditionModal": {
-      "header": {
-        "value": "Contenu d'édition communautaire",
-        "_context": "Header for the community edition content modal"
-      },
-      "description": {
-        "value": "<p>L'exactitude de ce contenu n'a pas été entièrement vérifiée. Un membre de la communauté l'a traduit, mais il n'a pas été soumis au même processus de révision que les autres contenus. Ne l'utiliser qu'avec précaution.</p><p>Veuillez nous signaler toute erreur de traduction ou suggestion en utilisant l'icône de rétroaction dans le coin supérieur droit de la fenêtre.</p><p>Si vous souhaitez devenir un contributeur de l'édition communautaire, allez dans Menu > Retours et suggestions pour en faire la demande.</p>",
-        "_context": "Description for the community edition content modal"
-      }
-    },
-    "aiEditionModal": {
-      "header": {
-        "value": "Contenu traduit par IA",
-        "_context": "Header for the community edition content modal"
-      },
-      "description": {
-        "value": "<p>Ce contenu a été traduit par IA et son exactitude n'a été vérifiée par personne. Ne l'utiliser qu'avec précaution.</p><p>Veuillez nous signaler toute erreur de traduction ou suggestion en utilisant l'icône de rétroaction dans le coin supérieur droit de la fenêtre.</p><p>Si vous souhaitez réviser ce contenu, devenez un contributeur en allant dans Menu > Retours et suggestions pour en faire la demande.</p>",
-        "_context": "Description for the community edition content modal"
-      }
-    }
-  }
 }
