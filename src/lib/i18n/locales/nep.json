@@ -2,636 +2,820 @@
     "page": {
         "index": {
             "downloadResourcesForOfflineUse": {
-                "value": "अफलाइन जानुहोस्? थप सामग्री प्राप्त गर्नुहोस्"
+                "value": "अफलाइन हुँदै हुनुहुन्छ? अरू पाठ प्राप्त गर्नुहोस्",
+                "_context": "Button text telling the user to download resources for offline use"
             },
             "about": {
-                "value": "बारेमा"
+                "value": "हाम्रो विषयमा ",
+                "_context": "Link to the about page"
             },
             "downloadManager": {
-                "value": "डाउनलोड प्रबन्धक"
+                "value": "डाउनलोड मेनेजर",
+                "_context": "The label for the download manager button"
             },
             "getStarted": {
-                "value": "सुरू गर्नुहोस्"
+                "value": "सुरु गर्नुहोस्",
+                "_context": "Button to get started with the application"
             }
         },
         "about": {
             "error": {
-                "value": "सामग्री लाइसेन्स जानकारी लोड गर्न त्रुटि"
+                "value": "पाठको अनुमति बारे जानकारी निकाल्दा त्रुटि",
+                "_context": "Message to show when there's an error loading the page for some reason"
             },
             "license": {
                 "releasedUnderSingle": {
-                    "value": "{name} अन्तर्गत जारी गरिएको"
+                    "value": "{name} मा प्रकाशन गरिएको",
+                    "_context": "Description explaining the content is released under a single license"
                 },
                 "releasedUnderMultiple": {
-                    "value": "विभिन्न"
+                    "value": "विभिन्न {names} मा प्रकाशन गरिएको:",
+                    "_context": "Description explaining the content is released under multiple licenses"
                 },
                 "adaptedInLanguages": {
-                    "value": "{title} निम्न भाषामा अनुकूलित गरिएको छ<br /> {languages}<br /> {title} {copyright} {date} {publisher} बाट<br /> {bnLicense} लाइसेन्स अन्तर्गत Biblionexus द्वारा जारी गरिएको"
+                    "value": "{title} निम्नलिखित भाषाहरूमा अनुकूलित गरिएको छ<br /> {languages}<br /> {title} {copyright} {date} {publisher} बाट<br /> {bnLicense} अनुमति  अन्तर्गत Biblionexus द्वारा प्रकाशन गरिएको।",
+                    "_context": "Description for license adapted in languages"
                 }
             }
         },
         "passage": {
             "nav": {
                 "bible": {
-                    "value": "बाइबल"
+                    "value": "बाइबल",
+                    "_context": "Label for Bible button on navbar"
                 },
                 "guide": {
-                    "value": "गाइड"
+                    "value": "निर्देशिका ",
+                    "_context": "Label for Guide button on navbar"
                 },
                 "library": {
-                    "value": "पुस्तकालय"
+                    "value": "पुस्तकालय ",
+                    "_context": "Label for Library button on navbar"
                 },
                 "menu": {
-                    "value": "मेनु"
+                    "value": "मेनू ",
+                    "_context": "Label for Menu button on navbar"
                 },
                 "resources": {
-                    "value": "स्रोतहरू"
+                    "value": "संसाधन (श्रोतसाधनहरू)",
+                    "_context": "Label for Resources button on navbar"
                 }
             },
             "resourcePane": {
                 "cancel": {
-                    "value": "रद्ध गर्नुहोस्"
+                    "value": "रद्द गर्नुहोस्",
+                    "_context": "Button to cancel search"
                 },
                 "libraryTitle": {
-                    "value": "पुस्तकालय"
+                    "value": "पुस्तकालय ",
+                    "_context": "Title for the Library Menu"
                 },
                 "librarySubtitle": {
-                    "value": "तपाईंलाई आवश्यक स्रोतहरू खोज्नुहोस्"
+                    "value": "तपाईंलाई आवश्यक परेको स्रोतहरूको खोजी गर्नुहोस् ",
+                    "_context": "Subtitle for the Library Menu"
                 },
                 "typeToSearch": {
-                    "value": "पुस्तकालयमा खोज्नको लागि शब्द टाइप गर्नुहोस्"
+                    "value": "पुस्तकालयमा खोज्न शब्द लेख्नुहोस् ",
+                    "_context": "Label for searching the library"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {
-                        "value": "{current} मध्ये {total}"
+                        "value": "{current} को {total}",
+                        "_context": "Displays the current position out of the total fullscreen elements"
                     }
                 },
                 "seeAll": {
-                    "value": "सबै हेर्नुहोस् ({count})"
+                    "value": "सबै हेर्नुहोस् ({count})",
+                    "_context": "Button for the user to see all resources of a given resource type"
                 },
                 "noThumbnail": {
-                    "value": "कुनै थम्बनेल छैन"
+                    "value": "कुनै थम्बनेल छैन",
+                    "_context": "Label for videos that have no thumbnail"
                 },
                 "noResourcesFound": {
                     "header": {
-                        "value": "कुनै स्रोतहरू फेला परेनन्"
+                        "value": "कुनै सामग्री भेटिएन",
+                        "_context": "Header to show when no resources are found with the search string"
                     },
                     "description": {
-                        "value": "तपाईंको खोज \"{searchQuery}\" ले कुनै स्रोतसँग मेल खायो छैन।"
+                        "value": "तपाईंले खोज्नु भएको कुरा \"{searchQuery}\" कुनै संसाधनसँग मेल खाएन।",
+                        "_context": "Description to show no resources are found with the search string"
                     }
                 },
                 "resourceCount": {
                     "singular": {
-                        "value": "१ स्रोत"
+                        "value": "१ संसाधन",
+                        "_context": "Label for when there is one resource"
                     },
                     "plural": {
-                        "value": "{count} स्रोतहरू"
+                        "value": "{count} संसाधनहरू",
+                        "_context": "Label for when there is more than one resource"
                     }
                 },
                 "error": {
-                    "value": "स्रोत लोड गर्न त्रुटि"
+                    "value": "संसाधन निकाल्दा त्रुटि",
+                    "_context": "Message for when a resource fails to load"
                 }
             },
             "alignmentMode": {
                 "selectWord": {
-                    "value": "मूल भाषा स्रोत हेर्नका लागि कुनै शब्दमा क्लिक गर्नुहोस्।"
+                    "value": "मूल भाषाको संसाधन हेर्न एउटा शब्दमा क्लिक गर्नुहोस्",
+                    "_context": "Instructions for when user hasn't selected word yet in alignment mode"
                 },
                 "noWordInfoAvailable": {
-                    "value": "यस चयनका लागि मूल भाषा जानकारी उपलब्ध छैन।"
+                    "value": "यस छानिएको शब्दको लागि कुनै मूल भाषाको जानकारी उपलब्ध छैन।",
+                    "_context": "Message for when we're missing alignment data for the selected word."
                 },
                 "noSenseInfoAvailable": {
-                    "value": "यस चयनका लागि ग्लोस वा परिभाषा जानकारी उपलब्ध छैन।"
+                    "value": "यस छानिएको शब्दको लागि कुनै शब्दकोष वा परिभाषा जानकारी उपलब्ध छैन",
+                    "_context": "Message for when we're missing alignment data for the selected word."
                 },
                 "gloss": {
-                    "value": "ग्लोस"
+                    "value": "शब्दकोष",
+                    "_context": "Gloss label for Greek/Hebrew alignment"
                 },
                 "definition": {
-                    "value": "परिभाषा"
+                    "value": "परिभाषा",
+                    "_context": "Definition label for Greek/Hebrew alignment"
                 }
             },
             "noBibleContent": {
                 "header": {
-                    "value": "स्रोत उपलब्ध छैन"
+                    "value": "सामग्री उपलब्ध छैन",
+                    "_context": "Header for when a Bible is not available in the current language"
                 },
                 "description": {
-                    "value": "यस उपकरणमा {language} को लागि कुनै बाइबल उपलब्ध छैन।<br />के तपाईं अर्को भाषामा बाइबल प्रयोग गर्न चाहनुहुन्छ?"
+                    "value": "यो उपकरणमा {language} को लागि कुनै बाइबल उपलब्ध छैन।<br />के तपाईं अर्को भाषामा बाइबल प्रयोग गर्न चाहनुहुन्छ?",
+                    "_context": "Description for when a Bible is not available in the current language"
                 },
                 "noneAvailableDescription": {
-                    "value": "यस उपकरणमा {language} वा अन्य कुनै भाषामा बाइबल उपलब्ध छैन।<br />कृपया अनलाइन हुँदा सामग्री डाउनलोड गर्नुहोस्।"
+                    "value": "यो उपकरणमा {language} वा अरू कुनै भाषामा बाइबल उपलब्ध छैन।<br />कृपया अनलाइन हुँदा सामग्री डाउनलोड गर्नुहोस्।",
+                    "_context": "Description for when a Bible is not available in the current language or any other language"
                 },
                 "show": {
-                    "value": "बाइबल चयन गर्नुहोस्"
+                    "value": "बाइबल चुन्नुहोस्",
+                    "_context": "Button to pop up modal that allows selecting a Bible."
                 },
                 "checkForMoreResources": {
-                    "value": "थप स्रोतहरूको लागि जाँच गर्नुहोस्..."
+                    "value": "अरु थप संसाधनहरू हेर्नुहोस्",
+                    "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
                 },
                 "missingFromBible": {
-                    "value": "यस बाइबलमा चयनित अंश गुमेको छ।"
+                    "value": "यस बाइबलमा चयन गरिएको खण्ड समावेश गरिएको छैन।",
+                    "_context": "Message for when the Bible does not have the passage for whatever reason."
                 }
             },
             "noGuideContent": {
-                "value": "यस अंशको लागि कुनै सामग्री फेला परेन।"
+                "value": "यो खण्डको लागि कुनै विषय भेटिएन",
+                "_context": "Message to display when the content is not downloaded or available"
             },
             "guide": {
                 "next": {
-                    "value": "अर्को"
+                    "value": "अर्को",
+                    "_context": "Go to next item in guide."
                 },
                 "usedInVerses": {
-                    "value": "यी श्लोकहरूमा प्रयोग गरिएको"
+                    "value": "यी पदहरूमा प्रयोग गरिएको",
+                    "_context": "Prefixed to content in Translation Words Guides for displaying references of the word in the selected passage"
                 }
             }
         },
         "fileManager": {
             "downloadManager": {
-                "value": "डाउनलोड प्रबन्धक"
+                "value": "डाउनलोड मेनेजर",
+                "_context": "Title displayed on the download manager page"
             },
             "download": {
-                "value": "डाउनलोड गर्नुहोस्"
+                "value": "डाउनलोड",
+                "_context": "Table column heading for the column with checkboxes allowing the user to select content to download"
             },
             "textType": {
-                "value": "पाठ"
+                "value": "पाठ ",
+                "_context": "The media type for text, available to be downloaded"
             },
             "audioType": {
-                "value": "अडियो"
+                "value": "अडियो",
+                "_context": "The media type for audio, available to be downloaded"
             },
             "mediaType": {
-                "value": "मिडिया"
+                "value": "मिडिया",
+                "_context": "The media type for media, available to be downloaded"
             },
             "ok": {
-                "value": "ठिक छ"
+                "value": "ठीक छ",
+                "_context": "Button to download/delete content based on what the user selected"
             },
             "cancel": {
-                "value": "रद्ध गर्नुहोस्"
+                "value": "रद्द गर्नुहोस्",
+                "_context": "Button to cancel current action"
             },
             "noInternet": {
-                "value": "इन्टरनेट छैन"
+                "value": "इन्टरनेट छैन",
+                "_context": "Message to display when the user has no internet connection"
             },
             "selectABook": {
-                "value": "पुस्तक चयन गर्नुहोस्"
+                "value": "पुस्तक चुन्नुहोस्",
+                "_context": "Label for a dropdown allowing the user to select a book to view"
             },
             "delete": {
-                "value": "मेटाउनुहोस्"
+                "value": "मेट्नुहोस्",
+                "_context": "Button to delete content"
             },
             "modal": {
                 "title": {
-                    "value": "डाउनलोड पुष्टि गर्नुहोस्"
+                    "value": "डाउनलोड निश्चित गर्नुहोस्",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
                 },
                 "description": {
-                    "value": "बाइबल वेल {downloadSize} सामग्री तपाईंको उपकरणमा डाउनलोड गर्नेछ।"
+                    "value": "बाइबल वेलले तपाईंको उपकरणमा {downloadSize} सामग्री डाउनलोड गर्नेछ",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
                 },
                 "downloadProgress": {
-                    "value": "डाउनलोड प्रगति"
+                    "value": "डाउनलोड प्रगति",
+                    "_context": "Title of the modal showing the user how the download is progressing"
                 },
                 "success": {
-                    "value": "सफलतापूर्वक डाउनलोड गरियो"
+                    "value": "डाउनलोड पूरा भयो",
+                    "_context": "Title of the modal showing the download was successful"
                 },
                 "close": {
-                    "value": "बन्द गर्नुहोस्"
+                    "value": "बन्द गर्नुहोस्",
+                    "_context": "Button to close the modal"
                 },
                 "downloadingDescription": {
-                    "value": "{totalSizeDownloaded} को {totalSizeToDownload} डाउनलोड गर्दैछ।"
+                    "value": "{totalSizeDownloaded} को {totalSizeToDownload} डाउनलोड हुँदैछ।",
+                    "_context": "Shows on the modal showing the user how the download is progressing"
                 }
             },
             "deleteModal": {
                 "warning": {
-                    "value": "चेतावनी!"
+                    "value": "सावधान !",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
                 },
                 "description": {
-                    "value": "के तपाईं निश्चित हुनुहुन्छ कि तपाईं यी फाइलहरूलाई स्थायी रूपमा तपाईंको उपकरणबाट मेटाउन चाहनुहुन्छ?"
+                    "value": "के तपाईं पक्का हुनुहुन्छ कि यी फाइलहरूलाई तपाईंको उपकरणबाट स्थायी रूपमा हटाउन चाहनुहुन्छ?",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
                 }
             },
             "metaData": {
                 "description": {
-                    "value": "यहाँ तपाईं आफ्नो उपकरणबाट एक्विफर सामग्री डाउनलोड र मेटाउन सक्नुहुन्छ।"
+                    "value": "यहाँ तपाईं आफ्नो उपकरणबाट Aquifer सामग्री डाउनलोड र हटाउन सक्नुहुन्छ।",
+                    "_context": "Meta tag description"
                 }
             },
             "viewHeader": {
                 "name": {
-                    "value": "नाम"
+                    "value": "नाम",
+                    "_context": "Label for the name column"
                 },
                 "text": {
-                    "value": "पाठ"
+                    "value": "पाठ ",
+                    "_context": "Label for the text column"
                 },
                 "audio": {
-                    "value": "अडियो"
+                    "value": "अडियो",
+                    "_context": "Label for the audio column"
                 },
                 "media": {
-                    "value": "मिडिया"
+                    "value": "मिडिया",
+                    "_context": "Label for the media column"
                 }
             },
             "viewRow": {
                 "resources": {
-                    "value": "स्रोतहरू"
+                    "value": "संसाधनहरू",
+                    "_context": "Label for the resources row"
                 }
             }
         },
         "menu": {
             "home": {
-                "value": "गृहपृष्ठ"
+                "value": "गृह पृष्ठ",
+                "_context": "Label for the home button"
             },
             "menu": {
-                "value": "मेनु"
+                "value": "मेनू",
+                "_context": "Label for the menu button"
             },
             "downloadManager": {
-                "value": "डाउनलोड प्रबन्धक"
+                "value": "डाउनलोड मेनेजर",
+                "_context": "Label for the download manager button"
             },
             "language": {
-                "value": "भाषा"
+                "value": "भाषा",
+                "_context": "Label for the language button"
             },
             "shortcuts": {
-                "value": "सर्टकटहरू"
+                "value": "सर्टकटहरू",
+                "_context": "Label for the shortcuts button"
             },
             "changeLanguage": {
-                "value": "भाषा परिवर्तन गर्नुहोस्"
+                "value": "भाषा परिवर्तन गर्नुहोस्",
+                "_context": "Label for the change language button"
             }
         },
         "selectLanguage": {
             "welcome": {
-                "value": "स्वागत छ"
+                "value": "स्वागत छ",
+                "_context": "Title for the select language page"
             },
             "chooseYourPreferredLanguage": {
-                "value": "तपाईंको मनपर्ने भाषा चयन गर्नुहोस्"
+                "value": "तपाईंको मनपर्ने भाषा चयन गर्नुहोस्",
+                "_context": "Placeholder text for the sub title"
             },
             "next": {
-                "value": "अर्को"
+                "value": "अर्को",
+                "_context": "Label for next button"
             }
         },
         "guideMenu": {
             "translationGuides": {
-                "value": "अनुवाद मार्गदर्शिकाहरू"
+                "value": "अनुवाद गर्ने मार्गनिर्देशन ",
+                "_context": "Title for the Translation Guides section"
             },
             "whatWouldYouLikeToDo": {
-                "value": "तपाईं के गर्न चाहनुहुन्छ?"
+                "value": "तपाईं के गर्न चाहनुहुन्छ?",
+                "_context": "Header for the guide selection options"
             },
             "chooseGuide": {
-                "value": "एक मार्गदर्शिका चयन गर्नुहोस्"
+                "value": "एउटा मार्गनिर्देशन चुन्नुहोस्",
+                "_context": "Placeholder text for the dropdown"
             },
             "allGuides": {
-                "value": "सबै मार्गदर्शिकाहरू"
+                "value": "सबै मार्गनिर्देशन",
+                "_context": "Header for the menu showing all guides"
             },
             "checkingGuides": {
-                "value": "मार्गदर्शिकाहरू जाँच्दै"
+                "value": "जाँच्ने मार्गनिर्देशन",
+                "_context": "Header for the menu showing checking guides"
             },
             "draftingGuides": {
-                "value": "मार्गदर्शिकाहरू मस्यौदा गर्दै"
+                "value": "ड्राफ्ट [मसौदा] तयार पार्ने मार्गनिर्देशन",
+                "_context": "Header for the menu showing drafting guides"
             },
             "startDraftingTranslation": {
-                "value": "म अनुवाद मस्यौदा गर्न सुरू गर्न चाहन्छु।"
+                "value": "म अनुवादको मसौदा [ड्राफ्ट] सुरु गर्न चाहन्छु",
+                "_context": "Button to show drafting guides"
             },
             "checkTranslation": {
-                "value": "म मेरो अनुवाद जाँच्न चाहन्छु।"
+                "value": "म मेरो अनुवाद जाँच गर्न चाहन्छु",
+                "_context": "Button to show checking guides"
             },
             "helpMeChoose": {
-                "value": "म निश्चित छैन, मलाई मार्गदर्शिका चयन गर्न मद्दत गर्नुहोस्।"
+                "value": "म निश्चित छैन, कृपया मलाई चयन गर्न मद्दत गर्नुहोस्।",
+                "_context": "Button to get help choosing a guide"
             },
             "showAllGuides": {
-                "value": "म एक मार्गदर्शिका चयन गर्न चाहन्छु।"
+                "value": "म एक मार्गनिर्देशन चयन गर्न चाहन्छु",
+                "_context": "Button to show all guides"
             },
             "guideExplanationHeader": {
-                "value": "मार्गदर्शिका व्याख्या"
+                "value": "मार्गनिर्देशनको व्याख्या",
+                "_context": "Header for the guide explanation section"
             },
             "guideExplanationContent": {
-                "value": "<p>बाइबल वेलका मार्गदर्शिकाहरूले तपाईंलाई बाइबल राम्रोसँग बुझ्न मद्दत पुर्याउँछन्। यसले तपाईंलाई भगवान को हो र उनले के गरिरहेका छन् भन्ने बुझ्न मद्दत पुर्याउँछ। यसले तपाईंलाई बाइबलको अनुवाद राम्रोसँग गर्न मद्दत गर्दछ र तपाईंको बाइबल अनुवाद ठीकसँग गरिएको छ भन्ने सुनिश्चित गर्न मद्दत पुर्याउँछ।</p><p>यदि तपाईं बाइबल अध्ययन गर्न चाहनुहुन्छ वा बाइबलको अनुवाद गर्न सुरू गर्न चाहनुहुन्छ भने, तल \"मस्यौदा मार्गदर्शिकाहरू\" चयन गर्नुहोस्। यसले तपाईंलाई बाइबल बुझ्न र तपाईंको अनुवाद मस्यौदा गर्न सुरू गर्नका लागि प्रक्रिया देखाउँछ।</p><p>यदि तपाईं आफ्नो बाइबल अनुवाद जाँच्न चाहनुहुन्छ र सुनिश्चित गर्न चाहनुहुन्छ कि यसले राम्रोसँग काम गरेको छ भने, तल \"जाँच मार्गदर्शिकाहरू\" चयन गर्नुहोस्। यी मार्गदर्शिकाहरूले तपाईंलाई बाइबल बुझ्नमा मद्दत गर्दछ, विशेष गरी कठिन श्लोकहरूमा।</p>"
+                "value": "<p>बाइबल वेलका मार्गनिर्देशनहरू तपाईंले बाइबललाई अझ राम्रोसँग बुझ्न मद्दत गर्न डिजाइन गरिएको हो। परमेश्वर को हुनुहुन्छ र उहाँ के गर्नुहुन्छ भनेर राम्ररी बुझ्न यसले तपाईंलाई मद्दत गर्छ। यसले तपाईंलाई बाइबल अझ राम्ररी अनुवाद गर्न र तपाईंको अनुवाद सही भएको छ कि छैन भनेर पक्का गर्न पनि मद्दत  गर्छ। <p>यदि तपाईं बाइबल अध्ययन गर्न चाहनुहुन्छ वा बाइबल अनुवाद सुरु गर्न चाहनुहुन्छ भने, तल \"ड्राफ्ट तयार गर्ने मार्गनिर्देशन\" चयन गर्नुहोस्। यसले तपाईंलाई बाइबल बुझ्न र आफ्नो अनुवाद तयार गर्न सुरु गर्न मद्दत गर्नेछ।</p><p> यदि तपाईं सुनिश्चित गर्न चाहनुहुन्छ कि तपाईंले बाइबल राम्रोसँग अनुवाद गर्नुभएको छ भने, तल \"जाँच गर्ने मार्गनिर्देशन\"  चयन गर्नुहोस्। केहि विकल्पहरू तपाईंलाई बाइबल बुझ्नमा मद्दत गर्नेछ, विशेषगरी कठिन खण्डहरू।</p>",
+                "_context": "Explanation of each type of guide so users know what to choose."
             },
             "noGuides": {
-                "value": "चयनित अंशको लागि कुनै मार्गदर्शिका उपलब्ध छैन"
+                "value": "चयन गरिएको खण्डको लागि कुनै मार्गनिर्देशन उपलब्ध छैन",
+                "_context": "Message for when no guides are available for the passage"
             }
         },
         "bibleMenu": {
             "noBibles": {
-                "value": "कुनै बाइबल उपलब्ध छैन"
+                "value": "कुनै बाइबल उपलब्ध छैन",
+                "_context": "Message to display when no Bibles are available"
             },
             "selectBible": {
-                "value": "बाइबल चयन गर्नुहोस्"
+                "value": "बाइबल चुन्नुहोस्",
+                "_context": "Placeholder text for the dropdown"
             },
             "goToPassage": {
-                "value": "अंशमा जानुहोस्"
+                "value": "खण्डमा जानुहोस्",
+                "_context": "Label for the button to go to the passage"
             },
             "bible": {
-                "value": "बाइबल"
+                "value": "बाइबल",
+                "_context": "Label for the dropdown"
             },
             "bibleLicenseAcceptanceModal": {
                 "accept": {
-                    "value": "स्वीकृत गर्नुहोस्"
+                    "value": "स्वीकार गर्नुहोस्",
+                    "_context": "Button to accept license"
                 },
                 "cancel": {
-                    "value": "रद्ध गर्नुहोस्"
+                    "value": "रद्द गर्नुहोस्",
+                    "_context": "Button to cancel license accept modal"
                 },
                 "header": {
-                    "value": "गैर-खुला सामग्री सम्झौता"
+                    "value": "गैर-खुला सामग्री सम्झौता",
+                    "_context": "Header for license accept modal"
                 },
                 "description": {
-                    "value": "तपाईंले आयात गर्न चाहेको स्रोत, {resourceName}, {licenseType} अन्तर्गत प्रकाशित गरिएको छ। यो अनुप्रयोगले तपाईंलाई यस स्रोतलाई आयात गर्न र यसलाई अनुप्रयोगमा पहिले नै रहेका खुला लाइसेन्स सामग्रीसँग \"मिलाउन\" सक्षम बनाउँछ। अगाडि बढ्नको लागि, कृपया \"स्वीकृत गर्नुहोस्\" बटनमा क्लिक गरेर यस स्रोतको लाइसेन्स सर्तहरू तपाईंले बुझ्नुभएको स्वीकार गर्नुहोस्।"
+                    "value": "तपाईंले आयात गर्न चाहनु भएको स्रोत, {resourceName}, {licenseType} अन्तर्गत जारी गरिएको छ। यो एप तपाईंलाई यो स्रोतलाई एपमा पहिले देखि उपलब्ध खुल्ला लाइसेंस गरिएको सामग्रीसँग \"मिश्रित\" गर्न अनुमति दिन्छ। अघि बढ्नको लागि, कृपया यस स्रोतको लाइसेंस सर्तहरू तपाईंले बुझिसकेको पुष्टि गर्नुहोस् र \"स्वीकार गर्नुहोस्\" बटनमा क्लिक गर्नुहोस्।",
+                    "_context": "Description for license accept modal"
                 }
             }
         },
         "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
-                "value": "पुस्तक चयन गर्नुहोस्"
+                "value": "पुस्तक चुन्नुहोस्",
+                "_context": "Title for the first step in the book and passage selector"
             },
             "stepTwoTitle": {
-                "value": "अंश चयन गर्नुहोस्"
+                "value": "खण्ड चयन गर्नुहोस्",
+                "_context": "Title for the second step in the book and passage selector"
             },
             "noBooks": {
-                "value": "कुनै पुस्तक उपलब्ध छैन"
+                "value": "कुनै पुस्तक उपलब्ध छैन",
+                "_context": "Message to display when no Books are available"
             },
             "noPassages": {
-                "value": "कुनै अंश उपलब्ध छैन"
+                "value": "कुनै खण्ड उपलब्ध छैन",
+                "_context": "Message to display when no Passages are available"
             }
         },
         "settingsMenu": {
             "settings": {
-                "value": "सेटिङहरू"
+                "value": "सेटिङ्स",
+                "_context": "Title for the settings section"
             },
             "showOnlySrvResources": {
-                "value": "केवल SRV स्रोतहरू मात्र देखाउनुहोस्"
+                "value": "केवल SRV सामग्रीहरू मात्र देखाउनुहोस्",
+                "_context": "Label for the toggle to show only SRV resources"
             },
             "communityEditionResources": {
-                "value": "समुदाय संस्करण स्रोतहरू"
+                "value": "सामुदायिक संस्करण सामग्रीहरू",
+                "_context": "Label for the toggle to show Community Edition resources"
             },
             "aiTranslatedResources": {
-                "value": "AI अनुवादित स्रोतहरू"
+                "value": "AI अनुवादित संसाधनहरू",
+                "_context": "Label for the toggle to show AI Translated resources"
             },
             "showResourceByCheckingMethod": {
-                "value": "जाँच विधिबाट स्रोतहरू देखाउनुहोस्"
+                "value": "जाँच गर्ने विधिका आधारमा सामग्रीहरू देखाउनुहोस्",
+                "_context": "Label for the toggle to show resources by checking method"
             },
             "showResourcesByTitle": {
-                "value": "शीर्षक अनुसार स्रोतहरू देखाउनुहोस्"
+                "value": "शीर्षक अनुसार सामग्रीहरू देखाउनुहोस्",
+                "_context": "Label for the toggle to show resources by title"
             }
         },
         "BookChapterSelectorPane": {
             "availableBooks": {
-                "value": "उपलब्ध पुस्तकहरू"
+                "value": "उपलब्ध पुस्तकहरू",
+                "_context": "Label for the available books section"
             },
             "book": {
-                "value": "पुस्तक"
+                "value": "पुस्तक",
+                "_context": "Label for the book dropdown"
             },
             "selectChapter": {
-                "value": "अध्याय चयन गर्नुहोस्"
+                "value": "अध्याय चुन्नुहोस्",
+                "_context": "Label for the chapter dropdown"
             },
             "chapter": {
-                "value": "अध्याय"
+                "value": "अध्याय",
+                "_context": "Label for the chapter dropdown"
             },
             "selectVerse": {
-                "value": "पहिलो र अन्तिम श्लोक चयन गर्नुहोस्"
+                "value": "पहिलो र अन्तिम पद चुन्नुहोस्",
+                "_context": "Label for the verse dropdown"
             },
             "go": {
-                "value": "जानुहोस्"
+                "value": "जानुहोस्",
+                "_context": "Label for the go button"
             }
         },
         "quickShare": {
             "share": {
-                "value": "साझा गर्नुहोस्"
+                "value": "शेयर गर्नुहोस्",
+                "_context": "over all title"
             },
             "inAWebBrowser": {
-                "value": "वेब ब्राउजरमा (जस्तै क्रोम), जानुहोस्"
+                "value": "वेब ब्राउजर (जस्तै क्रोम) मा, यहाँ जानुहोस्:",
+                "_context": "this tells the user to go to a web browser and navigate to a specific URL"
             },
             "orScan": {
-                "value": "वा स्क्यान गर्नुहोस्"
+                "value": "वा स्क्यान गर्नुहोस्:",
+                "_context": "this tells the user to scan a QR code instead of going to a URL"
             },
             "toInstallBibleWell": {
-                "value": "Bible Well स्थापना गर्न"
+                "value": "बाइबल वेल इन्स्टल गर्न:",
+                "_context": "this is the title of the installation instructions"
             },
             "stepOne": {
-                "value": "1. एक वेब ब्राउजर खोल्नुहोस् (जस्तै क्रोम)"
+                "value": "१. एक वेब ब्राउजर खोल्नुहोस् (जस्तै Chrome)",
+                "_context": "this is the first step in the installation instructions"
             },
             "stepTwo": {
-                "value": "2. जानुहोस्"
+                "value": "२. यहाँ  जानुहोस्",
+                "_context": "this is the second step in the installation instructions"
             },
             "stepThree": {
-                "value": "3. सेटिङ्समा जानुहोस्"
+                "value": "३. सेटिङ्समा जानुहोस्",
+                "_context": "this is the third step in the installation instructions"
             },
             "stepFour": {
-                "value": "4. \"स्थापना गर्नुहोस्\" मा क्लिक गर्नुहोस् (नीचे हेर्नुहोस्)"
+                "value": "४. \" इन्स्टल गर्नुहोस्\" मा क्लिक गर्नुहोस् (तल हेर्नुहोस्)",
+                "_context": "this is the fourth step in the installation instructions"
             },
             "close": {
-                "value": "बन्द गर्नुहोस्"
+                "value": "बन्द गर्नुहोस्",
+                "_context": "this is the button to close the quick share view"
             }
         },
         "feedback": {
             "feedback": {
-                "value": "प्रतिक्रिया"
+                "value": "प्रतिक्रिया",
+                "_context": "Title for the feedback section"
             },
             "submit": {
-                "value": "पेश गर्नुहोस्"
+                "value": "पेश गर्नुहोस्",
+                "_context": "Label for the submit button"
             },
             "feedbackSending": {
-                "value": "प्रतिक्रिया पठाइँदै छ..."
+                "value": "प्रतिक्रिया पठाइरहेको छ...",
+                "_context": "Message to display when feedback is being sent"
             },
             "feedbackSuccessfullySent": {
-                "value": "प्रतिक्रिया सफलतापूर्वक पठाइयो।"
+                "value": "प्रतिक्रिया सफलतापूर्वक पठाइयो",
+                "_context": "Message to display when feedback is successfully sent"
             },
             "feedbackQueuedOffline": {
-                "value": "तपाईं अनलाइन हुँदा प्रतिक्रिया पठाइनेछ।"
+                "value": "प्रतिक्रिया तपाईं अनलाइन हुँदा पठाइनेछ",
+                "_context": "Message to display when user is offline but feedback will be sent later."
             },
             "feedbackError": {
-                "value": "प्रतिक्रिया पठाउँदा त्रुटि भयो। कृपया पुन"
+                "value": "प्रतिक्रिया पठाउँदा त्रुटि भयो। कृपया फेरि प्रयास गर्नुहोस्।",
+                "_context": "Message to display when the feedback failed to send."
             },
             "thankYou": {
-                "value": "धन्यवाद!"
+                "value": "तपाईंलाई धन्यवाद!",
+                "_context": "Message to display when feedback is successfully sent"
             },
             "close": {
-                "value": "बन्द गर्नुहोस्"
+                "value": "बन्द गर्नुहोस्",
+                "_context": "Button to close the feedback form"
             },
             "feedbackFailedToSend": {
-                "value": "प्रतिक्रिया पठाउन असफल भयो।"
+                "value": "प्रतिक्रिया पठाउन असफल भयो।",
+                "_context": "Message to display when feedback fails to send"
             },
             "pleaseCheckYourInternetConnectionAndRetry": {
-                "value": "कृपया आफ्नो इन्टरनेट जडान जाँच गर्नुहोस् र पुन"
+                "value": "कृपया आफ्नो इन्टरनेट जडान जाँच गर्नुहोस् र पुनः प्रयास गर्नुहोस्।",
+                "_context": "Message to display when feedback fails to send"
             },
             "retry": {
-                "value": "पुनः प्रयास गर्नुहोस्"
+                "value": "पुनः प्रयास गर्नुहोस्",
+                "_context": "Button to retry sending feedback"
             },
             "feedbackForm": {
                 "name": {
-                    "value": "नाम"
+                    "value": "नाम",
+                    "_context": "Label for the name input field"
                 },
                 "email": {
-                    "value": "इमेल"
+                    "value": "ईमेल",
+                    "_context": "Label for the email input field"
                 },
                 "phone": {
-                    "value": "फोन"
+                    "value": "फ़ोन नंबर",
+                    "_context": "Label for the phone input field"
                 },
                 "howOftenDoYouUseTheBibleWell": {
-                    "value": "तपाईं Bible Well कति पटक प्रयोग गर्नुहुन्छ?"
+                    "value": "प्राय तपाईं कति पटक बाइबल वेल प्रयोग गर्नुहुन्छ?",
+                    "_context": "Label for the how often input field"
                 },
                 "whatDoYouLikeMostAboutTheBibleWell": {
-                    "value": "Bible Well बारे तपाईंलाई सबैभन्दा के मन पर्छ?"
+                    "value": "तपाईंलाई बाइबल वेलका बारेमा सबैभन्दा के कुरा मन पर्छ?",
+                    "_context": "Label for the what do you like most input field"
                 },
                 "WhatCanBeImproved": {
-                    "value": "के सुधार गर्न सकिन्छ?"
+                    "value": "के सुधार गर्न सकिन्छ?",
+                    "_context": "Label for the what can be improved input field"
                 },
                 "howAreYouUsingTheBibleWell": {
-                    "value": "तपाईं Bible Well कसरी प्रयोग गर्दै हुनुहुन्छ?"
+                    "value": "तपाईं  बाइबल वेल कसरी प्रयोग गर्दै हुनुहुन्छ?",
+                    "_context": "Label for the how are you using the Bible Well input field"
                 },
                 "bibleTranslation": {
-                    "value": "बाइबल अनुवाद"
+                    "value": "बाइबल अनुवाद",
+                    "_context": "Label for the Bible Translation input field"
                 },
                 "sermonPreparation": {
-                    "value": "उपदेश तयारी"
+                    "value": "प्रचारको तयारी",
+                    "_context": "Label for the Sermon Preparation input field"
                 },
                 "bibleStudy": {
-                    "value": "बाइबल अध्ययन"
+                    "value": "बाइबल अध्ययन",
+                    "_context": "Label for the Bible Study input field"
                 },
                 "studiesBibleSchoolSeminary": {
-                    "value": "अध्ययन (बाइबल स्कूल, सेमिनरी)"
+                    "value": "अध्ययन (बाइबल स्कूल, सेमिनरी)",
+                    "_context": "Label for the Studies (Bible School, Seminary) input field"
                 },
                 "Evangelism": {
-                    "value": "सुसमाचार प्रचार"
+                    "value": "सुसमाचार प्रचार",
+                    "_context": "Label for the Evangelism input field"
                 },
                 "isRequired": {
-                    "value": "आवश्यक छ"
+                    "value": "आवश्यक छ",
+                    "_context": "Message to display when a field is required"
                 },
                 "likesOrImprovementsFeedbackRequired": {
-                    "value": "मनपर्ने वा सुधारको प्रतिक्रिया आवश्यक छ"
+                    "value": "मनपर्ने वा सुधारको लागि प्रतिक्रिया आवश्यक छ",
+                    "_context": "Message to display when the likes or improvements feedback is required"
                 },
                 "pleaseFillInTheRequiredFields": {
-                    "value": "कृपया आवश्यक फिल्डहरू भर्नुहोस्"
+                    "value": "कृपया आवश्यक स्थानहरू भर्नुहोस्",
+                    "_context": "Message to display when the required fields are not filled in"
                 }
             },
             "infoPromptForm": {
                 "share": {
-                    "value": "आफ्नो जानकारी साझा गर्नुहोस्"
+                    "value": "तपाईंको जानकारी शेयर  गर्नुहोस्",
+                    "_context": "Title for contact form popup"
                 },
                 "shareSubtitle": {
-                    "value": "Bible Well लाई सुधार गर्न र प्रयोग गर्न सजिलो बनाउन मद्दत गर्नुहोस्! तपाईंको प्रतिक्रिया महत्त्वपूर्ण छ!"
+                    "value": "हामीलाई बाइबल वेल सुधार गर्न र यसलाई प्रयोग गर्न सजिलो बनाउन मद्दत गर्नुहोस्! तपाईंको प्रतिक्रिया महत्त्वपूर्ण छ!",
+                    "_context": "Subtitle for the contact form popup"
                 },
                 "contactInformation": {
-                    "value": "सम्पर्क जानकारी"
+                    "value": " जानकारीको लागि सम्पर्क",
+                    "_context": "Label for contact information dropdown"
                 },
                 "contactType": {
-                    "value": "सम्पर्क प्रकार"
+                    "value": "सम्पर्कको प्रकार",
+                    "_context": "Label for contact type dropdown"
                 }
             },
             "resourceFeedbackForm": {
                 "rateContent": {
-                    "value": "यस सामग्रीलाई दर दिनुहोस्"
+                    "value": "यस सामग्रीलाई रेटिङ दिनुहोस्",
+                    "_context": "Label for the star rating field"
                 },
                 "additionalFeedback": {
-                    "value": "थप प्रतिक्रिया (वैकल्पिक)"
+                    "value": "अतिरिक्त प्रतिक्रिया (वैकल्पिक)",
+                    "_context": "Label for additional feedback"
                 },
                 "contactInformation": {
-                    "value": "सम्पर्क जानकारी (वैकल्पिक)"
+                    "value": " जानकारीको लागि सम्पर्क (वैकल्पिक)",
+                    "_context": "Label for contact information section"
                 },
                 "contactType": {
-                    "value": "सम्पर्क प्रकार"
+                    "value": "सम्पर्कको प्रकार",
+                    "_context": "Label for contact type dropdown"
                 }
             },
             "contactType": {
                 "email": {
-                    "value": "इमेल"
+                    "value": "इमेल",
+                    "_context": "Email contact method"
                 },
                 "phone": {
-                    "value": "फोन"
+                    "value": "फोन",
+                    "_context": "Phone contact method"
                 },
                 "whatsapp": {
-                    "value": "व्हाट्सएप"
+                    "value": "व्हाट्सएप",
+                    "_context": "WhatsApp contact method"
                 },
                 "signal": {
-                    "value": "सिग्नल"
+                    "value": "सिग्नल",
+                    "_context": "Signal contact method"
                 },
                 "other": {
-                    "value": "अन्य"
+                    "value": "अन्य",
+                    "_context": "Other contact method"
                 }
             }
         }
     },
     "navTop": {
         "selectPassage": {
-            "value": "पाठ चयन गर्नुहोस्"
+            "value": "खण्ड चयन गर्नुहोस्",
+            "_context": "Button to select a passage"
         },
         "selectGuide": {
-            "value": "गाइड चयन गर्नुहोस्"
+            "value": "मार्गनिर्देशन चयन गर्नुहोस्",
+            "_context": "Button to select a guide"
         }
     },
     "resources": {
         "fia": {
             "step1": {
-                "value": "सुन्न र मन"
+                "value": "सुन्नु र मनन गर्नु",
+                "_context": "See FIA for translations of each step name"
             },
             "step2": {
-                "value": "चरण सेट गर्नुहोस्"
+                "value": "मञ्च तयार गर्नु",
+                "_context": "See FIA for translations of each step name"
             },
             "step3": {
-                "value": "दृश्यहरूको परिभाषा"
+                "value": "दृश्यहरूको परिभाषा",
+                "_context": "See FIA for translations of each step name"
             },
             "step4": {
-                "value": "पाठलाई अवतार गर्नुहोस्"
+                "value": "खण्डलाई मूर्त आकार दिनु",
+                "_context": "See FIA for translations of each step name"
             },
             "step5": {
-                "value": "अन्तराल भर्नुहोस्"
+                "value": "अन्तराल भर्नुहोस्",
+                "_context": "See FIA for translations of each step name"
             },
             "step6": {
-                "value": "शब्द बोल्नुहोस्"
+                "value": "वचन बोल्नुहोस्",
+                "_context": "See FIA for translations of each step name"
             }
         },
         "silOpenTranslatorsNotes": {
             "paragraphButton": {
-                "value": "अनुच्छेद"
+                "value": "अनुच्छेद",
+                "_context": "Button to see OTN paragraph info"
             },
             "sectionButton": {
-                "value": "खण्ड"
+                "value": "अनुभाग",
+                "_context": "Button to see OTN section info"
             },
             "suggestionsButton": {
-                "value": "अर्थहरू"
+                "value": "अर्थ",
+                "_context": "Button to see OTN text translation suggestions info"
             },
             "suggestionsDescription": {
-                "value": "यीलाई मूल पाठको अर्थ बुझ्नको लागि उपकरणको रूपमा प्रयोग गर्नुहोस्, त्यसपछि यसलाई तपाईंको भाषामा स्वाभाविक रूपमा व्यक्त गर्नुहोस्।"
+                "value": "मूल पाठको अर्थ बुझ्नको लागि यसलाई उपकरणको रूपमा प्रयोग गर्नुहोस्, त्यसपछि यसलाई तपाईंको भाषामा स्वाभाविक रूपमा व्यक्त गर्नुहोस्।",
+                "_context": "Description explaining OTN text translation suggestions"
             }
         }
     },
     "errorMessage": {
         "error": {
-            "value": "त्रुटि"
+            "value": "त्रुटि",
+            "_context": "The label for the error message"
         },
         "title": {
-            "value": "सामग्री लोड गर्न असमर्थ"
+            "value": "विषयवस्तु लोड गर्न असमर्थ",
+            "_context": "The title for the error message"
         },
         "message": {
-            "value": "यदि समस्या निरन्तर छ भने, कृपया आफ्नो इन्टरनेट जडान जाँच गर्नुहोस्।"
+            "value": "यदि समस्या निरन्तर रहन्छ भने, कृपया आफ्नो इन्टरनेट जडान जाँच गर्नुहोस्।",
+            "_context": "The message for the error message"
         },
         "home": {
-            "value": "गृहपृष्ठ"
+            "value": "गृह पृष्ठ",
+            "_context": "The label for the home button"
         },
         "browserUnsupported": {
-            "value": "तपाईंको ब्राउजर समर्थित छैन। कृपया अर्को ब्राउजर प्रयोग गर्नुहोस्। यदि तपाईं निजी/incognito मोडमा हुनुहुन्छ भने, कृपया नियमित मोड प्रयास गर्नुहोस्।"
+            "value": "तपाईंको ब्राउजर समर्थित छैन। कृपया अर्को ब्राउजर प्रयोग गर्नुहोस्। यदि तपाईं निजी/गुप्त मोडमा हुनुहुन्छ भने, कृपया सामान्य मोडमा प्रयास गर्नुहोस्।",
+            "_context": "Message for when the browser is missing features"
         }
     },
     "components": {
         "search": {
             "placeholder": {
-                "value": "खोजी"
+                "value": "खोजी गर्नुहोस्|",
+                "_context": "Placeholder text for the search component"
             },
             "clear": {
-                "value": "मेटाउनुहोस्"
+                "value": "सफा गर्नुहोस्",
+                "_context": "Button in the search component for clearing entered text"
             },
             "passage": {
-                "value": "अंश"
+                "value": "खण्ड ",
+                "_context": "Label for the passage search button"
             },
             "resource": {
-                "value": "स्रोत"
+                "value": "संसाधन",
+                "_context": "Label for the resource search button"
             },
             "resources": {
-                "value": "स्रोतहरू"
+                "value": "संसाधनहरू",
+                "_context": "Title for the resource menu"
             },
             "loadMore": {
-                "value": "थप लोड गर्नुहोस्"
+                "value": "थप लोड गर्नुहोस्",
+                "_context": "Button to load more resources"
             }
         },
         "communityEditionModal": {
             "header": {
-                "value": "समुदाय संस्करण सामग्री"
+                "value": "सामुदायिक संस्करण विषयवस्तु",
+                "_context": "Header for the community edition content modal"
             },
             "description": {
-                "value": "<p>यस सामग्रीलाई पूर्ण रूपमा शुद्धता जाँच गरिएको छैन। एक समुदाय सदस्यले यसलाई अनुवादित गरेका छन्, तर यसले अन्य सामग्रीजस्तै समीक्षा प्रक्रिया पार गरेको छैन। कृपया यसलाई सावधानीपूर्वक प्रयोग गर्नुहोस्।</p><p>कृपया कुनै पनि अनुवाद त्रुटिहरू वा सुझावहरू रिपोर्ट गर्न विन्डोको माथिल्लो दाहिने कुनामा रहेको प्रतिक्रिया आइकन प्रयोग गर्नुहोस्।</p><p>यदि तपाईं समुदाय संस्करण योगदानकर्ता बन्न चाहनुहुन्छ भने, मेनु > प्रतिक्रिया मा जानुहोस् र हामीलाई जानकारी दिनुहोस्।</p>"
+                "value": "<p>यो सामग्री पूर्ण रूपमा सटीकताका लागि जाँच गरिएको छैन। एक सामुदायको सदस्यले यसलाई अनुवाद गरेका छन्, तर यसले अन्य सामग्रीहरू जस्तै गहिरो जाँच प्रक्रियाबाट गुज्रिएको छैन। कृपया यसलाई सावधानीपूर्वक प्रयोग गर्नुहोस्।</p><p>कुनै अनुवाद त्रुटिहरू वा सुझावहरू रिपोर्ट गर्न कृपया विन्डोको माथिल्लो दाहिने कुनामा रहेको प्रतिक्रिया आइकन प्रयोग गर्नुहोस्।</p><p>यदि तपाईं सामुदायिक संस्करणका योगदानकर्ता बन्न इच्छुक हुनुहुन्छ भने, मेनु > प्रतिक्रिया मा जानुहोस् र हामीलाई जानकारी दिनुहोस्।</p>",
+                "_context": "Description for the community edition content modal"
             }
         },
         "aiEditionModal": {
             "header": {
-                "value": "एआई अनुवादित सामग्री"
+                "value": "AI द्वारा अनुवादित सामग्री",
+                "_context": "Header for the community edition content modal"
             },
             "description": {
-                "value": "<p>यस सामग्रीलाई एआईले अनुवाद गरेको हो र यसलाई शुद्धताको लागि व्यक्तिले जाँच गरेको छैन। कृपया यसलाई सावधानीपूर्वक प्रयोग गर्नुहोस्।</p><p>कृपया कुनै पनि अनुवाद त्रुटिहरू वा सुझावहरू रिपोर्ट गर्न विन्डोको माथिल्लो दाहिने कुनामा रहेको प्रतिक्रिया आइकन प्रयोग गर्नुहोस्।</p><p>यदि तपाईं यस सामग्रीलाई समीक्षा गर्न इच्छुक हुनुहुन्छ भने, समुदाय संस्करण योगदानकर्ता बन्नका लागि गृहपृष्ठ > प्रतिक्रिया मा जानुहोस्।</p>"
+                "value": " <p>यो सामग्री AI द्वारा अनुवाद गरिएको हो र यसलाई सटीकताको लागि व्यक्तिले जाँच गरेको छैन। कृपया यसलाई सावधानीपूर्वक प्रयोग गर्नुहोस्।</p><p>कुनै अनुवाद त्रुटिहरू वा सुझावहरू रिपोर्ट गर्न कृपया विन्डोको माथिल्लो दाहिने कुनामा रहेको प्रतिक्रिया आइकन प्रयोग गर्नुहोस्।</p><p>यदि तपाईं सामुदायिक संस्करणका योगदानकर्ता बन्न इच्छुक हुनुहुन्छ भने, मेनु > प्रतिक्रियामा जानुहोस् र हामीलाई जानकारी दिनुहोस्।</p>",
+                "_context": "Description for the community edition content modal"
             }
         }
     }

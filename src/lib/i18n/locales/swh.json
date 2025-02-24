@@ -2,636 +2,820 @@
     "page": {
         "index": {
             "downloadResourcesForOfflineUse": {
-                "value": "Je, unakwenda Nje ya Mtandao? Pata Maudhui zaidi"
+                "value": "Toka Mtandaoni? Kupata Maudhui zaidi?",
+                "_context": "Button text telling the user to download resources for offline use"
             },
             "about": {
-                "value": "Kuhusu"
+                "value": "Kuhusu",
+                "_context": "Link to the about page"
             },
             "downloadManager": {
-                "value": "Kidhibiti Pakua"
+                "value": "Meneja wa Upakuaji",
+                "_context": "The label for the download manager button"
             },
             "getStarted": {
-                "value": "Anza"
+                "value": "Anza",
+                "_context": "Button to get started with the application"
             }
         },
         "about": {
             "error": {
-                "value": "Hitilafu katika kupakia maelezo ya leseni ya maudhui"
+                "value": "Hitilafu katika kupakia maelezo ya leseni ya maudhui",
+                "_context": "Message to show when there's an error loading the page for some reason"
             },
             "license": {
                 "releasedUnderSingle": {
-                    "value": "Imetolewa chini ya {name}"
+                    "value": "Imetolewa chini ya {name}",
+                    "_context": "Description explaining the content is released under a single license"
                 },
                 "releasedUnderMultiple": {
-                    "value": "Imetolewa chini ya anuwai: {names}"
+                    "value": "Imetolewa kwa aina mbalimbali: {name}",
+                    "_context": "Description explaining the content is released under multiple licenses"
                 },
                 "adaptedInLanguages": {
-                    "value": "{title} imebadilishwa katika lugha zifuatazo<br /> {languages}<br /> kutoka {title} {copyright} {date} {publisher}<br /> Imetolewa chini ya leseni {bnLicense} na Biblionexus"
+                    "value": "{title} imetumika katika lugha zifuatazo<br / > {languages}<br /> kutoka>{title} {copyright} {date} {publisher}<br /> Imetolewa chini ya {bnLicense} > leseni na Biblionexus",
+                    "_context": "Description for license adapted in languages"
                 }
             }
         },
         "passage": {
             "nav": {
                 "bible": {
-                    "value": "Biblia"
+                    "value": "Biblia",
+                    "_context": "Label for Bible button on navbar"
                 },
                 "guide": {
-                    "value": "Mwongozo"
+                    "value": "Mwongozo",
+                    "_context": "Label for Guide button on navbar"
                 },
                 "library": {
-                    "value": "Maktaba"
+                    "value": "Maktaba",
+                    "_context": "Label for Library button on navbar"
                 },
                 "menu": {
-                    "value": "Menyu"
+                    "value": "Menyu",
+                    "_context": "Label for Menu button on navbar"
                 },
                 "resources": {
-                    "value": "Rasilimali"
+                    "value": "Rasilimali",
+                    "_context": "Label for Resources button on navbar"
                 }
             },
             "resourcePane": {
                 "cancel": {
-                    "value": "Ghairi"
+                    "value": "Ghairi",
+                    "_context": "Button to cancel search"
                 },
                 "libraryTitle": {
-                    "value": "Maktaba"
+                    "value": "Maktaba",
+                    "_context": "Title for the Library Menu"
                 },
                 "librarySubtitle": {
-                    "value": "Pata rasilimali unazohitaji"
+                    "value": "Tafuta rasilimali unazohitaji",
+                    "_context": "Subtitle for the Library Menu"
                 },
                 "typeToSearch": {
-                    "value": "Andika neno ili kutafuta maktaba"
+                    "value": "Andika neno ili kutafuta maktaba",
+                    "_context": "Label for searching the library"
                 },
                 "fullscreen": {
                     "currentOfTotalLabel": {
-                        "value": "{current} kati ya {total}"
+                        "value": "{current} ya {total}",
+                        "_context": "Displays the current position out of the total fullscreen elements"
                     }
                 },
                 "seeAll": {
-                    "value": "Tazama Zote ({count})"
+                    "value": "Tazama Yote ({count})",
+                    "_context": "Button for the user to see all resources of a given resource type"
                 },
                 "noThumbnail": {
-                    "value": "Hakuna kijipicha"
+                    "value": "Hakuna kijipicha",
+                    "_context": "Label for videos that have no thumbnail"
                 },
                 "noResourcesFound": {
                     "header": {
-                        "value": "Hakuna Nyezo Zilizopatikana"
+                        "value": "Hakuna Rasilimali Zilizopatikana",
+                        "_context": "Header to show when no resources are found with the search string"
                     },
                     "description": {
-                        "value": "Utafutaji wako \"{searchQuery}\" haukulingana na nyenzo zozote."
+                        "value": "Utafutaji wako \"{searchQuery}\" haukulingana na rasilimali yoyote",
+                        "_context": "Description to show no resources are found with the search string"
                     }
                 },
                 "resourceCount": {
                     "singular": {
-                        "value": "1 nyenzo"
+                        "value": "rasilimali 1",
+                        "_context": "Label for when there is one resource"
                     },
                     "plural": {
-                        "value": "{count} nyenzo"
+                        "value": "{count} rasilimali",
+                        "_context": "Label for when there is more than one resource"
                     }
                 },
                 "error": {
-                    "value": "Hitilafu kupakia rasilimali"
+                    "value": "Hitilafu ya upakiaji wa rasilimali",
+                    "_context": "Message for when a resource fails to load"
                 }
             },
             "alignmentMode": {
                 "selectWord": {
-                    "value": "Bofya kwenye neno kuona chanzo cha lugha asilia."
+                    "value": "Bofya kwenye neno ili kuona chanzo cha lugha asili.",
+                    "_context": "Instructions for when user hasn't selected word yet in alignment mode"
                 },
                 "noWordInfoAvailable": {
-                    "value": "Hakuna taarifa za lugha asilia zinazopatikana kwa uteuzi huu."
+                    "value": "Hakuna taarifa ya lugha ya asili inapatikana kwa uchaguzi huu",
+                    "_context": "Message for when we're missing alignment data for the selected word."
                 },
                 "noSenseInfoAvailable": {
-                    "value": "Hakuna taarifa za gloss au tafsiri zinazopatikana kwa uteuzi huu."
+                    "value": "Hakuna taarifa ya tafsiri au ufafanuzi inapatikana kwa uchaguzi huu.",
+                    "_context": "Message for when we're missing alignment data for the selected word."
                 },
                 "gloss": {
-                    "value": "Gloss"
+                    "value": "Tafsiri",
+                    "_context": "Gloss label for Greek/Hebrew alignment"
                 },
                 "definition": {
-                    "value": "Tafsiri"
+                    "value": "Ufafanuzi",
+                    "_context": "Definition label for Greek/Hebrew alignment"
                 }
             },
             "noBibleContent": {
                 "header": {
-                    "value": "Nyenzo Haipatikani"
+                    "value": "Rasilimali Haipatikani",
+                    "_context": "Header for when a Bible is not available in the current language"
                 },
                 "description": {
-                    "value": "Hakuna Biblia inayopatikana kwenye kifaa hiki kwa {language}. <br> Je, ungependa kutumia Biblia katika lugha nyingine?"
+                    "value": "Hakuna Biblia inayopatikana kwenye kifaa hiki kwa {language}.<br />Je, unataka kutumia Biblia katika lugha nyingine?",
+                    "_context": "Description for when a Bible is not available in the current language"
                 },
                 "noneAvailableDescription": {
-                    "value": "Hakuna Biblia inayopatikana kwenye kifaa hiki kwa {language} au lugha nyingine yoyote. <br>Tafadhali pakua maudhui ukiwa mtandaoni."
+                    "value": "Hakuna Biblia inayopatikana kwenye kifaa hiki kwa {language} au lugha nyingine yoyote.<br />Tafadhali pakua maudhui unapo mtandaoni.",
+                    "_context": "Description for when a Bible is not available in the current language or any other language"
                 },
                 "show": {
-                    "value": "Chagua Biblia"
+                    "value": "Chagua Biblia",
+                    "_context": "Button to pop up modal that allows selecting a Bible."
                 },
                 "checkForMoreResources": {
-                    "value": "Angalia nyenzo zaidi..."
+                    "value": "Angalia rasilimali zaidi...",
+                    "_context": "Link to go to the file manager and see more resources if Bible not available in the current language"
                 },
                 "missingFromBible": {
-                    "value": "Biblia hii inakosa kipande kilichochaguliwa."
+                    "value": "Biblia hii inakosa kifungu kilichochaguliwa.",
+                    "_context": "Message for when the Bible does not have the passage for whatever reason."
                 }
             },
             "noGuideContent": {
-                "value": "Hakuna maudhui yaliyopatikana kwa kifungu hiki."
+                "value": "Hakuna maudhui yaliyopatikana kwa kifungu hiki.",
+                "_context": "Message to display when the content is not downloaded or available"
             },
             "guide": {
                 "next": {
-                    "value": "Ifuatayo"
+                    "value": "Inayofuata",
+                    "_context": "Go to next item in guide."
                 },
                 "usedInVerses": {
-                    "value": "Tumiwa katika aya hizi"
+                    "value": "Inayotumika katika mistari hii",
+                    "_context": "Prefixed to content in Translation Words Guides for displaying references of the word in the selected passage"
                 }
             }
         },
         "fileManager": {
             "downloadManager": {
-                "value": "Kidhibiti Pakua"
+                "value": "Meneja wa Upakuaji",
+                "_context": "Title displayed on the download manager page"
             },
             "download": {
-                "value": "Pakua"
+                "value": "Pakua",
+                "_context": "Table column heading for the column with checkboxes allowing the user to select content to download"
             },
             "textType": {
-                "value": "Matini"
+                "value": "Maandishi",
+                "_context": "The media type for text, available to be downloaded"
             },
             "audioType": {
-                "value": "Sauti"
+                "value": "Sauti",
+                "_context": "The media type for audio, available to be downloaded"
             },
             "mediaType": {
-                "value": "Midia"
+                "value": "Vyombo vya Habari",
+                "_context": "The media type for media, available to be downloaded"
             },
             "ok": {
-                "value": "SAWA"
+                "value": "Sawa",
+                "_context": "Button to download/delete content based on what the user selected"
             },
             "cancel": {
-                "value": "Ghairi"
+                "value": "Ghairi",
+                "_context": "Button to cancel current action"
             },
             "noInternet": {
-                "value": "Hakuna intaneti"
+                "value": "Hakuna Mtandao",
+                "_context": "Message to display when the user has no internet connection"
             },
             "selectABook": {
-                "value": "Chagua Kitabu"
+                "value": "Chagua Kitabu",
+                "_context": "Label for a dropdown allowing the user to select a book to view"
             },
             "delete": {
-                "value": "Futa"
+                "value": "Futa",
+                "_context": "Button to delete content"
             },
             "modal": {
                 "title": {
-                    "value": "Thibitisha Upakuaji"
+                    "value": "Thibitisha Upakuaji",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
                 },
                 "description": {
-                    "value": "The Bible Well itapakua maudhui ya {downloadSize} kwenye kifaa chako."
+                    "value": "Bible Well itapakuwa {downloadSize} ya maudhui kwa kifaa chako.",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
                 },
                 "downloadProgress": {
-                    "value": "Maendeleo ya upakuaji"
+                    "value": "Maendeleo ya Upakuaji",
+                    "_context": "Title of the modal showing the user how the download is progressing"
                 },
                 "success": {
-                    "value": "Imepakuliwa kikamilifu"
+                    "value": "Umefanikiwa Kupakua",
+                    "_context": "Title of the modal showing the download was successful"
                 },
                 "close": {
-                    "value": "Funga"
+                    "value": "Funga",
+                    "_context": "Button to close the modal"
                 },
                 "downloadingDescription": {
-                    "value": "Inapakua {totalSizeDownloaded} kati ya {totalSizeToDownload}."
+                    "value": "Inapakuliwa {totalSizeDownloaded} ya {totalSizeDownloaded}",
+                    "_context": "Shows on the modal showing the user how the download is progressing"
                 }
             },
             "deleteModal": {
                 "warning": {
-                    "value": "Onyo!"
+                    "value": "Onyo!",
+                    "_context": "Title of the modal asking the user to confirm changes before syncing"
                 },
                 "description": {
-                    "value": "Je, una uhakika unataka kufuta faili hizi kabisa kutoka kwa kifaa chako?"
+                    "value": "Je, uko sawa kufuta faili hizi kabisa kutoka kwa kifaa chako?",
+                    "_context": "Shows on the modal asking the user to confirm changes before syncing"
                 }
             },
             "metaData": {
                 "description": {
-                    "value": "Hapa ndipo unaweza kupakua na kufuta maudhui ya Chemichemi kutoka kwa kifaa chako."
+                    "value": "Hapa ndipo unaweza kupakua na kufuta maudhui ya Aquifer kutoka kwa kifaa chako.",
+                    "_context": "Meta tag description"
                 }
             },
             "viewHeader": {
                 "name": {
-                    "value": "Jina"
+                    "value": "Jina",
+                    "_context": "Label for the name column"
                 },
                 "text": {
-                    "value": "Matini"
+                    "value": "Maandishi",
+                    "_context": "Label for the text column"
                 },
                 "audio": {
-                    "value": "Sauti"
+                    "value": "Sauti",
+                    "_context": "Label for the audio column"
                 },
                 "media": {
-                    "value": "Midia"
+                    "value": "Vyombo vya Habari",
+                    "_context": "Label for the media column"
                 }
             },
             "viewRow": {
                 "resources": {
-                    "value": "Rasilimali"
+                    "value": "Rasilimali",
+                    "_context": "Label for the resources row"
                 }
             }
         },
         "menu": {
             "home": {
-                "value": "Nyumbani"
+                "value": "Nyumbani",
+                "_context": "Label for the home button"
             },
             "menu": {
-                "value": "Menyu"
+                "value": "Orodha",
+                "_context": "Label for the menu button"
             },
             "downloadManager": {
-                "value": "Kidhibiti Pakua"
+                "value": "Meneja wa Upakuaji",
+                "_context": "Label for the download manager button"
             },
             "language": {
-                "value": "Lugha"
+                "value": "Lugha",
+                "_context": "Label for the language button"
             },
             "shortcuts": {
-                "value": "Vidokezo"
+                "value": "Mifupisho",
+                "_context": "Label for the shortcuts button"
             },
             "changeLanguage": {
-                "value": "Badilisha Lugha"
+                "value": "Badilisha Lugha",
+                "_context": "Label for the change language button"
             }
         },
         "selectLanguage": {
             "welcome": {
-                "value": "Karibu"
+                "value": "Karibu",
+                "_context": "Title for the select language page"
             },
             "chooseYourPreferredLanguage": {
-                "value": "Chagua lugha yako unayopendelea"
+                "value": "Chagua lugha yako unayopendelea",
+                "_context": "Placeholder text for the sub title"
             },
             "next": {
-                "value": "Ijayo"
+                "value": "Inayofuata",
+                "_context": "Label for next button"
             }
         },
         "guideMenu": {
             "translationGuides": {
-                "value": "Miongozo ya Tafsiri"
+                "value": "Miongozo ya Tafsiri",
+                "_context": "Title for the Translation Guides section"
             },
             "whatWouldYouLikeToDo": {
-                "value": "Ungependa kufanya nini?"
+                "value": "Ungependa kufanya nini?",
+                "_context": "Header for the guide selection options"
             },
             "chooseGuide": {
-                "value": "Chagua mwongozo"
+                "value": "Chagua miongozo",
+                "_context": "Placeholder text for the dropdown"
             },
             "allGuides": {
-                "value": "Miongozo Yote"
+                "value": "Miongozo Yote",
+                "_context": "Header for the menu showing all guides"
             },
             "checkingGuides": {
-                "value": "Miongozo ya Kukagua"
+                "value": "Miongozo ya Ukaguzi",
+                "_context": "Header for the menu showing checking guides"
             },
             "draftingGuides": {
-                "value": "Miongozo ya Kuandika"
+                "value": "Miongozo ya Rasimu",
+                "_context": "Header for the menu showing drafting guides"
             },
             "startDraftingTranslation": {
-                "value": "Nataka kuanza kuandika tafsiri."
+                "value": "Nataka kuanza kuandika tafsiri.",
+                "_context": "Button to show drafting guides"
             },
             "checkTranslation": {
-                "value": "Nataka kukagua tafsiri yangu."
+                "value": "Nataka kukagua tafsiri yangu.",
+                "_context": "Button to show checking guides"
             },
             "helpMeChoose": {
-                "value": "Sina uhakika, nisaidie kuchagua."
+                "value": "Sijui, nisaidie kuchagua.",
+                "_context": "Button to get help choosing a guide"
             },
             "showAllGuides": {
-                "value": "Nataka kuchagua mwongozo."
+                "value": "Nataka kuchagua miongozo.",
+                "_context": "Button to show all guides"
             },
             "guideExplanationHeader": {
-                "value": "Maelezo ya Mwongozo"
+                "value": "Maelezo ya mwongozo",
+                "_context": "Header for the guide explanation section"
             },
             "guideExplanationContent": {
-                "value": "<p>Miongozo katika Bible Well imeundwa ili kukusaidia kuelewa Biblia vizuri zaidi. Hii inakusaidia kukua katika kuelewa wewe ni nani na Mungu anafanya nini. Pia inakusaidia kutafsiri Biblia vizuri zaidi na kuhakikisha kwamba tafsiri yako ya Biblia imefanywa vizuri.</p><p>Ikiwa unataka kusoma Biblia au kuanza kutafsiri Biblia, tafadhali chagua \"Miongozo ya Kuandika\" hapa chini. Hii itakupitisha katika mchakato wa kuelewa Biblia na kuanza kuandika tafsiri yako.</p><p>Ikiwa unataka kukagua tafsiri yako ya Biblia kuhakikisha imefanywa vizuri, chagua \"Miongozo ya Kukagua\" hapa chini. Kuna chaguo kadhaa ambazo zinakusaidia kuelewa Biblia, hasa vifungu vigumu.</p>"
+                "value": "<p>Miongozo katika Bible Well imeundwa kukusaidia kuelewa Biblia vizuri. Hii inakusaidia kukua katika kuelewa kuhusu Mungu ni nani na anafanya nini. Pia inakusaidia kutafsiri Biblia vizuri na kuhakikisha kuwa tafsiri yako ya Biblia imefanywa vizuri.</p> <p>Ili kujifunza Biblia au kuanza kutafsiri Biblia, tafadhali chagua \"Miongozo ya Rasimu\" hapo chini. Hii itakuongoza kupitia mchakato wa kuelewa Biblia na kuanza kuandika tafsiri yako.</p><p>Ili kukagua tafsiri yako ya Biblia kuhakikisha imetafsiriwa vizuri, chagua \"Miongozo ya Ukaguzi\" hapo chini. Kuna chaguzi kadhaa zinazokusaidia kuelewa Biblia, hasa vifungu vigumu.</p>",
+                "_context": "Explanation of each type of guide so users know what to choose."
             },
             "noGuides": {
-                "value": "Hakuna miongozo inayopatikana kwa kifungu kilichochaguliwa"
+                "value": "Hakuna miongozo inayopatikana kwa kifungu kilichochaguliwa",
+                "_context": "Message for when no guides are available for the passage"
             }
         },
         "bibleMenu": {
             "noBibles": {
-                "value": "Hakuna Biblia iliyopatikana kwa lugha hii."
+                "value": "Hakuna Biblia zinazopatikana",
+                "_context": "Message to display when no Bibles are available"
             },
             "selectBible": {
-                "value": "Chagua Biblia"
+                "value": "Chagua Biblia",
+                "_context": "Placeholder text for the dropdown"
             },
             "goToPassage": {
-                "value": "Nenda kwa Sehemu"
+                "value": "Nenda kwa Kifungu",
+                "_context": "Label for the button to go to the passage"
             },
             "bible": {
-                "value": "Biblia"
+                "value": "Biblia",
+                "_context": "Label for the dropdown"
             },
             "bibleLicenseAcceptanceModal": {
                 "accept": {
-                    "value": "Kubali"
+                    "value": "Kubali",
+                    "_context": "Button to accept license"
                 },
                 "cancel": {
-                    "value": "Ghairi"
+                    "value": "Ghairi",
+                    "_context": "Button to cancel license accept modal"
                 },
                 "header": {
-                    "value": "Makubaliano ya Maudhui Yasiyo ya Wazi"
+                    "value": "Mkataba wa Maudhui Yasiyofunguliwa",
+                    "_context": "Header for license accept modal"
                 },
                 "description": {
-                    "value": "Rasilimali unayotaka kuingiza, {resourceName}, imetolewa chini ya {licenseType}. Programu hii inakuwezesha kuingiza na \"kuchanganya\" rasilimali hii na maudhui yaliyotolewa kwa leseni ya wazi ambayo tayari yamo kwenye programu. Ili kuendelea, tafadhali thibitisha kuwa unaelewa masharti ya leseni ya rasilimali hii kwa kubonyeza kitufe cha \"Kubali\"."
+                    "value": "Rasilimali unayotaka kuingiza, {resourceName}, imetolewa chini ya {licenseType}. Programu hii inakuwezesha kuingiza na \"kuchanganya\" rasilimali hii na maudhui yaliyotolewa chini ya leseni ya wazi yaliyopo kwenye programu. Ili kuendelea, tafadhali kubali kwamba umeelewa masharti ya leseni ya rasilimali hii kwa kubonyeza kitufe cha \"Kubali\"",
+                    "_context": "Description for license accept modal"
                 }
             }
         },
         "PredeterminedPassageSelectorMenu": {
             "stepOneTitle": {
-                "value": "Chagua Kitabu"
+                "value": "Chagua Kitabu",
+                "_context": "Title for the first step in the book and passage selector"
             },
             "stepTwoTitle": {
-                "value": "Chagua Kifungu"
+                "value": "Chagua Kifungu",
+                "_context": "Title for the second step in the book and passage selector"
             },
             "noBooks": {
-                "value": "Hakuna vitabu vilivyopatikana"
+                "value": "Hakuna Vitabu vinavyopatikana",
+                "_context": "Message to display when no Books are available"
             },
             "noPassages": {
-                "value": "Hakuna vifungu vilivyopatikana"
+                "value": "Hakuna Vifungu inayopatikana",
+                "_context": "Message to display when no Passages are available"
             }
         },
         "settingsMenu": {
             "settings": {
-                "value": "Mipangilio"
+                "value": "Mipangilio",
+                "_context": "Title for the settings section"
             },
             "showOnlySrvResources": {
-                "value": "Onyesha rasilimali za SRV pekee"
+                "value": "Onyesha rasilimali SRV pekee",
+                "_context": "Label for the toggle to show only SRV resources"
             },
             "communityEditionResources": {
-                "value": "Rasilimali za Toleo la Jamii"
+                "value": "Rasilimali za Toleo la Jamii",
+                "_context": "Label for the toggle to show Community Edition resources"
             },
             "aiTranslatedResources": {
-                "value": "Rasilimali zilizotafsiriwa na AI"
+                "value": "Rasilimali zilizotafsiriwa na Akili Bandia (AB)",
+                "_context": "Label for the toggle to show AI Translated resources"
             },
             "showResourceByCheckingMethod": {
-                "value": "Onyesha rasilimali kwa njia ya ukaguzi"
+                "value": "Onyesha Rasilimali kwa Njia ya Ukaguzi",
+                "_context": "Label for the toggle to show resources by checking method"
             },
             "showResourcesByTitle": {
-                "value": "Onyesha rasilimali kwa jina"
+                "value": "Onyesha Rasilimali kwa Kichwa",
+                "_context": "Label for the toggle to show resources by title"
             }
         },
         "BookChapterSelectorPane": {
             "availableBooks": {
-                "value": "Vitabu Vinavyopatikana"
+                "value": "Vitabu Vinavyopatikana",
+                "_context": "Label for the available books section"
             },
             "book": {
-                "value": "Kitabu"
+                "value": "Kitabu",
+                "_context": "Label for the book dropdown"
             },
             "selectChapter": {
-                "value": "Chagua Sura"
+                "value": "Chagua Sura",
+                "_context": "Label for the chapter dropdown"
             },
             "chapter": {
-                "value": "Sura"
+                "value": "Sura",
+                "_context": "Label for the chapter dropdown"
             },
             "selectVerse": {
-                "value": "Chagua aya ya kwanza na ya mwisho"
+                "value": "Chagua mstari wa kwanza na wa mwisho",
+                "_context": "Label for the verse dropdown"
             },
             "go": {
-                "value": "Enda"
+                "value": "Endelea",
+                "_context": "Label for the go button"
             }
         },
         "quickShare": {
             "share": {
-                "value": "Shiriki"
+                "value": "Shiriki",
+                "_context": "over all title"
             },
             "inAWebBrowser": {
-                "value": "Katika kivinjari cha wavuti (kama Chrome), nenda kwa:"
+                "value": "Katika kivinjari cha mtandao (kama Chrome), nenda kwa:",
+                "_context": "this tells the user to go to a web browser and navigate to a specific URL"
             },
             "orScan": {
-                "value": "Au skanisha:"
+                "value": "Au tambaza:",
+                "_context": "this tells the user to scan a QR code instead of going to a URL"
             },
             "toInstallBibleWell": {
-                "value": "Kusakinisha Bible Well:"
+                "value": "Ili kusakinisha Bible Well:",
+                "_context": "this is the title of the installation instructions"
             },
             "stepOne": {
-                "value": "1. Fungua kivinjari cha wavuti (kama Chrome)"
+                "value": "1. Fungua kivinjari cha mtandao (kama Chrome)",
+                "_context": "this is the first step in the installation instructions"
             },
             "stepTwo": {
-                "value": "2. Nenda kwa"
+                "value": "2. Nenda kwa",
+                "_context": "this is the second step in the installation instructions"
             },
             "stepThree": {
-                "value": "3. Nenda kwenye Mipangilio"
+                "value": "3. Nenda kwenye Mipangilio",
+                "_context": "this is the third step in the installation instructions"
             },
             "stepFour": {
-                "value": "4. Bonyeza \"Sakinisha\" (angalia hapa chini)"
+                "value": "4. Bonyeza  \"Sakinisha\" (ona chini)",
+                "_context": "this is the fourth step in the installation instructions"
             },
             "close": {
-                "value": "Funga"
+                "value": "Funga",
+                "_context": "this is the button to close the quick share view"
             }
         },
         "feedback": {
             "feedback": {
-                "value": "Maoni"
+                "value": "Maoni",
+                "_context": "Title for the feedback section"
             },
             "submit": {
-                "value": "Wasilisha"
+                "value": "Tuma",
+                "_context": "Label for the submit button"
             },
             "feedbackSending": {
-                "value": "Inatuma maoni..."
+                "value": "Maoni yanatumwa...",
+                "_context": "Message to display when feedback is being sent"
             },
             "feedbackSuccessfullySent": {
-                "value": "Maoni yamesafirishwa kwa mafanikio!"
+                "value": "Maoni yametumwa kwa mafanikio.",
+                "_context": "Message to display when feedback is successfully sent"
+            },
+            "feedbackQueuedOffline": {
+                "value": "Maoni yatatumwa utakapokuwa mtandaoni tena.",
+                "_context": "Message to display when user is offline but feedback will be sent later."
+            },
+            "feedbackError": {
+                "value": "Hitilafu imetokea wakati wa kutuma maoni. Tafadhali jaribu tena.",
+                "_context": "Message to display when the feedback failed to send."
             },
             "thankYou": {
-                "value": "Asante kwa maoni yako!"
+                "value": "Asante!",
+                "_context": "Message to display when feedback is successfully sent"
             },
             "close": {
-                "value": "Funga"
+                "value": "Funga",
+                "_context": "Button to close the feedback form"
             },
             "feedbackFailedToSend": {
-                "value": "Kushindwa kutuma maoni. Tafadhali jaribu tena."
+                "value": "Maoni hayakufanikiwa kutumwa.",
+                "_context": "Message to display when feedback fails to send"
             },
             "pleaseCheckYourInternetConnectionAndRetry": {
-                "value": "Tafadhali angalia muunganisho wako wa intaneti na ujaribu tena."
+                "value": "Tafadhali angalia muunganisho wako wa mtandao na jaribu tena.",
+                "_context": "Message to display when feedback fails to send"
             },
             "retry": {
-                "value": "Jaribu tena"
+                "value": "Jaribu tena",
+                "_context": "Button to retry sending feedback"
             },
             "feedbackForm": {
                 "name": {
-                    "value": "Jina"
+                    "value": "Jina",
+                    "_context": "Label for the name input field"
                 },
                 "email": {
-                    "value": "Barua pepe"
+                    "value": "Barua pepe",
+                    "_context": "Label for the email input field"
                 },
                 "phone": {
-                    "value": "Simu"
+                    "value": "Simu",
+                    "_context": "Label for the phone input field"
                 },
                 "howOftenDoYouUseTheBibleWell": {
-                    "value": "Unaitumia mara ngapi Bible Well?"
+                    "value": "Unaitumia Bible Well mara ngapi?",
+                    "_context": "Label for the how often input field"
                 },
                 "whatDoYouLikeMostAboutTheBibleWell": {
-                    "value": "Unapenda nini zaidi kuhusu Bible Well?"
+                    "value": "Unapenda nini zaidi kuhusu Bible Well?",
+                    "_context": "Label for the what do you like most input field"
                 },
                 "WhatCanBeImproved": {
-                    "value": "Nini kinaweza kuboreshwa?"
+                    "value": "Nini kinaweza kuboreshwa?",
+                    "_context": "Label for the what can be improved input field"
                 },
                 "howAreYouUsingTheBibleWell": {
-                    "value": "Unaitumiaje Bible Well?"
+                    "value": "Unaitumia vipi Bible Well?",
+                    "_context": "Label for the how are you using the Bible Well input field"
                 },
                 "bibleTranslation": {
-                    "value": "Tafsiri ya Biblia"
+                    "value": "Tafsiri ya Biblia",
+                    "_context": "Label for the Bible Translation input field"
                 },
                 "sermonPreparation": {
-                    "value": "Maandalizi ya mahubiri"
+                    "value": "Maandalizi ya Mahubiri",
+                    "_context": "Label for the Sermon Preparation input field"
                 },
                 "bibleStudy": {
-                    "value": "Masomo ya Biblia"
+                    "value": "Masomo ya Biblia",
+                    "_context": "Label for the Bible Study input field"
                 },
                 "studiesBibleSchoolSeminary": {
-                    "value": "Masomo ya Biblia / Shule ya Biblia / Seminari"
+                    "value": "Masomo (Shule ya Biblia, Seminari)",
+                    "_context": "Label for the Studies (Bible School, Seminary) input field"
                 },
                 "Evangelism": {
-                    "value": "Uinjilisti"
+                    "value": "Uinjilisti",
+                    "_context": "Label for the Evangelism input field"
                 },
                 "isRequired": {
-                    "value": "inahitajika"
+                    "value": "inahitajika",
+                    "_context": "Message to display when a field is required"
                 },
                 "likesOrImprovementsFeedbackRequired": {
-                    "value": "Maoni ya kupenda au kuboresha yanahitajika"
+                    "value": "Maoni ya mapendeleo au maboresho yanahitajika",
+                    "_context": "Message to display when the likes or improvements feedback is required"
                 },
                 "pleaseFillInTheRequiredFields": {
-                    "value": "Tafadhali jaza uga uliohitajika"
-                }
-            },
-            "resourceFeedbackForm": {
-                "rateContent": {
-                    "value": "Pima maudhui haya"
-                },
-                "additionalFeedback": {
-                    "value": "Maoni ya Ziada (Hiari)"
-                },
-                "contactInformation": {
-                    "value": "Taarifa za Mawasiliano (Hiari)"
-                },
-                "contactType": {
-                    "value": "Aina ya Mawasiliano"
-                }
-            },
-            "feedbackError": {
-                "value": "Hitilafu ilipotuma maoni. Tafadhali jaribu tena."
-            },
-            "feedbackQueuedOffline": {
-                "value": "Maoni yatatumwa utakapokuwa mtandaoni tena."
-            },
-            "contactType": {
-                "email": {
-                    "value": "Barua pepe"
-                },
-                "phone": {
-                    "value": "Simu"
-                },
-                "whatsapp": {
-                    "value": "WhatsApp"
-                },
-                "signal": {
-                    "value": "Signal"
-                },
-                "other": {
-                    "value": "Nyingine"
+                    "value": "Tafadhali jaza maeneo yanayohitajika",
+                    "_context": "Message to display when the required fields are not filled in"
                 }
             },
             "infoPromptForm": {
                 "share": {
-                    "value": "Shiriki Taarifa Zako"
+                    "value": "Shiriki Taarifa Zako",
+                    "_context": "Title for contact form popup"
                 },
                 "shareSubtitle": {
-                    "value": "Tusaidie kuboresha Bible Well na kuifanya iwe rahisi kutumia! Maoni yako yanafanya tofauti!"
+                    "value": "Tusaidie kuboresha Bible Well na kuifanya iwe rahisi kuitumia! Maoni yako yana umuhimu!",
+                    "_context": "Subtitle for the contact form popup"
                 },
                 "contactInformation": {
-                    "value": "Aina ya Mawasiliano"
+                    "value": "Taarifa za Mawasiliano",
+                    "_context": "Label for contact information dropdown"
                 },
                 "contactType": {
-                    "value": "Aina ya Mawasiliano"
+                    "value": "Aina ya Mawasiliano",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
+            "resourceFeedbackForm": {
+                "rateContent": {
+                    "value": "Pima maudhui haya",
+                    "_context": "Label for the star rating field"
+                },
+                "additionalFeedback": {
+                    "value": "Maoni ya Ziada (Hiari)",
+                    "_context": "Label for additional feedback"
+                },
+                "contactInformation": {
+                    "value": "Taarifa za Mawasiliano (Hiari)",
+                    "_context": "Label for contact information section"
+                },
+                "contactType": {
+                    "value": "Aina ya Mawasiliano",
+                    "_context": "Label for contact type dropdown"
+                }
+            },
+            "contactType": {
+                "email": {
+                    "value": "Barua pepe",
+                    "_context": "Email contact method"
+                },
+                "phone": {
+                    "value": "Simu",
+                    "_context": "Phone contact method"
+                },
+                "whatsapp": {
+                    "value": "WhatsApp",
+                    "_context": "WhatsApp contact method"
+                },
+                "signal": {
+                    "value": "Signal",
+                    "_context": "Signal contact method"
+                },
+                "other": {
+                    "value": "Nyingine",
+                    "_context": "Other contact method"
                 }
             }
         }
     },
     "navTop": {
         "selectPassage": {
-            "value": "Chagua Kifungu"
+            "value": "Chagua Kifungu",
+            "_context": "Button to select a passage"
         },
         "selectGuide": {
-            "value": "Chagua Mwongozo"
+            "value": "Chagua Mwongozo",
+            "_context": "Button to select a guide"
         }
     },
     "resources": {
         "fia": {
             "step1": {
-                "value": "Hear and Heart"
+                "value": "Kusikiliza na Moyo",
+                "_context": "See FIA for translations of each step name"
             },
             "step2": {
-                "value": "Kuweka Hatua"
+                "value": "Kuweka Jukwaa",
+                "_context": "See FIA for translations of each step name"
             },
             "step3": {
-                "value": "Kufafanua Mandhari"
+                "value": "Kufafanua Matukio",
+                "_context": "See FIA for translations of each step name"
             },
             "step4": {
-                "value": "Kujumuisha Maandishi"
+                "value": "Kuleta Maandishi Hai",
+                "_context": "See FIA for translations of each step name"
             },
             "step5": {
-                "value": "Kujaza hayo mapengo"
+                "value": "Kujaza Mapengo",
+                "_context": "See FIA for translations of each step name"
             },
             "step6": {
-                "value": "Akizungumza Neno"
+                "value": "Kuongelea Neno",
+                "_context": "See FIA for translations of each step name"
             }
         },
         "silOpenTranslatorsNotes": {
             "paragraphButton": {
-                "value": "Aya"
+                "value": "Aya",
+                "_context": "Button to see OTN paragraph info"
             },
             "sectionButton": {
-                "value": "Sehemu"
+                "value": "Sehemu",
+                "_context": "Button to see OTN section info"
             },
             "suggestionsButton": {
-                "value": "Maana"
+                "value": "Maana",
+                "_context": "Button to see OTN text translation suggestions info"
             },
             "suggestionsDescription": {
-                "value": "Tumia hizi kama zana ya kuelewa maana ya maandiko ya asili, kisha uonyeshe kwa lugha yako asili."
+                "value": "Tumia hizi kama zana kuelewa maana ya maandiko ya asili, kisha iwasilishe kwa asili katika lugha yako.",
+                "_context": "Description explaining OTN text translation suggestions"
             }
         }
     },
     "errorMessage": {
         "error": {
-            "value": "Hitilafu"
+            "value": "Hitilafu",
+            "_context": "The label for the error message"
         },
         "title": {
-            "value": "Haiwezi Kupakia Maudhui"
+            "value": "Haiwezekani Kupakia Maudhui",
+            "_context": "The title for the error message"
         },
         "message": {
-            "value": "Tatizo likiendelea, tafadhali angalia muunganisho wako wa intaneti."
+            "value": "Ikiwa tatizo litaendelea, tafadhali angalia muunganisho wako wa mtandao.",
+            "_context": "The message for the error message"
         },
         "home": {
-            "value": "Nyumbani"
+            "value": "Nyumbani",
+            "_context": "The label for the home button"
         },
         "browserUnsupported": {
-            "value": "Kivinjari chako hakitumiki. Tafadhali tumia kivinjari tofauti. Ikiwa uko katika hali fiche/ya faragha, tafadhali jaribu hali ya kawaida."
+            "value": "Kivinjari chako hakikubaliwi. Tafadhali tumia kivinjari kingine. Ikiwa uko kwenye hali ya kibinafsi/kichupo fiche, tafadhali jaribu hali ya kawaida.",
+            "_context": "Message for when the browser is missing features"
         }
     },
     "components": {
         "search": {
             "placeholder": {
-                "value": "Tafuta"
+                "value": "Tafuta",
+                "_context": "Placeholder text for the search component"
             },
             "clear": {
-                "value": "Futa"
+                "value": "Futa",
+                "_context": "Button in the search component for clearing entered text"
             },
             "passage": {
-                "value": "Kifungu"
+                "value": "Kifungu",
+                "_context": "Label for the passage search button"
             },
             "resource": {
-                "value": "Rasilimali"
+                "value": "Rasilimali",
+                "_context": "Label for the resource search button"
             },
             "resources": {
-                "value": "Rasilimali"
+                "value": "Rasilimali",
+                "_context": "Title for the resource menu"
             },
             "loadMore": {
-                "value": "Pakia Zaidi"
+                "value": "Pakia Zaidi",
+                "_context": "Button to load more resources"
             }
         },
         "communityEditionModal": {
             "header": {
-                "value": "Yaliyomo ya Toleo la Jamii"
+                "value": "Maudhui ya Toleo la Jamii",
+                "_context": "Header for the community edition content modal"
             },
             "description": {
-                "value": "<p>Yaliyomo haya hayajachunguzwa kikamilifu kwa usahihi. Mwanajamii alitafsiri, lakini hayajapitia mchakato wa uhakiki kama yaliyomo mengine. Tafadhali tumia kwa uangalifu.</p><p>Tafadhali ripoti makosa yoyote ya tafsiri au mapendekezo kwa kutumia ikoni ya maoni katika kona ya juu ya kulia ya dirisha.</p><p>Kama una nia ya kuwa mchangiaji wa Toleo la Jamii, nenda kwenye Menyu > Maoni na utujulishe.</p>"
+                "value": "<p>Maudhui haya hayajakaguliwa kikamilifu kwa usahihi. Mjumbe wa jamii aliyatafsiri, lakini hayajapitia mchakato wa ukaguzi kama maudhui mengine. Tafadhali yatumie kwa tahadhari. </p><p>Tafadhali ripoti makosa yoyote ya tafsiri au mapendekezo kwa kutumia ikoni ya maoni kwenye kona ya juu kulia ya dirisha. </p><p>Ikiwa unavutiwa kuwa mchango wa Toleo la Jamii, nenda kwenye Orodha > Maoni na utuambie. </p>",
+                "_context": "Description for the community edition content modal"
             }
         },
         "aiEditionModal": {
             "header": {
-                "value": "Yaliyomo Yaliyotafsiriwa na AI"
+                "value": "Maudhui Yaliyotafsiriwa ya Akili Bandia",
+                "_context": "Header for the community edition content modal"
             },
             "description": {
-                "value": "<p>Yaliyomo haya yametafsiriwa kwa kutumia teknolojia ya ujifunzaji wa mashine. Ingawa imefanywa kwa uangalifu, inaweza kuwa na makosa. Tafadhali tumia kwa uangalifu.</p><p>Tafadhali ripoti makosa yoyote ya tafsiri au mapendekezo kwa kutumia ikoni ya maoni katika kona ya juu ya kulia ya dirisha.</p>"
+                "value": "<p>Maudhui haya yalitafsiriwa na Akili Bandia na hayajakaguliwa na mtu kwa usahihi. Tafadhali yatumie kwa tahadhari. </p><p>Tafadhali ripoti makosa ya tafsiri au mapendekezo kwa kutumia ikoni ya maoni kwenye kona ya juu kulia ya dirisha. </p><p>Ikiwa unavutiwa na kupitia maudhui haya, kuwa mmoja wa wana jamii wa marekebisho kwa kwenda Nyumbani > Maoni.</p>",
+                "_context": "Description for the community edition content modal"
             }
         }
     }
