@@ -54,6 +54,8 @@
     import { saveContentViewerContext, goToSavedContentViewerContext } from './context-persister';
     import { createResourceFeedbackContext } from './resource-feedback-context';
     import ResourceFeedbackModal from './feedback/ResourceFeedbackModal.svelte';
+    import ChatBubbleBottom from '$lib/icons/ChatBubbleBottom.svelte';
+    import ChatMenu from './chat-menu/ChatMenu.svelte';
 
     const {
         currentGuide,
@@ -280,6 +282,11 @@
             <LibraryIcon />
         </NavMenuTabItem>
     {/if}
+    {#if $isOnline}
+        <NavMenuTabItem tabName={ContentTabEnum.Chat} label={$translate('page.passage.nav.chat.value')}>
+            <ChatBubbleBottom />
+        </NavMenuTabItem>
+    {/if}
     <NavMenuTabItem tabName={ContentTabEnum.MainMenu} label={$translate('page.passage.nav.menu.value')}>
         <MenuIcon />
     </NavMenuTabItem>
@@ -357,6 +364,9 @@
     {/if}
     {#if $currentTab === ContentTabEnum.Bible && $isShowingContextualMenu}
         <BibleMenu />
+    {/if}
+    {#if $currentTab === ContentTabEnum.Chat && $isOnline}
+        <ChatMenu />
     {/if}
     {#key $currentBibleSection}
         <LibraryResourceMenu

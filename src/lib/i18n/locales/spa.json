@@ -59,6 +59,10 @@
                 "resources": {
                     "value": "Recursos",
                     "_context": "Label for Resources button on navbar"
+                },
+                "chat": {
+                    "value": "Chat",
+                    "_context": "Label for Chat button on navbar"
                 }
             },
             "resourcePane": {
@@ -460,6 +464,12 @@
             "showResourcesByTitle": {
                 "value": "Mostrar recursos por título",
                 "_context": "Label for the toggle to show resources by title"
+            }
+        },
+        "ChatMenu": {
+            "FaithBridgeMultilingualArtificialIntelligence": {
+                "value": "FaithBridge Multilingual AI",
+                "_context": "Title for the iframe in chat menu"
             }
         },
         "BookChapterSelectorPane": {

@@ -59,6 +59,10 @@
                 "resources": {
                     "value": "संसाधन (श्रोतसाधनहरू)",
                     "_context": "Label for Resources button on navbar"
+                },
+                "chat": {
+                    "value": "च्याट",
+                    "_context": "Label for Chat button on navbar"
                 }
             },
             "resourcePane": {
@@ -460,6 +464,12 @@
             "showResourcesByTitle": {
                 "value": "शीर्षक अनुसार सामग्रीहरू देखाउनुहोस्",
                 "_context": "Label for the toggle to show resources by title"
+            }
+        },
+        "ChatMenu": {
+            "FaithBridgeMultilingualArtificialIntelligence": {
+                "value": "FaithBridge बहुभाषिक कृत्रिम बुद्धिमत्ता",
+                "_context": "Title for the iframe in chat menu"
             }
         },
         "BookChapterSelectorPane": {

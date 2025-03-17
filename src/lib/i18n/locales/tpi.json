@@ -46,6 +46,10 @@
                 },
                 "resources": {
                     "value": "Risoses"
+                },
+                "chat": {
+                    "value": "Toktok",
+                    "_context": "Label for Chat button on navbar"
                 }
             },
             "resourcePane": {
@@ -357,6 +361,12 @@
             },
             "showResourcesByTitle": {
                 "value": "Soim Risoses long Nem"
+            }
+        },
+        "ChatMenu": {
+            "FaithBridgeMultilingualArtificialIntelligence": {
+                "value": "FaithBridge Multilingual Artificial Intelligence",
+                "_context": "Title for the iframe in chat menu"
             }
         },
         "BookChapterSelectorPane": {

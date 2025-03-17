@@ -59,6 +59,10 @@
                 "resources": {
                     "value": "資源",
                     "_context": "Label for Resources button on navbar"
+                },
+                "chat": {
+                    "value": "聊天",
+                    "_context": "Label for Chat button on navbar"
                 }
             },
             "resourcePane": {
@@ -460,6 +464,12 @@
             "showResourcesByTitle": {
                 "value": "依標題顯示資源",
                 "_context": "Label for the toggle to show resources by title"
+            }
+        },
+        "ChatMenu": {
+            "FaithBridgeMultilingualArtificialIntelligence": {
+                "value": "FaithBridge 多語言人工智慧",
+                "_context": "Title for the iframe in chat menu"
             }
         },
         "BookChapterSelectorPane": {

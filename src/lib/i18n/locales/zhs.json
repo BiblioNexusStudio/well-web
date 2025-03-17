@@ -46,6 +46,10 @@
                 },
                 "resources": {
                     "value": "资源"
+                },
+                "chat": {
+                    "value": "聊天",
+                    "_context": "Label for Chat button on navbar"
                 }
             },
             "resourcePane": {
@@ -357,6 +361,12 @@
             },
             "showResourcesByTitle": {
                 "value": "按标题显示资源"
+            }
+        },
+        "ChatMenu": {
+            "FaithBridgeMultilingualArtificialIntelligence": {
+                "value": "信仰桥多语言人工智能",
+                "_context": "Title for the iframe in chat menu"
             }
         },
         "BookChapterSelectorPane": {
