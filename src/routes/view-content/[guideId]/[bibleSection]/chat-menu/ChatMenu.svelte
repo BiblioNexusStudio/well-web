@@ -2,7 +2,7 @@
     import { _ as translate } from 'svelte-i18n';
 </script>
 
-<div class="h-full w-full">
+<div class="h-full w-full pb-20">
     <iframe
         title={$translate('page.ChatMenu.FaithBridgeMultilingualArtificialIntelligence.value')}
         class="h-full w-full"
