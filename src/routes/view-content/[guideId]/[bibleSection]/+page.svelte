@@ -365,9 +365,7 @@
     {#if $currentTab === ContentTabEnum.Bible && $isShowingContextualMenu}
         <BibleMenu />
     {/if}
-    {#if $currentTab === ContentTabEnum.Chat && $isOnline}
-        <ChatMenu />
-    {/if}
+    <ChatMenu hidden={$currentTab === ContentTabEnum.Chat && $isOnline} />
     {#key $currentBibleSection}
         <LibraryResourceMenu
             tab={ContentTabEnum.Resources}
