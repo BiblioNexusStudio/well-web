@@ -17,6 +17,7 @@ export enum ContentTabEnum {
     MainMenu = 'MainMenu',
     LibraryMenu = 'LibraryMenu',
     Resources = 'Resources',
+    Chat = 'Chat',
 }
 
 const CONTEXT_KEY = 'contentContext';
