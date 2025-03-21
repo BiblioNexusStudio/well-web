@@ -98,6 +98,7 @@
     let preferredBiblesModalOpen = false;
     let audioPlayerKey: string | undefined;
     let bookCodesToNames: Map<string, string> | undefined;
+    let loadFaithBridgeIframe = false;
 
     $: {
         baseFetchPromise = fetchBase($currentBibleSection); // when the Bible section changes, refetch
@@ -108,6 +109,7 @@
     $: $currentTab === ContentTabEnum.Bible && setBibleAudioPlayerForBible(currentBibleId);
     $: audioPlayerShowing = audioPlayerKey && !!multiClipAudioStates[audioPlayerKey] && !alignmentModeEnabled;
     $: fetchBibleBookCodeToName($currentLanguageInfo);
+    $: $currentTab === ContentTabEnum.Chat && $isOnline && (loadFaithBridgeIframe = true);
 
     function fetchBase(bibleSection: BibleSection | null) {
         resourceData = null;
@@ -365,7 +367,7 @@
     {#if $currentTab === ContentTabEnum.Bible && $isShowingContextualMenu}
         <BibleMenu />
     {/if}
-    <ChatMenu hidden={$currentTab === ContentTabEnum.Chat && $isOnline} />
+    <ChatMenu hidden={$currentTab === ContentTabEnum.Chat && $isOnline} {loadFaithBridgeIframe} />
     {#key $currentBibleSection}
         <LibraryResourceMenu
             tab={ContentTabEnum.Resources}
