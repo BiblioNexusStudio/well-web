@@ -153,7 +153,11 @@
     }
 
     function subgroupSelected(subgroup: LibraryResourceSubgrouping | null) {
-        currentFullscreenResourceSubgrouping = subgroup;
+        if (subgroup?.resources.length === 1 && subgroup?.resources[0]) {
+            resourceSelected(subgroup?.resources[0]);
+        } else {
+            currentFullscreenResourceSubgrouping = subgroup;
+        }
     }
 
     function showResourceGroupingFullscreen(resourceGrouping: LibraryResourceGrouping | null) {

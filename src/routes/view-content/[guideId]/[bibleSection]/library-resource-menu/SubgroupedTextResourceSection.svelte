@@ -19,7 +19,7 @@
     $: subgroupedResources = objectEntries(
         groupBy(
             resourceGrouping.resources,
-            (r) => r.displayName?.match(groupingRegex)?.[1] ?? '',
+            (r) => r.displayName?.match(groupingRegex)?.[1] ?? r.displayName ?? '',
             (r) => r
         )
     )
