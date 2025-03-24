@@ -161,7 +161,7 @@ export function stringToBibleSection(sectionString: string): BibleSection {
     return {
         bookCode,
         startChapter,
-        startVerse,
+        startVerse: startVerse === 1 ? 0 : startVerse,
         endChapter,
         endVerse,
     };
@@ -183,14 +183,15 @@ export function bibleSectionsEqual(passage1: BibleSection, passage2: BibleSectio
 
 export function bibleSectionToReference(bibleSection: BibleSection, scriptDirection: DirectionCode | undefined) {
     let reference: string;
+    const startVerse = bibleSection.startVerse === 0 ? 1 : bibleSection.startVerse;
     if (bibleSection.startChapter === bibleSection.endChapter) {
-        if (bibleSection.startVerse === bibleSection.endVerse) {
-            reference = `${bibleSection.startChapter}:${bibleSection.startVerse}`;
+        if (startVerse === bibleSection.endVerse) {
+            reference = `${bibleSection.startChapter}:${startVerse}`;
         } else {
-            reference = `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endVerse}`;
+            reference = `${bibleSection.startChapter}:${startVerse}-${bibleSection.endVerse}`;
         }
     } else {
-        reference = `${bibleSection.startChapter}:${bibleSection.startVerse}-${bibleSection.endChapter}:${bibleSection.endVerse}`;
+        reference = `${bibleSection.startChapter}:${startVerse}-${bibleSection.endChapter}:${bibleSection.endVerse}`;
     }
     return handleRtlVerseReferences(reference, scriptDirection)!;
 }

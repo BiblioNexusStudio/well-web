@@ -169,10 +169,12 @@ ${verseNumber}, ${wordIndex})" class="cursor-pointer ${
                 {@const splitText = getSplitTextForAlignment(chapterIndex, verseIndex)}
                 <div
                     id="{chapterIndex}-{verseIndex}"
-                    class="py-1"
+                    class={number === 0 ? 'py-1 italic' : 'py-1'}
                     dir={lookupLanguageInfoById(currentBible.languageId)?.scriptDirection}
                 >
-                    <span class="sup pe-1">{number}</span>
+                    {#if number !== 0}
+                        <span class="sup pe-1">{number}</span>
+                    {/if}
                     {#if splitText && alignmentModeEnabled}
                         <!-- this conditional makes sure that if when we select a word we don't need to rerender every single verse but only the relevant one -->
                         {#if selectedChapterIndex === chapterIndex && selectedVerseIndex === verseIndex}
