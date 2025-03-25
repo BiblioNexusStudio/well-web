@@ -11,7 +11,7 @@
             title={$translate('page.ChatMenu.FaithBridgeMultilingualArtificialIntelligence.value')}
             class="h-full w-full"
             src="https://faithbridge.multilingualai.com/bible-well"
-            allow="microphone autoplay"
+            allow="microphone; autoplay"
         ></iframe>
     {/if}
 </div>
