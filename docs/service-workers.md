@@ -1,0 +1,98 @@
+# Service Workers and Caching
+
+This doc explains well-web's offline caching architecture: how the service
+worker is built, how URLs map to caching strategies, and the conventions you
+must follow when changing API responses or adding endpoints.
+
+## Files and their roles
+
+| File | Role |
+|---|---|
+| `src/service-worker.ts` | The service worker entry point |
+| `config/service-worker-pwa.config.ts` | PWA manifest + Workbox build config; the manifest is injected as `self.__WB_MANIFEST` |
+| `static/js/caching-config.js` | **The single source of truth for URL → strategy mapping**, shared by the SW and app code (copied into `src/lib` at build) |
+| `static/js/workbox-plugins/*.js` | Custom Workbox plugins (pure JS with JSDoc types — see below) |
+| `static/external-js/workbox/` | Vendored Workbox 7 runtime |
+| `src/lib/data-cache.ts` | App-side cache layer on top of the SW |
+
+## Why the service worker is written the way it is
+
+The SW uses **classic mode** (`importScripts`), not ES modules. Module-based
+service workers only work in Chrome in dev mode (`yarn dev` doesn't bundle),
+so to keep Firefox/Safari/Edge usable locally we:
+
+- vendor the Workbox runtime in `static/external-js/workbox/` and
+  `importScripts` it,
+- write custom plugins as **plain JS with JSDoc types** in
+  `static/js/workbox-plugins/` (they can't go through the TS compiler),
+- share config via `caching-config.js`, which both the SW (`importScripts`)
+  and the app (`window.__CACHING_CONFIG` / build-time copy) consume.
+
+The long comment at the top of `src/service-worker.ts` explains this in more
+detail — read it before restructuring.
+
+## Request routing
+
+`caching-config.js` builds regexes from API host URLs × path patterns, and
+`service-worker.ts` registers Workbox routes against them:
+
+| URL class | Paths | Strategy |
+|---|---|---|
+| Content + metadata | `/resources/:ID/content`, `/resources/:ID/metadata` | `ContentAndMetadataNetworkFirstWhenVersionOutdated` — cache-first, but revalidates from network when the version in the URL is newer than the cached version (tracked in IndexedDB) |
+| Other content | `/resources/:ID/thumbnail`, `/bibles/:ID/texts`, `cdn.aquifer.bible` | `CacheFirst` (immutable media) |
+| Skip list | `/resources/batch/metadata`, `/resources/batch/content/text` | `NetworkOnly` — batch endpoints are never cached |
+| Everything else (GET) | all other API GETs | `CacheFirstAndStaleWhileRevalidateAfterExpiration` — cache-first, then stale-while-revalidate once older than 24h in prod (**1h in dev/QA**) |
+| All API POSTs | — | `NetworkOnly` + background sync retry (up to 1 year retention) so offline actions (e.g. feedback) eventually reach the server |
+| App Insights | `*.applicationinsights.azure.com` | `NetworkOnly` + background sync (2 weeks) |
+
+Supporting plugins:
+
+- **`add-api-key-to-all-request-plugin.js`** — attaches the API key and
+  `bn-*` headers to every request *in the SW*, so the key never lives in main
+  thread JS. Also tags requests with the App Insights user ID (received via
+  `postMessage`, since the SW can't read the main thread).
+- **`cacheable-media-or-text-content-plugin.js`** — decides what content
+  responses are safe to cache.
+- **`RangeRequestsPlugin`** — enables seeking in cached audio without
+  downloading the whole file.
+
+## The versioning contract (read before changing API responses)
+
+Two different mechanisms keep offline clients from going stale:
+
+1. **Cache-bust versions** (`src/lib/api-endpoints.ts`): each endpoint helper
+   returns `[path, version]`; the version becomes a `?version=N` query param.
+   When you make an **additive** change to an endpoint's response, increment
+   its number — old cached entries won't match and clients refetch. Avoid
+   breaking changes entirely: an offline client may hold an old app version
+   for a long time.
+2. **Content versions**: content/metadata URLs carry server content versions;
+   `splitVersionOutOfUrl` in `caching-config.js` extracts them and the
+   content strategy compares them against IndexedDB records to decide
+   cache vs. network.
+
+Adding a new endpoint? Add its path to the right list in
+`caching-config.js` — otherwise it falls into the default API handler, which
+may not be what you want (e.g. large media would get the wrong strategy).
+
+## App shell and lifecycle
+
+- `precacheAndRoute(self.__WB_MANIFEST)` precaches the build output;
+  `cleanupOutdatedCaches()` drops old precaches; a `NavigationRoute` serves
+  `/` for all navigations (SPA behavior) outside local dev.
+- In production the new SW waits for the app to send `SKIP_WAITING`; in local
+  dev it activates immediately.
+
+## Local development gotchas
+
+- **PWA behavior only works from a production build**: `yarn build && serve -s
+  build`. In `yarn dev` the SW is unbundled.
+- In dev, `process.env.*` is not replaced, so the SW falls back to
+  `importScripts('local-development-env.js')` for the API key — that file is
+  generated by `yarn use-config dev-local`. If you see the "forgot to run
+  `yarn use-config dev-local`" error, that's why.
+- API cache duration is 1 hour in dev/QA vs 24 hours in prod — if content
+  "isn't updating" in prod testing, it's usually this.
+
+---
+_Last verified: 2026-08-03_
